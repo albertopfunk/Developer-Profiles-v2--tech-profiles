@@ -1,4 +1,5 @@
 const express = require("express");
+const routes = require("./routes/routes.js");
 require("dotenv").config();
 
 const server = express();
@@ -11,6 +12,8 @@ if (PORT == null || PORT == "") {
 server.get("/", (req, res) => {
   res.send("API is up an running!");
 });
+
+server.use("/", routes);
 
 server.listen(PORT, () => {
   console.log(
