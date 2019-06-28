@@ -1,16 +1,10 @@
 {
-  "extends": ["eslint:recommended", "prettier"],
+  "extends": ["eslint:recommended", "plugin:node/recommended", "prettier"],
   "plugins": [],
-  "parserOptions": {
-    "ecmaVersion": 2018,
-    "sourceType": "module",
-    "ecmaFeatures": {
-      "jsx": true
-    }
+  "rules": {
+    "no-console": 1
   },
   "env": {
-    "es6": true,
-    "browser": true,
     "node": true
   }
 }
