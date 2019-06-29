@@ -5,7 +5,93 @@ const db = knex(dbconfig[process.env.DB]);
 const server = express.Router();
 
 //----------------------------------------------------------------------
-//      EXTRAS
+//      USERS
+//----------------------------------------------------------------------
+
+// all users
+server.get("/", (req, res) => {
+  db("users")
+    .then(users => {
+      res.status(200).json(users);
+    })
+    .catch(err => {
+      res
+        .status(500)
+        .json({ message: "there is an error fetching users", err: err });
+    });
+});
+
+// single user
+server.get("/:email", (req, res) => {
+  const { email } = req.params;
+
+  db("users")
+    .where({ email })
+    .first()
+    .then(user => {
+      res.status(200).json(user);
+    })
+    .catch(err => {
+      res
+        .status(500)
+        .json({ message: "there is an error fetching user", err: err });
+    });
+});
+
+// new user, checks if user exists before adding
+server.post("/new", (req, res) => {
+  const { email } = req.body;
+
+  db("users")
+    .where({ email })
+    .first()
+    .then(existing_user => {
+      res.status(200).json(existing_user);
+    })
+    .catch(err => {
+      db("users")
+        .insert(req.body, ["email", "first_name", "last_name"])
+        .then(new_user => {
+          res.status(200).json(new_user);
+        })
+        .catch(err => {
+          res.status(500).json({ message: "error posting new user", err: err });
+        });
+    });
+});
+
+// edit user
+server.put("/:id", (req, res) => {
+  const { id } = req.params;
+
+  db("users")
+    .where({ id })
+    .update(req.body)
+    .then(user => {
+      res.status(200).json(user);
+    })
+    .catch(err => {
+      res.status(500).json({ message: "error editing user data", err: err });
+    });
+});
+
+// delete user
+server.delete("/:id", (req, res) => {
+  const { id } = req.params;
+
+  db("users")
+    .where({ id })
+    .delete()
+    .then(user => {
+      res.status(200).json(user);
+    })
+    .catch(err => {
+      res.status(500).json({ message: "error deleting user", err: err });
+    });
+});
+
+//----------------------------------------------------------------------
+//      USER EXTRAS
 //----------------------------------------------------------------------
 
 server.get("/:user_id/:user_extras", (req, res) => {
@@ -68,3 +154,17 @@ server.delete("/:user_extras/:user_extras_id", (req, res) => {
         .json({ message: "error deleting user_extra data", err: err });
     });
 });
+
+
+//----------------------------------------------------------------------
+//      USER SKILLS
+//----------------------------------------------------------------------
+
+       
+
+
+
+
+
+
+module.exports = server;
