@@ -1,8 +1,10 @@
 const express = require("express");
-const routes = require("./routes/routes.js");
+const routes = require("./routes/routes");
 require("dotenv").config();
 
 const server = express();
+
+server.use(express.json());
 
 let PORT = process.env.PORT;
 if (PORT == null || PORT == "") {

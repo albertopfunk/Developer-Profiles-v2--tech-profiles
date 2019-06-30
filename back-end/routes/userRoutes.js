@@ -1,14 +1,15 @@
 const express = require("express");
 const knex = require("knex");
 const dbconfig = require("../knexfile");
-const db = knex(dbconfig[process.env.DB]);
+const db = knex(dbconfig.development);
 const server = express.Router();
 
 //----------------------------------------------------------------------
 //      USERS
 //----------------------------------------------------------------------
 
-// all users
+// get all users
+// does not expect anything, returns [user objects]
 server.get("/", (req, res) => {
   db("users")
     .then(users => {
@@ -21,7 +22,9 @@ server.get("/", (req, res) => {
     });
 });
 
-// single user
+// get single user
+// expects email of existing user in params
+// returns user object if user is found
 server.get("/:email", (req, res) => {
   const { email } = req.params;
 
@@ -29,7 +32,11 @@ server.get("/:email", (req, res) => {
     .where({ email })
     .first()
     .then(user => {
-      res.status(200).json(user);
+      user
+        ? res.status(200).json(user)
+        : res
+            .status(400)
+            .json({ message: "Error finding user, check your email" });
     })
     .catch(err => {
       res
@@ -38,7 +45,11 @@ server.get("/:email", (req, res) => {
     });
 });
 
-// new user, checks if user exists before adding
+// add new user
+// expects any email in body
+// checks if the email is already in the database
+// if the email exists, returns existing user, user object
+// if the email does not exist, adds new user, first and last name optional, returns [new_user_id]
 server.post("/new", (req, res) => {
   const { email } = req.body;
 
@@ -46,44 +57,61 @@ server.post("/new", (req, res) => {
     .where({ email })
     .first()
     .then(existing_user => {
-      res.status(200).json(existing_user);
+      if (existing_user) {
+        res.status(200).json(existing_user);
+      } else {
+        db("users")
+          .insert(req.body, ["email", "first_name", "last_name"])
+          .then(new_user_id => {
+            res.status(200).json(new_user_id);
+          })
+          .catch(err => {
+            res
+              .status(500)
+              .json({ message: "error adding new user", err: err });
+          });
+      }
     })
     .catch(err => {
-      db("users")
-        .insert(req.body, ["email", "first_name", "last_name"])
-        .then(new_user => {
-          res.status(200).json(new_user);
-        })
-        .catch(err => {
-          res.status(500).json({ message: "error posting new user", err: err });
-        });
+      db("users");
+      res
+        .status(500)
+        .json({ message: "error checking if user exists", err: err });
     });
 });
 
-// edit user
+// expects id of existing user in params
+// returns a number 1 if successful
 server.put("/:id", (req, res) => {
   const { id } = req.params;
 
   db("users")
     .where({ id })
     .update(req.body)
-    .then(user => {
-      res.status(200).json(user);
+    .then(isSuccessful => {
+      isSuccessful === 0
+        ? res.status(400).json({ message: "Error editing user, check your id" })
+        : res.status(200).json(isSuccessful);
     })
     .catch(err => {
       res.status(500).json({ message: "error editing user data", err: err });
     });
 });
 
-// delete user
+// expects id of existing user in params
+// returns a number 1 if successful
 server.delete("/:id", (req, res) => {
   const { id } = req.params;
 
   db("users")
     .where({ id })
     .delete()
-    .then(user => {
-      res.status(200).json(user);
+    .then(isSuccessful => {
+      isSuccessful === 0
+        ? res
+            .status(400)
+            .json({ message: "Error deleting user, check your id" })
+        : res.status(200).json(isSuccessful);
     })
     .catch(err => {
       res.status(500).json({ message: "error deleting user", err: err });
@@ -94,27 +122,39 @@ server.delete("/:id", (req, res) => {
 //      USER EXTRAS
 //----------------------------------------------------------------------
 
-server.get("/:user_id/:user_extras", (req, res) => {
-  const { user_id, user_extras } = req.params;
+// expects id of existing user in params
+// expects user extra, either 'education', 'experience', 'projects' in params
+// returns user extras of chosen extra, [user extra objects]
+server.get("/:user_id/:user_extra", (req, res) => {
+  const { user_id, user_extra } = req.params;
 
-  db(`${user_extras}`)
+  db(`${user_extra}`)
     .where({ user_id })
-    .then(user_extras => {
-      res.status(200).json(user_extras);
+    .then(user_extra => {
+      user_extra.length === 0
+        ? res
+            .status(400)
+            .json({
+              message: `Error finding user ${req.params.user_extra}, check user id or add a user ${req.params.user_extra}`
+            })
+        : res.status(200).json(user_extra);
     })
     .catch(err => {
       res.status(500).json({ message: "error fetching data", err: err });
     });
 });
 
+
+// expects user extra, either 'education', 'experience', 'projects' in params
+// expects id of existing user in body
+// returns id of new user extra
 server.post("/:user_extras", (req, res) => {
   const { user_extras } = req.params;
 
-  // user_id in req.body
   db(`${user_extras}`)
     .insert(req.body)
-    .then(user_extra => {
-      res.status(200).json(user_extra);
+    .then(new_user_extra_id => {
+      res.status(200).json(new_user_extra_id);
     })
     .catch(err => {
       res
@@ -123,14 +163,21 @@ server.post("/:user_extras", (req, res) => {
     });
 });
 
+// expects user extra, either 'education', 'experience', 'projects' in params
+// expects id of the user extra in params
+// returns a number 1 if successful
 server.put("/:user_extras/:user_extras_id", (req, res) => {
   const { user_extras, user_extras_id } = req.params;
-
+  console.log(user_extras, user_extras_id)
   db(`${user_extras}`)
-    .where({ user_extras_id })
+    .where({ id: user_extras_id })
     .update(req.body)
-    .then(user_extra => {
-      res.status(200).json(user_extra);
+    .then(isSuccessful => {
+      isSuccessful === 0
+        ? res
+            .status(400)
+            .json({ message: "Error editing user extra, check your id" })
+        : res.status(200).json(isSuccessful);
     })
     .catch(err => {
       res
@@ -139,14 +186,21 @@ server.put("/:user_extras/:user_extras_id", (req, res) => {
     });
 });
 
+// expects user extra, either 'education', 'experience', 'projects' in params
+// expects id of the user extra in params
+// returns a number 1 if successful
 server.delete("/:user_extras/:user_extras_id", (req, res) => {
   const { user_extras, user_extras_id } = req.params;
 
   db(`${user_extras}`)
-    .where({ user_extras_id })
+    .where({ id: user_extras_id })
     .delete()
-    .then(user_extra => {
-      res.status(200).json(user_extra);
+    .then(isSuccessful => {
+      isSuccessful === 0
+        ? res
+            .status(400)
+            .json({ message: "Error deleting user extra, check your id" })
+        : res.status(200).json(isSuccessful);
     })
     .catch(err => {
       res
@@ -155,16 +209,54 @@ server.delete("/:user_extras/:user_extras_id", (req, res) => {
     });
 });
 
-
 //----------------------------------------------------------------------
 //      USER SKILLS
 //----------------------------------------------------------------------
 
-       
+server.get("/skills", (req, res) => {
+  db("skills")
+    .then(skills => {
+      res.status(200).json(skills);
+    })
+    .catch(err => {
+      res.status(500).json({ message: "error getting skills", err: err });
+    });
+});
 
+server.get("/skills-for-review", (req, res) => {
+  db("skills_for_review")
+    .then(skills_for_review => {
+      res.status(200).json(skills_for_review);
+    })
+    .catch(err => {
+      res
+        .status(500)
+        .json({ message: "error getting skills for review", err: err });
+    });
+});
 
+server.post("/skills/new", (req, res) => {
+  db("skills")
+    .insert(req.body)
+    .then(skill => {
+      res.status(200).json(skill);
+    })
+    .catch(err => {
+      res.status(500).json({ message: "error adding new skill", err: err });
+    });
+});
 
-
-
+server.post("/skills-for-review/new", (req, res) => {
+  db("skills_for_review")
+    .insert(req.body)
+    .then(skill_for_review => {
+      res.status(200).json(skill_for_review);
+    })
+    .catch(err => {
+      res
+        .status(500)
+        .json({ message: "error adding new skill for review", err: err });
+    });
+});
 
 module.exports = server;
