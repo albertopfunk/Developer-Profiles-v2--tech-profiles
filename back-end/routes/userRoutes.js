@@ -5,7 +5,33 @@ const db = knex(dbconfig.development);
 const server = express.Router();
 
 //----------------------------------------------------------------------
-//      USERS
+/*
+    USERS(users)
+    id
+    email
+    public_email
+    first_name
+    last_name
+    image
+    desired_title
+    area_of_work
+    current_location_name
+    current_location_lat
+    current_location_lon
+    interested_location_names
+    github
+    linkedin
+    portfolio
+    badge
+    badgeURL
+    summary
+    stripe_customer_id
+    stripe_subscription_name
+    top_skills
+    additional_skills
+    familiar_skills
+
+*/
 //----------------------------------------------------------------------
 
 // get all users
@@ -46,7 +72,7 @@ server.get("/:email", (req, res) => {
 });
 
 // add new user
-// expects any email in body
+// expects 'email' in body
 // checks if the email is already in the database
 // if the email exists, returns existing user, user object
 // if the email does not exist, adds new user, first and last name optional, returns [new_user_id]
@@ -119,7 +145,13 @@ server.delete("/:id", (req, res) => {
 });
 
 //----------------------------------------------------------------------
-//      USER EXTRAS
+/*
+    USER EXTRAS
+      education - id, school, school_dates, field_of_study, *user_id
+      experience - id, company_name, job_title, job_dates, job_description, *user_id
+      projects - id, project_title, link, project_description, project_img, *user_id
+      *user_id not nullable
+*/
 //----------------------------------------------------------------------
 
 // expects id of existing user in params
@@ -132,18 +164,15 @@ server.get("/:user_id/:user_extra", (req, res) => {
     .where({ user_id })
     .then(user_extra => {
       user_extra.length === 0
-        ? res
-            .status(400)
-            .json({
-              message: `Error finding user ${req.params.user_extra}, check user id or add a user ${req.params.user_extra}`
-            })
+        ? res.status(400).json({
+            message: `Error finding user ${req.params.user_extra}, check user id or add a user ${req.params.user_extra}`
+          })
         : res.status(200).json(user_extra);
     })
     .catch(err => {
       res.status(500).json({ message: "error fetching data", err: err });
     });
 });
-
 
 // expects user extra, either 'education', 'experience', 'projects' in params
 // expects id of existing user in body
@@ -168,7 +197,7 @@ server.post("/:user_extras", (req, res) => {
 // returns a number 1 if successful
 server.put("/:user_extras/:user_extras_id", (req, res) => {
   const { user_extras, user_extras_id } = req.params;
-  console.log(user_extras, user_extras_id)
+  console.log(user_extras, user_extras_id);
   db(`${user_extras}`)
     .where({ id: user_extras_id })
     .update(req.body)
@@ -206,56 +235,6 @@ server.delete("/:user_extras/:user_extras_id", (req, res) => {
       res
         .status(500)
         .json({ message: "error deleting user_extra data", err: err });
-    });
-});
-
-//----------------------------------------------------------------------
-//      USER SKILLS
-//----------------------------------------------------------------------
-
-server.get("/skills", (req, res) => {
-  db("skills")
-    .then(skills => {
-      res.status(200).json(skills);
-    })
-    .catch(err => {
-      res.status(500).json({ message: "error getting skills", err: err });
-    });
-});
-
-server.get("/skills-for-review", (req, res) => {
-  db("skills_for_review")
-    .then(skills_for_review => {
-      res.status(200).json(skills_for_review);
-    })
-    .catch(err => {
-      res
-        .status(500)
-        .json({ message: "error getting skills for review", err: err });
-    });
-});
-
-server.post("/skills/new", (req, res) => {
-  db("skills")
-    .insert(req.body)
-    .then(skill => {
-      res.status(200).json(skill);
-    })
-    .catch(err => {
-      res.status(500).json({ message: "error adding new skill", err: err });
-    });
-});
-
-server.post("/skills-for-review/new", (req, res) => {
-  db("skills_for_review")
-    .insert(req.body)
-    .then(skill_for_review => {
-      res.status(200).json(skill_for_review);
-    })
-    .catch(err => {
-      res
-        .status(500)
-        .json({ message: "error adding new skill for review", err: err });
     });
 });
 
