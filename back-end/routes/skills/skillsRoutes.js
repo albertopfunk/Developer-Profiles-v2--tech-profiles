@@ -1,6 +1,6 @@
 const express = require("express");
 const knex = require("knex");
-const dbconfig = require("../knexfile");
+const dbconfig = require("../../knexfile");
 const db = knex(dbconfig.development);
 const server = express.Router();
 
@@ -70,11 +70,11 @@ server.delete("/:skill_id", (req, res) => {
       isSuccessful === 0
         ? res
             .status(400)
-            .json({ message: "Error editing skill, check skill id" })
+            .json({ message: "Error deleting skill, check skill id" })
         : res.status(200).json(isSuccessful);
     })
     .catch(err => {
-      res.status(500).json({ message: "error editing skill data", err: err });
+      res.status(500).json({ message: "error deleting skill data", err: err });
     });
 });
 
@@ -152,14 +152,14 @@ server.delete("/review/:skill_for_review_id", (req, res) => {
     .then(isSuccessful => {
       isSuccessful === 0
         ? res.status(400).json({
-            message: "Error editing skill for review, check skill for review id"
+            message: "Error deleting skill for review, check skill for review id"
           })
         : res.status(200).json(isSuccessful);
     })
     .catch(err => {
       res
         .status(500)
-        .json({ message: "error editing skill for review data", err: err });
+        .json({ message: "error deleting skill for review data", err: err });
     });
 });
 
