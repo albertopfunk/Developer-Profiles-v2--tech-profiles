@@ -1,41 +1,38 @@
 const db = require("../data/dbConfig");
 
 module.exports = {
+  insert,
   getAll,
   getSingle,
-  insert,
   update,
   remove
 };
+
+async function insert(newUser) {
+  const [id] = await db("users").insert(newUser);
+  return db("users")
+    .where({ id })
+    .first();
+}
 
 async function getAll() {
   return db("users");
 }
 
-async function getSingle(email) {
+async function getSingle(id) {
   return db("users")
-    .where({ email })
+    .where({ email: id })
+    .orWhere({ id: id })
     .first();
 }
 
-async function insert(newUser) {
-  const [id] = await db("users").insert(newUser, [
-    "email",
-    "first_name",
-    "last_name"
-  ]);
+async function update(id, body) {
   return db("users")
     .where({ id })
-    .first();
+    .update(body);
 }
 
-async function update() {
-  return db("users")
-    .where({ id })
-    .update(req.body);
-}
-
-async function remove() {
+async function remove(id) {
   return db("users")
     .where({ id })
     .delete();
