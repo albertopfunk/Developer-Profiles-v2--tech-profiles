@@ -16,7 +16,7 @@ describe("server", () => {
         .expect("Content-Type", /json/i);
     });
 
-    it("Should match the expected JSON object", async () => {
+    it("Should match the expected object", async () => {
       const expectedBody = { api: "up and running" };
       const response = await request(server).get("");
       expect(response.body).toEqual(expectedBody);

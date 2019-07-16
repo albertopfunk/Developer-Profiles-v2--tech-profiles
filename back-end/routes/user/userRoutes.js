@@ -1,7 +1,11 @@
 const express = require("express");
+
+
 const knex = require("knex");
 const dbconfig = require("../../knexfile");
 const db = knex(dbconfig.development);
+
+
 const server = express.Router();
 
 //----------------------------------------------------------------------
@@ -34,10 +38,18 @@ const server = express.Router();
 */
 //----------------------------------------------------------------------
 
+
+
+
+
 // get all users
 // does not expect anything, returns [user objects]
 server.get("/", (req, res) => {
+
+
   db("users")
+
+
     .then(users => {
       res.status(200).json(users);
     })
@@ -46,17 +58,30 @@ server.get("/", (req, res) => {
         .status(500)
         .json({ message: "there is an error fetching users", err: err });
     });
+
+    
 });
+
+
+
+
+
+
+
 
 // get single user
 // expects email of existing user in params
 // returns user object if user is found
 server.get("/:email", (req, res) => {
+
+
   const { email } = req.params;
 
   db("users")
     .where({ email })
     .first()
+
+
     .then(user => {
       user
         ? res.status(200).json(user)
@@ -69,7 +94,17 @@ server.get("/:email", (req, res) => {
         .status(500)
         .json({ message: "there is an error fetching user", err: err });
     });
+
+
+
 });
+
+
+
+
+
+
+
 
 // add new user
 // expects 'email' in body
@@ -77,17 +112,29 @@ server.get("/:email", (req, res) => {
 // if the email exists, returns existing user, user object
 // if the email does not exist, adds new user, first and last name optional, returns [new_user_id]
 server.post("/new", (req, res) => {
+
+
+
   const { email } = req.body;
 
   db("users")
     .where({ email })
     .first()
+
+
+
     .then(existing_user => {
       if (existing_user) {
         res.status(200).json(existing_user);
+
+
+
       } else {
         db("users")
           .insert(req.body, ["email", "first_name", "last_name"])
+          
+          
+          
           .then(new_user_id => {
             res.status(200).json(new_user_id);
           })
@@ -96,6 +143,9 @@ server.post("/new", (req, res) => {
               .status(500)
               .json({ message: "error adding new user", err: err });
           });
+
+
+
       }
     })
     .catch(err => {
@@ -104,16 +154,33 @@ server.post("/new", (req, res) => {
         .status(500)
         .json({ message: "error checking if user exists", err: err });
     });
+
+
+
 });
+
+
+
+
+
+
+
+
 
 // expects id of existing user in params
 // returns a number 1 if successful
 server.put("/:id", (req, res) => {
+
+
+
   const { id } = req.params;
 
   db("users")
     .where({ id })
     .update(req.body)
+
+
+
     .then(isSuccessful => {
       isSuccessful === 0
         ? res.status(400).json({ message: "Error editing user, check your id" })
@@ -122,16 +189,33 @@ server.put("/:id", (req, res) => {
     .catch(err => {
       res.status(500).json({ message: "error editing user data", err: err });
     });
+
+
+
 });
+
+
+
+
+
+
+
+
+
 
 // expects id of existing user in params
 // returns a number 1 if successful
 server.delete("/:id", (req, res) => {
+
+
   const { id } = req.params;
 
   db("users")
     .where({ id })
     .delete()
+
+
+
     .then(isSuccessful => {
       isSuccessful === 0
         ? res
@@ -142,7 +226,20 @@ server.delete("/:id", (req, res) => {
     .catch(err => {
       res.status(500).json({ message: "error deleting user", err: err });
     });
+
+
+
 });
+
+
+
+
+
+
+
+
+
+
 
 //----------------------------------------------------------------------
 /*
