@@ -33,7 +33,7 @@ describe("insert", () => {
     expect(user.id).toBe(1);
     expect(user.email).toBe("test@email.com");
     expect(user.first_name).toBe("Mr. Test");
-    
+
     const user2 = await userModel.insert({
       first_name: "Mr. Test2",
       email: "test@email2.com"
@@ -100,8 +100,8 @@ describe("getSingle", () => {
     const newUser = await userModel.getSingle(user.email);
     expect(newUser.email).toBe(user.email);
   });
-  
-  it('should be able to accept a users ID or Email', async () => {
+
+  it("should be able to accept a users ID or Email", async () => {
     const user = {
       first_name: "Mr. Test",
       email: "test@email.com"
@@ -111,6 +111,18 @@ describe("getSingle", () => {
     const newUserByEmail = await userModel.getSingle(user.email);
     expect(newUserById.email).toBe(user.email);
     expect(newUserByEmail.first_name).toBe(user.first_name);
+  });
+
+  it("should return undefined if an ID or Email was NOT passed in", async () => {
+    const user = {
+      first_name: "Mr. Test",
+      email: "test@email.com"
+    };
+    await userModel.insert(user);
+    const newUser = await userModel.getSingle(user.first_name);
+    expect(newUser).toBeUndefined;
+    const newUser2 = await userModel.getSingle(null);
+    expect(newUser2).toBeUndefined;
   });
 });
 
@@ -126,13 +138,13 @@ describe("update", () => {
     };
     const updateUser = {
       email: "NEWtest@email.com"
-    }
+    };
     await userModel.insert(user);
     const userToUpdate = await userModel.getSingle(user.email);
     const isSuccessful = await userModel.update(userToUpdate.id, updateUser);
     expect(isSuccessful).toBe(1);
   });
-  
+
   it("should update the user that was added", async () => {
     const user = {
       first_name: "Mr. Test",
@@ -140,7 +152,7 @@ describe("update", () => {
     };
     const updateUser = {
       email: "NEWtest@email.com"
-    }
+    };
     await userModel.insert(user);
     const userToUpdate = await userModel.getSingle(user.email);
     await userModel.update(userToUpdate.id, updateUser);

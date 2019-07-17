@@ -15,24 +15,24 @@ async function insert(newUser) {
     .first();
 }
 
-async function getAll() {
+function getAll() {
   return db("users");
 }
 
-async function getSingle(id) {
+function getSingle(id) {
   return db("users")
     .where({ email: id })
     .orWhere({ id: id })
     .first();
 }
 
-async function update(id, body) {
+function update(id, body) {
   return db("users")
     .where({ id })
     .update(body);
 }
 
-async function remove(id) {
+function remove(id) {
   return db("users")
     .where({ id })
     .delete();
