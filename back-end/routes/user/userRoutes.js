@@ -1,5 +1,5 @@
 const express = require("express");
-const userModel = require("../../models/userModel");
+const userModel = require("../../models/user/userModel");
 
 const server = express.Router();
 
@@ -47,13 +47,15 @@ server.post("/new", async (req, res) => {
 
   const checkIfUserExists = await userModel.getSingle(id);
   if (checkIfUserExists) {
-    res.status(200).json(checkIfUserExists);
+    res.json(checkIfUserExists);
   } else {
     try {
       const addNewUser = await userModel.insert(req.body);
-      res.status(200).json(addNewUser);
+      res.status(201).json(addNewUser);
     } catch (err) {
-      res.status(500).json({ message: "error adding new user", err });
+      res
+        .status(500)
+        .json({ message: "Error adding the user to the database", err });
     }
   }
 });
@@ -63,9 +65,9 @@ server.post("/new", async (req, res) => {
 server.get("/", async (req, res) => {
   try {
     const users = await userModel.getAll();
-    res.status(200).json(users);
+    res.json(users);
   } catch (err) {
-    res.status(500).json({ message: "there is an error fetching users", err });
+    res.status(500).json({ message: "The users could not be retrieved", err });
   }
 });
 
@@ -77,10 +79,12 @@ server.get("/:id", async (req, res) => {
   try {
     const getSingleUser = await userModel.getSingle(id);
     getSingleUser
-      ? res.status(200).json(getSingleUser)
-      : res.status(400).json({ message: "Error finding user, check your id" });
+      ? res.json(getSingleUser)
+      : res
+          .status(404)
+          .json({ message: "The user with the specified ID does not exist" });
   } catch (err) {
-    res.status(500).json({ message: "there is an error fetching user", err });
+    res.status(500).json({ message: "The user could not be retrieved", err });
   }
 });
 
@@ -90,11 +94,13 @@ server.put("/:id", async (req, res) => {
   const { id } = req.params;
   try {
     const editUser = await userModel.update(id, req.body);
-    editUser === 0
-      ? res.status(400).json({ message: "Error editing user, check your id" })
-      : res.status(200).json(editUser);
+    editUser
+      ? res.json(editUser)
+      : res
+          .status(404)
+          .json({ message: "The user with the specified ID does not exist" });
   } catch (err) {
-    res.status(500).json({ message: "error editing user data", err });
+    res.status(500).json({ message: "The user information could not be modified", err });
   }
 });
 
@@ -104,23 +110,15 @@ server.delete("/:id", async (req, res) => {
   const { id } = req.params;
   try {
     const removeUser = await userModel.remove(id);
-    removeUser === 0
-      ? res.status(400).json({ message: "Error removing user, check your id" })
-      : res.status(200).json(removeUser);
+    removeUser
+      ? res.json(removeUser)
+      : res
+          .status(404)
+          .json({ message: "The user with the specified ID does not exist" });
   } catch (err) {
-    res.status(500).json({ message: "error removing user data", err });
+    res.status(500).json({ message: "The user could not be removed", err });
   }
 });
-
-
-
-
-
-
-
-
-
-
 
 //----------------------------------------------------------------------
 /*

@@ -1,5 +1,5 @@
 const userModel = require("./userModel");
-const db = require("../data/dbConfig");
+const db = require("../../data/dbConfig");
 
 describe("environment", () => {
   it("environment should be testing", () => {
