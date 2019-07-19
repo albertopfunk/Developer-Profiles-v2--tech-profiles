@@ -100,7 +100,9 @@ server.put("/:id", async (req, res) => {
           .status(404)
           .json({ message: "The user with the specified ID does not exist" });
   } catch (err) {
-    res.status(500).json({ message: "The user information could not be modified", err });
+    res
+      .status(500)
+      .json({ message: "The user information could not be modified", err });
   }
 });
 
