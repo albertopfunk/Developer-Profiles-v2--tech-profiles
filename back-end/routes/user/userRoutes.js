@@ -36,7 +36,7 @@ const server = express.Router();
 // add new user
 // checks if the email is already in the database
 // if the email exists, returns existing user, user object
-// if the email does not exist, adds new user, returns user object
+// if the email does not exist, adds new user, returns new user, user object
 server.post("/new", async (req, res) => {
   let id = 0;
   if (req.body.email) {
