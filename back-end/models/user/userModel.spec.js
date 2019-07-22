@@ -95,7 +95,7 @@ describe("getAll", () => {
     await db("users").truncate();
   });
 
-  it("should return an array", async () => {
+  it("should return an empty array", async () => {
     const allUsers = await userModel.getAll();
     expect(allUsers).toHaveLength(0);
   });
@@ -182,7 +182,7 @@ describe("getSingle", () => {
     await db("users").insert(user);
     const newUser = await userModel.getSingle(user.first_name);
     expect(newUser).toBeUndefined;
-    const newUser2 = await userModel.getSingle(null);
+    const newUser2 = await userModel.getSingle({});
     expect(newUser2).toBeUndefined;
   });
 });
