@@ -11,7 +11,7 @@ describe("insert", () => {
   beforeEach(async () => {
     await db("users").truncate();
   });
-  afterAll(async () => {
+  afterEach(async () => {
     await db("users").truncate();
   });
 
@@ -91,7 +91,10 @@ describe("insert", () => {
 });
 
 describe("getAll", () => {
-  afterAll(async () => {
+  beforeEach(async () => {
+    await db("users").truncate();
+  });
+  afterEach(async () => {
     await db("users").truncate();
   });
 
@@ -120,7 +123,7 @@ describe("getSingle", () => {
   beforeEach(async () => {
     await db("users").truncate();
   });
-  afterAll(async () => {
+  afterEach(async () => {
     await db("users").truncate();
   });
 
@@ -191,7 +194,7 @@ describe("update", () => {
   beforeEach(async () => {
     await db("users").truncate();
   });
-  afterAll(async () => {
+  afterEach(async () => {
     await db("users").truncate();
   });
 
@@ -230,7 +233,7 @@ describe("remove", () => {
   beforeEach(async () => {
     await db("users").truncate();
   });
-  afterAll(async () => {
+  afterEach(async () => {
     await db("users").truncate();
   });
 

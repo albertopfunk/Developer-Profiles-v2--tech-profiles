@@ -7,7 +7,7 @@ const server = express();
 server.use(express.json());
 server.use(helmet());
 
-server.get("/", (req, res) => {
+server.get("/hello", (req, res) => {
   res.json({ api: "up and running" });
 });
 
