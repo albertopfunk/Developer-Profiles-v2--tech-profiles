@@ -93,3 +93,50 @@ describe("insert", () => {
     expect(newUserExtra).toEqual(newProjectFull);
   });
 });
+
+describe("getAll", () => {
+  beforeEach(async () => {
+    await db("users").truncate();
+    await db("projects").truncate();
+    await db("education").truncate();
+    await db("experience").truncate();
+  });
+  afterEach(async () => {
+    await db("users").truncate();
+    await db("projects").truncate();
+    await db("education").truncate();
+    await db("experience").truncate();
+  });
+
+  it("should return empty array if user ID invalid", async () => {
+    await db("users").insert({ email: "test@email.com" });
+    await db("experience").insert([
+      { user_id: 1 },
+      { user_id: 1 },
+      { user_id: 1 }
+    ]);
+    const userExtras = await userExtrasModel.getAll(999, "experience");
+    expect(userExtras).toHaveLength(0);
+  });
+
+  it("should return empty array if user extra is empty", async () => {
+    await db("users").insert({ email: "test@email.com" });
+    const userExtras = await userExtrasModel.getAll(1, "projects");
+    expect(userExtras).toHaveLength(0);
+  });
+
+  it("should return all items in user's extra", async () => {
+    await db("users").insert({ email: "test@email.com" });
+    let userExtras = await userExtrasModel.getAll(1, "education");
+    expect(userExtras).toHaveLength(0);
+
+    await db("education").insert([
+      { user_id: 1 },
+      { user_id: 1 },
+      { user_id: 1 }
+    ]);
+
+    userExtras = await userExtrasModel.getAll(1, "education");
+    expect(userExtras).toHaveLength(3);
+  });
+});

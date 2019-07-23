@@ -2,7 +2,7 @@ const db = require("../../data/dbConfig");
 
 module.exports = {
   insert,
-  getSingle,
+  getAll,
   update,
   remove
 };
@@ -14,8 +14,8 @@ async function insert(userExtra, body) {
     .first();
 }
 
-function getSingle() {
-  return null;
+function getAll(userId, userExtra) {
+  return db(`${userExtra}`).where({ user_id: userId });
 }
 
 function update() {

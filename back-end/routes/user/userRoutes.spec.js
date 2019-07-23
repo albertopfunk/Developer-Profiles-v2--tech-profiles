@@ -31,7 +31,7 @@ describe("POST /", () => {
       .expect(500);
   });
 
-  it("should return new user if emails do not match", async () => {
+  it("should return inserted new user if emails do not match", async () => {
     const user = await request(server)
       .post("/users/new")
       .send({
