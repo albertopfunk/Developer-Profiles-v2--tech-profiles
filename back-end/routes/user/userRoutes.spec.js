@@ -12,7 +12,7 @@ describe("POST /", () => {
   beforeEach(async () => {
     await db("users").truncate();
   });
-  afterAll(async () => {
+  afterEach(async () => {
     await db("users").truncate();
   });
 
@@ -85,7 +85,10 @@ describe("POST /", () => {
 });
 
 describe("GET /", () => {
-  afterAll(async () => {
+  beforeEach(async () => {
+    await db("users").truncate();
+  });
+  afterEach(async () => {
     await db("users").truncate();
   });
 
@@ -100,12 +103,19 @@ describe("GET /", () => {
     let users = await request(server).get("/users");
     expect(users.body).toHaveLength(0);
 
-    for (let i = 0; i < 10; i++) {
-      await db("users").insert({});
-    }
+    await db("users").insert([
+      { email: "hello1@mail.com" },
+      { email: "hello2@mail.com" },
+      { email: "hello3@mail.com" },
+      { email: "hello4@mail.com" },
+      { email: "hello5@mail.com" },
+      { email: "hello6@mail.com" },
+      { email: "hello7@mail.com" },
+      { email: "hello8@mail.com" }
+    ]);
 
     users = await request(server).get("/users");
-    expect(users.body).toHaveLength(10);
+    expect(users.body).toHaveLength(8);
   });
 });
 
@@ -113,7 +123,7 @@ describe("GET /:id", () => {
   beforeEach(async () => {
     await db("users").truncate();
   });
-  afterAll(async () => {
+  afterEach(async () => {
     await db("users").truncate();
   });
 
@@ -169,7 +179,7 @@ describe("PUT /:id", () => {
   beforeEach(async () => {
     await db("users").truncate();
   });
-  afterAll(async () => {
+  afterEach(async () => {
     await db("users").truncate();
   });
 
@@ -225,7 +235,7 @@ describe("DELETE /:id", () => {
   beforeEach(async () => {
     await db("users").truncate();
   });
-  afterAll(async () => {
+  afterEach(async () => {
     await db("users").truncate();
   });
 
