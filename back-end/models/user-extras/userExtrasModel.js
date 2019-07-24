@@ -3,25 +3,35 @@ const db = require("../../data/dbConfig");
 module.exports = {
   insert,
   getAll,
+  getSingle,
   update,
   remove
 };
 
 async function insert(userExtra, body) {
   const [id] = await db(`${userExtra}`).insert(body);
-  return db(`${userExtra}`)
-    .where({ id })
-    .first();
+  return getSingle(userExtra, id);
 }
 
 function getAll(userId, userExtra) {
   return db(`${userExtra}`).where({ user_id: userId });
 }
 
-function update() {
-  return null;
+function getSingle(userExtra, userExtraId) {
+  return db(`${userExtra}`)
+    .where({ id: userExtraId })
+    .first();
 }
 
-function remove() {
-  return null;
+async function update(userExtra, userExtraId, body) {
+  await db(`${userExtra}`)
+    .where({ id: userExtraId })
+    .update(body);
+  return getSingle(userExtra, userExtraId);
+}
+
+function remove(userExtra, userExtraId) {
+  return db(`${userExtra}`)
+    .where({ id: userExtraId })
+    .delete();
 }

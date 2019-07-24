@@ -51,66 +51,70 @@ server.get("/:user_id/:user_extra", async (req, res) => {
   }
 });
 
+// expects user extra, either 'education', 'experience', 'projects' in params
+server.get("/single/:user_extra/:user_extra_id", async (req, res) => {
+  const { user_extra, user_extra_id } = req.params;
 
-
+  try {
+    const getSingleUserExtra = await userExtrasModel.getSingle(
+      user_extra,
+      user_extra_id
+    );
+    getSingleUserExtra
+      ? res.json(getSingleUserExtra)
+      : res.status(404).json({
+          message: `The user's '${user_extra}' with the specified ID of '${user_extra_id}' does not exist`
+        });
+  } catch (err) {
+    res.status(500).json({
+      message: `The user's '${user_extra}' could not be retrieved`,
+      err
+    });
+  }
+});
 
 // expects user extra, either 'education', 'experience', 'projects' in params
 // expects id of the user extra in params
 // returns a number 1 if successful
-
-// server.put("/:user_extras/:user_extras_id", (req, res) => {
-
-//   const { user_extras, user_extras_id } = req.params;
-
-//   db(`${user_extras}`)
-//     .where({ id: user_extras_id })
-//     .update(req.body)
-
-//     .then(isSuccessful => {
-
-//       isSuccessful === 0
-//         ? res
-//             .status(400)
-//             .json({ message: "Error editing user extra, check your id" })
-//         : res.status(200).json(isSuccessful);
-//     })
-
-//     .catch(err => {
-//       res
-//         .status(500)
-//         .json({ message: "error editing user_extra data", err: err });
-//     });
-// });
-
-
-
+server.put("/:user_extra/:user_extra_id", async (req, res) => {
+  const { user_extra, user_extra_id } = req.params;
+  try {
+    const editUser = await userExtrasModel.update(
+      user_extra,
+      user_extra_id,
+      req.body
+    );
+    editUser
+      ? res.json(editUser)
+      : res.status(404).json({
+          message: `The user's '${user_extra}' with the specified ID of '${user_extra_id}' does not exist`
+        });
+  } catch (err) {
+    res.status(500).json({
+      message: `The user's '${user_extra}' could not be modified`,
+      err
+    });
+  }
+});
 
 // expects user extra, either 'education', 'experience', 'projects' in params
 // expects id of the user extra in params
 // returns a number 1 if successful
-
-// server.delete("/:user_extras/:user_extras_id", (req, res) => {
-
-//   const { user_extras, user_extras_id } = req.params;
-
-//   db(`${user_extras}`)
-//     .where({ id: user_extras_id })
-//     .delete()
-
-//     .then(isSuccessful => {
-
-//       isSuccessful === 0
-//         ? res
-//             .status(400)
-//             .json({ message: "Error deleting user extra, check your id" })
-//         : res.status(200).json(isSuccessful);
-//     })
-
-//     .catch(err => {
-//       res
-//         .status(500)
-//         .json({ message: "error deleting user_extra data", err: err });
-//     });
-// });
+server.delete("/:user_extra/:user_extra_id", async (req, res) => {
+  const { user_extra, user_extra_id } = req.params;
+  try {
+    const removeUser = await userExtrasModel.remove(user_extra, user_extra_id);
+    removeUser
+      ? res.json(removeUser)
+      : res.status(404).json({
+          message: `The user's '${user_extra}' with the specified ID of '${user_extra_id}' does not exist`
+        });
+  } catch (err) {
+    res.status(500).json({
+      message: `The user's '${user_extra}' could not be removed`,
+      err
+    });
+  }
+});
 
 module.exports = server;
