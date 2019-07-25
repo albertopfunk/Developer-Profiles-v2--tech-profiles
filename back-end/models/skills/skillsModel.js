@@ -1,4 +1,4 @@
-const db = require('../../data/dbConfig');
+const db = require("../../data/dbConfig");
 
 module.exports = {
   insert,
@@ -6,24 +6,31 @@ module.exports = {
   getSingle,
   update,
   remove
+};
+
+async function insert(newSkill) {
+  const [id] = await db("skills").insert(newSkill);
+  return getSingle(id);
 }
 
-async function insert() {
-  return null;
+function getAll() {
+  return db("skills");
 }
 
-async function getAll() {
-  return null;
+function getSingle(id) {
+  return db("skills")
+    .where({ id })
+    .first();
 }
 
-async function getSingle() {
-  return null;
+function update(id, body) {
+  return db("skills")
+    .where({ id })
+    .update(body);
 }
 
-async function update() {
-  return null;
-}
-
-async function remove() {
-  return null;
+function remove(id) {
+  return db("skills")
+    .where({ id })
+    .delete();
 }

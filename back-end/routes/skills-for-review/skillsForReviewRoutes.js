@@ -24,7 +24,7 @@ user_id (not nullable)
 // expects 'skill_for_review' in body
 // expects 'user_id' in body
 // returns [new skill for review id]
-server.post("/review/new", (req, res) => {
+server.post("/new", (req, res) => {
   
   db("skills_for_review")
     .insert(req.body)
@@ -47,7 +47,7 @@ server.post("/review/new", (req, res) => {
 
 // get all skills for review
 // does not expect anything, returns [skill for review objects]
-server.get("/review", (req, res) => {
+server.get("/", (req, res) => {
   
   
   db("skills_for_review")
@@ -68,7 +68,7 @@ server.get("/review", (req, res) => {
 
 
 // get single skill for review
-server.get("/review/:id", (req, res) => {
+server.get("/:id", (req, res) => {
   const {id} = req.params;
   
   db("skills_for_review").where({id}).first()
@@ -93,7 +93,7 @@ server.get("/review/:id", (req, res) => {
 
 // expects id of existing skill for review in params
 // returns a number 1 if successful
-server.put("/review/:skill_for_review_id", (req, res) => {
+server.put("/:skill_for_review_id", (req, res) => {
   
   const { skill_for_review_id } = req.params;
 
@@ -126,7 +126,7 @@ server.put("/review/:skill_for_review_id", (req, res) => {
 
 // expects id of existing skill for review in params
 // returns a number 1 if successful
-server.delete("/review/:skill_for_review_id", (req, res) => {
+server.delete("/:skill_for_review_id", (req, res) => {
   const { skill_for_review_id } = req.params;
 
   db("skills_for_review")
@@ -151,3 +151,6 @@ server.delete("/review/:skill_for_review_id", (req, res) => {
         .json({ message: "error deleting skill for review data", err: err });
     });
 });
+
+
+module.exports = server;

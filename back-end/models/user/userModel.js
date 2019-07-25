@@ -10,9 +10,7 @@ module.exports = {
 
 async function insert(newUser) {
   const [id] = await db("users").insert(newUser);
-  return db("users")
-    .where({ id })
-    .first();
+  return getSingle(id);
 }
 
 function getAll() {
@@ -22,7 +20,7 @@ function getAll() {
 function getSingle(id) {
   return db("users")
     .where({ email: id })
-    .orWhere({ id: id })
+    .orWhere({ id })
     .first();
 }
 
