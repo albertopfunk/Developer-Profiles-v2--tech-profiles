@@ -75,7 +75,6 @@ server.get("/", async (req, res) => {
 // returns user object if user is found
 server.get("/:id", async (req, res) => {
   const { id } = req.params;
-
   try {
     const getSingleUser = await userModel.getSingle(id);
     getSingleUser

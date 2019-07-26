@@ -18,6 +18,8 @@ const server = express.Router();
 // returns id of new user extra
 server.post("/new/:user_extra", async (req, res) => {
   const { user_extra } = req.params;
+  // if user extra !== projects, education, or experience
+  // if !req.body.user_id
 
   try {
     const addNewUserExtra = await userExtrasModel.insert(user_extra, req.body);
@@ -35,6 +37,7 @@ server.post("/new/:user_extra", async (req, res) => {
 // returns user extras of chosen extra, [user extra objects]
 server.get("/:user_id/:user_extra", async (req, res) => {
   const { user_id, user_extra } = req.params;
+  // if user extra !== projects, education, or experience
 
   try {
     const getAllUserExtra = await userExtrasModel.getAll(user_id, user_extra);
@@ -54,6 +57,7 @@ server.get("/:user_id/:user_extra", async (req, res) => {
 // expects user extra, either 'education', 'experience', 'projects' in params
 server.get("/single/:user_extra/:user_extra_id", async (req, res) => {
   const { user_extra, user_extra_id } = req.params;
+  // if user extra !== projects, education, or experience
 
   try {
     const getSingleUserExtra = await userExtrasModel.getSingle(
@@ -78,6 +82,8 @@ server.get("/single/:user_extra/:user_extra_id", async (req, res) => {
 // returns a number 1 if successful
 server.put("/:user_extra/:user_extra_id", async (req, res) => {
   const { user_extra, user_extra_id } = req.params;
+  // if user extra !== projects, education, or experience
+
   try {
     const editUser = await userExtrasModel.update(
       user_extra,
@@ -102,6 +108,8 @@ server.put("/:user_extra/:user_extra_id", async (req, res) => {
 // returns a number 1 if successful
 server.delete("/:user_extra/:user_extra_id", async (req, res) => {
   const { user_extra, user_extra_id } = req.params;
+  // if user extra !== projects, education, or experience
+
   try {
     const removeUser = await userExtrasModel.remove(user_extra, user_extra_id);
     removeUser

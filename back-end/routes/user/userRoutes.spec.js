@@ -8,7 +8,7 @@ describe("environment", () => {
   });
 });
 
-describe("POST /", () => {
+describe("POST /new", () => {
   beforeEach(async () => {
     await db("users").truncate();
   });
@@ -20,6 +20,11 @@ describe("POST /", () => {
     await request(server)
       .post("/users/new")
       .send({ email: "test@test.com" })
+      .expect(201)
+      .expect("Content-Type", /json/i);
+    await request(server)
+      .post("/users/new")
+      .send({})
       .expect(201)
       .expect("Content-Type", /json/i);
   });

@@ -23,6 +23,6 @@ dist/
 .DS_Store
 dev.sqlite3
 devtest.sqlite3
-
+.notes.txt
 
 npm-debug.log*
