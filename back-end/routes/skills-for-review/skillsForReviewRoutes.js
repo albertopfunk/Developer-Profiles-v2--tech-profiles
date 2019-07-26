@@ -61,53 +61,45 @@ server.get("/:id", async (req, res) => {
 
 // expects id of existing skill for review in params
 // returns a number 1 if successful
-// server.put("/:skill_for_review_id", (req, res) => {
+server.put("/:id", async (req, res) => {
+  const { id } = req.params;
 
-//   const { skill_for_review_id } = req.params;
-
-//   db("skills_for_review")
-//     .where({ id: skill_for_review_id })
-//     .update(req.body)
-
-//     .then(isSuccessful => {
-
-//       isSuccessful === 0
-//         ? res.status(400).json({
-//             message: "Error editing skill for review, check skill for review id"
-//           })
-//         : res.status(200).json(isSuccessful);
-//     })
-
-//     .catch(err => {
-//       res
-//         .status(500)
-//         .json({ message: "error editing skill for review data", err: err });
-//     });
-// });
+  if (!req.body.user_id || !req.body.skill_for_review) {
+    res
+      .status(400)
+      .json({ message: "Expected 'user_id' and 'skill_for_review' in body" });
+  } else {
+    try {
+      const editSkill = await skillsForReviewModel.update(id, req.body);
+      editSkill
+        ? res.json(editSkill)
+        : res.status(404).json({
+            message: `The skill with the specified ID of '${id}' does not exist`
+          });
+    } catch (err) {
+      res
+        .status(500)
+        .json({ message: "The skill information could not be modified", err });
+    }
+  }
+});
 
 // expects id of existing skill for review in params
 // returns a number 1 if successful
-// server.delete("/:skill_for_review_id", (req, res) => {
-//   const { skill_for_review_id } = req.params;
-
-//   db("skills_for_review")
-//     .where({ id: skill_for_review_id })
-//     .delete()
-
-//     .then(isSuccessful => {
-
-//       isSuccessful === 0
-//         ? res.status(400).json({
-//             message: "Error deleting skill for review, check skill for review id"
-//           })
-//         : res.status(200).json(isSuccessful);
-//     })
-
-//     .catch(err => {
-//       res
-//         .status(500)
-//         .json({ message: "error deleting skill for review data", err: err });
-//     });
-// });
+server.delete("/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const removeSkill = await skillsForReviewModel.remove(id);
+    removeSkill
+      ? res.json(removeSkill)
+      : res.status(404).json({
+          message: `The skill with the specified ID of '${id}' does not exist`
+        });
+  } catch (err) {
+    res
+      .status(500)
+      .json({ message: "The skill information could not be removed", err });
+  }
+});
 
 module.exports = server;

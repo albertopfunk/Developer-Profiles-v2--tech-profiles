@@ -146,3 +146,139 @@ describe("GET /:id", () => {
     expect(skill3.body.skill_for_review).toBe("TestSkill3");
   });
 });
+
+describe("PUT /:id", () => {
+  beforeAll(async () => {
+    await db("skills_for_review").truncate();
+  });
+  afterEach(async () => {
+    await db("skills_for_review").truncate();
+  });
+
+  it("responds with 200 OK and JSON", async () => {
+    await db("skills_for_review").insert({
+      user_id: 1,
+      skill_for_review: "TestSkill"
+    });
+
+    await request(server)
+      .put("/skills-for-review/1")
+      .send({ user_id: 1, skill_for_review: "NEWTestSkill" })
+      .expect(200)
+      .expect("Content-Type", /json/i);
+  });
+
+  it("responds with 400 with correct message", async () => {
+    await db("skills_for_review").insert({
+      user_id: 1,
+      skill_for_review: "TestSkill"
+    });
+
+    let err = await request(server)
+      .put("/skills-for-review/1")
+      .send({ user_id: 1, skill_for_reviewS: "NEWTestSkill" })
+      .expect(400)
+      .expect("Content-Type", /json/i);
+    expect(err.body.message).toBe(
+      "Expected 'user_id' and 'skill_for_review' in body"
+    );
+    err = await request(server)
+      .put("/skills-for-review/1")
+      .send({ skill_for_review: "NEWTestSkill" })
+      .expect(400)
+      .expect("Content-Type", /json/i);
+    expect(err.body.message).toBe(
+      "Expected 'user_id' and 'skill_for_review' in body"
+    );
+    err = await request(server)
+      .put("/skills-for-review/1")
+      .send({})
+      .expect(400)
+      .expect("Content-Type", /json/i);
+    expect(err.body.message).toBe(
+      "Expected 'user_id' and 'skill_for_review' in body"
+    );
+  });
+
+  it("responds with 404 with correct message", async () => {
+    await db("skills_for_review").insert({
+      user_id: 1,
+      skill_for_review: "TestSkill"
+    });
+
+    const err = await request(server)
+      .put("/skills-for-review/99")
+      .send({ user_id: 1, skill_for_review: "NEWTestSkill" })
+      .expect(404)
+      .expect("Content-Type", /json/i);
+    expect(err.body.message).toBe(
+      "The skill with the specified ID of '99' does not exist"
+    );
+  });
+
+  it("should update skill", async () => {
+    await db("skills_for_review").insert({
+      user_id: 1,
+      skill_for_review: "TestSkill"
+    });
+
+    const isSuccessfull = await request(server)
+      .put("/skills-for-review/1")
+      .send({ user_id: 1, skill_for_review: "NEWTestSkill" });
+    expect(isSuccessfull.body).toBe(1);
+
+    const updatedSkill = await db("skills_for_review")
+      .where({ id: 1 })
+      .first();
+    expect(updatedSkill.skill_for_review).toBe("NEWTestSkill");
+  });
+});
+
+describe("DELETE /:id", () => {
+  beforeAll(async () => {
+    await db("skills_for_review").truncate();
+  });
+  afterEach(async () => {
+    await db("skills_for_review").truncate();
+  });
+
+  it("responds with 200 OK and JSON", async () => {
+    await db("skills_for_review").insert({
+      user_id: 1,
+      skill_for_review: "NEWTestSkill"
+    });
+
+    await request(server)
+      .delete("/skills-for-review/1")
+      .expect(200)
+      .expect("Content-Type", /json/i);
+  });
+
+  it("responds with 404 with correct message", async () => {
+    await db("skills_for_review").insert({
+      user_id: 1,
+      skill_for_review: "NEWTestSkill"
+    });
+
+    const err = await request(server)
+      .delete("/skills-for-review/99")
+      .expect(404)
+      .expect("Content-Type", /json/i);
+    expect(err.body.message).toBe(
+      "The skill with the specified ID of '99' does not exist"
+    );
+  });
+
+  it("deletes skill and returns number 1 on success", async () => {
+    await db("skills_for_review").insert({
+      user_id: 1,
+      skill_for_review: "NEWTestSkill"
+    });
+    let skills = await db("skills_for_review");
+    expect(skills).toHaveLength(1);
+    const isSuccessful = await request(server).delete("/skills-for-review/1");
+    expect(isSuccessful.body).toBe(1);
+    skills = await db("skills_for_review");
+    expect(skills).toHaveLength(0);
+  });
+});

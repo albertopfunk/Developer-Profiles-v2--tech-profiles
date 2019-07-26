@@ -128,3 +128,106 @@ describe("GET /:id", () => {
     expect(skill3.body.skill).toBe("TestSkill3");
   });
 });
+
+describe("PUT /:id", () => {
+  beforeAll(async () => {
+    await db("skills").truncate();
+  });
+  afterEach(async () => {
+    await db("skills").truncate();
+  });
+
+  it("responds with 200 OK and JSON", async () => {
+    await db("skills").insert({ skill: "TestSkill" });
+
+    await request(server)
+      .put("/skills/1")
+      .send({ skill: "NEWTestSkill" })
+      .expect(200)
+      .expect("Content-Type", /json/i);
+  });
+
+  it("responds with 400 with correct message", async () => {
+    await db("skills").insert({ skill: "TestSkill" });
+
+    let err = await request(server)
+      .put("/skills/1")
+      .send({ skillZ: "NEWTestSkill" })
+      .expect(400)
+      .expect("Content-Type", /json/i);
+    expect(err.body.message).toBe("Expected 'skill' in body");
+    err = await request(server)
+      .put("/skills/1")
+      .send({})
+      .expect(400)
+      .expect("Content-Type", /json/i);
+    expect(err.body.message).toBe("Expected 'skill' in body");
+  });
+
+  it("responds with 404 with correct message", async () => {
+    await db("skills").insert({ skill: "TestSkill" });
+
+    const err = await request(server)
+      .put("/skills/99")
+      .send({ skill: "NEWTestSkill" })
+      .expect(404)
+      .expect("Content-Type", /json/i);
+    expect(err.body.message).toBe(
+      "The skill with the specified ID of '99' does not exist"
+    );
+  });
+
+  it("should update skill", async () => {
+    await db("skills").insert({ skill: "TestSkill" });
+
+    const isSuccessfull = await request(server)
+      .put("/skills/1")
+      .send({ skill: "NEWTestSkill" });
+    expect(isSuccessfull.body).toBe(1);
+
+    const updatedSkill = await db("skills")
+      .where({ id: 1 })
+      .first();
+    expect(updatedSkill.skill).toBe("NEWTestSkill");
+  });
+});
+
+describe("DELETE /:id", () => {
+  beforeAll(async () => {
+    await db("skills").truncate();
+  });
+  afterEach(async () => {
+    await db("skills").truncate();
+  });
+
+  it("responds with 200 OK and JSON", async () => {
+    await db("skills").insert({ skill: "TestSkill" });
+
+    await request(server)
+      .delete("/skills/1")
+      .expect(200)
+      .expect("Content-Type", /json/i);
+  });
+
+  it("responds with 404 with correct message", async () => {
+    await db("skills").insert({ skill: "TestSkill" });
+
+    const err = await request(server)
+      .delete("/skills/99")
+      .expect(404)
+      .expect("Content-Type", /json/i);
+    expect(err.body.message).toBe(
+      "The skill with the specified ID of '99' does not exist"
+    );
+  });
+
+  it("deletes skill and returns number 1 on success", async () => {
+    await db("skills").insert({ skill: "TestSkill" });
+    let skills = await db("skills");
+    expect(skills).toHaveLength(1);
+    const isSuccessful = await request(server).delete("/skills/1");
+    expect(isSuccessful.body).toBe(1);
+    skills = await db("skills");
+    expect(skills).toHaveLength(0);
+  });
+});

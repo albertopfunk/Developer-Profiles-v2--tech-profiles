@@ -57,50 +57,43 @@ server.get("/:id", async (req, res) => {
 
 // expects id of existing skill in params
 // returns a number 1 if successful
-// server.put("/:skill_id", (req, res) => {
+server.put("/:id", async (req, res) => {
+  const { id } = req.params;
 
-//   const { skill_id } = req.params;
-
-//   db("skills")
-//     .where({ id: skill_id })
-//     .update(req.body)
-
-//     .then(isSuccessful => {
-
-//       isSuccessful === 0
-//         ? res
-//             .status(400)
-//             .json({ message: "Error editing skill, check skill id" })
-//         : res.status(200).json(isSuccessful);
-//     })
-
-//     .catch(err => {
-//       res.status(500).json({ message: "error editing skill data", err: err });
-//     });
-// });
+  if (!req.body.skill) {
+    res.status(400).json({ message: "Expected 'skill' in body" });
+  } else {
+    try {
+      const editSkill = await skillsModel.update(id, req.body);
+      editSkill
+        ? res.json(editSkill)
+        : res.status(404).json({
+            message: `The skill with the specified ID of '${id}' does not exist`
+          });
+    } catch (err) {
+      res
+        .status(500)
+        .json({ message: "The skill information could not be modified", err });
+    }
+  }
+});
 
 // expects id of existing skill in params
 // returns a number 1 if successful
-// server.delete("/:skill_id", (req, res) => {
-
-//   const { skill_id } = req.params;
-
-//   db("skills")
-//     .where({ id: skill_id })
-//     .delete()
-
-//     .then(isSuccessful => {
-
-//       isSuccessful === 0
-//         ? res
-//             .status(400)
-//             .json({ message: "Error deleting skill, check skill id" })
-//         : res.status(200).json(isSuccessful);
-//     })
-
-//     .catch(err => {
-//       res.status(500).json({ message: "error deleting skill data", err: err });
-//     });
-// });
+server.delete("/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const removeSkill = await skillsModel.remove(id);
+    removeSkill
+      ? res.json(removeSkill)
+      : res.status(404).json({
+          message: `The skill with the specified ID of '${id}' does not exist`
+        });
+  } catch (err) {
+    res
+      .status(500)
+      .json({ message: "The skill information could not be removed", err });
+  }
+});
 
 module.exports = server;

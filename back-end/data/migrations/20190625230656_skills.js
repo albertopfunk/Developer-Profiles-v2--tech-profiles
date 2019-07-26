@@ -2,7 +2,10 @@
 exports.up = function(knex, Promise) {
   return knex.schema.createTable("skills", function(table) {
     table.increments();
-    table.string("skill").unique("skill").notNullable();
+    table
+      .string("skill")
+      .unique("skill")
+      .notNullable();
   });
 };
 
