@@ -9,7 +9,7 @@ describe("environment", () => {
 });
 
 describe("POST /new", () => {
-  beforeEach(async () => {
+  beforeAll(async () => {
     await db("users").truncate();
   });
   afterEach(async () => {
@@ -29,11 +29,12 @@ describe("POST /new", () => {
       .expect("Content-Type", /json/i);
   });
 
-  it("responds with 500 server error", async () => {
-    await request(server)
+  it("responds with 500 and correct error message", async () => {
+    const err = await request(server)
       .post("/users/new")
       .send({ emailS: "test@test.com" })
       .expect(500);
+    expect(err.body.message).toBe("Error adding the user to the database");
   });
 
   it("should return inserted new user if emails do not match", async () => {
@@ -90,7 +91,7 @@ describe("POST /new", () => {
 });
 
 describe("GET /", () => {
-  beforeEach(async () => {
+  beforeAll(async () => {
     await db("users").truncate();
   });
   afterEach(async () => {
@@ -125,7 +126,7 @@ describe("GET /", () => {
 });
 
 describe("GET /:id", () => {
-  beforeEach(async () => {
+  beforeAll(async () => {
     await db("users").truncate();
   });
   afterEach(async () => {
@@ -145,7 +146,7 @@ describe("GET /:id", () => {
       .expect("Content-Type", /json/i);
   });
 
-  it("responds with 404 Error", async () => {
+  it("responds with 404 and correct error message", async () => {
     await db("users").insert({ email: "test@test.com" });
 
     await request(server)
@@ -153,10 +154,10 @@ describe("GET /:id", () => {
       .expect(404);
 
     const err = await request(server)
-      .get("/users/0")
+      .get("/users/99")
       .expect(404);
     expect(err.body.message).toBe(
-      "The user with the specified ID does not exist"
+      "The user with the specified ID of '99' does not exist"
     );
   });
 
@@ -181,7 +182,7 @@ describe("GET /:id", () => {
 });
 
 describe("PUT /:id", () => {
-  beforeEach(async () => {
+  beforeAll(async () => {
     await db("users").truncate();
   });
   afterEach(async () => {
@@ -198,24 +199,25 @@ describe("PUT /:id", () => {
       .expect("Content-Type", /json/i);
   });
 
-  it("responds with 500", async () => {
-    await db("users").insert({ email: "test@test.com" });
-
-    await request(server)
-      .put("/users/1")
-      .send({ emailS: "testNEW@test.com" })
-      .expect(500);
-  });
-
-  it("responds with 404", async () => {
+  it("responds with 500 and correct error message", async () => {
     await db("users").insert({ email: "test@test.com" });
 
     const err = await request(server)
-      .put("/users/test@test.com")
+      .put("/users/1")
+      .send({ emailS: "testNEW@test.com" })
+      .expect(500);
+    expect(err.body.message).toBe("The user information could not be modified");
+  });
+
+  it("responds with 404 and correct error message", async () => {
+    await db("users").insert({ email: "test@test.com" });
+
+    const err = await request(server)
+      .put("/users/99")
       .send({ email: "testNEW@test.com" })
       .expect(404);
     expect(err.body.message).toBe(
-      "The user with the specified ID does not exist"
+      "The user with the specified ID of '99' does not exist"
     );
   });
 
@@ -237,7 +239,7 @@ describe("PUT /:id", () => {
 });
 
 describe("DELETE /:id", () => {
-  beforeEach(async () => {
+  beforeAll(async () => {
     await db("users").truncate();
   });
   afterEach(async () => {
@@ -253,14 +255,14 @@ describe("DELETE /:id", () => {
       .expect("Content-Type", /json/i);
   });
 
-  it("responds with 404", async () => {
+  it("responds with 404 and correct error message", async () => {
     await db("users").insert({ email: "test@test.com" });
 
     const err = await request(server)
-      .delete("/users/test@test.com")
+      .delete("/users/99")
       .expect(404);
     expect(err.body.message).toBe(
-      "The user with the specified ID does not exist"
+      "The user with the specified ID of '99' does not exist"
     );
   });
 

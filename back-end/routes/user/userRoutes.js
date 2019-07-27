@@ -33,10 +33,9 @@ const server = express.Router();
 */
 //----------------------------------------------------------------------
 
-// add new user
-// checks if the email is already in the database
-// if the email exists, returns existing user, user object
-// if the email does not exist, adds new user, returns new user, user object
+// does not expect anything
+// checks for existing user by email(authO free plan creates doubles) or id
+// returns inserted user object
 server.post("/new", async (req, res) => {
   let id = 0;
   if (req.body.email) {
@@ -60,8 +59,8 @@ server.post("/new", async (req, res) => {
   }
 });
 
-// get all users
-// does not expect anything, returns [user objects]
+// does not expect anything
+// returns [user objects]
 server.get("/", async (req, res) => {
   try {
     const users = await userModel.getAll();
@@ -71,17 +70,17 @@ server.get("/", async (req, res) => {
   }
 });
 
-// get single user
-// returns user object if user is found
+// expects id of existing user in params
+// returns user object
 server.get("/:id", async (req, res) => {
   const { id } = req.params;
   try {
     const getSingleUser = await userModel.getSingle(id);
     getSingleUser
       ? res.json(getSingleUser)
-      : res
-          .status(404)
-          .json({ message: "The user with the specified ID does not exist" });
+      : res.status(404).json({
+          message: `The user with the specified ID of '${id}' does not exist`
+        });
   } catch (err) {
     res.status(500).json({ message: "The user could not be retrieved", err });
   }
@@ -95,9 +94,9 @@ server.put("/:id", async (req, res) => {
     const editUser = await userModel.update(id, req.body);
     editUser
       ? res.json(editUser)
-      : res
-          .status(404)
-          .json({ message: "The user with the specified ID does not exist" });
+      : res.status(404).json({
+          message: `The user with the specified ID of '${id}' does not exist`
+        });
   } catch (err) {
     res
       .status(500)
@@ -115,7 +114,9 @@ server.delete("/:id", async (req, res) => {
       ? res.json(removeUser)
       : res
           .status(404)
-          .json({ message: "The user with the specified ID does not exist" });
+          .json({
+            message: `The user with the specified ID of '${id}' does not exist`
+          });
   } catch (err) {
     res.status(500).json({ message: "The user could not be removed", err });
   }

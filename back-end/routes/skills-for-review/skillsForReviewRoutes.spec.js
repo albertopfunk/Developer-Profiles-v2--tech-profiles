@@ -24,6 +24,15 @@ describe("POST /new", () => {
       .expect("Content-Type", /json/i);
   });
 
+  it("responds with 500 and correct error message", async () => {
+    const err = await request(server)
+      .post("/skills-for-review/new")
+      .send({ user_id: 1, skill_for_review: "TestSkill", accident: "TEST" })
+      .expect(500)
+      .expect("Content-Type", /json/i);
+    expect(err.body.message).toBe("Error adding the skill to the database");
+  });
+
   it("responds with 400 and correct error message", async () => {
     let err = await request(server)
       .post("/skills-for-review/new")
@@ -116,7 +125,7 @@ describe("GET /:id", () => {
       .expect("Content-Type", /json/i);
   });
 
-  it("responds with 404 and correct message", async () => {
+  it("responds with 404 and correct error message", async () => {
     await db("skills_for_review").insert([
       { user_id: 1, skill_for_review: "TestSkill1" },
       { user_id: 1, skill_for_review: "TestSkill2" }
@@ -127,7 +136,7 @@ describe("GET /:id", () => {
       .expect(404)
       .expect("Content-Type", /json/i);
     expect(err.body.message).toBe(
-      "The skill with the specified ID does not exist"
+      "The skill with the specified ID of '99' does not exist"
     );
   });
 
@@ -200,7 +209,7 @@ describe("PUT /:id", () => {
     );
   });
 
-  it("responds with 404 with correct message", async () => {
+  it("responds with 404 and correct error message", async () => {
     await db("skills_for_review").insert({
       user_id: 1,
       skill_for_review: "TestSkill"
@@ -216,7 +225,7 @@ describe("PUT /:id", () => {
     );
   });
 
-  it("should update skill", async () => {
+  it("updates skill and returns number 1 on success", async () => {
     await db("skills_for_review").insert({
       user_id: 1,
       skill_for_review: "TestSkill"
@@ -254,7 +263,7 @@ describe("DELETE /:id", () => {
       .expect("Content-Type", /json/i);
   });
 
-  it("responds with 404 with correct message", async () => {
+  it("responds with 404 and correct error message", async () => {
     await db("skills_for_review").insert({
       user_id: 1,
       skill_for_review: "NEWTestSkill"

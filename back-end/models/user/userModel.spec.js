@@ -8,7 +8,7 @@ describe("environment", () => {
 });
 
 describe("insert", () => {
-  beforeEach(async () => {
+  beforeAll(async () => {
     await db("users").truncate();
   });
   afterEach(async () => {
@@ -91,7 +91,7 @@ describe("insert", () => {
 });
 
 describe("getAll", () => {
-  beforeEach(async () => {
+  beforeAll(async () => {
     await db("users").truncate();
   });
   afterEach(async () => {
@@ -103,7 +103,7 @@ describe("getAll", () => {
     expect(allUsers).toHaveLength(0);
   });
 
-  it("should return all inserted users", async () => {
+  it("should return all users", async () => {
     const user = {
       first_name: "Mr. Test",
       email: "test@email.com"
@@ -120,7 +120,7 @@ describe("getAll", () => {
 });
 
 describe("getSingle", () => {
-  beforeEach(async () => {
+  beforeAll(async () => {
     await db("users").truncate();
   });
   afterEach(async () => {
@@ -191,7 +191,7 @@ describe("getSingle", () => {
 });
 
 describe("update", () => {
-  beforeEach(async () => {
+  beforeAll(async () => {
     await db("users").truncate();
   });
   afterEach(async () => {
@@ -230,7 +230,7 @@ describe("update", () => {
 });
 
 describe("remove", () => {
-  beforeEach(async () => {
+  beforeAll(async () => {
     await db("users").truncate();
   });
   afterEach(async () => {

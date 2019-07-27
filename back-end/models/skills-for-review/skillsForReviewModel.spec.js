@@ -141,7 +141,7 @@ describe("remove", () => {
     await db("skills_for_review").truncate();
   });
 
-  it("should return 1 on success", async () => {
+  it("should return number 1 on success of removing skill", async () => {
     await db("skills_for_review").insert({
       user_id: 1,
       skill_for_review: "TestSkill1"

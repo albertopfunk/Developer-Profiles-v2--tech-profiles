@@ -11,9 +11,8 @@ skill
 */
 //----------------------------------------------------------------------
 
-// adds new skill
 // expects 'skill' in body
-// returns [new skill id]
+// returns inserted skill object
 server.post("/new", async (req, res) => {
   if (!req.body.skill) {
     res.status(400).json({ message: "Expected 'skill' in body" });
@@ -29,8 +28,8 @@ server.post("/new", async (req, res) => {
   }
 });
 
-// get all skills
-// does not expect anything, returns [skill objects]
+// does not expect anything
+// returns [skill objects]
 server.get("/", async (req, res) => {
   try {
     const getAllSkills = await skillsModel.getAll();
@@ -40,22 +39,24 @@ server.get("/", async (req, res) => {
   }
 });
 
-// get single skill
+// expects id of existing skill in params
+// returns skill object
 server.get("/:id", async (req, res) => {
   const { id } = req.params;
   try {
     const getSingleSkill = await skillsModel.getSingle(id);
     getSingleSkill
       ? res.json(getSingleSkill)
-      : res
-          .status(404)
-          .json({ message: "The skill with the specified ID does not exist" });
+      : res.status(404).json({
+          message: `The skill with the specified ID of '${id}' does not exist`
+        });
   } catch (err) {
     res.status(500).json({ message: "The skill could not be retrieved", err });
   }
 });
 
 // expects id of existing skill in params
+// expects 'skill' in req.body
 // returns a number 1 if successful
 server.put("/:id", async (req, res) => {
   const { id } = req.params;

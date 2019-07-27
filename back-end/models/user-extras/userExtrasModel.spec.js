@@ -8,7 +8,7 @@ describe("environment", () => {
 });
 
 describe("insert", () => {
-  beforeEach(async () => {
+  beforeAll(async () => {
     await db("users").truncate();
     await db("projects").truncate();
     await db("education").truncate();
@@ -95,7 +95,7 @@ describe("insert", () => {
 });
 
 describe("getAll", () => {
-  beforeEach(async () => {
+  beforeAll(async () => {
     await db("users").truncate();
     await db("projects").truncate();
     await db("education").truncate();
@@ -168,7 +168,7 @@ describe("getAll", () => {
 });
 
 describe("getSingle", () => {
-  beforeEach(async () => {
+  beforeAll(async () => {
     await db("users").truncate();
     await db("projects").truncate();
     await db("education").truncate();
@@ -219,7 +219,7 @@ describe("getSingle", () => {
 });
 
 describe("update", () => {
-  beforeEach(async () => {
+  beforeAll(async () => {
     await db("users").truncate();
     await db("projects").truncate();
     await db("education").truncate();
@@ -274,7 +274,7 @@ describe("update", () => {
 });
 
 describe("remove", () => {
-  beforeEach(async () => {
+  beforeAll(async () => {
     await db("users").truncate();
     await db("projects").truncate();
     await db("education").truncate();

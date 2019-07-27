@@ -130,7 +130,7 @@ describe("remove", () => {
     await db("skills").truncate();
   });
 
-  it("should return 1 on success", async () => {
+  it("should return number 1 on success of removing skill", async () => {
     await db("skills").insert({ skill: "TestSkill1" });
     const isSuccessfull = await skillsModel.remove(1);
     expect(isSuccessfull).toBe(1);

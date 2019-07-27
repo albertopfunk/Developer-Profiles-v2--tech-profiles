@@ -12,10 +12,9 @@ user_id (not nullable)
 */
 //----------------------------------------------------------------------
 
-// adds new skill for review
 // expects 'skill_for_review' in body
-// expects 'user_id' in body
-// returns [new skill for review id]
+// expects 'user_id' of existing user in body
+// returns inserted skill object
 server.post("/new", async (req, res) => {
   if (!req.body.user_id || !req.body.skill_for_review) {
     res
@@ -33,8 +32,8 @@ server.post("/new", async (req, res) => {
   }
 });
 
-// get all skills for review
-// does not expect anything, returns [skill for review objects]
+// does not expect anything
+// returns [skill for review objects]
 server.get("/", async (req, res) => {
   try {
     const getAllSkills = await skillsForReviewModel.getAll();
@@ -44,22 +43,24 @@ server.get("/", async (req, res) => {
   }
 });
 
-// get single skill for review
+// expects id of existing skill in params
+// returns skill object
 server.get("/:id", async (req, res) => {
   const { id } = req.params;
   try {
     const getSingleSkill = await skillsForReviewModel.getSingle(id);
     getSingleSkill
       ? res.json(getSingleSkill)
-      : res
-          .status(404)
-          .json({ message: "The skill with the specified ID does not exist" });
+      : res.status(404).json({
+          message: `The skill with the specified ID of '${id}' does not exist`
+        });
   } catch (err) {
     res.status(500).json({ message: "The skill could not be retrieved", err });
   }
 });
 
-// expects id of existing skill for review in params
+// expects id of existing skill in params
+// expects 'skill_for_review' in body
 // returns a number 1 if successful
 server.put("/:id", async (req, res) => {
   const { id } = req.params;
@@ -84,7 +85,7 @@ server.put("/:id", async (req, res) => {
   }
 });
 
-// expects id of existing skill for review in params
+// expects id of existing skill in params
 // returns a number 1 if successful
 server.delete("/:id", async (req, res) => {
   const { id } = req.params;

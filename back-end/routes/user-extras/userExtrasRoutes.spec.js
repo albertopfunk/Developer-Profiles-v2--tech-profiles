@@ -20,14 +20,10 @@ describe("POST /new/:user_extra", () => {
 
   it("responds with 201 OK and JSON", async () => {
     await db("users").insert({ email: "test@email.com" });
-    const newExperience = {
-      user_id: 1,
-      company_name: "TestCompany"
-    };
 
     await request(server)
       .post("/extras/new/experience")
-      .send(newExperience)
+      .send({ user_id: 1 })
       .expect(201)
       .expect("Content-Type", /json/i);
   });
@@ -46,6 +42,30 @@ describe("POST /new/:user_extra", () => {
     expect(err.body.message).toBe(
       "Error adding the user's 'experience' to the database"
     );
+  });
+
+  it("responds with 400 and correct error message", async () => {
+    await db("users").insert({ email: "test@email.com" });
+
+    let err = await request(server)
+      .post("/extras/new/experienceZ")
+      .send({ user_id: 1 })
+      .expect(400);
+    expect(err.body.message).toBe(
+      `Expected 'projects' or  'education', or 'experience' in parameters, received 'experienceZ'`
+    );
+
+    err = await request(server)
+      .post("/extras/new/experience")
+      .send({ user_idZ: 1 })
+      .expect(400);
+    expect(err.body.message).toBe("Expected 'user_id' in body");
+
+    err = await request(server)
+      .post("/extras/new/experience")
+      .send({})
+      .expect(400);
+    expect(err.body.message).toBe("Expected 'user_id' in body");
   });
 
   it("should return inserted user extra", async () => {
@@ -82,40 +102,40 @@ describe("GET /:user_id/:user_extra", () => {
       .expect("Content-Type", /json/i);
   });
 
-  it("responds with 500 and correct error message", async () => {
+  it("responds with 400 and correct error message if user extra is incorrect", async () => {
     await db("users").insert({ email: "test@email.com" });
     await db("projects").insert({ user_id: 1 });
 
     const err = await request(server)
       .get("/extras/1/projectss")
-      .expect(500);
+      .expect(400);
     expect(err.body.message).toBe(
-      "The user's 'projectss' could not be retrieved"
+      "Expected 'projects' or  'education', or 'experience' in parameters, received 'projectss'"
     );
   });
 
-  it("should return 400 if user ID is invalid", async () => {
+  it("responds with 400 and correct error message if user ID is invalid", async () => {
     await db("users").insert({ email: "test@email.com" });
     await db("projects").insert({ user_id: 1 });
     const invalidID = await request(server)
       .get("/extras/999/projects")
       .expect(400);
     expect(invalidID.body.message).toBe(
-      "Error finding user's 'projects', check user id or add a user 'projects'"
+      "Error finding user's 'projects' items, check user id of '999' or add a user 'projects' item"
     );
   });
 
-  it("should return 400 if user extra is empty", async () => {
+  it("responds with 400 and correct error message if user extra is empty", async () => {
     await db("users").insert({ email: "test@email.com" });
     const emptyUserExtra = await request(server)
       .get("/extras/1/projects")
       .expect(400);
     expect(emptyUserExtra.body.message).toBe(
-      "Error finding user's 'projects', check user id or add a user 'projects'"
+      "Error finding user's 'projects' items, check user id of '1' or add a user 'projects' item"
     );
   });
 
-  it("should return all items in user's extra", async () => {
+  it("should return all items of specified user's extra", async () => {
     await db("users").insert({ email: "test@email.com" });
     await db("projects").insert([
       { user_id: 1 },
@@ -123,10 +143,7 @@ describe("GET /:user_id/:user_extra", () => {
       { user_id: 1 }
     ]);
 
-    userExtras = await request(server)
-      .get("/extras/1/projects")
-      .expect(200)
-      .expect("Content-Type", /json/i);
+    userExtras = await request(server).get("/extras/1/projects");
     expect(userExtras.body).toHaveLength(3);
   });
 });
@@ -150,7 +167,7 @@ describe("GET /single/:user_extra/:user_extra_id", () => {
       .expect("content-type", /json/i);
   });
 
-  it("responds with 500 and correct error message", async () => {
+  it("responds with 400 and correct error message", async () => {
     await db("users").insert({ email: "test@email.com" });
     await db("education").insert([
       { user_id: 1, school: "TestSchool1" },
@@ -158,11 +175,11 @@ describe("GET /single/:user_extra/:user_extra_id", () => {
       { user_id: 1, school: "TestSchool3" }
     ]);
 
-    const userExtras = await request(server)
+    const err = await request(server)
       .get("/extras/single/educationS/2")
-      .expect(500);
-    expect(userExtras.body.message).toBe(
-      "The user's 'educationS' could not be retrieved"
+      .expect(400);
+    expect(err.body.message).toBe(
+      "Expected 'projects' or  'education', or 'experience' in parameters, received 'educationS'"
     );
   });
 
@@ -174,10 +191,10 @@ describe("GET /single/:user_extra/:user_extra_id", () => {
       { user_id: 1, school: "TestSchool3" }
     ]);
 
-    const userExtras = await request(server)
+    const err = await request(server)
       .get("/extras/single/education/99")
       .expect(404);
-    expect(userExtras.body.message).toBe(
+    expect(err.body.message).toBe(
       "The user's 'education' with the specified ID of '99' does not exist"
     );
   });
@@ -219,16 +236,16 @@ describe("PUT /:user_extra/:user_extra_id", () => {
       .expect("content-type", /json/i);
   });
 
-  it("responds with 500 and correct error message", async () => {
+  it("responds with 400 and correct error message", async () => {
     await db("users").insert({ email: "test@email.com" });
     await db("education").insert({ user_id: 1 });
 
     const err = await request(server)
       .put("/extras/educationS/1")
       .send({ school: "TestSchool" })
-      .expect(500);
+      .expect(400);
     expect(err.body.message).toBe(
-      "The user's 'educationS' could not be modified"
+      "Expected 'projects' or  'education', or 'experience' in parameters, received 'educationS'"
     );
   });
 
@@ -278,19 +295,19 @@ describe("DELETE /:user_extra/:user_extra_id", () => {
       .expect("content-type", /json/i);
   });
 
-  it("responds with 500 and correct error message", async () => {
+  it("responds with 400 and correct error message", async () => {
     await db("users").insert({ email: "test@email.com" });
     await db("projects").insert({ user_id: 1 });
 
     const err = await request(server)
       .delete("/extras/projectsS/1")
-      .expect(500);
+      .expect(400);
     expect(err.body.message).toBe(
-      "The user's 'projectsS' could not be removed"
+      "Expected 'projects' or  'education', or 'experience' in parameters, received 'projectsS'"
     );
   });
 
-  it("should return 404 with correct message", async () => {
+  it("responds with 404 and correct error message", async () => {
     await db("users").insert({ email: "test@email.com" });
     await db("projects").insert({ user_id: 1 });
 
@@ -302,12 +319,13 @@ describe("DELETE /:user_extra/:user_extra_id", () => {
     );
   });
 
-  it("should remove user extra", async () => {
+  it("deletes user extra and returns number 1 on success", async () => {
     await db("users").insert({ email: "test@email.com" });
     await db("projects").insert([{ user_id: 1 }, { user_id: 1 }]);
     let userExtras = await db("projects").where({ user_id: 1 });
     expect(userExtras).toHaveLength(2);
-    await request(server).delete("/extras/projects/1");
+    const isSuccessful = await request(server).delete("/extras/projects/1");
+    expect(isSuccessful.body).toBe(1);
     userExtras = await db("projects").where({ user_id: 1 });
     expect(userExtras).toHaveLength(1);
   });

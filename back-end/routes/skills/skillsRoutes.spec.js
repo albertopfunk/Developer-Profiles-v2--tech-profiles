@@ -24,6 +24,15 @@ describe("POST /new", () => {
       .expect("Content-Type", /json/i);
   });
 
+  it("responds with 500 and correct error message", async () => {
+    const err = await request(server)
+      .post("/skills/new")
+      .send({ skill: "TestSkill", accident: "TEST" })
+      .expect(500)
+      .expect("Content-Type", /json/i);
+    expect(err.body.message).toBe("Error adding the skill to the database");
+  });
+
   it("responds with 400 and correct error message", async () => {
     let err = await request(server)
       .post("/skills/new")
@@ -98,7 +107,7 @@ describe("GET /:id", () => {
       .expect("Content-Type", /json/i);
   });
 
-  it("responds with 404 and correct message", async () => {
+  it("responds with 404 and correct error message", async () => {
     await db("skills").insert([
       { skill: "TestSkill1" },
       { skill: "TestSkill2" }
@@ -109,7 +118,7 @@ describe("GET /:id", () => {
       .expect(404)
       .expect("Content-Type", /json/i);
     expect(err.body.message).toBe(
-      "The skill with the specified ID does not exist"
+      "The skill with the specified ID of '99' does not exist"
     );
   });
 
@@ -164,7 +173,7 @@ describe("PUT /:id", () => {
     expect(err.body.message).toBe("Expected 'skill' in body");
   });
 
-  it("responds with 404 with correct message", async () => {
+  it("responds with 404 and correct error message", async () => {
     await db("skills").insert({ skill: "TestSkill" });
 
     const err = await request(server)
@@ -177,7 +186,7 @@ describe("PUT /:id", () => {
     );
   });
 
-  it("should update skill", async () => {
+  it("updates skill and returns number 1 on success", async () => {
     await db("skills").insert({ skill: "TestSkill" });
 
     const isSuccessfull = await request(server)
@@ -209,7 +218,7 @@ describe("DELETE /:id", () => {
       .expect("Content-Type", /json/i);
   });
 
-  it("responds with 404 with correct message", async () => {
+  it("responds with 404 and correct error message", async () => {
     await db("skills").insert({ skill: "TestSkill" });
 
     const err = await request(server)
