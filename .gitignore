@@ -24,5 +24,8 @@ dist/
 dev.sqlite3
 devtest.sqlite3
 .notes.txt
+Playground.js
 
 npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

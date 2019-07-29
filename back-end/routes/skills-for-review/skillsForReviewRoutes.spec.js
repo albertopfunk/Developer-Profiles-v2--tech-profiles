@@ -172,7 +172,7 @@ describe("PUT /:id", () => {
 
     await request(server)
       .put("/skills-for-review/1")
-      .send({ user_id: 1, skill_for_review: "NEWTestSkill" })
+      .send({ skill_for_review: "NEWTestSkill" })
       .expect(200)
       .expect("Content-Type", /json/i);
   });
@@ -185,19 +185,11 @@ describe("PUT /:id", () => {
 
     let err = await request(server)
       .put("/skills-for-review/1")
-      .send({ user_id: 1, skill_for_reviewS: "NEWTestSkill" })
+      .send({ skill_for_reviewS: "NEWTestSkill" })
       .expect(400)
       .expect("Content-Type", /json/i);
     expect(err.body.message).toBe(
-      "Expected 'user_id' and 'skill_for_review' in body"
-    );
-    err = await request(server)
-      .put("/skills-for-review/1")
-      .send({ skill_for_review: "NEWTestSkill" })
-      .expect(400)
-      .expect("Content-Type", /json/i);
-    expect(err.body.message).toBe(
-      "Expected 'user_id' and 'skill_for_review' in body"
+      "Expected 'skill_for_review' in body"
     );
     err = await request(server)
       .put("/skills-for-review/1")
@@ -205,7 +197,7 @@ describe("PUT /:id", () => {
       .expect(400)
       .expect("Content-Type", /json/i);
     expect(err.body.message).toBe(
-      "Expected 'user_id' and 'skill_for_review' in body"
+      "Expected 'skill_for_review' in body"
     );
   });
 
@@ -217,7 +209,7 @@ describe("PUT /:id", () => {
 
     const err = await request(server)
       .put("/skills-for-review/99")
-      .send({ user_id: 1, skill_for_review: "NEWTestSkill" })
+      .send({ skill_for_review: "NEWTestSkill" })
       .expect(404)
       .expect("Content-Type", /json/i);
     expect(err.body.message).toBe(
@@ -233,7 +225,7 @@ describe("PUT /:id", () => {
 
     const isSuccessfull = await request(server)
       .put("/skills-for-review/1")
-      .send({ user_id: 1, skill_for_review: "NEWTestSkill" });
+      .send({ skill_for_review: "NEWTestSkill" });
     expect(isSuccessfull.body).toBe(1);
 
     const updatedSkill = await db("skills_for_review")
