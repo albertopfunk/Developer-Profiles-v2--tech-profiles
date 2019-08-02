@@ -62,6 +62,7 @@ server.post("/new", async (req, res) => {
 // does not expect anything
 // returns [user objects]
 server.get("/", async (req, res) => {
+  console.log(req.query.results);
   try {
     const users = await userModel.getAll();
     res.json(users);
@@ -69,6 +70,126 @@ server.get("/", async (req, res) => {
     res.status(500).json({ message: "The users could not be retrieved", err });
   }
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+server.post("/infinite", async (req, res) => {
+  // Might be able to do everything with SQL queries(LIMIT, OFFSET, ORDER BY, WHERE NOT, etc)
+  // this includes return limit for infinite scroll, filters, etc
+
+  // return 20 users
+
+  // keep track by 'page'
+  // page 1 = return 1-20
+  // page 2 = return 21-40
+  // page 3 = return 41-50
+
+  const {
+    isWebDevChecked,
+    isUIUXChecked,
+    isIOSChecked,
+    isAndroidChecked,
+    isUsingLocationFilter,
+    isUsingRelocateToFilter,
+    selectedWithinMiles,
+    chosenLocationLat,
+    chosenLocationLon,
+    chosenRelocateTo
+  } = req.body;
+  console.log(
+    isWebDevChecked,
+    isUIUXChecked,
+    isIOSChecked,
+    isAndroidChecked,
+    isUsingLocationFilter,
+    isUsingRelocateToFilter,
+    selectedWithinMiles,
+    chosenLocationLat,
+    chosenLocationLon,
+    chosenRelocateTo
+  );
+
+
+  try {
+    const users = await userModel.getAllFiltered(req.body);
+    //console.log(users);
+    console.log(users.length);
+    res.json(users);
+  } catch (err) {
+    res.status(500).json({ message: "The users could not be retrieved", err });
+  }
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // expects id of existing user in params
 // returns user object
@@ -112,11 +233,9 @@ server.delete("/:id", async (req, res) => {
     const removeUser = await userModel.remove(id);
     removeUser
       ? res.json(removeUser)
-      : res
-          .status(404)
-          .json({
-            message: `The user with the specified ID of '${id}' does not exist`
-          });
+      : res.status(404).json({
+          message: `The user with the specified ID of '${id}' does not exist`
+        });
   } catch (err) {
     res.status(500).json({ message: "The user could not be removed", err });
   }

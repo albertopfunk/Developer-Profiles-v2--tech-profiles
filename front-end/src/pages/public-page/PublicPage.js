@@ -1,6 +1,41 @@
+/*eslint no-console: ["error", { allow: ["error", "log"] }] */
 import React, { Component } from "react";
 import styled from "styled-components";
 import axios from "axios";
+
+// reset all users
+
+// filter by will relocate too - filter by matching strings(user input location(s) with interested_location_names)
+// interested location names will have to be transformed from 'string|string|string' to array
+
+// filter by location within x miles - haversine formula
+// function distanceWithFilter(lat1, lon1, lat2, lon2, filter) {
+// 	if ((lat1 == lat2) && (lon1 == lon2)) {
+// 		return 0;
+// 	}
+// 	else {
+// 		let radlat1 = Math.PI * lat1/180;
+// 		let radlat2 = Math.PI * lat2/180;
+// 		let theta = lon1-lon2;
+// 		let radtheta = Math.PI * theta/180;
+// 		let dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+// 		if (dist > 1) {
+// 			dist = 1;
+// 		}
+// 		dist = Math.acos(dist);
+// 		dist = dist * 180/Math.PI;
+// 		dist = dist * 60 * 1.1515;
+
+//     if (dist < filter) {
+//       console.log('user is within chosen miles of origin location!')
+//       return dist;
+//     } else {
+//       console.log('user to too far!')
+//       return dist;
+//     }
+
+// 	}
+// }
 
 class PublicPage extends Component {
   state = {
@@ -9,93 +44,117 @@ class PublicPage extends Component {
     isWebDevChecked: false,
     isUIUXChecked: false,
     isIOSChecked: false,
-    isAndroidChecked: false
+    isAndroidChecked: false,
+
+    isUsingLocationFilter: true, // false
+    isUsingRelocateToFilter: true, // false
+
+    selectedWithinMiles: 500, // 0
+    // LA
+    chosenLocationLat: 34.052235, // 0
+    chosenLocationLon: -118.243683, // 0
+
+    chosenRelocateTo: "Los Angeles, CA, USA" // ""
   };
 
   async componentDidMount() {
-    const users = await axios.get("http://localhost:3001/users");
-    this.setState({ users: users.data });
+    this.loadUsers();
   }
 
-  toggleAreaOfWorkCheckbox = areaOfWork => {
-    switch (areaOfWork) {
-      case "Web Development":
-        this.setState(prevState => ({
-          isWebDevChecked: !prevState.isWebDevChecked
-        }));
-        break;
-      case "UI/UX":
-        this.setState(prevState => {
-          return { isUIUXChecked: !prevState.isUIUXChecked };
-        });
-        break;
-      case "iOS":
-        this.setState(prevState => {
-          return { isIOSChecked: !prevState.isIOSChecked };
-        });
-        break;
-      case "Android":
-        this.setState(prevState => {
-          return { isAndroidChecked: !prevState.isAndroidChecked };
-        });
-        break;
-      default:
-        return;
-    }
-    this.filterByAreaOfWork();
-  }
+  setStateAsync = state => {
+    return new Promise(resolve => {
+      this.setState(state, resolve);
+    });
+  };
 
-  filterByAreaOfWork = async () => {
-    const usersData = await axios.get("http://localhost:3001/users");
-    let users = usersData.data;
-
+  loadUsers = async () => {
     const {
       isWebDevChecked,
       isUIUXChecked,
       isIOSChecked,
-      isAndroidChecked
+      isAndroidChecked,
+      isUsingLocationFilter,
+      isUsingRelocateToFilter,
+      selectedWithinMiles,
+      chosenLocationLat,
+      chosenLocationLon,
+      chosenRelocateTo
     } = this.state;
 
-    if (!isWebDevChecked && !isUIUXChecked && !isIOSChecked && !isAndroidChecked) {
-      this.setState({ users });
-      return;
+    try {
+      const users = await axios.post(`http://localhost:3001/users/infinite`, {
+        isWebDevChecked,
+        isUIUXChecked,
+        isIOSChecked,
+        isAndroidChecked,
+        isUsingLocationFilter,
+        isUsingRelocateToFilter,
+        selectedWithinMiles,
+        chosenLocationLat,
+        chosenLocationLon,
+        chosenRelocateTo
+      });
+      this.setState({ users: users.data });
+    } catch (err) {
+      console.error(`${err.response.data.message} =>`, err);
     }
-
-    users = users.filter(user => user.area_of_work !== null);
-
-    if (!isWebDevChecked) {
-      users = users.filter(user => user.area_of_work !== "Web Development");
-    }
-
-    if (!isUIUXChecked) {
-      users = users.filter(user => user.area_of_work !== "UI/UX");
-    }
-
-    if (!isIOSChecked) {
-      users = users.filter(user => user.area_of_work !== "iOS");
-    }
-
-    if (!isAndroidChecked) {
-      users = users.filter(user => user.area_of_work !== "Android");
-    }
-
-    this.setState({ users });
   };
 
-  // filter
-  // click on checkbox
-  // if box is 'checked'
-  // filter users.area_of_work with areaOfWork param
-  // toggle isWebDevChecked, isUIUXChecked, isIOSChecked, isAndroidChecked
-  // ONLY SHOW 'CHECKED' users when one or more filter is checked
-  // if box is 'unchecked'
-  // filter users.area_of_work with areaOfWork param
-  // toggle isWebDevChecked, isUIUXChecked, isIOSChecked, isAndroidChecked
-  // ONLY SHOW 'CHECKED' users when one or more filter is unchecked
-  // show ALL users when all filters are unchecked
+  toggleAreaOfWorkCheckbox = async areaOfWork => {
+    switch (areaOfWork) {
+      case "Web Development":
+        await this.setStateAsync(prevState => ({
+          isWebDevChecked: !prevState.isWebDevChecked
+        }));
+        break;
+      case "UI/UX":
+        await this.setStateAsync(prevState => ({
+          isUIUXChecked: !prevState.isUIUXChecked
+        }));
+        break;
+      case "iOS":
+        await this.setStateAsync(prevState => ({
+          isIOSChecked: !prevState.isIOSChecked
+        }));
+        break;
+      case "Android":
+        await this.setStateAsync(prevState => ({
+          isAndroidChecked: !prevState.isAndroidChecked
+        }));
+        break;
+      default:
+        return;
+    }
+    this.loadUsers();
+  };
+
+  locationFilter = async () => {
+    await this.setStateAsync(prevState => ({
+      isUsingLocationFilter: !prevState.isUsingLocationFilter
+    }));
+    this.loadUsers();
+  }
+
+  relocateToFilter = async () => {
+    await this.setStateAsync(prevState => ({
+      isUsingRelocateToFilter: !prevState.isUsingRelocateToFilter
+    }));
+    this.loadUsers();
+  }
+
+  // resetAllFilters = async () => {
+  //   this.setState({
+  //     isWebDevChecked: false,
+  //     isUIUXChecked: false,
+  //     isIOSChecked: false,
+  //     isAndroidChecked: false,
+  //     isUsingLocationFilter: false,
+  //     isUsingRelocateToFilter: false
+  //   })
+  // }
 
   render() {
-    //console.log(this.state.users.length, this.state.users);
+    console.log(this.state.users.length, this.state.users);
     //this.state.users.forEach(user => console.log(user.area_of_work))
     return (
       <main>
@@ -108,7 +167,9 @@ class PublicPage extends Component {
                   type="checkbox"
                   name="area-of-work"
                   id="web-development"
-                  onChange={() => this.toggleAreaOfWorkCheckbox("Web Development")}
+                  onChange={() =>
+                    this.toggleAreaOfWorkCheckbox("Web Development")
+                  }
                 />
                 Web Development
               </label>
@@ -143,6 +204,11 @@ class PublicPage extends Component {
                 Android
               </label>
             </form>
+            {/* <form>
+              <label htmlFor="DistanceFromLocation">
+                  <input id="DistanceFromLocation" type="number"/>
+              </label>
+            </form> */}
           </section>
         </aside>
         <section>
@@ -156,6 +222,7 @@ class PublicPage extends Component {
                     <p>{user.first_name}</p>
                     <p>{user.id}</p>
                     <p>{user.area_of_work}</p>
+                    <p>{user.interested_location_names}</p>
                   </User>
                 );
               })}
