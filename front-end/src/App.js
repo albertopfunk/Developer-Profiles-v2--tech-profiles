@@ -1,12 +1,24 @@
 import React from "react";
 import { GlobalStyles } from "./global-styles/GlobalStyles";
-import Playground from "./Playground";
+import PublicPage from "./pages/public-page/PublicPage";
+// import Playground from "./Playground";
 
 function App() {
   return (
-    <div>
+    <div id="main-container">
       <GlobalStyles />
-      <Playground />
+      <header>
+        <h1>HEADERRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR</h1>
+      </header>
+      
+      <>
+        Landing
+        Dashboard
+        <PublicPage />
+      </>
+
+
+      {/* <Playground /> */}
     </div>
   );
 }
