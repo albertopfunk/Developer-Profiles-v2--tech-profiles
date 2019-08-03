@@ -90,11 +90,6 @@ async function getAllFiltered(filters) {
       tempUsers = relocateToFilter(users, chosenRelocateTo);
       users = tempUsers;
     }
-
-    if (isUsingLocationFilter) {
-    } else {
-      users = [...new Set([...users, ...tempUsers])];
-    }
   }
 
   if (isUsingSortByChoice) {
