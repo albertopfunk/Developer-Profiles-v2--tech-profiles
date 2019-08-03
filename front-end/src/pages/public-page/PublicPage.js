@@ -5,60 +5,40 @@ import axios from "axios";
 
 // reset all users
 
-// filter by will relocate too - filter by matching strings(user input location(s) with interested_location_names)
-// interested location names will have to be transformed from 'string|string|string' to array
-
-// filter by location within x miles - haversine formula
-// function distanceWithFilter(lat1, lon1, lat2, lon2, filter) {
-// 	if ((lat1 == lat2) && (lon1 == lon2)) {
-// 		return 0;
-// 	}
-// 	else {
-// 		let radlat1 = Math.PI * lat1/180;
-// 		let radlat2 = Math.PI * lat2/180;
-// 		let theta = lon1-lon2;
-// 		let radtheta = Math.PI * theta/180;
-// 		let dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
-// 		if (dist > 1) {
-// 			dist = 1;
-// 		}
-// 		dist = Math.acos(dist);
-// 		dist = dist * 180/Math.PI;
-// 		dist = dist * 60 * 1.1515;
-
-//     if (dist < filter) {
-//       console.log('user is within chosen miles of origin location!')
-//       return dist;
-//     } else {
-//       console.log('user to too far!')
-//       return dist;
-//     }
-
-// 	}
-// }
+// sort choices
+//  descending(newest-oldest)
+//  acending(oldest-newest)
 
 class PublicPage extends Component {
   state = {
     users: [],
 
+    usersPage: 1,
+
+    // add little loading indicators so users know when filter is being ran,
+    // might need to disable while loading to avoid misuse
     isWebDevChecked: false,
     isUIUXChecked: false,
     isIOSChecked: false,
     isAndroidChecked: false,
 
-    isUsingLocationFilter: true, // false
-    isUsingRelocateToFilter: true, // false
+    isUsingLocationFilter: false,
+    isUsingRelocateToFilter: true,
 
     selectedWithinMiles: 500, // 0
-    // LA
-    chosenLocationLat: 34.052235, // 0
-    chosenLocationLon: -118.243683, // 0
+    // Boston
+    chosenLocationLat: 42.361145, // 0
+    chosenLocationLon: -71.057083, // 0
 
-    chosenRelocateTo: "Los Angeles, CA, USA" // ""
+    chosenRelocateTo: "Boston, MA, USA", // ""
+
+    isUsingSortByChoice: true, // always needs to be true when running any filter
+    sortByChoice: "acending(oldest-newest)" // acending(oldest-newest) default, so we will not have to run this alg on initial load
   };
 
   async componentDidMount() {
-    this.loadUsers();
+    const users = await this.loadUsers();
+    this.setState({ users });
   }
 
   setStateAsync = state => {
@@ -69,6 +49,7 @@ class PublicPage extends Component {
 
   loadUsers = async () => {
     const {
+      usersPage,
       isWebDevChecked,
       isUIUXChecked,
       isIOSChecked,
@@ -78,29 +59,44 @@ class PublicPage extends Component {
       selectedWithinMiles,
       chosenLocationLat,
       chosenLocationLon,
-      chosenRelocateTo
+      chosenRelocateTo,
+      isUsingSortByChoice,
+      sortByChoice
     } = this.state;
 
     try {
-      const users = await axios.post(`http://localhost:3001/users/infinite`, {
-        isWebDevChecked,
-        isUIUXChecked,
-        isIOSChecked,
-        isAndroidChecked,
-        isUsingLocationFilter,
-        isUsingRelocateToFilter,
-        selectedWithinMiles,
-        chosenLocationLat,
-        chosenLocationLon,
-        chosenRelocateTo
-      });
-      this.setState({ users: users.data });
+      const users = await axios.post(
+        `http://localhost:3001/users/infinite/${usersPage}`,
+        {
+          isWebDevChecked,
+          isUIUXChecked,
+          isIOSChecked,
+          isAndroidChecked,
+          isUsingLocationFilter,
+          isUsingRelocateToFilter,
+          selectedWithinMiles,
+          chosenLocationLat,
+          chosenLocationLon,
+          chosenRelocateTo,
+          isUsingSortByChoice,
+          sortByChoice
+        }
+      );
+
+      return users.data;
     } catch (err) {
       console.error(`${err.response.data.message} =>`, err);
     }
   };
 
+  infiniteScroll = async () => {
+    await this.setStateAsync({ usersPage: this.state.usersPage + 1 });
+    const users = await this.loadUsers();
+    this.setState({ users: [...this.state.users, ...users] });
+  };
+
   toggleAreaOfWorkCheckbox = async areaOfWork => {
+    await this.setStateAsync({ usersPage: 1, isUsingSortByChoice: true });
     switch (areaOfWork) {
       case "Web Development":
         await this.setStateAsync(prevState => ({
@@ -125,22 +121,38 @@ class PublicPage extends Component {
       default:
         return;
     }
-    this.loadUsers();
+    const users = await this.loadUsers();
+    this.setState({ users });
   };
 
   locationFilter = async () => {
-    await this.setStateAsync(prevState => ({
-      isUsingLocationFilter: !prevState.isUsingLocationFilter
-    }));
-    this.loadUsers();
-  }
+    // selectedWithinMiles, chosenLocationLat, chosenLocationLon
+    await this.setStateAsync({
+      usersPage: 1,
+      isUsingSortByChoice: true,
+      isUsingLocationFilter: true
+    });
+    const users = await this.loadUsers();
+    this.setState({ users });
+  };
 
   relocateToFilter = async () => {
-    await this.setStateAsync(prevState => ({
-      isUsingRelocateToFilter: !prevState.isUsingRelocateToFilter
-    }));
-    this.loadUsers();
-  }
+    // chosenRelocateTo
+    await this.setStateAsync({
+      usersPage: 1,
+      isUsingSortByChoice: true,
+      isUsingRelocateToFilter: true
+    });
+    const users = await this.loadUsers();
+    this.setState({ users });
+  };
+
+  sortUsers = async () => {
+    // sortByChoice
+    await this.setStateAsync({ usersPage: 1, isUsingSortByChoice: true });
+    const users = await this.loadUsers();
+    this.setState({ users });
+  };
 
   // resetAllFilters = async () => {
   //   this.setState({
@@ -154,7 +166,7 @@ class PublicPage extends Component {
   // }
 
   render() {
-    console.log(this.state.users.length, this.state.users);
+    // console.log(this.state.users.length, this.state.users);
     //this.state.users.forEach(user => console.log(user.area_of_work))
     return (
       <main>
@@ -204,6 +216,7 @@ class PublicPage extends Component {
                 Android
               </label>
             </form>
+            <button onClick={this.infiniteScroll}>MORE USERS</button>
             {/* <form>
               <label htmlFor="DistanceFromLocation">
                   <input id="DistanceFromLocation" type="number"/>
@@ -222,6 +235,7 @@ class PublicPage extends Component {
                     <p>{user.first_name}</p>
                     <p>{user.id}</p>
                     <p>{user.area_of_work}</p>
+                    <p>{user.current_location_name}</p>
                     <p>{user.interested_location_names}</p>
                   </User>
                 );

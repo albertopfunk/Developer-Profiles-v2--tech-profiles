@@ -71,125 +71,32 @@ server.get("/", async (req, res) => {
   }
 });
 
+// create a catch to store and splice users for infinite scroll
+// only replace when filters change or refresh
+// for now request all users and splice based on page
+server.post("/infinite/:usersPage", async (req, res) => {
+  let start = 0;
+  let end = 7;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-server.post("/infinite", async (req, res) => {
-  // Might be able to do everything with SQL queries(LIMIT, OFFSET, ORDER BY, WHERE NOT, etc)
-  // this includes return limit for infinite scroll, filters, etc
-
-  // return 20 users
-
-  // keep track by 'page'
-  // page 1 = return 1-20
-  // page 2 = return 21-40
-  // page 3 = return 41-50
-
-  const {
-    isWebDevChecked,
-    isUIUXChecked,
-    isIOSChecked,
-    isAndroidChecked,
-    isUsingLocationFilter,
-    isUsingRelocateToFilter,
-    selectedWithinMiles,
-    chosenLocationLat,
-    chosenLocationLon,
-    chosenRelocateTo
-  } = req.body;
-  console.log(
-    isWebDevChecked,
-    isUIUXChecked,
-    isIOSChecked,
-    isAndroidChecked,
-    isUsingLocationFilter,
-    isUsingRelocateToFilter,
-    selectedWithinMiles,
-    chosenLocationLat,
-    chosenLocationLon,
-    chosenRelocateTo
-  );
-
+  const { usersPage } = req.params;
+  if (+usersPage === 1) {
+    start = 0;
+    end = 7;
+  } else {
+    for (let i = 1; i < usersPage; i++) {
+      start += 7;
+      end += 7;
+    }
+  }
 
   try {
     const users = await userModel.getAllFiltered(req.body);
-    //console.log(users);
-    console.log(users.length);
-    res.json(users);
+    slicedUsers = users.slice(start, end);
+    res.json(slicedUsers);
   } catch (err) {
     res.status(500).json({ message: "The users could not be retrieved", err });
   }
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // expects id of existing user in params
 // returns user object
