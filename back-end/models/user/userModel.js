@@ -19,6 +19,7 @@ function getAll() {
 }
 
 async function getAllFiltered(filters) {
+
   let users = [];
   let tempUsers;
   const {
@@ -76,19 +77,24 @@ async function getAllFiltered(filters) {
       chosenLocationLat,
       chosenLocationLon
     );
+    if (users.length === 0) {
+      return users;
+    }
   }
 
   if (isUsingRelocateToFilter) {
-    if (users.length === 0) {
-      users = await db("users");
-      tempUsers = relocateToFilter(users, chosenRelocateTo);
-      users = tempUsers;
-    } else if (isUsingLocationFilter) {
+    users.length === 0 ? (users = await db("users")) : null;
+
+    if (isUsingLocationFilter) {
       tempUsers = relocateToFilter(users, chosenRelocateTo);
       users = [...new Set([...users, ...tempUsers])];
     } else {
       tempUsers = relocateToFilter(users, chosenRelocateTo);
       users = tempUsers;
+    }
+    
+    if (users.length === 0) {
+      return users;
     }
   }
 
@@ -110,7 +116,7 @@ function locationFilter(
     if (user.current_location_lat && user.current_location_lon) {
       userLat = user.current_location_lat;
       userLon = user.current_location_lon;
-      return distanceWithFilter(
+      return distanceWithinFilter(
         chosenLocationLat,
         chosenLocationLon,
         userLat,
@@ -124,7 +130,7 @@ function locationFilter(
   return filteredUsers;
 }
 
-function distanceWithFilter(lat1, lon1, lat2, lon2, filter) {
+function distanceWithinFilter(lat1, lon1, lat2, lon2, filter) {
   if (lat1 == lat2 && lon1 == lon2) {
     return true;
   } else {

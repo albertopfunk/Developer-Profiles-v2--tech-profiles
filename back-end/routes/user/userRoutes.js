@@ -60,12 +60,12 @@ server.post("/new", async (req, res) => {
 });
 
 // does not expect anything
-// returns [user objects]
+// returns 14 [user objects]
 server.get("/", async (req, res) => {
-  console.log(req.query.results);
   try {
     const users = await userModel.getAll();
-    res.json(users);
+    slicedUsers = users.slice(0, 14);
+    res.json(slicedUsers);
   } catch (err) {
     res.status(500).json({ message: "The users could not be retrieved", err });
   }
@@ -76,17 +76,13 @@ server.get("/", async (req, res) => {
 // for now request all users and splice based on page
 server.post("/infinite/:usersPage", async (req, res) => {
   let start = 0;
-  let end = 7;
+  let end = 14;
 
   const { usersPage } = req.params;
-  if (+usersPage === 1) {
-    start = 0;
-    end = 7;
-  } else {
-    for (let i = 1; i < usersPage; i++) {
-      start += 7;
-      end += 7;
-    }
+
+  for (let i = 1; i < usersPage; i++) {
+    start += 14;
+    end += 14;
   }
 
   try {

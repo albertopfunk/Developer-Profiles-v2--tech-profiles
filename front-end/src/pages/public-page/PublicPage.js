@@ -16,7 +16,7 @@ class PublicPage extends Component {
     usersPage: 1,
 
     // add little loading indicators so users know when filter is being ran,
-    // might need to disable while loading to avoid misuse
+    // disable while loading to avoid misuse
     isWebDevChecked: false,
     isUIUXChecked: false,
     isIOSChecked: false,
@@ -32,13 +32,15 @@ class PublicPage extends Component {
 
     chosenRelocateTo: "Boston, MA, USA", // ""
 
-    isUsingSortByChoice: true, // always needs to be true when running any filter
-    sortByChoice: "acending(oldest-newest)" // acending(oldest-newest) default, so we will not have to run this alg on initial load
+    isUsingSortByChoice: false, // always needs to be true when running any filter
+    sortByChoice: "descending(newest-oldest)" // acending(oldest-newest) default, so we will not have to run this alg on initial load
   };
 
   async componentDidMount() {
-    const users = await this.loadUsers();
-    this.setState({ users });
+    const users = await axios.get("http://localhost:3001/users")
+    this.setState({users: users.data})
+    // const users = await this.loadUsers();
+    // this.setState({ users });
   }
 
   setStateAsync = state => {
