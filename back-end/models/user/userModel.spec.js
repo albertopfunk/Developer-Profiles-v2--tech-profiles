@@ -1,4 +1,6 @@
+/*eslint no-console: ["error", { allow: ["error"] }] */
 const userModel = require("./userModel");
+const testUsers = require("../../helpers/testUsers");
 const db = require("../../data/dbConfig");
 
 describe("environment", () => {
@@ -116,6 +118,188 @@ describe("getAll", () => {
     await db("users").insert(user2);
     const allUsers = await userModel.getAll();
     expect(allUsers).toHaveLength(2);
+  });
+});
+
+describe("getAllFiltered", () => {
+  beforeAll(async () => {
+    await db("users").truncate();
+  });
+  afterAll(async () => {
+    await db("users").truncate();
+  });
+
+  const filterOptions = {
+    isWebDevChecked: false,
+    isUIUXChecked: false,
+    isIOSChecked: false,
+    isAndroidChecked: false,
+    isUsingLocationFilter: false,
+    isUsingRelocateToFilter: false,
+    // boston
+    selectedWithinMiles: 500,
+    chosenLocationLat: 42.361145,
+    chosenLocationLon: -71.057083,
+    chosenRelocateTo: "Boston, MA, USA",
+    isUsingSortByChoice: false,
+    sortByChoice: "acending(oldest-newest)"
+  };
+
+  let users = [...testUsers.usersData];
+  users = users.map(user => {
+    user.current_location_lat = +user.current_location_lat;
+    user.current_location_lon = +user.current_location_lon;
+    return user;
+  });
+
+  // testUsers:
+  // ids 1-50
+  // 18 web dev
+  // 9 UI/UX
+  // 11 IOS
+  // 12 Android
+  // users within 500 miles of Boston = 4(boston)
+  // users within 50 miles of Los Angeles = 7(LA,Calabasas)
+  // users interested in relocating to Boston = 10
+  // users interested in relocating to Boulder = 7
+  // --------------
+
+  it("should set up DB", async () => {
+    let splitUsers;
+
+    splitUsers = users.slice(0, 20);
+    await db("users").insert(splitUsers);
+
+    splitUsers = users.slice(20, 40);
+    await db("users").insert(splitUsers);
+
+    splitUsers = users.slice(40, 50);
+    await db("users").insert(splitUsers);
+
+    const testUsers = await db("users");
+
+    expect(testUsers).toHaveLength(50);
+  });
+
+  it("should return all users if all filters are NOT being used", async () => {
+    const filterOptionsCopy = { ...filterOptions };
+    const testUsers = await userModel.getAllFiltered(filterOptionsCopy);
+    expect(testUsers).toHaveLength(50);
+  });
+
+  it("should return Web Dev users if checkbox is checked", async () => {
+    const filterOptionsCopy = { ...filterOptions };
+    filterOptionsCopy.isWebDevChecked = true;
+    const testUsers = await userModel.getAllFiltered(filterOptionsCopy);
+    expect(testUsers).toHaveLength(18);
+  });
+
+  it("should return UIUX users if checkbox is checked", async () => {
+    const filterOptionsCopy = { ...filterOptions };
+    filterOptionsCopy.isUIUXChecked = true;
+    const testUsers = await userModel.getAllFiltered(filterOptionsCopy);
+    expect(testUsers).toHaveLength(9);
+  });
+
+  it("should return IOS/Android users if checkboxes are checked", async () => {
+    const filterOptionsCopy = { ...filterOptions };
+    filterOptionsCopy.isIOSChecked = true;
+    filterOptionsCopy.isAndroidChecked = true;
+    const testUsers = await userModel.getAllFiltered(filterOptionsCopy);
+    expect(testUsers).toHaveLength(23);
+  });
+
+  it("should return users within default 500 miles of default Boston", async () => {
+    const filterOptionsCopy = { ...filterOptions };
+    filterOptionsCopy.isUsingLocationFilter = true;
+    const testUsers = await userModel.getAllFiltered(filterOptionsCopy);
+    expect(testUsers).toHaveLength(4);
+  });
+
+  it("should return users within 50 miles of Los Angeles", async () => {
+    const filterOptionsCopy = { ...filterOptions };
+    filterOptionsCopy.selectedWithinMiles = 50;
+    filterOptionsCopy.chosenLocationLat = 34.052235;
+    filterOptionsCopy.chosenLocationLon = -118.243683;
+    filterOptionsCopy.isUsingLocationFilter = true;
+    const testUsers = await userModel.getAllFiltered(filterOptionsCopy);
+    expect(testUsers).toHaveLength(7);
+  });
+
+  it("should return users interested in default Boston", async () => {
+    const filterOptionsCopy = { ...filterOptions };
+    filterOptionsCopy.isUsingRelocateToFilter = true;
+    const testUsers = await userModel.getAllFiltered(filterOptionsCopy);
+    expect(testUsers).toHaveLength(10);
+  });
+
+  it("should return users interested in Boulder", async () => {
+    const filterOptionsCopy = { ...filterOptions };
+    filterOptionsCopy.chosenRelocateTo = "Boulder, CO, USA";
+    filterOptionsCopy.isUsingRelocateToFilter = true;
+    const testUsers = await userModel.getAllFiltered(filterOptionsCopy);
+    expect(testUsers).toHaveLength(7);
+  });
+
+  it("should return default acending sorted users", async () => {
+    const filterOptionsCopy = { ...filterOptions };
+    filterOptionsCopy.isUsingSortByChoice = true;
+    const testUsers = await userModel.getAllFiltered(filterOptionsCopy);
+    expect(testUsers[0].id).toBe(1);
+  });
+
+  it("should return descending sorted users", async () => {
+    const filterOptionsCopy = { ...filterOptions };
+    filterOptionsCopy.isUsingSortByChoice = true;
+    filterOptionsCopy.sortByChoice = "descending(newest-oldest)";
+    const testUsers = await userModel.getAllFiltered(filterOptionsCopy);
+    expect(testUsers[0].id).toBe(50);
+  });
+
+  it("should return 0 users since 0 UI/UX users live close to Boston", async () => {
+    const filterOptionsCopy = { ...filterOptions };
+    filterOptionsCopy.isUIUXChecked = true;
+    filterOptionsCopy.isUsingLocationFilter = true;
+    const testUsers = await userModel.getAllFiltered(filterOptionsCopy);
+    expect(testUsers).toHaveLength(0);
+  });
+
+  it("should return 2 users since 2 Web Dev users live close to Boston", async () => {
+    const filterOptionsCopy = { ...filterOptions };
+    filterOptionsCopy.isWebDevChecked = true;
+    filterOptionsCopy.isUsingLocationFilter = true;
+    const testUsers = await userModel.getAllFiltered(filterOptionsCopy);
+    expect(testUsers).toHaveLength(2);
+  });
+
+  it("should return 2 users since 2 IOS/Android users live close to Boston", async () => {
+    const filterOptionsCopy = { ...filterOptions };
+    filterOptionsCopy.isIOSChecked = true;
+    filterOptionsCopy.isAndroidChecked = true;
+    filterOptionsCopy.isUsingLocationFilter = true;
+    const testUsers = await userModel.getAllFiltered(filterOptionsCopy);
+    expect(testUsers).toHaveLength(2);
+  });
+
+  it("should return 2 users since 2 IOS/Android users live close to Boston sorted default acending(oldest-newest)", async () => {
+    const filterOptionsCopy = { ...filterOptions };
+    filterOptionsCopy.isIOSChecked = true;
+    filterOptionsCopy.isAndroidChecked = true;
+    filterOptionsCopy.isUsingLocationFilter = true;
+    filterOptionsCopy.isUsingSortByChoice = true;
+    const testUsers = await userModel.getAllFiltered(filterOptionsCopy);
+    expect(testUsers[0].id).toBe(6);
+  });
+
+  it("should return 2 users since 2 IOS/Android users live close to Boston sorted descending(newest-oldest)", async () => {
+    const filterOptionsCopy = { ...filterOptions };
+    filterOptionsCopy.isIOSChecked = true;
+    filterOptionsCopy.isAndroidChecked = true;
+    filterOptionsCopy.isUsingLocationFilter = true;
+    filterOptionsCopy.isUsingSortByChoice = true;
+    filterOptionsCopy.sortByChoice = "descending(newest-oldest)";
+    const testUsers = await userModel.getAllFiltered(filterOptionsCopy);
+    expect(testUsers[0].id).toBe(17);
   });
 });
 

@@ -1,3 +1,4 @@
+/*eslint no-console: ["error", { allow: ["error"] }] */
 const request = require("supertest");
 const server = require("../../api/server");
 const db = require("../../data/dbConfig");
@@ -105,7 +106,7 @@ describe("GET /", () => {
       .expect("Content-Type", /json/i);
   });
 
-  it("returns all users", async () => {
+  it("returns all 8 users", async () => {
     let users = await request(server).get("/users");
     expect(users.body).toHaveLength(0);
 
@@ -122,6 +123,22 @@ describe("GET /", () => {
 
     users = await request(server).get("/users");
     expect(users.body).toHaveLength(8);
+  });
+
+  it("returns a max of 14 users", async () => {
+    let users = await request(server).get("/users");
+    expect(users.body).toHaveLength(0);
+
+
+    let usersArr = [];
+    for (let i = 0; i < 25; i++) {
+      usersArr.push({ email: `hello${i}@mail.com` })
+    }
+
+    await db("users").insert(usersArr);
+
+    users = await request(server).get("/users");
+    expect(users.body).toHaveLength(14);
   });
 });
 

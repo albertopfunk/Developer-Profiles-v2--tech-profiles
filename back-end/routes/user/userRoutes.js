@@ -1,3 +1,4 @@
+/*eslint no-console: ["error", { allow: ["error"] }] */
 const express = require("express");
 const userModel = require("../../models/user/userModel");
 

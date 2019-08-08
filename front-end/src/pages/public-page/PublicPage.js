@@ -1,4 +1,4 @@
-/*eslint no-console: ["error", { allow: ["error", "log"] }] */
+/*eslint no-console: ["error", { allow: ["error"] }] */
 import React, { Component } from "react";
 import styled from "styled-components";
 import axios from "axios";
@@ -23,7 +23,7 @@ class PublicPage extends Component {
     isAndroidChecked: false,
 
     isUsingLocationFilter: false,
-    isUsingRelocateToFilter: true,
+    isUsingRelocateToFilter: false,
 
     selectedWithinMiles: 500, // 0
     // Boston
@@ -33,14 +33,12 @@ class PublicPage extends Component {
     chosenRelocateTo: "Boston, MA, USA", // ""
 
     isUsingSortByChoice: false, // always needs to be true when running any filter
-    sortByChoice: "descending(newest-oldest)" // acending(oldest-newest) default, so we will not have to run this alg on initial load
+    sortByChoice: "acending(oldest-newest)" // acending(oldest-newest) default, so we will not have to run this alg on initial load
   };
 
   async componentDidMount() {
-    const users = await axios.get("http://localhost:3001/users")
-    this.setState({users: users.data})
-    // const users = await this.loadUsers();
-    // this.setState({ users });
+    const users = await axios.get("http://localhost:3001/users");
+    this.setState({ users: users.data });
   }
 
   setStateAsync = state => {
