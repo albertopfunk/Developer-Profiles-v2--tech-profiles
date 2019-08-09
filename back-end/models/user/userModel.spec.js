@@ -165,18 +165,13 @@ describe("getAllFiltered", () => {
 
   it("should set up DB", async () => {
     let splitUsers;
-
     splitUsers = users.slice(0, 20);
     await db("users").insert(splitUsers);
-
     splitUsers = users.slice(20, 40);
     await db("users").insert(splitUsers);
-
     splitUsers = users.slice(40, 50);
     await db("users").insert(splitUsers);
-
     const testUsers = await db("users");
-
     expect(testUsers).toHaveLength(50);
   });
 

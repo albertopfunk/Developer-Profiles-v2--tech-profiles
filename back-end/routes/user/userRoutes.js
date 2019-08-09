@@ -64,7 +64,7 @@ server.post("/new", async (req, res) => {
 server.get("/", async (req, res) => {
   try {
     const users = await userModel.getAll();
-    console.log(users.length)
+    //console.log(users.length);
     slicedUsers = users.slice(0, 14);
     res.json(slicedUsers);
   } catch (err) {
@@ -105,7 +105,7 @@ server.post("/infinite/:usersPage", async (req, res) => {
 
   try {
     const users = await userModel.getAllFiltered(req.body);
-    console.log(users.length)
+    //console.log(users.length);
     slicedUsers = users.slice(start, end);
     res.json(slicedUsers);
   } catch (err) {
@@ -128,7 +128,6 @@ server.get("/:id", async (req, res) => {
     res.status(500).json({ message: "The user could not be retrieved", err });
   }
 });
-
 
 // expects id of existing user in params
 // returns a number 1 if successful

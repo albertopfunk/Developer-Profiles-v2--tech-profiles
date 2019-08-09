@@ -1,5 +1,6 @@
 const request = require("supertest");
 const server = require("../../api/server");
+const testUsers = require("../../helpers/testUsers");
 const db = require("../../data/dbConfig");
 
 describe("environment", () => {
@@ -140,7 +141,111 @@ describe("GET /", () => {
   });
 });
 
-describe("POST /infinite/:usersPage", () => {});
+describe("POST /infinite/:usersPage", () => {
+  beforeAll(async () => {
+    await db("users").truncate();
+  });
+  afterAll(async () => {
+    await db("users").truncate();
+  });
+
+  const filterOptions = {
+    isWebDevChecked: false,
+    isUIUXChecked: false,
+    isIOSChecked: false,
+    isAndroidChecked: false,
+    isUsingLocationFilter: false,
+    isUsingRelocateToFilter: false,
+    // boston
+    selectedWithinMiles: 500,
+    chosenLocationLat: 42.361145,
+    chosenLocationLon: -71.057083,
+    chosenRelocateTo: "Boston, MA, USA",
+    isUsingSortByChoice: false,
+    sortByChoice: "acending(oldest-newest)"
+  };
+
+  let users = [...testUsers.usersData];
+  users = users.map(user => {
+    user.current_location_lat = +user.current_location_lat;
+    user.current_location_lon = +user.current_location_lon;
+    return user;
+  });
+
+  // testUsers:
+  // ids 1-50
+  // 18 web dev
+  // 9 UI/UX
+  // 11 IOS
+  // 12 Android
+  // users within 500 miles of Boston = 4(boston)
+  // users within 50 miles of Los Angeles = 7(LA,Calabasas)
+  // users interested in relocating to Boston = 10
+  // users interested in relocating to Boulder = 7
+  // --------------
+
+  it("should set up DB", async () => {
+    let splitUsers;
+    splitUsers = users.slice(0, 20);
+    await db("users").insert(splitUsers);
+    splitUsers = users.slice(20, 40);
+    await db("users").insert(splitUsers);
+    splitUsers = users.slice(40, 50);
+    await db("users").insert(splitUsers);
+    const testUsers = await db("users");
+    expect(testUsers).toHaveLength(50);
+  });
+
+  it("responds with 200 OK and JSON", async () => {
+    const filterOptionsCopy = { ...filterOptions };
+    await request(server)
+      .post("/users/infinite/1")
+      .send(filterOptionsCopy)
+      .expect(200)
+      .expect("Content-Type", /json/i);
+  });
+
+  it("should return 14 users if all filters are NOT being used and is on page 1", async () => {
+    const filterOptionsCopy = { ...filterOptions };
+    const testUsers = await request(server)
+      .post("/users/infinite/1")
+      .send(filterOptionsCopy);
+    expect(testUsers.body).toHaveLength(14);
+  });
+
+  it("should return 14 IOS/Android users if checkboxes are checked", async () => {
+    const filterOptionsCopy = { ...filterOptions };
+    filterOptionsCopy.isIOSChecked = true;
+    filterOptionsCopy.isAndroidChecked = true;
+    const testUsers = await request(server)
+      .post("/users/infinite/1")
+      .send(filterOptionsCopy);
+    expect(testUsers.body).toHaveLength(14);
+
+    let areAllUsersIosAndAndroid = false;
+    const filteredUsers = testUsers.body.filter(user => {
+      return user.area_of_work === "iOS" || user.area_of_work === "Android";
+    });
+    filteredUsers.length !== testUsers.body.length
+      ? (areAllUsersIosAndAndroid = false)
+      : (areAllUsersIosAndAndroid = true);
+    expect(areAllUsersIosAndAndroid).toBeTruthy();
+  });
+
+  it("should return 23 IOS/Android users if checkboxes are checked and user requests additional users", async () => {
+    const filterOptionsCopy = { ...filterOptions };
+    filterOptionsCopy.isIOSChecked = true;
+    filterOptionsCopy.isAndroidChecked = true;
+    const testUsers1 = await request(server)
+      .post("/users/infinite/1")
+      .send(filterOptionsCopy);
+    const testUsers2 = await request(server)
+      .post("/users/infinite/2")
+      .send(filterOptionsCopy);
+    const testUsers = [...testUsers1.body, ...testUsers2.body];
+    expect(testUsers).toHaveLength(23);
+  });
+});
 
 describe("GET /:id", () => {
   beforeAll(async () => {

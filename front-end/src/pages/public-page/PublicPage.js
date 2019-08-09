@@ -86,7 +86,7 @@ class PublicPage extends Component {
           sortByChoice
         }
       );
-      // if users.data.length === 0 = no users returned 
+      // if users.data.length === 0 = no users returned
       return users.data;
     } catch (err) {
       console.error(`${err.response.data.message} =>`, err);
@@ -191,10 +191,10 @@ class PublicPage extends Component {
     } catch (err) {
       console.error(`${err.response.data.message} =>`, err);
     }
-  }
+  };
 
   render() {
-    console.log(this.state);
+    //console.log(this.state.users.length);
     return (
       <main>
         <aside>
