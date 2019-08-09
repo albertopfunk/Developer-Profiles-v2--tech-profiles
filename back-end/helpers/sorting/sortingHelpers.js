@@ -1,9 +1,4 @@
-/*eslint no-console: ["error", { allow: ["error"] }] */
-module.exports = {
-  sortUsers
-};
-
-function sortUsers(users, sortByChoice) {
+exports.sortUsers = (users, sortByChoice) => {
   let sortedUsers;
 
   if (sortByChoice === "acending(oldest-newest)") {
@@ -19,4 +14,4 @@ function sortUsers(users, sortByChoice) {
   }
 
   return sortedUsers;
-}
+};

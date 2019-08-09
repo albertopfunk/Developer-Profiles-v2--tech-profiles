@@ -1,4 +1,4 @@
-/*eslint no-console: ["error", { allow: ["error"] }] */
+/*eslint no-console: ["warn", { allow: ["error"] }] */
 import React, { Component } from "react";
 import styled from "styled-components";
 import axios from "axios";
@@ -37,8 +37,12 @@ class PublicPage extends Component {
   };
 
   async componentDidMount() {
-    const users = await axios.get("http://localhost:3001/users");
-    this.setState({ users: users.data });
+    try {
+      const users = await axios.get("http://localhost:3001/users");
+      this.setState({ users: users.data });
+    } catch (err) {
+      console.error(`${err.response.data.message} =>`, err);
+    }
   }
 
   setStateAsync = state => {
@@ -82,7 +86,7 @@ class PublicPage extends Component {
           sortByChoice
         }
       );
-
+      // if users.data.length === 0 = no users returned 
       return users.data;
     } catch (err) {
       console.error(`${err.response.data.message} =>`, err);
@@ -91,8 +95,13 @@ class PublicPage extends Component {
 
   infiniteScroll = async () => {
     await this.setStateAsync({ usersPage: this.state.usersPage + 1 });
-    const users = await this.loadUsers();
-    this.setState({ users: [...this.state.users, ...users] });
+    try {
+      const users = await this.loadUsers();
+      // if state.length === users.length = no more users to add
+      this.setState({ users: [...this.state.users, ...users] });
+    } catch (err) {
+      console.error(`${err.response.data.message} =>`, err);
+    }
   };
 
   toggleAreaOfWorkCheckbox = async areaOfWork => {
@@ -121,8 +130,13 @@ class PublicPage extends Component {
       default:
         return;
     }
-    const users = await this.loadUsers();
-    this.setState({ users });
+
+    try {
+      const users = await this.loadUsers();
+      this.setState({ users });
+    } catch (err) {
+      console.error(`${err.response.data.message} =>`, err);
+    }
   };
 
   locationFilter = async () => {
@@ -132,8 +146,12 @@ class PublicPage extends Component {
       isUsingSortByChoice: true,
       isUsingLocationFilter: true
     });
-    const users = await this.loadUsers();
-    this.setState({ users });
+    try {
+      const users = await this.loadUsers();
+      this.setState({ users });
+    } catch (err) {
+      console.error(`${err.response.data.message} =>`, err);
+    }
   };
 
   relocateToFilter = async () => {
@@ -143,31 +161,40 @@ class PublicPage extends Component {
       isUsingSortByChoice: true,
       isUsingRelocateToFilter: true
     });
-    const users = await this.loadUsers();
-    this.setState({ users });
+    try {
+      const users = await this.loadUsers();
+      this.setState({ users });
+    } catch (err) {
+      console.error(`${err.response.data.message} =>`, err);
+    }
   };
 
   sortUsers = async () => {
     // sortByChoice
     await this.setStateAsync({ usersPage: 1, isUsingSortByChoice: true });
-    const users = await this.loadUsers();
-    this.setState({ users });
+    try {
+      const users = await this.loadUsers();
+      this.setState({ users });
+    } catch (err) {
+      console.error(`${err.response.data.message} =>`, err);
+    }
   };
 
-  // resetAllFilters = async () => {
-  //   this.setState({
-  //     isWebDevChecked: false,
-  //     isUIUXChecked: false,
-  //     isIOSChecked: false,
-  //     isAndroidChecked: false,
-  //     isUsingLocationFilter: false,
-  //     isUsingRelocateToFilter: false
-  //   })
-  // }
+  resetLocationFilters = async () => {
+    await this.setStateAsync({
+      isUsingLocationFilter: false,
+      isUsingRelocateToFilter: false
+    });
+    try {
+      const users = await this.loadUsers();
+      this.setState({ users });
+    } catch (err) {
+      console.error(`${err.response.data.message} =>`, err);
+    }
+  }
 
   render() {
-    // console.log(this.state.users.length, this.state.users);
-    //this.state.users.forEach(user => console.log(user.area_of_work))
+    console.log(this.state);
     return (
       <main>
         <aside>
@@ -216,14 +243,12 @@ class PublicPage extends Component {
                 Android
               </label>
             </form>
-            <button onClick={this.infiniteScroll}>MORE USERS</button>
-            {/* <form>
-              <label htmlFor="DistanceFromLocation">
-                  <input id="DistanceFromLocation" type="number"/>
-              </label>
-            </form> */}
+            <button onClick={this.locationFilter}>LOCATE WITHIN</button>
+            <button onClick={this.relocateToFilter}>RELOCATE TO</button>
           </section>
         </aside>
+        <button onClick={this.infiniteScroll}>MORE USERS</button>
+        <button onClick={this.resetLocationFilters}>RESET</button>
         <section>
           {this.state.users.length === 0 ? (
             <h1>Loading...</h1>

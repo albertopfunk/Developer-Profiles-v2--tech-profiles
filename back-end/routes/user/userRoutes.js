@@ -1,4 +1,3 @@
-/*eslint no-console: ["error", { allow: ["error"] }] */
 const express = require("express");
 const userModel = require("../../models/user/userModel");
 
@@ -65,6 +64,7 @@ server.post("/new", async (req, res) => {
 server.get("/", async (req, res) => {
   try {
     const users = await userModel.getAll();
+    console.log(users.length)
     slicedUsers = users.slice(0, 14);
     res.json(slicedUsers);
   } catch (err) {
@@ -75,6 +75,23 @@ server.get("/", async (req, res) => {
 // create a catch to store and splice users for infinite scroll
 // only replace when filters change or refresh
 // for now request all users and splice based on page
+
+// need validation
+// expects
+// num:usersPage parameter
+// bool:isWebDevChecked
+// bool:isUIUXChecked
+// bool:isIOSChecked
+// bool:isAndroidChecked
+// bool:isUsingLocationFilter
+// bool:isUsingRelocateToFilter
+// num:selectedWithinMiles
+// num:chosenLocationLat
+// num:chosenLocationLon
+// str:chosenRelocateTo
+// bool:isUsingSortByChoice
+// str:sortByChoice
+
 server.post("/infinite/:usersPage", async (req, res) => {
   let start = 0;
   let end = 14;
@@ -88,6 +105,7 @@ server.post("/infinite/:usersPage", async (req, res) => {
 
   try {
     const users = await userModel.getAllFiltered(req.body);
+    console.log(users.length)
     slicedUsers = users.slice(start, end);
     res.json(slicedUsers);
   } catch (err) {
@@ -110,6 +128,7 @@ server.get("/:id", async (req, res) => {
     res.status(500).json({ message: "The user could not be retrieved", err });
   }
 });
+
 
 // expects id of existing user in params
 // returns a number 1 if successful

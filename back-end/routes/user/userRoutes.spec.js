@@ -1,4 +1,3 @@
-/*eslint no-console: ["error", { allow: ["error"] }] */
 const request = require("supertest");
 const server = require("../../api/server");
 const db = require("../../data/dbConfig");
@@ -129,10 +128,9 @@ describe("GET /", () => {
     let users = await request(server).get("/users");
     expect(users.body).toHaveLength(0);
 
-
     let usersArr = [];
     for (let i = 0; i < 25; i++) {
-      usersArr.push({ email: `hello${i}@mail.com` })
+      usersArr.push({ email: `hello${i}@mail.com` });
     }
 
     await db("users").insert(usersArr);
@@ -141,6 +139,8 @@ describe("GET /", () => {
     expect(users.body).toHaveLength(14);
   });
 });
+
+describe("POST /infinite/:usersPage", () => {});
 
 describe("GET /:id", () => {
   beforeAll(async () => {

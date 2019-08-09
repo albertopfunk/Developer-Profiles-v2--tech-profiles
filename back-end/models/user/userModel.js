@@ -1,4 +1,3 @@
-/*eslint no-console: ["error", { allow: ["error"] }] */
 const sortingHelpers = require("../../helpers/sorting/sortingHelpers");
 const filterHelpers = require("../../helpers/filtering/filterHelpers");
 const db = require("../../data/dbConfig");
@@ -51,50 +50,42 @@ async function getAllFiltered(filters) {
     return db("users");
   }
 
-  if (isWebDevChecked) {
-    tempUsers = await db("users").where("area_of_work", "Web Development");
-    users = [...users, ...tempUsers];
-  }
+  if (isWebDevChecked || isUIUXChecked || isIOSChecked || isAndroidChecked) {
+    if (isWebDevChecked) {
+      tempUsers = await db("users").where("area_of_work", "Web Development");
+      users = [...users, ...tempUsers];
+    }
 
-  if (isUIUXChecked) {
-    tempUsers = await db("users").where("area_of_work", "UI/UX");
-    users = [...users, ...tempUsers];
-  }
+    if (isUIUXChecked) {
+      tempUsers = await db("users").where("area_of_work", "UI/UX");
+      users = [...users, ...tempUsers];
+    }
 
-  if (isIOSChecked) {
-    tempUsers = await db("users").where("area_of_work", "iOS");
-    users = [...users, ...tempUsers];
-  }
+    if (isIOSChecked) {
+      tempUsers = await db("users").where("area_of_work", "iOS");
+      users = [...users, ...tempUsers];
+    }
 
-  if (isAndroidChecked) {
-    tempUsers = await db("users").where("area_of_work", "Android");
-    users = [...users, ...tempUsers];
-  }
-
-  if (isUsingLocationFilter) {
-    users.length === 0 ? (users = await db("users")) : null;
-    users = filterHelpers.locationFilter(
-      users,
-      selectedWithinMiles,
-      chosenLocationLat,
-      chosenLocationLon
-    );
+    if (isAndroidChecked) {
+      tempUsers = await db("users").where("area_of_work", "Android");
+      users = [...users, ...tempUsers];
+    }
     if (users.length === 0) {
       return users;
     }
   }
 
-  if (isUsingRelocateToFilter) {
+  if (isUsingLocationFilter || isUsingRelocateToFilter) {
     users.length === 0 ? (users = await db("users")) : null;
-
-    if (isUsingLocationFilter) {
-      tempUsers = filterHelpers.relocateToFilter(users, chosenRelocateTo);
-      users = [...new Set([...users, ...tempUsers])];
-    } else {
-      tempUsers = filterHelpers.relocateToFilter(users, chosenRelocateTo);
-      users = tempUsers;
-    }
-
+    const locationOptions = {
+      isUsingLocationFilter,
+      isUsingRelocateToFilter,
+      selectedWithinMiles,
+      chosenLocationLat,
+      chosenLocationLon,
+      chosenRelocateTo
+    };
+    users = filterHelpers.locationFilters(locationOptions, users);
     if (users.length === 0) {
       return users;
     }

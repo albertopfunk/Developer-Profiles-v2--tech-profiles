@@ -1,4 +1,3 @@
-/*eslint no-console: ["error", { allow: ["error"] }] */
 const userModel = require("./userModel");
 const testUsers = require("../../helpers/testUsers");
 const db = require("../../data/dbConfig");

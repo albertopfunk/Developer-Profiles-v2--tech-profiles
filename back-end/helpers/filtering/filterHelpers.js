@@ -1,7 +1,36 @@
-/*eslint no-console: ["error", { allow: ["error"] }] */
-module.exports = {
-  locationFilter,
-  relocateToFilter
+exports.locationFilters = (locationOptions, users) => {
+  if (users.length === 0) {
+    return users;
+  }
+
+  let tempLocationUsers = [];
+  let tempRelocateToUsers = [];
+
+  const {
+    isUsingLocationFilter,
+    isUsingRelocateToFilter,
+    selectedWithinMiles,
+    chosenLocationLat,
+    chosenLocationLon,
+    chosenRelocateTo
+  } = locationOptions;
+
+  if (isUsingLocationFilter) {
+    tempLocationUsers = locationFilter(
+      users,
+      selectedWithinMiles,
+      chosenLocationLat,
+      chosenLocationLon
+    );
+  }
+
+  if (isUsingRelocateToFilter) {
+    tempRelocateToUsers = relocateToFilter(users, chosenRelocateTo);
+  }
+
+  users = [...new Set([...tempLocationUsers, ...tempRelocateToUsers])];
+
+  return users;
 };
 
 function locationFilter(
