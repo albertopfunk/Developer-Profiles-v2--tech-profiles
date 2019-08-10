@@ -10,15 +10,12 @@ function App() {
       <header>
         <h1>HEADERRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR</h1>
       </header>
-      
+
       <>
-        Landing
-        Dashboard
+        {/* Landing
+        Dashboard */}
         <PublicPage />
       </>
-
-
-      {/* <Playground /> */}
     </div>
   );
 }
