@@ -28,7 +28,7 @@ async function getAllFiltered(filters) {
     isUIUXChecked,
     isIOSChecked,
     isAndroidChecked,
-    isUsingLocationFilter,
+    isUsingCurrLocationFilter,
     isUsingRelocateToFilter,
     selectedWithinMiles,
     chosenLocationLat,
@@ -43,7 +43,7 @@ async function getAllFiltered(filters) {
     !isUIUXChecked &&
     !isIOSChecked &&
     !isAndroidChecked &&
-    !isUsingLocationFilter &&
+    !isUsingCurrLocationFilter &&
     !isUsingRelocateToFilter &&
     !isUsingSortByChoice
   ) {
@@ -75,10 +75,10 @@ async function getAllFiltered(filters) {
     }
   }
 
-  if (isUsingLocationFilter || isUsingRelocateToFilter) {
+  if (isUsingCurrLocationFilter || isUsingRelocateToFilter) {
     users.length === 0 ? (users = await db("users")) : null;
     const locationOptions = {
-      isUsingLocationFilter,
+      isUsingCurrLocationFilter,
       isUsingRelocateToFilter,
       selectedWithinMiles,
       chosenLocationLat,

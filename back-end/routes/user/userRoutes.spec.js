@@ -154,7 +154,7 @@ describe("POST /infinite/:usersPage", () => {
     isUIUXChecked: false,
     isIOSChecked: false,
     isAndroidChecked: false,
-    isUsingLocationFilter: false,
+    isUsingCurrLocationFilter: false,
     isUsingRelocateToFilter: false,
     // boston
     selectedWithinMiles: 500,
@@ -239,9 +239,11 @@ describe("POST /infinite/:usersPage", () => {
     const testUsers1 = await request(server)
       .post("/users/infinite/1")
       .send(filterOptionsCopy);
+    expect(testUsers1.body).toHaveLength(14);
     const testUsers2 = await request(server)
       .post("/users/infinite/2")
       .send(filterOptionsCopy);
+    expect(testUsers2.body).toHaveLength(9);
     const testUsers = [...testUsers1.body, ...testUsers2.body];
     expect(testUsers).toHaveLength(23);
   });

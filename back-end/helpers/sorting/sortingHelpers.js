@@ -1,4 +1,8 @@
-exports.sortUsers = (users, sortByChoice) => {
+module.exports = {
+  sortUsers
+};
+
+function sortUsers(users, sortByChoice) {
   let sortedUsers;
 
   if (sortByChoice === "acending(oldest-newest)") {

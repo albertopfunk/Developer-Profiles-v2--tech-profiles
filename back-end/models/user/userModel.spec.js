@@ -133,7 +133,7 @@ describe("getAllFiltered", () => {
     isUIUXChecked: false,
     isIOSChecked: false,
     isAndroidChecked: false,
-    isUsingLocationFilter: false,
+    isUsingCurrLocationFilter: false,
     isUsingRelocateToFilter: false,
     // boston
     selectedWithinMiles: 500,
@@ -205,7 +205,7 @@ describe("getAllFiltered", () => {
 
   it("should return users within default 500 miles of default Boston", async () => {
     const filterOptionsCopy = { ...filterOptions };
-    filterOptionsCopy.isUsingLocationFilter = true;
+    filterOptionsCopy.isUsingCurrLocationFilter = true;
     const testUsers = await userModel.getAllFiltered(filterOptionsCopy);
     expect(testUsers).toHaveLength(4);
   });
@@ -215,7 +215,7 @@ describe("getAllFiltered", () => {
     filterOptionsCopy.selectedWithinMiles = 50;
     filterOptionsCopy.chosenLocationLat = 34.052235;
     filterOptionsCopy.chosenLocationLon = -118.243683;
-    filterOptionsCopy.isUsingLocationFilter = true;
+    filterOptionsCopy.isUsingCurrLocationFilter = true;
     const testUsers = await userModel.getAllFiltered(filterOptionsCopy);
     expect(testUsers).toHaveLength(7);
   });
@@ -253,7 +253,7 @@ describe("getAllFiltered", () => {
   it("should return 0 users since 0 UI/UX users live close to Boston", async () => {
     const filterOptionsCopy = { ...filterOptions };
     filterOptionsCopy.isUIUXChecked = true;
-    filterOptionsCopy.isUsingLocationFilter = true;
+    filterOptionsCopy.isUsingCurrLocationFilter = true;
     const testUsers = await userModel.getAllFiltered(filterOptionsCopy);
     expect(testUsers).toHaveLength(0);
   });
@@ -261,7 +261,7 @@ describe("getAllFiltered", () => {
   it("should return 2 users since 2 Web Dev users live close to Boston", async () => {
     const filterOptionsCopy = { ...filterOptions };
     filterOptionsCopy.isWebDevChecked = true;
-    filterOptionsCopy.isUsingLocationFilter = true;
+    filterOptionsCopy.isUsingCurrLocationFilter = true;
     const testUsers = await userModel.getAllFiltered(filterOptionsCopy);
     expect(testUsers).toHaveLength(2);
   });
@@ -270,7 +270,7 @@ describe("getAllFiltered", () => {
     const filterOptionsCopy = { ...filterOptions };
     filterOptionsCopy.isIOSChecked = true;
     filterOptionsCopy.isAndroidChecked = true;
-    filterOptionsCopy.isUsingLocationFilter = true;
+    filterOptionsCopy.isUsingCurrLocationFilter = true;
     const testUsers = await userModel.getAllFiltered(filterOptionsCopy);
     expect(testUsers).toHaveLength(2);
   });
@@ -279,7 +279,7 @@ describe("getAllFiltered", () => {
     const filterOptionsCopy = { ...filterOptions };
     filterOptionsCopy.isIOSChecked = true;
     filterOptionsCopy.isAndroidChecked = true;
-    filterOptionsCopy.isUsingLocationFilter = true;
+    filterOptionsCopy.isUsingCurrLocationFilter = true;
     filterOptionsCopy.isUsingSortByChoice = true;
     const testUsers = await userModel.getAllFiltered(filterOptionsCopy);
     expect(testUsers[0].id).toBe(6);
@@ -289,7 +289,7 @@ describe("getAllFiltered", () => {
     const filterOptionsCopy = { ...filterOptions };
     filterOptionsCopy.isIOSChecked = true;
     filterOptionsCopy.isAndroidChecked = true;
-    filterOptionsCopy.isUsingLocationFilter = true;
+    filterOptionsCopy.isUsingCurrLocationFilter = true;
     filterOptionsCopy.isUsingSortByChoice = true;
     filterOptionsCopy.sortByChoice = "descending(newest-oldest)";
     const testUsers = await userModel.getAllFiltered(filterOptionsCopy);

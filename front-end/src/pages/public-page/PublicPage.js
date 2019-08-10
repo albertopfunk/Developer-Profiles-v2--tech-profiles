@@ -22,7 +22,7 @@ class PublicPage extends Component {
     isIOSChecked: false,
     isAndroidChecked: false,
 
-    isUsingLocationFilter: false,
+    isUsingCurrLocationFilter: false,
     isUsingRelocateToFilter: false,
 
     selectedWithinMiles: 500, // 0
@@ -58,7 +58,7 @@ class PublicPage extends Component {
       isUIUXChecked,
       isIOSChecked,
       isAndroidChecked,
-      isUsingLocationFilter,
+      isUsingCurrLocationFilter,
       isUsingRelocateToFilter,
       selectedWithinMiles,
       chosenLocationLat,
@@ -76,7 +76,7 @@ class PublicPage extends Component {
           isUIUXChecked,
           isIOSChecked,
           isAndroidChecked,
-          isUsingLocationFilter,
+          isUsingCurrLocationFilter,
           isUsingRelocateToFilter,
           selectedWithinMiles,
           chosenLocationLat,
@@ -139,12 +139,12 @@ class PublicPage extends Component {
     }
   };
 
-  locationFilter = async () => {
+  currentLocationFilter = async () => {
     // selectedWithinMiles, chosenLocationLat, chosenLocationLon
     await this.setStateAsync({
       usersPage: 1,
       isUsingSortByChoice: true,
-      isUsingLocationFilter: true
+      isUsingCurrLocationFilter: true
     });
     try {
       const users = await this.loadUsers();
@@ -182,7 +182,7 @@ class PublicPage extends Component {
 
   resetLocationFilters = async () => {
     await this.setStateAsync({
-      isUsingLocationFilter: false,
+      isUsingCurrLocationFilter: false,
       isUsingRelocateToFilter: false
     });
     try {
@@ -243,7 +243,7 @@ class PublicPage extends Component {
                 Android
               </label>
             </form>
-            <button onClick={this.locationFilter}>LOCATE WITHIN</button>
+            <button onClick={this.currentLocationFilter}>LOCATE WITHIN</button>
             <button onClick={this.relocateToFilter}>RELOCATE TO</button>
           </section>
         </aside>

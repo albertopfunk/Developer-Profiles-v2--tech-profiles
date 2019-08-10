@@ -1,4 +1,11 @@
-exports.locationFilters = (locationOptions, users) => {
+module.exports = {
+  locationFilters,
+  currentLocationFilter,
+  distanceWithinFilter,
+  relocateToFilter
+};
+
+function locationFilters(locationOptions, users) {
   if (users.length === 0) {
     return users;
   }
@@ -7,7 +14,7 @@ exports.locationFilters = (locationOptions, users) => {
   let tempRelocateToUsers = [];
 
   const {
-    isUsingLocationFilter,
+    isUsingCurrLocationFilter,
     isUsingRelocateToFilter,
     selectedWithinMiles,
     chosenLocationLat,
@@ -15,8 +22,8 @@ exports.locationFilters = (locationOptions, users) => {
     chosenRelocateTo
   } = locationOptions;
 
-  if (isUsingLocationFilter) {
-    tempLocationUsers = locationFilter(
+  if (isUsingCurrLocationFilter) {
+    tempLocationUsers = currentLocationFilter(
       users,
       selectedWithinMiles,
       chosenLocationLat,
@@ -31,9 +38,9 @@ exports.locationFilters = (locationOptions, users) => {
   users = [...new Set([...tempLocationUsers, ...tempRelocateToUsers])];
 
   return users;
-};
+}
 
-function locationFilter(
+function currentLocationFilter(
   users,
   selectedWithinMiles,
   chosenLocationLat,

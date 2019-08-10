@@ -75,23 +75,6 @@ server.get("/", async (req, res) => {
 // create a catch to store and splice users for infinite scroll
 // only replace when filters change or refresh
 // for now request all users and splice based on page
-
-// need validation
-// expects
-// num:usersPage parameter
-// bool:isWebDevChecked
-// bool:isUIUXChecked
-// bool:isIOSChecked
-// bool:isAndroidChecked
-// bool:isUsingLocationFilter
-// bool:isUsingRelocateToFilter
-// num:selectedWithinMiles
-// num:chosenLocationLat
-// num:chosenLocationLon
-// str:chosenRelocateTo
-// bool:isUsingSortByChoice
-// str:sortByChoice
-
 server.post("/infinite/:usersPage", async (req, res) => {
   let start = 0;
   let end = 14;

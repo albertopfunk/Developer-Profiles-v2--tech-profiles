@@ -1,4 +1,3 @@
-/*eslint no-console: ["error", { allow: ["error"] }] */
 // eslint-disable-next-line
 exports.seed = function(knex, Promise) {
   const userArr = [];
