@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "axios": "^0.19.0",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
-    "react-scripts": "3.0.1",
-    "styled-components": "^4.3.2"
+    "axios": "*",
+    "react": "*",
+    "react-dom": "*",
+    "react-scripts": "*",
+    "styled-components": "*"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -33,10 +33,10 @@
     ]
   },
   "devDependencies": {
-    "eslint-config-prettier": "^6.0.0",
-    "eslint-plugin-import": "^2.18.2",
-    "eslint-plugin-jsx-a11y": "^6.2.3",
-    "eslint-plugin-react": "^7.14.3",
-    "prettier": "^1.18.2"
+    "eslint-config-prettier": "*",
+    "eslint-plugin-import": "*",
+    "eslint-plugin-jsx-a11y": "*",
+    "eslint-plugin-react": "*",
+    "prettier": "*"
   }
 }
