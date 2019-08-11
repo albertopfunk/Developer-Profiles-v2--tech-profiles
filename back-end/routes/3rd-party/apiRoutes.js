@@ -1,4 +1,6 @@
 const express = require("express");
+const axios = require("axios");
+
 const server = express.Router();
 
 server.post("/autocomplete", async (req, res) => {
@@ -21,8 +23,9 @@ server.post("/gio", async (req, res) => {
 
   try {
     const response = await axios.post(url);
-    res.send(response.data);
+    res.send(response.data.result.geometry.location);
   } catch (err) {
+    console.log(err);
     res.send({ err });
   }
 });

@@ -5,10 +5,6 @@ import axios from "axios";
 import FiltersContainer from "../../components/filters/FiltersContainer";
 import UserCardsContainer from "../../components/user-cards/UserCardsContainer";
 
-// sort choices
-//  descending(newest-oldest)
-//  acending(oldest-newest)
-
 class PublicPage extends Component {
   state = {
     users: [],
@@ -20,19 +16,14 @@ class PublicPage extends Component {
     isUIUXChecked: false,
     isIOSChecked: false,
     isAndroidChecked: false,
-
     isUsingCurrLocationFilter: false,
     isUsingRelocateToFilter: false,
-
-    selectedWithinMiles: 500, // 0
-    // Boston
-    chosenLocationLat: 42.361145, // 0
-    chosenLocationLon: -71.057083, // 0
-
-    chosenRelocateTo: "Boston, MA, USA", // ""
-
-    isUsingSortByChoice: false, // always needs to be true when running any filter
-    sortByChoice: "acending(oldest-newest)" // acending(oldest-newest) default, so we will not have to run this alg on initial load
+    selectedWithinMiles: 0,
+    chosenLocationLat: 0,
+    chosenLocationLon: 0,
+    chosenRelocateTo: "",
+    isUsingSortByChoice: false,
+    sortByChoice: "acending(oldest-newest)"
   };
 
   async componentDidMount() {
@@ -101,6 +92,7 @@ class PublicPage extends Component {
   };
 
   render() {
+    console.log(this.state.users.length);
     return (
       <main>
         <FiltersContainer

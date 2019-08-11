@@ -7,7 +7,6 @@ import RelocateToFilter from "./RelocateToFilter";
 import SortingFilter from "./SortingFilter";
 
 class FiltersContainer extends Component {
-  // Filters - props setStateAsync, loadUsers
   toggleAreaOfWorkCheckbox = async areaOfWork => {
     await this.props.setStateAsync({ usersPage: 1, isUsingSortByChoice: true });
     switch (areaOfWork) {
@@ -37,22 +36,27 @@ class FiltersContainer extends Component {
     this.props.loadUsers();
   };
 
-  // Filters - props setStateAsync, loadUsers
-  currentLocationFilter = async () => {
-    // selectedWithinMiles, chosenLocationLat, chosenLocationLon
+  currentLocationFilter = async locationState => {
+    const {
+      selectedWithinMiles,
+      chosenLocationLat,
+      chosenLocationLon
+    } = locationState;
     await this.props.setStateAsync({
       usersPage: 1,
+      selectedWithinMiles,
+      chosenLocationLat,
+      chosenLocationLon,
       isUsingSortByChoice: true,
       isUsingCurrLocationFilter: true
     });
     this.props.loadUsers();
   };
 
-  // Filters - props setStateAsync, loadUsers
-  relocateToFilter = async () => {
-    // chosenRelocateTo
+  relocateToFilter = async chosenRelocateTo => {
     await this.props.setStateAsync({
       usersPage: 1,
+      chosenRelocateTo,
       isUsingSortByChoice: true,
       isUsingRelocateToFilter: true
     });
@@ -66,12 +70,18 @@ class FiltersContainer extends Component {
     this.props.loadUsers();
   };
 
-  // Filters - props setStateAsync, loadUsers
-  resetLocationFilters = async () => {
-    await this.props.setStateAsync({
-      isUsingCurrLocationFilter: false,
-      isUsingRelocateToFilter: false
-    });
+  resetLocationFilters = async locationFilter => {
+    if (locationFilter === "currLocationFilter") {
+      await this.props.setStateAsync({
+        isUsingCurrLocationFilter: false
+      });
+    } else if (locationFilter === "relocateToFilter") {
+      await this.props.setStateAsync({
+        isUsingRelocateToFilter: false
+      });
+    } else {
+      return;
+    }
     this.props.loadUsers();
   };
 
@@ -81,22 +91,19 @@ class FiltersContainer extends Component {
         {/* Will need text input - str:sortByChoice */}
         <SortingFilter sortUsers={this.sortUsers} />
 
-        {/* No text input, checkboxes */}
         <AreaOfWorkFilter
           toggleAreaOfWorkCheckbox={this.toggleAreaOfWorkCheckbox}
         />
 
-        {/* Will need text input - num:selectedWithinMiles, num:chosenLocationLat, num:chosenLocationLon */}
         <CurrentLocationFilter
+          resetLocationFilters={this.resetLocationFilters}
           currentLocationFilter={this.currentLocationFilter}
         />
 
-        {/* Will need text input - chosenRelocateTo */}
-        <RelocateToFilter relocateToFilter={this.relocateToFilter} />
-
-        <button type="reset" onClick={this.resetLocationFilters}>
-          RESET
-        </button>
+        <RelocateToFilter
+          resetLocationFilters={this.resetLocationFilters}
+          relocateToFilter={this.relocateToFilter}
+        />
       </aside>
     );
   }

@@ -1,5 +1,9 @@
 import React from "react";
 
+// sort choices
+//  descending(newest-oldest)
+//  acending(oldest-newest)
+
 function SortingFilter(props) {
   return (
     <section>
