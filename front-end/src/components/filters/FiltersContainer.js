@@ -8,26 +8,33 @@ import SortingFilter from "./SortingFilter";
 
 class FiltersContainer extends Component {
   toggleAreaOfWorkCheckbox = async areaOfWork => {
-    await this.props.setStateAsync({ usersPage: 1, isUsingSortByChoice: true });
     switch (areaOfWork) {
       case "Web Development":
         await this.props.setStateAsync(prevState => ({
-          isWebDevChecked: !prevState.isWebDevChecked
+          isWebDevChecked: !prevState.isWebDevChecked,
+          usersPage: 1,
+          isUsingSortByChoice: true
         }));
         break;
       case "UI/UX":
         await this.props.setStateAsync(prevState => ({
-          isUIUXChecked: !prevState.isUIUXChecked
+          isUIUXChecked: !prevState.isUIUXChecked,
+          usersPage: 1,
+          isUsingSortByChoice: true
         }));
         break;
       case "iOS":
         await this.props.setStateAsync(prevState => ({
-          isIOSChecked: !prevState.isIOSChecked
+          isIOSChecked: !prevState.isIOSChecked,
+          usersPage: 1,
+          isUsingSortByChoice: true
         }));
         break;
       case "Android":
         await this.props.setStateAsync(prevState => ({
-          isAndroidChecked: !prevState.isAndroidChecked
+          isAndroidChecked: !prevState.isAndroidChecked,
+          usersPage: 1,
+          isUsingSortByChoice: true
         }));
         break;
       default:
@@ -36,12 +43,12 @@ class FiltersContainer extends Component {
     this.props.loadUsers();
   };
 
-  currentLocationFilter = async locationState => {
+  currentLocationFilter = async currLocationOptions => {
     const {
       selectedWithinMiles,
       chosenLocationLat,
       chosenLocationLon
-    } = locationState;
+    } = currLocationOptions;
     await this.props.setStateAsync({
       usersPage: 1,
       selectedWithinMiles,
@@ -63,10 +70,12 @@ class FiltersContainer extends Component {
     this.props.loadUsers();
   };
 
-  // Filters - props setStateAsync, loadUsers
-  sortUsers = async () => {
-    // sortByChoice
-    await this.props.setStateAsync({ usersPage: 1, isUsingSortByChoice: true });
+  sortUsers = async sortByChoice => {
+    await this.props.setStateAsync({
+      usersPage: 1,
+      sortByChoice,
+      isUsingSortByChoice: true
+    });
     this.props.loadUsers();
   };
 
@@ -88,7 +97,6 @@ class FiltersContainer extends Component {
   render() {
     return (
       <aside>
-        {/* Will need text input - str:sortByChoice */}
         <SortingFilter sortUsers={this.sortUsers} />
 
         <AreaOfWorkFilter

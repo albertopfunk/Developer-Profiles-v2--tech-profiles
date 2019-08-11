@@ -17,7 +17,6 @@ class CurrentLocationFilter extends React.Component {
 
   onDistanceChange = () => {
     if (this.state.chosenLocationName !== "") {
-      console.log(this.state.milesWithinInput);
       this.onChoosingLocation(
         this.state.chosenLocationName,
         this.state.chosenLocationId
