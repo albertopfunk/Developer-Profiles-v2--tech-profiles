@@ -14,7 +14,6 @@ function SortingFilter(props) {
           descending(newest-oldest)
         </option>
       </select>
-      <button onClick={props.sortUsers}>SORT USERS</button>
     </section>
   );
 }

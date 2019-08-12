@@ -36,14 +36,16 @@ class RelocateToFilter extends React.Component {
     }
   };
 
-  chooseOnEnter = e => {
+  chooseOnKeyUp = (e, locationName) => {
     if (e.keyCode === 13) {
-      this.onChoosingLocation(e);
+      this.onChoosingLocation(locationName);
+    }
+    if (e.keyCode === 27) {
+      this.resetFilter("relocateToFilter");
     }
   };
 
-  onChoosingLocation = async e => {
-    const { name } = e.target.dataset;
+  onChoosingLocation = async name => {
     this.props.relocateToFilter(name);
     this.setState({
       locationAutocomplete: [],
@@ -90,15 +92,23 @@ class RelocateToFilter extends React.Component {
               ? null
               : this.state.locationAutocomplete.map(location => {
                   return (
+                    // need to figure out accessability keyboard controls
+                      // up and down arrows to move through list, esc to close list, enter to choose item and close list, tabindex to -1, 
+                      // this will also allow you to add aria-activedescendant(changes as the user presses the Up and Down arrows, keyboard focus)
+                      // aria-selected should be in sync with aria-activedescendant
+                      // aria-live like https://alphagov.github.io/accessible-autocomplete/examples/
+                      // aria-describedby https://haltersweb.github.io/Accessibility/autocomplete.html
+                      // https://intopia.digital/articles/anatomy-accessible-auto-suggest/
+                      // https://www.w3.org/TR/wai-aria-practices/examples/combobox/aria1.1pattern/listbox-combo.html
+                      // eslint-disable-next-line
                     <li
                       key={location.id}
                       role="option"
+                      // should be true when item is on focus(not hover)
                       aria-selected="false"
                       tabIndex="0"
-                      data-name={location.name}
-                      data-id={location.id}
-                      onKeyUp={this.chooseOnEnter}
-                      onClick={this.onChoosingLocation}
+                      onKeyUp={(e) => this.chooseOnKeyUp(e, location.name)}
+                      onClick={() => this.onChoosingLocation(location.name)}
                     >
                       {location.name}
                     </li>
@@ -107,6 +117,7 @@ class RelocateToFilter extends React.Component {
           </ul>
         </div>
         {this.state.chosenLocationName === "" ? null : (
+          // there should be something here for accessibility, to let know that this is related to the selection they made
           <div>
             {this.state.chosenLocationName}{" "}
             <button
