@@ -1,6 +1,42 @@
 import React from "react";
 
 function AreaOfWorkFilter(props) {
+  async function toggleAreaOfWorkCheckbox(areaOfWork) {
+    switch (areaOfWork) {
+      case "Web Development":
+        await props.setStateAsync(prevState => ({
+          isWebDevChecked: !prevState.isWebDevChecked,
+          usersPage: 1,
+          isUsingSortByChoice: true
+        }));
+        break;
+      case "UI/UX":
+        await props.setStateAsync(prevState => ({
+          isUIUXChecked: !prevState.isUIUXChecked,
+          usersPage: 1,
+          isUsingSortByChoice: true
+        }));
+        break;
+      case "iOS":
+        await props.setStateAsync(prevState => ({
+          isIOSChecked: !prevState.isIOSChecked,
+          usersPage: 1,
+          isUsingSortByChoice: true
+        }));
+        break;
+      case "Android":
+        await props.setStateAsync(prevState => ({
+          isAndroidChecked: !prevState.isAndroidChecked,
+          usersPage: 1,
+          isUsingSortByChoice: true
+        }));
+        break;
+      default:
+        return;
+    }
+    props.loadUsers();
+  }
+
   return (
     <section>
       <h2>Filter by Area of Work</h2>
@@ -10,7 +46,7 @@ function AreaOfWorkFilter(props) {
             type="checkbox"
             name="area-of-work"
             id="web-development"
-            onChange={() => props.toggleAreaOfWorkCheckbox("Web Development")}
+            onChange={() => toggleAreaOfWorkCheckbox("Web Development")}
           />
           Web Development
         </label>
@@ -20,7 +56,7 @@ function AreaOfWorkFilter(props) {
             type="checkbox"
             name="area-of-work"
             id="UI/UX"
-            onChange={() => props.toggleAreaOfWorkCheckbox("UI/UX")}
+            onChange={() => toggleAreaOfWorkCheckbox("UI/UX")}
           />
           UI/UX
         </label>
@@ -30,7 +66,7 @@ function AreaOfWorkFilter(props) {
             type="checkbox"
             name="area-of-work"
             id="iOS"
-            onChange={() => props.toggleAreaOfWorkCheckbox("iOS")}
+            onChange={() => toggleAreaOfWorkCheckbox("iOS")}
           />
           iOS
         </label>
@@ -40,7 +76,7 @@ function AreaOfWorkFilter(props) {
             type="checkbox"
             name="area-of-work"
             id="Android"
-            onChange={() => props.toggleAreaOfWorkCheckbox("Android")}
+            onChange={() => toggleAreaOfWorkCheckbox("Android")}
           />
           Android
         </label>

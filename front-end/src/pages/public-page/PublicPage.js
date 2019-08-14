@@ -42,18 +42,28 @@ class PublicPage extends Component {
   };
 
   loadUsers = async infinite => {
+
+    // you can avoid state all together
+    // you can just do a lePackage as the second parameter
+    // anything that is missing will be false/undefined so it is the same as setting it to false
+    // INFINITE SCROLL WILL NOT WORK - this is dependent on state
+    // the only way this can work is if you store the users on the server in a cache
     const {
       usersPage,
+
       isWebDevChecked,
       isUIUXChecked,
       isIOSChecked,
       isAndroidChecked,
+
       isUsingCurrLocationFilter,
-      isUsingRelocateToFilter,
       selectedWithinMiles,
       chosenLocationLat,
       chosenLocationLon,
+
+      isUsingRelocateToFilter,
       chosenRelocateTo,
+
       isUsingSortByChoice,
       sortByChoice
     } = this.state;
