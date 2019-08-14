@@ -1,7 +1,9 @@
 const express = require("express");
+const NodeCache = require("node-cache");
 const userModel = require("../../models/user/userModel");
 
 const server = express.Router();
+const infinityCache = new NodeCache({ stdTTL: 21500, checkperiod: 22000 });
 
 //----------------------------------------------------------------------
 /*
@@ -64,22 +66,65 @@ server.post("/new", async (req, res) => {
 server.get("/", async (req, res) => {
   try {
     const users = await userModel.getAll();
-    console.log(users.length);
-    slicedUsers = users.slice(0, 14);
-    res.json(slicedUsers);
+    cachedUsersSuccess = infinityCache.set("users", users);
+    if (cachedUsersSuccess) {
+      const slicedUsers = users.slice(0, 14);
+      res.json(slicedUsers);
+    } else {
+      res.status(500).json({ message: "error setting users to cache" });
+    }
   } catch (err) {
     res.status(500).json({ message: "The users could not be retrieved", err });
   }
 });
 
-// create a catch to store and splice users for infinite scroll
-// only replace when filters change or refresh
-// for now request all users and splice based on page
-server.post("/infinite/:usersPage", async (req, res) => {
+// Get users middleware
+// should check if users are stored
+// if not stored, next()
+// if stored, send back sliced users based on page
+// get filtered users route
+// will add users to cache
+// send back sliced users based on page
+
+const getUsersFromCache = (req, res, next) => {
+  let start = 0;
+  let end = 14;
+  const { infinite, usersPage } = req.body;
+
+  for (let i = 1; i < usersPage; i++) {
+    start += 14;
+    end += 14;
+  }
+
+  if (infinite === "infinite") {
+    try {
+      const cachedUsers = infinityCache.get("users", true);
+      const slicedUsers = cachedUsers.slice(start, end);
+      res.json(slicedUsers);
+    } catch (err) {
+      next();
+    }
+  } else {
+    next();
+  }
+};
+
+// const getFilteredUsers = (req, res, next) => {
+//   try {
+//     const cachedFilters = infinityCache.get("filters", true);
+//     console.log(cachedFilters)
+//     req.body = {...cachedFilters}
+//     next();
+//   } catch (err) {
+//     next();
+//   }
+// }
+
+server.post("/infinite", getUsersFromCache, async (req, res) => {
   let start = 0;
   let end = 14;
 
-  const { usersPage } = req.params;
+  const { usersPage } = req.body;
 
   for (let i = 1; i < usersPage; i++) {
     start += 14;
@@ -88,9 +133,15 @@ server.post("/infinite/:usersPage", async (req, res) => {
 
   try {
     const users = await userModel.getAllFiltered(req.body);
-    console.log(users.length);
-    slicedUsers = users.slice(start, end);
-    res.json(slicedUsers);
+    cachedUsersSuccess = infinityCache.set("users", users);
+    cachedFiltersSuccess = infinityCache.set("filters", req.body);
+
+    if (cachedUsersSuccess && cachedFiltersSuccess) {
+      slicedUsers = users.slice(start, end);
+      res.json(slicedUsers);
+    } else {
+      res.status(500).json({ message: "error setting users and/or filters to cache" });
+    }
   } catch (err) {
     res.status(500).json({ message: "The users could not be retrieved", err });
   }

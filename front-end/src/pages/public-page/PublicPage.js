@@ -70,8 +70,10 @@ class PublicPage extends Component {
 
     try {
       const users = await axios.post(
-        `http://localhost:3001/users/infinite/${usersPage}`,
+        "http://localhost:3001/users/infinite",
         {
+          infinite,
+          usersPage,
           isWebDevChecked,
           isUIUXChecked,
           isIOSChecked,
