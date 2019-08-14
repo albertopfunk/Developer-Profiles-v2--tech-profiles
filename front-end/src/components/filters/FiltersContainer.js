@@ -32,4 +32,6 @@ function FiltersContainer(props) {
   );
 }
 
-export default FiltersContainer;
+const MemoFiltersContainer = React.memo(FiltersContainer);
+
+export default MemoFiltersContainer;

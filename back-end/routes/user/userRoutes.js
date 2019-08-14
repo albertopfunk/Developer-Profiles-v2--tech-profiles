@@ -5,6 +5,30 @@ const userModel = require("../../models/user/userModel");
 const server = express.Router();
 const infinityCache = new NodeCache({ stdTTL: 21500, checkperiod: 22000 });
 
+// middleware
+const getUsersFromCache = (req, res, next) => {
+  let start = 0;
+  let end = 14;
+  const { infinite, usersPage } = req.body;
+
+  for (let i = 1; i < usersPage; i++) {
+    start += 14;
+    end += 14;
+  }
+
+  if (infinite === "infinite") {
+    try {
+      const cachedUsers = infinityCache.get("users", true);
+      const slicedUsers = cachedUsers.slice(start, end);
+      res.json(slicedUsers);
+    } catch (err) {
+      next();
+    }
+  } else {
+    next();
+  }
+};
+
 //----------------------------------------------------------------------
 /*
     USERS(users)
@@ -78,48 +102,6 @@ server.get("/", async (req, res) => {
   }
 });
 
-// Get users middleware
-// should check if users are stored
-// if not stored, next()
-// if stored, send back sliced users based on page
-// get filtered users route
-// will add users to cache
-// send back sliced users based on page
-
-const getUsersFromCache = (req, res, next) => {
-  let start = 0;
-  let end = 14;
-  const { infinite, usersPage } = req.body;
-
-  for (let i = 1; i < usersPage; i++) {
-    start += 14;
-    end += 14;
-  }
-
-  if (infinite === "infinite") {
-    try {
-      const cachedUsers = infinityCache.get("users", true);
-      const slicedUsers = cachedUsers.slice(start, end);
-      res.json(slicedUsers);
-    } catch (err) {
-      next();
-    }
-  } else {
-    next();
-  }
-};
-
-// const getFilteredUsers = (req, res, next) => {
-//   try {
-//     const cachedFilters = infinityCache.get("filters", true);
-//     console.log(cachedFilters)
-//     req.body = {...cachedFilters}
-//     next();
-//   } catch (err) {
-//     next();
-//   }
-// }
-
 server.post("/infinite", getUsersFromCache, async (req, res) => {
   let start = 0;
   let end = 14;
@@ -134,9 +116,7 @@ server.post("/infinite", getUsersFromCache, async (req, res) => {
   try {
     const users = await userModel.getAllFiltered(req.body);
     cachedUsersSuccess = infinityCache.set("users", users);
-    cachedFiltersSuccess = infinityCache.set("filters", req.body);
-
-    if (cachedUsersSuccess && cachedFiltersSuccess) {
+    if (cachedUsersSuccess) {
       slicedUsers = users.slice(start, end);
       res.json(slicedUsers);
     } else {
