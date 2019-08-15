@@ -1,3 +1,5 @@
+const faker = require("faker");
+
 // eslint-disable-next-line
 exports.seed = function(knex, Promise) {
   let educationArr = [];
@@ -10,13 +12,16 @@ exports.seed = function(knex, Promise) {
     });
   }
 
-  // Deletes ALL existing entries
   return knex("education")
-    .del()
-    .then(function() {
-      // Inserts seed entries
-      return knex("education")
-        .truncate()
-        .insert(educationArr);
-    });
+    .truncate()
+    .insert(educationArr);
+  // Deletes ALL existing entries
+  // return knex("education")
+  //   .del()
+  //   .then(function() {
+  //     // Inserts seed entries
+  //     return knex("education")
+  //       .truncate()
+  //       .insert(educationArr);
+  //   });
 };

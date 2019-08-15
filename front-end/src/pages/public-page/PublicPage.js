@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-// import styled from "styled-components";
+import styled from "styled-components";
 import axios from "axios";
 
 import FiltersContainer from "../../components/filters/FiltersContainer";
@@ -95,18 +95,28 @@ class PublicPage extends Component {
   render() {
     console.log(this.state.users.length);
     return (
-      <main>
-        <FiltersContainer
-          setStateAsync={this.setStateAsync}
-          loadUsers={this.loadUsers}
-        />
-        <UserCardsContainer users={this.state.users} />
+      <Main>
+        <div className="container">
+          <FiltersContainer
+            setStateAsync={this.setStateAsync}
+            loadUsers={this.loadUsers}
+          />
+          <UserCardsContainer users={this.state.users} />
+        </div>
+
         <aside>
           <button onClick={this.infiniteScroll}>More Profiles</button>
         </aside>
-      </main>
+      </Main>
     );
   }
 }
+
+const Main = styled.main`
+  background-color: lightblue;
+  > div {
+    display: flex;
+  }
+`;
 
 export default PublicPage;

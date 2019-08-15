@@ -50,11 +50,11 @@ class CurrentLocationFilter extends React.Component {
   };
 
   resetLocationFilter = async () => {
-    this.setState({ chosenLocationName: "", chosenLocationId: "" });
     await this.props.setStateAsync({
       isUsingCurrLocationFilter: false
     });
     this.props.loadUsers();
+    this.setState({ chosenLocationName: "", chosenLocationId: "" });
   };
 
   render() {

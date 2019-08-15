@@ -20,6 +20,7 @@ const getUsersFromCache = (req, res, next) => {
   if (infinite === "infinite") {
     try {
       const cachedUsers = infinityCache.get("users", true);
+      console.log(cachedUsers.length)
       const slicedUsers = cachedUsers.slice(start, end);
       res.json(slicedUsers);
     } catch (err) {
@@ -117,6 +118,7 @@ server.post("/new", async (req, res) => {
 server.get("/", async (req, res) => {
   try {
     const users = await userModel.getAll();
+    console.log(users.length)
     cachedUsersSuccess = infinityCache.set("users", users);
     if (cachedUsersSuccess) {
       const slicedUsers = users.slice(0, 14);
@@ -146,6 +148,7 @@ server.post("/infinite/:usersPage", getUsersFromCache, async (req, res) => {
 
   try {
     const users = await userModel.getAllFiltered(req.body);
+    console.log(users.length)
     cachedUsersSuccess = infinityCache.set("users", users);
     if (cachedUsersSuccess) {
       slicedUsers = users.slice(start, end);
