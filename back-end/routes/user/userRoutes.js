@@ -48,14 +48,40 @@ const getUsersFromCache = (req, res, next) => {
     github
     linkedin
     portfolio
-    badge
-    badgeURL
+    badge - might deprecate
+    badgeURL - might deprecate
     summary
     stripe_customer_id
     stripe_subscription_name
     top_skills
     additional_skills
-    familiar_skills
+    familiar_skills - might deprecate
+
+    years_of_related_work_experience
+    clicks_to_expand
+    clicks_to_view_profile
+    profile_views
+
+
+
+
+
+
+    // ----------------- //
+    Possible Other User
+    name
+    email
+    favorite_profiles
+    viewed_profiles
+    expanded_profiles
+    current_location_name
+    current_location_lat
+    current_location_lon
+    interested_skills
+    interested areas of work
+    
+
+
 
 */
 //----------------------------------------------------------------------

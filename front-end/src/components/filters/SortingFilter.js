@@ -10,7 +10,6 @@ function SortingFilter(props) {
     props.loadUsers();
   }
 
-  console.log("UGHVFJTGFJYTF")
   return (
     <section>
       <label htmlFor="sorting-select">Sort Profiles:</label>
