@@ -9,7 +9,8 @@ const infinityCache = new NodeCache({ stdTTL: 21500, checkperiod: 22000 });
 const getUsersFromCache = (req, res, next) => {
   let start = 0;
   let end = 14;
-  const { infinite, usersPage } = req.body;
+  const { infinite } = req.body;
+  const { usersPage } = req.params;
 
   for (let i = 1; i < usersPage; i++) {
     start += 14;
@@ -102,11 +103,15 @@ server.get("/", async (req, res) => {
   }
 });
 
-server.post("/infinite", getUsersFromCache, async (req, res) => {
+
+// uses middleware cache for users
+// requires usersPage param
+// requires filter options on req.body
+server.post("/infinite/:usersPage", getUsersFromCache, async (req, res) => {
   let start = 0;
   let end = 14;
 
-  const { usersPage } = req.body;
+  const { usersPage } = req.params;
 
   for (let i = 1; i < usersPage; i++) {
     start += 14;

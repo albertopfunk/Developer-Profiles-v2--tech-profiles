@@ -60,10 +60,9 @@ class PublicPage extends Component {
 
     try {
       const users = await axios.post(
-        "http://localhost:3001/users/infinite",
+        `http://localhost:3001/users/infinite/${usersPage}`,
         {
           infinite,
-          usersPage,
           isWebDevChecked,
           isUIUXChecked,
           isIOSChecked,
@@ -102,11 +101,8 @@ class PublicPage extends Component {
           loadUsers={this.loadUsers}
         />
         <UserCardsContainer users={this.state.users} />
-
-        {/* Can contain scrolling logic, and call infiniteScroll */}
-        {/* props infiniteScroll */}
         <aside>
-          <button onClick={this.infiniteScroll}>MORE USERS</button>
+          <button onClick={this.infiniteScroll}>More Profiles</button>
         </aside>
       </main>
     );

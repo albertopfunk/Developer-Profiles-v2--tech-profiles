@@ -45,7 +45,7 @@ class CurrentLocationFilter extends React.Component {
       });
       this.props.loadUsers();
     } catch (err) {
-      console.log(err);
+      console.error(`${err.response.data.message} =>`, err);
     }
   };
 

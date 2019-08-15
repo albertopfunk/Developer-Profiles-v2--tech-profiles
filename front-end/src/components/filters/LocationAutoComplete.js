@@ -81,7 +81,7 @@ class LocationAutoComplete extends React.Component {
     const { name, value } = e.target;
     this.setState({ [name]: value });
     if (value.trim() === "") {
-      this.setState({ isUsingCombobox: false });
+      this.setState({ isUsingCombobox: false, autoComplete: [] });
       return;
     }
     try {
@@ -100,7 +100,7 @@ class LocationAutoComplete extends React.Component {
         isUsingCombobox: true
       });
     } catch (err) {
-      console.log(err);
+      console.error(`${err.response.data.message} =>`, err);
     }
   };
 

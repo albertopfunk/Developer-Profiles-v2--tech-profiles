@@ -93,7 +93,9 @@ async function getAllFiltered(filters) {
 
   if (isUsingSortByChoice) {
     users.length === 0 ? (users = await db("users")) : null;
-    users = sortingHelpers.sortUsers(users, sortByChoice);
+    if (sortByChoice !== "acending(oldest-newest)") {
+      users = sortingHelpers.sortUsers(users, sortByChoice);
+    }
   }
 
   return users;

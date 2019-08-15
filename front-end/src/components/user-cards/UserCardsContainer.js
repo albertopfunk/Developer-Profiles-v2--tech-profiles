@@ -1,9 +1,23 @@
 import React, { Component } from "react";
+import axios from "axios";
 import UserCard from "./UserCard";
 // import styled from "styled-components";
 
 class UserCardsContainer extends Component {
   expandUserCard = async id => {
+    id = 5;
+    try {
+      const [education, experience, projects] = await Promise.all([
+        axios.get(`http://localhost:3001/extras/${id}/education`),
+        axios.get(`http://localhost:3001/extras/${id}/experience`),
+        axios.get(`http://localhost:3001/extras/${id}/projects`)
+      ]);
+      console.log(experience.data)
+      console.log(education.data)
+      console.log(projects.data)
+    } catch (err) {
+      console.error(`${err.response.data.message} =>`, err);
+    }
     return id;
   };
 
