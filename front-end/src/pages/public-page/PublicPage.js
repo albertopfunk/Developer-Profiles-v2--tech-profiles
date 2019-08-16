@@ -36,6 +36,31 @@ class PublicPage extends Component {
     }
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    const {
+      isWebDevChecked,
+      isUIUXChecked,
+      isIOSChecked,
+      isAndroidChecked,
+      isUsingCurrLocationFilter,
+      isUsingRelocateToFilter,
+      isUsingSortByChoice
+    } = this.state;
+
+    if (
+      isWebDevChecked !== nextState.isWebDevChecked ||
+      isUIUXChecked !== nextState.isUIUXChecked ||
+      isIOSChecked !== nextState.isIOSChecked ||
+      isAndroidChecked !== nextState.isAndroidChecked ||
+      isUsingCurrLocationFilter !== nextState.isUsingCurrLocationFilter ||
+      isUsingRelocateToFilter !== nextState.isUsingRelocateToFilter ||
+      isUsingSortByChoice !== nextState.isUsingSortByChoice
+    ) {
+      return false;
+    }
+    return true;
+  }
+
   setStateAsync = state => {
     return new Promise(resolve => {
       this.setState(state, resolve);
