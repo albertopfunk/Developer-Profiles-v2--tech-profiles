@@ -13,11 +13,9 @@ function setToCache(users) {
 }
 
 function validateFilterOptions(req, res, next) {
-  let stopRunning = false;
-  function returnFail(variableMissing) {
-    stopRunning = true;
+  function validationFail(variable) {
     return res.status(400).json({
-      message: `Expected '${variableMissing}' but recevied 'null', 'undefined', or the incorrect data type'`
+      message: `Expected '${variable}' but recevied 'null', 'undefined', or the incorrect data type'`
     });
   }
 
@@ -38,62 +36,63 @@ function validateFilterOptions(req, res, next) {
     sortByChoice
   } = req.query;
 
-  // normalize or reject
   if (typeof usersPage === "string") {
     usersPage = +usersPage;
-    Number.isNaN(usersPage) ? returnFail("num:usersPage") : null;
+    if (Number.isNaN(usersPage)) {
+      return validationFail("num:usersPage");
+    }
   } else {
-    returnFail("num:usersPage");
+    return validationFail("num:usersPage");
   }
 
   if (typeof isUsinginfinite === "string") {
     if (isUsinginfinite === "true" || isUsinginfinite === "false") {
       isUsinginfinite = isUsinginfinite === "true";
     } else {
-      returnFail("bool:isUsinginfinite");
+      return validationFail("bool:isUsinginfinite");
     }
   } else {
-    returnFail("bool:isUsinginfinite");
+    return validationFail("bool:isUsinginfinite");
   }
 
   if (typeof isWebDevChecked === "string") {
     if (isWebDevChecked === "true" || isWebDevChecked === "false") {
       isWebDevChecked = isWebDevChecked === "true";
     } else {
-      returnFail("bool:isWebDevChecked");
+      return validationFail("bool:isWebDevChecked");
     }
   } else {
-    returnFail("bool:isWebDevChecked");
+    return validationFail("bool:isWebDevChecked");
   }
 
   if (typeof isUIUXChecked === "string") {
     if (isUIUXChecked === "true" || isUIUXChecked === "false") {
       isUIUXChecked = isUIUXChecked === "true";
     } else {
-      returnFail("bool:isUIUXChecked");
+      return validationFail("bool:isUIUXChecked");
     }
   } else {
-    returnFail("bool:isUIUXChecked");
+    return validationFail("bool:isUIUXChecked");
   }
 
   if (typeof isIOSChecked === "string") {
     if (isIOSChecked === "true" || isIOSChecked === "false") {
       isIOSChecked = isIOSChecked === "true";
     } else {
-      returnFail("bool:isIOSChecked");
+      return validationFail("bool:isIOSChecked");
     }
   } else {
-    returnFail("bool:isIOSChecked");
+    return validationFail("bool:isIOSChecked");
   }
 
   if (typeof isAndroidChecked === "string") {
     if (isAndroidChecked === "true" || isAndroidChecked === "false") {
       isAndroidChecked = isAndroidChecked === "true";
     } else {
-      returnFail("bool:isAndroidChecked");
+      return validationFail("bool:isAndroidChecked");
     }
   } else {
-    returnFail("bool:isAndroidChecked");
+    return validationFail("bool:isAndroidChecked");
   }
 
   if (typeof isUsingCurrLocationFilter === "string") {
@@ -103,66 +102,70 @@ function validateFilterOptions(req, res, next) {
     ) {
       isUsingCurrLocationFilter = isUsingCurrLocationFilter === "true";
     } else {
-      returnFail("bool:isUsingCurrLocationFilter");
+      return validationFail("bool:isUsingCurrLocationFilter");
     }
   } else {
-    returnFail("bool:isUsingCurrLocationFilter");
+    return validationFail("bool:isUsingCurrLocationFilter");
   }
 
   if (isUsingCurrLocationFilter) {
     if (typeof selectedWithinMiles === "string") {
       selectedWithinMiles = +selectedWithinMiles;
-      Number.isNaN(selectedWithinMiles)
-        ? returnFail("num:selectedWithinMiles")
-        : null;
+      if (Number.isNaN(selectedWithinMiles)) {
+        return validationFail("num:selectedWithinMiles");
+      }
     } else {
-      returnFail("num:selectedWithinMiles");
+      return validationFail("num:selectedWithinMiles");
     }
 
     if (typeof chosenLocationLat === "string") {
       chosenLocationLat = +chosenLocationLat;
-      Number.isNaN(chosenLocationLat)
-        ? returnFail("num:chosenLocationLat")
-        : null;
+      if (Number.isNaN(chosenLocationLat)) {
+        return validationFail("num:chosenLocationLat");
+      }
     } else {
-      returnFail("num:chosenLocationLat");
+      return validationFail("num:chosenLocationLat");
     }
 
     if (typeof chosenLocationLon === "string") {
       chosenLocationLon = +chosenLocationLon;
-      Number.isNaN(chosenLocationLon)
-        ? returnFail("num:chosenLocationLon")
-        : null;
+      if (Number.isNaN(chosenLocationLon)) {
+        return validationFail("num:chosenLocationLon");
+      }
     } else {
-      returnFail("num:chosenLocationLon");
+      return validationFail("num:chosenLocationLon");
     }
   }
 
   if (typeof isUsingRelocateToFilter === "string") {
-    typeof chosenRelocateTo === "string"
-      ? null
-      : returnFail("str:chosenRelocateTo");
     if (
       isUsingRelocateToFilter === "true" ||
       isUsingRelocateToFilter === "false"
     ) {
       isUsingRelocateToFilter = isUsingRelocateToFilter === "true";
     } else {
-      returnFail("bool:isUsingRelocateToFilter");
+      return validationFail("bool:isUsingRelocateToFilter");
+    }
+
+    if (typeof chosenRelocateTo !== "string") {
+      return validationFail("str:chosenRelocateTo");
     }
   } else {
-    returnFail("bool:isUsingRelocateToFilter");
+    return validationFail("bool:isUsingRelocateToFilter");
   }
 
   if (typeof isUsingSortByChoice === "string") {
-    typeof sortByChoice === "string" ? null : returnFail("str:sortByChoice");
     if (isUsingSortByChoice === "true" || isUsingSortByChoice === "false") {
       isUsingSortByChoice = isUsingSortByChoice === "true";
     } else {
-      returnFail("bool:isUsingSortByChoice");
+      return validationFail("bool:isUsingSortByChoice");
+    }
+
+    if (typeof sortByChoice !== "string") {
+      return validationFail("str:sortByChoice");
     }
   } else {
-    returnFail("bool:isUsingSortByChoice");
+    return validationFail("bool:isUsingSortByChoice");
   }
 
   req.query = {
@@ -182,12 +185,8 @@ function validateFilterOptions(req, res, next) {
     sortByChoice
   };
 
-  // unhandled promise rejection if this condition is not present
-  if (stopRunning) {
-    return;
-  } else {
-    next();
-  }
+  console.log("isrunning...");
+  next();
 }
 
 function getUsersFromCache(req, res, next) {

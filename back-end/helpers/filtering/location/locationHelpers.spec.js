@@ -1,4 +1,4 @@
-const filterHelpers = require("./filterHelpers");
+const locationHelpers = require("./locationHelpers");
 
 // Global users - Do not get modified
 const users = [
@@ -48,14 +48,14 @@ describe("locationFilters", () => {
   };
 
   it("should return 0 users since filters are false", () => {
-    const filteredUsers = filterHelpers.locationFilters(filterOptions, users);
+    const filteredUsers = locationHelpers.locationFilters(filterOptions, users);
     expect(filteredUsers).toHaveLength(0);
   });
 
   it("should return 2 users that live within 500miles of default Los Angeles", () => {
     const filterOptionsCopy = { ...filterOptions };
     filterOptionsCopy.isUsingCurrLocationFilter = true;
-    const filteredUsers = filterHelpers.locationFilters(
+    const filteredUsers = locationHelpers.locationFilters(
       filterOptionsCopy,
       users
     );
@@ -65,7 +65,7 @@ describe("locationFilters", () => {
   it("should return 2 users that want to relocate to default Los Angeles", () => {
     const filterOptionsCopy = { ...filterOptions };
     filterOptionsCopy.isUsingRelocateToFilter = true;
-    const filteredUsers = filterHelpers.locationFilters(
+    const filteredUsers = locationHelpers.locationFilters(
       filterOptionsCopy,
       users
     );
@@ -76,7 +76,7 @@ describe("locationFilters", () => {
     const filterOptionsCopy = { ...filterOptions };
     filterOptionsCopy.isUsingCurrLocationFilter = true;
     filterOptionsCopy.isUsingRelocateToFilter = true;
-    const filteredUsers = filterHelpers.locationFilters(
+    const filteredUsers = locationHelpers.locationFilters(
       filterOptionsCopy,
       users
     );
@@ -90,7 +90,7 @@ describe("currentLocationFilter", () => {
     // Seattle, WA, USA
     let chosenLocationLat = 47.608013;
     let chosenLocationLon = -122.335167;
-    const filteredUsers = filterHelpers.currentLocationFilter(
+    const filteredUsers = locationHelpers.currentLocationFilter(
       users,
       miles,
       chosenLocationLat,
@@ -104,7 +104,7 @@ describe("currentLocationFilter", () => {
     // Boston, MA, USA
     let chosenLocationLat = 42.361145;
     let chosenLocationLon = -71.057083;
-    const filteredUsers = filterHelpers.currentLocationFilter(
+    const filteredUsers = locationHelpers.currentLocationFilter(
       users,
       miles,
       chosenLocationLat,
@@ -118,7 +118,7 @@ describe("currentLocationFilter", () => {
     // Boston, MA, USA
     let chosenLocationLat = 42.361145;
     let chosenLocationLon = -71.057083;
-    const filteredUsers = filterHelpers.currentLocationFilter(
+    const filteredUsers = locationHelpers.currentLocationFilter(
       users,
       miles,
       chosenLocationLat,
@@ -141,7 +141,7 @@ describe("distanceWithinFilter", () => {
     let lat2 = 40.014984;
     let lon2 = -105.270546;
 
-    const isWithinDistance = filterHelpers.distanceWithinFilter(
+    const isWithinDistance = locationHelpers.distanceWithinFilter(
       lat,
       lon,
       lat2,
@@ -163,7 +163,7 @@ describe("distanceWithinFilter", () => {
     let lat2 = 40.014984;
     let lon2 = -105.270546;
 
-    const isWithinDistance = filterHelpers.distanceWithinFilter(
+    const isWithinDistance = locationHelpers.distanceWithinFilter(
       lat,
       lon,
       lat2,
@@ -185,7 +185,7 @@ describe("distanceWithinFilter", () => {
     let lat2 = 21.315603;
     let lon2 = -157.858093;
 
-    const isWithinDistance = filterHelpers.distanceWithinFilter(
+    const isWithinDistance = locationHelpers.distanceWithinFilter(
       lat,
       lon,
       lat2,
@@ -207,7 +207,7 @@ describe("distanceWithinFilter", () => {
     let lat2 = 21.315603;
     let lon2 = -157.858093;
 
-    const isWithinDistance = filterHelpers.distanceWithinFilter(
+    const isWithinDistance = locationHelpers.distanceWithinFilter(
       lat,
       lon,
       lat2,
@@ -221,19 +221,19 @@ describe("distanceWithinFilter", () => {
 describe("relocateToFilter", () => {
   it("should return 3 users that want to relocate to Seattle", () => {
     const relocateTo = "Seattle, WA, USA";
-    const filteredUsers = filterHelpers.relocateToFilter(users, relocateTo);
+    const filteredUsers = locationHelpers.relocateToFilter(users, relocateTo);
     expect(filteredUsers).toHaveLength(3);
   });
 
   it("should return 3 users that want to relocate to Boston", () => {
     const relocateTo = "Boston, MA, USA";
-    const filteredUsers = filterHelpers.relocateToFilter(users, relocateTo);
+    const filteredUsers = locationHelpers.relocateToFilter(users, relocateTo);
     expect(filteredUsers).toHaveLength(3);
   });
 
   it("should return 1 user that wants to relocate to Boulder", () => {
     const relocateTo = "Boulder, CO, USA";
-    const filteredUsers = filterHelpers.relocateToFilter(users, relocateTo);
+    const filteredUsers = locationHelpers.relocateToFilter(users, relocateTo);
     expect(filteredUsers).toHaveLength(1);
   });
 });

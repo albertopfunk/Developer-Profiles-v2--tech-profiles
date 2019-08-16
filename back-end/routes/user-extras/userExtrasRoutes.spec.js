@@ -114,25 +114,21 @@ describe("GET /:user_id/:user_extra", () => {
     );
   });
 
-  it("responds with 400 and correct error message if user ID is invalid", async () => {
+  it("responds with 200 and empty array if user ID is invalid", async () => {
     await db("users").insert({ email: "test@email.com" });
     await db("projects").insert({ user_id: 1 });
     const invalidID = await request(server)
       .get("/extras/999/projects")
-      .expect(400);
-    expect(invalidID.body.message).toBe(
-      "Error finding user's 'projects' items, check user id of '999' or add a user 'projects' item"
-    );
+      .expect(200);
+    expect(invalidID.body).toHaveLength(0);
   });
 
-  it("responds with 400 and correct error message if user extra is empty", async () => {
+  it("responds with 200 and empty array if user extra is empty", async () => {
     await db("users").insert({ email: "test@email.com" });
     const emptyUserExtra = await request(server)
       .get("/extras/1/projects")
-      .expect(400);
-    expect(emptyUserExtra.body.message).toBe(
-      "Error finding user's 'projects' items, check user id of '1' or add a user 'projects' item"
-    );
+      .expect(200);
+    expect(emptyUserExtra.body).toHaveLength(0);
   });
 
   it("should return all items of specified user's extra", async () => {

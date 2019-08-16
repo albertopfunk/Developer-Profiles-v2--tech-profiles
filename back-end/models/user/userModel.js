@@ -1,5 +1,5 @@
 const sortingHelpers = require("../../helpers/sorting/sortingHelpers");
-const filterHelpers = require("../../helpers/filtering/filterHelpers");
+const locationHelpers = require("../../helpers/filtering/location/locationHelpers");
 const db = require("../../data/dbConfig");
 
 module.exports = {
@@ -85,7 +85,7 @@ async function getAllFiltered(filters) {
       chosenLocationLon,
       chosenRelocateTo
     };
-    users = filterHelpers.locationFilters(locationOptions, users);
+    users = locationHelpers.locationFilters(locationOptions, users);
     if (users.length === 0) {
       return users;
     }

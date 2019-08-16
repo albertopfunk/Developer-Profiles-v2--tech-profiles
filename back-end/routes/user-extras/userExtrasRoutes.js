@@ -64,11 +64,7 @@ server.get("/:user_id/:user_extra", async (req, res) => {
   } else {
     try {
       const getAllUserExtra = await userExtrasModel.getAll(user_id, user_extra);
-      getAllUserExtra.length === 0
-        ? res.status(400).json({
-            message: `Error finding user's '${user_extra}' items, check user id of '${user_id}' or add a user '${user_extra}' item`
-          })
-        : res.json(getAllUserExtra);
+      res.json(getAllUserExtra);
     } catch (err) {
       res.status(500).json({
         message: `The user's '${user_extra}' could not be retrieved`,

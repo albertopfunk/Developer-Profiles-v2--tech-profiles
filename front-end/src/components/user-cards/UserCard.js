@@ -59,20 +59,14 @@ class UserCard extends React.Component {
 
     return (
       <article style={{ margin: "20px", border: "solid" }}>
-
         {/* <aside className="favorite">Favorite</aside> */}
 
-
-
-
         <section>
-
           <div className="left">
-
             <section className="user-info">
               <div className="img">
-              image
-              {this.props.id}
+                image
+                {this.props.id}
               </div>
               <div className="basic-info">
                 name, location, summary
@@ -86,21 +80,14 @@ class UserCard extends React.Component {
               <p>{topSkills[0]}</p>
               <p>{additionalSkills[0]}</p>
             </section>
-
           </div>
-
 
           <aside className="right">
             icons
             <p>{this.props.github}</p>
             <p>{this.props.linkedin}</p>
           </aside>
-
         </section>
-
-
-
-
 
         <section>
           <button onClick={() => this.expandUserCard(this.props.id)}>
@@ -108,23 +95,28 @@ class UserCard extends React.Component {
           </button>
         </section>
 
-
-
-
-
         {projects.length > 0 ||
         education.length > 0 ||
         experience.length > 0 ? (
           <section className="user-extras">
-            <section className="projects">
-              <p>{projects[0].project_title}</p>
-            </section>
-            <section className="education">
-              <p>{education[0].school}</p>
-            </section>
-            <section className="experience">
-              <p>{experience[0].company_name}</p>
-            </section>
+            {projects.length > 0 ? (
+              <section className="projects">
+                <p>{projects[0].project_title}</p>
+              </section>
+            ) : null}
+
+            {education.length > 0 ? (
+              <section className="education">
+                <p>{education[0].school}</p>
+              </section>
+            ) : null}
+
+            {experience.length > 0 ? (
+              <section className="experience">
+                <p>{experience[0].company_name}</p>
+              </section>
+            ) : null}
+
             <section className="interested-locations">
               <p>{interestedLocations[0]}</p>
             </section>
