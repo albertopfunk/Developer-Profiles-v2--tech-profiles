@@ -41,7 +41,7 @@ class PublicPage extends Component {
     });
   };
 
-  loadUsers = async infinite => {
+  loadUsers = async isUsinginfinite => {
     const {
       usersPage,
       isWebDevChecked,
@@ -62,7 +62,7 @@ class PublicPage extends Component {
       const users = await axios.get("http://localhost:3001/users/infinite", {
         params: {
           usersPage: usersPage,
-          infinite: infinite,
+          isUsinginfinite: isUsinginfinite,
           isWebDevChecked: isWebDevChecked,
           isUIUXChecked: isUIUXChecked,
           isIOSChecked: isIOSChecked,
@@ -78,7 +78,7 @@ class PublicPage extends Component {
         }
       });
 
-      if (infinite) {
+      if (isUsinginfinite) {
         this.setState({ users: [...this.state.users, ...users.data] });
       } else {
         this.setState({ users: users.data });

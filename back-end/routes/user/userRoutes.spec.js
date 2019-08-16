@@ -141,7 +141,7 @@ describe("GET /", () => {
   });
 });
 
-describe("POST /infinite/:usersPage", () => {
+describe("POST /infinite", () => {
   beforeAll(async () => {
     await db("users").truncate();
   });
@@ -150,6 +150,8 @@ describe("POST /infinite/:usersPage", () => {
   });
 
   const filterOptions = {
+    usersPage: 1,
+    isUsinginfinite: false,
     isWebDevChecked: false,
     isUIUXChecked: false,
     isIOSChecked: false,
@@ -199,17 +201,31 @@ describe("POST /infinite/:usersPage", () => {
   it("responds with 200 OK and JSON", async () => {
     const filterOptionsCopy = { ...filterOptions };
     await request(server)
-      .post("/users/infinite/1")
-      .send(filterOptionsCopy)
+      .get("/users/infinite")
+      .query(filterOptionsCopy)
       .expect(200)
       .expect("Content-Type", /json/i);
+  });
+
+  it("responds with 400 and correct error message", async () => {
+    const filterOptionsCopy = { ...filterOptions };
+    filterOptionsCopy.isUsingCurrLocationFilter = true;
+    filterOptionsCopy.selectedWithinMiles = "Not A Number";
+    const err = await request(server)
+      .get("/users/infinite")
+      .query(filterOptionsCopy)
+      .expect(400)
+      .expect("Content-Type", /json/i);
+    expect(err.body.message).toBe(
+      "Expected 'num:selectedWithinMiles' but recevied 'null', 'undefined', or the incorrect data type'"
+    );
   });
 
   it("should return 14 users if all filters are NOT being used and is on page 1", async () => {
     const filterOptionsCopy = { ...filterOptions };
     const testUsers = await request(server)
-      .post("/users/infinite/1")
-      .send(filterOptionsCopy);
+      .get("/users/infinite")
+      .query(filterOptionsCopy);
     expect(testUsers.body).toHaveLength(14);
   });
 
@@ -218,8 +234,8 @@ describe("POST /infinite/:usersPage", () => {
     filterOptionsCopy.isIOSChecked = true;
     filterOptionsCopy.isAndroidChecked = true;
     const testUsers = await request(server)
-      .post("/users/infinite/1")
-      .send(filterOptionsCopy);
+      .get("/users/infinite")
+      .query(filterOptionsCopy);
     expect(testUsers.body).toHaveLength(14);
 
     let areAllUsersIosAndAndroid = false;
@@ -237,12 +253,31 @@ describe("POST /infinite/:usersPage", () => {
     filterOptionsCopy.isIOSChecked = true;
     filterOptionsCopy.isAndroidChecked = true;
     const testUsers1 = await request(server)
-      .post("/users/infinite/1")
-      .send(filterOptionsCopy);
+      .get("/users/infinite")
+      .query(filterOptionsCopy);
     expect(testUsers1.body).toHaveLength(14);
+    filterOptionsCopy.usersPage = 2;
     const testUsers2 = await request(server)
-      .post("/users/infinite/2")
-      .send(filterOptionsCopy);
+      .get("/users/infinite")
+      .query(filterOptionsCopy);
+    expect(testUsers2.body).toHaveLength(9);
+    const testUsers = [...testUsers1.body, ...testUsers2.body];
+    expect(testUsers).toHaveLength(23);
+  });
+
+  it("same as previous, should return 23 IOS/Android users, BUT from cache instead of DB", async () => {
+    const filterOptionsCopy = { ...filterOptions };
+    filterOptionsCopy.isIOSChecked = true;
+    filterOptionsCopy.isAndroidChecked = true;
+    const testUsers1 = await request(server)
+      .get("/users/infinite")
+      .query(filterOptionsCopy);
+    expect(testUsers1.body).toHaveLength(14);
+    filterOptionsCopy.usersPage = 2;
+    filterOptionsCopy.isUsinginfinite = true;
+    const testUsers2 = await request(server)
+      .get("/users/infinite")
+      .query(filterOptionsCopy);
     expect(testUsers2.body).toHaveLength(9);
     const testUsers = [...testUsers1.body, ...testUsers2.body];
     expect(testUsers).toHaveLength(23);
