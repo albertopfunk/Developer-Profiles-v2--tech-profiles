@@ -14,6 +14,21 @@ class CurrentLocationFilter extends React.Component {
     this.setState({ [e.target.name]: e.target.value });
   };
 
+  chooseDistanceOnKeyUp = (e) => {
+    if (e.keyCode === 37) {
+      this.onDistanceChange();
+    }
+    if (e.keyCode === 38) {
+      this.onDistanceChange();
+    }
+    if (e.keyCode === 39) {
+      this.onDistanceChange();
+    }
+    if (e.keyCode === 40) {
+      this.onDistanceChange();
+    }
+  };
+
   onDistanceChange = () => {
     if (this.state.chosenLocationName !== "") {
       this.onChosenLocation(
@@ -37,11 +52,11 @@ class CurrentLocationFilter extends React.Component {
       });
       await this.props.setStateAsync({
         usersPage: 1,
+        isUsingCurrLocationFilter: true,
         selectedWithinMiles: this.state.milesWithinInput,
         chosenLocationLat: response.data.lat,
         chosenLocationLon: response.data.lng,
-        isUsingSortByChoice: true,
-        isUsingCurrLocationFilter: true
+        isUsingSortByChoice: true
       });
       this.props.loadUsers(false);
     } catch (err) {
@@ -72,7 +87,7 @@ class CurrentLocationFilter extends React.Component {
               value={this.state.milesWithinInput}
               onChange={this.onInputChange}
               onMouseUp={this.onDistanceChange}
-              onBlur={this.onDistanceChange}
+              onKeyUp={this.chooseDistanceOnKeyUp}
             />
             {this.state.milesWithinInput}
           </label>

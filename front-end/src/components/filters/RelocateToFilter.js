@@ -6,9 +6,9 @@ function RelocateToFilter(props) {
   async function onChosenLocation(chosenRelocateTo) {
     await props.setStateAsync({
       usersPage: 1,
+      isUsingRelocateToFilter: true,
       chosenRelocateTo,
-      isUsingSortByChoice: true,
-      isUsingRelocateToFilter: true
+      isUsingSortByChoice: true
     });
     props.loadUsers(false);
   }

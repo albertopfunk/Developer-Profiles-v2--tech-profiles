@@ -18,10 +18,10 @@ class PublicPage extends Component {
     isIOSChecked: false,
     isAndroidChecked: false,
     isUsingCurrLocationFilter: false,
-    isUsingRelocateToFilter: false,
     selectedWithinMiles: 0,
     chosenLocationLat: 0,
     chosenLocationLon: 0,
+    isUsingRelocateToFilter: false,
     chosenRelocateTo: "",
     isUsingSortByChoice: false,
     sortByChoice: "acending(oldest-newest)"
@@ -38,23 +38,35 @@ class PublicPage extends Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     const {
+      usersPage,
       isWebDevChecked,
       isUIUXChecked,
       isIOSChecked,
       isAndroidChecked,
       isUsingCurrLocationFilter,
+      selectedWithinMiles,
+      chosenLocationLat,
+      chosenLocationLon,
       isUsingRelocateToFilter,
-      isUsingSortByChoice
+      chosenRelocateTo,
+      isUsingSortByChoice,
+      sortByChoice
     } = this.state;
 
     if (
+      usersPage !== nextState.usersPage ||
       isWebDevChecked !== nextState.isWebDevChecked ||
       isUIUXChecked !== nextState.isUIUXChecked ||
       isIOSChecked !== nextState.isIOSChecked ||
       isAndroidChecked !== nextState.isAndroidChecked ||
       isUsingCurrLocationFilter !== nextState.isUsingCurrLocationFilter ||
+      selectedWithinMiles !== nextState.selectedWithinMiles ||
+      chosenLocationLat !== nextState.chosenLocationLat ||
+      chosenLocationLon !== nextState.chosenLocationLon ||
       isUsingRelocateToFilter !== nextState.isUsingRelocateToFilter ||
-      isUsingSortByChoice !== nextState.isUsingSortByChoice
+      chosenRelocateTo !== nextState.chosenRelocateTo ||
+      isUsingSortByChoice !== nextState.isUsingSortByChoice ||
+      sortByChoice !== nextState.sortByChoice
     ) {
       return false;
     }
