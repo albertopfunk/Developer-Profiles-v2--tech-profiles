@@ -188,17 +188,13 @@ describe("PUT /:id", () => {
       .send({ skill_for_reviewS: "NEWTestSkill" })
       .expect(400)
       .expect("Content-Type", /json/i);
-    expect(err.body.message).toBe(
-      "Expected 'skill_for_review' in body"
-    );
+    expect(err.body.message).toBe("Expected 'skill_for_review' in body");
     err = await request(server)
       .put("/skills-for-review/1")
       .send({})
       .expect(400)
       .expect("Content-Type", /json/i);
-    expect(err.body.message).toBe(
-      "Expected 'skill_for_review' in body"
-    );
+    expect(err.body.message).toBe("Expected 'skill_for_review' in body");
   });
 
   it("responds with 404 and correct error message", async () => {

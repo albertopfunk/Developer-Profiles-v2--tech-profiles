@@ -66,9 +66,7 @@ server.put("/:id", async (req, res) => {
   const { id } = req.params;
 
   if (!req.body.skill_for_review) {
-    res
-      .status(400)
-      .json({ message: "Expected 'skill_for_review' in body" });
+    res.status(400).json({ message: "Expected 'skill_for_review' in body" });
   } else {
     try {
       const editSkill = await skillsForReviewModel.update(id, req.body);

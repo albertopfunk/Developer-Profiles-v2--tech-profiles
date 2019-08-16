@@ -185,7 +185,6 @@ function validateFilterOptions(req, res, next) {
     sortByChoice
   };
 
-  console.log("isrunning...");
   next();
 }
 

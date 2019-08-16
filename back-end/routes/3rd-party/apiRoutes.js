@@ -12,7 +12,9 @@ server.post("/autocomplete", async (req, res) => {
     const response = await axios.post(url);
     res.send(response.data);
   } catch (err) {
-    res.send({ err });
+    res
+      .status(500)
+      .json({ message: "Error with places/autocomplete API", err });
   }
 });
 
@@ -25,8 +27,7 @@ server.post("/gio", async (req, res) => {
     const response = await axios.post(url);
     res.send(response.data.result.geometry.location);
   } catch (err) {
-    console.log(err);
-    res.send({ err });
+    res.status(500).json({ message: "Error with places/details API", err });
   }
 });
 

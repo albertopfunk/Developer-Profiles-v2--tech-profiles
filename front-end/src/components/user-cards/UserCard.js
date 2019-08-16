@@ -122,7 +122,15 @@ class UserCard extends React.Component {
               {this.props.id}
               <div className="img">
                 image
-                <img style={{width: "200px", height: "200px", borderRadius: "50%"}} src={this.props.image} alt="user-avatar"/>
+                <img
+                  style={{
+                    width: "200px",
+                    height: "200px",
+                    borderRadius: "50%"
+                  }}
+                  src={this.props.image}
+                  alt="user-avatar"
+                />
               </div>
               <div className="basic-info">
                 name, location, summary

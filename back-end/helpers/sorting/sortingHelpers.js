@@ -18,4 +18,4 @@ function sortUsers(users, sortByChoice) {
   }
 
   return sortedUsers;
-};
+}

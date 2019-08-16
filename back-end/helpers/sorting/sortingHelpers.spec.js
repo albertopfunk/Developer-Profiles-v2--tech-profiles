@@ -13,7 +13,7 @@ describe("sortUsers", () => {
       users,
       "acending(oldest-newest)"
     );
-    expect(sortedUsers[0].id).toBe(101)
+    expect(sortedUsers[0].id).toBe(101);
   });
 
   it("should sort users by descending", () => {
@@ -28,6 +28,6 @@ describe("sortUsers", () => {
       users,
       "descending(newest-oldest)"
     );
-    expect(sortedUsers[0].id).toBe(105)
+    expect(sortedUsers[0].id).toBe(105);
   });
 });

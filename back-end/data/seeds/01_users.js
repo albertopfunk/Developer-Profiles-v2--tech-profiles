@@ -38,7 +38,11 @@ exports.seed = function(knex, Promise) {
       { name: "Charlotte, NC, USA", lat: 35.2270869, lon: -80.8431267 },
       { name: "Dallas, TX, USA", lat: 32.7766642, lon: -96.79698789999999 },
       { name: "Orlando, FL, USA", lat: 28.5383355, lon: -81.3792365 },
-      { name: "St. Louis, MO, USA", lat: 38.62700249999999, lon: -90.19940419999999 },
+      {
+        name: "St. Louis, MO, USA",
+        lat: 38.62700249999999,
+        lon: -90.19940419999999
+      },
       { name: "Atlanta, GA, USA", lat: 33.7489954, lon: -84.3879824 },
       { name: "Miami, FL, USA", lat: 25.7616798, lon: -80.1917902 },
       { name: "Melbourne, FL, USA", lat: 28.0836269, lon: -80.60810889999999 },
@@ -49,15 +53,27 @@ exports.seed = function(knex, Promise) {
       { name: "Asheville, NC, USA", lat: 35.59505809999999, lon: -82.5514869 },
       { name: "Nashville, TN, USA", lat: 36.1626638, lon: -86.7816016 },
       { name: "San Jose, CA, USA", lat: 37.3382082, lon: -121.8863286 },
-      { name: "Grand Rapids, MI, USA", lat: 42.96335990000001, lon: -85.6680863 },
+      {
+        name: "Grand Rapids, MI, USA",
+        lat: 42.96335990000001,
+        lon: -85.6680863
+      },
       { name: "Madison, WI, USA", lat: 43.0730517, lon: -89.4012302 },
       { name: "Huntsville, AL, USA", lat: 34.7303688, lon: -86.5861037 },
       { name: "Des Moines, IA, USA", lat: 41.5868353, lon: -93.6249593 },
-      { name: "Fayetteville, NC, USA", lat: 35.0526641, lon: -78.87835849999999 },
+      {
+        name: "Fayetteville, NC, USA",
+        lat: 35.0526641,
+        lon: -78.87835849999999
+      },
       { name: "Colorado Springs, CO, USA", lat: 38.8338816, lon: -104.8213634 },
       { name: "Las Vegas, NV, USA", lat: 36.1699412, lon: -115.1398296 },
       { name: "El Paso, TX, USA", lat: 31.7618778, lon: -106.4850217 },
-      { name: "New Orleans, LA, USA", lat: 29.95106579999999, lon: -90.0715323 },
+      {
+        name: "New Orleans, LA, USA",
+        lat: 29.95106579999999,
+        lon: -90.0715323
+      },
       { name: "Albuquerque, NM, USA", lat: 35.0843859, lon: -106.650422 },
       { name: "Kansas City, MO, USA", lat: 39.0997265, lon: -94.5785667 },
       { name: "Oklahoma City, OK, USA", lat: 35.4675602, lon: -97.5164276 },
