@@ -62,6 +62,9 @@ class UserCard extends React.Component {
 
         {/* <aside className="favorite">Favorite</aside> */}
 
+
+
+
         <section>
 
           <div className="left">
@@ -98,11 +101,13 @@ class UserCard extends React.Component {
 
 
 
+
         <section>
           <button onClick={() => this.expandUserCard(this.props.id)}>
             Expand
           </button>
         </section>
+
 
 
 

@@ -43,7 +43,7 @@ class CurrentLocationFilter extends React.Component {
         isUsingSortByChoice: true,
         isUsingCurrLocationFilter: true
       });
-      this.props.loadUsers();
+      this.props.loadUsers(false);
     } catch (err) {
       console.error(`${err.response.data.message} =>`, err);
     }
@@ -53,7 +53,7 @@ class CurrentLocationFilter extends React.Component {
     await this.props.setStateAsync({
       isUsingCurrLocationFilter: false
     });
-    this.props.loadUsers();
+    this.props.loadUsers(false);
     this.setState({ chosenLocationName: "", chosenLocationId: "" });
   };
 

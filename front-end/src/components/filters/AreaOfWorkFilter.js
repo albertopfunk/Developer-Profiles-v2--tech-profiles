@@ -34,7 +34,7 @@ function AreaOfWorkFilter(props) {
       default:
         return;
     }
-    props.loadUsers();
+    props.loadUsers(false);
   }
 
   return (

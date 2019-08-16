@@ -7,7 +7,7 @@ function SortingFilter(props) {
       sortByChoice,
       isUsingSortByChoice: true
     });
-    props.loadUsers();
+    props.loadUsers(false);
   }
 
   return (

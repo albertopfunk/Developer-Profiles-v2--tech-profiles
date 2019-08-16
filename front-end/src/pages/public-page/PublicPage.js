@@ -59,25 +59,26 @@ class PublicPage extends Component {
     } = this.state;
 
     try {
-      const users = await axios.post(
-        `http://localhost:3001/users/infinite/${usersPage}`,
-        {
-          infinite,
-          isWebDevChecked,
-          isUIUXChecked,
-          isIOSChecked,
-          isAndroidChecked,
-          isUsingCurrLocationFilter,
-          isUsingRelocateToFilter,
-          selectedWithinMiles,
-          chosenLocationLat,
-          chosenLocationLon,
-          chosenRelocateTo,
-          isUsingSortByChoice,
-          sortByChoice
+      const users = await axios.get("http://localhost:3001/users/infinite", {
+        params: {
+          usersPage: usersPage,
+          infinite: infinite,
+          isWebDevChecked: isWebDevChecked,
+          isUIUXChecked: isUIUXChecked,
+          isIOSChecked: isIOSChecked,
+          isAndroidChecked: isAndroidChecked,
+          isUsingCurrLocationFilter: isUsingCurrLocationFilter,
+          selectedWithinMiles: selectedWithinMiles,
+          chosenLocationLat: chosenLocationLat,
+          chosenLocationLon: chosenLocationLon,
+          isUsingRelocateToFilter: isUsingRelocateToFilter,
+          chosenRelocateTo: chosenRelocateTo,
+          isUsingSortByChoice: isUsingSortByChoice,
+          sortByChoice: sortByChoice
         }
-      );
-      if (infinite === "infinite") {
+      });
+
+      if (infinite) {
         this.setState({ users: [...this.state.users, ...users.data] });
       } else {
         this.setState({ users: users.data });
@@ -89,7 +90,7 @@ class PublicPage extends Component {
 
   infiniteScroll = async () => {
     await this.setStateAsync({ usersPage: this.state.usersPage + 1 });
-    this.loadUsers("infinite");
+    this.loadUsers(true);
   };
 
   render() {

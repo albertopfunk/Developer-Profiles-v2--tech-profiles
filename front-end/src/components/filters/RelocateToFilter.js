@@ -10,14 +10,14 @@ function RelocateToFilter(props) {
       isUsingSortByChoice: true,
       isUsingRelocateToFilter: true
     });
-    props.loadUsers();
+    props.loadUsers(false);
   }
 
   async function resetLocationFilter() {
     await props.setStateAsync({
       isUsingRelocateToFilter: false
     });
-    props.loadUsers();
+    props.loadUsers(false);
   }
 
   return (
