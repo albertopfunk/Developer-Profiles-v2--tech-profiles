@@ -7,12 +7,11 @@ import UserCardsContainer from "../../components/user-cards/UserCardsContainer";
 
 class PublicPage extends Component {
   state = {
-    // do not assume that data will be present, a user can be created with nothing, so everything will be null
     users: [],
+    initialLoading: true,
+    infiniteLoading: false,
+    filtersLoading: false,
     usersPage: 1,
-
-    // add little loading indicators so users know when filter is being ran,
-    // disable while loading to avoid misuse
     isWebDevChecked: false,
     isUIUXChecked: false,
     isIOSChecked: false,
@@ -30,7 +29,7 @@ class PublicPage extends Component {
   async componentDidMount() {
     try {
       const users = await axios.get("http://localhost:3001/users");
-      this.setState({ users: users.data });
+      this.setState({ users: users.data, initialLoading: false });
     } catch (err) {
       console.error(`${err.response.data.message} =>`, err);
     }
@@ -38,7 +37,6 @@ class PublicPage extends Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     const {
-      usersPage,
       isWebDevChecked,
       isUIUXChecked,
       isIOSChecked,
@@ -54,7 +52,6 @@ class PublicPage extends Component {
     } = this.state;
 
     if (
-      usersPage !== nextState.usersPage ||
       isWebDevChecked !== nextState.isWebDevChecked ||
       isUIUXChecked !== nextState.isUIUXChecked ||
       isIOSChecked !== nextState.isIOSChecked ||
@@ -80,6 +77,11 @@ class PublicPage extends Component {
   };
 
   loadUsers = async isUsinginfinite => {
+    // app filter loading is too fast so it will only show a flash
+    // if (!isUsinginfinite) {
+    //   this.setState({ filtersLoading: true });
+    // }
+
     const {
       usersPage,
       isWebDevChecked,
@@ -117,9 +119,12 @@ class PublicPage extends Component {
       });
 
       if (isUsinginfinite) {
-        this.setState({ users: [...this.state.users, ...users.data] });
+        this.setState({
+          users: [...this.state.users, ...users.data],
+          infiniteLoading: false
+        });
       } else {
-        this.setState({ users: users.data });
+        this.setState({ users: users.data, filtersLoading: false });
       }
     } catch (err) {
       console.error(`${err.response.data.message} =>`, err);
@@ -127,7 +132,10 @@ class PublicPage extends Component {
   };
 
   infiniteScroll = async () => {
-    await this.setStateAsync({ usersPage: this.state.usersPage + 1 });
+    await this.setStateAsync({
+      usersPage: this.state.usersPage + 1,
+      infiniteLoading: true
+    });
     this.loadUsers(true);
   };
 
@@ -140,11 +148,21 @@ class PublicPage extends Component {
             setStateAsync={this.setStateAsync}
             loadUsers={this.loadUsers}
           />
-          <UserCardsContainer users={this.state.users} />
+          {this.state.initialLoading || this.state.filtersLoading ? (
+            <p>LOADING...</p>
+          ) : (
+            <UserCardsContainer users={this.state.users} />
+          )}
         </div>
 
         <aside>
-          <button onClick={this.infiniteScroll}>More Profiles</button>
+          <button onClick={this.infiniteScroll}>
+            {this.state.infiniteLoading ? (
+              <span>Loading...</span>
+            ) : (
+              <span>More Users</span>
+            )}
+          </button>
         </aside>
       </Main>
     );

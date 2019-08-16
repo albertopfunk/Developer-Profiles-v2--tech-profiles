@@ -12,7 +12,7 @@ function SortingFilter(props) {
 
   return (
     <section>
-      <label htmlFor="sorting-select">Sort Profiles:</label>
+      <label htmlFor="sorting-select">Sort By:</label>
       {/* eslint-disable-next-line */}
       <select
         id="sorting-select"

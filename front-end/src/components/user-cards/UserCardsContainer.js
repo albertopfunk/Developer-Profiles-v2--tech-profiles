@@ -6,7 +6,7 @@ function UserCardsContainer(props) {
   return (
     <section>
       {props.users.length === 0 ? (
-        <h1>Loading...</h1>
+        <h1>No Users Here! - Reset filters BTN</h1>
       ) : (
         <>
           {props.users.map(user => {
