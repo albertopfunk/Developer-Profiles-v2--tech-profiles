@@ -14,13 +14,27 @@ class UserCard extends React.Component {
     projects: [],
     interestedLocations: [],
     topSkills: [],
-    additionalSkills: []
+    additionalSkills: [],
+    isCardExpanded: false,
+    hasRequestedExtras: false,
+    noExtras: false
   };
 
   componentDidMount() {
-    const interestedLocations = this.props.interestedLocations.split("|");
-    const topSkills = this.props.topSkills.split(",");
-    const additionalSkills = this.props.additionalSkills.split(",");
+    let interestedLocations = [];
+    let topSkills = [];
+    let additionalSkills = [];
+
+    if (this.props.interestedLocations) {
+      interestedLocations = this.props.interestedLocations.split("|");
+    }
+    if (this.props.topSkills) {
+      topSkills = this.props.topSkills.split(",");
+    }
+    if (this.props.additionalSkills) {
+      additionalSkills = this.props.additionalSkills.split(",");
+    }
+
     this.setState({
       interestedLocations,
       topSkills,
@@ -29,30 +43,71 @@ class UserCard extends React.Component {
   }
 
   expandUserCard = async id => {
-    try {
-      const [education, experience, projects] = await Promise.all([
-        axios.get(`http://localhost:3001/extras/${id}/education`),
-        axios.get(`http://localhost:3001/extras/${id}/experience`),
-        axios.get(`http://localhost:3001/extras/${id}/projects`)
-      ]);
+    if (this.state.hasRequestedExtras) {
+      if (
+        this.state.projects.length > 0 ||
+        this.state.education.length > 0 ||
+        this.state.experience.length > 0 ||
+        this.state.interestedLocations.length > 0
+      ) {
+        this.setState({
+          isCardExpanded: true
+        });
+      } else {
+        this.setState({
+          isCardExpanded: true,
+          noExtras: true
+        });
+      }
+    } else {
+      try {
+        const [education, experience, projects] = await Promise.all([
+          axios.get(`http://localhost:3001/extras/${id}/education`),
+          axios.get(`http://localhost:3001/extras/${id}/experience`),
+          axios.get(`http://localhost:3001/extras/${id}/projects`)
+        ]);
 
-      this.setState({
-        education: education.data,
-        experience: experience.data,
-        projects: projects.data
-      });
-    } catch (err) {
-      console.error(`${err.response.data.message} =>`, err);
+        if (
+          projects.length > 0 ||
+          education.length > 0 ||
+          experience.length > 0 ||
+          this.state.interestedLocations.length > 0
+        ) {
+          this.setState({
+            hasRequestedExtras: true,
+            isCardExpanded: true,
+            education: education.data,
+            experience: experience.data,
+            projects: projects.data
+          });
+        } else {
+          this.setState({
+            hasRequestedExtras: true,
+            isCardExpanded: true,
+            noExtras: true,
+            education: education.data,
+            experience: experience.data,
+            projects: projects.data
+          });
+        }
+      } catch (err) {
+        console.error(`${err.response.data.message} =>`, err);
+      }
     }
-    return id;
+  };
+
+  closeUserCard = () => {
+    this.setState({ isCardExpanded: false });
   };
 
   render() {
     const {
-      projects,
       education,
       experience,
+      projects,
       interestedLocations,
+      isCardExpanded,
+      noExtras,
       topSkills,
       additionalSkills
     } = this.state;
@@ -64,9 +119,10 @@ class UserCard extends React.Component {
         <section>
           <div className="left">
             <section className="user-info">
+              {this.props.id}
               <div className="img">
                 image
-                {this.props.id}
+                <img style={{width: "200px", height: "200px", borderRadius: "50%"}} src={this.props.image} alt="user-avatar"/>
               </div>
               <div className="basic-info">
                 name, location, summary
@@ -90,15 +146,20 @@ class UserCard extends React.Component {
         </section>
 
         <section>
-          <button onClick={() => this.expandUserCard(this.props.id)}>
-            Expand
-          </button>
+          {!isCardExpanded ? (
+            <button onClick={() => this.expandUserCard(this.props.id)}>
+              Expand
+            </button>
+          ) : (
+            <button onClick={() => this.closeUserCard(this.props.id)}>
+              Close
+            </button>
+          )}
         </section>
 
-        {projects.length > 0 ||
-        education.length > 0 ||
-        experience.length > 0 ? (
+        {isCardExpanded ? (
           <section className="user-extras">
+            {noExtras ? <p>Nothing to Show...</p> : null}
             {projects.length > 0 ? (
               <section className="projects">
                 <p>{projects[0].project_title}</p>
@@ -117,9 +178,11 @@ class UserCard extends React.Component {
               </section>
             ) : null}
 
-            <section className="interested-locations">
-              <p>{interestedLocations[0]}</p>
-            </section>
+            {interestedLocations.length > 0 ? (
+              <section className="interested-locations">
+                <p>{interestedLocations[0]}</p>
+              </section>
+            ) : null}
           </section>
         ) : null}
       </article>

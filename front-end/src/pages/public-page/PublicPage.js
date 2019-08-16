@@ -7,6 +7,7 @@ import UserCardsContainer from "../../components/user-cards/UserCardsContainer";
 
 class PublicPage extends Component {
   state = {
+    // do not assume that data will be present, a user can be created with nothing, so everything will be null
     users: [],
     usersPage: 1,
 
