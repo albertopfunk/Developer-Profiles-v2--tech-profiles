@@ -14,7 +14,7 @@ class CurrentLocationFilter extends React.Component {
     this.setState({ [e.target.name]: e.target.value });
   };
 
-  chooseDistanceOnKeyUp = (e) => {
+  chooseDistanceOnKeyUp = e => {
     if (e.keyCode === 37) {
       this.onDistanceChange();
     }

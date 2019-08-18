@@ -1,11 +1,6 @@
 import React from "react";
 import axios from "axios";
 
-// aria-live like https://alphagov.github.io/accessible-autocomplete/examples/
-// aria-describedby https://haltersweb.github.io/Accessibility/autocomplete.html
-// https://intopia.digital/articles/anatomy-accessible-auto-suggest/
-// https://www.w3.org/TR/wai-aria-practices/examples/combobox/aria1.1pattern/listbox-combo.html
-
 class LocationAutoComplete extends React.Component {
   state = {
     input: "",

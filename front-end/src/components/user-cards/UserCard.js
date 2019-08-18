@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "axios";
+import styled from "styled-components";
 
 // resume link?
 // twitter link?
@@ -113,15 +114,21 @@ class UserCard extends React.Component {
     } = this.state;
 
     return (
-      <article style={{ margin: "20px", border: "solid" }}>
+      <Article
+        tabIndex="0"
+        aria-posinset={this.props.index + 1}
+        aria-setsize={this.props.usersLength}
+        aria-expanded={this.state.isCardExpanded}
+      >
         {/* <aside className="favorite">Favorite</aside> */}
 
         <section>
           <div className="left">
             <section className="user-info">
-              {this.props.id}
+              id:{this.props.id}
               <div className="img">
                 image
+                {/* add figure/figcation to all images */}
                 <img
                   style={{
                     width: "200px",
@@ -193,9 +200,14 @@ class UserCard extends React.Component {
             ) : null}
           </section>
         ) : null}
-      </article>
+      </Article>
     );
   }
 }
+
+const Article = styled.article`
+  margin: 20px;
+  border: solid;
+`;
 
 export default UserCard;
