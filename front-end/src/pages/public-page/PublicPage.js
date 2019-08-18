@@ -26,7 +26,22 @@ class PublicPage extends Component {
     sortByChoice: "acending(oldest-newest)"
   };
 
+  scrollSectionRef = React.createRef();
+
+  // onInfinite = () => {
+  //   console.log("Blup");
+  //   console.log("Blup", this.scrollSectionRef.current);
+  //   console.log("Blup", this.scrollSectionRef.current.scrollTop);
+  //   console.log("Blup", this.scrollSectionRef.current.scrollY);
+  //   console.log("Blup", this.scrollSectionRef.current.clientHeight);
+  //   console.log("Blup", this.scrollSectionRef.current.scrollHeight);
+  // }
+
   async componentDidMount() {
+    
+    // window.addEventListener("scroll", this.onInfinite);
+    
+    // use local storage for filters
     try {
       const users = await axios.get("http://localhost:3001/users");
       this.setState({ users: users.data, initialLoading: false });
@@ -34,6 +49,10 @@ class PublicPage extends Component {
       console.error(`${err.response.data.message} =>`, err);
     }
   }
+
+  // componentWillUnmount() {
+  //   window.removeEventListener("scroll", this.onInfinite);
+  // }
 
   shouldComponentUpdate(nextProps, nextState) {
     const {
@@ -131,7 +150,14 @@ class PublicPage extends Component {
     }
   };
 
+
+
+
   infiniteScroll = async () => {
+    if (this.state.infiniteLoading) {
+      return;
+    }
+    console.log("alwatys")
     await this.setStateAsync({
       usersPage: this.state.usersPage + 1,
       infiniteLoading: true
@@ -139,11 +165,14 @@ class PublicPage extends Component {
     this.loadUsers(true);
   };
 
+
+
+
   render() {
     console.log(this.state.users.length);
     return (
       <Main>
-        <div className="container">
+        <div className="container" ref={this.scrollSectionRef}>
           <FiltersContainer
             setStateAsync={this.setStateAsync}
             loadUsers={this.loadUsers}
@@ -151,11 +180,16 @@ class PublicPage extends Component {
           {this.state.initialLoading || this.state.filtersLoading ? (
             <p>LOADING...</p>
           ) : (
-            <UserCardsContainer users={this.state.users} />
+            <UserCardsContainer
+              infiniteScroll={this.infiniteScroll}
+              isBusy={this.state.infiniteLoading}
+              users={this.state.users}
+            />
           )}
         </div>
 
         <aside>
+          {/* do not need this, infinite instead */}
           <button onClick={this.infiniteScroll}>
             {this.state.infiniteLoading ? (
               <span>Loading...</span>
