@@ -8,6 +8,7 @@ import UserCardsContainer from "../../components/user-cards/UserCardsContainer";
 class PublicPage extends Component {
   state = {
     users: [],
+    noMoreUsers: false,
     initialLoading: true,
     infiniteLoading: false,
     filtersLoading: false,
@@ -26,21 +27,7 @@ class PublicPage extends Component {
     sortByChoice: "acending(oldest-newest)"
   };
 
-  scrollSectionRef = React.createRef();
-
-  // onInfinite = () => {
-  //   console.log("Blup");
-  //   console.log("Blup", this.scrollSectionRef.current);
-  //   console.log("Blup", this.scrollSectionRef.current.scrollTop);
-  //   console.log("Blup", this.scrollSectionRef.current.scrollY);
-  //   console.log("Blup", this.scrollSectionRef.current.clientHeight);
-  //   console.log("Blup", this.scrollSectionRef.current.scrollHeight);
-  // }
-
   async componentDidMount() {
-    
-    // window.addEventListener("scroll", this.onInfinite);
-    
     // use local storage for filters
     try {
       const users = await axios.get("http://localhost:3001/users");
@@ -49,10 +36,6 @@ class PublicPage extends Component {
       console.error(`${err.response.data.message} =>`, err);
     }
   }
-
-  // componentWillUnmount() {
-  //   window.removeEventListener("scroll", this.onInfinite);
-  // }
 
   shouldComponentUpdate(nextProps, nextState) {
     const {
@@ -138,26 +121,34 @@ class PublicPage extends Component {
       });
 
       if (isUsinginfinite) {
-        this.setState({
-          users: [...this.state.users, ...users.data],
-          infiniteLoading: false
-        });
+        if (users.data.length === 0) {
+          this.setState({
+            noMoreUsers: true,
+            infiniteLoading: false
+          });
+        } else {
+          this.setState({
+            users: [...this.state.users, ...users.data],
+            infiniteLoading: false,
+            noMoreUsers: false
+          });
+        }
       } else {
-        this.setState({ users: users.data, filtersLoading: false });
+        this.setState({
+          users: users.data,
+          filtersLoading: false,
+          noMoreUsers: false
+        });
       }
     } catch (err) {
       console.error(`${err.response.data.message} =>`, err);
     }
   };
 
-
-
-
   infiniteScroll = async () => {
-    if (this.state.infiniteLoading) {
+    if (this.state.infiniteLoading || this.state.noMoreUsers) {
       return;
     }
-    console.log("alwatys")
     await this.setStateAsync({
       usersPage: this.state.usersPage + 1,
       infiniteLoading: true
@@ -165,14 +156,11 @@ class PublicPage extends Component {
     this.loadUsers(true);
   };
 
-
-
-
   render() {
     console.log(this.state.users.length);
     return (
       <Main>
-        <div className="container" ref={this.scrollSectionRef}>
+        <div className="container">
           <FiltersContainer
             setStateAsync={this.setStateAsync}
             loadUsers={this.loadUsers}
@@ -187,17 +175,6 @@ class PublicPage extends Component {
             />
           )}
         </div>
-
-        <aside>
-          {/* do not need this, infinite instead */}
-          <button onClick={this.infiniteScroll}>
-            {this.state.infiniteLoading ? (
-              <span>Loading...</span>
-            ) : (
-              <span>More Users</span>
-            )}
-          </button>
-        </aside>
       </Main>
     );
   }

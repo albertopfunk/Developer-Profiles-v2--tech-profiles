@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import UserCard from "./UserCard";
 // import styled from "styled-components";
 
 function UserCardsContainer(props) {
-  let scrollSectionRef = React.createRef();
-  const [isScrolling, setIsScrolling] = useState(false)
+  const scrollSectionRef = React.createRef();
 
   useEffect(() => {
     window.addEventListener("scroll", onInfinite, true);
@@ -14,70 +13,18 @@ function UserCardsContainer(props) {
   });
 
   function onInfinite() {
-    // console.log("Blup0", scrollSectionRef.current);
-    
-    // console.log("BlupOF", scrollSectionRef.current.offsetTop);
-    
-    // console.log("Blup2", scrollSectionRef.current.clientHeight);
-    // console.log("Blup3", scrollSectionRef.current.scrollHeight);
-    // console.log("Blup3.5", scrollSectionRef.current.offsetHeight);
-    
-    // console.log("Blup4", window.scrollY);
-    // console.log("+Blup1", document.documentElement.scrollTop);
-    // console.log("Blup5", window.pageYOffset);
-    
-    // console.log("Blup6+", window.innerHeight);
-    // console.log("=Blup1", document.documentElement.offsetHeight);
-
-    // console.log(window.innerHeight)
-    // console.log(window.scrollY)
-    // console.log(document.body.offsetHeight)
-    // if (
-    //   (window.innerHeight + window.scrollY) >= (document.body.offsetHeight - 500)) {
-    //     console.log("OIIOIO")
-    //   }
-
-
-
-      // console.log(scrollSectionRef.current.scrollTop)
-      // console.log(scrollSectionRef.current.clientHeight)
-      // console.log(scrollSectionRef.current.scrollHeight)
-      // if (
-      //   scrollSectionRef.current.scrollTop + scrollSectionRef.current.clientHeight >=
-      //   scrollSectionRef.current.scrollHeight
-      // ) {
-      //   console.log("OIIOIO")
-      // }
-
-
-
-      // var lastLiOffset = scrollSectionRef.current.offsetTop + scrollSectionRef.current.clientHeight;
-      // var pageOffset = window.pageYOffset + window.innerHeight;
-      // if (pageOffset > lastLiOffset) {
-      //   console.log("OIIOIO")
-      //   }
-
-      // works!
-      // need to keep testing
-      // case for no more users
-      // button=loading working
-      // better handling of !props.isBusy && !isScrolling
-      if (scrollSectionRef.current) {
-        if (scrollSectionRef.current.scrollHeight - window.scrollY < scrollSectionRef.current.scrollHeight / 4) {
-          console.log("JGKFVK")
-          console.log(!props.isBusy && !isScrolling)
-          setIsScrolling(true);
-          props.infiniteScroll();
-        }
+    if (scrollSectionRef.current && !props.isBusy) {
+      if (
+        scrollSectionRef.current.scrollHeight - window.scrollY <
+        scrollSectionRef.current.scrollHeight / 4
+      ) {
+        props.infiniteScroll();
       }
+    }
   }
 
   return (
-    <section
-      role="feed"
-      aria-busy={props.isBusy}
-      ref={scrollSectionRef}
-    >
+    <section role="feed" aria-busy={props.isBusy} ref={scrollSectionRef}>
       {props.users.length === 0 ? (
         <h1>No Users Here! - Reset filters BTN</h1>
       ) : (
