@@ -85,10 +85,7 @@ class UserCard extends React.Component {
           this.setState({
             hasRequestedExtras: true,
             isCardExpanded: true,
-            noExtras: true,
-            education: education.data,
-            experience: experience.data,
-            projects: projects.data
+            noExtras: true
           });
         }
       } catch (err) {
@@ -166,9 +163,7 @@ class UserCard extends React.Component {
               Expand
             </button>
           ) : (
-            <button onClick={() => this.closeUserCard(this.props.id)}>
-              Close
-            </button>
+            <button onClick={() => this.closeUserCard()}>Close</button>
           )}
         </section>
 

@@ -50,7 +50,7 @@ class CurrentLocationFilter extends React.Component {
       const response = await axios.post(`http://localhost:3001/api/gio`, {
         placeId: id
       });
-      await this.props.setStateAsync({
+      this.props.updateUsers({
         usersPage: 1,
         isUsingCurrLocationFilter: true,
         selectedWithinMiles: this.state.milesWithinInput,
@@ -58,17 +58,15 @@ class CurrentLocationFilter extends React.Component {
         chosenLocationLon: response.data.lng,
         isUsingSortByChoice: true
       });
-      this.props.loadUsers(false);
     } catch (err) {
       console.error(`${err.response.data.message} =>`, err);
     }
   };
 
-  resetLocationFilter = async () => {
-    await this.props.setStateAsync({
+  resetLocationFilter = () => {
+    this.props.updateUsers({
       isUsingCurrLocationFilter: false
     });
-    this.props.loadUsers(false);
     this.setState({ chosenLocationName: "", chosenLocationId: "" });
   };
 

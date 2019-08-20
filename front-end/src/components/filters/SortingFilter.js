@@ -1,13 +1,12 @@
 import React from "react";
 
 function SortingFilter(props) {
-  async function sortUsers(sortByChoice) {
-    await props.setStateAsync({
+  function sortUsers(sortByChoice) {
+    props.updateUsers({
       usersPage: 1,
       sortByChoice,
       isUsingSortByChoice: true
     });
-    props.loadUsers(false);
   }
 
   return (

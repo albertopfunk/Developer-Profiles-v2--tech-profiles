@@ -1,40 +1,40 @@
 import React from "react";
 
 function AreaOfWorkFilter(props) {
-  async function toggleAreaOfWorkCheckbox(areaOfWork) {
+  function toggleAreaOfWorkCheckbox(areaOfWork) {
     switch (areaOfWork) {
       case "Web Development":
-        await props.setStateAsync(prevState => ({
+        props.updateUsers(prevState => ({
           isWebDevChecked: !prevState.isWebDevChecked,
           usersPage: 1,
           isUsingSortByChoice: true
         }));
         break;
       case "UI/UX":
-        await props.setStateAsync(prevState => ({
+        props.updateUsers(prevState => ({
           isUIUXChecked: !prevState.isUIUXChecked,
           usersPage: 1,
           isUsingSortByChoice: true
         }));
         break;
       case "iOS":
-        await props.setStateAsync(prevState => ({
+        props.updateUsers(prevState => ({
           isIOSChecked: !prevState.isIOSChecked,
           usersPage: 1,
           isUsingSortByChoice: true
         }));
         break;
       case "Android":
-        await props.setStateAsync(prevState => ({
+        props.updateUsers(prevState => ({
           isAndroidChecked: !prevState.isAndroidChecked,
           usersPage: 1,
           isUsingSortByChoice: true
         }));
         break;
       default:
+        console.error("unable to find area of work");
         return;
     }
-    props.loadUsers(false);
   }
 
   return (

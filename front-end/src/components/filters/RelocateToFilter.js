@@ -3,21 +3,19 @@ import React from "react";
 import LocationAutoComplete from "./LocationAutoComplete";
 
 function RelocateToFilter(props) {
-  async function onChosenLocation(chosenRelocateTo) {
-    await props.setStateAsync({
+  function onChosenLocation(chosenRelocateTo) {
+    props.updateUsers({
       usersPage: 1,
       isUsingRelocateToFilter: true,
       chosenRelocateTo,
       isUsingSortByChoice: true
     });
-    props.loadUsers(false);
   }
 
-  async function resetLocationFilter() {
-    await props.setStateAsync({
+  function resetLocationFilter() {
+    props.updateUsers({
       isUsingRelocateToFilter: false
     });
-    props.loadUsers(false);
   }
 
   return (

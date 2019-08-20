@@ -9,25 +9,10 @@ import SortingFilter from "./SortingFilter";
 function FiltersContainer(props) {
   return (
     <aside>
-      <SortingFilter
-        setStateAsync={props.setStateAsync}
-        loadUsers={props.loadUsers}
-      />
-
-      <AreaOfWorkFilter
-        setStateAsync={props.setStateAsync}
-        loadUsers={props.loadUsers}
-      />
-
-      <CurrentLocationFilter
-        setStateAsync={props.setStateAsync}
-        loadUsers={props.loadUsers}
-      />
-
-      <RelocateToFilter
-        setStateAsync={props.setStateAsync}
-        loadUsers={props.loadUsers}
-      />
+      <SortingFilter updateUsers={props.updateUsers} />
+      <AreaOfWorkFilter updateUsers={props.updateUsers} />
+      <CurrentLocationFilter updateUsers={props.updateUsers} />
+      <RelocateToFilter updateUsers={props.updateUsers} />
     </aside>
   );
 }

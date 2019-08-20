@@ -28,7 +28,6 @@ class PublicPage extends Component {
   };
 
   async componentDidMount() {
-    // use local storage for filters
     try {
       const users = await axios.get("http://localhost:3001/users");
       this.setState({ users: users.data, initialLoading: false });
@@ -71,12 +70,6 @@ class PublicPage extends Component {
     }
     return true;
   }
-
-  setStateAsync = state => {
-    return new Promise(resolve => {
-      this.setState(state, resolve);
-    });
-  };
 
   loadUsers = async isUsinginfinite => {
     // app filter loading is too fast so it will only show a flash
@@ -145,15 +138,21 @@ class PublicPage extends Component {
     }
   };
 
-  infiniteScroll = async () => {
+  infiniteScroll = () => {
     if (this.state.infiniteLoading || this.state.noMoreUsers) {
       return;
     }
-    await this.setStateAsync({
-      usersPage: this.state.usersPage + 1,
-      infiniteLoading: true
-    });
-    this.loadUsers(true);
+    this.setState(
+      {
+        usersPage: this.state.usersPage + 1,
+        infiniteLoading: true
+      },
+      () => this.loadUsers(true)
+    );
+  };
+
+  updateUsers = stateUpdate => {
+    this.setState(stateUpdate, () => this.loadUsers(false));
   };
 
   render() {
@@ -161,10 +160,7 @@ class PublicPage extends Component {
     return (
       <Main>
         <div className="container">
-          <FiltersContainer
-            setStateAsync={this.setStateAsync}
-            loadUsers={this.loadUsers}
-          />
+          <FiltersContainer updateUsers={this.updateUsers} />
           {this.state.initialLoading || this.state.filtersLoading ? (
             <p>LOADING...</p>
           ) : (
