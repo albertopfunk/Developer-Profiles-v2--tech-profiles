@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import styled from "styled-components";
 import axios from "axios";
 
-import FiltersContainer from "../../components/filters/FiltersContainer";
-import UserCardsContainer from "../../components/user-cards/UserCardsContainer";
+import Filters from "../../components/filters/Filters";
+import UserCards from "../../components/user-cards/UserCards";
 
 class PublicPage extends Component {
   state = {
@@ -132,6 +132,7 @@ class PublicPage extends Component {
           filtersLoading: false,
           noMoreUsers: false
         });
+        window.scrollTo(0,0);
       }
     } catch (err) {
       console.error(`${err.response.data.message} =>`, err);
@@ -159,28 +160,24 @@ class PublicPage extends Component {
     console.log(this.state.users.length);
     return (
       <Main>
-        <div className="container">
-          <FiltersContainer updateUsers={this.updateUsers} />
-          {this.state.initialLoading || this.state.filtersLoading ? (
-            <p>LOADING...</p>
-          ) : (
-            <UserCardsContainer
-              infiniteScroll={this.infiniteScroll}
-              isBusy={this.state.infiniteLoading}
-              users={this.state.users}
-            />
-          )}
-        </div>
+        <Filters updateUsers={this.updateUsers} />
+        {this.state.initialLoading || this.state.filtersLoading ? (
+          <h1>Loading...</h1>
+        ) : (
+          <UserCards
+            infiniteScroll={this.infiniteScroll}
+            isBusy={this.state.infiniteLoading}
+            users={this.state.users}
+          />
+        )}
       </Main>
     );
   }
 }
 
 const Main = styled.main`
+  padding-top: 100px; 
   background-color: lightblue;
-  > div {
-    display: flex;
-  }
 `;
 
 export default PublicPage;

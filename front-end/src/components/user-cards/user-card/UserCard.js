@@ -2,6 +2,12 @@ import React from "react";
 import axios from "axios";
 import styled from "styled-components";
 
+import UserImage from "./img-section/UserImage";
+import UserInfo from "./info-section/UserInfo";
+import UserSkills from "./skills-section/UserSkills";
+import UserIcons from "./icons-section/UserIcons";
+import UserExtras from "./extras-section/UserExtras";
+
 // resume link?
 // twitter link?
 // codesandbox link?
@@ -46,6 +52,8 @@ class UserCard extends React.Component {
   expandUserCard = async id => {
     if (this.state.hasRequestedExtras) {
       if (
+        this.state.topSkills.length > 0 ||
+        this.state.additionalSkills.length > 0 ||
         this.state.projects.length > 0 ||
         this.state.education.length > 0 ||
         this.state.experience.length > 0 ||
@@ -111,7 +119,7 @@ class UserCard extends React.Component {
     } = this.state;
 
     return (
-      <Article
+      <UserArticle
         tabIndex="0"
         aria-posinset={this.props.index + 1}
         aria-setsize={this.props.usersLength}
@@ -119,45 +127,35 @@ class UserCard extends React.Component {
       >
         {/* <aside className="favorite">Favorite</aside> */}
 
-        <section>
-          <div className="left">
-            <section className="user-info">
-              id:{this.props.id}
-              <div className="img">
-                image
-                {/* add figure/figcation to all images */}
-                <img
-                  style={{
-                    width: "200px",
-                    height: "200px",
-                    borderRadius: "50%"
-                  }}
-                  src={this.props.image}
-                  alt="user-avatar"
-                />
-              </div>
-              <div className="basic-info">
-                name, location, summary
-                <p>{this.props.firstName}</p>
-                <p>{this.props.currentLocation}</p>
-              </div>
-            </section>
+        <UserSection>
+          <div>
+            <div>
+              <UserImage image={this.props.image} />
 
-            <section className="user-skills">
-              top, additional
-              <p>{topSkills[0]}</p>
-              <p>{additionalSkills[0]}</p>
-            </section>
+              <UserInfo
+                firstName={this.props.firstName}
+                lastName={this.props.lastName}
+                currentLocation={this.props.currentLocation}
+                summary={this.props.summary}
+              />
+            </div>
+
+            <section className="user-title">{this.props.title}</section>
+
+            <UserSkills
+              topSkills={topSkills}
+              additionalSkills={additionalSkills}
+            />
           </div>
 
-          <aside className="right">
-            icons
-            <p>{this.props.github}</p>
-            <p>{this.props.linkedin}</p>
-          </aside>
-        </section>
+          <UserIcons
+            github={this.props.github}
+            linkedin={this.props.linkedin}
+            portfolio={this.props.portfolio}
+          />
+        </UserSection>
 
-        <section>
+        <ExpandControlsSection>
           {!isCardExpanded ? (
             <button onClick={() => this.expandUserCard(this.props.id)}>
               Expand
@@ -165,44 +163,42 @@ class UserCard extends React.Component {
           ) : (
             <button onClick={() => this.closeUserCard()}>Close</button>
           )}
-        </section>
+        </ExpandControlsSection>
 
         {isCardExpanded ? (
-          <section className="user-extras">
-            {noExtras ? <p>Nothing to Show...</p> : null}
-            {projects.length > 0 ? (
-              <section className="projects">
-                <p>{projects[0].project_title}</p>
-              </section>
-            ) : null}
-
-            {education.length > 0 ? (
-              <section className="education">
-                <p>{education[0].school}</p>
-              </section>
-            ) : null}
-
-            {experience.length > 0 ? (
-              <section className="experience">
-                <p>{experience[0].company_name}</p>
-              </section>
-            ) : null}
-
-            {interestedLocations.length > 0 ? (
-              <section className="interested-locations">
-                <p>{interestedLocations[0]}</p>
-              </section>
-            ) : null}
-          </section>
+          <UserExtras
+            topSkills={topSkills}
+            additionalSkills={additionalSkills}
+            education={education}
+            experience={experience}
+            projects={projects}
+            interestedLocations={interestedLocations}
+            noExtras={noExtras}
+          />
         ) : null}
-      </Article>
+      </UserArticle>
     );
   }
 }
 
-const Article = styled.article`
-  margin: 20px;
-  border: solid;
+const UserArticle = styled.article`
+  margin: 40px;
+  border: solid blue;
+  max-width: 1000px;
+`;
+
+const UserSection = styled.section`
+  border: solid green;
+  display: flex;
+  > div {
+    > div {
+      display: flex;
+    }
+  }
+`;
+
+const ExpandControlsSection = styled.section`
+  border: solid red;
 `;
 
 export default UserCard;
