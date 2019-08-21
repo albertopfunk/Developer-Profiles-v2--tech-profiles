@@ -2,6 +2,12 @@ import React, { useEffect, useState } from "react";
 import UserCard from "./user-card/UserCard";
 import styled from "styled-components";
 
+
+// Test Ideas
+// renders list of articles
+// renders 14 articles
+// renders additional 14 articles onInfinite() fire
+
 function UserCards(props) {
   const scrollSectionRef = React.createRef();
   const [canScrollUp, setCanScrollUp] = useState(false);

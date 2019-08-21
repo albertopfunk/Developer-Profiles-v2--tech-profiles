@@ -4,8 +4,10 @@ import styled from "styled-components";
 
 import UserImage from "./img-section/UserImage";
 import UserInfo from "./info-section/UserInfo";
+import UserTitle from "./title-section/UserTitle";
 import UserSkills from "./skills-section/UserSkills";
 import UserIcons from "./icons-section/UserIcons";
+import UserControls from "./controls-section/UserControls";
 import UserExtras from "./extras-section/UserExtras";
 
 // resume link?
@@ -13,6 +15,11 @@ import UserExtras from "./extras-section/UserExtras";
 // codesandbox link?
 // codepen link?
 // share profile?
+
+// Test Ideas
+// renders with user info(name, location) or replacement UI
+// When user expands card, expanded section should show
+// either with a user extra section(s) or with 'nothing to show' mssg
 
 class UserCard extends React.Component {
   state = {
@@ -140,7 +147,7 @@ class UserCard extends React.Component {
               />
             </div>
 
-            <section className="user-title">{this.props.title}</section>
+            <UserTitle title={this.props.title} />
 
             <UserSkills
               topSkills={topSkills}
@@ -155,15 +162,12 @@ class UserCard extends React.Component {
           />
         </UserSection>
 
-        <ExpandControlsSection>
-          {!isCardExpanded ? (
-            <button onClick={() => this.expandUserCard(this.props.id)}>
-              Expand
-            </button>
-          ) : (
-            <button onClick={() => this.closeUserCard()}>Close</button>
-          )}
-        </ExpandControlsSection>
+        <UserControls
+          id={this.props.id}
+          isCardExpanded={isCardExpanded}
+          expandUserCard={this.expandUserCard}
+          closeUserCard={this.closeUserCard}
+        />
 
         {isCardExpanded ? (
           <UserExtras
@@ -195,10 +199,6 @@ const UserSection = styled.section`
       display: flex;
     }
   }
-`;
-
-const ExpandControlsSection = styled.section`
-  border: solid red;
 `;
 
 export default UserCard;

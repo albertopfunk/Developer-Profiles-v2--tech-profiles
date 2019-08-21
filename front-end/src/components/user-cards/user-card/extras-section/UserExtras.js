@@ -1,5 +1,10 @@
 import React from "react";
 
+// Test Ideas
+// renders certain section, depending on props
+// renders 'nothing to show' when noExtras is true
+// if no extras is true, that means that ALL sections should have a length of 0
+
 function UserExtras(props) {
   return (
     <section>

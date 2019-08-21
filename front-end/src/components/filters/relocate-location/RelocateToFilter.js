@@ -1,6 +1,6 @@
 import React from "react";
 
-import LocationAutoComplete from "./LocationAutoComplete";
+import LocationAutoComplete from "../../location-autocomplete/LocationAutoComplete";
 
 function RelocateToFilter(props) {
   function onChosenLocation(chosenRelocateTo) {

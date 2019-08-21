@@ -1,10 +1,13 @@
 import React from "react";
 
+// Test Ideas
+// renders image or default avatar image
+
 function UserImage(props) {
   return (
     <section>
       {/* add figure/figcation to all images */}
-      {props.image ?
+      {props.image ? (
         <img
           style={{
             width: "200px",
@@ -14,9 +17,9 @@ function UserImage(props) {
           src={props.image}
           alt="user-avatar"
         />
-        :
+      ) : (
         <p>Avatar Image</p>
-      }
+      )}
     </section>
   );
 }

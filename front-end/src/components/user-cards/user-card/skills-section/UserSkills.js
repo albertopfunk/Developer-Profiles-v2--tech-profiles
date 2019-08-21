@@ -1,6 +1,11 @@
 import React from "react";
 import styled from "styled-components";
 
+// Test Ideas
+// renders with 3 skills + 'Expand for more skills' if there are more than 3 skills
+// renders all skills if there are less than 3 skills
+// renders no skills listed if there are 0 skills
+
 function UserSkills(props) {
   return (
     <Section>
@@ -47,7 +52,6 @@ const Section = styled.section`
   display: flex;
   > section {
     width: 50%;
-
   }
 `;
 

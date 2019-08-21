@@ -1,10 +1,10 @@
 import React from "react";
 import styled from "styled-components";
 
-import AreaOfWorkFilter from "./AreaOfWorkFilter";
-import CurrentLocationFilter from "./CurrentLocationFilter";
-import RelocateToFilter from "./RelocateToFilter";
-import SortingFilter from "./SortingFilter";
+import AreaOfWorkFilter from "./area-of-work/AreaOfWorkFilter";
+import CurrentLocationFilter from "./current-location/CurrentLocationFilter";
+import RelocateToFilter from "./relocate-location/RelocateToFilter";
+import SortingFilter from "./sorting/SortingFilter";
 
 function Filters(props) {
   return (

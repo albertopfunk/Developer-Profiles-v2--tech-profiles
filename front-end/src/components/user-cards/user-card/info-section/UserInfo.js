@@ -1,5 +1,10 @@
 import React from "react";
 
+// Test Ideas
+// renders name or 'no name listed'
+// renders location or 'no location listed'
+// renders summary or 'no summary listed'
+
 function UserInfo(props) {
   return (
     <section>
