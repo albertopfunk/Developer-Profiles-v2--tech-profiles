@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
 
-import LocationAutoComplete from "../../location-autocomplete/LocationAutoComplete";
+import LocationAutoComplete from "../location-autocomplete/LocationAutoComplete";
 
 class CurrentLocationFilter extends React.Component {
   state = {

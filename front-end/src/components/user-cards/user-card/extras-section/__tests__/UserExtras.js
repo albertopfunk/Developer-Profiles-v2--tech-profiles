@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import UserExtras from "./UserExtras";
+import UserExtras from "../UserExtras";
 
 it("should render 'Nothing to Show' when nothing is passed in component", () => {
   const container = document.createElement("div");

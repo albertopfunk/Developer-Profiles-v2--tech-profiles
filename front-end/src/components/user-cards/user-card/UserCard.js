@@ -2,12 +2,12 @@ import React from "react";
 import axios from "axios";
 import styled from "styled-components";
 
-import UserImage from "./img-section/UserImage";
-import UserInfo from "./info-section/UserInfo";
-import UserTitle from "./title-section/UserTitle";
-import UserSkills from "./skills-section/UserSkills";
-import UserIcons from "./icons-section/UserIcons";
-import UserControls from "./controls-section/UserControls";
+import UserImage from "./UserImage";
+import UserInfo from "./UserInfo";
+import UserTitle from "./UserTitle";
+import UserSkills from "./UserSkills";
+import UserIcons from "./UserIcons";
+import UserControls from "./UserControls";
 import UserExtras from "./extras-section/UserExtras";
 
 // resume link?
@@ -15,6 +15,24 @@ import UserExtras from "./extras-section/UserExtras";
 // codesandbox link?
 // codepen link?
 // share profile?
+
+
+// missing aria
+/*
+https://www.w3.org/TR/wai-aria-practices/examples/feed/feedDisplay.html
+aria-label
+aria-describedby
+*/
+
+// Keyboard control
+/*
+https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/Feed_Role
+Page Down: Move focus to next article.
+Page Up: Move focus to previous article.
+Control + End: Move focus to the first focusable element after the feed.
+Control + Home: Move focus to the first focusable element before the feed.
+*/
+
 
 // Test Ideas
 // renders with user info(name, location) or replacement UI
