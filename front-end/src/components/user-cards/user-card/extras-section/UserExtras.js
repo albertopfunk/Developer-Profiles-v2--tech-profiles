@@ -6,47 +6,57 @@ import React from "react";
 // if no extras is true, that means that ALL sections should have a length of 0
 
 function UserExtras(props) {
+  const {
+    noExtras,
+    topSkills,
+    additionalSkills,
+    projects,
+    education,
+    experience,
+    interestedLocations
+  } = props;
+
   return (
     <section>
-      {props.noExtras ? <p>Nothing to Show...</p> : null}
+      {noExtras ? <p>Nothing to Show...</p> : null}
 
-      {props.topSkills.length > 0 ? (
+      {topSkills && topSkills.length > 0 ? (
         <section className="top-skills">
-          {props.topSkills.map(skill => (
+          {topSkills.map(skill => (
             <p key={skill}>{skill}</p>
           ))}
         </section>
       ) : null}
 
-      {props.additionalSkills.length > 0 ? (
+      {additionalSkills && additionalSkills.length > 0 ? (
         <section className="top-skills">
-          {props.additionalSkills.map(skill => (
+          {additionalSkills.map(skill => (
             <p key={skill}>{skill}</p>
           ))}
         </section>
       ) : null}
 
-      {props.projects.length > 0 ? (
+      {projects && projects.length > 0 ? (
         <section className="projects">
-          <p>{props.projects[0].project_title}</p>
+          <p>{projects[0].project_title}</p>
         </section>
       ) : null}
 
-      {props.education.length > 0 ? (
+      {education && education.length > 0 ? (
         <section className="education">
-          <p>{props.education[0].school}</p>
+          <p>{education[0].school}</p>
         </section>
       ) : null}
 
-      {props.experience.length > 0 ? (
+      {experience && experience.length > 0 ? (
         <section className="experience">
-          <p>{props.experience[0].company_name}</p>
+          <p>{experience[0].company_name}</p>
         </section>
       ) : null}
 
-      {props.interestedLocations.length > 0 ? (
+      {interestedLocations && interestedLocations.length > 0 ? (
         <section className="interested-locations">
-          <p>{props.interestedLocations[0]}</p>
+          <p>{interestedLocations[0]}</p>
         </section>
       ) : null}
     </section>

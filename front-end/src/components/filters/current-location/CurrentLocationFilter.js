@@ -10,22 +10,23 @@ class CurrentLocationFilter extends React.Component {
     chosenLocationId: ""
   };
 
+  // Tests
+  // changes state based on input, this changeing input value
   onInputChange = e => {
     this.setState({ [e.target.name]: e.target.value });
   };
 
+  // 
   chooseDistanceOnKeyUp = e => {
-    if (e.keyCode === 37) {
+    if (
+      e.keyCode === 37 ||
+      e.keyCode === 38 ||
+      e.keyCode === 39 ||
+      e.keyCode === 40
+    ) {
       this.onDistanceChange();
-    }
-    if (e.keyCode === 38) {
-      this.onDistanceChange();
-    }
-    if (e.keyCode === 39) {
-      this.onDistanceChange();
-    }
-    if (e.keyCode === 40) {
-      this.onDistanceChange();
+    } else {
+      return;
     }
   };
 

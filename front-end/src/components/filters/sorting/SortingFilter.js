@@ -1,5 +1,8 @@
 import React from "react";
 
+// Tests
+// fires when <select> option changes, passing the value of the option
+// correct value(sortByChoice) is being passed to updateUsers
 function SortingFilter(props) {
   function sortUsers(sortByChoice) {
     props.updateUsers({
