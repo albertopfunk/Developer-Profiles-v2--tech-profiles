@@ -8,7 +8,7 @@ import UserTitle from "./UserTitle";
 import UserSkills from "./UserSkills";
 import UserIcons from "./UserIcons";
 import UserControls from "./UserControls";
-import UserExtras from "./extras-section/UserExtras";
+import UserExtras from "./user-extras/UserExtras";
 
 // resume link?
 // twitter link?

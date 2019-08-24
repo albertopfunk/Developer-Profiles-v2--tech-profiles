@@ -1,7 +1,9 @@
 import React from "react";
 import { PropTypes } from "prop-types";
 
-import TopSkills from "./TopSkills";
+import UserEducation from "./UserEducation";
+import UserExperience from "./UserExperience";
+import UserProjects from "./userProjects";
 
 // Test Ideas
 // renders certain section, depending on props
@@ -24,11 +26,15 @@ function UserExtras(props) {
       {noExtras ? <p>Nothing to Show...</p> : null}
 
       {Array.isArray(topSkills) && topSkills.length > 0 ? (
-        <TopSkills topSkills={topSkills} />
+        <section className="top-skills">
+          {topSkills.map(skill => (
+            <p key={skill}>{skill}</p>
+          ))}
+        </section>
       ) : null}
 
       {Array.isArray(additionalSkills) && additionalSkills.length > 0 ? (
-        <section className="top-skills">
+        <section className="additional-skills">
           {additionalSkills.map(skill => (
             <p key={skill}>{skill}</p>
           ))}
@@ -36,26 +42,22 @@ function UserExtras(props) {
       ) : null}
 
       {Array.isArray(projects) && projects.length > 0 ? (
-        <section className="projects">
-          <p>{projects[0].project_title}</p>
-        </section>
+        <UserProjects projects={projects} />
       ) : null}
 
       {Array.isArray(education) && education.length > 0 ? (
-        <section className="education">
-          <p>{education[0].school}</p>
-        </section>
+        <UserEducation education={education} />
       ) : null}
 
       {Array.isArray(experience) && experience.length > 0 ? (
-        <section className="experience">
-          <p>{experience[0].company_name}</p>
-        </section>
+        <UserExperience experience={experience} />
       ) : null}
 
       {Array.isArray(interestedLocations) && interestedLocations.length > 0 ? (
         <section className="interested-locations">
-          <p>{interestedLocations[0]}</p>
+          {interestedLocations.map(location => (
+            <p key={location}>{location}</p>
+          ))}
         </section>
       ) : null}
     </section>

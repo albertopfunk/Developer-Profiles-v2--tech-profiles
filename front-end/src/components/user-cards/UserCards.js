@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import UserCard from "./user-card/UserCard";
 import styled from "styled-components";
 
+import UserCard from "./user-card/UserCard";
 
 // Test Ideas
 // renders list of articles
