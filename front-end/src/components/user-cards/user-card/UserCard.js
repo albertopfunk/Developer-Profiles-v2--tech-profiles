@@ -102,9 +102,9 @@ class UserCard extends React.Component {
         ]);
 
         if (
-          projects.length > 0 ||
-          education.length > 0 ||
-          experience.length > 0 ||
+          projects.data.length > 0 ||
+          education.data.length > 0 ||
+          experience.data.length > 0 ||
           this.state.interestedLocations.length > 0
         ) {
           this.setState({

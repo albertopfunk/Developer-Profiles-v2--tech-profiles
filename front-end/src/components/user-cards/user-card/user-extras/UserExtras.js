@@ -3,7 +3,7 @@ import { PropTypes } from "prop-types";
 
 import UserEducation from "./UserEducation";
 import UserExperience from "./UserExperience";
-import UserProjects from "./userProjects";
+import UserProjects from "./UserProjects";
 
 // Test Ideas
 // renders certain section, depending on props
