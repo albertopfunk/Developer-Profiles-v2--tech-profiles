@@ -1,9 +1,9 @@
 import React from "react";
 import { PropTypes } from "prop-types";
 
+import UserProjects from "./UserProjects";
 import UserEducation from "./UserEducation";
 import UserExperience from "./UserExperience";
-import UserProjects from "./UserProjects";
 
 // Test Ideas
 // renders certain section, depending on props
