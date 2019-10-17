@@ -6,7 +6,7 @@ const routes = require("../routes/routes");
 const server = express();
 
 const corsOptions = {
-  origin: process.env.CLIENT_ORIGIN_DEV,
+  origin: process.env.CLIENT_ORIGIN,
   optionsSuccessStatus: 200
 };
 
