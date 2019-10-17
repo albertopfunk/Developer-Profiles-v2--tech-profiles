@@ -1,5 +1,3 @@
-[Settings]
-ID = "8403450c-33e7-47e7-ac2b-18b9efcabc62"
 
 [build]
   command = "npm run build"
