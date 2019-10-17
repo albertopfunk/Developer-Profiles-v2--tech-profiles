@@ -1,5 +1,6 @@
 const express = require("express");
 const userMiddleware = require("../../helpers/middleware/user");
+const authMiddleware = require("../../helpers/middleware/auth");
 const userModel = require("../../models/user/userModel");
 
 const server = express.Router();
@@ -92,7 +93,7 @@ server.post("/new", async (req, res) => {
 server.get("/", async (req, res) => {
   try {
     const users = await userModel.getAll();
-    console.log("INIT", users.length);
+    // console.log("INIT", users.length);
     cachedUsersSuccess = userMiddleware.setToCache(users);
     if (cachedUsersSuccess) {
       const slicedUsers = users.slice(0, 14);
@@ -126,7 +127,7 @@ server.get(
 
     try {
       const users = await userModel.getAllFiltered(req.query);
-      console.log("INFINITE", users.length);
+      // console.log("INFINITE", users.length);
       cachedUsersSuccess = userMiddleware.setToCache(users);
       if (cachedUsersSuccess) {
         slicedUsers = users.slice(start, end);
@@ -161,7 +162,7 @@ server.get("/:id", async (req, res) => {
 // expects id of existing user in params
 // returns a number 1 if successful
 // authorization for updates? like user ID
-server.put("/:id", async (req, res) => {
+server.put("/:id", authMiddleware.checkJwt, async (req, res) => {
   const { id } = req.params;
   try {
     const editUser = await userModel.update(id, req.body);
