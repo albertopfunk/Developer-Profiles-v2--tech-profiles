@@ -202,7 +202,7 @@ function getUsersFromCache(req, res, next) {
   if (isUsinginfinite) {
     try {
       const cachedUsers = usersCache.get("users", true);
-      console.log("CACHE", cachedUsers.length);
+      // console.log("CACHE", cachedUsers.length);
       const slicedUsers = cachedUsers.slice(start, end);
       res.json(slicedUsers);
     } catch (err) {

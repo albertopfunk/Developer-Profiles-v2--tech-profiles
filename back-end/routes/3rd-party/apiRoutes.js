@@ -6,7 +6,7 @@ const server = express.Router();
 server.post("/autocomplete", async (req, res) => {
   const key = process.env.GOOGLE_PLACES_KEY;
   const { locationInput } = req.body;
-  const url = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${locationInput}&types=(cities)&key=${key}`;
+  const url = `${process.env.GOOGLE_PLACES_AUTOCOMPLETE}/json?input=${locationInput}&types=(cities)&key=${key}`;
 
   try {
     const response = await axios.post(url);
@@ -21,7 +21,7 @@ server.post("/autocomplete", async (req, res) => {
 server.post("/gio", async (req, res) => {
   const key = process.env.GOOGLE_PLACES_KEY;
   const { placeId } = req.body;
-  const url = `https://maps.googleapis.com/maps/api/place/details/json?placeid=${placeId}&fields=geometry&key=${key}`;
+  const url = `${process.env.GOOGLE_PLACES_GIO}/json?placeid=${placeId}&fields=geometry&key=${key}`;
 
   try {
     const response = await axios.post(url);
