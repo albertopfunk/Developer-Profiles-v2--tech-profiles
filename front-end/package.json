@@ -3,10 +3,12 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
+    "auth0-js": "^9.11.3",
     "axios": "*",
     "prop-types": "*",
     "react": "*",
     "react-dom": "*",
+    "react-router-dom": "^5.1.2",
     "react-scripts": "*",
     "styled-components": "*"
   },

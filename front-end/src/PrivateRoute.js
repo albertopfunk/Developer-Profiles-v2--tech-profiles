@@ -9,7 +9,7 @@ function PrivateRoute(props) {
       {auth0Client.isAuthenticated() ?
         props.children
         :
-        <Redirect to="/" />
+        <Redirect to="/authorize" />
       }
     </div>
   )

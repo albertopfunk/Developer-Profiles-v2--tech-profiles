@@ -31,5 +31,8 @@
       "version": "detect"
     }
   },
-  "parser": "babel-eslint"
+  "parser": "babel-eslint",
+  "globals": {
+    "process": true
+  }
 }

@@ -29,7 +29,7 @@ class PublicPage extends Component {
 
   async componentDidMount() {
     try {
-      const users = await axios.get("http://localhost:3001/users");
+      const users = await axios.get(`${process.env.REACT_APP_SERVER}/users`);
       this.setState({ users: users.data, initialLoading: false });
     } catch (err) {
       console.error(`${err.response.data.message} =>`, err);
@@ -37,34 +37,19 @@ class PublicPage extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    const {
-      isWebDevChecked,
-      isUIUXChecked,
-      isIOSChecked,
-      isAndroidChecked,
-      isUsingCurrLocationFilter,
-      selectedWithinMiles,
-      chosenLocationLat,
-      chosenLocationLon,
-      isUsingRelocateToFilter,
-      chosenRelocateTo,
-      isUsingSortByChoice,
-      sortByChoice
-    } = this.state;
-
     if (
-      isWebDevChecked !== nextState.isWebDevChecked ||
-      isUIUXChecked !== nextState.isUIUXChecked ||
-      isIOSChecked !== nextState.isIOSChecked ||
-      isAndroidChecked !== nextState.isAndroidChecked ||
-      isUsingCurrLocationFilter !== nextState.isUsingCurrLocationFilter ||
-      selectedWithinMiles !== nextState.selectedWithinMiles ||
-      chosenLocationLat !== nextState.chosenLocationLat ||
-      chosenLocationLon !== nextState.chosenLocationLon ||
-      isUsingRelocateToFilter !== nextState.isUsingRelocateToFilter ||
-      chosenRelocateTo !== nextState.chosenRelocateTo ||
-      isUsingSortByChoice !== nextState.isUsingSortByChoice ||
-      sortByChoice !== nextState.sortByChoice
+      this.state.isWebDevChecked !== nextState.isWebDevChecked ||
+      this.state.isUIUXChecked !== nextState.isUIUXChecked ||
+      this.state.isIOSChecked !== nextState.isIOSChecked ||
+      this.state.isAndroidChecked !== nextState.isAndroidChecked ||
+      this.state.isUsingCurrLocationFilter !== nextState.isUsingCurrLocationFilter ||
+      this.state.selectedWithinMiles !== nextState.selectedWithinMiles ||
+      this.state.chosenLocationLat !== nextState.chosenLocationLat ||
+      this.state.chosenLocationLon !== nextState.chosenLocationLon ||
+      this.state.isUsingRelocateToFilter !== nextState.isUsingRelocateToFilter ||
+      this.state.chosenRelocateTo !== nextState.chosenRelocateTo ||
+      this.state.isUsingSortByChoice !== nextState.isUsingSortByChoice ||
+      this.state.sortByChoice !== nextState.sortByChoice
     ) {
       return false;
     }
@@ -77,39 +62,23 @@ class PublicPage extends Component {
     //   this.setState({ filtersLoading: true });
     // }
 
-    const {
-      usersPage,
-      isWebDevChecked,
-      isUIUXChecked,
-      isIOSChecked,
-      isAndroidChecked,
-      isUsingCurrLocationFilter,
-      selectedWithinMiles,
-      chosenLocationLat,
-      chosenLocationLon,
-      isUsingRelocateToFilter,
-      chosenRelocateTo,
-      isUsingSortByChoice,
-      sortByChoice
-    } = this.state;
-
     try {
-      const users = await axios.get("http://localhost:3001/users/infinite", {
+      const users = await axios.get(`${process.env.REACT_APP_SERVER}/users/infinite`, {
         params: {
-          usersPage: usersPage,
-          isUsinginfinite: isUsinginfinite,
-          isWebDevChecked: isWebDevChecked,
-          isUIUXChecked: isUIUXChecked,
-          isIOSChecked: isIOSChecked,
-          isAndroidChecked: isAndroidChecked,
-          isUsingCurrLocationFilter: isUsingCurrLocationFilter,
-          selectedWithinMiles: selectedWithinMiles,
-          chosenLocationLat: chosenLocationLat,
-          chosenLocationLon: chosenLocationLon,
-          isUsingRelocateToFilter: isUsingRelocateToFilter,
-          chosenRelocateTo: chosenRelocateTo,
-          isUsingSortByChoice: isUsingSortByChoice,
-          sortByChoice: sortByChoice
+          usersPage: this.state.usersPage,
+          isUsinginfinite,
+          isWebDevChecked: this.state.isWebDevChecked,
+          isUIUXChecked: this.state.isUIUXChecked,
+          isIOSChecked: this.state.isIOSChecked,
+          isAndroidChecked: this.state.isAndroidChecked,
+          isUsingCurrLocationFilter: this.state.isUsingCurrLocationFilter,
+          selectedWithinMiles: this.state.selectedWithinMiles,
+          chosenLocationLat: this.state.chosenLocationLat,
+          chosenLocationLon: this.state.chosenLocationLon,
+          isUsingRelocateToFilter: this.state.isUsingRelocateToFilter,
+          chosenRelocateTo: this.state.chosenRelocateTo,
+          isUsingSortByChoice: this.state.isUsingSortByChoice,
+          sortByChoice: this.state.sortByChoice
         }
       });
 
@@ -157,7 +126,7 @@ class PublicPage extends Component {
   };
 
   render() {
-    console.log(this.state.users.length);
+    // console.log(this.state.users.length);
     return (
       <Main>
         <Filters updateUsers={this.updateUsers} />

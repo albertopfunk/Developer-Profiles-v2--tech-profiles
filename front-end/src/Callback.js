@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import styled from "styled-components";
 import {withRouter} from 'react-router-dom';
 import auth0Client from './Auth';
 
@@ -10,9 +11,16 @@ class Callback extends Component {
 
   render() {
     return (
-      <p>Loading profile...</p>
+      <Main>Loading profile...</Main>
     );
   }
 }
+
+const Main = styled.main`
+  width: 100%;
+  height: 100vh;
+  padding-top: 100px;
+  background-color: pink;
+`;
 
 export default withRouter(Callback);

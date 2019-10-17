@@ -48,7 +48,7 @@ class CurrentLocationFilter extends React.Component {
     }
 
     try {
-      const response = await axios.post(`http://localhost:3001/api/gio`, {
+      const response = await axios.post(`${process.env.REACT_APP_SERVER}/api/gio`, {
         placeId: id
       });
       this.props.updateUsers({

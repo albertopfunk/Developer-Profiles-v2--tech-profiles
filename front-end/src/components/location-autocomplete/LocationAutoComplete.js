@@ -101,7 +101,7 @@ class LocationAutoComplete extends React.Component {
     }
     try {
       const response = await axios.post(
-        `http://localhost:3001/api/autocomplete`,
+        `${process.env.REACT_APP_SERVER}/api/autocomplete`,
         { locationInput: value }
       );
       const predictions = response.data.predictions.map(location => {

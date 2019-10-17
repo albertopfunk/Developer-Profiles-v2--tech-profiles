@@ -96,9 +96,9 @@ class UserCard extends React.Component {
     } else {
       try {
         const [education, experience, projects] = await Promise.all([
-          axios.get(`http://localhost:3001/extras/${id}/education`),
-          axios.get(`http://localhost:3001/extras/${id}/experience`),
-          axios.get(`http://localhost:3001/extras/${id}/projects`)
+          axios.get(`${process.env.REACT_APP_SERVER}/extras/${id}/education`),
+          axios.get(`${process.env.REACT_APP_SERVER}/extras/${id}/experience`),
+          axios.get(`${process.env.REACT_APP_SERVER}/extras/${id}/projects`)
         ]);
 
         if (

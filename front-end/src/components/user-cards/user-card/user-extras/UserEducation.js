@@ -3,7 +3,6 @@ import React, { useState } from "react";
 function UserEducation(props) {
   const [sliderPage, setSliderPage] = useState(0);
 
-  // have one nextFunction for edu, proj, exp, locationAutocomplete
   function nextExtra(direction) {
     if (direction === "left") {
       if (sliderPage === 0) {
