@@ -5,22 +5,22 @@ import { Link, withRouter } from "react-router-dom";
 
 
 function HeaderNav(props) {
-  const signOut = () => {
-    //auth0Client.signOut();
-    props.history.replace('/');
-  };
+  // const signOut = () => {
+  //   auth0Client.signOut();
+  //   props.history.replace('/');
+  // };
 
   return (
     <nav>
       <Link to="/profiles">Profiles</Link>
-      {auth0Client.isAuthenticated() ?
+      {/* {auth0Client.isAuthenticated() ?
         <>
           <Link to="/dashboard">Dashboard</Link>
           <button onClick={() => signOut()}>Sign Out</button>
         </>
         :
         <button onClick={auth0Client.signIn}>Sign In</button>
-      }
+      } */}
     </nav>
   )
 }
