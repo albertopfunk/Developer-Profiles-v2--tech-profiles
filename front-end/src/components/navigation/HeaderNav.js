@@ -1,12 +1,12 @@
 import React from 'react'
 import { Link, withRouter } from "react-router-dom";
 
-import auth0Client from '../../Auth';
+//import auth0Client from '../../Auth';
 
 
 function HeaderNav(props) {
   const signOut = () => {
-    auth0Client.signOut();
+    //auth0Client.signOut();
     props.history.replace('/');
   };
 

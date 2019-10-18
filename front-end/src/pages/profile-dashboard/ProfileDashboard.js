@@ -1,14 +1,14 @@
 import React from 'react';
 import styled from "styled-components";
 
-import auth0Client from '../../Auth';
+//import auth0Client from '../../Auth';
 
 
 function ProfileDashboard() {
   function getIt() {
-    console.log(auth0Client.getProfile())
-    console.log(auth0Client.getIdToken())
-    console.log(auth0Client.isAuthenticated())
+    // console.log(auth0Client.getProfile())
+    // console.log(auth0Client.getIdToken())
+    // console.log(auth0Client.isAuthenticated())
   }
   return (
     <Main>
