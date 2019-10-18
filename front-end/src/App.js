@@ -10,6 +10,7 @@ import Callback from './Callback';
 import PrivateRoute from './PrivateRoute';
 import PageNotAuthorized from "./pages/error-pages/not-authorized/PageNotAuthorized";
 import PageNotFound from "./pages/error-pages/404/PageNotFound";
+import PrivatePolicy from "./pages/misc-pages/private-policy/PrivatePolicy";
 
 
 function App() {
@@ -28,6 +29,9 @@ function App() {
           <PrivateRoute>
             <ProfileDashboard />
           </PrivateRoute>
+        </Route>
+        <Route path="/private-policy">
+          <PrivatePolicy />
         </Route>
         <Route path='/callback'>
           <Callback />
