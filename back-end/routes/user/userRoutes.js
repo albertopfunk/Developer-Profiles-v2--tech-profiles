@@ -1,6 +1,5 @@
 const express = require("express");
 const userMiddleware = require("../../helpers/middleware/user");
-const authMiddleware = require("../../helpers/middleware/auth");
 const userModel = require("../../models/user/userModel");
 
 const server = express.Router();
@@ -72,9 +71,9 @@ server.post("/new", async (req, res) => {
     id = req.body.id;
   }
 
-  const checkIfUserExists = await userModel.getSingle(id);
-  if (checkIfUserExists) {
-    res.json(checkIfUserExists);
+  const doesUserExist = await userModel.getSingle(id);
+  if (doesUserExist) {
+    res.status(200).json(doesUserExist);
   } else {
     try {
       const addNewUser = await userModel.insert(req.body);
@@ -162,7 +161,7 @@ server.get("/:id", async (req, res) => {
 // expects id of existing user in params
 // returns a number 1 if successful
 // authorization for updates? like user ID
-server.put("/:id", authMiddleware.checkJwt, async (req, res) => {
+server.put("/:id", async (req, res) => {
   const { id } = req.params;
   try {
     const editUser = await userModel.update(id, req.body);
