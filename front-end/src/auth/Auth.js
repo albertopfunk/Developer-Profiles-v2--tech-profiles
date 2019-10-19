@@ -24,10 +24,6 @@ class Auth {
     return this.profile;
   }
 
-  getIdToken() {
-    return this.idToken;
-  }
-
   isAuthenticated() {
     return new Date().getTime() < this.expiresAt;
   }
@@ -50,7 +46,6 @@ class Auth {
   }
 
   setSession(authResult) {
-    this.idToken = authResult.idToken;
     this.profile = authResult.idTokenPayload;
     this.expiresAt = authResult.idTokenPayload.exp * 1000;
   }

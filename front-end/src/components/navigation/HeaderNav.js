@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, withRouter } from "react-router-dom";
 
-import auth0Client from "../../Auth";
+import auth0Client from "../../auth/Auth";
 
 function HeaderNav(props) {
   const signOut = () => {

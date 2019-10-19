@@ -108,10 +108,11 @@ function getSingle(id) {
     .first();
 }
 
-function update(id, body) {
-  return db("users")
+async function update(id, body) {
+  await db("users")
     .where({ id })
     .update(body);
+    return getSingle(id);
 }
 
 function remove(id) {

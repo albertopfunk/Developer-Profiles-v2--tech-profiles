@@ -6,13 +6,13 @@ import MainHeader from "./components/header/MainHeader";
 import LandingPage from "./pages/landing-page/LandingPage";
 import PublicPage from "./pages/public-page/PublicPage";
 import ProfileDashboard from "./pages/profile-dashboard/ProfileDashboard";
-import Callback from "./Callback";
-import PrivateRoute from "./PrivateRoute";
+import Callback from "./auth/Callback";
+import PrivateRoute from "./auth/PrivateRoute";
 import PageNotAuthorized from "./pages/error-pages/not-authorized/PageNotAuthorized";
 import PageNotFound from "./pages/error-pages/404/PageNotFound";
 import PrivatePolicy from "./pages/misc-pages/private-policy/PrivatePolicy";
 
-import auth0Client from "./Auth";
+import auth0Client from "./auth/Auth";
 
 class App extends React.Component {
   state = {
@@ -26,11 +26,10 @@ class App extends React.Component {
     }
     try {
       await auth0Client.silentAuth();
-      this.forceUpdate();
+      this.setState({ checkingSession: false });
     } catch (err) {
       if (err.error !== "login_required") console.warn(err.error);
     }
-    this.setState({ checkingSession: false });
   }
 
   render() {
