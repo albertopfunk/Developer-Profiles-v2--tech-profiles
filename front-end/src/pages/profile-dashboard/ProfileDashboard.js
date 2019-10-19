@@ -8,6 +8,8 @@ import UserCard from "../../components/user-cards/user-card/UserCard";
 function ProfileDashboard() {
 
   const [userId, setUserId] = useState(0);
+  const [isNewUser, setIsNewUser] = useState(null);
+
 
   const [firstNameInput, setFirstNameInput] = useState("");
   const [lastNameInput, setLastNameInput] = useState("");
@@ -16,15 +18,64 @@ function ProfileDashboard() {
   const [lastNameDisplay, setLastNameDisplay] = useState("");
 
 
-  async function getIt() {
-    const { email } = auth0Client.getProfile();
-    const user = await axios.post(`${process.env.REACT_APP_SERVER}/users/new`, {email})
+  async function dashboardInit() {
+
+    const userProfile = auth0Client.getProfile();
+    const { email, sub } = userProfile
+
+    let firstName = "";
+    let lastName = "";
+    
+    if (sub.includes("google")) {
+      console.log("===GOOGLE===")
+      console.log(userProfile.given_name)
+      firstName = userProfile.given_name;
+      console.log(userProfile.family_name)
+      lastName = userProfile.family_name;
+    }
+    if (sub.includes("github")) {
+      console.log("===GITHUB===")
+      const userFullNameArr = userProfile.name.split(" ");
+      console.log(userFullNameArr[0])
+      firstName = userFullNameArr[0];
+      console.log(userFullNameArr[1])
+      lastName = userFullNameArr[1];
+    }
+    if (sub.includes("auth0")) {
+      console.log("===AUTH0===")
+    }
+
+    const user = await axios.post(`${process.env.REACT_APP_SERVER}/users/new`, {
+      email,
+      first_name: firstName,
+      last_name: lastName
+    })
+
     const {status, data} = user;
+    
+    console.log("============")
     console.log(status, data)
+    console.log("============")
+    console.log("============")
+    console.log(data.first_name)
+    console.log(data.last_name)
+    console.log("============")
+    
+    status === 201 ? setIsNewUser(true) : setIsNewUser(false)
+
+    // only thing that needs to be accessed by all dashboard components
+    // maybe use session for user info to avoid api calls
     setUserId(data.id)
+
+
+    // not part of init
     setFirstNameDisplay(data.first_name)
     setLastNameDisplay(data.last_name)
   }
+
+  console.log("NEW USER?", isNewUser)
+
+
 
   async function editName(e) {
     e.preventDefault();
@@ -44,7 +95,7 @@ function ProfileDashboard() {
   return (
     <Main>
       <h1>Helloo Dashboard</h1>
-      <button onClick={getIt}>PROFILE</button>
+      <button onClick={dashboardInit}>PROFILE</button>
       <br/>
       <h2>User Name Display</h2>
       <p>{firstNameDisplay}</p>
