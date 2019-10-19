@@ -1,13 +1,12 @@
-import React from 'react';
+import React from "react";
 import styled from "styled-components";
-
 
 function LandingPage() {
   return (
     <Main>
       <h1>Helloo EveryBody</h1>
     </Main>
-  )
+  );
 }
 
 const Main = styled.main`

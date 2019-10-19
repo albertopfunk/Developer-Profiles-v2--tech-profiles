@@ -16,7 +16,6 @@ import UserExtras from "../user-extras/UserExtras";
 // codepen link?
 // share profile?
 
-
 // missing aria
 /*
 https://www.w3.org/TR/wai-aria-practices/examples/feed/feedDisplay.html
@@ -32,7 +31,6 @@ Page Up: Move focus to previous article.
 Control + End: Move focus to the first focusable element after the feed.
 Control + Home: Move focus to the first focusable element before the feed.
 */
-
 
 // Test Ideas
 // renders with user info(name, location) or replacement UI

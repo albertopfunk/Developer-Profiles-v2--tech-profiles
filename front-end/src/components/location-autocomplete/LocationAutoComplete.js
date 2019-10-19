@@ -21,7 +21,7 @@ class LocationAutoComplete extends React.Component {
 
   // Tests
   // focusOnFirstOption with down arrow key focuses on first <li>
-    // only runs when there are <li>s present
+  // only runs when there are <li>s present
   // focusOnFirstOption with esc key resets filter with resetFilter()
   focusOnFirstOption = e => {
     if (e.keyCode === 40) {
@@ -88,10 +88,10 @@ class LocationAutoComplete extends React.Component {
   // closes combobox and removes <li> when no characters are found on input change, i.e blank/spaces
   // calls Autocomplete API on input change, sends current input
   // Autocomplete API returns an array of predictions based on input, or an empty array based on input if no locations found
-    // they are immediately mapped to extract the name and ID of each prediction
+  // they are immediately mapped to extract the name and ID of each prediction
   // autoComplete: predictions, adds each prediction to autoComplete state which is used by <li>s
   // isUsingCombobox: true opens combobox, even is array is empty(
-    // use this for aria-describeby, i.e 'there are x location predictions available for you')
+  // use this for aria-describeby, i.e 'there are x location predictions available for you')
   onLocationChange = async e => {
     const { name, value } = e.target;
     this.setState({ [name]: value });
@@ -118,7 +118,6 @@ class LocationAutoComplete extends React.Component {
       console.error(`${err.response.data.message} =>`, err);
     }
   };
-
 
   // Tests
   // autoComplete: [], should remove all <li> from UI

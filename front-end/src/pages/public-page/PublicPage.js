@@ -42,11 +42,13 @@ class PublicPage extends Component {
       this.state.isUIUXChecked !== nextState.isUIUXChecked ||
       this.state.isIOSChecked !== nextState.isIOSChecked ||
       this.state.isAndroidChecked !== nextState.isAndroidChecked ||
-      this.state.isUsingCurrLocationFilter !== nextState.isUsingCurrLocationFilter ||
+      this.state.isUsingCurrLocationFilter !==
+        nextState.isUsingCurrLocationFilter ||
       this.state.selectedWithinMiles !== nextState.selectedWithinMiles ||
       this.state.chosenLocationLat !== nextState.chosenLocationLat ||
       this.state.chosenLocationLon !== nextState.chosenLocationLon ||
-      this.state.isUsingRelocateToFilter !== nextState.isUsingRelocateToFilter ||
+      this.state.isUsingRelocateToFilter !==
+        nextState.isUsingRelocateToFilter ||
       this.state.chosenRelocateTo !== nextState.chosenRelocateTo ||
       this.state.isUsingSortByChoice !== nextState.isUsingSortByChoice ||
       this.state.sortByChoice !== nextState.sortByChoice
@@ -63,24 +65,27 @@ class PublicPage extends Component {
     // }
 
     try {
-      const users = await axios.get(`${process.env.REACT_APP_SERVER}/users/infinite`, {
-        params: {
-          usersPage: this.state.usersPage,
-          isUsinginfinite,
-          isWebDevChecked: this.state.isWebDevChecked,
-          isUIUXChecked: this.state.isUIUXChecked,
-          isIOSChecked: this.state.isIOSChecked,
-          isAndroidChecked: this.state.isAndroidChecked,
-          isUsingCurrLocationFilter: this.state.isUsingCurrLocationFilter,
-          selectedWithinMiles: this.state.selectedWithinMiles,
-          chosenLocationLat: this.state.chosenLocationLat,
-          chosenLocationLon: this.state.chosenLocationLon,
-          isUsingRelocateToFilter: this.state.isUsingRelocateToFilter,
-          chosenRelocateTo: this.state.chosenRelocateTo,
-          isUsingSortByChoice: this.state.isUsingSortByChoice,
-          sortByChoice: this.state.sortByChoice
+      const users = await axios.get(
+        `${process.env.REACT_APP_SERVER}/users/infinite`,
+        {
+          params: {
+            usersPage: this.state.usersPage,
+            isUsinginfinite,
+            isWebDevChecked: this.state.isWebDevChecked,
+            isUIUXChecked: this.state.isUIUXChecked,
+            isIOSChecked: this.state.isIOSChecked,
+            isAndroidChecked: this.state.isAndroidChecked,
+            isUsingCurrLocationFilter: this.state.isUsingCurrLocationFilter,
+            selectedWithinMiles: this.state.selectedWithinMiles,
+            chosenLocationLat: this.state.chosenLocationLat,
+            chosenLocationLon: this.state.chosenLocationLon,
+            isUsingRelocateToFilter: this.state.isUsingRelocateToFilter,
+            chosenRelocateTo: this.state.chosenRelocateTo,
+            isUsingSortByChoice: this.state.isUsingSortByChoice,
+            sortByChoice: this.state.sortByChoice
+          }
         }
-      });
+      );
 
       if (isUsinginfinite) {
         if (users.data.length === 0) {
@@ -101,7 +106,7 @@ class PublicPage extends Component {
           filtersLoading: false,
           noMoreUsers: false
         });
-        window.scrollTo(0,0);
+        window.scrollTo(0, 0);
       }
     } catch (err) {
       console.error(`${err.response.data.message} =>`, err);
@@ -145,7 +150,7 @@ class PublicPage extends Component {
 }
 
 const Main = styled.main`
-  padding-top: 100px; 
+  padding-top: 100px;
   background-color: lightblue;
 `;
 

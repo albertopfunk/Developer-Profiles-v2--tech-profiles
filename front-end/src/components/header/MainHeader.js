@@ -1,7 +1,7 @@
-import React from 'react'
+import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import HeaderNav from '../navigation/HeaderNav';
+import HeaderNav from "../navigation/HeaderNav";
 
 function MainHeader() {
   return (
@@ -9,7 +9,7 @@ function MainHeader() {
       <Link to="/">Developer Profiles</Link>
       <HeaderNav />
     </Header>
-  )
+  );
 }
 
 const Header = styled.header`
@@ -26,4 +26,4 @@ const Header = styled.header`
   justify-content: space-between;
 `;
 
-export default MainHeader
+export default MainHeader;

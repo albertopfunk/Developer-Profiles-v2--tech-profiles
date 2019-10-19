@@ -1,13 +1,12 @@
-import React from 'react'
+import React from "react";
 import styled from "styled-components";
-
 
 function PageNotAuthorized() {
   return (
     <Main>
       <h1>Page Not Authorized!</h1>
     </Main>
-  )
+  );
 }
 
 const Main = styled.main`
@@ -17,4 +16,4 @@ const Main = styled.main`
   background-color: pink;
 `;
 
-export default PageNotAuthorized
+export default PageNotAuthorized;

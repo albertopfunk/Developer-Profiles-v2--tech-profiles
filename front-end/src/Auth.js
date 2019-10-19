@@ -1,4 +1,4 @@
-import auth0 from 'auth0-js';
+import auth0 from "auth0-js";
 
 class Auth {
   constructor() {
@@ -7,8 +7,8 @@ class Auth {
       audience: process.env.REACT_APP_AUTH0_AUDIENCE,
       clientID: process.env.REACT_APP_AUTH0_CLIENT_ID,
       redirectUri: process.env.REACT_APP_AUTH_REDIRECT,
-      responseType: 'id_token',
-      scope: 'openid profile email'
+      responseType: "id_token",
+      scope: "openid profile email"
     });
 
     this.getProfile = this.getProfile.bind(this);
@@ -16,6 +16,8 @@ class Auth {
     this.isAuthenticated = this.isAuthenticated.bind(this);
     this.signIn = this.signIn.bind(this);
     this.signOut = this.signOut.bind(this);
+    this.setSession = this.setSession.bind(this);
+    this.silentAuth = this.silentAuth.bind(this);
   }
 
   getProfile() {
@@ -41,18 +43,33 @@ class Auth {
         if (!authResult || !authResult.idToken) {
           return reject(err);
         }
-        this.idToken = authResult.idToken;
-        this.profile = authResult.idTokenPayload;
-        this.expiresAt = authResult.idTokenPayload.exp * 1000;
+        this.setSession(authResult);
         resolve();
       });
-    })
+    });
+  }
+
+  setSession(authResult) {
+    this.idToken = authResult.idToken;
+    this.profile = authResult.idTokenPayload;
+    this.expiresAt = authResult.idTokenPayload.exp * 1000;
   }
 
   signOut() {
-    this.idToken = null;
-    this.profile = null;
-    this.expiresAt = null;
+    this.auth0.logout({
+      returnTo: process.env.REACT_APP_HOMEPAGE,
+      clientID: process.env.REACT_APP_AUTH0_CLIENT_ID
+    });
+  }
+
+  silentAuth() {
+    return new Promise((resolve, reject) => {
+      this.auth0.checkSession({}, (err, authResult) => {
+        if (err) return reject(err);
+        this.setSession(authResult);
+        resolve();
+      });
+    });
   }
 }
 

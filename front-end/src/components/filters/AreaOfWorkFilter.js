@@ -1,10 +1,10 @@
 import React from "react";
 
 // Additional Area of Work
-  // AR/VR
-  // Blockchain
-  // Data Science
-  // AI
+// AR/VR
+// Blockchain
+// Data Science
+// AI
 
 function AreaOfWorkFilter(props) {
   function toggleAreaOfWorkCheckbox(areaOfWork) {

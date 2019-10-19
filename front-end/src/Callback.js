@@ -1,18 +1,16 @@
-import React, {Component} from 'react';
+import React, { Component } from "react";
 import styled from "styled-components";
-import {withRouter} from 'react-router-dom';
-import auth0Client from './Auth';
+import { withRouter } from "react-router-dom";
+import auth0Client from "./Auth";
 
 class Callback extends Component {
   async componentDidMount() {
     await auth0Client.handleAuthentication();
-    this.props.history.replace('/dashboard');
+    this.props.history.replace("/dashboard");
   }
 
   render() {
-    return (
-      <Main>Loading profile...</Main>
-    );
+    return <Main>Loading profile...</Main>;
   }
 }
 

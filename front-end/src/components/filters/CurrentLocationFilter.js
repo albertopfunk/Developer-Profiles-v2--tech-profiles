@@ -16,7 +16,7 @@ class CurrentLocationFilter extends React.Component {
     this.setState({ [e.target.name]: e.target.value });
   };
 
-  // 
+  //
   chooseDistanceOnKeyUp = e => {
     if (
       e.keyCode === 37 ||
@@ -48,9 +48,12 @@ class CurrentLocationFilter extends React.Component {
     }
 
     try {
-      const response = await axios.post(`${process.env.REACT_APP_SERVER}/api/gio`, {
-        placeId: id
-      });
+      const response = await axios.post(
+        `${process.env.REACT_APP_SERVER}/api/gio`,
+        {
+          placeId: id
+        }
+      );
       this.props.updateUsers({
         usersPage: 1,
         isUsingCurrLocationFilter: true,

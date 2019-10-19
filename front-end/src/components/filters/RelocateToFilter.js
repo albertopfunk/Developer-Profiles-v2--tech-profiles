@@ -3,7 +3,6 @@ import React from "react";
 import LocationAutoComplete from "../location-autocomplete/LocationAutoComplete";
 
 function RelocateToFilter(props) {
-
   // Tests
   // calls updateUsers with correct chosen location to update users
   // chosenRelocateTo, correct chosen location name
