@@ -8,8 +8,6 @@ import UserCard from "../../components/user-cards/user-card/UserCard";
 function ProfileDashboard() {
 
   const [userId, setUserId] = useState(0);
-  const [isNewUser, setIsNewUser] = useState(null);
-
 
   const [firstNameInput, setFirstNameInput] = useState("");
   const [lastNameInput, setLastNameInput] = useState("");
@@ -21,70 +19,46 @@ function ProfileDashboard() {
   async function dashboardInit() {
 
     const userProfile = auth0Client.getProfile();
-    const { email, sub } = userProfile
+    const { email } = userProfile
+    const user = await axios.get(`${process.env.REACT_APP_SERVER}/users/${email}`)
+    const {
+        id,
+        image,
+        public_email: publicEmail,
+        first_name: firstName,
+        last_name: lastName,
+        area_of_work: areaOfWork,
+        desired_title: title,
 
-    let firstName = "";
-    let lastName = "";
-    
-    if (sub.includes("google")) {
-      console.log("===GOOGLE===")
-      console.log(userProfile.given_name)
-      firstName = userProfile.given_name;
-      console.log(userProfile.family_name)
-      lastName = userProfile.family_name;
-    }
-    if (sub.includes("github")) {
-      console.log("===GITHUB===")
-      const userFullNameArr = userProfile.name.split(" ");
-      console.log(userFullNameArr[0])
-      firstName = userFullNameArr[0];
-      console.log(userFullNameArr[1])
-      lastName = userFullNameArr[1];
-    }
-    if (sub.includes("auth0")) {
-      console.log("===AUTH0===")
-    }
+        current_location_name: currentLocation,
+        github: github,
+        linkedin: linkedin,
+        portfolio: portfolio,
+        
+        interested_location_names: interestedLocations,
+        summary: summary,
+        top_skills: topSkills,
+        additional_skills: additionalSkills,
 
-    const user = await axios.post(`${process.env.REACT_APP_SERVER}/users/new`, {
-      email,
-      first_name: firstName,
-      last_name: lastName
-    })
-
-    const {status, data} = user;
-    
-    console.log("============")
-    console.log(status, data)
-    console.log("============")
-    console.log("============")
-    console.log(data.first_name)
-    console.log(data.last_name)
-    console.log("============")
-    
-    status === 201 ? setIsNewUser(true) : setIsNewUser(false)
-
-    // only thing that needs to be accessed by all dashboard components
-    // maybe use session for user info to avoid api calls
-    setUserId(data.id)
+    } = user.data;
 
 
-    // not part of init
-    setFirstNameDisplay(data.first_name)
-    setLastNameDisplay(data.last_name)
+    setUserId(id)
+
+    setFirstNameDisplay(firstName)
+    setLastNameDisplay(lastName)
   }
-
-  console.log("NEW USER?", isNewUser)
 
 
 
   async function editName(e) {
     e.preventDefault();
+    
     const editUser = await axios.put(`${process.env.REACT_APP_SERVER}/users/${userId}`, {
       first_name: firstNameInput,
       last_name: lastNameInput
     });
 
-    // how you can update UI and UserCard
     console.log(editUser)
     const editedUser = editUser.data
     setFirstNameDisplay(editedUser.first_name)

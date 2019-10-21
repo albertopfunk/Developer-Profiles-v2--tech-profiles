@@ -44,11 +44,23 @@ class App extends React.Component {
           <Route path="/profiles">
             <PublicPage />
           </Route>
-          <Route path="/dashboard">
+
+
+          <Route exact path="/dashboard">
             <PrivateRoute checkingSession={this.state.checkingSession}>
               <ProfileDashboard />
             </PrivateRoute>
           </Route>
+
+          <Route path="/dashboard/new">
+            <PrivateRoute checkingSession={this.state.checkingSession}>
+
+              <PageNotFound />
+
+            </PrivateRoute>
+          </Route>
+
+
           <Route path="/private-policy">
             <PrivatePolicy />
           </Route>
