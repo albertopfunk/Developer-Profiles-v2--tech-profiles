@@ -1,6 +1,6 @@
 import React from "react";
 import { Route, Switch, withRouter } from "react-router-dom";
-import { GlobalStyles } from "./global-styles/GlobalStyles";
+import { GlobalStyles } from "./global/styles/GlobalStyles";
 
 import MainHeader from "./components/header/MainHeader";
 import LandingPage from "./pages/landing-page/LandingPage";
@@ -44,23 +44,11 @@ class App extends React.Component {
           <Route path="/profiles">
             <PublicPage />
           </Route>
-
-
-          <Route exact path="/dashboard">
+          <Route path="/dashboard">
             <PrivateRoute checkingSession={this.state.checkingSession}>
               <ProfileDashboard />
             </PrivateRoute>
           </Route>
-
-          <Route path="/dashboard/new">
-            <PrivateRoute checkingSession={this.state.checkingSession}>
-
-              <PageNotFound />
-
-            </PrivateRoute>
-          </Route>
-
-
           <Route path="/private-policy">
             <PrivatePolicy />
           </Route>
