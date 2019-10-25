@@ -29,10 +29,12 @@ class App extends React.Component {
       this.setState({ checkingSession: false });
     } catch (err) {
       if (err.error === "login_required") {
-        this.props.history.replace("/authorize")
+        if (this.props.location.pathname.includes("dashboard")) {
+          this.props.history.replace("/authorize");
+        }
       } else {
         console.error("Silent Auth Failed", err.error);
-        this.props.history.replace("/")
+        this.props.history.replace("/");
       }
     }
   }
@@ -49,7 +51,7 @@ class App extends React.Component {
           <Route path="/profiles">
             <PublicPage />
           </Route>
-          <Route path="/dashboard">
+          <Route path="/profile-dashboard">
             <PrivateRoute checkingSession={this.state.checkingSession}>
               <ProfileDashboard />
             </PrivateRoute>

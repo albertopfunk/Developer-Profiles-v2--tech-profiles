@@ -36,9 +36,9 @@ class Callback extends Component {
       const { status } = user;
 
       if (status === 201) {
-        this.props.history.replace("/dashboard/new");
+        this.props.history.replace("/profile-dashboard/new");
       } else if (status === 200) {
-        this.props.history.replace("/dashboard");
+        this.props.history.replace("/profile-dashboard");
       } else {
         this.props.history.replace("/");
       }

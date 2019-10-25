@@ -14,7 +14,7 @@ function HeaderNav(props) {
       <Link to="/profiles">Profiles</Link>
       {auth0Client.isAuthenticated() ? (
         <>
-          <Link to="/dashboard">Dashboard</Link>
+          <Link to="/profile-dashboard">Dashboard</Link>
           <button onClick={() => signOut()}>Sign Out</button>
         </>
       ) : (
