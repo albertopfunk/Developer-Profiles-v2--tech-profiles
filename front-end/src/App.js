@@ -28,7 +28,12 @@ class App extends React.Component {
       await auth0Client.silentAuth();
       this.setState({ checkingSession: false });
     } catch (err) {
-      if (err.error !== "login_required") console.warn(err.error);
+      if (err.error === "login_required") {
+        this.props.history.replace("/authorize")
+      } else {
+        console.error("Silent Auth Failed", err.error);
+        this.props.history.replace("/")
+      }
     }
   }
 

@@ -1,64 +1,67 @@
-import React, {useState} from 'react'
+import React, { useState, useContext } from "react";
 import styled from "styled-components";
-import axios from "axios";
 
-import UserCard from '../../../components/user-cards/user-card/UserCard';
-
+import UserCard from "../../../components/user-cards/user-card/UserCard";
+import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
 
 function PersonalInfo() {
-  console.log("OIOI")
-
-  
-  const [userId, setUserId] = useState(0);
+  const { loadingUser, user, editProfile } = useContext(ProfileContext);
 
   const [firstNameInput, setFirstNameInput] = useState("");
   const [lastNameInput, setLastNameInput] = useState("");
 
-  const [firstNameDisplay, setFirstNameDisplay] = useState("");
-  const [lastNameDisplay, setLastNameDisplay] = useState("");
-
-
   async function editName(e) {
     e.preventDefault();
 
-    setUserId(1)
-    
-    const editUser = await axios.put(`${process.env.REACT_APP_SERVER}/users/${userId}`, {
+    const inputs = {
       first_name: firstNameInput,
       last_name: lastNameInput
-    });
+    };
 
-    console.log(editUser)
-    const editedUser = editUser.data
-    setFirstNameDisplay(editedUser.first_name)
-    setLastNameDisplay(editedUser.last_name)
+    editProfile(inputs);
+    setFirstNameInput("");
+    setLastNameInput("");
   }
 
-
+  console.log("P-INFO RENDER STATE", user);
+  if (loadingUser) {
+    return <h1>Loading...</h1>;
+  }
   return (
     <Main>
       <h2>User Name Display</h2>
-      <p>{firstNameDisplay}</p>
-      <p>{lastNameDisplay}</p>
+      <p>{user.first_name}</p>
+      <p>{user.last_name}</p>
 
       <form onSubmit={e => editName(e)}>
         <label>{firstNameInput || "Enter First Name"}</label>
-        <input type="text" placeholder="First Name" value={firstNameInput} onChange={e => setFirstNameInput(e.target.value)} /><br/>
+        <input
+          type="text"
+          placeholder="First Name"
+          value={firstNameInput}
+          onChange={e => setFirstNameInput(e.target.value)}
+        />
+        <br />
         <label>{lastNameInput || "Enter Last Name"}</label>
-        <input type="text" placeholder="Last Name" value={lastNameInput} onChange={e => setLastNameInput(e.target.value)} />
+        <input
+          type="text"
+          placeholder="Last Name"
+          value={lastNameInput}
+          onChange={e => setLastNameInput(e.target.value)}
+        />
         <button>EDIT NAME</button>
       </form>
-      <br/>
-      <hr/>
+      <br />
+      <hr />
       <UserCard
         usersLength={1}
         index={1}
-        id={userId}
+        id={user.id}
         // areaOfWork={user.area_of_work}
         // email={user.public_email}
         // image={user.image}
-        firstName={firstNameDisplay}
-        lastName={lastNameDisplay}
+        firstName={user.first_name}
+        lastName={user.last_name}
         // currentLocation={user.current_location_name}
         // summary={user.summary}
         // title={user.desired_title}
@@ -70,7 +73,7 @@ function PersonalInfo() {
         // interestedLocations={user.interested_location_names}
       />
     </Main>
-  )
+  );
 }
 
 const Main = styled.main`
@@ -80,4 +83,4 @@ const Main = styled.main`
   background-color: pink;
 `;
 
-export default PersonalInfo
+export default PersonalInfo;
