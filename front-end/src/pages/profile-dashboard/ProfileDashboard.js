@@ -42,7 +42,6 @@ function ProfileDashboard() {
     setUser(newUser.data);
   }
 
-  console.log("DASH RENDER STATE");
   return (
     <Main>
       <header>
