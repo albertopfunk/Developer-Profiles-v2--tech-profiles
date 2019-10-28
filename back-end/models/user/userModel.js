@@ -13,8 +13,8 @@ module.exports = {
 };
 
 async function insert(newUser) {
-  const [email] = await db("users").insert(newUser);
-  return getSingleByEmail(email);
+  await db("users").insert(newUser);
+  return;
 }
 
 function getAll() {
