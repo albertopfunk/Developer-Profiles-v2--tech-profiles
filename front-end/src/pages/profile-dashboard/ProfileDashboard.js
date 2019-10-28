@@ -24,8 +24,8 @@ function ProfileDashboard() {
     const { email } = userProfile;
 
     try {
-      const user = await axios.get(
-        `${process.env.REACT_APP_SERVER}/users/${email}`
+      const user = await axios.post(
+        `${process.env.REACT_APP_SERVER}/users/get-single`, {email}
       );
       setUser(user.data);
       setLoadingUser(false);
@@ -33,6 +33,16 @@ function ProfileDashboard() {
       console.error(`${err.response.data.message} =>`, err);
     }
   }
+  //   try {
+  //     const user = await axios.get(
+  //       `${process.env.REACT_APP_SERVER}/users/${email}`
+  //     );
+  //     setUser(user.data);
+  //     setLoadingUser(false);
+  //   } catch (err) {
+  //     console.error(`${err.response.data.message} =>`, err);
+  //   }
+  // }
 
   async function editProfile(input) {
     const newUser = await axios.put(

@@ -16,11 +16,13 @@ class Callback extends Component {
     if (sub.includes("google")) {
       firstName = userProfile.given_name;
       lastName = userProfile.family_name;
-    }
-    if (sub.includes("github")) {
+    } else if (sub.includes("github")) {
       const userFullNameArr = userProfile.name.split(" ");
       firstName = userFullNameArr[0];
       lastName = userFullNameArr[1];
+    } else {
+      firstName = null;
+      lastName = null;
     }
 
     try {

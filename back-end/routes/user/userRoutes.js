@@ -64,14 +64,9 @@ const server = express.Router();
 // checks for existing user by email(authO free plan creates doubles) or id
 // returns inserted user object
 server.post("/new", async (req, res) => {
-  let id = 0;
-  if (req.body.email) {
-    id = req.body.email;
-  } else if (req.body.id) {
-    id = req.body.id;
-  }
+  const {email} = req.body;
 
-  const doesUserExist = await userModel.getSingle(id);
+  const doesUserExist = await userModel.getSingleTemp(email);
   if (doesUserExist) {
     res.status(200).json(doesUserExist);
   } else {
@@ -148,6 +143,21 @@ server.get("/:id", async (req, res) => {
   const { id } = req.params;
   try {
     const getSingleUser = await userModel.getSingle(id);
+    getSingleUser
+      ? res.json(getSingleUser)
+      : res.status(404).json({
+          message: `The user with the specified ID of '${id}' does not exist`
+        });
+  } catch (err) {
+    res.status(500).json({ message: "The user could not be retrieved", err });
+  }
+});
+
+
+server.post("/get-single", async (req, res) => {
+  const { email } = req.body;
+  try {
+    const getSingleUser = await userModel.getSingleTemp(email);
     getSingleUser
       ? res.json(getSingleUser)
       : res.status(404).json({

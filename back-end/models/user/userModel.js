@@ -7,6 +7,7 @@ module.exports = {
   getAll,
   getAllFiltered,
   getSingle,
+  getSingleTemp,
   update,
   remove
 };
@@ -105,6 +106,12 @@ function getSingle(id) {
   return db("users")
     .where({ email: id })
     .orWhere({ id })
+    .first();
+}
+
+function getSingleTemp(id) {
+  return db("users")
+    .where({ email: id })
     .first();
 }
 
