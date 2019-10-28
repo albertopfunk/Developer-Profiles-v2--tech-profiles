@@ -33,16 +33,6 @@ function ProfileDashboard() {
       console.error(`${err.response.data.message} =>`, err);
     }
   }
-  //   try {
-  //     const user = await axios.get(
-  //       `${process.env.REACT_APP_SERVER}/users/${email}`
-  //     );
-  //     setUser(user.data);
-  //     setLoadingUser(false);
-  //   } catch (err) {
-  //     console.error(`${err.response.data.message} =>`, err);
-  //   }
-  // }
 
   async function editProfile(input) {
     const newUser = await axios.put(

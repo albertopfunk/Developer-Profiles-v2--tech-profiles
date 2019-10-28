@@ -7,7 +7,7 @@ module.exports = {
   getAll,
   getAllFiltered,
   getSingle,
-  getSingleTemp,
+  getSingleByEmail,
   update,
   remove
 };
@@ -104,14 +104,13 @@ async function getAllFiltered(filters) {
 
 function getSingle(id) {
   return db("users")
-    .where({ email: id })
-    .orWhere({ id })
+    .where({ id })
     .first();
 }
 
-function getSingleTemp(id) {
+function getSingleByEmail(email) {
   return db("users")
-    .where({ email: id })
+    .where({ email })
     .first();
 }
 
@@ -119,7 +118,7 @@ async function update(id, body) {
   await db("users")
     .where({ id })
     .update(body);
-    return getSingle(id);
+  return getSingle(id);
 }
 
 function remove(id) {

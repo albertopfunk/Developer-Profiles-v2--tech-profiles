@@ -61,12 +61,12 @@ const server = express.Router();
 //----------------------------------------------------------------------
 
 // does not expect anything
-// checks for existing user by email(authO free plan creates doubles) or id
+// checks for existing user by email(authO free plan creates doubles)
 // returns inserted user object
 server.post("/new", async (req, res) => {
-  const {email} = req.body;
+  const { email } = req.body;
 
-  const doesUserExist = await userModel.getSingleTemp(email);
+  const doesUserExist = await userModel.getSingleByEmail(email);
   if (doesUserExist) {
     res.status(200).json(doesUserExist);
   } else {
@@ -153,11 +153,12 @@ server.get("/:id", async (req, res) => {
   }
 });
 
-
+// expects email of user in body
+// returns user object
 server.post("/get-single", async (req, res) => {
   const { email } = req.body;
   try {
-    const getSingleUser = await userModel.getSingleTemp(email);
+    const getSingleUser = await userModel.getSingleByEmail(email);
     getSingleUser
       ? res.json(getSingleUser)
       : res.status(404).json({
