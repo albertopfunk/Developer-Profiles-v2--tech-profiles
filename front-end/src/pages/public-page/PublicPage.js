@@ -22,7 +22,7 @@ class PublicPage extends Component {
     chosenLocationLat: 0,
     chosenLocationLon: 0,
     isUsingRelocateToFilter: false,
-    chosenRelocateTo: "",
+    chosenRelocateToArr: [],
     isUsingSortByChoice: false,
     sortByChoice: "acending(oldest-newest)"
   };
@@ -49,7 +49,7 @@ class PublicPage extends Component {
       this.state.chosenLocationLon !== nextState.chosenLocationLon ||
       this.state.isUsingRelocateToFilter !==
         nextState.isUsingRelocateToFilter ||
-      this.state.chosenRelocateTo !== nextState.chosenRelocateTo ||
+      this.state.chosenRelocateToArr !== nextState.chosenRelocateToArr ||
       this.state.isUsingSortByChoice !== nextState.isUsingSortByChoice ||
       this.state.sortByChoice !== nextState.sortByChoice
     ) {
@@ -63,27 +63,25 @@ class PublicPage extends Component {
     // if (!isUsinginfinite) {
     //   this.setState({ filtersLoading: true });
     // }
-
+    console.log("RELOCATEARR", this.state.isUsingRelocateToFilter, this.state.chosenRelocateToArr)
     try {
-      const users = await axios.get(
+      const users = await axios.post(
         `${process.env.REACT_APP_SERVER}/users/infinite`,
         {
-          params: {
-            usersPage: this.state.usersPage,
-            isUsinginfinite,
-            isWebDevChecked: this.state.isWebDevChecked,
-            isUIUXChecked: this.state.isUIUXChecked,
-            isIOSChecked: this.state.isIOSChecked,
-            isAndroidChecked: this.state.isAndroidChecked,
-            isUsingCurrLocationFilter: this.state.isUsingCurrLocationFilter,
-            selectedWithinMiles: this.state.selectedWithinMiles,
-            chosenLocationLat: this.state.chosenLocationLat,
-            chosenLocationLon: this.state.chosenLocationLon,
-            isUsingRelocateToFilter: this.state.isUsingRelocateToFilter,
-            chosenRelocateTo: this.state.chosenRelocateTo,
-            isUsingSortByChoice: this.state.isUsingSortByChoice,
-            sortByChoice: this.state.sortByChoice
-          }
+          usersPage: this.state.usersPage,
+          isUsinginfinite,
+          isWebDevChecked: this.state.isWebDevChecked,
+          isUIUXChecked: this.state.isUIUXChecked,
+          isIOSChecked: this.state.isIOSChecked,
+          isAndroidChecked: this.state.isAndroidChecked,
+          isUsingCurrLocationFilter: this.state.isUsingCurrLocationFilter,
+          selectedWithinMiles: this.state.selectedWithinMiles,
+          chosenLocationLat: this.state.chosenLocationLat,
+          chosenLocationLon: this.state.chosenLocationLon,
+          isUsingRelocateToFilter: this.state.isUsingRelocateToFilter,
+          chosenRelocateToArr: this.state.chosenRelocateToArr,
+          isUsingSortByChoice: this.state.isUsingSortByChoice,
+          sortByChoice: this.state.sortByChoice
         }
       );
 
@@ -131,7 +129,7 @@ class PublicPage extends Component {
   };
 
   render() {
-    // console.log(this.state.users.length);
+    console.log("PUBLIC PAGE", this.state.users.length);
     return (
       <Main>
         <Filters updateUsers={this.updateUsers} />

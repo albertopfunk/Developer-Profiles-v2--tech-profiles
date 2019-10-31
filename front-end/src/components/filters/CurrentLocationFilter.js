@@ -57,7 +57,7 @@ class CurrentLocationFilter extends React.Component {
       this.props.updateUsers({
         usersPage: 1,
         isUsingCurrLocationFilter: true,
-        selectedWithinMiles: this.state.milesWithinInput,
+        selectedWithinMiles: +this.state.milesWithinInput,
         chosenLocationLat: response.data.lat,
         chosenLocationLon: response.data.lng,
         isUsingSortByChoice: true
@@ -97,6 +97,7 @@ class CurrentLocationFilter extends React.Component {
         <LocationAutoComplete
           onChosenLocation={this.onChosenLocation}
           resetLocationFilter={this.resetLocationFilter}
+          singular
         />
       </section>
     );

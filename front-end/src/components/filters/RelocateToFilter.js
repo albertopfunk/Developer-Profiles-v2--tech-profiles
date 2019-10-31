@@ -9,11 +9,11 @@ function RelocateToFilter(props) {
   // usersPage: 1, resets page to 1 when updating users
   // isUsingRelocateToFilter: true, filters users based on this filter being on
   // isUsingSortByChoice: true, each filter turns this on to correctly sort filtered users
-  function onChosenLocation(chosenRelocateTo) {
+  function onChosenLocation(chosenRelocateToArr) {
     props.updateUsers({
       usersPage: 1,
       isUsingRelocateToFilter: true,
-      chosenRelocateTo,
+      chosenRelocateToArr,
       isUsingSortByChoice: true
     });
   }
@@ -21,7 +21,14 @@ function RelocateToFilter(props) {
   // Tests
   // calls updateUsers to update users
   // isUsingRelocateToFilter: false, filters users based on this filter being off
-  function resetLocationFilter() {
+  function resetLocationFilter(chosenRelocateToArr) {
+    if (chosenRelocateToArr) {
+      props.updateUsers({
+        isUsingRelocateToFilter: true,
+        chosenRelocateToArr
+      });
+      return;
+    }
     props.updateUsers({
       isUsingRelocateToFilter: false
     });

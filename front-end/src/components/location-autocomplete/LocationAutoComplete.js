@@ -5,8 +5,7 @@ class LocationAutoComplete extends React.Component {
   state = {
     input: "",
     autoComplete: [],
-    chosenName: "",
-    chosenId: "",
+    chosenNames: [],
     isUsingCombobox: false,
     currentFocusedOption: ""
   };
@@ -126,14 +125,51 @@ class LocationAutoComplete extends React.Component {
   // chosenName: name, should make chosenName UI appear, with the correct chosen location and reset btn
   // calls onChosenLocation to change user based on this filter being on and chosen location(name, id)
   chooseLocation = (name, id) => {
+
+    // need to account for 1 location(current) and
+    // +1 locations(skills/relocateTo)
+    // on back end, relocateTo will filter with array
+    // current location will stay the same
+    // you can send array to both, and set state differently here
+    // 1s will empty the array
+
+    console.log(this.props.singular)
+
+    
+    
+    let newChosenNamesState = [...this.state.chosenNames];
+    
+    if (newChosenNamesState.includes(name)) {
+      this.setState({
+        autoComplete: [],
+        input: "",
+        isUsingCombobox: false
+      });
+      return;
+    }
+    
+    // for current locations
+    if (this.props.singular) {
+      this.setState({
+        autoComplete: [],
+        input: name,
+        chosenNames: [name],
+        isUsingCombobox: false
+      });
+      this.props.onChosenLocation(name, id);
+      return;
+    }
+
+
+    // for skills and relocate to
+    newChosenNamesState.push(name);
     this.setState({
       autoComplete: [],
-      input: name,
-      chosenName: name,
-      chosenId: id,
+      input: "",
+      chosenNames: newChosenNamesState,
       isUsingCombobox: false
     });
-    this.props.onChosenLocation(name, id);
+    this.props.onChosenLocation(newChosenNamesState);
   };
 
   // Tests
@@ -142,13 +178,31 @@ class LocationAutoComplete extends React.Component {
   // input: "", should remove value from <input>
   // chosenName: "", should make chosenName UI dissapear
   // calls resetLocationFilter to change users based on this filter being off
-  resetFilter = () => {
+  resetFilter = (location) => {
+    if (this.props.singular) {
+      this.setState({
+        chosenNames: [],
+        input: ""
+      });
+      this.props.resetLocationFilter();
+      return;
+    }
+
+    let chosenNamesState = [...this.state.chosenNames]
+    let newChosenNamesState = chosenNamesState.filter(chosenName => {
+      return chosenName !== location;
+    })
+
+    if (newChosenNamesState.length > 0) {
+      this.setState({
+        chosenNames: newChosenNamesState
+      });
+      this.props.resetLocationFilter(newChosenNamesState);
+      return;
+    }
+
     this.setState({
-      autoComplete: [],
-      input: "",
-      chosenName: "",
-      chosenId: "",
-      isUsingCombobox: false
+      chosenNames: []
     });
     this.props.resetLocationFilter();
   };
@@ -229,12 +283,18 @@ class LocationAutoComplete extends React.Component {
         {/* should display correct chosen location */}
         {/* should display btn to reset location combobox */}
         {/* resetting combobox makes chosenName an empty str again so this UI should dissapear onClick of reset btn */}
-        {this.state.chosenName === "" ? null : (
+        {this.state.chosenNames.length === 0 ? null : (
           <aside id="results">
-            {this.state.chosenName}{" "}
-            <button type="reset" onClick={() => this.resetFilter()}>
-              X
-            </button>
+            {this.state.chosenNames.map(chosenName => {
+              return (
+                <div key={chosenName}>
+                  <span>{chosenName}</span>
+                  <button type="reset" onClick={() => this.resetFilter(chosenName)}>
+                    X
+                  </button>
+                </div>
+              )
+            })}
           </aside>
         )}
       </div>
