@@ -1,11 +1,19 @@
 import React from "react";
+import styled from "styled-components";
 
 function PrivatePolicy() {
   return (
-    <div>
+    <Main>
       <h1>Private Policy</h1>
-    </div>
+    </Main>
   );
 }
+
+const Main = styled.main`
+  width: 100%;
+  height: 100vh;
+  padding-top: 100px;
+  background-color: pink;
+`;
 
 export default PrivatePolicy;

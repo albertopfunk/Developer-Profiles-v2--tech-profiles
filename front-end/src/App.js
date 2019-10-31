@@ -34,12 +34,12 @@ class App extends React.Component {
         }
       } else {
         console.error("Silent Auth Failed", err.error);
-        this.props.history.replace("/");
       }
     }
   }
 
   render() {
+    console.log("APP RENDER")
     return (
       <>
         <GlobalStyles />

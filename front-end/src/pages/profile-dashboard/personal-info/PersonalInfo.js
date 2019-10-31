@@ -1,21 +1,19 @@
 import React, { useState, useContext, useEffect } from "react";
 import styled from "styled-components";
 
-import UserCard from "../../../components/user-cards/user-card/UserCard";
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
 import axios from "axios";
 
 function PersonalInfo() {
   const { loadingUser, user, editProfile } = useContext(ProfileContext);
 
-  const [firstNameInput, setFirstNameInput] = useState("");
-  const [lastNameInput, setLastNameInput] = useState("");
-
   const [imageDisplay, setImageDisplay] = useState("");
   const [imageInput, setImageInput] = useState("");
   const [loadingImage, setLoadingImage] = useState(false);
   const [errorImage, setErrorImage] = useState(false);
 
+  const [firstNameInput, setFirstNameInput] = useState("");
+  const [lastNameInput, setLastNameInput] = useState("");
   const [publicEmailInput, setPublicEmailInput] = useState("");
   const [areaOfWorkInput, setAreaOfWorkInput] = useState("");
   const [titleInput, setTitleInput] = useState("");
@@ -29,6 +27,7 @@ function PersonalInfo() {
   });
 
   function loadImage() {
+    console.log("IMAGEE", user.image)
     let image;
     image = user.image;
     image = image.split(",");
@@ -71,8 +70,7 @@ function PersonalInfo() {
   }
 
   async function deleteOldImage(imageId) {
-    let imageToDelete;
-    imageToDelete = imageId;
+    let imageToDelete = imageId;
     imageToDelete = imageToDelete.split(",");
 
     try {
@@ -207,28 +205,6 @@ function PersonalInfo() {
 
         <button>Submit</button>
       </form>
-
-      <br />
-      <hr />
-      <UserCard
-        usersLength={1}
-        index={1}
-        id={user.id}
-        firstName={user.first_name}
-        lastName={user.last_name}
-        image={imageDisplay}
-        email={user.public_email}
-        areaOfWork={user.area_of_work}
-        title={user.desired_title}
-        // currentLocation={user.current_location_name}
-        // summary={user.summary}
-        // topSkills={user.top_skills}
-        // additionalSkills={user.additional_skills}
-        // github={user.github}
-        // linkedin={user.linkedin}
-        // portfolio={user.portfolio}
-        // interestedLocations={user.interested_location_names}
-      />
     </Main>
   );
 }

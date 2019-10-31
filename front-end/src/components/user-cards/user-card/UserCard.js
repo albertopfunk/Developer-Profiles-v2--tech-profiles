@@ -45,6 +45,7 @@ class UserCard extends React.Component {
     interestedLocations: [],
     topSkills: [],
     additionalSkills: [],
+    image: "",
     isCardExpanded: false,
     hasRequestedExtras: false,
     noExtras: false
@@ -54,6 +55,7 @@ class UserCard extends React.Component {
     let interestedLocations = [];
     let topSkills = [];
     let additionalSkills = [];
+    let image = "";
 
     if (this.props.interestedLocations) {
       interestedLocations = this.props.interestedLocations.split("|");
@@ -64,11 +66,17 @@ class UserCard extends React.Component {
     if (this.props.additionalSkills) {
       additionalSkills = this.props.additionalSkills.split(",");
     }
+    if (this.props.image) {
+      image = this.props.image;
+      image = image.split(",");
+      image = image[0];
+    }
 
     this.setState({
       interestedLocations,
       topSkills,
-      additionalSkills
+      additionalSkills,
+      image
     });
   }
 
@@ -129,6 +137,7 @@ class UserCard extends React.Component {
     this.setState({ isCardExpanded: false });
   };
 
+  
   render() {
     const {
       education,
@@ -138,7 +147,8 @@ class UserCard extends React.Component {
       isCardExpanded,
       noExtras,
       topSkills,
-      additionalSkills
+      additionalSkills,
+      image
     } = this.state;
 
     return (
@@ -153,7 +163,7 @@ class UserCard extends React.Component {
         <UserSection>
           <div>
             <div>
-              <UserImage image={this.props.image} />
+              <UserImage image={image} />
 
               <UserInfo
                 firstName={this.props.firstName}

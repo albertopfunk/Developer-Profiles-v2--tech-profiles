@@ -6,23 +6,31 @@ import auth0Client from "./Auth";
 
 class Callback extends Component {
   async componentDidMount() {
-    await auth0Client.handleAuthentication();
+    try {
+      await auth0Client.handleAuthentication();
+    } catch (err) {
+      console.error("Unable to Authorize User", err);
+      this.props.history.replace("/authorize");
+    }
 
     const userProfile = auth0Client.getProfile();
     const { email, sub } = userProfile;
-    let firstName = "";
-    let lastName = "";
+    if (!email || !sub) {
+      console.error("Unable to Get User Profile");
+      this.props.history.replace("/authorize");
+    }
+
+    let firstName = null;
+    let lastName = null;
 
     if (sub.includes("google")) {
       firstName = userProfile.given_name;
       lastName = userProfile.family_name;
-    } else if (sub.includes("github")) {
+    }
+    if (sub.includes("github")) {
       const userFullNameArr = userProfile.name.split(" ");
       firstName = userFullNameArr[0];
       lastName = userFullNameArr[1];
-    } else {
-      firstName = null;
-      lastName = null;
     }
 
     try {
@@ -42,11 +50,12 @@ class Callback extends Component {
       } else if (status === 200) {
         this.props.history.replace("/profile-dashboard");
       } else {
-        this.props.history.replace("/");
+        console.error("Unable to Get User");
+        this.props.history.replace("/authorize");
       }
     } catch (err) {
       console.error(`${err.response.data.message} =>`, err);
-      this.props.history.replace("/");
+      this.props.history.replace("/authorize");
     }
   }
 
