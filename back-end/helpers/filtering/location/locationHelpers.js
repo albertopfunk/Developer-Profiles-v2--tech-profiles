@@ -19,7 +19,7 @@ function locationFilters(locationOptions, users) {
     selectedWithinMiles,
     chosenLocationLat,
     chosenLocationLon,
-    chosenRelocateTo
+    chosenRelocateToArr
   } = locationOptions;
 
   if (isUsingCurrLocationFilter) {
@@ -32,7 +32,7 @@ function locationFilters(locationOptions, users) {
   }
 
   if (isUsingRelocateToFilter) {
-    tempRelocateToUsers = relocateToFilter(users, chosenRelocateTo);
+    tempRelocateToUsers = relocateToFilter(users, chosenRelocateToArr);
   }
 
   users = [...new Set([...tempLocationUsers, ...tempRelocateToUsers])];
@@ -90,14 +90,19 @@ function distanceWithinFilter(lat1, lon1, lat2, lon2, filter) {
   }
 }
 
-function relocateToFilter(users, chosenRelocateTo) {
+function relocateToFilter(users, chosenRelocateToArr) {
   let filteredUsers;
   let filteredUserArr = [];
 
   filteredUsers = users.filter(user => {
     if (user.interested_location_names) {
       filteredUserArr = user.interested_location_names.split("|");
-      return filteredUserArr.includes(chosenRelocateTo);
+
+      // compare filteredUserArr with chosenRelocateToArr
+      return chosenRelocateToArr.some(item => filteredUserArr.includes(item))
+
+      // return filteredUserArr.includes(chosenRelocateToArr);
+
     } else {
       return false;
     }

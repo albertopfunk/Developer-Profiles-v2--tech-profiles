@@ -104,7 +104,7 @@ server.get("/", async (req, res) => {
 // requires ALL filter options on req.query(params), that includes isUsinginfinite and usersPage
 // ALL data should be present with the correct data type
 // returns 14 [user objects]
-server.get(
+server.post(
   "/infinite",
   userMiddleware.validateFilterOptions,
   userMiddleware.getUsersFromCache,
@@ -112,16 +112,17 @@ server.get(
     let start = 0;
     let end = 14;
 
-    const { usersPage } = req.query;
+    const { usersPage } = req.body;
 
     for (let i = 1; i < usersPage; i++) {
       start += 14;
       end += 14;
     }
 
+    
     try {
-      const users = await userModel.getAllFiltered(req.query);
-      // console.log("INFINITE", users.length);
+      const users = await userModel.getAllFiltered(req.body);
+      console.log("/INFINITE", users.length);
       cachedUsersSuccess = userMiddleware.setToCache(users);
       if (cachedUsersSuccess) {
         slicedUsers = users.slice(start, end);
