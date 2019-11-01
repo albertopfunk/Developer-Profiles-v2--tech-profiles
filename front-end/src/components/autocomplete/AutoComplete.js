@@ -166,7 +166,7 @@ class AutoComplete extends React.Component {
       return;
     }
 
-    if (this.props.singular) {
+    if (this.props.single) {
       this.setState({
         autoComplete: [],
         input: name,
