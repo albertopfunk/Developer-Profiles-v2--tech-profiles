@@ -83,7 +83,6 @@ class AutoComplete extends React.Component {
     }
   };
 
-
   // Tests
   // closes combobox and removes <li> when no characters are found on input change, i.e blank/spaces
 
@@ -149,7 +148,6 @@ class AutoComplete extends React.Component {
     }
   };
 
-  
   // Tests
   // autoComplete: [], should remove all <li> from UI
   // isUsingCombobox: false, closes combobox for accessibility
@@ -196,32 +194,29 @@ class AutoComplete extends React.Component {
   // chosenName: "", should make chosenName UI dissapear
   // calls resetInputFilter to change users based on this filter being off
   resetFilter = location => {
-    if (this.props.singular) {
-      this.setState({
-        chosenNames: [],
-        input: ""
+    if (this.props.multiple) {
+      let chosenNamesState = [...this.state.chosenNames];
+      let newChosenNamesState = chosenNamesState.filter(chosenName => {
+        return chosenName !== location;
       });
-      this.props.resetInputFilter();
-      return;
-    }
 
-    let chosenNamesState = [...this.state.chosenNames];
-    let newChosenNamesState = chosenNamesState.filter(chosenName => {
-      return chosenName !== location;
-    });
-
-    if (newChosenNamesState.length === 0) {
-      this.setState({
-        chosenNames: []
-      });
-      this.props.resetInputFilter();
-      return;
+      if (newChosenNamesState.length > 0) {
+        this.setState({
+          chosenNames: newChosenNamesState,
+          autoComplete: [],
+          input: ""
+        });
+        this.props.resetInputFilter(newChosenNamesState);
+        return;
+      }
     }
 
     this.setState({
-      chosenNames: newChosenNamesState
+      chosenNames: [],
+      autoComplete: [],
+      input: ""
     });
-    this.props.resetInputFilter(newChosenNamesState);
+    this.props.resetInputFilter();
   };
 
   render() {
@@ -229,7 +224,7 @@ class AutoComplete extends React.Component {
       <div>
         <div>
           <label htmlFor="search-predictions">
-            {this.props.skills ? 'Choose Skills' : 'Choose Location'}
+            {this.props.skills ? "Choose Skills" : "Choose Location"}
             {/* aria-expanded should be true when any value exists on input(no blank spaces) */}
             {/* aria-activedescendant shows correct focused <li> based on id */}
             {/* onChange sets new predictions based on AutoComplete API, changes <li> */}

@@ -25,19 +25,19 @@ function AboutYou() {
   function onChosenLocation(chosenRelocateToArr) {
     // you can filter these to not show locations that user already has
     console.log("CHOOSE RELOCATE/INTERESTED",chosenRelocateToArr)
-    console.log("CHOOSE RELOCATE/INTERESTED",user.interested_location_names)
+    console.log("CHOOSE RELOCATE/INTERESTED USER",user.interested_location_names)
   }
 
   function resetLocationFilter(chosenRelocateToArr) {
-    console.log("DELETE", chosenRelocateToArr)
+    console.log("DELETE RELOCATE/INTERESTED", chosenRelocateToArr)
   }
 
 
   function onChosenSkill(chosenRelocateToArr) {
     // you can filter these to not show skills that user already has
     console.log("CHOOSE SKILL",chosenRelocateToArr)
-    console.log("CHOOSE SKILL",user.top_skills)
-    console.log("CHOOSE SKILL",user.additional_skills)
+    console.log("CHOOSE SKILL USER",user.top_skills)
+    console.log("CHOOSE SKILL USER",user.additional_skills)
   }
 
   function resetSkillsFilter(chosenRelocateToArr) {
@@ -56,12 +56,15 @@ function AboutYou() {
       <AutoComplete
           onChosenInput={onChosenLocation}
           resetInputFilter={resetLocationFilter}
+          locations
+          multiple
         />
 
       <AutoComplete
           onChosenInput={onChosenSkill}
           resetInputFilter={resetSkillsFilter}
           skills
+          multiple
         />
     </Main>
   );

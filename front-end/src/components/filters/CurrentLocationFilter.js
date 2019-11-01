@@ -98,7 +98,7 @@ class CurrentLocationFilter extends React.Component {
           onChosenInput={this.onChosenLocation}
           resetInputFilter={this.resetLocationFilter}
           locations
-          singular
+          single
         />
       </section>
     );

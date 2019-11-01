@@ -40,6 +40,7 @@ function RelocateToFilter(props) {
         onChosenInput={onChosenLocation}
         resetInputFilter={resetLocationFilter}
         locations
+        multiple
       />
     </section>
   );
