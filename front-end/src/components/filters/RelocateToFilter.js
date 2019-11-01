@@ -1,6 +1,6 @@
 import React from "react";
 
-import LocationAutoComplete from "../location-autocomplete/LocationAutoComplete";
+import AutoComplete from "../autocomplete/AutoComplete";
 
 function RelocateToFilter(props) {
   // Tests
@@ -36,9 +36,10 @@ function RelocateToFilter(props) {
 
   return (
     <section>
-      <LocationAutoComplete
-        onChosenLocation={onChosenLocation}
-        resetLocationFilter={resetLocationFilter}
+      <AutoComplete
+        onChosenInput={onChosenLocation}
+        resetInputFilter={resetLocationFilter}
+        locations
       />
     </section>
   );

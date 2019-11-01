@@ -87,7 +87,7 @@ server.post("/new", async (req, res) => {
 server.get("/", async (req, res) => {
   try {
     const users = await userModel.getAll();
-    // console.log("INIT", users.length);
+    console.log("INIT", users.length);
     cachedUsersSuccess = userMiddleware.setToCache(users);
     if (cachedUsersSuccess) {
       const slicedUsers = users.slice(0, 14);

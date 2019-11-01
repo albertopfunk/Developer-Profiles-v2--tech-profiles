@@ -39,6 +39,24 @@ server.get("/", async (req, res) => {
   }
 });
 
+// expects input
+// returns skill predictions based on input
+server.post("/autocomplete", async (req, res) => {
+  const { skillsInput } = req.body;
+  try {
+    const getAllSkills = await skillsModel.getAllFiltered(skillsInput);
+    if (getAllSkills.length > 10) {
+      let splitSkills = getAllSkills.slice(0, 10);
+      res.json(splitSkills);
+    }
+    res.json(getAllSkills);
+  } catch (err) {
+    res
+      .status(500)
+      .json({ message: "The skill predictions could not be retrieved", err });
+  }
+});
+
 // expects id of existing skill in params
 // returns skill object
 server.get("/:id", async (req, res) => {

@@ -97,12 +97,7 @@ function relocateToFilter(users, chosenRelocateToArr) {
   filteredUsers = users.filter(user => {
     if (user.interested_location_names) {
       filteredUserArr = user.interested_location_names.split("|");
-
-      // compare filteredUserArr with chosenRelocateToArr
       return chosenRelocateToArr.some(item => filteredUserArr.includes(item))
-
-      // return filteredUserArr.includes(chosenRelocateToArr);
-
     } else {
       return false;
     }

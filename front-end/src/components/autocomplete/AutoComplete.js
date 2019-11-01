@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
 
-class LocationAutoComplete extends React.Component {
+class AutoComplete extends React.Component {
   state = {
     input: "",
     autoComplete: [],
@@ -19,9 +19,9 @@ class LocationAutoComplete extends React.Component {
   };
 
   // Tests
-  // focusOnFirstOption with down arrow key focuses on first <li>
+  // down arrow key focuses on first <li>
   // only runs when there are <li>s present
-  // focusOnFirstOption with esc key resets filter with resetFilter()
+  // esc key resets filter with resetFilter()
   focusOnFirstOption = e => {
     if (e.keyCode === 40) {
       e.preventDefault();
@@ -39,9 +39,9 @@ class LocationAutoComplete extends React.Component {
 
   // Tests
   // chooseOnKeyDown with up or down arrow keys moves focus of <li>s respectively with focusOnOption()
-  // chooseOnKeyDown with enter key chooses location with chooseLocation()
+  // chooseOnKeyDown with enter key chooses prediction with choosePrediction()
   // chooseOnKeyDown with esc key resets filter with resetFilter()
-  chooseOnKeyDown = (e, locationName, locationId, index) => {
+  chooseOnKeyDown = (e, name, id, index) => {
     if (e.keyCode === 38) {
       e.preventDefault();
       this.focusOnOption(index, "up");
@@ -51,7 +51,7 @@ class LocationAutoComplete extends React.Component {
       this.focusOnOption(index, "down");
     }
     if (e.keyCode === 13) {
-      this.chooseLocation(locationName, locationId);
+      this.choosePrediction(name, id);
     }
     if (e.keyCode === 27) {
       this.resetFilter();
@@ -83,62 +83,82 @@ class LocationAutoComplete extends React.Component {
     }
   };
 
+
   // Tests
   // closes combobox and removes <li> when no characters are found on input change, i.e blank/spaces
+
+  // if props.skills
+  // calls skills autocomplete API on input change, sends current input
+  // skills autocomplete API returns an array of predictions based on input, or an empty array based on input if no locations found
+  // returns {id, skill}
+  // skills predictions are don't need to be mapped and already contain skill and ID of each prediction
+
+  // if not this.props.skills
   // calls Autocomplete API on input change, sends current input
   // Autocomplete API returns an array of predictions based on input, or an empty array based on input if no locations found
-  // they are immediately mapped to extract the name and ID of each prediction
+  // returns {id, name}
+  // location predictions are mapped to extract the name and ID of each prediction
+
   // autoComplete: predictions, adds each prediction to autoComplete state which is used by <li>s
   // isUsingCombobox: true opens combobox, even is array is empty(
   // use this for aria-describeby, i.e 'there are x location predictions available for you')
-  onLocationChange = async e => {
+  onInputChange = async e => {
     const { name, value } = e.target;
     this.setState({ [name]: value });
     if (value.trim() === "") {
       this.setState({ isUsingCombobox: false, autoComplete: [] });
       return;
     }
-    try {
-      const response = await axios.post(
-        `${process.env.REACT_APP_SERVER}/api/autocomplete`,
-        { locationInput: value }
-      );
-      const predictions = response.data.predictions.map(location => {
-        return {
-          name: location.description,
-          id: location.place_id
-        };
-      });
-      this.setState({
-        autoComplete: predictions,
-        isUsingCombobox: true
-      });
-    } catch (err) {
-      console.error(`${err.response.data.message} =>`, err);
+
+    if (this.props.skills) {
+      try {
+        const response = await axios.post(
+          `${process.env.REACT_APP_SERVER}/skills/autocomplete`,
+          { skillsInput: value }
+        );
+        this.setState({
+          autoComplete: response.data,
+          isUsingCombobox: true
+        });
+      } catch (err) {
+        console.error(`${err.response.data.message} =>`, err);
+      }
+      return;
+    }
+
+    if (this.props.locations) {
+      try {
+        const response = await axios.post(
+          `${process.env.REACT_APP_SERVER}/api/autocomplete`,
+          { locationInput: value }
+        );
+        const predictions = response.data.predictions.map(location => {
+          return {
+            name: location.description,
+            id: location.place_id
+          };
+        });
+        this.setState({
+          autoComplete: predictions,
+          isUsingCombobox: true
+        });
+      } catch (err) {
+        console.error(`${err.response.data.message} =>`, err);
+      }
+      return;
     }
   };
 
+  
   // Tests
   // autoComplete: [], should remove all <li> from UI
   // isUsingCombobox: false, closes combobox for accessibility
   // input: name, should change <input> value to chosen name
   // chosenName: name, should make chosenName UI appear, with the correct chosen location and reset btn
-  // calls onChosenLocation to change user based on this filter being on and chosen location(name, id)
-  chooseLocation = (name, id) => {
+  // calls onChosenInput to change user based on this filter being on and chosen location(name, id)
+  choosePrediction = (name, id) => {
+    const newChosenNamesState = [...this.state.chosenNames];
 
-    // need to account for 1 location(current) and
-    // +1 locations(skills/relocateTo)
-    // on back end, relocateTo will filter with array
-    // current location will stay the same
-    // you can send array to both, and set state differently here
-    // 1s will empty the array
-
-    console.log(this.props.singular)
-
-    
-    
-    let newChosenNamesState = [...this.state.chosenNames];
-    
     if (newChosenNamesState.includes(name)) {
       this.setState({
         autoComplete: [],
@@ -147,8 +167,7 @@ class LocationAutoComplete extends React.Component {
       });
       return;
     }
-    
-    // for current locations
+
     if (this.props.singular) {
       this.setState({
         autoComplete: [],
@@ -156,12 +175,10 @@ class LocationAutoComplete extends React.Component {
         chosenNames: [name],
         isUsingCombobox: false
       });
-      this.props.onChosenLocation(name, id);
+      this.props.onChosenInput(name, id);
       return;
     }
 
-
-    // for skills and relocate to
     newChosenNamesState.push(name);
     this.setState({
       autoComplete: [],
@@ -169,7 +186,7 @@ class LocationAutoComplete extends React.Component {
       chosenNames: newChosenNamesState,
       isUsingCombobox: false
     });
-    this.props.onChosenLocation(newChosenNamesState);
+    this.props.onChosenInput(newChosenNamesState);
   };
 
   // Tests
@@ -177,42 +194,42 @@ class LocationAutoComplete extends React.Component {
   // isUsingCombobox: false, closes combobox for accessibility
   // input: "", should remove value from <input>
   // chosenName: "", should make chosenName UI dissapear
-  // calls resetLocationFilter to change users based on this filter being off
-  resetFilter = (location) => {
+  // calls resetInputFilter to change users based on this filter being off
+  resetFilter = location => {
     if (this.props.singular) {
       this.setState({
         chosenNames: [],
         input: ""
       });
-      this.props.resetLocationFilter();
+      this.props.resetInputFilter();
       return;
     }
 
-    let chosenNamesState = [...this.state.chosenNames]
+    let chosenNamesState = [...this.state.chosenNames];
     let newChosenNamesState = chosenNamesState.filter(chosenName => {
       return chosenName !== location;
-    })
+    });
 
-    if (newChosenNamesState.length > 0) {
+    if (newChosenNamesState.length === 0) {
       this.setState({
-        chosenNames: newChosenNamesState
+        chosenNames: []
       });
-      this.props.resetLocationFilter(newChosenNamesState);
+      this.props.resetInputFilter();
       return;
     }
 
     this.setState({
-      chosenNames: []
+      chosenNames: newChosenNamesState
     });
-    this.props.resetLocationFilter();
+    this.props.resetInputFilter(newChosenNamesState);
   };
 
   render() {
     return (
-      <div className="location">
+      <div>
         <div>
-          <label htmlFor="search-location">
-            Choose Location
+          <label htmlFor="search-predictions">
+            {this.props.skills ? 'Choose Skills' : 'Choose Location'}
             {/* aria-expanded should be true when any value exists on input(no blank spaces) */}
             {/* aria-activedescendant shows correct focused <li> based on id */}
             {/* onChange sets new predictions based on AutoComplete API, changes <li> */}
@@ -221,7 +238,7 @@ class LocationAutoComplete extends React.Component {
             {/* onKeyDown with esc key resets filter with resetFilter() */}
             <input
               type="text"
-              id="search-location"
+              id="search-predictions"
               autoComplete="off"
               role="combobox"
               aria-expanded={this.state.isUsingCombobox}
@@ -232,7 +249,7 @@ class LocationAutoComplete extends React.Component {
               aria-activedescendant={this.state.currentFocusedOption}
               name="input"
               value={this.state.input}
-              onChange={this.onLocationChange}
+              onChange={this.onInputChange}
               onKeyDown={e =>
                 this.state.autoComplete.length > 0
                   ? this.focusOnFirstOption(e)
@@ -245,17 +262,17 @@ class LocationAutoComplete extends React.Component {
           <ul id="results" role="listbox">
             {this.state.autoComplete.length === 0
               ? null
-              : this.state.autoComplete.map((location, i) => {
+              : this.state.autoComplete.map((prediction, i) => {
                   return (
                     // setOptionRefs each li is a custom ref based on index
                     // chooseOnKeyDown with up or down arrow keys moves focus of <li>s respectively
-                    // chooseOnKeyDown with enter key chooses location with chooseLocation()
+                    // chooseOnKeyDown with enter key chooses prediction with choosePrediction()
                     // chooseOnKeyDown with esc key resets filter with resetFilter()
-                    // chooseLocation chooses location on mouse click
-                    // shows correct name of location prediction
+                    // choosePrediction chooses prediction on mouse click
+                    // shows correct name of prediction
                     <li
                       id={`result${i}`}
-                      key={location.id}
+                      key={prediction.id}
                       role="option"
                       aria-selected={
                         this.state.currentFocusedOption === `result${i}`
@@ -265,13 +282,21 @@ class LocationAutoComplete extends React.Component {
                         this.setOptionRefs(ref, i);
                       }}
                       onKeyDown={e =>
-                        this.chooseOnKeyDown(e, location.name, location.id, i)
+                        this.chooseOnKeyDown(
+                          e,
+                          prediction.name || prediction.skill,
+                          prediction.id,
+                          i
+                        )
                       }
                       onClick={() =>
-                        this.chooseLocation(location.name, location.id)
+                        this.choosePrediction(
+                          prediction.name || prediction.skill,
+                          prediction.id
+                        )
                       }
                     >
-                      {location.name}
+                      {prediction.name || prediction.skill}
                     </li>
                   );
                 })}
@@ -289,11 +314,14 @@ class LocationAutoComplete extends React.Component {
               return (
                 <div key={chosenName}>
                   <span>{chosenName}</span>
-                  <button type="reset" onClick={() => this.resetFilter(chosenName)}>
+                  <button
+                    type="reset"
+                    onClick={() => this.resetFilter(chosenName)}
+                  >
                     X
                   </button>
                 </div>
-              )
+              );
             })}
           </aside>
         )}
@@ -302,4 +330,4 @@ class LocationAutoComplete extends React.Component {
   }
 }
 
-export default LocationAutoComplete;
+export default AutoComplete;

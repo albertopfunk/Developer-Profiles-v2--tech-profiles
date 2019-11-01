@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
 
-import LocationAutoComplete from "../location-autocomplete/LocationAutoComplete";
+import AutoComplete from "../autocomplete/AutoComplete";
 
 class CurrentLocationFilter extends React.Component {
   state = {
@@ -94,9 +94,10 @@ class CurrentLocationFilter extends React.Component {
             {this.state.milesWithinInput}
           </label>
         </div>
-        <LocationAutoComplete
-          onChosenLocation={this.onChosenLocation}
-          resetLocationFilter={this.resetLocationFilter}
+        <AutoComplete
+          onChosenInput={this.onChosenLocation}
+          resetInputFilter={this.resetLocationFilter}
+          locations
           singular
         />
       </section>
