@@ -219,6 +219,10 @@ class AutoComplete extends React.Component {
     this.props.resetInputFilter();
   };
 
+  resetOnSubmit = () => {
+    this.setState({ chosenNames: [], autoComplete: [], input: "" });
+  };
+
   render() {
     return (
       <div>
@@ -253,7 +257,28 @@ class AutoComplete extends React.Component {
             />
           </label>
         </div>
+
         <div>
+          {this.props.skills &&
+          this.state.autoComplete.length === 0 &&
+          this.state.input ? (
+            <div>
+              <p>
+                {this.state.input} is not in our system, click on the button to
+                add it
+              </p>
+              <p>skill will be reviewed for apporval</p>
+              <button
+                onClick={() => {
+                  this.props.addNewSkill(this.state.input);
+                  this.setState({ input: "" });
+                }}
+              >
+                Add Skill
+              </button>
+            </div>
+          ) : null}
+
           <ul id="results" role="listbox">
             {this.state.autoComplete.length === 0
               ? null

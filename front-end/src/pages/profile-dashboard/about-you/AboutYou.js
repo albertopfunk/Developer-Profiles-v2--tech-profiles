@@ -5,67 +5,203 @@ import { ProfileContext } from "../../../global/context/user-profile/ProfileCont
 import AutoComplete from "../../../components/autocomplete/AutoComplete";
 
 function AboutYou() {
-  const { loadingUser, user } = useContext(ProfileContext);
-
+  const { loadingUser, user, editProfile } = useContext(ProfileContext);
   const [summaryInput, setSummaryInput] = useState("");
+  const [topSkills, setTopSkills] = useState([]);
+  const [additionalSkills, setAdditionalSkills] = useState([]);
+  const [interestedLocations, setInterestedLocations] = useState([]);
 
-  const [topSkillsInput, setTopSkillsInput] = useState("");
-  const [topSkillsDisplay, setTopSkillsDisplay] = useState([]);
-
-  const [additionalSkillsInput, setAdditionalSkillsInput] = useState("");
-  const [additionalSkillsDisplay, setAdditionalSkillsDisplay] = useState([]);
-
-
-
-  const [interestedLocationsInput, setInterestedLocationsInput] = useState("");
-  const [interestedLocationsPredictions, setInterestedLocationsPredictions] = useState([]);
-  const [interestedLocationsDisplay, setInterestedLocationsDisplay] = useState([]);
-
+  let locationRef = React.createRef();
+  let topSkillsRef = React.createRef();
+  let additionalSkillsRef = React.createRef();
 
   function onChosenLocation(chosenRelocateToArr) {
-    // you can filter these to not show locations that user already has
-    console.log("CHOOSE RELOCATE/INTERESTED",chosenRelocateToArr)
-    console.log("CHOOSE RELOCATE/INTERESTED USER",user.interested_location_names)
+    setInterestedLocations(chosenRelocateToArr);
+    console.log("CHOOSE RELOCATE/INTERESTED", chosenRelocateToArr);
+    console.log(
+      "CHOOSE RELOCATE/INTERESTED USER",
+      user.interested_location_names
+    );
   }
 
   function resetLocationFilter(chosenRelocateToArr) {
-    console.log("DELETE RELOCATE/INTERESTED", chosenRelocateToArr)
+    setInterestedLocations(chosenRelocateToArr);
+    console.log("DELETE RELOCATE/INTERESTED", chosenRelocateToArr);
   }
 
-
-  function onChosenSkill(chosenRelocateToArr) {
-    // you can filter these to not show skills that user already has
-    console.log("CHOOSE SKILL",chosenRelocateToArr)
-    console.log("CHOOSE SKILL USER",user.top_skills)
-    console.log("CHOOSE SKILL USER",user.additional_skills)
+  function onChosenTopSkill(chosenTopSkills) {
+    setTopSkills(chosenTopSkills);
+    console.log("CHOOSE TOP SKILL", chosenTopSkills);
+    console.log("CHOOSE TOP SKILL USER", user.top_skills);
   }
 
-  function resetSkillsFilter(chosenRelocateToArr) {
-    console.log("DELETE SKILL", chosenRelocateToArr)
+  function resetTopSkillsFilter(chosenTopSkills) {
+    setTopSkills(chosenTopSkills);
+    console.log("DELETE TOP SKILL", chosenTopSkills);
   }
 
+  function addNewTopSkill(skill) {
+    console.log("ADD TOP SKILL", skill);
+  }
 
+  function onChosenAdditionalSkill(chosenAdditionalSkills) {
+    setAdditionalSkills(chosenAdditionalSkills);
+    console.log("CHOOSE ADDITIONAL SKILL", chosenAdditionalSkills);
+    console.log("CHOOSE ADDITIONAL SKILL USER", user.additional_skills);
+  }
 
-  console.log("About You", user);
+  function resetAdditionalSkillsFilter(chosenAdditionalSkills) {
+    setAdditionalSkills(chosenAdditionalSkills);
+    console.log("DELETE ADDITIONAL SKILL", chosenAdditionalSkills);
+  }
+
+  function addNewAdditionalSkill(skill) {
+    console.log("DELETE ADDITIONAL SKILL", skill);
+  }
+
+  async function submitEdit(e) {
+    e.preventDefault();
+
+    const inputs = {};
+
+    if (summaryInput) {
+      inputs.summary = summaryInput;
+      setSummaryInput("");
+    }
+
+    let topSkillsState = [...topSkills];
+    let additionalSkillsState = [...additionalSkills];
+
+    if (topSkillsState && additionalSkillsState) {
+      topSkillsState = topSkillsState.filter(
+        item => !additionalSkillsState.includes(item)
+      );
+    }
+
+    if (topSkillsState) {
+      let userTopSkills;
+      let newTopSkills;
+
+      if (user.top_skills) {
+        userTopSkills = user.top_skills.split(",");
+        newTopSkills = [...new Set([...userTopSkills, ...topSkillsState])];
+      } else {
+        newTopSkills = [...topSkillsState];
+      }
+
+      if (user.additional_skills) {
+        let userAdditionalSkills = user.additional_skills.split(",");
+        newTopSkills = newTopSkills.filter(
+          item => !userAdditionalSkills.includes(item)
+        );
+      }
+
+      newTopSkills = newTopSkills.join();
+      inputs.top_skills = newTopSkills;
+      setTopSkills([]);
+      topSkillsRef.current.resetOnSubmit();
+    }
+
+    if (additionalSkillsState) {
+      let userAdditionalSkills;
+      let newAdditionalSkills;
+
+      if (user.additional_skills) {
+        userAdditionalSkills = user.additional_skills.split(",");
+        newAdditionalSkills = [
+          ...new Set([...userAdditionalSkills, ...additionalSkillsState])
+        ];
+      } else {
+        newAdditionalSkills = [...additionalSkillsState];
+      }
+
+      if (user.top_skills) {
+        let userTopSkills = user.top_skills.split(",");
+        newAdditionalSkills = newAdditionalSkills.filter(
+          item => !userTopSkills.includes(item)
+        );
+      }
+
+      newAdditionalSkills = newAdditionalSkills.join();
+      inputs.additional_skills = newAdditionalSkills;
+      setAdditionalSkills([]);
+      additionalSkillsRef.current.resetOnSubmit();
+    }
+
+    if (interestedLocations) {
+      let userInterestedLocations;
+      let newInterestedLocations;
+
+      if (user.interested_location_names) {
+        userInterestedLocations = user.interested_location_names.split("|");
+        newInterestedLocations = [
+          ...new Set([...userInterestedLocations, ...interestedLocations])
+        ];
+      } else {
+        newInterestedLocations = [...interestedLocations];
+      }
+
+      newInterestedLocations = newInterestedLocations.join("|");
+      inputs.interested_location_names = newInterestedLocations;
+      setInterestedLocations([]);
+      locationRef.current.resetOnSubmit();
+    }
+
+    console.log(inputs);
+    editProfile(inputs);
+  }
+
+  console.log("===ABOUT YOU===", user);
   if (loadingUser) {
     return <h1>Loading...</h1>;
   }
   return (
     <Main>
       <h1>Hello About You</h1>
-      <AutoComplete
+
+      <form onSubmit={e => submitEdit(e)}>
+        <h3>Your Summary</h3>
+        <input
+          type="text"
+          placeholder="Summary"
+          value={summaryInput}
+          onChange={e => setSummaryInput(e.target.value)}
+        />
+
+        <br />
+        <br />
+
+        <h3>Interested Locations</h3>
+        <AutoComplete
+          ref={locationRef}
           onChosenInput={onChosenLocation}
           resetInputFilter={resetLocationFilter}
           locations
           multiple
         />
 
-      <AutoComplete
-          onChosenInput={onChosenSkill}
-          resetInputFilter={resetSkillsFilter}
+        <h3>Top Skills</h3>
+        <AutoComplete
+          ref={topSkillsRef}
+          onChosenInput={onChosenTopSkill}
+          resetInputFilter={resetTopSkillsFilter}
+          addNewSkill={addNewTopSkill}
           skills
           multiple
         />
+
+        <h3>Additional Skills</h3>
+        <AutoComplete
+          ref={additionalSkillsRef}
+          onChosenInput={onChosenAdditionalSkill}
+          resetInputFilter={resetAdditionalSkillsFilter}
+          addNewSkill={addNewAdditionalSkill}
+          skills
+          multiple
+        />
+
+        <button>Submit</button>
+      </form>
     </Main>
   );
 }
