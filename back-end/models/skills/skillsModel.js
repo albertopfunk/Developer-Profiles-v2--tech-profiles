@@ -19,7 +19,13 @@ function getAll() {
 }
 
 function getAllFiltered(input) {
-  return db("skills").where('skill', 'like', `%${input}%`);
+  const dbEnv = process.env.DB_ENV || process.env.DB;
+
+  if (dbEnv === "production") {
+    return db("skills").where('skill', 'ilike', `%${input}%`);
+  } else {
+    return db("skills").where('skill', 'like', `%${input}%`);
+  }
 }
 
 function getSingle(id) {
