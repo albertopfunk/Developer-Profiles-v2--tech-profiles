@@ -50,9 +50,9 @@ class Auth {
     this.expiresAt = authResult.idTokenPayload.exp * 1000;
   }
 
-  signOut() {
+  signOut(path) {
     this.auth0.logout({
-      returnTo: process.env.REACT_APP_HOMEPAGE,
+      returnTo: `${process.env.REACT_APP_HOMEPAGE}/${path || ""}`,
       clientID: process.env.REACT_APP_AUTH0_CLIENT_ID
     });
   }

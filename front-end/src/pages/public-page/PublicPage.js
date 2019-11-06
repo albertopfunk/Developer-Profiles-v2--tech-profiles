@@ -63,7 +63,7 @@ class PublicPage extends Component {
     // if (!isUsinginfinite) {
     //   this.setState({ filtersLoading: true });
     // }
-    console.log("RELOCATEARR", this.state.isUsingRelocateToFilter, this.state.chosenRelocateToArr)
+
     try {
       const users = await axios.post(
         `${process.env.REACT_APP_SERVER}/users/infinite`,
@@ -129,7 +129,7 @@ class PublicPage extends Component {
   };
 
   render() {
-    console.log("PUBLIC PAGE", this.state.users.length);
+    console.log("===PUBLIC PAGE===", this.state.users.length);
     return (
       <Main>
         <Filters updateUsers={this.updateUsers} />

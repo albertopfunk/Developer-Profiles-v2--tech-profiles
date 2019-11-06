@@ -175,10 +175,17 @@ class UserCard extends React.Component {
 
             <UserTitle title={this.props.title} />
 
-            <UserSkills
-              topSkills={topSkills}
-              additionalSkills={additionalSkills}
-            />
+            {this.props.dashboard ? 
+              <UserSkills
+                topSkills={topSkills}
+                additionalSkills={additionalSkills}
+              />
+              :
+              <UserSkills
+                topSkills={topSkills}
+                additionalSkills={additionalSkills}
+              />
+            }
           </div>
 
           <UserIcons

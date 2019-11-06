@@ -124,7 +124,7 @@ function PersonalInfo() {
     editProfile(inputs);
   }
 
-  console.log("PERSONAL INFO RENDER STATE", user);
+  console.log("===PERSONAL INFO===", user);
   if (loadingUser) {
     return <h1>Loading...</h1>;
   }

@@ -4,8 +4,7 @@ import {
   Route,
   useRouteMatch,
   Link,
-  Switch,
-  useHistory
+  Switch
 } from "react-router-dom";
 import styled from "styled-components";
 
@@ -27,7 +26,6 @@ function ProfileDashboard() {
   const [loadingUser, setLoadingUser] = useState(true);
   const [user, setUser] = useState(null);
   let { path, url } = useRouteMatch();
-  let history = useHistory();
 
   useEffect(() => {
     if (!user) {
@@ -41,9 +39,8 @@ function ProfileDashboard() {
 
     if (!email) {
       console.error("Unable to Get User Profile");
-      history.replace("/authorize");
+      auth0Client.signOut("authorize");
     }
-
     try {
       const user = await axios.post(
         `${process.env.REACT_APP_SERVER}/users/get-single`,
@@ -53,7 +50,7 @@ function ProfileDashboard() {
       setLoadingUser(false);
     } catch (err) {
       console.error(`${err.response.data.message} =>`, err);
-      history.replace("/authorize");
+      auth0Client.signOut("authorize");
     }
   }
 
@@ -65,7 +62,7 @@ function ProfileDashboard() {
     setUser(newUser.data);
   }
 
-  console.log("PROFILE DASH");
+  console.log("===PROFILE DASH===");
 
   if (loadingUser) {
     return <h1>Loading...</h1>;
@@ -99,6 +96,7 @@ function ProfileDashboard() {
         usersLength={1}
         index={1}
         id={user.id}
+        dashboard
         firstName={user.first_name}
         lastName={user.last_name}
         image={user.image}

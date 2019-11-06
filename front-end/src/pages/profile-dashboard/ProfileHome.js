@@ -6,7 +6,7 @@ import { ProfileContext } from "../../global/context/user-profile/ProfileContext
 function ProfileHome() {
   const { loadingUser, user } = useContext(ProfileContext);
 
-  console.log("HOME RENDER STATE", user);
+  console.log("===HOME RENDER===", user);
   if (loadingUser) {
     return <h1>Loading...</h1>;
   }
