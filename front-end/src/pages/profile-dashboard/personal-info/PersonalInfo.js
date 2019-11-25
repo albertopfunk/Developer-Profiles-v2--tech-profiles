@@ -24,7 +24,12 @@ function PersonalInfo() {
         loadImage();
       }
     }
-  });
+    return () => {
+      if (imageInput) {
+        deleteOldImage(imageInput);
+      }
+    };
+  }, [imageInput, user.image, imageDisplay]);
 
   function loadImage() {
     console.log("IMAGEE", user.image)
@@ -33,12 +38,9 @@ function PersonalInfo() {
     image = image.split(",");
     setImageDisplay(image[0]);
   }
-
+  
   async function uploadImage(e) {
     if (e.target.files.length === 0) {
-      if (imageInput) {
-        deleteOldImage(imageInput);
-      }
       return;
     }
 
@@ -59,8 +61,8 @@ function PersonalInfo() {
       setErrorImage(false);
     });
 
-    XHR.addEventListener("error", e => {
-      console.error(e.target);
+    XHR.addEventListener("error", err => {
+      console.error(err);
       setLoadingImage(false);
       setErrorImage(true);
     });
@@ -78,12 +80,23 @@ function PersonalInfo() {
         id: imageToDelete[1]
       });
     } catch (err) {
-      console.error(`${err.response.data.message} =>`, err);
+      console.error(`Error Deleting Image =>`, err);
     }
   }
 
   async function submitEdit(e) {
     e.preventDefault();
+
+    if (
+      !firstNameInput &&
+      !lastNameInput &&
+      !imageInput &&
+      !publicEmailInput &&
+      !areaOfWorkInput &&
+      !titleInput
+    ) {
+      return;
+    }
 
     const inputs = {};
     if (firstNameInput) {
@@ -97,9 +110,9 @@ function PersonalInfo() {
     }
 
     if (imageInput) {
-      if (user.image) {
-        deleteOldImage(user.image);
-      }
+      // if (user.image) {
+      //   deleteOldImage(user.image);
+      // }
       inputs.image = imageInput;
       let image = imageInput;
       image = image.split(",");
@@ -167,6 +180,7 @@ function PersonalInfo() {
         />
         {loadingImage ? <p>Loading...</p> : null}
         {errorImage ? <p>Error!</p> : null}
+        {imageInput ? <p>Success!</p> : null}
 
         <br />
         <br />

@@ -5,32 +5,38 @@ const fileUpload = require("express-fileupload");
 
 const server = express.Router();
 
-server.use(
-  fileUpload({
-    useTempFiles: true
-  })
-);
-
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_KEY,
   api_secret: process.env.CLOUDINARY_SECRET
 });
 
-server.post("/upload-image", (req, res) => {
-  cloudinary.uploader.upload(
-    req.files.image.tempFilePath,
-    { folder: process.env.CLOUDINARY_PROFILE_DASH },
-    (err, result) => {
-      if (err) {
-        res
-          .status(500)
-          .json({ message: "Error uploading image with cloudinary", err });
-      }
-      res.send({ url: result.secure_url, id: result.public_id });
+server.post(
+  "/upload-image",
+  fileUpload({
+    useTempFiles: true
+  }),
+  (req, res) => {
+    if (!req.files || Object.keys(req.files).length === 0) {
+      res.status(400).json({ message: "No files were uploaded." });
     }
-  );
-});
+    cloudinary.uploader.upload(
+      req.files.image.tempFilePath,
+      {
+        upload_preset: process.env.CLOUDINARY_UPLOAD_PRESET
+      },
+      (err, result) => {
+        if (!result || err) {
+          res
+            .status(500)
+            .json({ message: "Error uploading image with cloudinary", err });
+        } else {
+          res.send({ url: result.secure_url, id: result.public_id });
+        }
+      }
+    );
+  }
+);
 
 server.post("/delete-image", (req, res) => {
   cloudinary.uploader.destroy(req.body.id, (err, result) => {
