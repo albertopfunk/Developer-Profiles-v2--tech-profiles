@@ -91,6 +91,10 @@ class UserCard extends React.Component {
     }
   };
 
+  handleImgErr = () => {
+    this.setState({ image: "" });
+  };
+
   expandUserCard = async id => {
     if (this.state.hasRequestedExtras) {
       this.setState({ isCardExpanded: true });
@@ -158,7 +162,7 @@ class UserCard extends React.Component {
   };
 
   render() {
-    console.log("=====USER CARD=====", this.state)
+    console.log("=====USER CARD=====", this.state);
     const {
       education,
       experience,
@@ -186,9 +190,16 @@ class UserCard extends React.Component {
               <strong>{this.props.id}</strong>
 
               {this.props.dashboard ? (
-                <UserImage previewImg={this.props.previewImg} image={image} />
+                <UserImage
+                  handleImgErr={this.handleImgErr}
+                  previewImg={this.props.previewImg}
+                  image={image}
+                />
               ) : (
-                <UserImage image={image} />
+                <UserImage
+                  handleImgErr={this.handleImgErr}
+                  image={image}
+                />
               )}
 
               <UserInfo

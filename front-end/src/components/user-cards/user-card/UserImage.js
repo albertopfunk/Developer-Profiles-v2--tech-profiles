@@ -4,6 +4,10 @@ import React from "react";
 // renders image or default avatar image
 
 function UserImage(props) {
+  function handleBrokenLink() {
+    props.handleImgErr();
+  }
+
   return (
     <section>
       {/* add figure/figcation to all images */}
@@ -16,6 +20,7 @@ function UserImage(props) {
             borderRadius: "50%"
           }}
           src={props.previewImg || props.image}
+          onError={handleBrokenLink}
           alt="user-avatar"
         />
       ) : (
