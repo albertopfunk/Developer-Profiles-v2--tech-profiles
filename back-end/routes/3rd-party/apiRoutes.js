@@ -19,22 +19,23 @@ server.post(
   (req, res) => {
     if (!req.files || Object.keys(req.files).length === 0) {
       res.status(400).json({ message: "No files were uploaded." });
-    }
-    cloudinary.uploader.upload(
-      req.files.image.tempFilePath,
-      {
-        upload_preset: process.env.CLOUDINARY_UPLOAD_PRESET
-      },
-      (err, result) => {
-        if (!result || err) {
-          res
-            .status(500)
-            .json({ message: "Error uploading image with cloudinary", err });
-        } else {
-          res.send({ url: result.secure_url, id: result.public_id });
+    } else {
+      cloudinary.uploader.upload(
+        req.files.image.tempFilePath,
+        {
+          upload_preset: process.env.CLOUDINARY_UPLOAD_PRESET
+        },
+        (err, result) => {
+          if (!result || err) {
+            res
+              .status(500)
+              .json({ message: "Error uploading image with cloudinary =>", err });
+          } else {
+            res.send({ url: result.secure_url, id: result.public_id });
+          }
         }
-      }
-    );
+      );
+    }
   }
 );
 

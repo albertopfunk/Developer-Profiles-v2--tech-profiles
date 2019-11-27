@@ -1,12 +1,10 @@
 import React, { useState, useContext } from "react";
 import { ProfileContext } from "../../../../global/context/user-profile/ProfileContext";
 
-function ImageUploadForm({deleteOldImage, imageInput, setImageInput}) {
+function ImageUploadForm({ deleteOldImage, imageInput, setImageInput }) {
   const { setPreviewImg } = useContext(ProfileContext);
   const [loadingImage, setLoadingImage] = useState(false);
   const [errorImage, setErrorImage] = useState(false);
-
-
 
   async function uploadImage(e) {
     if (e.target.files.length === 0) {
@@ -20,16 +18,22 @@ function ImageUploadForm({deleteOldImage, imageInput, setImageInput}) {
     setLoadingImage(true);
 
     XHR.addEventListener("load", e => {
-      if (imageInput) {
-        deleteOldImage(imageInput);
+      if (e.target.status === 200) {
+        if (imageInput) {
+          deleteOldImage(imageInput);
+        }
+        const { url, id } = JSON.parse(e.target.response);
+        const imageInfo = `${url},${id}`;
+        localStorage.setItem("img_prev", id);
+        setPreviewImg(url);
+        setImageInput(imageInfo);
+        setLoadingImage(false);
+        setErrorImage(false);
+      } else {
+        console.error("Error uploading to cloudinary", e.target.statusText);
+        setLoadingImage(false);
+        setErrorImage(true);
       }
-      const { url, id } = JSON.parse(e.target.response);
-      const imageInfo = `${url},${id}`;
-      localStorage.setItem("img_prev", id);
-      setPreviewImg(url);
-      setImageInput(imageInfo);
-      setLoadingImage(false);
-      setErrorImage(false);
     });
 
     XHR.addEventListener("error", err => {
@@ -42,7 +46,7 @@ function ImageUploadForm({deleteOldImage, imageInput, setImageInput}) {
     XHR.send(data);
   }
 
-  console.log("=====IMAGEUPLOADFORM + IMG INPUTTTT=====", imageInput)
+  console.log("=====IMAGEUPLOADFORM + IMG INPUTTTT=====", imageInput);
 
   return (
     <div>
