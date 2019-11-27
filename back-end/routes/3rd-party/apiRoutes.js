@@ -2,6 +2,7 @@ const express = require("express");
 const axios = require("axios");
 const cloudinary = require("cloudinary").v2;
 const fileUpload = require("express-fileupload");
+const stripe = require("stripe")("sk_test_Zz77ZKGueQxb5zIIezFryEau005khPI0Wq");
 
 const server = express.Router();
 
@@ -19,23 +20,24 @@ server.post(
   (req, res) => {
     if (!req.files || Object.keys(req.files).length === 0) {
       res.status(400).json({ message: "No files were uploaded." });
-    } else {
-      cloudinary.uploader.upload(
-        req.files.image.tempFilePath,
-        {
-          upload_preset: process.env.CLOUDINARY_UPLOAD_PRESET
-        },
-        (err, result) => {
-          if (!result || err) {
-            res
-              .status(500)
-              .json({ message: "Error uploading image with cloudinary =>", err });
-          } else {
-            res.send({ url: result.secure_url, id: result.public_id });
-          }
-        }
-      );
+      return;
     }
+
+    cloudinary.uploader.upload(
+      req.files.image.tempFilePath,
+      {
+        upload_preset: process.env.CLOUDINARY_UPLOAD_PRESET
+      },
+      (err, result) => {
+        if (!result || err) {
+          res
+            .status(500)
+            .json({ message: "Error uploading image with cloudinary =>", err });
+          return;
+        }
+        res.send({ url: result.secure_url, id: result.public_id });
+      }
+    );
   }
 );
 
@@ -81,7 +83,24 @@ server.post("/gio", async (req, res) => {
   }
 });
 
-
 // billing
+
+server.use(require("body-parser").text());
+
+server.post("/charge", async (req, res) => {
+  try {
+    let { status } = await stripe.charges.create({
+      amount: 2000,
+      currency: "usd",
+      description: "An example charge",
+      source: req.body.token
+    });
+
+    res.json({ status });
+  } catch (err) {
+    console.log(err);
+    res.status(500).end();
+  }
+});
 
 module.exports = server;
