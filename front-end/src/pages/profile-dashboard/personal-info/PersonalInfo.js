@@ -3,73 +3,35 @@ import styled from "styled-components";
 
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
 import axios from "axios";
+import ImageUploadForm from "../../../components/forms/profile-dashboard/image-uploads/ImageUploadForm";
 
 function PersonalInfo() {
-  const { loadingUser, user, editProfile } = useContext(ProfileContext);
+  const { loadingUser, user, editProfile, setPreviewImg } = useContext(ProfileContext);
 
-  const [imageDisplay, setImageDisplay] = useState("");
   const [imageInput, setImageInput] = useState("");
-  const [loadingImage, setLoadingImage] = useState(false);
-  const [errorImage, setErrorImage] = useState(false);
-
   const [firstNameInput, setFirstNameInput] = useState("");
   const [lastNameInput, setLastNameInput] = useState("");
   const [publicEmailInput, setPublicEmailInput] = useState("");
   const [areaOfWorkInput, setAreaOfWorkInput] = useState("");
   const [titleInput, setTitleInput] = useState("");
 
+
   useEffect(() => {
-    if (user && user.image) {
-      if (!imageDisplay) {
-        loadImage();
-      }
+    console.log("=====LOCAL STORAGE USEEFFECT=====")
+    if (localStorage.getItem("img_prev")) {
+      const imgPrev = `mockURL,${localStorage.getItem("img_prev")}`;
+      localStorage.removeItem("img_prev");
+      deleteOldImage(imgPrev);
     }
-    return () => {
-      if (imageInput) {
-        deleteOldImage(imageInput);
-      }
-    };
-  }, [imageInput, user.image, imageDisplay]);
-
-  function loadImage() {
-    console.log("IMAGEE", user.image)
-    let image;
-    image = user.image;
-    image = image.split(",");
-    setImageDisplay(image[0]);
-  }
+  }, []);
   
-  async function uploadImage(e) {
-    if (e.target.files.length === 0) {
-      return;
-    }
+  useEffect(() => {
+    console.log("=====REMOVE IMAGE USEEFFECT=====")
+    return () => {
+      setPreviewImg("")
+    };
+  }, [setPreviewImg])
 
-    const file = e.target.files[0];
-    const data = new FormData();
-    data.append("image", file);
-    const XHR = new XMLHttpRequest();
-    setLoadingImage(true);
-
-    XHR.addEventListener("load", e => {
-      if (imageInput) {
-        deleteOldImage(imageInput);
-      }
-      const { url, id } = JSON.parse(e.target.response);
-      const imageInfo = `${url},${id}`;
-      setImageInput(imageInfo);
-      setLoadingImage(false);
-      setErrorImage(false);
-    });
-
-    XHR.addEventListener("error", err => {
-      console.error(err);
-      setLoadingImage(false);
-      setErrorImage(true);
-    });
-
-    XHR.open("POST", `${process.env.REACT_APP_SERVER}/api/upload-image`);
-    XHR.send(data);
-  }
 
   async function deleteOldImage(imageId) {
     let imageToDelete = imageId;
@@ -110,13 +72,9 @@ function PersonalInfo() {
     }
 
     if (imageInput) {
-      // if (user.image) {
-      //   deleteOldImage(user.image);
-      // }
       inputs.image = imageInput;
-      let image = imageInput;
-      image = image.split(",");
-      setImageDisplay(image[0]);
+      localStorage.removeItem("img_prev")
+      setPreviewImg("");
       setImageInput("");
     }
 
@@ -134,17 +92,23 @@ function PersonalInfo() {
       inputs.desired_title = titleInput;
       setTitleInput("");
     }
-    editProfile(inputs);
+
+    if (imageInput && user.image) {
+      deleteOldImage(user.image).then(() => {
+        editProfile(inputs)
+      })
+    } else {
+      editProfile(inputs)
+    }
   }
 
-  console.log("===PERSONAL INFO===", user);
+  console.log("===PERSONAL INFO + IMG INPUTTTT===", imageInput);
   if (loadingUser) {
     return <h1>Loading...</h1>;
   }
   return (
     <Main>
       <h2>User Personal Info Display</h2>
-      <img src={imageDisplay} alt="some cool thingamagig" />
       <p>{user.first_name}</p>
       <p>{user.last_name}</p>
       <p>{user.public_email}</p>
@@ -172,15 +136,11 @@ function PersonalInfo() {
         <br />
         <br />
 
-        <input
-          type="file"
-          name="image-upload"
-          placeholder="Upload Image"
-          onChange={e => uploadImage(e)}
+        <ImageUploadForm
+          setImageInput={setImageInput}
+          imageInput={imageInput}
+          deleteOldImage={deleteOldImage}
         />
-        {loadingImage ? <p>Loading...</p> : null}
-        {errorImage ? <p>Error!</p> : null}
-        {imageInput ? <p>Success!</p> : null}
 
         <br />
         <br />

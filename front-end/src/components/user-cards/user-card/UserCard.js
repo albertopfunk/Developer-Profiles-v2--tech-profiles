@@ -52,36 +52,48 @@ class UserCard extends React.Component {
   };
 
   componentDidMount() {
-    let interestedLocations = [];
-    let topSkills = [];
-    let additionalSkills = [];
-    let image = "";
+    this.setUserInfo();
+  }
 
+  componentDidUpdate(prevProps) {
+    if (
+      this.props.image !== prevProps.image ||
+      this.props.interestedLocations !== prevProps.interestedLocations ||
+      this.props.topSkills !== prevProps.topSkills ||
+      this.props.additionalSkills !== prevProps.additionalSkills
+    ) {
+      this.setUserInfo();
+      this.closeUserCard();
+    }
+    if (this.props.extrasUpdate !== prevProps.extrasUpdate) {
+      this.closeUserCard();
+      this.setState({ hasRequestedExtras: false });
+    }
+  }
+
+  setUserInfo = () => {
     if (this.props.interestedLocations) {
-      interestedLocations = this.props.interestedLocations.split("|");
+      let interestedLocations = this.props.interestedLocations.split("|");
+      this.setState({ interestedLocations });
     }
     if (this.props.topSkills) {
-      topSkills = this.props.topSkills.split(",");
+      let topSkills = this.props.topSkills.split(",");
+      this.setState({ topSkills });
     }
     if (this.props.additionalSkills) {
-      additionalSkills = this.props.additionalSkills.split(",");
+      let additionalSkills = this.props.additionalSkills.split(",");
+      this.setState({ additionalSkills });
     }
     if (this.props.image) {
-      image = this.props.image;
-      image = image.split(",");
+      let image = this.props.image.split(",");
       image = image[0];
+      this.setState({ image });
     }
-
-    this.setState({
-      interestedLocations,
-      topSkills,
-      additionalSkills,
-      image
-    });
-  }
+  };
 
   expandUserCard = async id => {
     if (this.state.hasRequestedExtras) {
+      this.setState({ isCardExpanded: true });
       if (
         this.state.topSkills.length > 0 ||
         this.state.additionalSkills.length > 0 ||
@@ -91,45 +103,53 @@ class UserCard extends React.Component {
         this.state.interestedLocations.length > 0
       ) {
         this.setState({
-          isCardExpanded: true
+          noExtras: false
         });
       } else {
         this.setState({
-          isCardExpanded: true,
           noExtras: true
         });
       }
-    } else {
-      try {
-        const [education, experience, projects] = await Promise.all([
-          axios.get(`${process.env.REACT_APP_SERVER}/extras/${id}/education`),
-          axios.get(`${process.env.REACT_APP_SERVER}/extras/${id}/experience`),
-          axios.get(`${process.env.REACT_APP_SERVER}/extras/${id}/projects`)
-        ]);
+      return;
+    }
 
+    try {
+      const [education, experience, projects] = await Promise.all([
+        axios.get(`${process.env.REACT_APP_SERVER}/extras/${id}/education`),
+        axios.get(`${process.env.REACT_APP_SERVER}/extras/${id}/experience`),
+        axios.get(`${process.env.REACT_APP_SERVER}/extras/${id}/projects`)
+      ]);
+
+      this.setState({ hasRequestedExtras: true, isCardExpanded: true });
+
+      if (
+        projects.data.length > 0 ||
+        education.data.length > 0 ||
+        experience.data.length > 0
+      ) {
+        this.setState({
+          education: education.data,
+          experience: experience.data,
+          projects: projects.data,
+          noExtras: false
+        });
+      } else {
         if (
-          projects.data.length > 0 ||
-          education.data.length > 0 ||
-          experience.data.length > 0 ||
-          this.state.interestedLocations.length > 0
+          this.state.interestedLocations.length > 0 ||
+          this.state.additionalSkills.length > 0 ||
+          this.state.topSkills.length > 0
         ) {
           this.setState({
-            hasRequestedExtras: true,
-            isCardExpanded: true,
-            education: education.data,
-            experience: experience.data,
-            projects: projects.data
+            noExtras: false
           });
         } else {
           this.setState({
-            hasRequestedExtras: true,
-            isCardExpanded: true,
             noExtras: true
           });
         }
-      } catch (err) {
-        console.error(`${err.response.data.message} =>`, err);
       }
+    } catch (err) {
+      console.error(`${err.response.data.message} =>`, err);
     }
   };
 
@@ -137,8 +157,8 @@ class UserCard extends React.Component {
     this.setState({ isCardExpanded: false });
   };
 
-  
   render() {
+    console.log("=====USER CARD=====", this.state)
     const {
       education,
       experience,
@@ -163,7 +183,13 @@ class UserCard extends React.Component {
         <UserSection>
           <div>
             <div>
-              <UserImage image={image} />
+              <strong>{this.props.id}</strong>
+
+              {this.props.dashboard ? (
+                <UserImage previewImg={this.props.previewImg} image={image} />
+              ) : (
+                <UserImage image={image} />
+              )}
 
               <UserInfo
                 firstName={this.props.firstName}
@@ -175,17 +201,18 @@ class UserCard extends React.Component {
 
             <UserTitle title={this.props.title} />
 
-            {this.props.dashboard ? 
+            {this.props.dashboard ? (
+              <UserSkills
+                deleteFunctionality
+                topSkills={topSkills}
+                additionalSkills={additionalSkills}
+              />
+            ) : (
               <UserSkills
                 topSkills={topSkills}
                 additionalSkills={additionalSkills}
               />
-              :
-              <UserSkills
-                topSkills={topSkills}
-                additionalSkills={additionalSkills}
-              />
-            }
+            )}
           </div>
 
           <UserIcons

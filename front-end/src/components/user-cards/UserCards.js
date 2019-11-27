@@ -59,9 +59,9 @@ function UserCards(props) {
           {props.users.map((user, i) => {
             return (
               <UserCard
+                key={user.id}
                 usersLength={props.users.length}
                 index={i}
-                key={user.id}
                 id={user.id}
                 areaOfWork={user.area_of_work}
                 email={user.public_email}

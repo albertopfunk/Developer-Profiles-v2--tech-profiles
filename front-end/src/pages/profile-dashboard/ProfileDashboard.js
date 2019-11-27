@@ -1,11 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import {
-  Route,
-  useRouteMatch,
-  Link,
-  Switch
-} from "react-router-dom";
+import { Route, useRouteMatch, Link, Switch } from "react-router-dom";
 import styled from "styled-components";
 
 import ProfileHome from "./ProfileHome";
@@ -25,6 +20,8 @@ import UserCard from "../../components/user-cards/user-card/UserCard";
 function ProfileDashboard() {
   const [loadingUser, setLoadingUser] = useState(true);
   const [user, setUser] = useState(null);
+  const [previewImg, setPreviewImg] = useState("");
+  const [extrasUpdate, setExtrasUpdate] = useState(false);
   let { path, url } = useRouteMatch();
 
   useEffect(() => {
@@ -49,20 +46,36 @@ function ProfileDashboard() {
       setUser(user.data);
       setLoadingUser(false);
     } catch (err) {
-      console.error(`${err.response.data.message} =>`, err);
+      console.error(`Error Getting User By Email`, err);
       auth0Client.signOut("authorize");
     }
   }
 
   async function editProfile(input) {
-    const newUser = await axios.put(
-      `${process.env.REACT_APP_SERVER}/users/${user.id}`,
-      input
-    );
-    setUser(newUser.data);
+    try {
+      const newUser = await axios.put(
+        `${process.env.REACT_APP_SERVER}/users/${user.id}`,
+        input
+      );
+      setUser(newUser.data);
+    } catch (err) {
+      console.error(err);
+    }
   }
 
-  console.log("===PROFILE DASH===");
+  async function addExtra(input, extra) {
+    try {
+      await axios.post(
+        `${process.env.REACT_APP_SERVER}/extras/new/${extra}`,
+        input
+      );
+      setExtrasUpdate(!extrasUpdate);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  console.log("===PROFILE DASH + PREVIOUS IMG===", previewImg);
 
   if (loadingUser) {
     return <h1>Loading...</h1>;
@@ -93,18 +106,20 @@ function ProfileDashboard() {
       <hr />
 
       <UserCard
+        dashboard
+        extrasUpdate={extrasUpdate}
+        previewImg={previewImg}
         usersLength={1}
         index={1}
         id={user.id}
-        dashboard
+        areaOfWork={user.area_of_work}
+        email={user.public_email}
+        image={user.image}
         firstName={user.first_name}
         lastName={user.last_name}
-        image={user.image}
-        email={user.public_email}
-        areaOfWork={user.area_of_work}
-        title={user.desired_title}
         currentLocation={user.current_location_name}
         summary={user.summary}
+        title={user.desired_title}
         topSkills={user.top_skills}
         additionalSkills={user.additional_skills}
         github={user.github}
@@ -116,7 +131,15 @@ function ProfileDashboard() {
       <br />
       <hr />
 
-      <ProfileContext.Provider value={{ loadingUser, user, editProfile }}>
+      <ProfileContext.Provider
+        value={{
+          loadingUser,
+          user,
+          editProfile,
+          addExtra,
+          setPreviewImg
+        }}
+      >
         <Switch>
           <Route exact path={`${path}`}>
             <ProfileHome />
