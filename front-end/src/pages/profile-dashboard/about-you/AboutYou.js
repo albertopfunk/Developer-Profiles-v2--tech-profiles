@@ -62,6 +62,15 @@ function AboutYou() {
   async function submitEdit(e) {
     e.preventDefault();
 
+    if (
+      !summaryInput &&
+      interestedLocations.length === 0 &&
+      topSkills.length === 0 &&
+      additionalSkills.length === 0
+    ) {
+      return;
+    }
+
     const inputs = {};
 
     if (summaryInput) {
@@ -69,16 +78,35 @@ function AboutYou() {
       setSummaryInput("");
     }
 
+    if (interestedLocations.length > 0) {
+      let userInterestedLocations;
+      let newInterestedLocations;
+
+      if (user.interested_location_names) {
+        userInterestedLocations = user.interested_location_names.split("|");
+        newInterestedLocations = [
+          ...new Set([...userInterestedLocations, ...interestedLocations])
+        ];
+      } else {
+        newInterestedLocations = [...interestedLocations];
+      }
+
+      newInterestedLocations = newInterestedLocations.join("|");
+      inputs.interested_location_names = newInterestedLocations;
+      setInterestedLocations([]);
+      locationRef.current.resetOnSubmit();
+    }
+
     let topSkillsState = [...topSkills];
     let additionalSkillsState = [...additionalSkills];
 
-    if (topSkillsState && additionalSkillsState) {
+    if (topSkillsState.length > 0 && additionalSkillsState.length > 0) {
       topSkillsState = topSkillsState.filter(
         item => !additionalSkillsState.includes(item)
       );
     }
 
-    if (topSkillsState) {
+    if (topSkillsState.length > 0) {
       let userTopSkills;
       let newTopSkills;
 
@@ -102,7 +130,7 @@ function AboutYou() {
       topSkillsRef.current.resetOnSubmit();
     }
 
-    if (additionalSkillsState) {
+    if (additionalSkillsState.length > 0) {
       let userAdditionalSkills;
       let newAdditionalSkills;
 
@@ -126,25 +154,6 @@ function AboutYou() {
       inputs.additional_skills = newAdditionalSkills;
       setAdditionalSkills([]);
       additionalSkillsRef.current.resetOnSubmit();
-    }
-
-    if (interestedLocations) {
-      let userInterestedLocations;
-      let newInterestedLocations;
-
-      if (user.interested_location_names) {
-        userInterestedLocations = user.interested_location_names.split("|");
-        newInterestedLocations = [
-          ...new Set([...userInterestedLocations, ...interestedLocations])
-        ];
-      } else {
-        newInterestedLocations = [...interestedLocations];
-      }
-
-      newInterestedLocations = newInterestedLocations.join("|");
-      inputs.interested_location_names = newInterestedLocations;
-      setInterestedLocations([]);
-      locationRef.current.resetOnSubmit();
     }
 
     console.log(inputs);
