@@ -57,7 +57,7 @@ function ImageUploadForm({ deleteOldImage, imageInput, setImageInput }) {
         onChange={e => uploadImage(e)}
       />
       {loadingImage ? <p>Loading...</p> : null}
-      {errorImage ? <p>Error!</p> : null}
+      {errorImage ? <p>Error uploading image. Please try again</p> : null}
       {imageInput ? <p>Success!</p> : null}
     </div>
   );

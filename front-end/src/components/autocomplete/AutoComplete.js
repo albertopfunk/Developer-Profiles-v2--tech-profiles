@@ -5,6 +5,7 @@ class AutoComplete extends React.Component {
   state = {
     input: "",
     timeOut: null,
+    skillsInBank: true,
     autoComplete: [],
     chosenNames: [],
     isUsingCombobox: false,
@@ -102,15 +103,13 @@ class AutoComplete extends React.Component {
   // autoComplete: predictions, adds each prediction to autoComplete state which is used by <li>s
   // isUsingCombobox: true opens combobox, even is array is empty(
   // use this for aria-describeby, i.e 'there are x location predictions available for you')
-  onInputChange = async (name, value) => {
-    console.log("RUN ZERO", value)
-    //const { name, value } = e.target;
-    // this.setState({ [name]: value });
+  onInputChange = async value => {
+    console.log("==========RUN ZERO==========", value);
     if (value.trim() === "") {
       this.setState({ isUsingCombobox: false, autoComplete: [] });
       return;
     }
-    console.log("RUN ONE")
+    console.log("RUN ONE");
 
     if (this.props.skills) {
       try {
@@ -122,6 +121,11 @@ class AutoComplete extends React.Component {
           autoComplete: response.data,
           isUsingCombobox: true
         });
+        if (response.data.length === 0) {
+          this.setState({ skillsInBank: false });
+        } else {
+          this.setState({ skillsInBank: true });
+        }
       } catch (err) {
         console.error(`${err.response.data.message} =>`, err);
       }
@@ -129,7 +133,7 @@ class AutoComplete extends React.Component {
     }
 
     if (this.props.locations) {
-      console.log("RUN TWO", this.state.isUsingCombobox)
+      console.log("RUN TWO", this.state.isUsingCombobox);
       try {
         const response = await axios.post(
           `${process.env.REACT_APP_SERVER}/api/autocomplete`,
@@ -142,7 +146,7 @@ class AutoComplete extends React.Component {
           };
         });
 
-        console.log("RUN FOUR", this.state.isUsingCombobox)
+        console.log("RUN FOUR", this.state.isUsingCombobox);
         this.setState({
           autoComplete: predictions,
           isUsingCombobox: true
@@ -154,28 +158,22 @@ class AutoComplete extends React.Component {
     }
   };
 
-   debounceInput = (e) => {
-    let currTimeOut; 
+  debounceInput = e => {
+    let currTimeOut;
 
     const { name, value } = e.target;
     this.setState({ [name]: value });
 
-    console.log("TIMEOUT", this.state.timeOut)
-
     if (this.state.timeOut) {
-      clearTimeout(this.state.timeOut)
+      clearTimeout(this.state.timeOut);
     }
 
     currTimeOut = setTimeout(() => {
-      console.log("ads", this.state.timeOut)
-      this.setState({timeOut: null})
-      this.onInputChange(name, value)
+      this.setState({ timeOut: null });
+      this.onInputChange(value);
+    }, 250);
 
-    }, 500);
-
-    console.log(currTimeOut)
-
-    this.setState({timeOut: currTimeOut})
+    this.setState({ timeOut: currTimeOut });
   };
 
   // Tests
@@ -253,7 +251,7 @@ class AutoComplete extends React.Component {
     this.setState({ chosenNames: [], autoComplete: [], input: "" });
   };
   render() {
-    console.log("====AUTOCOMPLETE====", this.state.isUsingCombobox)
+    console.log("====AUTOCOMPLETE====", this.state.isUsingCombobox);
     return (
       <div>
         <div>
@@ -289,8 +287,9 @@ class AutoComplete extends React.Component {
         </div>
 
         <div>
+          {/* need to do something similar to locations when there is none */}
           {this.props.skills &&
-          this.state.autoComplete.length === 0 &&
+          !this.state.skillsInBank &&
           this.state.input ? (
             <div>
               <p>
