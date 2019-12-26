@@ -4,6 +4,7 @@ import axios from "axios";
 class AutoComplete extends React.Component {
   state = {
     input: "",
+    timeOut: null,
     autoComplete: [],
     chosenNames: [],
     isUsingCombobox: false,
@@ -101,13 +102,15 @@ class AutoComplete extends React.Component {
   // autoComplete: predictions, adds each prediction to autoComplete state which is used by <li>s
   // isUsingCombobox: true opens combobox, even is array is empty(
   // use this for aria-describeby, i.e 'there are x location predictions available for you')
-  onInputChange = async e => {
-    const { name, value } = e.target;
-    this.setState({ [name]: value });
+  onInputChange = async (name, value) => {
+    console.log("RUN ZERO", value)
+    //const { name, value } = e.target;
+    // this.setState({ [name]: value });
     if (value.trim() === "") {
       this.setState({ isUsingCombobox: false, autoComplete: [] });
       return;
     }
+    console.log("RUN ONE")
 
     if (this.props.skills) {
       try {
@@ -126,6 +129,7 @@ class AutoComplete extends React.Component {
     }
 
     if (this.props.locations) {
+      console.log("RUN TWO", this.state.isUsingCombobox)
       try {
         const response = await axios.post(
           `${process.env.REACT_APP_SERVER}/api/autocomplete`,
@@ -137,6 +141,8 @@ class AutoComplete extends React.Component {
             id: location.place_id
           };
         });
+
+        console.log("RUN FOUR", this.state.isUsingCombobox)
         this.setState({
           autoComplete: predictions,
           isUsingCombobox: true
@@ -146,6 +152,30 @@ class AutoComplete extends React.Component {
       }
       return;
     }
+  };
+
+   debounceInput = (e) => {
+    let currTimeOut; 
+
+    const { name, value } = e.target;
+    this.setState({ [name]: value });
+
+    console.log("TIMEOUT", this.state.timeOut)
+
+    if (this.state.timeOut) {
+      clearTimeout(this.state.timeOut)
+    }
+
+    currTimeOut = setTimeout(() => {
+      console.log("ads", this.state.timeOut)
+      this.setState({timeOut: null})
+      this.onInputChange(name, value)
+
+    }, 500);
+
+    console.log(currTimeOut)
+
+    this.setState({timeOut: currTimeOut})
   };
 
   // Tests
@@ -222,8 +252,8 @@ class AutoComplete extends React.Component {
   resetOnSubmit = () => {
     this.setState({ chosenNames: [], autoComplete: [], input: "" });
   };
-
   render() {
+    console.log("====AUTOCOMPLETE====", this.state.isUsingCombobox)
     return (
       <div>
         <div>
@@ -248,7 +278,7 @@ class AutoComplete extends React.Component {
               aria-activedescendant={this.state.currentFocusedOption}
               name="input"
               value={this.state.input}
-              onChange={this.onInputChange}
+              onChange={e => this.debounceInput(e)}
               onKeyDown={e =>
                 this.state.autoComplete.length > 0
                   ? this.focusOnFirstOption(e)
