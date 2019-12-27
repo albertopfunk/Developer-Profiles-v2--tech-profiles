@@ -2,7 +2,7 @@ const express = require("express");
 const axios = require("axios");
 const cloudinary = require("cloudinary").v2;
 const fileUpload = require("express-fileupload");
-const stripe = require("stripe")("sk_test_Zz77ZKGueQxb5zIIezFryEau005khPI0Wq");
+const stripe = require("stripe")(process.env.STRIPE_KEY);
 
 const server = express.Router();
 
@@ -47,9 +47,11 @@ server.post("/delete-image", (req, res) => {
       res
         .status(500)
         .json({ message: "Error uploading image with cloudinary", err });
+      return;
     }
     if (result.result === "not found") {
       res.status(404).json({ message: "public_id not found" });
+      return;
     }
     res.send(result.result);
   });
@@ -87,20 +89,46 @@ server.post("/gio", async (req, res) => {
 
 server.use(require("body-parser").text());
 
-server.post("/charge", async (req, res) => {
-  try {
-    let { status } = await stripe.charges.create({
-      amount: 2000,
-      currency: "usd",
-      description: "An example charge",
-      source: req.body.token
-    });
+server.post("/subscribe", async (req, res) => {
+  const { token, subType, email } = req.body;
+  let plan;
 
-    res.json({ status });
-  } catch (err) {
-    console.log(err);
-    res.status(500).end();
+  if (subType === "yearly") {
+    plan = process.env.STRIPE_CANDIDATE_YEARLY;
+  } else if (subType === "monthly") {
+    plan = process.env.STRIPE_CANDIDATE_MONTHLY;
   }
+
+  stripe.customers.create(
+    {
+      description: `New customer for ${subType} plan`,
+      source: token,
+      email
+    },
+    function(err, customer) {
+      if (err) {
+        res.status(500).json({ message: "Unable to CREATE customer" });
+        return;
+      }
+
+      stripe.subscriptions.create(
+        {
+          customer: customer.id,
+          items: [{ plan }]
+        },
+        function(err, subscription) {
+          if (err) {
+            res.status(500).json({ message: "Unable to SUB customer" });
+            return;
+          }
+          res.send({
+            stripe_customer_id: customer.id,
+            stripe_subscription_name: subscription.id
+          });
+        }
+      );
+    }
+  );
 });
 
 module.exports = server;
