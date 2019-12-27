@@ -1,5 +1,4 @@
 import React from "react";
-import { PropTypes } from "prop-types";
 
 import UserProjects from "./UserProjects";
 import UserEducation from "./UserEducation";
@@ -63,15 +62,5 @@ function UserExtras(props) {
     </section>
   );
 }
-
-UserExtras.propTypes = {
-  noExtras: PropTypes.bool,
-  topSkills: PropTypes.arrayOf(PropTypes.string),
-  additionalSkills: PropTypes.arrayOf(PropTypes.string),
-  projects: PropTypes.arrayOf(PropTypes.object),
-  education: PropTypes.arrayOf(PropTypes.object),
-  experience: PropTypes.arrayOf(PropTypes.object),
-  interestedLocations: PropTypes.arrayOf(PropTypes.string)
-};
 
 export default UserExtras;
