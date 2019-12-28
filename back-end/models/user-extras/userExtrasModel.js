@@ -10,8 +10,9 @@ module.exports = {
 
 async function insert(userExtra, body) {
 
-
-  return db(`${userExtra}`).insert(body);
+  const ret = await db(`${userExtra}`).insert(body);
+  const id = ret[0]
+  return getSingle(userExtra, id);
 }
 
 function getAll(userId, userExtra) {
