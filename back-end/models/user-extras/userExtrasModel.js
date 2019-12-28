@@ -10,9 +10,8 @@ module.exports = {
 
 async function insert(userExtra, body) {
 
-  // destructure not working with posgres
-  const id = await db(`${userExtra}`).insert(body);
-  return getSingle(userExtra, id[0]);
+
+  return await db(`${userExtra}`).insert(body);
 }
 
 function getAll(userId, userExtra) {
