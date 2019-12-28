@@ -11,7 +11,7 @@ module.exports = {
 async function insert(userExtra, body) {
 
 
-  return await db(`${userExtra}`).insert(body);
+  return db(`${userExtra}`).insert(body);
 }
 
 function getAll(userId, userExtra) {
