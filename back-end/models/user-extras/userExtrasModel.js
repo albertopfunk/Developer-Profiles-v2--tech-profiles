@@ -12,7 +12,8 @@ async function insert(userExtra, body) {
 
   const ret = await db(`${userExtra}`).insert(body);
   const id = ret[0]
-  return getSingle(userExtra, id);
+  const newExtra = await getSingle(userExtra, id);
+  return newExtra
 }
 
 function getAll(userId, userExtra) {
