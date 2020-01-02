@@ -10,8 +10,15 @@ module.exports = {
 };
 
 async function insert(newSkill) {
-  const [id] = await db("skills").insert(newSkill);
-  return getSingle(id);
+  const dbEnv = process.env.DB_ENV || process.env.DB;
+
+  if (dbEnv === "production") {
+    const [id] = await db("skills").returning("id").insert(newSkill);
+    return getSingle(id);
+  } else {
+    const [id] = await db("skills").insert(newSkill);
+    return getSingle(id);
+  }
 }
 
 function getAll() {
