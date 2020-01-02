@@ -131,4 +131,16 @@ server.post("/subscribe", async (req, res) => {
   );
 });
 
+server.post("/customer-sub", async (req, res) => {
+  const { sub } = req.body;
+
+  stripe.subscriptions.retrieve(sub, function(err, subscription) {
+    if (err) {
+      res.status(500).json({ message: "Unable to get SUB" });
+      return;
+    }
+    res.send(subscription);
+  });
+});
+
 module.exports = server;
