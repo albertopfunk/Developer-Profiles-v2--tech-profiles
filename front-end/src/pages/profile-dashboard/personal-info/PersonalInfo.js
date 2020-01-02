@@ -6,7 +6,9 @@ import axios from "axios";
 import ImageUploadForm from "../../../components/forms/profile-dashboard/image-uploads/ImageUploadForm";
 
 function PersonalInfo() {
-  const { loadingUser, user, editProfile, setPreviewImg } = useContext(ProfileContext);
+  const { loadingUser, user, editProfile, setPreviewImg } = useContext(
+    ProfileContext
+  );
 
   const [imageInput, setImageInput] = useState("");
   const [firstNameInput, setFirstNameInput] = useState("");
@@ -15,23 +17,21 @@ function PersonalInfo() {
   const [areaOfWorkInput, setAreaOfWorkInput] = useState("");
   const [titleInput, setTitleInput] = useState("");
 
-
   useEffect(() => {
-    console.log("=====LOCAL STORAGE USEEFFECT=====")
+    console.log("=====LOCAL STORAGE USEEFFECT=====");
     if (localStorage.getItem("img_prev")) {
       const imgPrev = `mockURL,${localStorage.getItem("img_prev")}`;
       localStorage.removeItem("img_prev");
       deleteOldImage(imgPrev);
     }
   }, []);
-  
-  useEffect(() => {
-    console.log("=====REMOVE IMAGE USEEFFECT=====")
-    return () => {
-      setPreviewImg("")
-    };
-  }, [setPreviewImg])
 
+  useEffect(() => {
+    console.log("=====REMOVE IMAGE USEEFFECT=====");
+    return () => {
+      setPreviewImg("");
+    };
+  }, [setPreviewImg]);
 
   async function deleteOldImage(imageId) {
     let imageToDelete = imageId;
@@ -73,7 +73,7 @@ function PersonalInfo() {
 
     if (imageInput) {
       inputs.image = imageInput;
-      localStorage.removeItem("img_prev")
+      localStorage.removeItem("img_prev");
       setPreviewImg("");
       setImageInput("");
     }
@@ -95,10 +95,10 @@ function PersonalInfo() {
 
     if (imageInput && user.image) {
       deleteOldImage(user.image).then(() => {
-        editProfile(inputs)
-      })
+        editProfile(inputs);
+      });
     } else {
-      editProfile(inputs)
+      editProfile(inputs);
     }
   }
 

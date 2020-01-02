@@ -1,11 +1,7 @@
-import React from 'react'
+import React from "react";
 
 function MainFooter() {
-  return (
-    <div>
-      
-    </div>
-  )
+  return <div></div>;
 }
 
-export default MainFooter
+export default MainFooter;

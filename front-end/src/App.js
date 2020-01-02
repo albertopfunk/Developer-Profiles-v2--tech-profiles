@@ -39,7 +39,7 @@ class App extends React.Component {
   }
 
   render() {
-    console.log("===APP RENDER===")
+    console.log("===APP RENDER===");
     return (
       <>
         <GlobalStyles />

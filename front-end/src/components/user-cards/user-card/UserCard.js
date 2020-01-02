@@ -196,10 +196,7 @@ class UserCard extends React.Component {
                   image={image}
                 />
               ) : (
-                <UserImage
-                  handleImgErr={this.handleImgErr}
-                  image={image}
-                />
+                <UserImage handleImgErr={this.handleImgErr} image={image} />
               )}
 
               <UserInfo

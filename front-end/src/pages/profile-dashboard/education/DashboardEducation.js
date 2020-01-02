@@ -5,23 +5,17 @@ import { ProfileContext } from "../../../global/context/user-profile/ProfileCont
 
 function DashboardEducation() {
   const { loadingUser, user, addExtra } = useContext(ProfileContext);
-  const [school, setSchool] = useState("")
-  const [fieldOfStudy, setFieldOfStudy] = useState("")
-
-
-
+  const [school, setSchool] = useState("");
+  const [fieldOfStudy, setFieldOfStudy] = useState("");
 
   async function submitAdd(e) {
     e.preventDefault();
 
-    if (
-      !school &&
-      !fieldOfStudy
-    ) {
+    if (!school && !fieldOfStudy) {
       return;
     }
 
-    const inputs = {user_id: user.id};
+    const inputs = { user_id: user.id };
     if (school) {
       inputs.school = school;
       setSchool("");

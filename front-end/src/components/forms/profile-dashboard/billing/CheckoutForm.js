@@ -3,7 +3,6 @@ import { CardElement, injectStripe } from "react-stripe-elements";
 import axios from "axios";
 import styled from "styled-components";
 
-
 // check if user is subscribed
 
 // other todos
@@ -12,28 +11,25 @@ import styled from "styled-components";
 // renew sub
 // ediit sub
 
-
-
 // STATES
 
 // User - has never subscribed
-  // checkout container
-  // stripeID AND subID === NULL
+// checkout container
+// stripeID AND subID === NULL
 
 // Subscribed Customer - has subscription
-  // info container
-    // next payment date
-    // amount due
-    // edit credit card*
-    // edit sub type
-    // cancel sub
-  // stripeID AND subID === TRUE
+// info container
+// next payment date
+// amount due
+// edit credit card*
+// edit sub type
+// cancel sub
+// stripeID AND subID === TRUE
 
 // Customer - previous subscription
-  // re-sub options container
-    // renew sub
-  // stripeID === TRUE, subID === NULL
-
+// re-sub options container
+// renew sub
+// stripeID === TRUE, subID === NULL
 
 // CONSTRAINTS
 
@@ -42,13 +38,9 @@ import styled from "styled-components";
 // user db stripe customer ID should never be deleted(unless user completely deletes account)
 // existing customer ID will be used to re-sub
 
-
 // FEATURES
 
-// user can cancel a sub, renew a sub, update type of sub, update cc, 
-
-
-
+// user can cancel a sub, renew a sub, update type of sub, update cc,
 
 class CheckoutForm extends Component {
   state = {

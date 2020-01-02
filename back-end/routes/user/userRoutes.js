@@ -119,7 +119,6 @@ server.post(
       end += 14;
     }
 
-    
     try {
       const users = await userModel.getAllFiltered(req.body);
       console.log("/INFINITE", users.length);

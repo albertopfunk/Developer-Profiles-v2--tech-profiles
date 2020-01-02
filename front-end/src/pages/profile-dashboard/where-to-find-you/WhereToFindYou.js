@@ -24,4 +24,4 @@ const Main = styled.main`
   background-color: pink;
 `;
 
-export default WhereToFindYou
+export default WhereToFindYou;

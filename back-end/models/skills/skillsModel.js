@@ -13,7 +13,9 @@ async function insert(newSkill) {
   const dbEnv = process.env.DB_ENV || process.env.DB;
 
   if (dbEnv === "production") {
-    const [id] = await db("skills").returning("id").insert(newSkill);
+    const [id] = await db("skills")
+      .returning("id")
+      .insert(newSkill);
     return getSingle(id);
   } else {
     const [id] = await db("skills").insert(newSkill);
@@ -29,9 +31,9 @@ function getAllFiltered(input) {
   const dbEnv = process.env.DB_ENV || process.env.DB;
 
   if (dbEnv === "production") {
-    return db("skills").where('skill', 'ilike', `%${input}%`);
+    return db("skills").where("skill", "ilike", `%${input}%`);
   } else {
-    return db("skills").where('skill', 'like', `%${input}%`);
+    return db("skills").where("skill", "like", `%${input}%`);
   }
 }
 

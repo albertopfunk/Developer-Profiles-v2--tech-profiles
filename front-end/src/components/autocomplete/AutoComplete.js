@@ -288,9 +288,7 @@ class AutoComplete extends React.Component {
 
         <div>
           {/* need to do something similar to locations when there is none */}
-          {this.props.skills &&
-          !this.state.skillsInBank &&
-          this.state.input ? (
+          {this.props.skills && !this.state.skillsInBank && this.state.input ? (
             <div>
               <p>
                 {this.state.input} is not in our system, click on the button to

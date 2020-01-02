@@ -97,7 +97,7 @@ function relocateToFilter(users, chosenRelocateToArr) {
   filteredUsers = users.filter(user => {
     if (user.interested_location_names) {
       filteredUserArr = user.interested_location_names.split("|");
-      return chosenRelocateToArr.some(item => filteredUserArr.includes(item))
+      return chosenRelocateToArr.some(item => filteredUserArr.includes(item));
     } else {
       return false;
     }
