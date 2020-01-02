@@ -9,11 +9,17 @@ module.exports = {
 };
 
 async function insert(userExtra, body) {
+  const dbEnv = process.env.DB_ENV || process.env.DB;
 
-  const ret = await db(`${userExtra}`).insert(body);
-  const id = ret[0]
-  const newExtra = await getSingle(userExtra, id);
-  return newExtra
+  if (dbEnv === "production") {
+    const [id] = await db(`${userExtra}`)
+      .returning("id")
+      .insert(body);
+    return getSingle(userExtra, id);
+  } else {
+    const [id] = await db(`${userExtra}`).insert(body);
+    return getSingle(userExtra, id);
+  }
 }
 
 function getAll(userId, userExtra) {
