@@ -131,7 +131,35 @@ server.post("/subscribe", async (req, res) => {
   );
 });
 
-server.post("/customer-sub", async (req, res) => {
+server.post("/subscribe-existing", (req, res) => {
+  const { stripeId, subType } = req.body;
+
+  let plan;
+
+  if (subType === "yearly") {
+    plan = process.env.STRIPE_CANDIDATE_YEARLY;
+  } else if (subType === "monthly") {
+    plan = process.env.STRIPE_CANDIDATE_MONTHLY;
+  }
+
+  stripe.subscriptions.create(
+    {
+      customer: stripeId,
+      items: [{ plan }]
+    },
+    function(err, subscription) {
+      if (err) {
+        res.status(500).json({ message: "Unable to SUB customer" });
+        return;
+      }
+      res.send({
+        stripe_subscription_name: subscription.id
+      });
+    }
+  );
+});
+
+server.post("/get-subscription", async (req, res) => {
   const { sub } = req.body;
 
   stripe.subscriptions.retrieve(sub, function(err, subscription) {
@@ -139,7 +167,26 @@ server.post("/customer-sub", async (req, res) => {
       res.status(500).json({ message: "Unable to get SUB" });
       return;
     }
-    res.send(subscription);
+    res.send({
+      status: subscription.status,
+      nickName: subscription.plan.nickname,
+      type: subscription.plan.interval,
+      created: subscription.created,
+      startDate: subscription.current_period_start,
+      dueDate: subscription.current_period_end
+    });
+  });
+});
+
+server.post("/cancel-subscription", async (req, res) => {
+  const { sub } = req.body;
+
+  stripe.subscriptions.del(sub, function(err, confirmation) {
+    if (err) {
+      res.status(500).json({ message: "Unable to cancel SUB" });
+      return;
+    }
+    res.send(confirmation);
   });
 });
 
