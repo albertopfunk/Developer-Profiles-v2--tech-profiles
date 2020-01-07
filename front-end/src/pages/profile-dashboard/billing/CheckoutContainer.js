@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import axios from "axios";
 import styled from "styled-components";
-import UserForm from "./UserForm";
-import SubscriberForm from "./SubscriberForm";
-import CustomerForm from "./CustomerForm";
+import UserForm from "../../../components/forms/profile-dashboard/billing/UserForm";
+import SubscriberForm from "../../../components/forms/profile-dashboard/billing/SubscriberForm";
+import CustomerForm from "../../../components/forms/profile-dashboard/billing/CustomerForm";
 
-class CheckoutForm extends Component {
+class CheckoutContainer extends Component {
   state = {
     userType: ""
   };
@@ -71,53 +71,53 @@ class CheckoutForm extends Component {
 
     if (this.state.userType === "user") {
       return (
-        <CheckoutContainer>
+        <CheckoutSection>
           <UserForm
             editUserProfile={this.editUserProfile}
             email={this.props.email}
           />
-        </CheckoutContainer>
+        </CheckoutSection>
       );
     }
 
     if (this.state.userType === "subscriber") {
       return (
-        <CheckoutContainer>
+        <CheckoutSection>
           <SubscriberForm
             stripeSubId={this.props.stripeSubId}
             editUserProfile={this.editUserProfile}
             setUserType={this.setUserType}
           />
-        </CheckoutContainer>
+        </CheckoutSection>
       );
     }
 
     if (this.state.userType === "customer") {
       return (
-        <CheckoutContainer>
+        <CheckoutSection>
           <CustomerForm
             editUserProfile={this.editUserProfile}
             setUserType={this.setUserType}
             stripeId={this.props.stripeId}
           />
-        </CheckoutContainer>
+        </CheckoutSection>
       );
     }
 
     if (this.state.userType === "inactiveSubscriber") {
       return (
-        <CheckoutContainer>
+        <CheckoutSection>
           <h1>INACTIVE</h1>
-        </CheckoutContainer>
+        </CheckoutSection>
       );
     }
   }
 }
 
-const CheckoutContainer = styled.section`
+const CheckoutSection = styled.section`
   width: 800px;
   height: 650px;
   background-color: skyblue;
 `;
 
-export default CheckoutForm;
+export default CheckoutContainer;

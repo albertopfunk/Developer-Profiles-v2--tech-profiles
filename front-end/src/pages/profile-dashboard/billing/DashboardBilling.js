@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import { Elements, StripeProvider } from "react-stripe-elements";
-import CheckoutForm from "../../../components/forms/profile-dashboard/billing/CheckoutForm";
+import CheckoutContainer from "./CheckoutContainer";
 
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
 
@@ -28,7 +28,7 @@ function DashboardBilling() {
       <Main>
         <h1>React Stripe Elements Example</h1>
         <Elements>
-          <CheckoutForm
+          <CheckoutContainer
             stripeId={user.stripe_customer_id}
             stripeSubId={user.stripe_subscription_name}
             email={user.email}
