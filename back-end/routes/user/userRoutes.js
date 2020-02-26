@@ -27,7 +27,6 @@ const server = express.Router();
     stripe_subscription_name
     top_skills
     additional_skills
-    familiar_skills - might deprecate
 
     years_of_related_work_experience
     clicks_to_expand

@@ -21,7 +21,6 @@ exports.usersData = [
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
     additional_skills: "Java, Swift",
-    familiar_skills: "Ruby, Elixir, SQL, Python"
   },
   {
     email: null,
@@ -45,7 +44,6 @@ exports.usersData = [
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
     additional_skills: "Java, Swift",
-    familiar_skills: "Ruby, Elixir, SQL, Python"
   },
   {
     email: null,
@@ -69,7 +67,6 @@ exports.usersData = [
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
     additional_skills: "Java, Swift",
-    familiar_skills: "Ruby, Elixir, SQL, Python"
   },
   {
     email: null,
@@ -93,7 +90,6 @@ exports.usersData = [
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
     additional_skills: "Java, Swift",
-    familiar_skills: "Ruby, Elixir, SQL, Python"
   },
   {
     email: null,
@@ -117,7 +113,6 @@ exports.usersData = [
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
     additional_skills: "Java, Swift",
-    familiar_skills: "Ruby, Elixir, SQL, Python"
   },
   {
     email: null,
@@ -141,7 +136,6 @@ exports.usersData = [
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
     additional_skills: "Java, Swift",
-    familiar_skills: "Ruby, Elixir, SQL, Python"
   },
   {
     email: null,
@@ -165,7 +159,6 @@ exports.usersData = [
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
     additional_skills: "Java, Swift",
-    familiar_skills: "Ruby, Elixir, SQL, Python"
   },
   {
     email: null,
@@ -189,7 +182,6 @@ exports.usersData = [
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
     additional_skills: "Java, Swift",
-    familiar_skills: "Ruby, Elixir, SQL, Python"
   },
   {
     email: null,
@@ -213,7 +205,6 @@ exports.usersData = [
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
     additional_skills: "Java, Swift",
-    familiar_skills: "Ruby, Elixir, SQL, Python"
   },
   {
     email: null,
@@ -237,7 +228,6 @@ exports.usersData = [
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
     additional_skills: "Java, Swift",
-    familiar_skills: "Ruby, Elixir, SQL, Python"
   },
   {
     email: null,
@@ -261,7 +251,6 @@ exports.usersData = [
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
     additional_skills: "Java, Swift",
-    familiar_skills: "Ruby, Elixir, SQL, Python"
   },
   {
     email: null,
@@ -285,7 +274,6 @@ exports.usersData = [
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
     additional_skills: "Java, Swift",
-    familiar_skills: "Ruby, Elixir, SQL, Python"
   },
   {
     email: null,
@@ -309,7 +297,6 @@ exports.usersData = [
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
     additional_skills: "Java, Swift",
-    familiar_skills: "Ruby, Elixir, SQL, Python"
   },
   {
     email: null,
@@ -333,7 +320,6 @@ exports.usersData = [
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
     additional_skills: "Java, Swift",
-    familiar_skills: "Ruby, Elixir, SQL, Python"
   },
   {
     email: null,
@@ -357,7 +343,6 @@ exports.usersData = [
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
     additional_skills: "Java, Swift",
-    familiar_skills: "Ruby, Elixir, SQL, Python"
   },
   {
     email: null,
@@ -381,7 +366,6 @@ exports.usersData = [
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
     additional_skills: "Java, Swift",
-    familiar_skills: "Ruby, Elixir, SQL, Python"
   },
   {
     email: null,
@@ -405,7 +389,6 @@ exports.usersData = [
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
     additional_skills: "Java, Swift",
-    familiar_skills: "Ruby, Elixir, SQL, Python"
   },
   {
     email: null,
@@ -429,7 +412,6 @@ exports.usersData = [
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
     additional_skills: "Java, Swift",
-    familiar_skills: "Ruby, Elixir, SQL, Python"
   },
   {
     email: null,
@@ -453,7 +435,6 @@ exports.usersData = [
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
     additional_skills: "Java, Swift",
-    familiar_skills: "Ruby, Elixir, SQL, Python"
   },
   {
     email: null,
@@ -477,7 +458,6 @@ exports.usersData = [
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
     additional_skills: "Java, Swift",
-    familiar_skills: "Ruby, Elixir, SQL, Python"
   },
   {
     email: null,
@@ -501,7 +481,6 @@ exports.usersData = [
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
     additional_skills: "Java, Swift",
-    familiar_skills: "Ruby, Elixir, SQL, Python"
   },
   {
     email: null,
@@ -525,7 +504,6 @@ exports.usersData = [
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
     additional_skills: "Java, Swift",
-    familiar_skills: "Ruby, Elixir, SQL, Python"
   },
   {
     email: null,
@@ -549,7 +527,6 @@ exports.usersData = [
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
     additional_skills: "Java, Swift",
-    familiar_skills: "Ruby, Elixir, SQL, Python"
   },
   {
     email: null,
@@ -573,7 +550,6 @@ exports.usersData = [
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
     additional_skills: "Java, Swift",
-    familiar_skills: "Ruby, Elixir, SQL, Python"
   },
   {
     email: null,
@@ -597,7 +573,6 @@ exports.usersData = [
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
     additional_skills: "Java, Swift",
-    familiar_skills: "Ruby, Elixir, SQL, Python"
   },
   {
     email: null,
@@ -621,7 +596,6 @@ exports.usersData = [
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
     additional_skills: "Java, Swift",
-    familiar_skills: "Ruby, Elixir, SQL, Python"
   },
   {
     email: null,
@@ -645,7 +619,6 @@ exports.usersData = [
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
     additional_skills: "Java, Swift",
-    familiar_skills: "Ruby, Elixir, SQL, Python"
   },
   {
     email: null,
@@ -669,7 +642,6 @@ exports.usersData = [
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
     additional_skills: "Java, Swift",
-    familiar_skills: "Ruby, Elixir, SQL, Python"
   },
   {
     email: null,
@@ -693,7 +665,6 @@ exports.usersData = [
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
     additional_skills: "Java, Swift",
-    familiar_skills: "Ruby, Elixir, SQL, Python"
   },
   {
     email: null,
@@ -717,7 +688,6 @@ exports.usersData = [
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
     additional_skills: "Java, Swift",
-    familiar_skills: "Ruby, Elixir, SQL, Python"
   },
   {
     email: null,
@@ -741,7 +711,6 @@ exports.usersData = [
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
     additional_skills: "Java, Swift",
-    familiar_skills: "Ruby, Elixir, SQL, Python"
   },
   {
     email: null,
@@ -765,7 +734,6 @@ exports.usersData = [
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
     additional_skills: "Java, Swift",
-    familiar_skills: "Ruby, Elixir, SQL, Python"
   },
   {
     email: null,
@@ -789,7 +757,6 @@ exports.usersData = [
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
     additional_skills: "Java, Swift",
-    familiar_skills: "Ruby, Elixir, SQL, Python"
   },
   {
     email: null,
@@ -813,7 +780,6 @@ exports.usersData = [
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
     additional_skills: "Java, Swift",
-    familiar_skills: "Ruby, Elixir, SQL, Python"
   },
   {
     email: null,
@@ -837,7 +803,6 @@ exports.usersData = [
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
     additional_skills: "Java, Swift",
-    familiar_skills: "Ruby, Elixir, SQL, Python"
   },
   {
     email: null,
@@ -861,7 +826,6 @@ exports.usersData = [
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
     additional_skills: "Java, Swift",
-    familiar_skills: "Ruby, Elixir, SQL, Python"
   },
   {
     email: null,
@@ -885,7 +849,6 @@ exports.usersData = [
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
     additional_skills: "Java, Swift",
-    familiar_skills: "Ruby, Elixir, SQL, Python"
   },
   {
     email: null,
@@ -909,7 +872,6 @@ exports.usersData = [
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
     additional_skills: "Java, Swift",
-    familiar_skills: "Ruby, Elixir, SQL, Python"
   },
   {
     email: null,
@@ -933,7 +895,6 @@ exports.usersData = [
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
     additional_skills: "Java, Swift",
-    familiar_skills: "Ruby, Elixir, SQL, Python"
   },
   {
     email: null,
@@ -957,7 +918,6 @@ exports.usersData = [
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
     additional_skills: "Java, Swift",
-    familiar_skills: "Ruby, Elixir, SQL, Python"
   },
   {
     email: null,
@@ -981,7 +941,6 @@ exports.usersData = [
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
     additional_skills: "Java, Swift",
-    familiar_skills: "Ruby, Elixir, SQL, Python"
   },
   {
     email: null,
@@ -1005,7 +964,6 @@ exports.usersData = [
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
     additional_skills: "Java, Swift",
-    familiar_skills: "Ruby, Elixir, SQL, Python"
   },
   {
     email: null,
@@ -1029,7 +987,6 @@ exports.usersData = [
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
     additional_skills: "Java, Swift",
-    familiar_skills: "Ruby, Elixir, SQL, Python"
   },
   {
     email: null,
@@ -1053,7 +1010,6 @@ exports.usersData = [
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
     additional_skills: "Java, Swift",
-    familiar_skills: "Ruby, Elixir, SQL, Python"
   },
   {
     email: null,
@@ -1077,7 +1033,6 @@ exports.usersData = [
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
     additional_skills: "Java, Swift",
-    familiar_skills: "Ruby, Elixir, SQL, Python"
   },
   {
     email: null,
@@ -1101,7 +1056,6 @@ exports.usersData = [
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
     additional_skills: "Java, Swift",
-    familiar_skills: "Ruby, Elixir, SQL, Python"
   },
   {
     email: null,
@@ -1125,7 +1079,6 @@ exports.usersData = [
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
     additional_skills: "Java, Swift",
-    familiar_skills: "Ruby, Elixir, SQL, Python"
   },
   {
     email: null,
@@ -1149,7 +1102,6 @@ exports.usersData = [
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
     additional_skills: "Java, Swift",
-    familiar_skills: "Ruby, Elixir, SQL, Python"
   },
   {
     email: null,
@@ -1173,7 +1125,6 @@ exports.usersData = [
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
     additional_skills: "Java, Swift",
-    familiar_skills: "Ruby, Elixir, SQL, Python"
   },
   {
     email: null,
@@ -1197,6 +1148,5 @@ exports.usersData = [
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
     additional_skills: "Java, Swift",
-    familiar_skills: "Ruby, Elixir, SQL, Python"
   }
 ];

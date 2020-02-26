@@ -21,7 +21,6 @@ exports.up = function(knex, Promise) {
     table.string("stripe_subscription_name");
     table.string("top_skills", 1000);
     table.string("additional_skills", 1000);
-    table.string("familiar_skills", 1000);
   });
 };
 
