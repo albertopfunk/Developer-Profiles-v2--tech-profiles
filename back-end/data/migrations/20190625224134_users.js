@@ -16,8 +16,6 @@ exports.up = function(knex, Promise) {
     table.string("github");
     table.string("linkedin");
     table.string("portfolio");
-    table.string("badge");
-    table.string("badgeURL");
     table.string("summary", 1000);
     table.string("stripe_customer_id");
     table.string("stripe_subscription_name");

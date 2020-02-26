@@ -22,8 +22,6 @@ const server = express.Router();
     github
     linkedin
     portfolio
-    badge - might deprecate
-    badgeURL - might deprecate
     summary
     stripe_customer_id
     stripe_subscription_name
