@@ -24,7 +24,7 @@ function ImageUploadForm({ deleteOldImage, imageInput, setImageInput }) {
         }
         const { url, id } = JSON.parse(e.target.response);
         const imageInfo = `${url},${id}`;
-        localStorage.setItem("img_prev", id);
+        localStorage.setItem("img_prev", imageInfo);
         setPreviewImg(url);
         setImageInput(imageInfo);
         setLoadingImage(false);

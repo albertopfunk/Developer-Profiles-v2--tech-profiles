@@ -20,7 +20,7 @@ function PersonalInfo() {
   useEffect(() => {
     console.log("=====LOCAL STORAGE USEEFFECT=====");
     if (localStorage.getItem("img_prev")) {
-      const imgPrev = `mockURL,${localStorage.getItem("img_prev")}`;
+      const imgPrev = localStorage.getItem("img_prev");
       localStorage.removeItem("img_prev");
       deleteOldImage(imgPrev);
     }

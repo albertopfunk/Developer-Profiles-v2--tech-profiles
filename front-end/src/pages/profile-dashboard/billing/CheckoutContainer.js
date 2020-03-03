@@ -12,9 +12,9 @@ class CheckoutContainer extends Component {
 
   componentDidMount() {
     if (!this.props.stripeId) {
-      this.setState({ userType: "user" });
+      this.setUserType("user");
     } else if (this.props.stripeId && !this.props.stripeSubId) {
-      this.setState({ userType: "customer" });
+      this.setUserType("customer");
     } else {
       this.checkSubStatus();
     }
@@ -25,7 +25,7 @@ class CheckoutContainer extends Component {
       if (this.props.stripeSubId) {
         this.checkSubStatus();
       } else {
-        this.setState({ userType: "customer" });
+        this.setUserType("customer");
       }
     }
   }
@@ -40,9 +40,9 @@ class CheckoutContainer extends Component {
       );
 
       if (res.data.status === "active") {
-        this.setState({ userType: "subscriber" });
+        this.setUserType("subscriber");
       } else {
-        this.setState({ userType: "inactiveSubscriber" });
+        this.setUserType("inactiveSubscriber");
       }
     } catch (err) {
       console.error(err);
