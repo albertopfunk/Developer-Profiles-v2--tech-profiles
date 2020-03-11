@@ -28,7 +28,6 @@ const server = express.Router();
     top_skills
     additional_skills
 
-    years_of_related_work_experience
     clicks_to_expand
     clicks_to_view_profile
     profile_views
@@ -103,7 +102,6 @@ server.get("/", async (req, res) => {
 // returns 14 [user objects]
 server.post(
   "/infinite",
-  userMiddleware.validateFilterOptions,
   userMiddleware.getUsersFromCache,
   async (req, res) => {
     let start = 0;

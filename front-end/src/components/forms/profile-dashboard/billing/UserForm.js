@@ -36,6 +36,7 @@ class UserForm extends Component {
   };
 
   subscribeUser = async tokenId => {
+    // || vs &&
     if (this.state.subType !== "yearly" && this.state.subType !== "monthly") {
       return;
     }

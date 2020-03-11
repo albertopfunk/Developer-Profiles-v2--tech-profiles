@@ -99,6 +99,7 @@ function getUsersFromCache(req, res, next) {
 
   const { usersPage, isUsinginfinite } = req.body;
 
+  // can't you just multiply instead of looping addition?
   for (let i = 1; i < usersPage; i++) {
     start += 14;
     end += 14;

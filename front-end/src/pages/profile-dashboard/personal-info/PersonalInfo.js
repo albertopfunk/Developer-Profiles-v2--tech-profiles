@@ -26,6 +26,8 @@ function PersonalInfo() {
     }
   }, []);
 
+  // dont need the state change on destroy
+  // state is reset when component unmounts so this is unecessary
   useEffect(() => {
     console.log("=====REMOVE IMAGE USEEFFECT=====");
     return () => {
