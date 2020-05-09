@@ -84,24 +84,10 @@ class AutoComplete extends React.Component {
     }
   };
 
-  // Tests
-  // closes combobox and removes <li> when no characters are found on input change, i.e blank/spaces
-
-  // if props.skills
-  // calls skills autocomplete API on input change, sends current input
-  // skills autocomplete API returns an array of predictions based on input, or an empty array based on input if no locations found
-  // returns {id, skill}
-  // skills predictions are don't need to be mapped and already contain skill and ID of each prediction
-
-  // if not this.props.skills
-  // calls Autocomplete API on input change, sends current input
-  // Autocomplete API returns an array of predictions based on input, or an empty array based on input if no locations found
-  // returns {id, name}
-  // location predictions are mapped to extract the name and ID of each prediction
-
-  // autoCompleteResults: predictions, adds each prediction to autoComplete state which is used by <li>s
-  // isUsingCombobox: true opens combobox, even is array is empty(
-  // use this for aria-describeby, i.e 'there are x location predictions available for you')
+  // tests
+  // closes combobox when input is blank
+  // awaits array of results or empty array
+  // sets state for UI change for results
   onInputChange = async value => {
     if (value.trim() === "") {
       this.setState({ isUsingCombobox: false, autoCompleteResults: [] });
@@ -144,11 +130,6 @@ class AutoComplete extends React.Component {
   };
 
   // Tests
-  // autoCompleteResults: [], should remove all <li> from UI
-  // isUsingCombobox: false, closes combobox for accessibility
-  // input: name, should change <input> value to chosen name
-  // chosenName: name, should make chosenName UI appear, with the correct chosen location and reset btn
-  // calls onChosenInput to change user based on this filter being on and chosen location(name, id)
   choosePrediction = (name, id) => {
     const newChosenNamesState = [...this.state.chosenNames];
 
@@ -183,11 +164,6 @@ class AutoComplete extends React.Component {
   };
 
   // Tests
-  // autoCompleteResults: [], should remove all <li> from UI
-  // isUsingCombobox: false, closes combobox for accessibility
-  // input: "", should remove value from <input>
-  // chosenName: "", should make chosenName UI dissapear
-  // calls resetInputFilter to change users based on this filter being off
   resetFilter = location => {
     if (this.props.multiple) {
       let chosenNamesState = [...this.state.chosenNames];
@@ -257,24 +233,31 @@ class AutoComplete extends React.Component {
         </div>
 
         <div>
-          {/* need to do something similar to locations when there is none */}
-          {this.props.skills &&
-          !this.state.resultsInBank &&
-          this.state.input ? (
+          {!this.state.resultsInBank && this.state.input ? (
             <div>
-              <p>
-                {this.state.input} is not in our system, click on the button to
-                add it
-              </p>
-              <p>skill will be reviewed for apporval</p>
-              <button
-                onClick={() => {
-                  this.props.addNewSkill(this.state.input);
-                  this.setState({ input: "" });
-                }}
-              >
-                Add Skill
-              </button>
+              <p>No Results</p>
+
+              {this.props.inputName.includes("location") ? (
+                <p>Please choose a valid city</p>
+              ) : null}
+
+              {this.props.inputName.includes("skill") ? (
+                <div>
+                  <p>
+                    {this.state.input} is not in our system, click on the button
+                    to add it
+                  </p>
+                  <p>skill will be reviewed for apporval</p>
+                  <button
+                    onClick={() => {
+                      this.props.addNewSkill(this.state.input);
+                      this.setState({ input: "" });
+                    }}
+                  >
+                    Add Skill
+                  </button>
+                </div>
+              ) : null}
             </div>
           ) : null}
 
