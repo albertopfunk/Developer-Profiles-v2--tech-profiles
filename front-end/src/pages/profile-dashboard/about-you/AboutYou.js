@@ -57,7 +57,15 @@ function AboutYou() {
         `${process.env.REACT_APP_SERVER}/skills/autocomplete`,
         { skillsInput: value }
       );
-      return response.data;
+
+      const predictions = response.data.map(skill => {
+        return {
+          name: skill.skill,
+          id: skill.id
+        };
+      });
+
+      return predictions;
     } catch (err) {
       console.error(`${err.response.data.message} =>`, err);
       return [];
@@ -221,6 +229,7 @@ function AboutYou() {
           inputChangeFunc={locationsInputChange}
           onChosenInput={onChosenLocation}
           resetInputFilter={resetLocationFilter}
+          inputName={"interested-location"}
           locations
           multiple
         />
@@ -231,6 +240,7 @@ function AboutYou() {
           inputChangeFunc={skillsInputChange}
           onChosenInput={onChosenTopSkill}
           resetInputFilter={resetTopSkillsFilter}
+          inputName={"top-skill"}
           addNewSkill={addNewTopSkill}
           skills
           multiple
@@ -242,6 +252,7 @@ function AboutYou() {
           inputChangeFunc={skillsInputChange}
           onChosenInput={onChosenAdditionalSkill}
           resetInputFilter={resetAdditionalSkillsFilter}
+          inputName={"additional-skill"}
           addNewSkill={addNewAdditionalSkill}
           skills
           multiple

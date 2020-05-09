@@ -2,13 +2,13 @@ import React from "react";
 
 class AutoComplete extends React.Component {
   state = {
-    input: "",
     timeOut: null,
+    input: "",
+    isUsingCombobox: false,
+    currentFocusedOption: "",
     resultsInBank: true,
     autoCompleteResults: [],
-    chosenNames: [],
-    isUsingCombobox: false,
-    currentFocusedOption: ""
+    chosenNames: []
   };
 
   optionRefs = [];
@@ -128,8 +128,8 @@ class AutoComplete extends React.Component {
   debounceInput = e => {
     let currTimeOut;
 
-    const { name, value } = e.target;
-    this.setState({ [name]: value });
+    const { value } = e.target;
+    this.setState({ input: value });
 
     if (this.state.timeOut) {
       clearTimeout(this.state.timeOut);
@@ -223,35 +223,37 @@ class AutoComplete extends React.Component {
     return (
       <div>
         <div>
-          <label htmlFor="search-predictions">
-            {this.props.skills ? "Choose Skills" : "Choose Location"}
-            {/* aria-expanded should be true when any value exists on input(no blank spaces) */}
-            {/* aria-activedescendant shows correct focused <li> based on id */}
-            {/* onChange sets new predictions based on AutoComplete API, changes <li> */}
-            {/* onKeyDown only runs when there are <li>s present */}
-            {/* onKeyDown with down arrow key focuses on first option(<li>) */}
-            {/* onKeyDown with esc key resets filter with resetFilter() */}
-            <input
-              type="text"
-              id="search-predictions"
-              autoComplete="off"
-              role="combobox"
-              aria-expanded={this.state.isUsingCombobox}
-              aria-haspopup="listbox"
-              aria-controls="results"
-              aria-owns="results"
-              aria-autocomplete="list"
-              aria-activedescendant={this.state.currentFocusedOption}
-              name="input"
-              value={this.state.input}
-              onChange={e => this.debounceInput(e)}
-              onKeyDown={e =>
-                this.state.autoCompleteResults.length > 0
-                  ? this.focusOnFirstOption(e)
-                  : null
-              }
-            />
+          {/* aria-expanded should be true when any value exists on input(no blank spaces) */}
+          {/* aria-activedescendant shows correct focused <li> based on id */}
+          {/* onChange sets new predictions based on AutoComplete API, changes <li> */}
+          {/* onKeyDown only runs when there are <li>s present */}
+          {/* onKeyDown with down arrow key focuses on first option(<li>) */}
+          {/* onKeyDown with esc key resets filter with resetFilter() */}
+          <label htmlFor={`${this.props.inputName}-search-predictions`}>
+            <p style={{ textTransform: "capitalize" }}>
+              {`Choose ${this.props.inputName.split("-")[1]}`}
+            </p>
           </label>
+          <input
+            type="text"
+            id={`${this.props.inputName}-search-predictions`}
+            autoComplete="off"
+            role="combobox"
+            aria-expanded={this.state.isUsingCombobox}
+            aria-haspopup="listbox"
+            aria-controls="results"
+            aria-owns="results"
+            aria-autocomplete="list"
+            aria-activedescendant={this.state.currentFocusedOption}
+            name={`${this.props.inputName}-search-predictions`}
+            value={this.state.input}
+            onChange={e => this.debounceInput(e)}
+            onKeyDown={e =>
+              this.state.autoCompleteResults.length > 0
+                ? this.focusOnFirstOption(e)
+                : null
+            }
+          />
         </div>
 
         <div>
@@ -301,19 +303,16 @@ class AutoComplete extends React.Component {
                       onKeyDown={e =>
                         this.chooseOnKeyDown(
                           e,
-                          prediction.name || prediction.skill,
+                          prediction.name,
                           prediction.id,
                           i
                         )
                       }
                       onClick={() =>
-                        this.choosePrediction(
-                          prediction.name || prediction.skill,
-                          prediction.id
-                        )
+                        this.choosePrediction(prediction.name, prediction.id)
                       }
                     >
-                      {prediction.name || prediction.skill}
+                      {prediction.name}
                     </li>
                   );
                 })}
