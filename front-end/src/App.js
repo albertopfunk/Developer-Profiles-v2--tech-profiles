@@ -2,15 +2,15 @@ import React from "react";
 import { Route, Switch, withRouter } from "react-router-dom";
 import { GlobalStyles } from "./global/styles/GlobalStyles";
 
-import MainHeader from "./components/header/MainHeader";
 import LandingPage from "./pages/landing-page/LandingPage";
 import PublicPage from "./pages/public-page/PublicPage";
 import ProfileDashboard from "./pages/profile-dashboard/ProfileDashboard";
-import Callback from "./auth/Callback";
-import PrivateRoute from "./auth/PrivateRoute";
 import PageNotAuthorized from "./pages/error-pages/not-authorized/PageNotAuthorized";
 import PageNotFound from "./pages/error-pages/404/PageNotFound";
 import PrivatePolicy from "./pages/misc-pages/private-policy/PrivatePolicy";
+import Callback from "./auth/Callback";
+import PrivateRoute from "./auth/PrivateRoute";
+import MainHeader from "./components/header/MainHeader";
 
 import auth0Client from "./auth/Auth";
 

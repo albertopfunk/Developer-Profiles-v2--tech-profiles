@@ -1,12 +1,11 @@
 import React from "react";
-import axios from "axios";
 
 class AutoComplete extends React.Component {
   state = {
     input: "",
     timeOut: null,
-    skillsInBank: true,
-    autoComplete: [],
+    resultsInBank: true,
+    autoCompleteResults: [],
     chosenNames: [],
     isUsingCombobox: false,
     currentFocusedOption: ""
@@ -100,61 +99,29 @@ class AutoComplete extends React.Component {
   // returns {id, name}
   // location predictions are mapped to extract the name and ID of each prediction
 
-  // autoComplete: predictions, adds each prediction to autoComplete state which is used by <li>s
+  // autoCompleteResults: predictions, adds each prediction to autoComplete state which is used by <li>s
   // isUsingCombobox: true opens combobox, even is array is empty(
   // use this for aria-describeby, i.e 'there are x location predictions available for you')
   onInputChange = async value => {
-    console.log("==========RUN ZERO==========", value);
     if (value.trim() === "") {
-      this.setState({ isUsingCombobox: false, autoComplete: [] });
-      return;
-    }
-    console.log("RUN ONE");
-
-    if (this.props.skills) {
-      try {
-        const response = await axios.post(
-          `${process.env.REACT_APP_SERVER}/skills/autocomplete`,
-          { skillsInput: value }
-        );
-        this.setState({
-          autoComplete: response.data,
-          isUsingCombobox: true
-        });
-        if (response.data.length === 0) {
-          this.setState({ skillsInBank: false });
-        } else {
-          this.setState({ skillsInBank: true });
-        }
-      } catch (err) {
-        console.error(`${err.response.data.message} =>`, err);
-      }
+      this.setState({ isUsingCombobox: false, autoCompleteResults: [] });
       return;
     }
 
-    if (this.props.locations) {
-      console.log("RUN TWO", this.state.isUsingCombobox);
-      try {
-        const response = await axios.post(
-          `${process.env.REACT_APP_SERVER}/api/autocomplete`,
-          { locationInput: value }
-        );
-        const predictions = response.data.predictions.map(location => {
-          return {
-            name: location.description,
-            id: location.place_id
-          };
-        });
+    const results = await this.props.inputChangeFunc(value);
 
-        console.log("RUN FOUR", this.state.isUsingCombobox);
-        this.setState({
-          autoComplete: predictions,
-          isUsingCombobox: true
-        });
-      } catch (err) {
-        console.error(`${err.response.data.message} =>`, err);
-      }
-      return;
+    if (results.length > 0) {
+      this.setState({
+        resultsInBank: true,
+        isUsingCombobox: true,
+        autoCompleteResults: results
+      });
+    } else {
+      this.setState({
+        resultsInBank: false,
+        isUsingCombobox: false,
+        autoCompleteResults: []
+      });
     }
   };
 
@@ -177,7 +144,7 @@ class AutoComplete extends React.Component {
   };
 
   // Tests
-  // autoComplete: [], should remove all <li> from UI
+  // autoCompleteResults: [], should remove all <li> from UI
   // isUsingCombobox: false, closes combobox for accessibility
   // input: name, should change <input> value to chosen name
   // chosenName: name, should make chosenName UI appear, with the correct chosen location and reset btn
@@ -187,7 +154,7 @@ class AutoComplete extends React.Component {
 
     if (newChosenNamesState.includes(name)) {
       this.setState({
-        autoComplete: [],
+        autoCompleteResults: [],
         input: "",
         isUsingCombobox: false
       });
@@ -196,7 +163,7 @@ class AutoComplete extends React.Component {
 
     if (this.props.single) {
       this.setState({
-        autoComplete: [],
+        autoCompleteResults: [],
         input: name,
         chosenNames: [name],
         isUsingCombobox: false
@@ -207,7 +174,7 @@ class AutoComplete extends React.Component {
 
     newChosenNamesState.push(name);
     this.setState({
-      autoComplete: [],
+      autoCompleteResults: [],
       input: "",
       chosenNames: newChosenNamesState,
       isUsingCombobox: false
@@ -216,7 +183,7 @@ class AutoComplete extends React.Component {
   };
 
   // Tests
-  // autoComplete: [], should remove all <li> from UI
+  // autoCompleteResults: [], should remove all <li> from UI
   // isUsingCombobox: false, closes combobox for accessibility
   // input: "", should remove value from <input>
   // chosenName: "", should make chosenName UI dissapear
@@ -231,7 +198,7 @@ class AutoComplete extends React.Component {
       if (newChosenNamesState.length > 0) {
         this.setState({
           chosenNames: newChosenNamesState,
-          autoComplete: [],
+          autoCompleteResults: [],
           input: ""
         });
         this.props.resetInputFilter(newChosenNamesState);
@@ -241,15 +208,16 @@ class AutoComplete extends React.Component {
 
     this.setState({
       chosenNames: [],
-      autoComplete: [],
+      autoCompleteResults: [],
       input: ""
     });
     this.props.resetInputFilter();
   };
 
   resetOnSubmit = () => {
-    this.setState({ chosenNames: [], autoComplete: [], input: "" });
+    this.setState({ chosenNames: [], autoCompleteResults: [], input: "" });
   };
+
   render() {
     console.log("====AUTOCOMPLETE====", this.state.isUsingCombobox);
     return (
@@ -278,7 +246,7 @@ class AutoComplete extends React.Component {
               value={this.state.input}
               onChange={e => this.debounceInput(e)}
               onKeyDown={e =>
-                this.state.autoComplete.length > 0
+                this.state.autoCompleteResults.length > 0
                   ? this.focusOnFirstOption(e)
                   : null
               }
@@ -288,7 +256,9 @@ class AutoComplete extends React.Component {
 
         <div>
           {/* need to do something similar to locations when there is none */}
-          {this.props.skills && !this.state.skillsInBank && this.state.input ? (
+          {this.props.skills &&
+          !this.state.resultsInBank &&
+          this.state.input ? (
             <div>
               <p>
                 {this.state.input} is not in our system, click on the button to
@@ -307,9 +277,9 @@ class AutoComplete extends React.Component {
           ) : null}
 
           <ul id="results" role="listbox">
-            {this.state.autoComplete.length === 0
+            {this.state.autoCompleteResults.length === 0
               ? null
-              : this.state.autoComplete.map((prediction, i) => {
+              : this.state.autoCompleteResults.map((prediction, i) => {
                   return (
                     // setOptionRefs each li is a custom ref based on index
                     // chooseOnKeyDown with up or down arrow keys moves focus of <li>s respectively
@@ -356,21 +326,21 @@ class AutoComplete extends React.Component {
         {/* should display btn to reset location combobox */}
         {/* resetting combobox makes chosenName an empty str again so this UI should dissapear onClick of reset btn */}
         {this.state.chosenNames.length === 0 ? null : (
-          <aside id="results">
+          <ul id="results">
             {this.state.chosenNames.map(chosenName => {
               return (
-                <div key={chosenName}>
-                  <span>{chosenName}</span>
+                <li key={chosenName}>
+                  <p style={{ display: "inline" }}>{chosenName}</p>
                   <button
-                    type="reset"
+                    type="button"
                     onClick={() => this.resetFilter(chosenName)}
                   >
                     X
                   </button>
-                </div>
+                </li>
               );
             })}
-          </aside>
+          </ul>
         )}
       </div>
     );

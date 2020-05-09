@@ -34,7 +34,7 @@ class CustomerForm extends Component {
     this.setState({ subType: "monthly" });
   };
 
-  reSubscribeUser = async tokenId => {
+  reSubscribeUser = async () => {
     // || vs &&
     if (this.state.subType !== "yearly" && this.state.subType !== "monthly") {
       return;
