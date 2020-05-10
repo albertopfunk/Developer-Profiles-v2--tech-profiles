@@ -230,8 +230,6 @@ function AboutYou() {
           onChosenInput={onChosenLocation}
           resetInputFilter={resetLocationFilter}
           inputName={"interested-location"}
-          locations
-          multiple
         />
 
         <h3>Top Skills</h3>
@@ -242,8 +240,6 @@ function AboutYou() {
           resetInputFilter={resetTopSkillsFilter}
           inputName={"top-skill"}
           addNewSkill={addNewTopSkill}
-          skills
-          multiple
         />
 
         <h3>Additional Skills</h3>
@@ -254,8 +250,6 @@ function AboutYou() {
           resetInputFilter={resetAdditionalSkillsFilter}
           inputName={"additional-skill"}
           addNewSkill={addNewAdditionalSkill}
-          skills
-          multiple
         />
 
         <button>Submit</button>
