@@ -1,14 +1,30 @@
 import React from "react";
+import axios from "axios";
 
 import AutoComplete from "../autocomplete/AutoComplete";
 
 function RelocateToFilter(props) {
-  // Tests
-  // calls updateUsers with correct chosen location to update users
-  // chosenRelocateTo, correct chosen location name
-  // usersPage: 1, resets page to 1 when updating users
-  // isUsingRelocateToFilter: true, filters users based on this filter being on
-  // isUsingSortByChoice: true, each filter turns this on to correctly sort filtered users
+  async function locationsInputChange(value) {
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_SERVER}/api/autocomplete`,
+        { locationInput: value }
+      );
+
+      const predictions = response.data.predictions.map(location => {
+        return {
+          name: location.description,
+          id: location.place_id
+        };
+      });
+
+      return predictions;
+    } catch (err) {
+      console.error(`${err.response.data.message} =>`, err);
+      return [];
+    }
+  }
+
   function onChosenLocation(chosenRelocateToArr) {
     props.updateUsers({
       usersPage: 1,
@@ -18,29 +34,27 @@ function RelocateToFilter(props) {
     });
   }
 
-  // Tests
-  // calls updateUsers to update users
-  // isUsingRelocateToFilter: false, filters users based on this filter being off
   function resetLocationFilter(chosenRelocateToArr) {
-    if (chosenRelocateToArr) {
+    if (chosenRelocateToArr.length === 0) {
       props.updateUsers({
-        isUsingRelocateToFilter: true,
-        chosenRelocateToArr
+        isUsingRelocateToFilter: false
       });
       return;
     }
+
     props.updateUsers({
-      isUsingRelocateToFilter: false
+      isUsingRelocateToFilter: true,
+      chosenRelocateToArr
     });
   }
 
   return (
     <section>
       <AutoComplete
+        inputChangeFunc={locationsInputChange}
         onChosenInput={onChosenLocation}
         resetInputFilter={resetLocationFilter}
-        locations
-        multiple
+        inputName={"interested-locations"}
       />
     </section>
   );

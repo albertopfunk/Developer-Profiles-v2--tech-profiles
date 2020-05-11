@@ -5,40 +5,57 @@ import AutoComplete from "../autocomplete/AutoComplete";
 
 class CurrentLocationFilter extends React.Component {
   state = {
-    milesWithinInput: 10,
+    milesWithinInput: 5,
     chosenLocationName: "",
     chosenLocationId: ""
   };
 
-  // Tests
-  // changes state based on input, this changeing input value
   onInputChange = e => {
-    this.setState({ [e.target.name]: e.target.value });
+    this.setState({ milesWithinInput: e.target.value });
   };
 
-  //
   chooseDistanceOnKeyUp = e => {
     if (
-      e.keyCode === 37 ||
-      e.keyCode === 38 ||
-      e.keyCode === 39 ||
-      e.keyCode === 40
+      e.keyCode !== 37 &&
+      e.keyCode !== 38 &&
+      e.keyCode !== 39 &&
+      e.keyCode !== 40
     ) {
-      this.onDistanceChange();
-    } else {
       return;
     }
+    this.onDistanceChange();
   };
 
   onDistanceChange = () => {
-    if (this.state.chosenLocationName !== "") {
-      this.onChosenLocation(
-        this.state.chosenLocationName,
-        this.state.chosenLocationId,
-        true
-      );
-    } else {
+    if (!this.state.chosenLocationName) {
       return;
+    }
+
+    this.onChosenLocation(
+      this.state.chosenLocationName,
+      this.state.chosenLocationId,
+      true
+    );
+  };
+
+  locationsInputChange = async value => {
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_SERVER}/api/autocomplete`,
+        { locationInput: value }
+      );
+
+      const predictions = response.data.predictions.map(location => {
+        return {
+          name: location.description,
+          id: location.place_id
+        };
+      });
+
+      return predictions;
+    } catch (err) {
+      console.error(`${err.response.data.message} =>`, err);
+      return [];
     }
   };
 
@@ -82,8 +99,9 @@ class CurrentLocationFilter extends React.Component {
             Select Distance
             <input
               type="range"
-              min="10"
-              max="5000"
+              min="5"
+              max="2000"
+              step="5"
               id="choose-miles"
               name="milesWithinInput"
               value={this.state.milesWithinInput}
@@ -95,9 +113,10 @@ class CurrentLocationFilter extends React.Component {
           </label>
         </div>
         <AutoComplete
+          inputChangeFunc={this.locationsInputChange}
           onChosenInput={this.onChosenLocation}
           resetInputFilter={this.resetLocationFilter}
-          locations
+          inputName={"current-location"}
           single
         />
       </section>

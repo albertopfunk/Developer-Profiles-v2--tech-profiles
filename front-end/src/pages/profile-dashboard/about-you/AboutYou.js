@@ -229,7 +229,7 @@ function AboutYou() {
           inputChangeFunc={locationsInputChange}
           onChosenInput={onChosenLocation}
           resetInputFilter={resetLocationFilter}
-          inputName={"interested-location"}
+          inputName={"interested-locations"}
         />
 
         <h3>Top Skills</h3>
@@ -238,7 +238,7 @@ function AboutYou() {
           inputChangeFunc={skillsInputChange}
           onChosenInput={onChosenTopSkill}
           resetInputFilter={resetTopSkillsFilter}
-          inputName={"top-skill"}
+          inputName={"top-skills"}
           addNewSkill={addNewTopSkill}
         />
 
@@ -248,7 +248,7 @@ function AboutYou() {
           inputChangeFunc={skillsInputChange}
           onChosenInput={onChosenAdditionalSkill}
           resetInputFilter={resetAdditionalSkillsFilter}
-          inputName={"additional-skill"}
+          inputName={"additional-skills"}
           addNewSkill={addNewAdditionalSkill}
         />
 
