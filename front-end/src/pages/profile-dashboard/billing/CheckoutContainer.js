@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import axios from "axios";
 import styled from "styled-components";
-import UserForm from "../../../components/forms/profile-dashboard/billing/UserForm";
-import SubscriberForm from "../../../components/forms/profile-dashboard/billing/SubscriberForm";
-import CustomerForm from "../../../components/forms/profile-dashboard/billing/CustomerForm";
+import UserForm from "../../../components/billing/UserForm";
+import SubscriberForm from "../../../components/billing/SubscriberForm";
+import CustomerForm from "../../../components/billing/CustomerForm";
 
 class CheckoutContainer extends Component {
   state = {
