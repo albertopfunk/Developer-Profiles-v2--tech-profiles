@@ -1,12 +1,27 @@
-import React, { useState, useContext } from "react";
-import { ProfileContext } from "../../../../global/context/user-profile/ProfileContext";
+import React, { useState, useContext, useEffect } from "react";
+import { ProfileContext } from "../../global/context/user-profile/ProfileContext";
+import { deleteImage } from "../http-requests/profile-dashboard";
 
-function ImageUploadForm({ deleteOldImage, imageInput, setImageInput }) {
+function ImageUploadForm({ imageInput, setImageInput }) {
   const { setPreviewImg } = useContext(ProfileContext);
   const [loadingImage, setLoadingImage] = useState(false);
   const [errorImage, setErrorImage] = useState(false);
 
-  async function uploadImage(e) {
+  useEffect(() => {
+    if (localStorage.getItem("img_prev")) {
+      const imgPrev = localStorage.getItem("img_prev");
+      localStorage.removeItem("img_prev");
+      deleteImage(imgPrev);
+    }
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      setPreviewImg("");
+    };
+  }, [setPreviewImg]);
+
+  async function onImageInputChange(e) {
     if (e.target.files.length === 0) {
       return;
     }
@@ -20,7 +35,7 @@ function ImageUploadForm({ deleteOldImage, imageInput, setImageInput }) {
     XHR.addEventListener("load", e => {
       if (e.target.status === 200) {
         if (imageInput) {
-          deleteOldImage(imageInput);
+          deleteImage(imageInput);
         }
         const { url, id } = JSON.parse(e.target.response);
         const imageInfo = `${url},${id}`;
@@ -54,7 +69,7 @@ function ImageUploadForm({ deleteOldImage, imageInput, setImageInput }) {
         type="file"
         name="image-upload"
         placeholder="Upload Image"
-        onChange={e => uploadImage(e)}
+        onChange={e => onImageInputChange(e)}
       />
       {loadingImage ? <p>Loading...</p> : null}
       {errorImage ? <p>Error uploading image. Please try again</p> : null}

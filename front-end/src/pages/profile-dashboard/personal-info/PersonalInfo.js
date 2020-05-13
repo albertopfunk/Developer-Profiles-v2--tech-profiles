@@ -1,9 +1,9 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import styled from "styled-components";
 
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
-import axios from "axios";
-import ImageUploadForm from "../../../components/forms/profile-dashboard/image-uploads/ImageUploadForm";
+import { deleteImage } from "../../../components/http-requests/profile-dashboard";
+import ImageUploadForm from "../../../components/image-uploads/ImageUploadForm";
 
 function PersonalInfo() {
   const { loadingUser, user, editProfile, setPreviewImg } = useContext(
@@ -16,37 +16,6 @@ function PersonalInfo() {
   const [publicEmailInput, setPublicEmailInput] = useState("");
   const [areaOfWorkInput, setAreaOfWorkInput] = useState("");
   const [titleInput, setTitleInput] = useState("");
-
-  useEffect(() => {
-    console.log("=====LOCAL STORAGE USEEFFECT=====");
-    if (localStorage.getItem("img_prev")) {
-      const imgPrev = localStorage.getItem("img_prev");
-      localStorage.removeItem("img_prev");
-      deleteOldImage(imgPrev);
-    }
-  }, []);
-
-  // dont need the state change on destroy
-  // state is reset when component unmounts so this is unecessary
-  useEffect(() => {
-    console.log("=====REMOVE IMAGE USEEFFECT=====");
-    return () => {
-      setPreviewImg("");
-    };
-  }, [setPreviewImg]);
-
-  async function deleteOldImage(imageId) {
-    let imageToDelete = imageId;
-    imageToDelete = imageToDelete.split(",");
-
-    try {
-      await axios.post(`${process.env.REACT_APP_SERVER}/api/delete-image`, {
-        id: imageToDelete[1]
-      });
-    } catch (err) {
-      console.error(`Error Deleting Image =>`, err);
-    }
-  }
 
   async function submitEdit(e) {
     e.preventDefault();
@@ -96,7 +65,7 @@ function PersonalInfo() {
     }
 
     if (imageInput && user.image) {
-      deleteOldImage(user.image).then(() => {
+      deleteImage(user.image).then(() => {
         editProfile(inputs);
       });
     } else {
@@ -141,7 +110,6 @@ function PersonalInfo() {
         <ImageUploadForm
           setImageInput={setImageInput}
           imageInput={imageInput}
-          deleteOldImage={deleteOldImage}
         />
 
         <br />
