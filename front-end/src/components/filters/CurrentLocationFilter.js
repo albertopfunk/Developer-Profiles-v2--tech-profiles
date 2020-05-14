@@ -38,27 +38,6 @@ class CurrentLocationFilter extends React.Component {
     );
   };
 
-  locationsInputChange = async value => {
-    try {
-      const response = await axios.post(
-        `${process.env.REACT_APP_SERVER}/api/autocomplete`,
-        { locationInput: value }
-      );
-
-      const predictions = response.data.predictions.map(location => {
-        return {
-          name: location.description,
-          id: location.place_id
-        };
-      });
-
-      return predictions;
-    } catch (err) {
-      console.error(`${err.response.data.message} =>`, err);
-      return [];
-    }
-  };
-
   onChosenLocation = async (name, id, distChange) => {
     if (!distChange) {
       this.setState({ chosenLocationName: name, chosenLocationId: id });
@@ -113,7 +92,6 @@ class CurrentLocationFilter extends React.Component {
           </label>
         </div>
         <AutoComplete
-          inputChangeFunc={this.locationsInputChange}
           onChosenInput={this.onChosenLocation}
           resetInputFilter={this.resetLocationFilter}
           inputName={"current-location"}

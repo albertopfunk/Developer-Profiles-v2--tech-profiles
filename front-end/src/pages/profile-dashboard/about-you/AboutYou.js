@@ -1,6 +1,5 @@
 import React, { useContext, useState } from "react";
 import styled from "styled-components";
-import axios from "axios";
 
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
 import AutoComplete from "../../../components/autocomplete/AutoComplete";
@@ -16,27 +15,6 @@ function AboutYou() {
   let topSkillsRef = React.createRef();
   let additionalSkillsRef = React.createRef();
 
-  async function locationsInputChange(value) {
-    try {
-      const response = await axios.post(
-        `${process.env.REACT_APP_SERVER}/api/autocomplete`,
-        { locationInput: value }
-      );
-
-      const predictions = response.data.predictions.map(location => {
-        return {
-          name: location.description,
-          id: location.place_id
-        };
-      });
-
-      return predictions;
-    } catch (err) {
-      console.error(`${err.response.data.message} =>`, err);
-      return [];
-    }
-  }
-
   function onChosenLocation(chosenRelocateToArr) {
     setInterestedLocations(chosenRelocateToArr);
     console.log("CHOOSE RELOCATE/INTERESTED", chosenRelocateToArr);
@@ -49,27 +27,6 @@ function AboutYou() {
   function resetLocationFilter(chosenRelocateToArr) {
     setInterestedLocations(chosenRelocateToArr);
     console.log("DELETE RELOCATE/INTERESTED", chosenRelocateToArr);
-  }
-
-  async function skillsInputChange(value) {
-    try {
-      const response = await axios.post(
-        `${process.env.REACT_APP_SERVER}/skills/autocomplete`,
-        { skillsInput: value }
-      );
-
-      const predictions = response.data.map(skill => {
-        return {
-          name: skill.skill,
-          id: skill.id
-        };
-      });
-
-      return predictions;
-    } catch (err) {
-      console.error(`${err.response.data.message} =>`, err);
-      return [];
-    }
   }
 
   function onChosenTopSkill(chosenTopSkills) {
@@ -226,7 +183,6 @@ function AboutYou() {
         <h3>Interested Locations</h3>
         <AutoComplete
           ref={locationRef}
-          inputChangeFunc={locationsInputChange}
           onChosenInput={onChosenLocation}
           resetInputFilter={resetLocationFilter}
           inputName={"interested-locations"}
@@ -235,7 +191,6 @@ function AboutYou() {
         <h3>Top Skills</h3>
         <AutoComplete
           ref={topSkillsRef}
-          inputChangeFunc={skillsInputChange}
           onChosenInput={onChosenTopSkill}
           resetInputFilter={resetTopSkillsFilter}
           inputName={"top-skills"}
@@ -245,7 +200,6 @@ function AboutYou() {
         <h3>Additional Skills</h3>
         <AutoComplete
           ref={additionalSkillsRef}
-          inputChangeFunc={skillsInputChange}
           onChosenInput={onChosenAdditionalSkill}
           resetInputFilter={resetAdditionalSkillsFilter}
           inputName={"additional-skills"}

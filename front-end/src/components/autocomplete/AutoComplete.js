@@ -1,4 +1,8 @@
 import React from "react";
+import {
+  locationPredictions,
+  skillPredictions
+} from "../http-requests/profile-dashboard";
 
 class AutoComplete extends React.Component {
   state = {
@@ -100,7 +104,16 @@ class AutoComplete extends React.Component {
       return;
     }
 
-    const results = await this.props.inputChangeFunc(value);
+    let results;
+    const { inputName } = this.props;
+
+    if (inputName.includes("locations") || inputName.includes("location")) {
+      results = await locationPredictions(value);
+    } else if (inputName.includes("skills")) {
+      results = await skillPredictions(value);
+    } else {
+      console.error("inputName not provided");
+    }
 
     if (results.length > 0) {
       this.setState({
@@ -130,7 +143,7 @@ class AutoComplete extends React.Component {
     currTimeOut = setTimeout(() => {
       this.setState({ timeOut: null });
       this.onInputChange(value);
-    }, 250);
+    }, 200);
 
     this.setState({ timeOut: currTimeOut });
   };
