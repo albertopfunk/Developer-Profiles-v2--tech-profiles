@@ -152,7 +152,8 @@ class AutoComplete extends React.Component {
   choosePrediction = (name, id) => {
     if (
       this.state.chosenNames.includes(name) ||
-      !this.props.checkDups(name, this.props.inputName)
+      (this.props.checkDups &&
+        !this.props.checkDups(name, this.props.inputName))
     ) {
       this.setState({
         autoCompleteResults: [],

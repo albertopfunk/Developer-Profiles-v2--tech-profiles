@@ -15,35 +15,8 @@ function AboutYou() {
   let topSkillsRef = React.createRef();
   let additionalSkillsRef = React.createRef();
 
-  function onChosenLocation(chosenRelocateToArr) {
-    setInterestedLocations(chosenRelocateToArr);
-  }
-
-  function resetLocationFilter(chosenRelocateToArr) {
-    setInterestedLocations(chosenRelocateToArr);
-    console.log("DELETE RELOCATE/INTERESTED", chosenRelocateToArr);
-  }
-
-  function onChosenTopSkill(chosenTopSkills) {
-    setTopSkills(chosenTopSkills);
-  }
-
-  function resetTopSkillsFilter(chosenTopSkills) {
-    setTopSkills(chosenTopSkills);
-    console.log("DELETE TOP SKILL", chosenTopSkills);
-  }
-
   function addNewTopSkill(skill) {
     console.log("ADD TOP SKILL", skill);
-  }
-
-  function onChosenAdditionalSkill(chosenAdditionalSkills) {
-    setAdditionalSkills(chosenAdditionalSkills);
-  }
-
-  function resetAdditionalSkillsFilter(chosenAdditionalSkills) {
-    setAdditionalSkills(chosenAdditionalSkills);
-    console.log("DELETE ADDITIONAL SKILL", chosenAdditionalSkills);
   }
 
   function addNewAdditionalSkill(skill) {
@@ -62,11 +35,11 @@ function AboutYou() {
     if (type.includes("skills")) {
       let userBankSkills = [];
       if (user.top_skills) {
-        userBankSkills.push(user.top_skills.split(","));
+        userBankSkills.push(...user.top_skills.split(","));
       }
 
       if (user.additional_skills) {
-        userBankSkills.push(user.additional_skills.split(","));
+        userBankSkills.push(...user.additional_skills.split(","));
       }
 
       if (type === "top-skills") {
@@ -105,19 +78,40 @@ function AboutYou() {
     }
 
     if (interestedLocations.length > 0) {
-      inputs.interested_location_names = interestedLocations;
+      if (user.interested_location_names) {
+        let interestedLocationsArr = [
+          ...user.interested_location_names.split("|"),
+          ...interestedLocations
+        ];
+        inputs.interested_location_names = interestedLocationsArr.join("|");
+      } else {
+        inputs.interested_location_names = interestedLocations.join("|");
+      }
       locationRef.current.resetOnSubmit();
       setInterestedLocations([]);
     }
 
     if (topSkills.length > 0) {
-      inputs.top_skills = topSkills;
+      if (user.top_skills) {
+        let topSkillsArr = [...user.top_skills.split(","), ...topSkills];
+        inputs.top_skills = topSkillsArr.join(",");
+      } else {
+        inputs.top_skills = topSkills.join(",");
+      }
       setTopSkills([]);
       topSkillsRef.current.resetOnSubmit();
     }
 
     if (additionalSkills.length > 0) {
-      inputs.additional_skills = additionalSkills;
+      if (user.additional_skills) {
+        let additionalSkillsArr = [
+          ...user.additional_skills.split(","),
+          ...additionalSkills
+        ];
+        inputs.additional_skills = additionalSkillsArr.join(",");
+      } else {
+        inputs.additional_skills = additionalSkills.join(",");
+      }
       setAdditionalSkills([]);
       additionalSkillsRef.current.resetOnSubmit();
     }
@@ -149,8 +143,8 @@ function AboutYou() {
         <h3>Interested Locations</h3>
         <AutoComplete
           ref={locationRef}
-          onChosenInput={onChosenLocation}
-          resetInputFilter={resetLocationFilter}
+          onChosenInput={setInterestedLocations}
+          resetInputFilter={setInterestedLocations}
           inputName={"interested-locations"}
           checkDups={checkDups}
         />
@@ -158,8 +152,8 @@ function AboutYou() {
         <h3>Top Skills</h3>
         <AutoComplete
           ref={topSkillsRef}
-          onChosenInput={onChosenTopSkill}
-          resetInputFilter={resetTopSkillsFilter}
+          onChosenInput={setTopSkills}
+          resetInputFilter={setTopSkills}
           inputName={"top-skills"}
           checkDups={checkDups}
           addNewSkill={addNewTopSkill}
@@ -168,8 +162,8 @@ function AboutYou() {
         <h3>Additional Skills</h3>
         <AutoComplete
           ref={additionalSkillsRef}
-          onChosenInput={onChosenAdditionalSkill}
-          resetInputFilter={resetAdditionalSkillsFilter}
+          onChosenInput={setAdditionalSkills}
+          resetInputFilter={setAdditionalSkills}
           inputName={"additional-skills"}
           checkDups={checkDups}
           addNewSkill={addNewAdditionalSkill}
