@@ -17,11 +17,6 @@ function AboutYou() {
 
   function onChosenLocation(chosenRelocateToArr) {
     setInterestedLocations(chosenRelocateToArr);
-    console.log("CHOOSE RELOCATE/INTERESTED", chosenRelocateToArr);
-    console.log(
-      "CHOOSE RELOCATE/INTERESTED USER",
-      user.interested_location_names
-    );
   }
 
   function resetLocationFilter(chosenRelocateToArr) {
@@ -31,8 +26,6 @@ function AboutYou() {
 
   function onChosenTopSkill(chosenTopSkills) {
     setTopSkills(chosenTopSkills);
-    console.log("CHOOSE TOP SKILL", chosenTopSkills);
-    console.log("CHOOSE TOP SKILL USER", user.top_skills);
   }
 
   function resetTopSkillsFilter(chosenTopSkills) {
@@ -46,8 +39,6 @@ function AboutYou() {
 
   function onChosenAdditionalSkill(chosenAdditionalSkills) {
     setAdditionalSkills(chosenAdditionalSkills);
-    console.log("CHOOSE ADDITIONAL SKILL", chosenAdditionalSkills);
-    console.log("CHOOSE ADDITIONAL SKILL USER", user.additional_skills);
   }
 
   function resetAdditionalSkillsFilter(chosenAdditionalSkills) {
@@ -57,6 +48,41 @@ function AboutYou() {
 
   function addNewAdditionalSkill(skill) {
     console.log("DELETE ADDITIONAL SKILL", skill);
+  }
+
+  function checkDups(name, type) {
+    if (type === "interested-locations") {
+      if (user.interested_location_names) {
+        if (user.interested_location_names.split("|").includes(name)) {
+          return false;
+        }
+      }
+    }
+
+    if (type.includes("skills")) {
+      let userBankSkills = [];
+      if (user.top_skills) {
+        userBankSkills.push(user.top_skills.split(","));
+      }
+
+      if (user.additional_skills) {
+        userBankSkills.push(user.additional_skills.split(","));
+      }
+
+      if (type === "top-skills") {
+        if (additionalSkills.includes(name) || userBankSkills.includes(name)) {
+          return false;
+        }
+      }
+
+      if (type === "additional-skills") {
+        if (topSkills.includes(name) || userBankSkills.includes(name)) {
+          return false;
+        }
+      }
+    }
+
+    return true;
   }
 
   async function submitEdit(e) {
@@ -79,79 +105,19 @@ function AboutYou() {
     }
 
     if (interestedLocations.length > 0) {
-      let userInterestedLocations;
-      let newInterestedLocations;
-
-      if (user.interested_location_names) {
-        userInterestedLocations = user.interested_location_names.split("|");
-        newInterestedLocations = [
-          ...new Set([...userInterestedLocations, ...interestedLocations])
-        ];
-      } else {
-        newInterestedLocations = [...interestedLocations];
-      }
-
-      newInterestedLocations = newInterestedLocations.join("|");
-      inputs.interested_location_names = newInterestedLocations;
-      setInterestedLocations([]);
+      inputs.interested_location_names = interestedLocations;
       locationRef.current.resetOnSubmit();
+      setInterestedLocations([]);
     }
 
-    let topSkillsState = [...topSkills];
-    let additionalSkillsState = [...additionalSkills];
-
-    if (topSkillsState.length > 0 && additionalSkillsState.length > 0) {
-      topSkillsState = topSkillsState.filter(
-        item => !additionalSkillsState.includes(item)
-      );
-    }
-
-    if (topSkillsState.length > 0) {
-      let userTopSkills;
-      let newTopSkills;
-
-      if (user.top_skills) {
-        userTopSkills = user.top_skills.split(",");
-        newTopSkills = [...new Set([...userTopSkills, ...topSkillsState])];
-      } else {
-        newTopSkills = [...topSkillsState];
-      }
-
-      if (user.additional_skills) {
-        let userAdditionalSkills = user.additional_skills.split(",");
-        newTopSkills = newTopSkills.filter(
-          item => !userAdditionalSkills.includes(item)
-        );
-      }
-
-      newTopSkills = newTopSkills.join();
-      inputs.top_skills = newTopSkills;
+    if (topSkills.length > 0) {
+      inputs.top_skills = topSkills;
       setTopSkills([]);
       topSkillsRef.current.resetOnSubmit();
     }
 
-    if (additionalSkillsState.length > 0) {
-      let userAdditionalSkills;
-      let newAdditionalSkills;
-
-      if (user.additional_skills) {
-        userAdditionalSkills = user.additional_skills.split(",");
-        newAdditionalSkills = [
-          ...new Set([...userAdditionalSkills, ...additionalSkillsState])
-        ];
-      } else {
-        newAdditionalSkills = [...additionalSkillsState];
-      }
-
-      if (user.top_skills) {
-        let userTopSkills = user.top_skills.split(",");
-        newAdditionalSkills = newAdditionalSkills.filter(
-          item => !userTopSkills.includes(item)
-        );
-      }
-
-      newAdditionalSkills = newAdditionalSkills.join();
-      inputs.additional_skills = newAdditionalSkills;
+    if (additionalSkills.length > 0) {
+      inputs.additional_skills = additionalSkills;
       setAdditionalSkills([]);
       additionalSkillsRef.current.resetOnSubmit();
     }
@@ -186,6 +152,7 @@ function AboutYou() {
           onChosenInput={onChosenLocation}
           resetInputFilter={resetLocationFilter}
           inputName={"interested-locations"}
+          checkDups={checkDups}
         />
 
         <h3>Top Skills</h3>
@@ -194,6 +161,7 @@ function AboutYou() {
           onChosenInput={onChosenTopSkill}
           resetInputFilter={resetTopSkillsFilter}
           inputName={"top-skills"}
+          checkDups={checkDups}
           addNewSkill={addNewTopSkill}
         />
 
@@ -203,6 +171,7 @@ function AboutYou() {
           onChosenInput={onChosenAdditionalSkill}
           resetInputFilter={resetAdditionalSkillsFilter}
           inputName={"additional-skills"}
+          checkDups={checkDups}
           addNewSkill={addNewAdditionalSkill}
         />
 

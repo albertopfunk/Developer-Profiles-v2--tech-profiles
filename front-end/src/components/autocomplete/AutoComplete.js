@@ -12,7 +12,8 @@ class AutoComplete extends React.Component {
     currentFocusedOption: "",
     resultsInBank: true,
     autoCompleteResults: [],
-    chosenNames: []
+    chosenNames: [],
+    chosenNameDup: false
   };
 
   optionRefs = [];
@@ -148,16 +149,20 @@ class AutoComplete extends React.Component {
     this.setState({ timeOut: currTimeOut });
   };
 
-  // Tests
   choosePrediction = (name, id) => {
-    const newChosenNamesState = [...this.state.chosenNames];
-
-    if (newChosenNamesState.includes(name)) {
+    if (
+      this.state.chosenNames.includes(name) ||
+      !this.props.checkDups(name, this.props.inputName)
+    ) {
       this.setState({
         autoCompleteResults: [],
         input: "",
-        isUsingCombobox: false
+        isUsingCombobox: false,
+        chosenNameDup: true
       });
+      setTimeout(() => {
+        this.setState({ chosenNameDup: false });
+      }, 2000);
       return;
     }
 
@@ -172,6 +177,7 @@ class AutoComplete extends React.Component {
       return;
     }
 
+    const newChosenNamesState = [...this.state.chosenNames];
     newChosenNamesState.push(name);
     this.setState({
       autoCompleteResults: [],
@@ -242,6 +248,12 @@ class AutoComplete extends React.Component {
             onKeyDown={e => this.focusOnFirstOption(e)}
           />
         </div>
+
+        {this.state.chosenNameDup ? (
+          <div>
+            <p>Chosen Item already exists</p>
+          </div>
+        ) : null}
 
         {!this.state.resultsInBank && this.state.input ? (
           <div>
