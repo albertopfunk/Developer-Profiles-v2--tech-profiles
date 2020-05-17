@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import { ProfileContext } from "../../global/context/user-profile/ProfileContext";
-import { deleteImage } from "../http-requests/profile-dashboard";
+import { deleteImage, uploadImage } from "../http-requests/profile-dashboard";
 
 function ImageUploadForm({ imageInput, setImageInput }) {
   const { setPreviewImg } = useContext(ProfileContext);
@@ -8,15 +8,12 @@ function ImageUploadForm({ imageInput, setImageInput }) {
   const [errorImage, setErrorImage] = useState(false);
 
   useEffect(() => {
-    if (localStorage.getItem("img_prev")) {
-      const imgPrev = localStorage.getItem("img_prev");
-      localStorage.removeItem("img_prev");
-      deleteImage(imgPrev);
-    }
-  }, []);
-
-  useEffect(() => {
     return () => {
+      if (localStorage.getItem("img_prev")) {
+        const imgPrev = localStorage.getItem("img_prev");
+        localStorage.removeItem("img_prev");
+        deleteImage(imgPrev);
+      }
       setPreviewImg("");
     };
   }, [setPreviewImg]);
@@ -29,36 +26,29 @@ function ImageUploadForm({ imageInput, setImageInput }) {
     const file = e.target.files[0];
     const data = new FormData();
     data.append("image", file);
-    const XHR = new XMLHttpRequest();
     setLoadingImage(true);
 
-    XHR.addEventListener("load", e => {
-      if (e.target.status === 200) {
-        if (imageInput) {
-          deleteImage(imageInput);
-        }
-        const { url, id } = JSON.parse(e.target.response);
-        const imageInfo = `${url},${id}`;
-        localStorage.setItem("img_prev", imageInfo);
-        setPreviewImg(url);
-        setImageInput(imageInfo);
-        setLoadingImage(false);
-        setErrorImage(false);
-      } else {
-        console.error("Error uploading to cloudinary", e.target.statusText);
-        setLoadingImage(false);
-        setErrorImage(true);
-      }
-    });
+    const [res, err] = await uploadImage(data);
 
-    XHR.addEventListener("error", err => {
-      console.error("Error uploading to cloudinary", err);
+    if (err) {
+      console.error(`${res.mssg} => ${res.err}`);
       setLoadingImage(false);
       setErrorImage(true);
-    });
+      return;
+    }
 
-    XHR.open("POST", `${process.env.REACT_APP_SERVER}/api/upload-image`);
-    XHR.send(data);
+    const { url, id } = res;
+
+    if (imageInput) {
+      deleteImage(imageInput);
+    }
+
+    const imageInfo = `${url},${id}`;
+    localStorage.setItem("img_prev", imageInfo);
+    setPreviewImg(url);
+    setImageInput(imageInfo);
+    setLoadingImage(false);
+    setErrorImage(false);
   }
 
   console.log("=====IMAGEUPLOADFORM + IMG INPUTTTT=====", imageInput);

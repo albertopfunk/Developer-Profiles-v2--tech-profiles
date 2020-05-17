@@ -17,6 +17,38 @@ import axios from "axios";
 
 // images
 
+export async function uploadImage(data) {
+  try {
+    const response = await axios.post(
+      `${process.env.REACT_APP_SERVER}/api/upload-image`,
+      data,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data"
+        }
+      }
+    );
+
+    const { url, id } = response.data;
+
+    return [
+      {
+        url,
+        id
+      },
+      false
+    ];
+  } catch (err) {
+    return [
+      {
+        err,
+        mssg: `Error uploading to cloudinary`
+      },
+      true
+    ];
+  }
+}
+
 export async function deleteImage(imageData) {
   let imageToDelete = imageData;
   imageToDelete = imageToDelete.split(",");
