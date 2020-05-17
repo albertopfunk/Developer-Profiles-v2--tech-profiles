@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import StripeCardInput from "./StripeCardInput";
-import axios from "axios";
 import styled from "styled-components";
+import { subscribeUser } from "../http-requests/profile-dashboard";
 
 class UserForm extends Component {
   state = {
@@ -35,30 +35,23 @@ class UserForm extends Component {
     this.setState({ subType: "monthly" });
   };
 
-  subscribeUser = async tokenId => {
-    // || vs &&
+  onSubscribe = async tokenId => {
     if (this.state.subType !== "yearly" && this.state.subType !== "monthly") {
       return;
     }
 
-    try {
-      const res = await axios.post(
-        `${process.env.REACT_APP_SERVER}/api/subscribe`,
-        {
-          token: tokenId,
-          subType: this.state.subType,
-          email: this.props.email
-        }
-      );
-      const { stripe_customer_id, stripe_subscription_name } = res.data;
+    const [res, err] = subscribeUser({
+      token: tokenId,
+      subType: this.state.subType,
+      email: this.props.email
+    });
 
-      this.props.editUserProfile({
-        stripe_customer_id,
-        stripe_subscription_name
-      });
-    } catch (err) {
-      console.error(err);
+    if (err) {
+      console.error(`${res.mssg} => ${res.err}`);
+      return;
     }
+
+    this.props.editUserProfile(res.data);
   };
 
   render() {
@@ -102,7 +95,7 @@ class UserForm extends Component {
             </label>
           </form>
           <StripeCardInput
-            subUser={this.subscribeUser}
+            subUser={this.onSubscribe}
             subType={this.state.subType}
           />
         </Article>

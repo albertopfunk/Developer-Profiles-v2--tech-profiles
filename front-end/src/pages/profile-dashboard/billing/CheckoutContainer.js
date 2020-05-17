@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import axios from "axios";
 import styled from "styled-components";
+import { userSubStatus } from "../../../components/http-requests/profile-dashboard";
 import UserForm from "../../../components/billing/UserForm";
 import SubscriberForm from "../../../components/billing/SubscriberForm";
 import CustomerForm from "../../../components/billing/CustomerForm";
@@ -31,21 +31,17 @@ class CheckoutContainer extends Component {
   }
 
   checkSubStatus = async () => {
-    try {
-      const res = await axios.post(
-        `${process.env.REACT_APP_SERVER}/api/get-subscription`,
-        {
-          sub: this.props.stripeSubId
-        }
-      );
+    const [res, err] = await userSubStatus(this.props.stripeSubId);
 
-      if (res.data.status === "active") {
-        this.setUserType("subscriber");
-      } else {
-        this.setUserType("inactiveSubscriber");
-      }
-    } catch (err) {
-      console.error(err);
+    if (err) {
+      console.error(`${res.mssg} => ${res.err}`);
+      return;
+    }
+
+    if (res.status === "active") {
+      this.setUserType("subscriber");
+    } else {
+      this.setUserType("inactiveSubscriber");
     }
   };
 

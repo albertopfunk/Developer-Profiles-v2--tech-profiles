@@ -60,8 +60,16 @@ export async function deleteImage(imageData) {
     await axios.post(`${process.env.REACT_APP_SERVER}/api/delete-image`, {
       id: imageToDelete[1]
     });
+    return onSuccess({
+      data: {},
+      status: 200
+    });
   } catch (err) {
-    console.error(`Error Deleting Image =>`, err);
+    return onError({
+      err,
+      mssg: `Error Deleting Image`,
+      status: 500
+    });
   }
 }
 
@@ -140,6 +148,59 @@ export async function skillPredictions(value) {
     return onError({
       err,
       mssg: `${err.response.data.message}`,
+      status: 500
+    });
+  }
+}
+
+// billing
+
+export async function userSubStatus(sub) {
+  try {
+    const res = await axios.post(
+      `${process.env.REACT_APP_SERVER}/api/get-subscription`,
+      {
+        sub
+      }
+    );
+
+    if (res.data.status === "active") {
+      return onSuccess({
+        data: {},
+        status: "active"
+      });
+    } else {
+      return onSuccess({
+        data: {},
+        status: "inactiveSubscriber"
+      });
+    }
+  } catch (err) {
+    return onError({
+      err,
+      mssg: `Unable to check status`,
+      status: 500
+    });
+  }
+}
+
+export async function subscribeUser(subInfo) {
+  try {
+    const res = await axios.post(
+      `${process.env.REACT_APP_SERVER}/api/subscribe`,
+      subInfo
+    );
+
+    const { stripe_customer_id, stripe_subscription_name } = res.data;
+
+    return onSuccess({
+      data: { stripe_customer_id, stripe_subscription_name },
+      status: 200
+    });
+  } catch (err) {
+    return onError({
+      err,
+      mssg: `Unable to subscribe user`,
       status: 500
     });
   }
