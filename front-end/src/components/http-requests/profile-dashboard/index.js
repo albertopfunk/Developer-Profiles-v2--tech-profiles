@@ -15,11 +15,19 @@ import axios from "axios";
   ..more stuff
 */
 
+function onSuccess(data) {
+  return [data, false];
+}
+
+function onError(data) {
+  return [data, true];
+}
+
 // images
 
 export async function uploadImage(data) {
   try {
-    const response = await axios.post(
+    const res = await axios.post(
       `${process.env.REACT_APP_SERVER}/api/upload-image`,
       data,
       {
@@ -29,23 +37,18 @@ export async function uploadImage(data) {
       }
     );
 
-    const { url, id } = response.data;
+    const { url, id } = res.data;
 
-    return [
-      {
-        url,
-        id
-      },
-      false
-    ];
+    return onSuccess({
+      data: { url, id },
+      status: 200
+    });
   } catch (err) {
-    return [
-      {
-        err,
-        mssg: `Error uploading to cloudinary`
-      },
-      true
-    ];
+    return onError({
+      err,
+      mssg: `Error uploading to cloudinary`,
+      status: 500
+    });
   }
 }
 
@@ -73,62 +76,71 @@ export async function getGio(id) {
       }
     );
 
-    return [
-      {
-        lat: response.data.lat,
-        lng: response.data.lng
-      },
-      false
-    ];
+    const { lat, lng } = response.data;
+
+    return onSuccess({
+      data: { lat, lng },
+      status: 200
+    });
   } catch (err) {
-    return [
-      {
-        err,
-        mssg: `${err.response.data.message}`
-      },
-      true
-    ];
+    return onError({
+      err,
+      mssg: `${err.response.data.message}`,
+      status: 500
+    });
   }
 }
 
-export async function locationPredictions(value, gio) {
+export async function locationPredictions(value) {
   try {
-    const response = await axios.post(
+    const res = await axios.post(
       `${process.env.REACT_APP_SERVER}/api/autocomplete`,
       { locationInput: value }
     );
 
-    const predictions = response.data.predictions.map(location => {
+    const predictions = res.data.predictions.map(location => {
       return {
         name: location.description,
         id: location.place_id
       };
     });
 
-    return predictions;
+    return onSuccess({
+      data: { predictions },
+      status: 200
+    });
   } catch (err) {
-    console.error(`${err.response.data.message} =>`, err);
-    return [];
+    return onError({
+      err,
+      mssg: `${err.response.data.message}`,
+      status: 500
+    });
   }
 }
 
 export async function skillPredictions(value) {
   try {
-    const response = await axios.post(
+    const res = await axios.post(
       `${process.env.REACT_APP_SERVER}/skills/autocomplete`,
       { skillsInput: value }
     );
 
-    const predictions = response.data.map(skill => {
+    const predictions = res.data.map(skill => {
       return {
         name: skill.skill,
         id: skill.id
       };
     });
 
-    return predictions;
+    return onSuccess({
+      data: { predictions },
+      status: 200
+    });
   } catch (err) {
-    console.error(`${err.response.data.message} =>`, err);
-    return [];
+    return onError({
+      err,
+      mssg: `${err.response.data.message}`,
+      status: 500
+    });
   }
 }

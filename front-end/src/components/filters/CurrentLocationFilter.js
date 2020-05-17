@@ -54,8 +54,8 @@ class CurrentLocationFilter extends React.Component {
       usersPage: 1,
       isUsingCurrLocationFilter: true,
       selectedWithinMiles: +this.state.milesWithinInput,
-      chosenLocationLat: res.lat,
-      chosenLocationLon: res.lng,
+      chosenLocationLat: res.data.lat,
+      chosenLocationLon: res.data.lng,
       isUsingSortByChoice: true
     });
   };

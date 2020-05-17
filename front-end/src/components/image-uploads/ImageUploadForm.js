@@ -37,7 +37,7 @@ function ImageUploadForm({ imageInput, setImageInput }) {
       return;
     }
 
-    const { url, id } = res;
+    const { url, id } = res.data;
 
     if (imageInput) {
       deleteImage(imageInput);

@@ -18,6 +18,10 @@ class AutoComplete extends React.Component {
 
   optionRefs = [];
 
+  componentDidUpdate() {
+    console.log("UPDATED");
+  }
+
   // Tests
   setOptionRefs = (element, index) => {
     if (element !== null) {
@@ -105,22 +109,43 @@ class AutoComplete extends React.Component {
       return;
     }
 
-    let results;
+    let predictions = [];
     const { inputName } = this.props;
 
     if (inputName.includes("locations") || inputName.includes("location")) {
-      results = await locationPredictions(value);
+      const [res, err] = await locationPredictions(value);
+      if (err) {
+        console.error(res);
+        this.setState({
+          resultsInBank: false,
+          isUsingCombobox: false,
+          autoCompleteResults: []
+        });
+        return;
+      }
+      predictions = res.data.predictions;
     } else if (inputName.includes("skills")) {
-      results = await skillPredictions(value);
+      const [res, err] = await skillPredictions(value);
+      if (err) {
+        console.error(res);
+        this.setState({
+          resultsInBank: false,
+          isUsingCombobox: false,
+          autoCompleteResults: []
+        });
+        return;
+      }
+      predictions = res.data.predictions;
     } else {
-      console.error("inputName not provided");
+      console.error("inputName Not Provided");
+      return;
     }
 
-    if (results.length > 0) {
+    if (predictions.length > 0) {
       this.setState({
         resultsInBank: true,
         isUsingCombobox: true,
-        autoCompleteResults: results
+        autoCompleteResults: predictions
       });
     } else {
       this.setState({
