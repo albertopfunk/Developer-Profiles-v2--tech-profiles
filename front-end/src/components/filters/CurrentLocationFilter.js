@@ -1,5 +1,5 @@
 import React from "react";
-import axios from "axios";
+import { getGio } from "../http-requests/profile-dashboard";
 
 import AutoComplete from "../autocomplete/AutoComplete";
 
@@ -43,24 +43,21 @@ class CurrentLocationFilter extends React.Component {
       this.setState({ chosenLocationName: name, chosenLocationId: id });
     }
 
-    try {
-      const response = await axios.post(
-        `${process.env.REACT_APP_SERVER}/api/gio`,
-        {
-          placeId: id
-        }
-      );
-      this.props.updateUsers({
-        usersPage: 1,
-        isUsingCurrLocationFilter: true,
-        selectedWithinMiles: +this.state.milesWithinInput,
-        chosenLocationLat: response.data.lat,
-        chosenLocationLon: response.data.lng,
-        isUsingSortByChoice: true
-      });
-    } catch (err) {
-      console.error(`${err.response.data.message} =>`, err);
+    const [res, err] = await getGio(id);
+
+    if (err) {
+      console.error(`${res.mssg} => ${res.err}`);
+      return;
     }
+
+    this.props.updateUsers({
+      usersPage: 1,
+      isUsingCurrLocationFilter: true,
+      selectedWithinMiles: +this.state.milesWithinInput,
+      chosenLocationLat: res.lat,
+      chosenLocationLon: res.lng,
+      isUsingSortByChoice: true
+    });
   };
 
   resetLocationFilter = () => {
