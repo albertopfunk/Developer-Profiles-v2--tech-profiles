@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import { userSubStatus } from "../../../components/http-requests/profile-dashboard";
+import { userSubInfo } from "../../../components/http-requests/profile-dashboard";
 import UserForm from "../../../components/billing/UserForm";
 import SubscriberForm from "../../../components/billing/SubscriberForm";
 import CustomerForm from "../../../components/billing/CustomerForm";
@@ -31,7 +31,7 @@ class CheckoutContainer extends Component {
   }
 
   checkSubStatus = async () => {
-    const [res, err] = await userSubStatus(this.props.stripeSubId);
+    const [res, err] = await userSubInfo(this.props.stripeSubId);
 
     if (err) {
       console.error(`${res.mssg} => ${res.err}`);

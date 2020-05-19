@@ -40,7 +40,7 @@ class UserForm extends Component {
       return;
     }
 
-    const [res, err] = subscribeUser({
+    const [res, err] = await subscribeUser({
       token: tokenId,
       subType: this.state.subType,
       email: this.props.email

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import axios from "axios";
 import styled from "styled-components";
+import { reSubscribeUser } from "../http-requests/profile-dashboard";
 
 class CustomerForm extends Component {
   state = {
@@ -34,31 +34,22 @@ class CustomerForm extends Component {
     this.setState({ subType: "monthly" });
   };
 
-  reSubscribeUser = async () => {
-    // || vs &&
+  onReSubscribe = async () => {
     if (this.state.subType !== "yearly" && this.state.subType !== "monthly") {
       return;
     }
 
-    try {
-      const res = await axios.post(
-        `${process.env.REACT_APP_SERVER}/api/subscribe-existing`,
-        {
-          stripeId: this.props.stripeId,
-          subType: this.state.subType
-        }
-      );
-      const {
-        stripe_subscription_name
-      } = res.data;
+    const [res, err] = await reSubscribeUser({
+      stripeId: this.props.stripeId,
+      subType: this.state.subType
+    });
 
-
-      this.props.editUserProfile({
-        stripe_subscription_name
-      });
-    } catch (err) {
-      console.error(err);
+    if (err) {
+      console.error(`${res.mssg} => ${res.err}`);
+      return;
     }
+
+    this.props.editUserProfile(res.data);
   };
 
   render() {
@@ -102,7 +93,7 @@ class CustomerForm extends Component {
             </label>
           </form>
           <button
-            onClick={this.reSubscribeUser}
+            onClick={this.onReSubscribe}
             disabled={this.state.subType ? false : true}
           >
             Re-Subscribe

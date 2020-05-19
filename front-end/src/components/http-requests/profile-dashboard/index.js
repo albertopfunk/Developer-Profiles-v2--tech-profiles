@@ -155,26 +155,36 @@ export async function skillPredictions(value) {
 
 // billing
 
-export async function userSubStatus(sub) {
+export async function userSubInfo(sub) {
   try {
     const res = await axios.post(
       `${process.env.REACT_APP_SERVER}/api/get-subscription`,
-      {
-        sub
-      }
+      { sub }
     );
 
-    if (res.data.status === "active") {
-      return onSuccess({
-        data: {},
-        status: "active"
-      });
-    } else {
+    if (res.data.status !== "active") {
       return onSuccess({
         data: {},
         status: "inactiveSubscriber"
       });
     }
+
+    for (let data in res.data) {
+      if (data === "created" || data === "startDate" || data === "dueDate") {
+        let date = res.data[data] * 1000;
+        let normDate = new Date(date);
+        normDate = normDate.toString();
+        let normDateArr = normDate.split(" ");
+        res.data[
+          data
+        ] = `${normDateArr[1]} ${normDateArr[2]} ${normDateArr[3]}`;
+      }
+    }
+
+    return onSuccess({
+      data: res.data,
+      status: "active"
+    });
   } catch (err) {
     return onError({
       err,
@@ -201,6 +211,48 @@ export async function subscribeUser(subInfo) {
     return onError({
       err,
       mssg: `Unable to subscribe user`,
+      status: 500
+    });
+  }
+}
+
+export async function reSubscribeUser(subInfo) {
+  try {
+    const res = await axios.post(
+      `${process.env.REACT_APP_SERVER}/api/subscribe-existing`,
+      subInfo
+    );
+
+    const { stripe_subscription_name } = res.data;
+
+    return onSuccess({
+      data: { stripe_subscription_name },
+      status: 200
+    });
+  } catch (err) {
+    return onError({
+      err,
+      mssg: `Unable to re-subscribe user`,
+      status: 500
+    });
+  }
+}
+
+export async function cancelUserSub(sub) {
+  try {
+    await axios.post(
+      `${process.env.REACT_APP_SERVER}/api/cancel-subscription`,
+      { sub }
+    );
+
+    return onSuccess({
+      data: {},
+      status: 200
+    });
+  } catch (err) {
+    return onError({
+      err,
+      mssg: `Unable to cancel subscription`,
       status: 500
     });
   }
