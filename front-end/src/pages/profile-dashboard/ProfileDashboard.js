@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { Route, useRouteMatch, Link, Switch } from "react-router-dom";
 import styled from "styled-components";
 
@@ -13,7 +12,11 @@ import DashboardEducation from "./education/DashboardEducation";
 import DashboardExperience from "./experience/DashboardExperience";
 import DashboardBilling from "./billing/DashboardBilling";
 
-import auth0Client from "../../auth/Auth";
+import {
+  getUser,
+  editUser,
+  addUserExtra
+} from "../../components/http-requests/profile-dashboard";
 import { ProfileContext } from "../../global/context/user-profile/ProfileContext";
 import UserCard from "../../components/user-cards/user-card/UserCard";
 
@@ -31,48 +34,37 @@ function ProfileDashboard() {
   });
 
   async function initProfile() {
-    const userProfile = auth0Client.getProfile();
-    const { email } = userProfile;
+    const [res, err] = await getUser();
 
-    if (!email) {
-      console.error("Unable to Get User Profile");
-      auth0Client.signOut("authorize");
+    if (err) {
+      console.error(`${res.mssg} => ${res.err}`);
+      return;
     }
-    try {
-      const user = await axios.post(
-        `${process.env.REACT_APP_SERVER}/users/get-single`,
-        { email }
-      );
-      setUser(user.data);
-      setLoadingUser(false);
-    } catch (err) {
-      console.error(`Error Getting User By Email`, err);
-      auth0Client.signOut("authorize");
-    }
+
+    setUser(res.data);
+    setLoadingUser(false);
   }
 
-  async function editProfile(input) {
-    try {
-      const newUser = await axios.put(
-        `${process.env.REACT_APP_SERVER}/users/${user.id}`,
-        input
-      );
-      setUser(newUser.data);
-    } catch (err) {
-      console.error(err);
+  async function editProfile(data) {
+    const [res, err] = await editUser(data, user.id);
+
+    if (err) {
+      console.error(`${res.mssg} => ${res.err}`);
+      return;
     }
+
+    setUser(res.data);
   }
 
-  async function addExtra(input, extra) {
-    try {
-      await axios.post(
-        `${process.env.REACT_APP_SERVER}/extras/new/${extra}`,
-        input
-      );
-      setExtrasUpdate(!extrasUpdate);
-    } catch (err) {
-      console.error(err);
+  async function addExtra(data, extra) {
+    const [res, err] = await addUserExtra(data, extra);
+
+    if (err) {
+      console.error(`${res.mssg} => ${res.err}`);
+      return;
     }
+
+    setExtrasUpdate(!extrasUpdate);
   }
 
   console.log("===PROFILE DASH + PREVIOUS IMG===", previewImg);
