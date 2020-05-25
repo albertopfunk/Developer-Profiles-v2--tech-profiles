@@ -24,53 +24,34 @@ function onError(data) {
   return [data, true];
 }
 
-// images
+export async function httpClient(method, url, data, config = {}) {
+  const options = {
+    baseURL: `${process.env.REACT_APP_SERVER}`,
+    method,
+    url,
+    data,
+    headers: config.headers ? { ...config.headers } : null
+  };
 
-export async function uploadImage(data) {
   try {
-    const res = await axios.post(
-      `${process.env.REACT_APP_SERVER}/api/upload-image`,
-      data,
+    const res = await axios(options);
+    console.log(res);
+    return [
       {
-        headers: {
-          "Content-Type": "multipart/form-data"
-        }
-      }
-    );
-
-    const { url, id } = res.data;
-
-    return onSuccess({
-      data: { url, id },
-      status: 200
-    });
+        data: res.data,
+        status: 200
+      },
+      false
+    ];
   } catch (err) {
-    return onError({
-      err,
-      mssg: `Error uploading to cloudinary`,
-      status: 500
-    });
-  }
-}
-
-export async function deleteImage(imageData) {
-  let imageToDelete = imageData;
-  imageToDelete = imageToDelete.split(",");
-
-  try {
-    await axios.post(`${process.env.REACT_APP_SERVER}/api/delete-image`, {
-      id: imageToDelete[1]
-    });
-    return onSuccess({
-      data: {},
-      status: 200
-    });
-  } catch (err) {
-    return onError({
-      err,
-      mssg: `Error Deleting Image`,
-      status: 500
-    });
+    return [
+      {
+        err,
+        mssg: `Error with ${method} : ${url}`,
+        status: 500
+      },
+      true
+    ];
   }
 }
 

@@ -2,7 +2,7 @@ import React, { useState, useContext } from "react";
 import styled from "styled-components";
 
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
-import { deleteImage } from "../../../components/http-requests/profile-dashboard";
+import { httpClient } from "../../../components/http-requests/profile-dashboard";
 import ImageUploadForm from "../../../components/image-uploads/ImageUploadForm";
 
 function PersonalInfo() {
@@ -65,12 +65,13 @@ function PersonalInfo() {
     }
 
     if (imageInput && user.image) {
-      deleteImage(user.image).then(() => {
-        editProfile(inputs);
+      let imageToDelete = user.image;
+      imageToDelete = imageToDelete.split(",");
+      httpClient("POST", "/api/delete-image", {
+        id: imageToDelete[1]
       });
-    } else {
-      editProfile(inputs);
     }
+    editProfile(inputs);
   }
 
   console.log("===PERSONAL INFO + IMG INPUTTTT===", imageInput);

@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import { ProfileContext } from "../../global/context/user-profile/ProfileContext";
-import { deleteImage, uploadImage } from "../http-requests/profile-dashboard";
+import { httpClient } from "../http-requests/profile-dashboard";
 
 function ImageUploadForm({ imageInput, setImageInput }) {
   const { setPreviewImg } = useContext(ProfileContext);
@@ -12,7 +12,11 @@ function ImageUploadForm({ imageInput, setImageInput }) {
       if (localStorage.getItem("img_prev")) {
         const imgPrev = localStorage.getItem("img_prev");
         localStorage.removeItem("img_prev");
-        deleteImage(imgPrev);
+        let imageToDelete = imgPrev;
+        imageToDelete = imageToDelete.split(",");
+        httpClient("POST", "/api/delete-image", {
+          id: imageToDelete[1]
+        });
       }
       setPreviewImg("");
     };
@@ -28,7 +32,11 @@ function ImageUploadForm({ imageInput, setImageInput }) {
     data.append("image", file);
     setLoadingImage(true);
 
-    const [res, err] = await uploadImage(data);
+    const [res, err] = await httpClient("POST", "/api/upload-image", data, {
+      headers: {
+        "Content-Type": "multipart/form-data"
+      }
+    });
 
     if (err) {
       console.error(`${res.mssg} => ${res.err}`);
@@ -40,7 +48,11 @@ function ImageUploadForm({ imageInput, setImageInput }) {
     const { url, id } = res.data;
 
     if (imageInput) {
-      deleteImage(imageInput);
+      let imageToDelete = imageInput;
+      imageToDelete = imageToDelete.split(",");
+      httpClient("POST", "/api/delete-image", {
+        id: imageToDelete[1]
+      });
     }
 
     const imageInfo = `${url},${id}`;
