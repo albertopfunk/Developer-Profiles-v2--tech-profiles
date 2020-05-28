@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import { httpClient } from "../../../components/http-requests/profile-dashboard";
+import { httpClient } from "../../../components/http-requests";
 import UserForm from "../../../components/billing/UserForm";
 import SubscriberForm from "../../../components/billing/SubscriberForm";
 import CustomerForm from "../../../components/billing/CustomerForm";

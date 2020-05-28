@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import StripeCardInput from "./StripeCardInput";
 import styled from "styled-components";
-import { httpClient } from "../http-requests/profile-dashboard";
+import { httpClient } from "../http-requests";
 
 class UserForm extends Component {
   state = {

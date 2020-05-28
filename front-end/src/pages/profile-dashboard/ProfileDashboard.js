@@ -12,13 +12,10 @@ import DashboardEducation from "./education/DashboardEducation";
 import DashboardExperience from "./experience/DashboardExperience";
 import DashboardBilling from "./billing/DashboardBilling";
 
-import {
-  getUser,
-  editUser,
-  addUserExtra
-} from "../../components/http-requests/profile-dashboard";
+import { httpClient } from "../../components/http-requests";
 import { ProfileContext } from "../../global/context/user-profile/ProfileContext";
 import UserCard from "../../components/user-cards/user-card/UserCard";
+import auth0Client from "../../auth/Auth";
 
 function ProfileDashboard() {
   const [loadingUser, setLoadingUser] = useState(true);
@@ -34,7 +31,15 @@ function ProfileDashboard() {
   });
 
   async function initProfile() {
-    const [res, err] = await getUser();
+    const userProfile = auth0Client.getProfile();
+    const { email } = userProfile;
+
+    if (!email) {
+      auth0Client.signOut("authorize");
+      return;
+    }
+
+    const [res, err] = await httpClient("POST", "/users/get-single", { email });
 
     if (err) {
       console.error(`${res.mssg} => ${res.err}`);
@@ -46,7 +51,7 @@ function ProfileDashboard() {
   }
 
   async function editProfile(data) {
-    const [res, err] = await editUser(data, user.id);
+    const [res, err] = await httpClient("PUT", `/users/${user.id}`, data);
 
     if (err) {
       console.error(`${res.mssg} => ${res.err}`);
@@ -57,7 +62,7 @@ function ProfileDashboard() {
   }
 
   async function addExtra(data, extra) {
-    const [res, err] = await addUserExtra(data, extra);
+    const [res, err] = await httpClient("POST", `/extras/new/${extra}`, data);
 
     if (err) {
       console.error(`${res.mssg} => ${res.err}`);

@@ -1,5 +1,5 @@
 import React from "react";
-import { httpClient } from "../http-requests/profile-dashboard";
+import { httpClient } from "../http-requests";
 
 class AutoComplete extends React.Component {
   state = {

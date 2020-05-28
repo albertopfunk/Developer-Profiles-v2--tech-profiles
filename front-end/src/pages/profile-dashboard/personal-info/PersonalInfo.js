@@ -2,7 +2,7 @@ import React, { useState, useContext } from "react";
 import styled from "styled-components";
 
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
-import { httpClient } from "../../../components/http-requests/profile-dashboard";
+import { httpClient } from "../../../components/http-requests";
 import ImageUploadForm from "../../../components/image-uploads/ImageUploadForm";
 
 function PersonalInfo() {
