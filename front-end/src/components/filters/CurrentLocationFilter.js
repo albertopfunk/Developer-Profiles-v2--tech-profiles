@@ -1,5 +1,5 @@
 import React from "react";
-import { getGio } from "../http-requests/profile-dashboard";
+import { httpClient } from "../http-requests/profile-dashboard";
 
 import AutoComplete from "../autocomplete/AutoComplete";
 
@@ -43,7 +43,9 @@ class CurrentLocationFilter extends React.Component {
       this.setState({ chosenLocationName: name, chosenLocationId: id });
     }
 
-    const [res, err] = await getGio(id);
+    const [res, err] = await httpClient("POST", "/api/gio", {
+      placeId: id
+    });
 
     if (err) {
       console.error(`${res.mssg} => ${res.err}`);

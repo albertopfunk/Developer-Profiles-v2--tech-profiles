@@ -1,8 +1,5 @@
 import React from "react";
-import {
-  locationPredictions,
-  skillPredictions
-} from "../http-requests/profile-dashboard";
+import { httpClient } from "../http-requests/profile-dashboard";
 
 class AutoComplete extends React.Component {
   state = {
@@ -110,36 +107,33 @@ class AutoComplete extends React.Component {
     }
 
     let predictions = [];
+    let url;
     const { inputName } = this.props;
 
     if (inputName.includes("locations") || inputName.includes("location")) {
-      const [res, err] = await locationPredictions(value);
-      if (err) {
-        console.error(res);
-        this.setState({
-          resultsInBank: false,
-          isUsingCombobox: false,
-          autoCompleteResults: []
-        });
-        return;
-      }
-      predictions = res.data.predictions;
+      url = "/api/autocomplete";
     } else if (inputName.includes("skills")) {
-      const [res, err] = await skillPredictions(value);
-      if (err) {
-        console.error(res);
-        this.setState({
-          resultsInBank: false,
-          isUsingCombobox: false,
-          autoCompleteResults: []
-        });
-        return;
-      }
-      predictions = res.data.predictions;
+      url = "/skills/autocomplete";
     } else {
       console.error("inputName Not Provided");
       return;
     }
+
+    const [res, err] = await httpClient("POST", url, {
+      value
+    });
+
+    if (err) {
+      console.error(`${res.mssg} => ${res.err}`);
+      this.setState({
+        resultsInBank: false,
+        isUsingCombobox: false,
+        autoCompleteResults: []
+      });
+      return;
+    }
+
+    predictions = res.data;
 
     if (predictions.length > 0) {
       this.setState({

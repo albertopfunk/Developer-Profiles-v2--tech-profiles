@@ -42,14 +42,22 @@ server.get("/", async (req, res) => {
 // expects input
 // returns skill predictions based on input
 server.post("/autocomplete", async (req, res) => {
-  const { skillsInput } = req.body;
+  const { value } = req.body;
   try {
-    const getAllSkills = await skillsModel.getAllFiltered(skillsInput);
-    if (getAllSkills.length > 10) {
-      let splitSkills = getAllSkills.slice(0, 10);
-      res.json(splitSkills);
+    let predictions = await skillsModel.getAllFiltered(value);
+
+    if (predictions.length > 5) {
+      predictions = predictions.slice(0, 5);
     }
-    res.json(getAllSkills);
+
+    predictions = predictions.map(prediction => {
+      return {
+        name: prediction.skill,
+        id: prediction.id
+      };
+    });
+
+    res.json(predictions);
   } catch (err) {
     res
       .status(500)

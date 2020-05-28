@@ -59,12 +59,19 @@ server.post("/delete-image", (req, res) => {
 
 server.post("/autocomplete", async (req, res) => {
   const key = process.env.GOOGLE_PLACES_KEY;
-  const { locationInput } = req.body;
-  const url = `${process.env.GOOGLE_PLACES_AUTOCOMPLETE}/json?input=${locationInput}&types=(cities)&key=${key}`;
+  const { value } = req.body;
+
+  const url = `${process.env.GOOGLE_PLACES_AUTOCOMPLETE}/json?input=${value}&types=(cities)&key=${key}`;
 
   try {
     const response = await axios.post(url);
-    res.send(response.data);
+    const predictions = response.data.predictions.map(prediction => {
+      return {
+        name: prediction.description,
+        id: prediction.place_id
+      };
+    });
+    res.send(predictions);
   } catch (err) {
     res
       .status(500)
