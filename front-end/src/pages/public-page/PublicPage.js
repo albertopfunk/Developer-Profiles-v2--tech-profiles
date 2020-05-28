@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import axios from "axios";
 
 import Filters from "../../components/filters/Filters";
 import UserCards from "../../components/user-cards/UserCards";
+import { httpClient } from "../../components/http-requests";
 
 class PublicPage extends Component {
   state = {
@@ -28,12 +28,14 @@ class PublicPage extends Component {
   };
 
   async componentDidMount() {
-    try {
-      const users = await axios.get(`${process.env.REACT_APP_SERVER}/users`);
-      this.setState({ users: users.data, initialLoading: false });
-    } catch (err) {
-      console.error(`${err.response.data.message} =>`, err);
+    const [res, err] = await httpClient("GET", "/users");
+
+    if (err) {
+      console.error(`${res.mssg} => ${res.err}`);
+      return;
     }
+
+    this.setState({ users: res.data, initialLoading: false });
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -58,57 +60,60 @@ class PublicPage extends Component {
     return true;
   }
 
-  loadUsers = async isUsinginfinite => {
-    // app filter loading is too fast so it will only show a flash
-    // if (!isUsinginfinite) {
-    //   this.setState({ filtersLoading: true });
-    // }
+  getFilteredUsers = async () => {
+    const [res, err] = await httpClient("POST", "users/filtered", {
+      usersPage: this.state.usersPage,
+      isWebDevChecked: this.state.isWebDevChecked,
+      isUIUXChecked: this.state.isUIUXChecked,
+      isIOSChecked: this.state.isIOSChecked,
+      isAndroidChecked: this.state.isAndroidChecked,
+      isUsingCurrLocationFilter: this.state.isUsingCurrLocationFilter,
+      selectedWithinMiles: this.state.selectedWithinMiles,
+      chosenLocationLat: this.state.chosenLocationLat,
+      chosenLocationLon: this.state.chosenLocationLon,
+      isUsingRelocateToFilter: this.state.isUsingRelocateToFilter,
+      chosenRelocateToArr: this.state.chosenRelocateToArr,
+      isUsingSortByChoice: this.state.isUsingSortByChoice,
+      sortByChoice: this.state.sortByChoice
+    });
 
-    try {
-      const users = await axios.post(
-        `${process.env.REACT_APP_SERVER}/users/infinite`,
-        {
-          usersPage: this.state.usersPage,
-          isUsinginfinite,
-          isWebDevChecked: this.state.isWebDevChecked,
-          isUIUXChecked: this.state.isUIUXChecked,
-          isIOSChecked: this.state.isIOSChecked,
-          isAndroidChecked: this.state.isAndroidChecked,
-          isUsingCurrLocationFilter: this.state.isUsingCurrLocationFilter,
-          selectedWithinMiles: this.state.selectedWithinMiles,
-          chosenLocationLat: this.state.chosenLocationLat,
-          chosenLocationLon: this.state.chosenLocationLon,
-          isUsingRelocateToFilter: this.state.isUsingRelocateToFilter,
-          chosenRelocateToArr: this.state.chosenRelocateToArr,
-          isUsingSortByChoice: this.state.isUsingSortByChoice,
-          sortByChoice: this.state.sortByChoice
-        }
-      );
-
-      if (isUsinginfinite) {
-        if (users.data.length === 0) {
-          this.setState({
-            noMoreUsers: true,
-            infiniteLoading: false
-          });
-        } else {
-          this.setState({
-            users: [...this.state.users, ...users.data],
-            infiniteLoading: false,
-            noMoreUsers: false
-          });
-        }
-      } else {
-        this.setState({
-          users: users.data,
-          filtersLoading: false,
-          noMoreUsers: false
-        });
-        window.scrollTo(0, 0);
-      }
-    } catch (err) {
-      console.error(`${err.response.data.message} =>`, err);
+    if (err) {
+      console.error(`${res.mssg} => ${res.err}`);
+      return;
     }
+
+    this.setState({
+      users: res.data,
+      filtersLoading: false,
+      noMoreUsers: false
+    });
+    window.scrollTo(0, 0);
+  };
+
+  loadMoreUsers = async () => {
+    const [res, err] = await httpClient(
+      "GET",
+      `users/load-more/${this.state.usersPage}`
+    );
+
+    if (err) {
+      console.error(`${res.mssg} => ${res.err}`);
+      return;
+    }
+
+    if (res.data.length === 0) {
+      this.setState({
+        noMoreUsers: true,
+        infiniteLoading: false
+      });
+      return;
+    }
+
+    this.setState({
+      users: [...this.state.users, ...res.data],
+      infiniteLoading: false,
+      noMoreUsers: false
+    });
   };
 
   infiniteScroll = () => {
@@ -120,12 +125,12 @@ class PublicPage extends Component {
         usersPage: this.state.usersPage + 1,
         infiniteLoading: true
       },
-      () => this.loadUsers(true)
+      () => this.loadMoreUsers()
     );
   };
 
   updateUsers = stateUpdate => {
-    this.setState(stateUpdate, () => this.loadUsers(false));
+    this.setState(stateUpdate, () => this.getFilteredUsers());
   };
 
   render() {

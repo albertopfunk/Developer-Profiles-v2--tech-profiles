@@ -1,8 +1,11 @@
 const express = require("express");
 const userMiddleware = require("../../helpers/middleware/user");
 const userModel = require("../../models/user/userModel");
+const NodeCache = require("node-cache");
 
 const server = express.Router();
+
+const usersCache = new NodeCache({ stdTTL: 21500, checkperiod: 22000 });
 
 //----------------------------------------------------------------------
 /*
@@ -60,6 +63,7 @@ const server = express.Router();
 // checks for existing user by email(authO free plan creates doubles)
 // returns inserted user object
 server.post("/new", async (req, res) => {
+  // HANDLE NO EMAILS!!!
   const { email } = req.body;
 
   const doesUserExist = await userModel.getSingleByEmail(email);
@@ -84,7 +88,7 @@ server.get("/", async (req, res) => {
   try {
     const users = await userModel.getAll();
     console.log("INIT", users.length);
-    cachedUsersSuccess = userMiddleware.setToCache(users);
+    cachedUsersSuccess = usersCache.set("users", users);
     if (cachedUsersSuccess) {
       const slicedUsers = users.slice(0, 14);
       res.json(slicedUsers);
@@ -100,37 +104,40 @@ server.get("/", async (req, res) => {
 // requires ALL filter options on req.query(params), that includes isUsinginfinite and usersPage
 // ALL data should be present with the correct data type
 // returns 14 [user objects]
-server.post(
-  "/infinite",
-  userMiddleware.getUsersFromCache,
-  async (req, res) => {
-    let start = 0;
-    let end = 14;
 
-    const { usersPage } = req.body;
+server.get("/load-more/:page", async (req, res) => {
+  let end = 14 * +req.params.page;
+  let start = end - 14;
+  const cachedUsers = usersCache.get("users", true);
 
-    for (let i = 1; i < usersPage; i++) {
-      start += 14;
-      end += 14;
-    }
-
-    try {
-      const users = await userModel.getAllFiltered(req.body);
-      console.log("/INFINITE", users.length);
-      cachedUsersSuccess = userMiddleware.setToCache(users);
-      if (cachedUsersSuccess) {
-        slicedUsers = users.slice(start, end);
-        res.json(slicedUsers);
-      } else {
-        res.status(500).json({ message: "error setting users to cache" });
-      }
-    } catch (err) {
-      res
-        .status(500)
-        .json({ message: "The users could not be retrieved", err });
-    }
+  if (!cachedUsers) {
+    res.status(500).json({ message: "error getting users from cache" });
+    return;
   }
-);
+
+  console.log("CACHE", cachedUsers.length);
+  const slicedUsers = cachedUsers.slice(start, end);
+  res.status(200).json(slicedUsers);
+});
+
+server.post("/filtered", async (req, res) => {
+  let end = 14 * req.body.usersPage;
+  let start = end - 14;
+
+  try {
+    const users = await userModel.getAllFiltered(req.body);
+    console.log("FILTERED", users.length);
+    cachedUsersSuccess = usersCache.set("users", users);
+    if (cachedUsersSuccess) {
+      slicedUsers = users.slice(start, end);
+      res.status(200).json(slicedUsers);
+    } else {
+      res.status(500).json({ message: "error setting users to cache" });
+    }
+  } catch (err) {
+    res.status(500).json({ message: "The users could not be retrieved", err });
+  }
+});
 
 // expects id of existing user in params
 // returns user object

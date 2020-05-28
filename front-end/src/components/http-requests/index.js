@@ -14,7 +14,7 @@ export async function httpClient(method, url, data, config = {}) {
     return [
       {
         data: res.data,
-        status: 200
+        status: res.status ? res.status : 200
       },
       false
     ];
