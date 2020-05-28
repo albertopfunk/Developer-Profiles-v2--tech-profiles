@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import StripeCardInput from "./StripeCardInput";
 import styled from "styled-components";
-import { subscribeUser } from "../http-requests/profile-dashboard";
+import { httpClient } from "../http-requests/profile-dashboard";
 
 class UserForm extends Component {
   state = {
@@ -40,7 +40,7 @@ class UserForm extends Component {
       return;
     }
 
-    const [res, err] = await subscribeUser({
+    const [res, err] = await httpClient("POST", "/api/subscribe", {
       token: tokenId,
       subType: this.state.subType,
       email: this.props.email

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import { reSubscribeUser } from "../http-requests/profile-dashboard";
+import { httpClient } from "../http-requests/profile-dashboard";
 
 class CustomerForm extends Component {
   state = {
@@ -39,7 +39,7 @@ class CustomerForm extends Component {
       return;
     }
 
-    const [res, err] = await reSubscribeUser({
+    const [res, err] = await httpClient("POST", "/api/subscribe-existing", {
       stripeId: this.props.stripeId,
       subType: this.state.subType
     });

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import { userSubInfo } from "../../../components/http-requests/profile-dashboard";
+import { httpClient } from "../../../components/http-requests/profile-dashboard";
 import UserForm from "../../../components/billing/UserForm";
 import SubscriberForm from "../../../components/billing/SubscriberForm";
 import CustomerForm from "../../../components/billing/CustomerForm";
@@ -31,18 +31,21 @@ class CheckoutContainer extends Component {
   }
 
   checkSubStatus = async () => {
-    const [res, err] = await userSubInfo(this.props.stripeSubId);
+    const [res, err] = await httpClient("POST", "/api/get-subscription", {
+      sub: this.props.stripeSubId
+    });
 
     if (err) {
       console.error(`${res.mssg} => ${res.err}`);
       return;
     }
 
-    if (res.status === "active") {
-      this.setUserType("subscriber");
-    } else {
+    if (res.data.status !== "active") {
       this.setUserType("inactiveSubscriber");
+      return;
     }
+
+    this.setUserType("subscriber");
   };
 
   setUserType = type => {

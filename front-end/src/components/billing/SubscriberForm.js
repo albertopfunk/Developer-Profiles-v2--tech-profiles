@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import { userSubInfo, cancelUserSub } from "../http-requests/profile-dashboard";
+import { httpClient } from "../http-requests/profile-dashboard";
 
 class SubscriberForm extends Component {
   state = {
@@ -17,22 +17,41 @@ class SubscriberForm extends Component {
   }
 
   getSubInfo = async () => {
-    const [res, err] = await userSubInfo(this.props.stripeSubId);
+    const [res, err] = await httpClient("POST", "/api/get-subscription", {
+      sub: this.props.stripeSubId
+    });
 
     if (err) {
       console.error(`${res.mssg} => ${res.err}`);
       return;
     }
 
-    if (res.status === "inactiveSubscriber") {
+    if (res.data.status !== "active") {
       this.props.setUserType("inactiveSubscriber");
+      return;
+    }
+
+    for (let data in res.data) {
+      if (data === "created" || data === "startDate" || data === "dueDate") {
+        let date = res.data[data] * 1000;
+        let normDate = new Date(date);
+        normDate = normDate.toString();
+        let normDateArr = normDate.split(" ");
+        res.data[
+          data
+        ] = `${normDateArr[1]} ${normDateArr[2]}, ${normDateArr[3]}`;
+      }
     }
 
     this.setState(res.data);
   };
 
   cancelSub = async () => {
-    const [res, err] = await cancelUserSub(this.props.stripeSubId);
+
+
+    const [res, err] = await httpClient("POST", "/api/cancel-subscription", {
+      sub: this.props.stripeSubId
+    });
 
     if (err) {
       console.error(`${res.mssg} => ${res.err}`);
