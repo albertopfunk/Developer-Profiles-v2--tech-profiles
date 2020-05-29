@@ -9,6 +9,11 @@ import UserCard from "./user-card/UserCard";
 // renders additional 14 articles onInfinite() fire
 
 function UserCards(props) {
+
+  function backToTop() {
+    window.scrollTo(0, 0);
+  }
+
   return (
     <Section role="feed" aria-busy={props.isBusy}>
       {props.users.length === 0 ? (
@@ -48,7 +53,14 @@ function UserCards(props) {
         </aside>
       ) : (
         <div>
-          <button onClick={props.loadMoreUsers}>Load More</button>
+          {!props.canLoadMore ? (
+            <button onClick={props.loadMoreUsers}>Load More</button>
+          ) : (
+            <div>
+              <p>No more users to load</p>
+              <button onClick={backToTop}>Back to Top</button>
+            </div>
+          )}
         </div>
       )}
     </Section>

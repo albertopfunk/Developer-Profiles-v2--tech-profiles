@@ -86,11 +86,10 @@ server.post("/new", async (req, res) => {
 server.get("/", async (req, res) => {
   try {
     const users = await userModel.getAll();
-    console.log("INIT", users.length);
     cachedUsersSuccess = usersCache.set("users", users);
     if (cachedUsersSuccess) {
       const slicedUsers = users.slice(0, 14);
-      res.json(slicedUsers);
+      res.status(200).json({ users: slicedUsers, len: users.length });
     } else {
       res.status(500).json({ message: "error setting initial users to cache" });
     }
@@ -114,7 +113,6 @@ server.get("/load-more/:page", async (req, res) => {
     return;
   }
 
-  console.log("CACHE", cachedUsers.length);
   const slicedUsers = cachedUsers.slice(start, end);
   res.status(200).json(slicedUsers);
 });
@@ -125,11 +123,10 @@ server.post("/filtered", async (req, res) => {
 
   try {
     const users = await userModel.getAllFiltered(req.body);
-    console.log("FILTERED", users.length);
     cachedUsersSuccess = usersCache.set("users", users);
     if (cachedUsersSuccess) {
       slicedUsers = users.slice(start, end);
-      res.status(200).json(slicedUsers);
+      res.status(200).json({ users: slicedUsers, len: users.length });
     } else {
       res.status(500).json({ message: "error setting users to cache" });
     }

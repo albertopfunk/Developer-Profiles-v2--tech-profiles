@@ -8,6 +8,7 @@ import { httpClient } from "../../components/http-requests";
 class PublicPage extends Component {
   state = {
     users: [],
+    usersLength: 0,
     noMoreUsers: false,
     initialLoading: true,
     usersLoading: false,
@@ -35,7 +36,11 @@ class PublicPage extends Component {
       return;
     }
 
-    this.setState({ users: res.data, initialLoading: false });
+    this.setState({
+      users: res.data.users,
+      usersLength: res.data.len,
+      initialLoading: false
+    });
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -61,7 +66,7 @@ class PublicPage extends Component {
   }
 
   getFilteredUsers = async () => {
-    const [res, err] = await httpClient("POST", "users/filtered", {
+    const [res, err] = await httpClient("POST", "/users/filtered", {
       usersPage: this.state.usersPage,
       isWebDevChecked: this.state.isWebDevChecked,
       isUIUXChecked: this.state.isUIUXChecked,
@@ -83,19 +88,30 @@ class PublicPage extends Component {
     }
 
     this.setState({
-      users: res.data,
-      filtersLoading: false,
-      noMoreUsers: false
+      users: res.data.users,
+      usersLength: res.data.len,
+      filtersLoading: false
     });
+
+    if (res.data.users.length < this.state.usersLength) {
+      this.setState({
+        noMoreUsers: false
+      });
+    } else {
+      this.setState({
+        noMoreUsers: true
+      });
+    }
+
     window.scrollTo(0, 0);
   };
 
   loadMoreUsers = async () => {
-    this.setState({usersLoading: true})
-    
+    this.setState({ usersLoading: true });
+
     const [res, err] = await httpClient(
       "GET",
-      `users/load-more/${this.state.usersPage + 1}`
+      `/users/load-more/${this.state.usersPage + 1}`
     );
 
     if (err) {
@@ -103,20 +119,21 @@ class PublicPage extends Component {
       return;
     }
 
-    if (res.data.length === 0) {
-      this.setState({
-        noMoreUsers: true,
-        usersLoading: false
-      });
-      return;
-    }
-
     this.setState({
       users: [...this.state.users, ...res.data],
       usersPage: this.state.usersPage + 1,
-      usersLoading: false,
-      noMoreUsers: false
+      usersLoading: false
     });
+
+    if (this.state.users.length + res.data.length < this.state.usersLength) {
+      this.setState({
+        noMoreUsers: false
+      });
+    } else {
+      this.setState({
+        noMoreUsers: true
+      });
+    }
   };
 
   updateUsers = stateUpdate => {
@@ -124,7 +141,12 @@ class PublicPage extends Component {
   };
 
   render() {
-    console.log("===PUBLIC PAGE===", this.state.users.length);
+    console.log(
+      "===PUBLIC PAGE===",
+      this.state.users.length,
+      "TOTAL",
+      this.state.usersLength
+    );
     return (
       <Main>
         <Filters updateUsers={this.updateUsers} />
@@ -133,6 +155,7 @@ class PublicPage extends Component {
         ) : (
           <UserCards
             loadMoreUsers={this.loadMoreUsers}
+            canLoadMore={this.state.noMoreUsers}
             isBusy={this.state.usersLoading}
             users={this.state.users}
           />
