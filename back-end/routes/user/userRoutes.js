@@ -35,10 +35,6 @@ const usersCache = new NodeCache({ stdTTL: 21500, checkperiod: 22000 });
     profile_views
 
 
-
-
-
-
     // ----------------- //
     Possible Other User
     name
@@ -52,20 +48,18 @@ const usersCache = new NodeCache({ stdTTL: 21500, checkperiod: 22000 });
     interested_skills
     interested areas of work
     
-
-
-
 */
 //----------------------------------------------------------------------
 
-// does not expect anything
-// checks for existing user by email(authO free plan creates doubles)
-// returns inserted user object
 server.post("/new", async (req, res) => {
-  // HANDLE NO EMAILS!!!
-  const { email } = req.body;
+  if (!req.body.email) {
+    res.status(400).json({
+      message: `Expected 'email' in body, received '${req.body.email}'`
+    });
+    return;
+  }
 
-  const doesUserExist = await userModel.getSingleByEmail(email);
+  const doesUserExist = await userModel.getSingleByEmail(req.body.email);
   if (doesUserExist) {
     res.status(200).json(doesUserExist);
   } else {
@@ -73,17 +67,12 @@ server.post("/new", async (req, res) => {
       const addNewUser = await userModel.insert(req.body);
       res.status(201).json(addNewUser);
     } catch (err) {
-      res
-        .status(500)
-        .json({ message: "Error adding the user to the database", err });
+      res.status(500).json({ message: "Error adding user to database" });
     }
   }
 });
 
-// uses middleware to cache initial users
-// does not expect anything
-// returns 14 [user objects]
-server.get("/", async (req, res) => {
+server.get("/", async (_, res) => {
   try {
     const users = await userModel.getAll();
     cachedUsersSuccess = usersCache.set("users", users);
@@ -91,25 +80,27 @@ server.get("/", async (req, res) => {
       const slicedUsers = users.slice(0, 14);
       res.status(200).json({ users: slicedUsers, len: users.length });
     } else {
-      res.status(500).json({ message: "error setting initial users to cache" });
+      res.status(500).json({ message: "Error adding users to cache" });
     }
   } catch (err) {
-    res.status(500).json({ message: "The users could not be retrieved", err });
+    res.status(500).json({ message: "Error getting users from database" });
   }
 });
 
-// uses middleware to authenticate data and uses a cache for users
-// requires ALL filter options on req.query(params), that includes isUsinginfinite and usersPage
-// ALL data should be present with the correct data type
-// returns 14 [user objects]
-
 server.get("/load-more/:page", async (req, res) => {
+  if (!req.params.page) {
+    res.status(400).json({
+      message: `Expected 'page' in params, received '${req.params.page}'`
+    });
+    return;
+  }
+
   let end = 14 * +req.params.page;
   let start = end - 14;
   const cachedUsers = usersCache.get("users", true);
 
   if (!cachedUsers) {
-    res.status(500).json({ message: "error getting users from cache" });
+    res.status(500).json({ message: "Error getting users from cache" });
     return;
   }
 
@@ -118,7 +109,14 @@ server.get("/load-more/:page", async (req, res) => {
 });
 
 server.post("/filtered", async (req, res) => {
-  let end = 14 * req.body.usersPage;
+  if (!req.body.page) {
+    res.status(400).json({
+      message: `Expected 'page' in body, received '${req.body.page}'`
+    });
+    return;
+  }
+
+  let end = 14 * req.body.page;
   let start = end - 14;
 
   try {
@@ -128,78 +126,88 @@ server.post("/filtered", async (req, res) => {
       slicedUsers = users.slice(start, end);
       res.status(200).json({ users: slicedUsers, len: users.length });
     } else {
-      res.status(500).json({ message: "error setting users to cache" });
+      res.status(500).json({ message: "Error adding users to cache" });
     }
   } catch (err) {
-    res.status(500).json({ message: "The users could not be retrieved", err });
+    res.status(500).json({ message: "Error getting users from database" });
   }
 });
 
-// expects id of existing user in params
-// returns user object
 server.get("/:id", async (req, res) => {
-  const { id } = req.params;
+  if (!req.params.id) {
+    res.status(400).json({
+      message: `Expected 'id' in params, received '${req.params.id}'`
+    });
+    return;
+  }
+
   try {
-    const getSingleUser = await userModel.getSingle(id);
+    const getSingleUser = await userModel.getSingle(req.params.id);
     getSingleUser
       ? res.json(getSingleUser)
       : res.status(404).json({
-          message: `The user with the specified ID of '${id}' does not exist`
+          message: `User with the specified ID of '${req.params.id}' does not exist`
         });
   } catch (err) {
-    res.status(500).json({ message: "The user could not be retrieved", err });
+    res.status(500).json({ message: "Error getting user from database" });
   }
 });
 
-// expects email of user in body
-// returns user object
 server.post("/get-single", async (req, res) => {
-  const { email } = req.body;
+  if (!req.body.email) {
+    res.status(400).json({
+      message: `Expected 'email' in body, received '${req.body.email}'`
+    });
+    return;
+  }
+
   try {
-    const getSingleUser = await userModel.getSingleByEmail(email);
+    const getSingleUser = await userModel.getSingleByEmail(req.body.email);
     getSingleUser
       ? res.json(getSingleUser)
       : res.status(404).json({
-          message: `The user with the specified ID of '${id}' does not exist`
+          message: `User with the specified ID of '${id}' does not exist`
         });
   } catch (err) {
-    res.status(500).json({ message: "The user could not be retrieved", err });
+    res.status(500).json({ message: "Error getting user from database" });
   }
 });
 
-// expects id of existing user in params
-// returns a number 1 if successful
-// authorization for updates? like user ID
 server.put("/:id", async (req, res) => {
-  const { id } = req.params;
+  if (!req.params.id) {
+    res.status(400).json({
+      message: `Expected 'id' in params, received '${req.params.id}'`
+    });
+    return;
+  }
   try {
-    const editUser = await userModel.update(id, req.body);
+    const editUser = await userModel.update(req.params.id, req.body);
     editUser
       ? res.json(editUser)
       : res.status(404).json({
-          message: `The user with the specified ID of '${id}' does not exist`
+          message: `User with the specified ID of '${req.params.id}' does not exist`
         });
   } catch (err) {
-    res
-      .status(500)
-      .json({ message: "The user information could not be modified", err });
+    res.status(500).json({ message: "Error updating user" });
   }
 });
 
-// expects id of existing user in params
-// returns a number 1 if successful
-// authorization for deletes? like user ID
 server.delete("/:id", async (req, res) => {
-  const { id } = req.params;
+  if (!req.params.id) {
+    res.status(400).json({
+      message: `Expected 'id' in params, received '${req.params.id}'`
+    });
+    return;
+  }
   try {
-    const removeUser = await userModel.remove(id);
+    const removeUser = await userModel.remove(req.params.id);
     removeUser
       ? res.json(removeUser)
       : res.status(404).json({
-          message: `The user with the specified ID of '${id}' does not exist`
+          message: `User with the specified ID of '${req.params.id}' does not exist`
         });
   } catch (err) {
-    res.status(500).json({ message: "The user could not be removed", err });
+    res.status(500).json({ message: "Error removing user" });
   }
 });
 

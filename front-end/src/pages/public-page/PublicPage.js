@@ -67,7 +67,7 @@ class PublicPage extends Component {
 
   getFilteredUsers = async () => {
     const [res, err] = await httpClient("POST", "/users/filtered", {
-      usersPage: this.state.usersPage,
+      page: this.state.usersPage,
       isWebDevChecked: this.state.isWebDevChecked,
       isUIUXChecked: this.state.isUIUXChecked,
       isIOSChecked: this.state.isIOSChecked,
