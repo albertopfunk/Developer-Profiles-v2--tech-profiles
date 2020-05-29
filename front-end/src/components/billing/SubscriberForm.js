@@ -31,18 +31,6 @@ class SubscriberForm extends Component {
       return;
     }
 
-    for (let data in res.data) {
-      if (data === "created" || data === "startDate" || data === "dueDate") {
-        let date = res.data[data] * 1000;
-        let normDate = new Date(date);
-        normDate = normDate.toString();
-        let normDateArr = normDate.split(" ");
-        res.data[
-          data
-        ] = `${normDateArr[1]} ${normDateArr[2]}, ${normDateArr[3]}`;
-      }
-    }
-
     this.setState(res.data);
   };
 
