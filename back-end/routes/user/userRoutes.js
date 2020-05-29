@@ -144,7 +144,7 @@ server.get("/:id", async (req, res) => {
   try {
     const getSingleUser = await userModel.getSingle(req.params.id);
     getSingleUser
-      ? res.json(getSingleUser)
+      ? res.status(200).json(getSingleUser)
       : res.status(404).json({
           message: `User with the specified ID of '${req.params.id}' does not exist`
         });
@@ -164,7 +164,7 @@ server.post("/get-single", async (req, res) => {
   try {
     const getSingleUser = await userModel.getSingleByEmail(req.body.email);
     getSingleUser
-      ? res.json(getSingleUser)
+      ? res.status(200).json(getSingleUser)
       : res.status(404).json({
           message: `User with the specified ID of '${id}' does not exist`
         });
@@ -183,7 +183,7 @@ server.put("/:id", async (req, res) => {
   try {
     const editUser = await userModel.update(req.params.id, req.body);
     editUser
-      ? res.json(editUser)
+      ? res.status(200).json(editUser)
       : res.status(404).json({
           message: `User with the specified ID of '${req.params.id}' does not exist`
         });
@@ -202,7 +202,7 @@ server.delete("/:id", async (req, res) => {
   try {
     const removeUser = await userModel.remove(req.params.id);
     removeUser
-      ? res.json(removeUser)
+      ? res.status(200).json(removeUser)
       : res.status(404).json({
           message: `User with the specified ID of '${req.params.id}' does not exist`
         });
