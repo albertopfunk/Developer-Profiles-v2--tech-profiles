@@ -1,5 +1,4 @@
 const express = require("express");
-const userMiddleware = require("../../helpers/middleware/user");
 const userModel = require("../../models/user/userModel");
 const NodeCache = require("node-cache");
 

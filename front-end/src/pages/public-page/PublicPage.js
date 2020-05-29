@@ -10,7 +10,7 @@ class PublicPage extends Component {
     users: [],
     noMoreUsers: false,
     initialLoading: true,
-    infiniteLoading: false,
+    usersLoading: false,
     filtersLoading: false,
     usersPage: 1,
     isWebDevChecked: false,
@@ -91,9 +91,11 @@ class PublicPage extends Component {
   };
 
   loadMoreUsers = async () => {
+    this.setState({usersLoading: true})
+    
     const [res, err] = await httpClient(
       "GET",
-      `users/load-more/${this.state.usersPage}`
+      `users/load-more/${this.state.usersPage + 1}`
     );
 
     if (err) {
@@ -104,29 +106,17 @@ class PublicPage extends Component {
     if (res.data.length === 0) {
       this.setState({
         noMoreUsers: true,
-        infiniteLoading: false
+        usersLoading: false
       });
       return;
     }
 
     this.setState({
       users: [...this.state.users, ...res.data],
-      infiniteLoading: false,
+      usersPage: this.state.usersPage + 1,
+      usersLoading: false,
       noMoreUsers: false
     });
-  };
-
-  infiniteScroll = () => {
-    if (this.state.infiniteLoading || this.state.noMoreUsers) {
-      return;
-    }
-    this.setState(
-      {
-        usersPage: this.state.usersPage + 1,
-        infiniteLoading: true
-      },
-      () => this.loadMoreUsers()
-    );
   };
 
   updateUsers = stateUpdate => {
@@ -142,8 +132,8 @@ class PublicPage extends Component {
           <h1>Loading...</h1>
         ) : (
           <UserCards
-            infiniteScroll={this.infiniteScroll}
-            isBusy={this.state.infiniteLoading}
+            loadMoreUsers={this.loadMoreUsers}
+            isBusy={this.state.usersLoading}
             users={this.state.users}
           />
         )}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styled from "styled-components";
 
 import UserCard from "./user-card/UserCard";
@@ -9,53 +9,12 @@ import UserCard from "./user-card/UserCard";
 // renders additional 14 articles onInfinite() fire
 
 function UserCards(props) {
-  const scrollSectionRef = React.createRef();
-  const [canScrollUp, setCanScrollUp] = useState(false);
-
-  useEffect(() => {
-    window.addEventListener("scroll", onInfinite, true);
-    return () => {
-      window.removeEventListener("scroll", onInfinite, true);
-    };
-  });
-
-  function onInfinite() {
-    if (!canScrollUp) {
-      if (window.scrollY > 3000) {
-        setCanScrollUp(true);
-      }
-    }
-    if (canScrollUp) {
-      if (window.scrollY < 3000) {
-        setCanScrollUp(false);
-      }
-    }
-
-    if (scrollSectionRef.current && !props.isBusy) {
-      if (
-        scrollSectionRef.current.scrollHeight - window.scrollY <
-        scrollSectionRef.current.scrollHeight / 3
-      ) {
-        props.infiniteScroll();
-      }
-    }
-  }
-
-  function backToTop() {
-    window.scrollTo(0, 0);
-  }
-
   return (
-    <Section role="feed" aria-busy={props.isBusy} ref={scrollSectionRef}>
+    <Section role="feed" aria-busy={props.isBusy}>
       {props.users.length === 0 ? (
         <h1>No Users Here! - Reset filters BTN</h1>
       ) : (
         <div>
-          {canScrollUp ? (
-            <aside className="back-to-top">
-              <button onClick={backToTop}>Back to Top</button>
-            </aside>
-          ) : null}
           {props.users.map((user, i) => {
             return (
               <UserCard
@@ -82,11 +41,16 @@ function UserCards(props) {
           })}
         </div>
       )}
+
       {props.isBusy ? (
-        <aside aria-hidden="true">
+        <aside>
           <h1>Loading...</h1>
         </aside>
-      ) : null}
+      ) : (
+        <div>
+          <button onClick={props.loadMoreUsers}>Load More</button>
+        </div>
+      )}
     </Section>
   );
 }
