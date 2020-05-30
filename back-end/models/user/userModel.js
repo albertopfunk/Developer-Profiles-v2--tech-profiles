@@ -5,6 +5,7 @@ const db = require("../../data/dbConfig");
 module.exports = {
   insert,
   getAll,
+  getFullUser,
   getAllFiltered,
   getSingle,
   getSingleByEmail,
@@ -106,6 +107,100 @@ function getSingle(id) {
   return db("users")
     .where({ id })
     .first();
+}
+
+async function getFullUser(userId) {
+  async function getUser() {
+    return db("users").where("id", userId);
+  }
+
+  async function getLocations() {
+    return db("locations")
+      .join("user_locations", "locations.id", "user_locations.locationId")
+      .select("locations.location as name")
+      .where("user_locations.userId", userId);
+  }
+
+  async function getTopSkills() {
+    return db("skills")
+      .join("user_top_skills", "skills.id", "user_top_skills.skillId")
+      .select("skills.skill as name")
+      .where("user_top_skills.userId", userId);
+  }
+
+  async function getAdditionalSkills() {
+    return db("skills")
+      .join(
+        "user_additional_skills",
+        "skills.id",
+        "user_additional_skills.skillId"
+      )
+      .select("skills.skill as name")
+      .where("user_additional_skills.userId", userId);
+  }
+
+  async function getEducation() {
+    return db("education")
+      .join("users", "users.id", "education.user_id")
+      .select(
+        "education.school",
+        "education.school_dates",
+        "education.field_of_study"
+      )
+      .where("education.user_id", userId);
+  }
+
+  async function getExperience() {
+    return db("experience")
+      .join("users", "users.id", "experience.user_id")
+      .select(
+        "experience.company_name",
+        "experience.job_title",
+        "experience.job_dates",
+        "experience.job_description"
+      )
+      .where("experience.user_id", userId);
+  }
+
+  async function getProjects() {
+    return db("projects")
+      .join("users", "users.id", "projects.user_id")
+      .select(
+        "projects.project_title",
+        "projects.link",
+        "projects.project_description",
+        "projects.project_img"
+      )
+      .where("projects.user_id", userId);
+  }
+
+  const [
+    user,
+    locations,
+    topSkills,
+    additionalSkills,
+    education,
+    experience,
+    projects
+  ] = await Promise.all([
+    getUser(),
+    getLocations(),
+    getTopSkills(),
+    getAdditionalSkills(),
+    getEducation(),
+    getExperience(),
+    getProjects()
+  ]);
+
+  return {
+    ...user[0],
+    locations,
+    top_skills: topSkills,
+    additional_skills: additionalSkills,
+    education,
+    experience,
+    projects
+  };
 }
 
 function getSingleByEmail(email) {
