@@ -43,6 +43,7 @@ function ProfileDashboard() {
 
     if (err) {
       console.error(`${res.mssg} => ${res.err}`);
+      auth0Client.signOut("authorize");
       return;
     }
 

@@ -78,8 +78,9 @@ server.post("/autocomplete", async (req, res) => {
   const url = `${process.env.GOOGLE_PLACES_AUTOCOMPLETE}/json?input=${value}&types=(cities)&key=${key}`;
 
   try {
-    const res = await axios.post(url);
-    const predictions = res.data.predictions.map(prediction => {
+    const response = await axios.post(url);
+
+    const predictions = response.data.predictions.map(prediction => {
       return {
         name: prediction.description,
         id: prediction.place_id
@@ -104,8 +105,8 @@ server.post("/gio", async (req, res) => {
   }
 
   try {
-    const res = await axios.post(url);
-    res.status(200).json(res.data.result.geometry.location);
+    const response = await axios.post(url);
+    res.status(200).json(response.data.result.geometry.location);
   } catch (err) {
     res.status(500).json({ message: "Error getting location gio" });
   }

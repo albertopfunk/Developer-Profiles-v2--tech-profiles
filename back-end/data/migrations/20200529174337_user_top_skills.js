@@ -2,7 +2,7 @@
 exports.up = function(knex) {
   return knex.schema.createTable("user_top_skills", function(table) {
     table.increments();
-    table.primary(['userId', 'skillId']);
+    table.primary(["userId", "skillId"]);
     table
       .integer("userId")
       .unsigned()

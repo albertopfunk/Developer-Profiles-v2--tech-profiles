@@ -43,6 +43,14 @@ function PersonalInfo() {
     }
 
     if (imageInput) {
+      if (user.image) {
+        let imageToDelete = user.image;
+        imageToDelete = imageToDelete.split(",");
+        httpClient("POST", "/api/delete-image", {
+          id: imageToDelete[1]
+        });
+      }
+
       inputs.image = imageInput;
       localStorage.removeItem("img_prev");
       setPreviewImg("");
@@ -64,13 +72,6 @@ function PersonalInfo() {
       setTitleInput("");
     }
 
-    if (imageInput && user.image) {
-      let imageToDelete = user.image;
-      imageToDelete = imageToDelete.split(",");
-      httpClient("POST", "/api/delete-image", {
-        id: imageToDelete[1]
-      });
-    }
     editProfile(inputs);
   }
 

@@ -35,8 +35,6 @@ class SubscriberForm extends Component {
   };
 
   cancelSub = async () => {
-
-
     const [res, err] = await httpClient("POST", "/api/cancel-subscription", {
       sub: this.props.stripeSubId
     });

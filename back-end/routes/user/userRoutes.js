@@ -15,20 +15,18 @@ const usersCache = new NodeCache({ stdTTL: 21500, checkperiod: 22000 });
     first_name
     last_name
     image
+    image_id
     desired_title
     area_of_work
     current_location_name
     current_location_lat
     current_location_lon
-    interested_location_names
     github
     linkedin
     portfolio
     summary
     stripe_customer_id
     stripe_subscription_name
-    top_skills
-    additional_skills
 
     clicks_to_expand
     clicks_to_view_profile

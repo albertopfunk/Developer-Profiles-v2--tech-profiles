@@ -9,7 +9,6 @@ import UserCard from "./user-card/UserCard";
 // renders additional 14 articles onInfinite() fire
 
 function UserCards(props) {
-
   function backToTop() {
     window.scrollTo(0, 0);
   }

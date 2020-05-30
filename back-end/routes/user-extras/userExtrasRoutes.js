@@ -140,13 +140,13 @@ server.put("/:user_extra/:user_extra_id", async (req, res) => {
   }
 
   try {
-    const editUser = await userExtrasModel.update(
+    const editExtra = await userExtrasModel.update(
       user_extra,
       user_extra_id,
       req.body
     );
-    editUser
-      ? res.status(200).json(editUser)
+    editExtra
+      ? res.status(200).json(editExtra)
       : res.status(404).json({
           message: `User's '${user_extra}' with the specified ID of '${user_extra_id}' does not exist`
         });
@@ -180,9 +180,9 @@ server.delete("/:user_extra/:user_extra_id", async (req, res) => {
   }
 
   try {
-    const removeUser = await userExtrasModel.remove(user_extra, user_extra_id);
-    removeUser
-      ? res.status(200).json(removeUser)
+    const removeExtra = await userExtrasModel.remove(user_extra, user_extra_id);
+    removeExtra
+      ? res.status(200).json(removeExtra)
       : res.status(404).json({
           message: `User's '${user_extra}' with the specified ID of '${user_extra_id}' does not exist`
         });
