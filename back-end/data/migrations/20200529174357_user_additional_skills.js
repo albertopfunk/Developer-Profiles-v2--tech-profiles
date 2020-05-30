@@ -1,7 +1,6 @@
 // eslint-disable-next-line
 exports.up = function(knex) {
   return knex.schema.createTable("user_additional_skills", function(table) {
-    table.increments();
     table.primary(["userId", "skillId"]);
     table
       .integer("userId")

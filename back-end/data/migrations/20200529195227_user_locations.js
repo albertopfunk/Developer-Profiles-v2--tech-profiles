@@ -1,7 +1,6 @@
 // eslint-disable-next-line
 exports.up = function(knex) {
   return knex.schema.createTable("user_locations", function(table) {
-    table.increments();
     table.primary(["userId", "locationId"]);
     table
       .integer("userId")
