@@ -4,6 +4,7 @@ module.exports = {
   insert,
   getAll,
   getAllFiltered,
+  insertUserSkill,
   getSingle,
   update,
   remove
@@ -20,6 +21,30 @@ async function insert(newSkill) {
   } else {
     const [id] = await db("skills").insert(newSkill);
     return getSingle(id);
+  }
+}
+
+async function insertUserSkill(lePackage) {
+  const { type, user_id, skill_id } = lePackage;
+
+  await db(type).insert({ user_id, skill_id });
+
+  const currentSkills = await db("skills")
+    .join(`${type}`, "skills.id", `${type}.skill_id`)
+    .select("skills.skill as name")
+    .where(`${type}.user_id`, user_id);
+
+  let currentSkillsString = "";
+  currentSkills.map(skill => (currentSkillsString += `${skill.name},`));
+
+  if (type === "user_top_skills") {
+    await db("users")
+      .where({ id: user_id })
+      .update({ top_skills_prev: currentSkillsString });
+  } else {
+    await db("users")
+      .where({ id: user_id })
+      .update({ additional_skills_prev: currentSkillsString });
   }
 }
 
