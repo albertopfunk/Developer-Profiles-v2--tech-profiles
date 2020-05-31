@@ -5,7 +5,7 @@ exports.seed = function(knex, Promise) {
   const userArr = [];
 
   function randomFilterValue() {
-    let filterOptions = ["Web Development", "iOS", "Android", "UI/UX"];
+    let filterOptions = ["Development", "iOS", "Android", "Design"];
     let rand = [(Math.random() * filterOptions.length) | 0];
     return filterOptions[rand];
   }
@@ -83,31 +83,27 @@ exports.seed = function(knex, Promise) {
     return filterOptions[rand];
   }
 
-  for (let i = 0; i < 50; i++) {
-    let user1Location = randomLocationValue();
-    let user1Interested1 = randomLocationValue();
-    let user1Interested2 = randomLocationValue();
-    userArr.push({
-      first_name: faker.name.firstName(),
-      last_name: faker.name.lastName(),
-      image:
-        "https://res.cloudinary.com/dlo7dkdfy/image/upload/v1554817779/womannnn.jpg",
-      desired_title: faker.name.title(),
-      area_of_work: randomFilterValue(),
-      current_location_name: user1Location.name,
-      current_location_lat: user1Location.lat,
-      current_location_lon: user1Location.lon,
-      interested_location_names: `${user1Interested1.name}|${user1Interested2.name}`,
-      public_email: faker.internet.email(),
-      github: "github.com",
-      linkedin: "linkedin.com",
-      portfolio: "coolbanana.com",
-      summary:
-        "245char Lorem Ipsum is dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-      top_skills: "Java, Swift, Python, SQL",
-      additional_skills: "Ruby, Elixir, GraphQL, RoR"
-    });
-  }
+  let user1Location = randomLocationValue();
+  userArr.push({
+    first_name: faker.name.firstName(),
+    last_name: faker.name.lastName(),
+    image:
+      "https://res.cloudinary.com/dy5hgr3ht/image/upload/c_scale,h_800/v1590889437/dev-profiles-v1-profile-dashboard/sxifjyiyc5hwujqfyven.webp",
+    image_id: "someimageID",
+    desired_title: faker.name.title(),
+    area_of_work: randomFilterValue(),
+    current_location_name: user1Location.name,
+    current_location_lat: user1Location.lat,
+    current_location_lon: user1Location.lon,
+    top_skills_prev: "Ruby, Elixir, SQL, Web Performance, Vue",
+    additional_skills_prev: "React, Front-End, Java, Stripe, Angular",
+    public_email: faker.internet.email(),
+    github: "github.com",
+    linkedin: "linkedin.com",
+    portfolio: "coolbanana.com",
+    summary:
+      "245char Lorem Ipsum is dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s when an unknown printer took a galley of type and scrambled it to make a type specimen book."
+  });
 
   // Deletes ALL existing entries
   return knex("users")

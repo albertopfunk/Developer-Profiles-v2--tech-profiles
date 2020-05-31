@@ -3,14 +3,12 @@ const faker = require("faker");
 // eslint-disable-next-line
 exports.seed = function(knex, Promise) {
   let educationArr = [];
-  for (let i = 1; i <= 50; i++) {
-    educationArr.push({
-      user_id: i,
-      school: "Stanford",
-      school_dates: "September 1998 - Present",
-      field_of_study: "Full Stack Web"
-    });
-  }
+  educationArr.push({
+    user_id: 1,
+    school: "Stanford",
+    school_dates: "September 1998 - Present",
+    field_of_study: "Full Stack Web"
+  });
 
   return knex("education")
     .truncate()

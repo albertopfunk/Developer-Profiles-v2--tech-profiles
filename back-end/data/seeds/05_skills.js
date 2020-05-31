@@ -12,7 +12,6 @@ exports.seed = function(knex, Promise) {
       return knex("skills")
         .truncate()
         .insert([
-          { skill: "RoR" },
           { skill: "Ruby" },
           { skill: "Python" },
           { skill: "Angular" },
@@ -34,6 +33,9 @@ exports.seed = function(knex, Promise) {
           { skill: "Vue" },
           { skill: "Testing" },
           { skill: "Accessibility" },
+          { skill: "Security" },
+          { skill: "Systems Design" },
+          { skill: "Web Development" },
           { skill: "React Native" },
           { skill: "Swift" },
           { skill: "GraphQL" },
@@ -41,6 +43,8 @@ exports.seed = function(knex, Promise) {
           { skill: "LESS" },
           { skill: "SASS" },
           { skill: "GSAP" },
+          { skill: "UX" },
+          { skill: "UI" },
           { skill: "Sketch" }
         ]);
     });
