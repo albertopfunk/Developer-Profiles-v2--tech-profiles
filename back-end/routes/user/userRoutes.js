@@ -70,6 +70,27 @@ server.post("/new", async (req, res) => {
   }
 });
 
+server.get("/get-full/:id", async (req, res) => {
+  if (!req.params.id) {
+    res.status(400).json({
+      message: `Expected 'id' in params, received '${req.params.id}'`
+    });
+    return;
+  }
+
+  try {
+    const getSingleUser = await userModel.getFullUser(req.params.id);
+    getSingleUser
+      ? res.status(200).json(getSingleUser)
+      : res.status(404).json({
+          message: `User with the specified ID of '${req.params.id}' does not exist`
+        });
+  } catch (err) {
+    console.log(err)
+    res.status(500).json({ message: "Error getting user from database" });
+  }
+});
+
 server.get("/", async (_, res) => {
   try {
     const users = await userModel.getAll();
@@ -81,6 +102,7 @@ server.get("/", async (_, res) => {
       res.status(500).json({ message: "Error adding users to cache" });
     }
   } catch (err) {
+    console.log(err);
     res.status(500).json({ message: "Error getting users from database" });
   }
 });
