@@ -7,7 +7,7 @@ exports.usersData = [
     image:
       "https://res.cloudinary.com/dlo7dkdfy/image/upload/v1554817779/womannnn.jpg",
     desired_title: "Unicorn Developer",
-    area_of_work: "Web Development",
+    area_of_work: "Development",
     current_location_name: "Boulder, CO, USA",
     current_location_lat: "40.014984",
     current_location_lon: "-105.270546",
@@ -20,7 +20,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift",
+    additional_skills: "Java, Swift"
   },
   {
     email: null,
@@ -30,7 +30,7 @@ exports.usersData = [
     image:
       "https://res.cloudinary.com/dlo7dkdfy/image/upload/v1554817779/mannnn.jpg",
     desired_title: "Unicorn Developer",
-    area_of_work: "Web Development",
+    area_of_work: "Development",
     current_location_name: "Los Angeles, CA, USA",
     current_location_lat: "34.052235",
     current_location_lon: "-118.243683",
@@ -43,7 +43,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift",
+    additional_skills: "Java, Swift"
   },
   {
     email: null,
@@ -66,7 +66,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift",
+    additional_skills: "Java, Swift"
   },
   {
     email: null,
@@ -89,7 +89,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift",
+    additional_skills: "Java, Swift"
   },
   {
     email: null,
@@ -99,7 +99,7 @@ exports.usersData = [
     image:
       "https://res.cloudinary.com/dlo7dkdfy/image/upload/v1554817779/womannnn.jpg",
     desired_title: "Unicorn Developer",
-    area_of_work: "UI/UX",
+    area_of_work: "Design",
     current_location_name: "Boulder, CO, USA",
     current_location_lat: "40.014984",
     current_location_lon: "-105.270546",
@@ -112,7 +112,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift",
+    additional_skills: "Java, Swift"
   },
   {
     email: null,
@@ -135,7 +135,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift",
+    additional_skills: "Java, Swift"
   },
   {
     email: null,
@@ -158,7 +158,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift",
+    additional_skills: "Java, Swift"
   },
   {
     email: null,
@@ -181,7 +181,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift",
+    additional_skills: "Java, Swift"
   },
   {
     email: null,
@@ -204,7 +204,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift",
+    additional_skills: "Java, Swift"
   },
   {
     email: null,
@@ -227,7 +227,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift",
+    additional_skills: "Java, Swift"
   },
   {
     email: null,
@@ -250,7 +250,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift",
+    additional_skills: "Java, Swift"
   },
   {
     email: null,
@@ -273,7 +273,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift",
+    additional_skills: "Java, Swift"
   },
   {
     email: null,
@@ -296,7 +296,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift",
+    additional_skills: "Java, Swift"
   },
   {
     email: null,
@@ -306,7 +306,7 @@ exports.usersData = [
     image:
       "https://res.cloudinary.com/dlo7dkdfy/image/upload/v1554817779/mannnn.jpg",
     desired_title: "Unicorn Developer",
-    area_of_work: "Web Development",
+    area_of_work: "Development",
     current_location_name: "Pueblo, CO, USA",
     current_location_lat: "38.276463",
     current_location_lon: "-104.604607",
@@ -319,7 +319,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift",
+    additional_skills: "Java, Swift"
   },
   {
     email: null,
@@ -329,7 +329,7 @@ exports.usersData = [
     image:
       "https://res.cloudinary.com/dlo7dkdfy/image/upload/v1554817779/womannnn.jpg",
     desired_title: "Unicorn Developer",
-    area_of_work: "Web Development",
+    area_of_work: "Development",
     current_location_name: "Seattle, WA, USA",
     current_location_lat: "47.608013",
     current_location_lon: "-122.335167",
@@ -342,7 +342,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift",
+    additional_skills: "Java, Swift"
   },
   {
     email: null,
@@ -365,7 +365,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift",
+    additional_skills: "Java, Swift"
   },
   {
     email: null,
@@ -388,7 +388,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift",
+    additional_skills: "Java, Swift"
   },
   {
     email: null,
@@ -411,7 +411,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift",
+    additional_skills: "Java, Swift"
   },
   {
     email: null,
@@ -421,7 +421,7 @@ exports.usersData = [
     image:
       "https://res.cloudinary.com/dlo7dkdfy/image/upload/v1554817779/womannnn.jpg",
     desired_title: "Unicorn Developer",
-    area_of_work: "UI/UX",
+    area_of_work: "Design",
     current_location_name: "Santa Fe, NM, USA",
     current_location_lat: "35.691544",
     current_location_lon: "-105.944183",
@@ -434,7 +434,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift",
+    additional_skills: "Java, Swift"
   },
   {
     email: null,
@@ -457,7 +457,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift",
+    additional_skills: "Java, Swift"
   },
   {
     email: null,
@@ -467,7 +467,7 @@ exports.usersData = [
     image:
       "https://res.cloudinary.com/dlo7dkdfy/image/upload/v1554817779/womannnn.jpg",
     desired_title: "Unicorn Developer",
-    area_of_work: "Web Development",
+    area_of_work: "Development",
     current_location_name: "Pueblo, CO, USA",
     current_location_lat: "38.276463",
     current_location_lon: "-104.604607",
@@ -480,7 +480,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift",
+    additional_skills: "Java, Swift"
   },
   {
     email: null,
@@ -490,7 +490,7 @@ exports.usersData = [
     image:
       "https://res.cloudinary.com/dlo7dkdfy/image/upload/v1554817779/mannnn.jpg",
     desired_title: "Unicorn Developer",
-    area_of_work: "Web Development",
+    area_of_work: "Development",
     current_location_name: "Los Angeles, CA, USA",
     current_location_lat: "34.052235",
     current_location_lon: "-118.243683",
@@ -503,7 +503,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift",
+    additional_skills: "Java, Swift"
   },
   {
     email: null,
@@ -513,7 +513,7 @@ exports.usersData = [
     image:
       "https://res.cloudinary.com/dlo7dkdfy/image/upload/v1554817779/womannnn.jpg",
     desired_title: "Unicorn Developer",
-    area_of_work: "UI/UX",
+    area_of_work: "Design",
     current_location_name: "San Francisco, CA, USA",
     current_location_lat: "37.773972",
     current_location_lon: "-122.431297",
@@ -526,7 +526,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift",
+    additional_skills: "Java, Swift"
   },
   {
     email: null,
@@ -536,7 +536,7 @@ exports.usersData = [
     image:
       "https://res.cloudinary.com/dlo7dkdfy/image/upload/v1554817779/mannnn.jpg",
     desired_title: "Unicorn Developer",
-    area_of_work: "Web Development",
+    area_of_work: "Development",
     current_location_name: "Seattle, WA, USA",
     current_location_lat: "47.608013",
     current_location_lon: "-122.335167",
@@ -549,7 +549,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift",
+    additional_skills: "Java, Swift"
   },
   {
     email: null,
@@ -559,7 +559,7 @@ exports.usersData = [
     image:
       "https://res.cloudinary.com/dlo7dkdfy/image/upload/v1554817779/womannnn.jpg",
     desired_title: "Unicorn Developer",
-    area_of_work: "Web Development",
+    area_of_work: "Development",
     current_location_name: "Santa Fe, NM, USA",
     current_location_lat: "35.691544",
     current_location_lon: "-105.944183",
@@ -572,7 +572,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift",
+    additional_skills: "Java, Swift"
   },
   {
     email: null,
@@ -595,7 +595,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift",
+    additional_skills: "Java, Swift"
   },
   {
     email: null,
@@ -605,7 +605,7 @@ exports.usersData = [
     image:
       "https://res.cloudinary.com/dlo7dkdfy/image/upload/v1554817779/womannnn.jpg",
     desired_title: "Unicorn Developer",
-    area_of_work: "UI/UX",
+    area_of_work: "Design",
     current_location_name: "Boulder, CO, USA",
     current_location_lat: "40.014984",
     current_location_lon: "-105.270546",
@@ -618,7 +618,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift",
+    additional_skills: "Java, Swift"
   },
   {
     email: null,
@@ -628,7 +628,7 @@ exports.usersData = [
     image:
       "https://res.cloudinary.com/dlo7dkdfy/image/upload/v1554817779/mannnn.jpg",
     desired_title: "Unicorn Developer",
-    area_of_work: "Web Development",
+    area_of_work: "Development",
     current_location_name: "Boston, MA, USA",
     current_location_lat: "42.361145",
     current_location_lon: "-71.057083",
@@ -641,7 +641,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift",
+    additional_skills: "Java, Swift"
   },
   {
     email: null,
@@ -651,7 +651,7 @@ exports.usersData = [
     image:
       "https://res.cloudinary.com/dlo7dkdfy/image/upload/v1554817779/womannnn.jpg",
     desired_title: "Unicorn Developer",
-    area_of_work: "Web Development",
+    area_of_work: "Development",
     current_location_name: "Tempe, AZ, USA",
     current_location_lat: "33.427204",
     current_location_lon: "-111.939896",
@@ -664,7 +664,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift",
+    additional_skills: "Java, Swift"
   },
   {
     email: null,
@@ -674,7 +674,7 @@ exports.usersData = [
     image:
       "https://res.cloudinary.com/dlo7dkdfy/image/upload/v1554817779/mannnn.jpg",
     desired_title: "Unicorn Developer",
-    area_of_work: "Web Development",
+    area_of_work: "Development",
     current_location_name: "South Valley, NM, USA",
     current_location_lat: "35.106766",
     current_location_lon: "-106.629181",
@@ -687,7 +687,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift",
+    additional_skills: "Java, Swift"
   },
   {
     email: null,
@@ -697,7 +697,7 @@ exports.usersData = [
     image:
       "https://res.cloudinary.com/dlo7dkdfy/image/upload/v1554817779/womannnn.jpg",
     desired_title: "Unicorn Developer",
-    area_of_work: "UI/UX",
+    area_of_work: "Design",
     current_location_name: "San Francisco, CA, USA",
     current_location_lat: "37.773972",
     current_location_lon: "-122.431297",
@@ -710,7 +710,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift",
+    additional_skills: "Java, Swift"
   },
   {
     email: null,
@@ -720,7 +720,7 @@ exports.usersData = [
     image:
       "https://res.cloudinary.com/dlo7dkdfy/image/upload/v1554817779/mannnn.jpg",
     desired_title: "Unicorn Developer",
-    area_of_work: "Web Development",
+    area_of_work: "Development",
     current_location_name: "Boston, MA, USA",
     current_location_lat: "42.361145",
     current_location_lon: "-71.057083",
@@ -733,7 +733,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift",
+    additional_skills: "Java, Swift"
   },
   {
     email: null,
@@ -756,7 +756,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift",
+    additional_skills: "Java, Swift"
   },
   {
     email: null,
@@ -779,7 +779,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift",
+    additional_skills: "Java, Swift"
   },
   {
     email: null,
@@ -802,7 +802,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift",
+    additional_skills: "Java, Swift"
   },
   {
     email: null,
@@ -812,7 +812,7 @@ exports.usersData = [
     image:
       "https://res.cloudinary.com/dlo7dkdfy/image/upload/v1554817779/mannnn.jpg",
     desired_title: "Unicorn Developer",
-    area_of_work: "Web Development",
+    area_of_work: "Development",
     current_location_name: "San Francisco, CA, USA",
     current_location_lat: "37.773972",
     current_location_lon: "-122.431297",
@@ -825,7 +825,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift",
+    additional_skills: "Java, Swift"
   },
   {
     email: null,
@@ -835,7 +835,7 @@ exports.usersData = [
     image:
       "https://res.cloudinary.com/dlo7dkdfy/image/upload/v1554817779/womannnn.jpg",
     desired_title: "Unicorn Developer",
-    area_of_work: "Web Development",
+    area_of_work: "Development",
     current_location_name: "Calabasas, CA, USA",
     current_location_lat: "34.138332",
     current_location_lon: "-118.660835",
@@ -848,7 +848,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift",
+    additional_skills: "Java, Swift"
   },
   {
     email: null,
@@ -858,7 +858,7 @@ exports.usersData = [
     image:
       "https://res.cloudinary.com/dlo7dkdfy/image/upload/v1554817779/mannnn.jpg",
     desired_title: "Unicorn Developer",
-    area_of_work: "Web Development",
+    area_of_work: "Development",
     current_location_name: "Tempe, AZ, USA",
     current_location_lat: "33.427204",
     current_location_lon: "-111.939896",
@@ -871,7 +871,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift",
+    additional_skills: "Java, Swift"
   },
   {
     email: null,
@@ -894,7 +894,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift",
+    additional_skills: "Java, Swift"
   },
   {
     email: null,
@@ -917,7 +917,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift",
+    additional_skills: "Java, Swift"
   },
   {
     email: null,
@@ -927,7 +927,7 @@ exports.usersData = [
     image:
       "https://res.cloudinary.com/dlo7dkdfy/image/upload/v1554817779/womannnn.jpg",
     desired_title: "Unicorn Developer",
-    area_of_work: "UI/UX",
+    area_of_work: "Design",
     current_location_name: "Tempe, AZ, USA",
     current_location_lat: "33.427204",
     current_location_lon: "-111.939896",
@@ -940,7 +940,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift",
+    additional_skills: "Java, Swift"
   },
   {
     email: null,
@@ -963,7 +963,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift",
+    additional_skills: "Java, Swift"
   },
   {
     email: null,
@@ -986,7 +986,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift",
+    additional_skills: "Java, Swift"
   },
   {
     email: null,
@@ -996,7 +996,7 @@ exports.usersData = [
     image:
       "https://res.cloudinary.com/dlo7dkdfy/image/upload/v1554817779/mannnn.jpg",
     desired_title: "Unicorn Developer",
-    area_of_work: "Web Development",
+    area_of_work: "Development",
     current_location_name: "Calabasas, CA, USA",
     current_location_lat: "34.138332",
     current_location_lon: "-118.660835",
@@ -1009,7 +1009,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift",
+    additional_skills: "Java, Swift"
   },
   {
     email: null,
@@ -1019,7 +1019,7 @@ exports.usersData = [
     image:
       "https://res.cloudinary.com/dlo7dkdfy/image/upload/v1554817779/womannnn.jpg",
     desired_title: "Unicorn Developer",
-    area_of_work: "UI/UX",
+    area_of_work: "Design",
     current_location_name: "Pueblo, CO, USA",
     current_location_lat: "38.276463",
     current_location_lon: "-104.604607",
@@ -1032,7 +1032,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift",
+    additional_skills: "Java, Swift"
   },
   {
     email: null,
@@ -1042,7 +1042,7 @@ exports.usersData = [
     image:
       "https://res.cloudinary.com/dlo7dkdfy/image/upload/v1554817779/mannnn.jpg",
     desired_title: "Unicorn Developer",
-    area_of_work: "Web Development",
+    area_of_work: "Development",
     current_location_name: "Boulder, CO, USA",
     current_location_lat: "40.014984",
     current_location_lon: "-105.270546",
@@ -1055,7 +1055,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift",
+    additional_skills: "Java, Swift"
   },
   {
     email: null,
@@ -1065,7 +1065,7 @@ exports.usersData = [
     image:
       "https://res.cloudinary.com/dlo7dkdfy/image/upload/v1554817779/womannnn.jpg",
     desired_title: "Unicorn Developer",
-    area_of_work: "UI/UX",
+    area_of_work: "Design",
     current_location_name: "South Valley, NM, USA",
     current_location_lat: "35.106766",
     current_location_lon: "-106.629181",
@@ -1078,7 +1078,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift",
+    additional_skills: "Java, Swift"
   },
   {
     email: null,
@@ -1088,7 +1088,7 @@ exports.usersData = [
     image:
       "https://res.cloudinary.com/dlo7dkdfy/image/upload/v1554817779/mannnn.jpg",
     desired_title: "Unicorn Developer",
-    area_of_work: "Web Development",
+    area_of_work: "Development",
     current_location_name: "Tempe, AZ, USA",
     current_location_lat: "33.427204",
     current_location_lon: "-111.939896",
@@ -1101,7 +1101,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift",
+    additional_skills: "Java, Swift"
   },
   {
     email: null,
@@ -1111,7 +1111,7 @@ exports.usersData = [
     image:
       "https://res.cloudinary.com/dlo7dkdfy/image/upload/v1554817779/womannnn.jpg",
     desired_title: "Unicorn Developer",
-    area_of_work: "UI/UX",
+    area_of_work: "Design",
     current_location_name: "Flagstaff, AZ, USA",
     current_location_lat: "35.198284",
     current_location_lon: "-111.651299",
@@ -1124,7 +1124,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift",
+    additional_skills: "Java, Swift"
   },
   {
     email: null,
@@ -1147,6 +1147,6 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift",
+    additional_skills: "Java, Swift"
   }
 ];

@@ -1,16 +1,16 @@
 // eslint-disable-next-line
 exports.up = function(knex) {
   return knex.schema.createTable("user_additional_skills", function(table) {
-    table.primary(["userId", "skillId"]);
+    table.primary(["user_id", "skill_id"]);
     table
-      .integer("userId")
+      .integer("user_id")
       .unsigned()
       .notNullable()
       .references("id")
       .inTable("users")
       .onDelete("CASCADE");
     table
-      .integer("skillId")
+      .integer("skill_id")
       .unsigned()
       .notNullable()
       .references("id")

@@ -134,10 +134,10 @@ function PersonalInfo() {
           onChange={e => setAreaOfWorkInput(e.target.value)}
         />
         <select name="area_of_work" id="area_of_work">
-          <option value="Web Development">Web Development</option>
+          <option value="Development">Development</option>
           <option value="iOS">iOS</option>
           <option value="Android">Android</option>
-          <option value="UI/UX">UI/UX</option>
+          <option value="Design">Design</option>
         </select>
 
         <br />

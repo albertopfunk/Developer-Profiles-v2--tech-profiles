@@ -176,8 +176,8 @@ describe("POST /infinite", () => {
 
   // testUsers:
   // ids 1-50
-  // 18 web dev
-  // 9 UI/UX
+  // 18 Dev
+  // 9 Design
   // 11 IOS
   // 12 Android
   // users within 500 miles of Boston = 4(boston)

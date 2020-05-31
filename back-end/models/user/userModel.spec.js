@@ -150,8 +150,8 @@ describe("getAllFiltered", () => {
 
   // testUsers:
   // ids 1-50
-  // 18 web dev
-  // 9 UI/UX
+  // 18 Dev
+  // 9 Design
   // 11 IOS
   // 12 Android
   // users within 500 miles of Boston = 4(boston)
@@ -247,7 +247,7 @@ describe("getAllFiltered", () => {
     expect(testUsers[0].id).toBe(50);
   });
 
-  it("should return 0 users since 0 UI/UX users live close to Boston", async () => {
+  it("should return 0 users since 0 Design users live close to Boston", async () => {
     const filterOptionsCopy = { ...filterOptions };
     filterOptionsCopy.isUIUXChecked = true;
     filterOptionsCopy.isUsingCurrLocationFilter = true;

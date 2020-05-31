@@ -54,12 +54,12 @@ async function getAllFiltered(filters) {
 
   if (isWebDevChecked || isUIUXChecked || isIOSChecked || isAndroidChecked) {
     if (isWebDevChecked) {
-      tempUsers = await db("users").where("area_of_work", "Web Development");
+      tempUsers = await db("users").where("area_of_work", "Development");
       users = [...users, ...tempUsers];
     }
 
     if (isUIUXChecked) {
-      tempUsers = await db("users").where("area_of_work", "UI/UX");
+      tempUsers = await db("users").where("area_of_work", "Design");
       users = [...users, ...tempUsers];
     }
 
@@ -116,16 +116,16 @@ async function getFullUser(userId) {
 
   async function getLocations() {
     return db("locations")
-      .join("user_locations", "locations.id", "user_locations.locationId")
+      .join("user_locations", "locations.id", "user_locations.location_id")
       .select("locations.location as name")
-      .where("user_locations.userId", userId);
+      .where("user_locations.user_id", userId);
   }
 
   async function getTopSkills() {
     return db("skills")
-      .join("user_top_skills", "skills.id", "user_top_skills.skillId")
+      .join("user_top_skills", "skills.id", "user_top_skills.skill_id")
       .select("skills.skill as name")
-      .where("user_top_skills.userId", userId);
+      .where("user_top_skills.user_id", userId);
   }
 
   async function getAdditionalSkills() {
@@ -133,10 +133,10 @@ async function getFullUser(userId) {
       .join(
         "user_additional_skills",
         "skills.id",
-        "user_additional_skills.skillId"
+        "user_additional_skills.skill_id"
       )
       .select("skills.skill as name")
-      .where("user_additional_skills.userId", userId);
+      .where("user_additional_skills.user_id", userId);
   }
 
   async function getEducation() {

@@ -9,14 +9,14 @@ import React from "react";
 function AreaOfWorkFilter(props) {
   function toggleAreaOfWorkCheckbox(areaOfWork) {
     switch (areaOfWork) {
-      case "Web Development":
+      case "Development":
         props.updateUsers(prevState => ({
           isWebDevChecked: !prevState.isWebDevChecked,
           usersPage: 1,
           isUsingSortByChoice: true
         }));
         break;
-      case "UI/UX":
+      case "Design":
         props.updateUsers(prevState => ({
           isUIUXChecked: !prevState.isUIUXChecked,
           usersPage: 1,
@@ -52,19 +52,19 @@ function AreaOfWorkFilter(props) {
             type="checkbox"
             name="area-of-work"
             id="web-development"
-            onChange={() => toggleAreaOfWorkCheckbox("Web Development")}
+            onChange={() => toggleAreaOfWorkCheckbox("Development")}
           />
-          Web Development
+          Development
         </label>
         <br />
-        <label htmlFor="UI/UX">
+        <label htmlFor="Design">
           <input
             type="checkbox"
             name="area-of-work"
-            id="UI/UX"
-            onChange={() => toggleAreaOfWorkCheckbox("UI/UX")}
+            id="Design"
+            onChange={() => toggleAreaOfWorkCheckbox("Design")}
           />
-          UI/UX
+          Design
         </label>
         <br />
         <label htmlFor="iOS">
