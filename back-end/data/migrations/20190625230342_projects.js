@@ -2,10 +2,10 @@
 exports.up = function(knex, Promise) {
   return knex.schema.createTable("projects", function(table) {
     table.increments();
-    table.string("project_title", 1000);
-    table.string("link", 1000);
-    table.string("project_description", 1000);
-    table.string("project_img", 1000);
+    table.string("project_title");
+    table.string("project_img");
+    table.string("link");
+    table.string("project_description", 280);
     table
       .integer("user_id")
       .unsigned()

@@ -5,6 +5,7 @@ exports.up = function(knex, Promise) {
     table.string("school");
     table.string("school_dates");
     table.string("field_of_study");
+    table.string("education_description", 280);
     table
       .integer("user_id")
       .unsigned()

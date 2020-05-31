@@ -6,7 +6,7 @@ exports.seed = function(knex, Promise) {
   projectArr.push({
     user_id: 1,
     project_img:
-      "https://res.cloudinary.com/dlo7dkdfy/image/upload/v1554828723/browser-1666982_960_720.png",
+      "https://res.cloudinary.com/dy5hgr3ht/image/upload/c_scale,h_500/v1590908926/dev-profiles-v1-profile-dashboard/j9d4p6fw6qzb7gn9fn5x.webp",
     project_title: faker.company.companyName(),
     link: "https://www.google.com/",
     project_description:

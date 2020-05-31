@@ -6,8 +6,9 @@ exports.seed = function(knex, Promise) {
   educationArr.push({
     user_id: 1,
     school: "Stanford",
-    school_dates: "September 1998 - Present",
-    field_of_study: "Full Stack Web"
+    school_dates: "September 2019 - Present",
+    field_of_study: "Full-Stack Web",
+    education_description: "Lorem dummy text. Lorem Ipsum has been the industry standard dummy text ever since the 1500s when an unknown printer took a galley of type and scrambled it to make a type specimen book. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters."
   });
 
   return knex("education")
