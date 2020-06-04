@@ -25,9 +25,11 @@ async function insert(newSkill) {
 }
 
 async function insertUserSkill(lePackage) {
-  const { type, user_id, skill_id } = lePackage;
+  const { type, user_id, skill_ids } = lePackage;
 
-  await db(type).insert({ user_id, skill_id });
+  for (let i = 0; i < skill_ids.length; i++) {
+    await db(type).insert({ user_id, skill_id: skill_ids[i] });
+  }
 
   const currentSkills = await db("skills")
     .join(`${type}`, "skills.id", `${type}.skill_id`)
@@ -35,14 +37,16 @@ async function insertUserSkill(lePackage) {
     .where(`${type}.user_id`, user_id);
 
   let currentSkillsString = "";
-  currentSkills.map(skill => (currentSkillsString += `${skill.name},`));
+  for (let i = 0; i < currentSkills.length && i < 6; i++) {
+    currentSkillsString += `${currentSkills[i].name},`;
+  }
 
   if (type === "user_top_skills") {
-    await db("users")
+    return db("users")
       .where({ id: user_id })
       .update({ top_skills_prev: currentSkillsString });
   } else {
-    await db("users")
+    return db("users")
       .where({ id: user_id })
       .update({ additional_skills_prev: currentSkillsString });
   }
