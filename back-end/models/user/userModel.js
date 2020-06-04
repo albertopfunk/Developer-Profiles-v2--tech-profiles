@@ -5,21 +5,30 @@ const db = require("../../data/dbConfig");
 module.exports = {
   insert,
   getAll,
-  getFullUser,
   getAllFiltered,
   getSingle,
   getSingleByEmail,
+  getFullUser,
   update,
   remove
 };
 
 async function insert(newUser) {
-  await db("users").insert(newUser);
-  return;
+  const dbEnv = process.env.DB_ENV || process.env.DB;
+
+  if (dbEnv === "production") {
+    const [id] = await db("users")
+      .returning("id")
+      .insert(newUser);
+    return getSingle(id);
+  } else {
+    const [id] = await db("users").insert(newUser);
+    return getSingle(id);
+  }
 }
 
 function getAll() {
-  return db("users");
+  return db("users").whereNotNull("stripe_subscription_name");
 }
 
 async function getAllFiltered(filters) {
@@ -36,8 +45,7 @@ async function getAllFiltered(filters) {
     chosenLocationLat,
     chosenLocationLon,
     chosenRelocateToArr,
-    isUsingSortByChoice,
-    sortByChoice
+    sortChoice
   } = filters;
 
   if (
@@ -47,9 +55,9 @@ async function getAllFiltered(filters) {
     !isAndroidChecked &&
     !isUsingCurrLocationFilter &&
     !isUsingRelocateToFilter &&
-    !isUsingSortByChoice
+    sortChoice === "acending(oldest-newest)"
   ) {
-    return db("users");
+    return getAll();
   }
 
   if (isWebDevChecked || isUIUXChecked || isIOSChecked || isAndroidChecked) {
@@ -72,13 +80,16 @@ async function getAllFiltered(filters) {
       tempUsers = await db("users").where("area_of_work", "Android");
       users = [...users, ...tempUsers];
     }
+
+    users = users.filter(user => user.stripe_subscription_name !== null);
+
     if (users.length === 0) {
       return users;
     }
   }
 
   if (isUsingCurrLocationFilter || isUsingRelocateToFilter) {
-    users.length === 0 ? (users = await db("users")) : null;
+    users.length === 0 ? (users = await getAll()) : null;
     const locationOptions = {
       isUsingCurrLocationFilter,
       isUsingRelocateToFilter,
@@ -93,11 +104,9 @@ async function getAllFiltered(filters) {
     }
   }
 
-  if (isUsingSortByChoice) {
-    users.length === 0 ? (users = await db("users")) : null;
-    if (sortByChoice !== "acending(oldest-newest)") {
-      users = sortingHelpers.sortUsers(users, sortByChoice);
-    }
+  users.length === 0 ? (users = await getAll()) : null;
+  if (sortChoice !== "acending(oldest-newest)") {
+    users = sortingHelpers.sortUsers(users, sortChoice);
   }
 
   return users;

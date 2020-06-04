@@ -1,15 +1,10 @@
+const db = require("../../../data/dbConfig");
+
 module.exports = {
-  locationFilters,
-  currentLocationFilter,
-  distanceWithinFilter,
-  relocateToFilter
+  locationFilters
 };
 
 function locationFilters(locationOptions, users) {
-  if (users.length === 0) {
-    return users;
-  }
-
   let tempLocationUsers = [];
   let tempRelocateToUsers = [];
 
@@ -90,18 +85,16 @@ function distanceWithinFilter(lat1, lon1, lat2, lon2, filter) {
   }
 }
 
-function relocateToFilter(users, chosenRelocateToArr) {
-  let filteredUsers;
+async function relocateToFilter(users, chosenRelocateToArr) {
+  let filteredUsers = [];
   let filteredUserArr = [];
 
-  filteredUsers = users.filter(user => {
-    if (user.interested_location_names) {
-      filteredUserArr = user.interested_location_names.split("|");
-      return chosenRelocateToArr.some(item => filteredUserArr.includes(item));
-    } else {
-      return false;
+  for (let i = 0; i < users.length; i++) {
+    filteredUserArr = await db("user_locations").where("user_id", users[i].id);
+    if (chosenRelocateToArr.some(item => filteredUserArr.includes(item))) {
+      filteredUsers.push(users[i]);
     }
-  });
+  }
 
   return filteredUsers;
 }

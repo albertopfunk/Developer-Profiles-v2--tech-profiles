@@ -3,51 +3,7 @@ const userModel = require("../../models/user/userModel");
 const NodeCache = require("node-cache");
 
 const server = express.Router();
-
 const usersCache = new NodeCache({ stdTTL: 21500, checkperiod: 22000 });
-
-//----------------------------------------------------------------------
-/*
-    USERS(users)
-    id
-    email
-    public_email
-    first_name
-    last_name
-    image
-    image_id
-    desired_title
-    area_of_work
-    current_location_name
-    current_location_lat
-    current_location_lon
-    github
-    linkedin
-    portfolio
-    summary
-    stripe_customer_id
-    stripe_subscription_name
-
-    clicks_to_expand
-    clicks_to_view_profile
-    profile_views
-
-
-    // ----------------- //
-    Possible Other User
-    name
-    email
-    favorite_profiles
-    viewed_profiles
-    expanded_profiles
-    current_location_name
-    current_location_lat
-    current_location_lon
-    interested_skills
-    interested areas of work
-    
-*/
-//----------------------------------------------------------------------
 
 server.post("/new", async (req, res) => {
   if (!req.body.email) {
@@ -67,27 +23,6 @@ server.post("/new", async (req, res) => {
     } catch (err) {
       res.status(500).json({ message: "Error adding user to database" });
     }
-  }
-});
-
-server.get("/get-full/:id", async (req, res) => {
-  if (!req.params.id) {
-    res.status(400).json({
-      message: `Expected 'id' in params, received '${req.params.id}'`
-    });
-    return;
-  }
-
-  try {
-    const getSingleUser = await userModel.getFullUser(req.params.id);
-    getSingleUser
-      ? res.status(200).json(getSingleUser)
-      : res.status(404).json({
-          message: `User with the specified ID of '${req.params.id}' does not exist`
-        });
-  } catch (err) {
-    console.log(err)
-    res.status(500).json({ message: "Error getting user from database" });
   }
 });
 
@@ -129,16 +64,6 @@ server.get("/load-more/:page", async (req, res) => {
 });
 
 server.post("/filtered", async (req, res) => {
-  if (!req.body.page) {
-    res.status(400).json({
-      message: `Expected 'page' in body, received '${req.body.page}'`
-    });
-    return;
-  }
-
-  let end = 14 * req.body.page;
-  let start = end - 14;
-
   try {
     const users = await userModel.getAllFiltered(req.body);
     cachedUsersSuccess = usersCache.set("users", users);
@@ -189,6 +114,27 @@ server.post("/get-single", async (req, res) => {
           message: `User with the specified ID of '${id}' does not exist`
         });
   } catch (err) {
+    res.status(500).json({ message: "Error getting user from database" });
+  }
+});
+
+server.get("/get-full/:id", async (req, res) => {
+  if (!req.params.id) {
+    res.status(400).json({
+      message: `Expected 'id' in params, received '${req.params.id}'`
+    });
+    return;
+  }
+
+  try {
+    const getSingleUser = await userModel.getFullUser(req.params.id);
+    getSingleUser && getSingleUser.id
+      ? res.status(200).json(getSingleUser)
+      : res.status(404).json({
+          message: `User with the specified ID of '${req.params.id}' does not exist`
+        });
+  } catch (err) {
+    console.log(err);
     res.status(500).json({ message: "Error getting user from database" });
   }
 });

@@ -103,7 +103,8 @@ exports.seed = function(knex, Promise) {
     twitter: "twitter.com",
     portfolio: "coolbanana.com",
     summary:
-      "Lorem dummy text. Lorem Ipsum has been the industry standard dummy text ever since the 1500s when an unknown printer took a galley of type and scrambled it to make a type specimen book. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters."
+      "Lorem dummy text. Lorem Ipsum has been the industry standard dummy text ever since the 1500s when an unknown printer took a galley of type and scrambled it to make a type specimen book. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters.",
+    stripe_subscription_name: "subscriptionexname"
   });
 
   // Deletes ALL existing entries
