@@ -3,101 +3,105 @@ const skillsForReviewModel = require("../../models/skills-for-review/skillsForRe
 
 const server = express.Router();
 
-//----------------------------------------------------------------------
-/*
-USER SKILLS FOR REVIEW(skills_for_review)
-id
-skill_for_review
-user_id (not nullable)
-*/
-//----------------------------------------------------------------------
-
-// expects 'skill_for_review' in body
-// expects 'user_id' of existing user in body
-// returns inserted skill object
 server.post("/new", async (req, res) => {
-  if (!req.body.user_id || !req.body.skill_for_review) {
-    res
-      .status(400)
-      .json({ message: "Expected 'user_id' and 'skill_for_review' in body" });
-  } else {
-    try {
-      const addNewSkill = await skillsForReviewModel.insert(req.body);
-      res.status(201).json(addNewSkill);
-    } catch (err) {
-      res
-        .status(500)
-        .json({ message: "Error adding the skill to the database", err });
-    }
+  if (!req.body.skill_for_review) {
+    res.status(400).json({
+      message: `Expected 'skill_for_review' in body, received '${req.body.skill_for_review}'`
+    });
+    return;
+  }
+
+  if (!req.body.user_id) {
+    res.status(400).json({
+      message: `Expected 'user_id' in body, received '${req.body.user_id}'`
+    });
+    return;
+  }
+
+  try {
+    const addNewSkill = await skillsForReviewModel.insert(req.body);
+    res.status(201).json(addNewSkill);
+  } catch (err) {
+    res.status(500).json({ message: "Error adding skill to database" });
   }
 });
 
-// does not expect anything
-// returns [skill for review objects]
 server.get("/", async (req, res) => {
   try {
     const getAllSkills = await skillsForReviewModel.getAll();
-    res.json(getAllSkills);
+    res.status(200).json(getAllSkills);
   } catch (err) {
-    res.status(500).json({ message: "The skills could not be retrieved", err });
+    res.status(500).json({ message: "Error getting skills from database" });
   }
 });
 
-// expects id of existing skill in params
-// returns skill object
 server.get("/:id", async (req, res) => {
-  const { id } = req.params;
+  if (!req.params.id) {
+    res.status(400).json({
+      message: `Expected 'id' in params, received '${req.params.id}'`
+    });
+    return;
+  }
+
   try {
-    const getSingleSkill = await skillsForReviewModel.getSingle(id);
+    const getSingleSkill = await skillsForReviewModel.getSingle(req.params.id);
     getSingleSkill
-      ? res.json(getSingleSkill)
+      ? res.status(200).json(getSingleSkill)
       : res.status(404).json({
-          message: `The skill with the specified ID of '${id}' does not exist`
+          message: `The skill with the specified ID of '${req.params.id}' does not exist`
         });
   } catch (err) {
-    res.status(500).json({ message: "The skill could not be retrieved", err });
+    res.status(500).json({ message: "Error getting skill from database" });
   }
 });
 
-// expects id of existing skill in params
-// expects 'skill_for_review' in body
-// returns a number 1 if successful
 server.put("/:id", async (req, res) => {
-  const { id } = req.params;
+  if (!req.params.id) {
+    res.status(400).json({
+      message: `Expected 'id' in params, received '${req.params.id}'`
+    });
+    return;
+  }
 
   if (!req.body.skill_for_review) {
-    res.status(400).json({ message: "Expected 'skill_for_review' in body" });
-  } else {
-    try {
-      const editSkill = await skillsForReviewModel.update(id, req.body);
-      editSkill
-        ? res.json(editSkill)
-        : res.status(404).json({
-            message: `The skill with the specified ID of '${id}' does not exist`
-          });
-    } catch (err) {
-      res
-        .status(500)
-        .json({ message: "The skill information could not be modified", err });
-    }
+    res.status(400).json({
+      message: `Expected 'skill_for_review' in body, received '${req.body.skill_for_review}'`
+    });
+    return;
+  }
+
+  try {
+    const editSkill = await skillsForReviewModel.update(
+      req.params.id,
+      req.body
+    );
+    editSkill
+      ? res.status(200).json(editSkill)
+      : res.status(404).json({
+          message: `The skill with the specified ID of '${req.params.id}' does not exist`
+        });
+  } catch (err) {
+    res.status(500).json({ message: "Error updating skill" });
   }
 });
 
-// expects id of existing skill in params
-// returns a number 1 if successful
 server.delete("/:id", async (req, res) => {
-  const { id } = req.params;
+  if (!req.params.id) {
+    res.status(400).json({
+      message: `Expected 'id' in params, received '${req.params.id}'`
+    });
+    return;
+  }
+
   try {
-    const removeSkill = await skillsForReviewModel.remove(id);
+    const removeSkill = await skillsForReviewModel.remove(req.params.id);
     removeSkill
-      ? res.json(removeSkill)
+      ? res.status(200).json(removeSkill)
       : res.status(404).json({
-          message: `The skill with the specified ID of '${id}' does not exist`
+          message: `The skill with the specified ID of '${req.params.id}' does not exist`
         });
   } catch (err) {
-    res
-      .status(500)
-      .json({ message: "The skill information could not be removed", err });
+    res.status(500).json({ message: "Error removing skill" });
   }
 });
 

@@ -26,8 +26,6 @@ function getAll() {
   return db("skills_for_review");
 }
 
-// getAllByUser
-
 function getSingle(id) {
   return db("skills_for_review")
     .where({ id })

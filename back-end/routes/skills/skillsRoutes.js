@@ -123,6 +123,13 @@ server.put("/:id", async (req, res) => {
     return;
   }
 
+  if (!req.body.skill) {
+    res.status(400).json({
+      message: `Expected 'skill' in body, received '${req.body.skill}'`
+    });
+    return;
+  }
+
   try {
     const editSkill = await skillsModel.update(req.params.id, req.body);
     editSkill
