@@ -12,29 +12,25 @@ function AreaOfWorkFilter(props) {
       case "Development":
         props.updateUsers(prevState => ({
           isWebDevChecked: !prevState.isWebDevChecked,
-          usersPage: 1,
-          isUsingSortByChoice: true
+          usersPage: 1
         }));
         break;
       case "Design":
         props.updateUsers(prevState => ({
           isUIUXChecked: !prevState.isUIUXChecked,
-          usersPage: 1,
-          isUsingSortByChoice: true
+          usersPage: 1
         }));
         break;
       case "iOS":
         props.updateUsers(prevState => ({
           isIOSChecked: !prevState.isIOSChecked,
-          usersPage: 1,
-          isUsingSortByChoice: true
+          usersPage: 1
         }));
         break;
       case "Android":
         props.updateUsers(prevState => ({
           isAndroidChecked: !prevState.isAndroidChecked,
-          usersPage: 1,
-          isUsingSortByChoice: true
+          usersPage: 1
         }));
         break;
       default:

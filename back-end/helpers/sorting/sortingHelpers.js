@@ -2,16 +2,16 @@ module.exports = {
   sortUsers
 };
 
-function sortUsers(users, sortByChoice) {
+function sortUsers(users, sortChoice) {
   let sortedUsers;
 
-  if (sortByChoice === "acending(oldest-newest)") {
+  if (sortChoice === "acending(oldest-newest)") {
     sortedUsers = users.sort(function(a, b) {
       return a.id - b.id;
     });
   }
 
-  if (sortByChoice === "descending(newest-oldest)") {
+  if (sortChoice === "descending(newest-oldest)") {
     sortedUsers = users.sort(function(a, b) {
       return b.id - a.id;
     });

@@ -24,8 +24,7 @@ class PublicPage extends Component {
     chosenLocationLon: 0,
     isUsingRelocateToFilter: false,
     chosenRelocateToArr: [],
-    isUsingSortByChoice: false,
-    sortByChoice: "acending(oldest-newest)"
+    sortChoice: "acending(oldest-newest)"
   };
 
   async componentDidMount() {
@@ -57,8 +56,7 @@ class PublicPage extends Component {
       this.state.isUsingRelocateToFilter !==
         nextState.isUsingRelocateToFilter ||
       this.state.chosenRelocateToArr !== nextState.chosenRelocateToArr ||
-      this.state.isUsingSortByChoice !== nextState.isUsingSortByChoice ||
-      this.state.sortByChoice !== nextState.sortByChoice
+      this.state.sortChoice !== nextState.sortChoice
     ) {
       return false;
     }
@@ -67,7 +65,6 @@ class PublicPage extends Component {
 
   getFilteredUsers = async () => {
     const [res, err] = await httpClient("POST", "/users/filtered", {
-      page: this.state.usersPage,
       isWebDevChecked: this.state.isWebDevChecked,
       isUIUXChecked: this.state.isUIUXChecked,
       isIOSChecked: this.state.isIOSChecked,
@@ -78,8 +75,7 @@ class PublicPage extends Component {
       chosenLocationLon: this.state.chosenLocationLon,
       isUsingRelocateToFilter: this.state.isUsingRelocateToFilter,
       chosenRelocateToArr: this.state.chosenRelocateToArr,
-      isUsingSortByChoice: this.state.isUsingSortByChoice,
-      sortByChoice: this.state.sortByChoice
+      sortChoice: this.state.sortChoice
     });
 
     if (err) {

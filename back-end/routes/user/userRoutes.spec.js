@@ -163,8 +163,7 @@ describe("POST /infinite", () => {
     chosenLocationLat: 42.361145,
     chosenLocationLon: -71.057083,
     chosenRelocateTo: "Boston, MA, USA",
-    isUsingSortByChoice: false,
-    sortByChoice: "acending(oldest-newest)"
+    sortChoice: "acending(oldest-newest)"
   };
 
   let users = [...testUsers.usersData];

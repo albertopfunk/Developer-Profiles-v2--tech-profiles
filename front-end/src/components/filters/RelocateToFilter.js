@@ -7,8 +7,7 @@ function RelocateToFilter(props) {
     props.updateUsers({
       usersPage: 1,
       isUsingRelocateToFilter: true,
-      chosenRelocateToArr,
-      isUsingSortByChoice: true
+      chosenRelocateToArr
     });
   }
 

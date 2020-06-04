@@ -137,8 +137,7 @@ describe("getAllFiltered", () => {
     chosenLocationLat: 42.361145,
     chosenLocationLon: -71.057083,
     chosenRelocateTo: "Boston, MA, USA",
-    isUsingSortByChoice: false,
-    sortByChoice: "acending(oldest-newest)"
+    sortChoice: "acending(oldest-newest)"
   };
 
   let users = [...testUsers.usersData];
@@ -234,15 +233,13 @@ describe("getAllFiltered", () => {
 
   it("should return default acending sorted users", async () => {
     const filterOptionsCopy = { ...filterOptions };
-    filterOptionsCopy.isUsingSortByChoice = true;
     const testUsers = await userModel.getAllFiltered(filterOptionsCopy);
     expect(testUsers[0].id).toBe(1);
   });
 
   it("should return descending sorted users", async () => {
     const filterOptionsCopy = { ...filterOptions };
-    filterOptionsCopy.isUsingSortByChoice = true;
-    filterOptionsCopy.sortByChoice = "descending(newest-oldest)";
+    filterOptionsCopy.sortChoice = "descending(newest-oldest)";
     const testUsers = await userModel.getAllFiltered(filterOptionsCopy);
     expect(testUsers[0].id).toBe(50);
   });
@@ -277,7 +274,6 @@ describe("getAllFiltered", () => {
     filterOptionsCopy.isIOSChecked = true;
     filterOptionsCopy.isAndroidChecked = true;
     filterOptionsCopy.isUsingCurrLocationFilter = true;
-    filterOptionsCopy.isUsingSortByChoice = true;
     const testUsers = await userModel.getAllFiltered(filterOptionsCopy);
     expect(testUsers[0].id).toBe(6);
   });
@@ -287,8 +283,7 @@ describe("getAllFiltered", () => {
     filterOptionsCopy.isIOSChecked = true;
     filterOptionsCopy.isAndroidChecked = true;
     filterOptionsCopy.isUsingCurrLocationFilter = true;
-    filterOptionsCopy.isUsingSortByChoice = true;
-    filterOptionsCopy.sortByChoice = "descending(newest-oldest)";
+    filterOptionsCopy.sortChoice = "descending(newest-oldest)";
     const testUsers = await userModel.getAllFiltered(filterOptionsCopy);
     expect(testUsers[0].id).toBe(17);
   });

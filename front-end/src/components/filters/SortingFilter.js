@@ -4,15 +4,14 @@ import React, { useState } from "react";
 function SortingFilter(props) {
   const [currentValue, setCurrentValue] = useState("acending(oldest-newest)");
 
-  function sortUsers(sortByChoice) {
-    if (currentValue === sortByChoice) {
+  function sortUsers(sortChoice) {
+    if (currentValue === sortChoice) {
       return;
     }
-    setCurrentValue(sortByChoice);
+    setCurrentValue(sortChoice);
     props.updateUsers({
       usersPage: 1,
-      sortByChoice,
-      isUsingSortByChoice: true
+      sortChoice
     });
   }
 
