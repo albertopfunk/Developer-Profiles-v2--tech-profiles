@@ -53,7 +53,6 @@ server.post("/new-user-skill", async (req, res) => {
           message: `User with the specified ID of '${req.body.user_id}' does not exist`
         });
   } catch (err) {
-    console.log(err);
     res.status(500).json({ message: "Error adding user-skill to database" });
   }
 });
@@ -159,6 +158,74 @@ server.delete("/:id", async (req, res) => {
         });
   } catch (err) {
     res.status(500).json({ message: "Error removing skill" });
+  }
+});
+
+server.post("/delete-user-skills", async (req, res) => {
+  if (!req.body.user_id) {
+    res.status(400).json({
+      message: `Expected 'user_id' in body, received '${req.body.user_id}'`
+    });
+    return;
+  }
+
+  if (
+    !req.body.type ||
+    (req.body.type !== "user_top_skills" &&
+      req.body.type !== "user_additional_skills")
+  ) {
+    res.status(400).json({
+      message: `Expected 'type' to be 'user_top_skills' or 'user_additional_skills' in body, received '${req.body.type}'`
+    });
+    return;
+  }
+
+  try {
+    const removeUserSkill = await skillsModel.removeUserSkills(
+      req.body.user_id,
+      req.body.type
+    );
+    res.status(200).json(removeUserSkill);
+  } catch (err) {
+    res.status(500).json({ message: "Error removing user-skill" });
+  }
+});
+
+server.post("/delete-user-skill", async (req, res) => {
+  if (!req.body.skill_id) {
+    res.status(400).json({
+      message: `Expected 'skill_id' in body, received '${req.body.skill_id}'`
+    });
+    return;
+  }
+
+  if (!req.body.user_id) {
+    res.status(400).json({
+      message: `Expected 'user_id' in body, received '${req.body.user_id}'`
+    });
+    return;
+  }
+
+  if (
+    !req.body.type ||
+    (req.body.type !== "user_top_skills" &&
+      req.body.type !== "user_additional_skills")
+  ) {
+    res.status(400).json({
+      message: `Expected 'type' to be 'user_top_skills' or 'user_additional_skills' in body, received '${req.body.type}'`
+    });
+    return;
+  }
+
+  try {
+    const removeUserSkill = await skillsModel.removeUserSkill(
+      req.body.user_id,
+      req.body.skill_id,
+      req.body.type
+    );
+    res.status(200).json(removeUserSkill);
+  } catch (err) {
+    res.status(500).json({ message: "Error removing user-skill" });
   }
 });
 

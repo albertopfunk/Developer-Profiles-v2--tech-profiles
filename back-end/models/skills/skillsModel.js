@@ -2,12 +2,14 @@ const db = require("../../data/dbConfig");
 
 module.exports = {
   insert,
+  insertUserSkill,
   getAll,
   getAllFiltered,
-  insertUserSkill,
   getSingle,
   update,
-  remove
+  remove,
+  removeUserSkills,
+  removeUserSkill
 };
 
 async function insert(newSkill) {
@@ -31,25 +33,7 @@ async function insertUserSkill(lePackage) {
     await db(type).insert({ user_id, skill_id: skill_ids[i] });
   }
 
-  const currentSkills = await db("skills")
-    .join(`${type}`, "skills.id", `${type}.skill_id`)
-    .select("skills.skill as name")
-    .where(`${type}.user_id`, user_id);
-
-  let currentSkillsString = "";
-  for (let i = 0; i < currentSkills.length && i < 6; i++) {
-    currentSkillsString += `${currentSkills[i].name},`;
-  }
-
-  if (type === "user_top_skills") {
-    return db("users")
-      .where({ id: user_id })
-      .update({ top_skills_prev: currentSkillsString });
-  } else {
-    return db("users")
-      .where({ id: user_id })
-      .update({ additional_skills_prev: currentSkillsString });
-  }
+  return syncSkills(user_id, type);
 }
 
 function getAll() {
@@ -82,4 +66,40 @@ function remove(id) {
   return db("skills")
     .where({ id })
     .delete();
+}
+
+async function removeUserSkills(userId, type) {
+  await db(type)
+    .where({ user_id: userId })
+    .delete();
+  return syncSkills(userId, type);
+}
+
+async function removeUserSkill(userId, skillId, type) {
+  await db(type)
+    .where({ user_id: userId, skill_id: skillId })
+    .delete();
+  return syncSkills(userId, type);
+}
+
+async function syncSkills(userId, type) {
+  const currentSkills = await db("skills")
+    .join(`${type}`, "skills.id", `${type}.skill_id`)
+    .select("skills.skill as name")
+    .where(`${type}.user_id`, userId);
+
+  let currentSkillsString = "";
+  for (let i = 0; i < currentSkills.length && i < 6; i++) {
+    currentSkillsString += `${currentSkills[i].name},`;
+  }
+
+  if (type === "user_top_skills") {
+    return db("users")
+      .where({ id: userId })
+      .update({ top_skills_prev: currentSkillsString });
+  } else {
+    return db("users")
+      .where({ id: userId })
+      .update({ additional_skills_prev: currentSkillsString });
+  }
 }
