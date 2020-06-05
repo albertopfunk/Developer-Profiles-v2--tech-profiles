@@ -19,7 +19,9 @@ server.post("/new", async (req, res) => {
   }
 
   try {
-    const addNewUserLocation = await locationsModel.insertUserLocation(req.body);
+    const addNewUserLocation = await locationsModel.insertUserLocation(
+      req.body
+    );
     res.status(201).json(addNewUserLocation);
   } catch (err) {
     console.log(err);
@@ -27,12 +29,47 @@ server.post("/new", async (req, res) => {
   }
 });
 
-server.get("/", async (req, res) => {
+server.post("/delete-user-locations", async (req, res) => {
+  if (!req.body.user_id) {
+    res.status(400).json({
+      message: `Expected 'user_id' in body, received '${req.body.user_id}'`
+    });
+    return;
+  }
+
   try {
-    const getAllLocations = await locationsModel.getAll();
-    res.json(getAllLocations);
+    const removeUserLocations = await locationsModel.removeUserLocations(
+      req.body.user_id
+    );
+    res.status(200).json(removeUserLocations);
   } catch (err) {
-    res.status(500).json({ message: "The skills could not be retrieved", err });
+    res.status(500).json({ message: "Error removing user-locations" });
+  }
+});
+
+server.post("/delete-user-location", async (req, res) => {
+  if (!req.body.location_id) {
+    res.status(400).json({
+      message: `Expected 'location_id' in body, received '${req.body.location_id}'`
+    });
+    return;
+  }
+
+  if (!req.body.user_id) {
+    res.status(400).json({
+      message: `Expected 'user_id' in body, received '${req.body.user_id}'`
+    });
+    return;
+  }
+
+  try {
+    const removeUserLocation = await locationsModel.removeUserLocation(
+      req.body.user_id,
+      req.body.location_id
+    );
+    res.status(200).json(removeUserLocation);
+  } catch (err) {
+    res.status(500).json({ message: "Error removing user-location" });
   }
 });
 

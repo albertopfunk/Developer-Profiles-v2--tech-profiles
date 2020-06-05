@@ -1,23 +1,10 @@
 const db = require("../../data/dbConfig");
 
-// locations array, user_id
-
-// for each location
-// check if location exists
-// if yes - get location ID
-// if no - add location and get ID
-// add entry to user-locations(userId and locationId)
-
 module.exports = {
-  insertLocation,
   insertUserLocation,
-  getAll,
-  getSingle
+  removeUserLocations,
+  removeUserLocation
 };
-
-async function getAll() {
-  return db("locations");
-}
 
 function getSingle(location) {
   return db("locations")
@@ -25,7 +12,7 @@ function getSingle(location) {
     .first();
 }
 
-async function insertLocation(location, user_id) {
+async function insertLocation(location) {
   const dbEnv = process.env.DB_ENV || process.env.DB;
   let id;
 
@@ -40,23 +27,36 @@ async function insertLocation(location, user_id) {
       location
     });
   }
-  await db("user_locations").insert({
-    user_id,
-    location_id: id[0]
-  });
+
+  return id[0];
 }
 
 async function insertUserLocation(lePackage) {
   for (let i = 0; i < lePackage.locations.length; i++) {
+    let id;
     let doesLocationExist = await getSingle(lePackage.locations[i]);
 
-    if (doesLocationExist) {
-      await db("user_locations").insert({
-        user_id: lePackage.user_id,
-        location_id: doesLocationExist.id
-      });
+    if (!doesLocationExist) {
+      id = await insertLocation(lePackage.locations[i]);
     } else {
-      await insertLocation(lePackage.locations[i], lePackage.user_id);
+      id = doesLocationExist.id;
     }
+
+    await db("user_locations").insert({
+      user_id: lePackage.user_id,
+      location_id: id
+    });
   }
+}
+
+function removeUserLocations(userId) {
+  return db("user_locations")
+    .where({ user_id: userId })
+    .delete();
+}
+
+function removeUserLocation(userId, locationId) {
+  return db("user_locations")
+    .where({ user_id: userId, location_id: locationId })
+    .delete();
 }
