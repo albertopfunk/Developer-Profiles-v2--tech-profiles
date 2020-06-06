@@ -1,18 +1,21 @@
 import React from "react";
+import { useState } from "react";
 
 // Test Ideas
 // renders image or default avatar image
 
 function UserImage(props) {
+  const [imageErr, setImageErr] = useState(false);
+
   function handleBrokenLink() {
-    props.handleImgErr();
+    setImageErr(true);
   }
 
   return (
     <section>
       {/* add figure/figcation to all images */}
 
-      {props.previewImg || props.image ? (
+      {(props.previewImg || props.image) && !imageErr ? (
         <img
           style={{
             width: "200px",

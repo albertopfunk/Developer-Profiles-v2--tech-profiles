@@ -3,11 +3,6 @@ import styled from "styled-components";
 
 import UserCard from "./user-card/UserCard";
 
-// Test Ideas
-// renders list of articles
-// renders 14 articles
-// renders additional 14 articles onInfinite() fire
-
 function UserCards(props) {
   function backToTop() {
     window.scrollTo(0, 0);
@@ -15,7 +10,7 @@ function UserCards(props) {
 
   return (
     <Section role="feed" aria-busy={props.isBusy}>
-      {props.users.length === 0 ? (
+      {props.usersLength === 0 ? (
         <h1>No Users Here! - Reset filters BTN</h1>
       ) : (
         <div>
@@ -23,7 +18,7 @@ function UserCards(props) {
             return (
               <UserCard
                 key={user.id}
-                usersLength={props.users.length}
+                usersLength={props.usersLength}
                 index={i}
                 id={user.id}
                 areaOfWork={user.area_of_work}
@@ -34,12 +29,12 @@ function UserCards(props) {
                 currentLocation={user.current_location_name}
                 summary={user.summary}
                 title={user.desired_title}
-                topSkills={user.top_skills}
-                additionalSkills={user.additional_skills}
+                topSkills={user.top_skills_prev}
+                additionalSkills={user.additional_skills_prev}
                 github={user.github}
+                twitter={user.twitter}
                 linkedin={user.linkedin}
                 portfolio={user.portfolio}
-                interestedLocations={user.interested_location_names}
               />
             );
           })}

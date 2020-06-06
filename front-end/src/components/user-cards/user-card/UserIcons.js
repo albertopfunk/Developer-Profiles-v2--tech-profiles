@@ -8,6 +8,7 @@ function UserIcons(props) {
   return (
     <aside>
       <p>{props.github}</p>
+      <p>{props.twitter}</p>
       <p>{props.linkedin}</p>
       <p>{props.portfolio}</p>
     </aside>

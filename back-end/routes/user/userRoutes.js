@@ -31,7 +31,7 @@ server.get("/", async (_, res) => {
     const users = await userModel.getAll();
     cachedUsersSuccess = usersCache.set("users", users);
     if (cachedUsersSuccess) {
-      const slicedUsers = users.slice(0, 14);
+      const slicedUsers = users.slice(0, 25);
       res.status(200).json({ users: slicedUsers, len: users.length });
     } else {
       res.status(500).json({ message: "Error adding users to cache" });
@@ -50,8 +50,8 @@ server.get("/load-more/:page", async (req, res) => {
     return;
   }
 
-  let end = 14 * +req.params.page;
-  let start = end - 14;
+  let end = 25 * +req.params.page;
+  let start = end - 25;
   const cachedUsers = usersCache.get("users", true);
 
   if (!cachedUsers) {
@@ -68,12 +68,13 @@ server.post("/filtered", async (req, res) => {
     const users = await userModel.getAllFiltered(req.body);
     cachedUsersSuccess = usersCache.set("users", users);
     if (cachedUsersSuccess) {
-      slicedUsers = users.slice(start, end);
+      slicedUsers = users.slice(0, 25);
       res.status(200).json({ users: slicedUsers, len: users.length });
     } else {
       res.status(500).json({ message: "Error adding users to cache" });
     }
   } catch (err) {
+    console.log(err)
     res.status(500).json({ message: "Error getting users from database" });
   }
 });

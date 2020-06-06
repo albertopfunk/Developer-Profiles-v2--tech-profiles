@@ -181,13 +181,13 @@ server.post("/delete-user-skills", async (req, res) => {
   }
 
   try {
-    const removeUserSkill = await skillsModel.removeUserSkills(
+    const removeUserSkills = await skillsModel.removeUserSkills(
       req.body.user_id,
       req.body.type
     );
-    res.status(200).json(removeUserSkill);
+    res.status(200).json(removeUserSkills);
   } catch (err) {
-    res.status(500).json({ message: "Error removing user-skill" });
+    res.status(500).json({ message: "Error removing user-skills" });
   }
 });
 

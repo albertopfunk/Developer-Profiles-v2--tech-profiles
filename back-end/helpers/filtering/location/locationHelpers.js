@@ -4,7 +4,7 @@ module.exports = {
   locationFilters
 };
 
-function locationFilters(locationOptions, users) {
+async function locationFilters(locationOptions, users) {
   let tempLocationUsers = [];
   let tempRelocateToUsers = [];
 
@@ -27,7 +27,7 @@ function locationFilters(locationOptions, users) {
   }
 
   if (isUsingRelocateToFilter) {
-    tempRelocateToUsers = relocateToFilter(users, chosenRelocateToArr);
+    tempRelocateToUsers = await relocateToFilter(users, chosenRelocateToArr);
   }
 
   users = [...new Set([...tempLocationUsers, ...tempRelocateToUsers])];
@@ -91,8 +91,17 @@ async function relocateToFilter(users, chosenRelocateToArr) {
 
   for (let i = 0; i < users.length; i++) {
     filteredUserArr = await db("user_locations").where("user_id", users[i].id);
-    if (chosenRelocateToArr.some(item => filteredUserArr.includes(item))) {
-      filteredUsers.push(users[i]);
+
+    for (let j = 0; j < filteredUserArr.length; j++) {
+      let [location] = await db("locations").where(
+        "id",
+        filteredUserArr[j].location_id
+      );
+
+      if (chosenRelocateToArr.includes(location.location)) {
+        filteredUsers.push(users[i]);
+        break;
+      }
     }
   }
 

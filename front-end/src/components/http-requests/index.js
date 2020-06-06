@@ -21,7 +21,9 @@ export async function httpClient(method, url, data, config = {}) {
   } catch (err) {
     return [
       {
-        err: err.response.data.message,
+        err: err.response
+          ? err.response.data.message
+          : `Unknown error with ${method} : ${url}`,
         mssg: `Error with ${method} : ${url}`,
         status: 500
       },
