@@ -98,7 +98,7 @@ async function getAllFiltered(filters) {
       chosenLocationLon,
       chosenRelocateToArr
     };
-    users = locationHelpers.locationFilters(locationOptions, users);
+    users = await locationHelpers.locationFilters(locationOptions, users);
     if (users.length === 0) {
       return users;
     }
