@@ -39,14 +39,14 @@ function ProfileDashboard() {
       return;
     }
 
-    const [res, err] = await httpClient("POST", "/users/get-single", { email });
+    const [res, err] = await httpClient("POST", "/users/get-full", { email });
 
     if (err) {
       console.error(`${res.mssg} => ${res.err}`);
       auth0Client.signOut("authorize");
       return;
     }
-
+    
     setUser(res.data);
     setLoadingUser(false);
   }
@@ -118,12 +118,12 @@ function ProfileDashboard() {
         currentLocation={user.current_location_name}
         summary={user.summary}
         title={user.desired_title}
-        topSkills={user.top_skills}
-        additionalSkills={user.additional_skills}
+        topSkills={user.top_skills_prev}
+        additionalSkills={user.additional_skills_prev}
         github={user.github}
+        twitter={user.twitter}
         linkedin={user.linkedin}
         portfolio={user.portfolio}
-        interestedLocations={user.interested_location_names}
       />
 
       <br />

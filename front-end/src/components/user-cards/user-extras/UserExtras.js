@@ -7,7 +7,7 @@ import { useState } from "react";
 import { httpClient } from "../../http-requests";
 
 function UserExtras(props) {
-  const [fullUser, setFullUser] = useState({});
+  const [userExtras, setUserExtras] = useState({});
   const [loadingExtras, setLoadingExtras] = useState(false);
   const [noExtras, setNoExtras] = useState(false);
   const [isCardExpanded, setIsCardExpanded] = useState(false);
@@ -23,7 +23,7 @@ function UserExtras(props) {
     setLoadingExtras(true);
     const [res, err] = await httpClient(
       "GET",
-      `/users/get-full/${props.userId}`
+      `/users/get-extras/${props.userId}`
     );
 
     if (err) {
@@ -33,12 +33,13 @@ function UserExtras(props) {
 
     if (
       res.data.locations.length === 0 &&
-      res.data.top_skills.length === 0 &&
-      res.data.additional_skills.length === 0 &&
+      res.data.topSkills.length === 0 &&
+      res.data.additionalSkills.length === 0 &&
       res.data.education.length === 0 &&
       res.data.experience.length === 0 &&
       res.data.projects.length === 0
     ) {
+      setUserExtras(res.data);
       setNoExtras(true);
       setHasRequestedExtras(true);
       props.setIsCardExpanded(true);
@@ -47,7 +48,7 @@ function UserExtras(props) {
       return;
     }
 
-    setFullUser(res.data);
+    setUserExtras(res.data);
     setHasRequestedExtras(true);
     props.setIsCardExpanded(true);
     setIsCardExpanded(true);
@@ -60,13 +61,13 @@ function UserExtras(props) {
   }
 
   const {
-    top_skills,
-    additional_skills,
+    topSkills,
+    additionalSkills,
     projects,
     education,
     experience,
     locations
-  } = fullUser;
+  } = userExtras;
 
   console.log("==========EXTRASSSS==========");
 
@@ -86,17 +87,17 @@ function UserExtras(props) {
         <div>
           {noExtras ? <p>Nothing to Show...</p> : null}
 
-          {top_skills.length > 0 ? (
+          {topSkills.length > 0 ? (
             <section className="top-skills">
-              {top_skills.map(skill => (
+              {topSkills.map(skill => (
                 <p key={skill.name}>{skill.name}</p>
               ))}
             </section>
           ) : null}
 
-          {additional_skills.length > 0 ? (
+          {additionalSkills.length > 0 ? (
             <section className="additional-skills">
-              {additional_skills.map(skill => (
+              {additionalSkills.map(skill => (
                 <p key={skill.name}>{skill.name}</p>
               ))}
             </section>
