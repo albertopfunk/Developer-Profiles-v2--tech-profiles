@@ -106,6 +106,7 @@ function ProfileDashboard() {
       <UserCard
         dashboard
         extrasUpdate={extrasUpdate}
+        extras={} // add all extras here
         previewImg={previewImg}
         usersLength={1}
         index={1}

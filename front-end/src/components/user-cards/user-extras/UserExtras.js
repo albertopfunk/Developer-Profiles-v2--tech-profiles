@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import UserProjects from "./UserProjects";
 import UserEducation from "./UserEducation";
@@ -12,6 +12,31 @@ function UserExtras(props) {
   const [noExtras, setNoExtras] = useState(false);
   const [isCardExpanded, setIsCardExpanded] = useState(false);
   const [hasRequestedExtras, setHasRequestedExtras] = useState(false);
+
+  useEffect(() => {
+    // pass extras props from dashboard
+
+    if (props.dashboard) {
+      setHasRequestedExtras(true);
+      setUserExtras(props.extras);
+
+      // check if there are any extras
+      if (
+        props.extras.locations.length === 0 &&
+        props.extras.topSkills.length === 0 &&
+        props.extras.additionalSkills.length === 0 &&
+        props.extras.education.length === 0 &&
+        props.extras.experience.length === 0 &&
+        props.extras.projects.length === 0
+      ) {
+        setNoExtras(true);
+      }
+
+      // closes card when extras props is updated
+      setIsCardExpanded(false);
+      props.setIsCardExpanded(false);
+    }
+  }, [props.extras]);
 
   async function expandUserCard() {
     if (hasRequestedExtras) {
