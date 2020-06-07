@@ -8,6 +8,7 @@ module.exports = {
   getAllFiltered,
   getSingle,
   getSingleByEmail,
+  getUserExtras,
   getFullUser,
   update,
   remove
@@ -118,11 +119,7 @@ function getSingle(id) {
     .first();
 }
 
-async function getFullUser(userId) {
-  async function getUser() {
-    return db("users").where("id", userId);
-  }
-
+async function getUserExtras(userId) {
   async function getLocations() {
     return db("locations")
       .join("user_locations", "locations.id", "user_locations.location_id")
@@ -184,7 +181,6 @@ async function getFullUser(userId) {
   }
 
   const [
-    user,
     locations,
     topSkills,
     additionalSkills,
@@ -192,7 +188,6 @@ async function getFullUser(userId) {
     experience,
     projects
   ] = await Promise.all([
-    getUser(),
     getLocations(),
     getTopSkills(),
     getAdditionalSkills(),
@@ -202,14 +197,19 @@ async function getFullUser(userId) {
   ]);
 
   return {
-    ...user[0],
     locations,
-    top_skills: topSkills,
-    additional_skills: additionalSkills,
+    topSkills,
+    additionalSkills,
     education,
     experience,
     projects
   };
+}
+
+async function getFullUser(email) {
+  const user = await getSingleByEmail(email);
+  const extras = await getUserExtras(user.id);
+  return { ...user, ...extras };
 }
 
 function getSingleByEmail(email) {
