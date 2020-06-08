@@ -1,5 +1,14 @@
 import axios from "axios";
 
+async function composer(options) {
+  options.baseURL = process.env.REACT_APP_SERVER;
+  if (options.config && options.config.headers) {
+    options.headers = options.config.headers;
+  }
+
+  return axios(options);
+}
+
 export async function httpClient(method, url, data, config = {}) {
   const options = {
     baseURL: `${process.env.REACT_APP_SERVER}`,
@@ -9,12 +18,19 @@ export async function httpClient(method, url, data, config = {}) {
     headers: config.headers ? { ...config.headers } : null
   };
 
+  let optionsArr = [options, ...(config.additional ? config.additional : [])];
+
   try {
-    const res = await axios(options);
+    const res = await Promise.all(optionsArr.map(options => composer(options)));
+
+    if (res.length > 1) {
+      return [res, false];
+    }
+
     return [
       {
-        data: res.data,
-        status: res.status ? res.status : 200
+        data: res[0].data,
+        status: res[0].status ? res[0].status : 200
       },
       false
     ];
