@@ -46,7 +46,7 @@ function ProfileDashboard() {
       auth0Client.signOut("authorize");
       return;
     }
-    
+
     setUser(res.data);
     setLoadingUser(false);
   }
@@ -106,7 +106,14 @@ function ProfileDashboard() {
       <UserCard
         dashboard
         extrasUpdate={extrasUpdate}
-        extras={} // add all extras here
+        extras={{
+          locations: user.locations,
+          topSkills: user.topSkills,
+          additionalSkills: user.additionalSkills,
+          education: user.education,
+          experience: user.experience,
+          projects: user.projects
+        }}
         previewImg={previewImg}
         usersLength={1}
         index={1}
