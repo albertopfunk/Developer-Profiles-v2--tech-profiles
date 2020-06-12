@@ -79,7 +79,12 @@ function UserCard(props) {
         />
       </UserSection>
 
-      <UserExtras userId={props.id} setIsCardExpanded={setIsCardExpanded} />
+      <UserExtras
+        dashboard={props.dashboard}
+        userId={props.id}
+        extras={props.extras}
+        setAriaExpanded={setIsCardExpanded}
+      />
     </UserArticle>
   );
 }

@@ -6,7 +6,7 @@ import UserExperience from "./UserExperience";
 import { useState } from "react";
 import { httpClient } from "../../http-requests";
 
-function UserExtras(props) {
+function UserExtras({ dashboard, extras, setAriaExpanded, userId }) {
   const [userExtras, setUserExtras] = useState({});
   const [loadingExtras, setLoadingExtras] = useState(false);
   const [noExtras, setNoExtras] = useState(false);
@@ -16,40 +16,49 @@ function UserExtras(props) {
   useEffect(() => {
     // pass extras props from dashboard
 
-    if (props.dashboard) {
+    if (dashboard) {
       setHasRequestedExtras(true);
-      setUserExtras(props.extras);
+      setUserExtras(extras);
 
-      // check if there are any extras
       if (
-        props.extras.locations.length === 0 &&
-        props.extras.topSkills.length === 0 &&
-        props.extras.additionalSkills.length === 0 &&
-        props.extras.education.length === 0 &&
-        props.extras.experience.length === 0 &&
-        props.extras.projects.length === 0
+        extras.locations.length === 0 &&
+        extras.topSkills.length === 0 &&
+        extras.additionalSkills.length === 0 &&
+        extras.education.length === 0 &&
+        extras.experience.length === 0 &&
+        extras.projects.length === 0
       ) {
         setNoExtras(true);
+      } else {
+        setNoExtras(false);
       }
 
-      // closes card when extras props is updated
-      setIsCardExpanded(false);
-      props.setIsCardExpanded(false);
+      if (isCardExpanded) {
+        setIsCardExpanded(false);
+        setAriaExpanded(false);
+      }
     }
-  }, [props.extras]);
+    // still trying to figure out why certain dependencies are needed
+    // dashboard - static, never changes
+    // isCardExpanded - only two states(true/false), only one is checked,
+    // it does not matter if that state was set 20 updates ago, it is static,
+    // until user updates extras,
+    // when I add it as a dep, and a user opens the card, this will run,
+    // and close the card, so it creates a bug
+    // setAriaExpanded - this is a useState fn
+    // this useEffect only depends on extras
+    // eslint-disable-next-line
+  }, [extras]);
 
   async function expandUserCard() {
     if (hasRequestedExtras) {
       setIsCardExpanded(true);
-      props.setIsCardExpanded(true);
+      setAriaExpanded(true);
       return;
     }
 
     setLoadingExtras(true);
-    const [res, err] = await httpClient(
-      "GET",
-      `/users/get-extras/${props.userId}`
-    );
+    const [res, err] = await httpClient("GET", `/users/get-extras/${userId}`);
 
     if (err) {
       console.error(`${res.mssg} => ${res.err}`);
@@ -67,7 +76,7 @@ function UserExtras(props) {
       setUserExtras(res.data);
       setNoExtras(true);
       setHasRequestedExtras(true);
-      props.setIsCardExpanded(true);
+      setAriaExpanded(true);
       setIsCardExpanded(true);
       setLoadingExtras(false);
       return;
@@ -75,14 +84,14 @@ function UserExtras(props) {
 
     setUserExtras(res.data);
     setHasRequestedExtras(true);
-    props.setIsCardExpanded(true);
+    setAriaExpanded(true);
     setIsCardExpanded(true);
     setLoadingExtras(false);
   }
 
   function closeUserCard() {
     setIsCardExpanded(false);
-    props.setIsCardExpanded(false);
+    setAriaExpanded(false);
   }
 
   const {
