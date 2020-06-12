@@ -20,9 +20,9 @@ server.post("/new", async (req, res) => {
 });
 
 server.post("/new-user-skill", async (req, res) => {
-  if (!Array.isArray(req.body.skill_ids)) {
+  if (!Array.isArray(req.body.skills)) {
     res.status(400).json({
-      message: `Expected 'skill_ids' array in body, received '${req.body.skill_ids}'`
+      message: `Expected 'skills' array in body, received '${req.body.skills}'`
     });
     return;
   }

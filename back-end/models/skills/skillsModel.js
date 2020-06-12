@@ -27,10 +27,10 @@ async function insert(newSkill) {
 }
 
 async function insertUserSkill(lePackage) {
-  const { type, user_id, skill_ids } = lePackage;
+  const { type, user_id, skills } = lePackage;
 
-  for (let i = 0; i < skill_ids.length; i++) {
-    await db(type).insert({ user_id, skill_id: skill_ids[i] });
+  for (let i = 0; i < skills.length; i++) {
+    await db(type).insert({ user_id, skill_id: skills[i].id });
   }
 
   return syncSkills(user_id, type);
