@@ -14,7 +14,7 @@ async function locationFilters(locationOptions, users) {
     selectedWithinMiles,
     chosenLocationLat,
     chosenLocationLon,
-    chosenRelocateToArr
+    chosenRelocateToObj
   } = locationOptions;
 
   if (isUsingCurrLocationFilter) {
@@ -27,7 +27,7 @@ async function locationFilters(locationOptions, users) {
   }
 
   if (isUsingRelocateToFilter) {
-    tempRelocateToUsers = await relocateToFilter(users, chosenRelocateToArr);
+    tempRelocateToUsers = await relocateToFilter(users, chosenRelocateToObj);
   }
 
   users = [...new Set([...tempLocationUsers, ...tempRelocateToUsers])];
@@ -85,7 +85,7 @@ function distanceWithinFilter(lat1, lon1, lat2, lon2, filter) {
   }
 }
 
-async function relocateToFilter(users, chosenRelocateToArr) {
+async function relocateToFilter(users, chosenRelocateToObj) {
   let filteredUsers = [];
   let filteredUserArr = [];
 
@@ -98,7 +98,7 @@ async function relocateToFilter(users, chosenRelocateToArr) {
         filteredUserArr[j].location_id
       );
 
-      if (chosenRelocateToArr.includes(location.location)) {
+      if (location.location in chosenRelocateToObj) {
         filteredUsers.push(users[i]);
         break;
       }

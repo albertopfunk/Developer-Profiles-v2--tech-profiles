@@ -34,10 +34,10 @@ async function insertLocation(location) {
 async function insertUserLocation(lePackage) {
   for (let i = 0; i < lePackage.locations.length; i++) {
     let id;
-    let doesLocationExist = await getSingle(lePackage.locations[i]);
+    let doesLocationExist = await getSingle(lePackage.locations[i].name);
 
     if (!doesLocationExist) {
-      id = await insertLocation(lePackage.locations[i]);
+      id = await insertLocation(lePackage.locations[i].name);
     } else {
       id = doesLocationExist.id;
     }

@@ -3,11 +3,19 @@ import React from "react";
 import AutoComplete from "../autocomplete/AutoComplete";
 
 function RelocateToFilter(props) {
+  function convertToObj(arr) {
+    return arr.reduce((accumilator, current) => {
+      accumilator[current.name] = current;
+      return accumilator;
+    }, {});
+  }
+
   function onChosenLocation(chosenRelocateToArr) {
+    let chosenRelocateToObj = convertToObj(chosenRelocateToArr);
     props.updateUsers({
       usersPage: 1,
       isUsingRelocateToFilter: true,
-      chosenRelocateToArr
+      chosenRelocateToObj
     });
   }
 
@@ -19,9 +27,11 @@ function RelocateToFilter(props) {
       return;
     }
 
+    let chosenRelocateToObj = convertToObj(chosenRelocateToArr);
+
     props.updateUsers({
       isUsingRelocateToFilter: true,
-      chosenRelocateToArr
+      chosenRelocateToObj
     });
   }
 

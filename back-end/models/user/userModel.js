@@ -45,7 +45,7 @@ async function getAllFiltered(filters) {
     selectedWithinMiles,
     chosenLocationLat,
     chosenLocationLon,
-    chosenRelocateToArr,
+    chosenRelocateToObj,
     sortChoice
   } = filters;
 
@@ -97,7 +97,7 @@ async function getAllFiltered(filters) {
       selectedWithinMiles,
       chosenLocationLat,
       chosenLocationLon,
-      chosenRelocateToArr
+      chosenRelocateToObj
     };
     users = await locationHelpers.locationFilters(locationOptions, users);
     if (users.length === 0) {
