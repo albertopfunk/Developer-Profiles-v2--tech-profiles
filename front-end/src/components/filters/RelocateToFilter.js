@@ -1,8 +1,22 @@
 import React from "react";
 
 import AutoComplete from "../autocomplete/AutoComplete";
+import { httpClient } from "../http-requests";
 
 function RelocateToFilter(props) {
+  async function onInputChange(value) {
+    const [res, err] = await httpClient("POST", "/api/autocomplete", {
+      value
+    });
+
+    if (err) {
+      console.error(`${res.mssg} => ${res.err}`);
+      return false;
+    }
+
+    return res.data;
+  }
+
   function convertToObj(arr) {
     return arr.reduce((accumilator, current) => {
       accumilator[current.name] = current;
@@ -38,6 +52,7 @@ function RelocateToFilter(props) {
   return (
     <section>
       <AutoComplete
+        onInputChange={onInputChange}
         onChosenInput={onChosenLocation}
         resetInputFilter={resetLocationFilter}
         inputName={"interested-locations"}

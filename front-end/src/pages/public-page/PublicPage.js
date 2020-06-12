@@ -23,7 +23,7 @@ class PublicPage extends Component {
     chosenLocationLat: 0,
     chosenLocationLon: 0,
     isUsingRelocateToFilter: false,
-    chosenRelocateToArr: [],
+    chosenRelocateToObj: {},
     sortChoice: "acending(oldest-newest)"
   };
 
@@ -55,7 +55,7 @@ class PublicPage extends Component {
       this.state.chosenLocationLon !== nextState.chosenLocationLon ||
       this.state.isUsingRelocateToFilter !==
         nextState.isUsingRelocateToFilter ||
-      this.state.chosenRelocateToArr !== nextState.chosenRelocateToArr ||
+      this.state.chosenRelocateToObj !== nextState.chosenRelocateToObj ||
       this.state.sortChoice !== nextState.sortChoice
     ) {
       return false;
@@ -74,7 +74,7 @@ class PublicPage extends Component {
       chosenLocationLat: this.state.chosenLocationLat,
       chosenLocationLon: this.state.chosenLocationLon,
       isUsingRelocateToFilter: this.state.isUsingRelocateToFilter,
-      chosenRelocateToArr: this.state.chosenRelocateToArr,
+      chosenRelocateToObj: this.state.chosenRelocateToObj,
       sortChoice: this.state.sortChoice
     });
 

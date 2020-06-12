@@ -1,5 +1,4 @@
 import React from "react";
-import { httpClient } from "../http-requests";
 
 class AutoComplete extends React.Component {
   state = {
@@ -19,17 +18,12 @@ class AutoComplete extends React.Component {
     console.log("UPDATED");
   }
 
-  // Tests
   setOptionRefs = (element, index) => {
     if (element !== null) {
       this.optionRefs[index] = element;
     }
   };
 
-  // Tests
-  // down arrow key focuses on first <li>
-  // only runs when there are <li>s present
-  // esc key resets filter with resetInput()
   focusOnFirstOption = e => {
     if (this.state.autoCompleteResults.length > 0) {
       if (e.keyCode === 40) {
@@ -49,10 +43,6 @@ class AutoComplete extends React.Component {
     }
   };
 
-  // Tests
-  // chooseOnKeyDown with up or down arrow keys moves focus of <li>s respectively with focusOnOption()
-  // chooseOnKeyDown with enter key chooses prediction with choosePrediction()
-  // chooseOnKeyDown with esc key resets filter with resetInput()
   chooseOnKeyDown = (e, name, id, index) => {
     if (e.keyCode === 38) {
       e.preventDefault();
@@ -70,8 +60,6 @@ class AutoComplete extends React.Component {
     }
   };
 
-  // Tests
-  // focuses on next or previous <li>
   focusOnOption = (index, direction) => {
     if (direction === "up") {
       if (index === 0) {
@@ -95,10 +83,6 @@ class AutoComplete extends React.Component {
     }
   };
 
-  // tests
-  // closes combobox when input is blank
-  // awaits array of results or empty array
-  // sets state for UI change for results
   onInputChange = async value => {
     this.optionRefs = [];
     if (value.trim() === "") {
@@ -106,48 +90,31 @@ class AutoComplete extends React.Component {
       return;
     }
 
-    let predictions = [];
-    let url;
-    const { inputName } = this.props;
+    let predictions = await this.props.onInputChange(value);
 
-    if (inputName.includes("locations") || inputName.includes("location")) {
-      url = "/api/autocomplete";
-    } else if (inputName.includes("skills")) {
-      url = "/skills/autocomplete";
-    } else {
-      console.error("inputName Not Provided");
+    if (!predictions) {
+      this.setState({
+        resultsInBank: false,
+        isUsingCombobox: false,
+        autoCompleteResults: []
+      });
       return;
     }
 
-    const [res, err] = await httpClient("POST", url, {
-      value
+    if (predictions.length === 0) {
+      this.setState({
+        resultsInBank: false,
+        isUsingCombobox: false,
+        autoCompleteResults: []
+      });
+      return;
+    }
+
+    this.setState({
+      resultsInBank: true,
+      isUsingCombobox: true,
+      autoCompleteResults: predictions
     });
-
-    if (err) {
-      console.error(`${res.mssg} => ${res.err}`);
-      this.setState({
-        resultsInBank: false,
-        isUsingCombobox: false,
-        autoCompleteResults: []
-      });
-      return;
-    }
-
-    predictions = res.data;
-
-    if (predictions.length > 0) {
-      this.setState({
-        resultsInBank: true,
-        isUsingCombobox: true,
-        autoCompleteResults: predictions
-      });
-    } else {
-      this.setState({
-        resultsInBank: false,
-        isUsingCombobox: false,
-        autoCompleteResults: []
-      });
-    }
   };
 
   debounceInput = e => {
@@ -170,7 +137,7 @@ class AutoComplete extends React.Component {
 
   choosePrediction = (name, id) => {
     if (
-      this.state.chosenNames.includes(name) ||
+      this.state.chosenNames.some(chosenName => chosenName.name === name) ||
       (this.props.checkDups &&
         !this.props.checkDups(name, this.props.inputName))
     ) {
@@ -190,7 +157,7 @@ class AutoComplete extends React.Component {
       this.setState({
         autoCompleteResults: [],
         input: name,
-        chosenNames: [name],
+        chosenNames: [{ name, id }],
         isUsingCombobox: false
       });
       this.props.onChosenInput(name, id);
@@ -198,7 +165,7 @@ class AutoComplete extends React.Component {
     }
 
     const newChosenNamesState = [...this.state.chosenNames];
-    newChosenNamesState.push(name);
+    newChosenNamesState.push({ name, id });
     this.setState({
       autoCompleteResults: [],
       input: "",
@@ -216,10 +183,9 @@ class AutoComplete extends React.Component {
     });
   };
 
-  // Tests
   removeChosenName = location => {
     let newChosenNamesState = this.state.chosenNames.filter(chosenName => {
-      return chosenName !== location;
+      return chosenName.name !== location.name;
     });
 
     this.setState({
@@ -347,8 +313,8 @@ class AutoComplete extends React.Component {
           <ul id="results">
             {this.state.chosenNames.map(chosenName => {
               return (
-                <li key={chosenName}>
-                  <p style={{ display: "inline" }}>{chosenName}</p>
+                <li key={chosenName.id}>
+                  <p style={{ display: "inline" }}>{chosenName.name}</p>
                   <button
                     type="button"
                     onClick={() => this.removeChosenName(chosenName)}

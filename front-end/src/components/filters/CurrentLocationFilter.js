@@ -14,6 +14,19 @@ class CurrentLocationFilter extends React.Component {
     this.setState({ milesWithinInput: e.target.value });
   };
 
+  onLocationInputChange = async value => {
+    const [res, err] = await httpClient("POST", "/api/autocomplete", {
+      value
+    });
+
+    if (err) {
+      console.error(`${res.mssg} => ${res.err}`);
+      return false;
+    }
+
+    return res.data;
+  };
+
   chooseDistanceOnKeyUp = e => {
     if (
       e.keyCode !== 37 &&
@@ -90,6 +103,7 @@ class CurrentLocationFilter extends React.Component {
           </label>
         </div>
         <AutoComplete
+          onInputChange={this.onLocationInputChange}
           onChosenInput={this.onChosenLocation}
           resetInputFilter={this.resetLocationFilter}
           inputName={"current-location"}
