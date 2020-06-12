@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import styled from "styled-components";
 
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
@@ -10,12 +10,23 @@ function PersonalInfo() {
     ProfileContext
   );
 
-  const [imageInput, setImageInput] = useState("");
+  const [imageInput, setImageInput] = useState({ image: "", id: "" });
   const [firstNameInput, setFirstNameInput] = useState("");
   const [lastNameInput, setLastNameInput] = useState("");
   const [publicEmailInput, setPublicEmailInput] = useState("");
   const [areaOfWorkInput, setAreaOfWorkInput] = useState("");
   const [titleInput, setTitleInput] = useState("");
+
+  useEffect(() => {
+    return () => {
+      if (imageInput.id) {
+        httpClient("POST", "/api/delete-image", {
+          id: imageInput.id
+        });
+        setPreviewImg({ image: "", id: "" });
+      }
+    };
+  }, [imageInput.id, setPreviewImg]);
 
   async function submitEdit(e) {
     e.preventDefault();
@@ -23,7 +34,8 @@ function PersonalInfo() {
     if (
       !firstNameInput &&
       !lastNameInput &&
-      !imageInput &&
+      !imageInput.name &&
+      !imageInput.id &&
       !publicEmailInput &&
       !areaOfWorkInput &&
       !titleInput
@@ -32,6 +44,13 @@ function PersonalInfo() {
     }
 
     const inputs = {};
+
+    //TODO: if input is empty then user wants to remove that
+    // when user clicks edit, fill in the inputs and let user remove input
+    // see if you can add an event listener to onChange for each input
+    // since you are filling them in then any change in them means the the user wants to edit them
+    // so submits will be similar to this, composing inputs
+    // difference is you will be checking for changes instead of empty fields
     if (firstNameInput) {
       inputs.first_name = firstNameInput;
       setFirstNameInput("");
@@ -42,19 +61,17 @@ function PersonalInfo() {
       setLastNameInput("");
     }
 
-    if (imageInput) {
-      if (user.image) {
-        let imageToDelete = user.image;
-        imageToDelete = imageToDelete.split(",");
+    if (imageInput.image && imageInput.id) {
+      if (user.image_id) {
         httpClient("POST", "/api/delete-image", {
-          id: imageToDelete[1]
+          id: user.image_id
         });
       }
 
-      inputs.image = imageInput;
-      localStorage.removeItem("img_prev");
-      setPreviewImg("");
-      setImageInput("");
+      inputs.image = imageInput.image;
+      inputs.image_id = imageInput.id;
+      setPreviewImg({ image: "", id: "" });
+      setImageInput({ image: "", id: "" });
     }
 
     if (publicEmailInput) {

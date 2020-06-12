@@ -60,7 +60,9 @@ server.post(
           res.status(500).json({ message: "Error uploading image" });
           return;
         }
-        res.status(200).json({ url: result.secure_url, id: result.public_id });
+        res
+          .status(200)
+          .json({ image: result.secure_url, id: result.public_id });
       }
     );
   }

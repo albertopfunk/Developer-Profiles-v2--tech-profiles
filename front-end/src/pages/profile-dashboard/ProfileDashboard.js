@@ -20,8 +20,7 @@ import auth0Client from "../../auth/Auth";
 function ProfileDashboard() {
   const [loadingUser, setLoadingUser] = useState(true);
   const [user, setUser] = useState(null);
-  const [previewImg, setPreviewImg] = useState("");
-  const [extrasUpdate, setExtrasUpdate] = useState(false);
+  const [previewImg, setPreviewImg] = useState({ image: "", id: "" });
   let { path, url } = useRouteMatch();
 
   useEffect(() => {
@@ -31,6 +30,7 @@ function ProfileDashboard() {
   });
 
   async function initProfile() {
+    // setLoadingUser(true);
     const userProfile = auth0Client.getProfile();
     const { email } = userProfile;
 
@@ -39,6 +39,10 @@ function ProfileDashboard() {
       return;
     }
 
+    getFullUser(email);
+  }
+
+  async function getFullUser(email) {
     const [res, err] = await httpClient("POST", "/users/get-full", { email });
 
     if (err) {
@@ -52,6 +56,7 @@ function ProfileDashboard() {
   }
 
   async function editProfile(data) {
+    // setLoadingUser(true);
     const [res, err] = await httpClient("PUT", `/users/${user.id}`, data);
 
     if (err) {
@@ -59,10 +64,11 @@ function ProfileDashboard() {
       return;
     }
 
-    setUser(res.data);
+    getFullUser(user.email);
   }
 
   async function addExtra(data, extra) {
+    // setLoadingUser(true);
     const [res, err] = await httpClient("POST", `/extras/new/${extra}`, data);
 
     if (err) {
@@ -70,10 +76,43 @@ function ProfileDashboard() {
       return;
     }
 
-    setExtrasUpdate(!extrasUpdate);
+    getFullUser(user.email);
   }
 
-  console.log("===PROFILE DASH + PREVIOUS IMG===", previewImg);
+  async function addUserExtras(additionalArr) {
+    let main = {
+      ...additionalArr.shift()
+    };
+
+    let config;
+    if (main.config) {
+      config = { ...main.config, additional: additionalArr };
+    } else {
+      config = { additional: additionalArr };
+    }
+
+    console.log("MAINNNNNNNN", main, config);
+
+    const [res, err] = await httpClient(
+      main.method,
+      main.url,
+      main.data ? main.data : {},
+      config
+    );
+
+    if (err) {
+      console.error(`${res.mssg} => ${res.err}`);
+      return;
+    }
+
+    getFullUser(user.email);
+  }
+
+  console.log(
+    "===PROFILE DASH + PREVIOUS IMG===",
+    previewImg,
+    previewImg.image
+  );
 
   if (loadingUser) {
     return <h1>Loading...</h1>;
@@ -105,7 +144,7 @@ function ProfileDashboard() {
 
       <UserCard
         dashboard
-        extrasUpdate={extrasUpdate}
+        previewImg={previewImg.image}
         extras={{
           locations: user.locations,
           topSkills: user.topSkills,
@@ -114,7 +153,6 @@ function ProfileDashboard() {
           experience: user.experience,
           projects: user.projects
         }}
-        previewImg={previewImg}
         usersLength={1}
         index={1}
         id={user.id}
@@ -143,6 +181,7 @@ function ProfileDashboard() {
           user,
           editProfile,
           addExtra,
+          addUserExtras,
           setPreviewImg
         }}
       >

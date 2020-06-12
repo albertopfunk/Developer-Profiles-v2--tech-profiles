@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import { ProfileContext } from "../../global/context/user-profile/ProfileContext";
 import { httpClient } from "../http-requests";
 
@@ -6,21 +6,6 @@ function ImageUploadForm({ imageInput, setImageInput }) {
   const { setPreviewImg } = useContext(ProfileContext);
   const [loadingImage, setLoadingImage] = useState(false);
   const [errorImage, setErrorImage] = useState(false);
-
-  useEffect(() => {
-    return () => {
-      if (localStorage.getItem("img_prev")) {
-        const imgPrev = localStorage.getItem("img_prev");
-        localStorage.removeItem("img_prev");
-        let imageToDelete = imgPrev;
-        imageToDelete = imageToDelete.split(",");
-        httpClient("POST", "/api/delete-image", {
-          id: imageToDelete[1]
-        });
-      }
-      setPreviewImg("");
-    };
-  }, [setPreviewImg]);
 
   async function onImageInputChange(e) {
     if (e.target.files.length === 0) {
@@ -45,20 +30,14 @@ function ImageUploadForm({ imageInput, setImageInput }) {
       return;
     }
 
-    const { url, id } = res.data;
-
-    if (imageInput) {
-      let imageToDelete = imageInput;
-      imageToDelete = imageToDelete.split(",");
+    if (imageInput.id) {
       httpClient("POST", "/api/delete-image", {
-        id: imageToDelete[1]
+        id: imageInput.id
       });
     }
 
-    const imageInfo = `${url},${id}`;
-    localStorage.setItem("img_prev", imageInfo);
-    setPreviewImg(url);
-    setImageInput(imageInfo);
+    setPreviewImg(res.data);
+    setImageInput(res.data);
     setLoadingImage(false);
     setErrorImage(false);
   }
@@ -75,7 +54,7 @@ function ImageUploadForm({ imageInput, setImageInput }) {
       />
       {loadingImage ? <p>Loading...</p> : null}
       {errorImage ? <p>Error uploading image. Please try again</p> : null}
-      {imageInput ? <p>Success!</p> : null}
+      {imageInput.image ? <p>Success!</p> : null}
     </div>
   );
 }
