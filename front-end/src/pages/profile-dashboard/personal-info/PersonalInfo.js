@@ -9,108 +9,178 @@ function PersonalInfo() {
   const { loadingUser, user, editProfile, setPreviewImg } = useContext(
     ProfileContext
   );
-
-  const [imageInput, setImageInput] = useState({ image: "", id: "" });
+  const [editInputs, setEditInputs] = useState(false);
   const [firstNameInput, setFirstNameInput] = useState("");
+  const [firstNameInputChange, setFirstNameInputChange] = useState(false);
   const [lastNameInput, setLastNameInput] = useState("");
+  const [lastNameInputChange, setLastNameInputChange] = useState(false);
+  const [imageInput, setImageInput] = useState({ image: "", id: "" });
+  const [imageInputChange, setImageInputChange] = useState(false);
   const [publicEmailInput, setPublicEmailInput] = useState("");
+  const [emailInputChange, setEmailInputChange] = useState(false);
   const [areaOfWorkInput, setAreaOfWorkInput] = useState("");
+  const [areaOfWorkInputChange, setAreaOfWorkInputChange] = useState(false);
   const [titleInput, setTitleInput] = useState("");
+  const [titleInputChange, setTitleInputChange] = useState(false);
 
   useEffect(() => {
+    if (localStorage.getItem("image_id")) {
+      let id = localStorage.getItem("image_id");
+      localStorage.removeItem("image_id");
+      httpClient("POST", "/api/delete-image", {
+        id
+      });
+    }
     return () => {
-      if (imageInput.id) {
-        httpClient("POST", "/api/delete-image", {
-          id: imageInput.id
-        });
-        setPreviewImg({ image: "", id: "" });
-      }
+      setPreviewImg({ image: "", id: "" });
     };
-  }, [imageInput.id, setPreviewImg]);
+  }, []);
+
+  function onEditInputs() {
+    setEditInputs(true);
+    setFirstNameInput(user.first_name || "");
+    setLastNameInput(user.last_name || "");
+    setPublicEmailInput(user.public_email || "");
+    setTitleInput(user.desired_title || "");
+  }
+
+  function onFirstNameInputChange(value) {
+    if (!firstNameInputChange) {
+      setFirstNameInputChange(true);
+    }
+    setFirstNameInput(value);
+  }
+
+  function onLastNameInputChange(value) {
+    if (!lastNameInputChange) {
+      setLastNameInputChange(true);
+    }
+    setLastNameInput(value);
+  }
+
+  function onImageInputChange(value) {
+    if (!imageInputChange) {
+      setImageInputChange(true);
+    }
+    setImageInput(value);
+  }
+
+  function onEmailInputChange(value) {
+    if (!emailInputChange) {
+      setEmailInputChange(true);
+    }
+    setPublicEmailInput(value);
+  }
+
+  function onAreaOfWorkInputChange(value) {
+    if (!value) {
+      setAreaOfWorkInputChange(false);
+      return;
+    }
+
+    if (!areaOfWorkInputChange) {
+      setAreaOfWorkInputChange(true);
+    }
+    setAreaOfWorkInput(value);
+  }
+
+  function onTitleInputChange(value) {
+    if (!titleInputChange) {
+      setTitleInputChange(true);
+    }
+    setTitleInput(value);
+  }
 
   async function submitEdit(e) {
     e.preventDefault();
 
     if (
-      !firstNameInput &&
-      !lastNameInput &&
-      !imageInput.name &&
-      !imageInput.id &&
-      !publicEmailInput &&
-      !areaOfWorkInput &&
-      !titleInput
+      !firstNameInputChange &&
+      !lastNameInputChange &&
+      !imageInputChange &&
+      !emailInputChange &&
+      !areaOfWorkInputChange &&
+      !titleInputChange
     ) {
       return;
     }
 
     const inputs = {};
 
-    //TODO: if input is empty then user wants to remove that
-    // when user clicks edit, fill in the inputs and let user remove input
-    // see if you can add an event listener to onChange for each input
-    // since you are filling them in then any change in them means the the user wants to edit them
-    // so submits will be similar to this, composing inputs
-    // difference is you will be checking for changes instead of empty fields
-    if (firstNameInput) {
+    if (firstNameInputChange) {
       inputs.first_name = firstNameInput;
       setFirstNameInput("");
+      setFirstNameInputChange(false);
     }
 
-    if (lastNameInput) {
+    if (lastNameInputChange) {
       inputs.last_name = lastNameInput;
       setLastNameInput("");
+      setLastNameInputChange(false);
     }
 
-    if (imageInput.image && imageInput.id) {
-      if (user.image_id) {
-        httpClient("POST", "/api/delete-image", {
-          id: user.image_id
-        });
+    if (imageInputChange) {
+      if (imageInput.id !== user.image_id) {
+        if (user.image_id) {
+          httpClient("POST", "/api/delete-image", {
+            id: user.image_id
+          });
+        }
+
+        inputs.image = imageInput.image;
+        inputs.image_id = imageInput.id;
+        localStorage.removeItem("image_id");
+        setPreviewImg({ image: "", id: "" });
+        setImageInput({ image: "", id: "" });
+        setImageInputChange(false);
       }
-
-      inputs.image = imageInput.image;
-      inputs.image_id = imageInput.id;
-      setPreviewImg({ image: "", id: "" });
-      setImageInput({ image: "", id: "" });
     }
 
-    if (publicEmailInput) {
+    if (emailInputChange) {
       inputs.public_email = publicEmailInput;
       setPublicEmailInput("");
+      setEmailInputChange(false);
     }
 
-    if (areaOfWorkInput) {
+    if (areaOfWorkInputChange) {
       inputs.area_of_work = areaOfWorkInput;
       setAreaOfWorkInput("");
+      setAreaOfWorkInputChange(false);
     }
 
-    if (titleInput) {
+    if (titleInputChange) {
       inputs.desired_title = titleInput;
       setTitleInput("");
+      setTitleInputChange(false);
     }
 
+    setEditInputs(false);
     editProfile(inputs);
   }
 
-  console.log("===PERSONAL INFO + IMG INPUTTTT===", imageInput);
+  console.log("===PERSONAL INFO + IMG INPUTTTT===", user);
   if (loadingUser) {
     return <h1>Loading...</h1>;
   }
+
+  if (!editInputs) {
+    return (
+      <div>
+        <h1>Edit Inputs</h1>
+        <button onClick={onEditInputs}>Edit</button>
+      </div>
+    );
+  }
+
   return (
     <Main>
-      <h2>User Personal Info Display</h2>
-      <p>{user.first_name}</p>
-      <p>{user.last_name}</p>
-      <p>{user.public_email}</p>
-      <p>{user.area_of_work}</p>
-      <p>{user.desired_title}</p>
-
+      <h2>User Personal Info</h2>
       <form onSubmit={e => submitEdit(e)}>
         <input
           type="text"
           placeholder="First Name"
           value={firstNameInput}
-          onChange={e => setFirstNameInput(e.target.value)}
+          onChange={e => onFirstNameInputChange(e.target.value)}
         />
 
         <br />
@@ -119,7 +189,7 @@ function PersonalInfo() {
           type="text"
           placeholder="Last Name"
           value={lastNameInput}
-          onChange={e => setLastNameInput(e.target.value)}
+          onChange={e => onLastNameInputChange(e.target.value)}
         />
 
         <br />
@@ -127,7 +197,7 @@ function PersonalInfo() {
         <br />
 
         <ImageUploadForm
-          setImageInput={setImageInput}
+          setImageInput={onImageInputChange}
           imageInput={imageInput}
         />
 
@@ -139,18 +209,19 @@ function PersonalInfo() {
           type="text"
           placeholder="Public Email"
           value={publicEmailInput}
-          onChange={e => setPublicEmailInput(e.target.value)}
+          onChange={e => onEmailInputChange(e.target.value)}
         />
 
         <br />
+        <br />
+        <br />
 
-        <input
-          type="text"
-          placeholder="Area of Work"
-          value={areaOfWorkInput}
-          onChange={e => setAreaOfWorkInput(e.target.value)}
-        />
-        <select name="area_of_work" id="area_of_work">
+        <select
+          id="sorting-area_of_work"
+          onClick={e => onAreaOfWorkInputChange(e.target.value)}
+          onBlur={e => onAreaOfWorkInputChange(e.target.value)}
+        >
+          <option value="">--Select--</option>
           <option value="Development">Development</option>
           <option value="iOS">iOS</option>
           <option value="Android">Android</option>
@@ -158,12 +229,14 @@ function PersonalInfo() {
         </select>
 
         <br />
+        <br />
+        <br />
 
         <input
           type="text"
           placeholder="Title"
           value={titleInput}
-          onChange={e => setTitleInput(e.target.value)}
+          onChange={e => onTitleInputChange(e.target.value)}
         />
 
         <button>Submit</button>

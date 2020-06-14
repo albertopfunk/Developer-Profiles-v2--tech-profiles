@@ -36,6 +36,7 @@ function ImageUploadForm({ imageInput, setImageInput }) {
       });
     }
 
+    localStorage.setItem("image_id", res.data.id);
     setPreviewImg(res.data);
     setImageInput(res.data);
     setLoadingImage(false);
