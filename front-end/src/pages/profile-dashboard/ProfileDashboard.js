@@ -79,19 +79,18 @@ function ProfileDashboard() {
     getFullUser(user.email);
   }
 
-  async function addUserExtras(additionalArr) {
+  async function addUserExtras(requestsArr) {
+    // setLoadingUser(true);
     let main = {
-      ...additionalArr.shift()
+      ...requestsArr.shift()
     };
 
     let config;
     if (main.config) {
-      config = { ...main.config, additional: additionalArr };
+      config = { ...main.config, additional: requestsArr };
     } else {
-      config = { additional: additionalArr };
+      config = { additional: requestsArr };
     }
-
-    console.log("MAINNNNNNNN", main, config);
 
     const [res, err] = await httpClient(
       main.method,
@@ -108,11 +107,7 @@ function ProfileDashboard() {
     getFullUser(user.email);
   }
 
-  console.log(
-    "===PROFILE DASH + PREVIOUS IMG===",
-    previewImg,
-    previewImg.image
-  );
+  console.log("===PROFILE DASH + PREVIOUS IMG===");
 
   if (loadingUser) {
     return <h1>Loading...</h1>;

@@ -14,7 +14,13 @@ class AutoComplete extends React.Component {
 
   optionRefs = [];
 
-  componentDidUpdate() {
+  componentDidMount() {
+    if (this.props.chosenInputs) {
+      this.setState({ chosenNames: this.props.chosenInputs });
+    }
+  }
+
+  componentDidUpdate(prevProps) {
     console.log("UPDATED");
   }
 
@@ -136,23 +142,6 @@ class AutoComplete extends React.Component {
   };
 
   choosePrediction = (name, id) => {
-    if (
-      this.state.chosenNames.some(chosenName => chosenName.name === name) ||
-      (this.props.checkDups &&
-        !this.props.checkDups(name, this.props.inputName))
-    ) {
-      this.setState({
-        autoCompleteResults: [],
-        input: "",
-        isUsingCombobox: false,
-        chosenNameDup: true
-      });
-      setTimeout(() => {
-        this.setState({ chosenNameDup: false });
-      }, 2000);
-      return;
-    }
-
     if (this.props.single) {
       this.setState({
         autoCompleteResults: [],
@@ -194,7 +183,7 @@ class AutoComplete extends React.Component {
       input: ""
     });
 
-    this.props.resetInputFilter(newChosenNamesState);
+    this.props.removeChosenInput(newChosenNamesState);
   };
 
   resetOnSubmit = () => {
@@ -234,12 +223,6 @@ class AutoComplete extends React.Component {
             onKeyDown={e => this.focusOnFirstOption(e)}
           />
         </div>
-
-        {this.state.chosenNameDup ? (
-          <div>
-            <p>Chosen Item already exists</p>
-          </div>
-        ) : null}
 
         {!this.state.resultsInBank && this.state.input ? (
           <div>

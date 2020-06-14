@@ -7,15 +7,35 @@ import { httpClient } from "../../../components/http-requests";
 
 function AboutYou() {
   const { loadingUser, user, addUserExtras } = useContext(ProfileContext);
+  const [editInputs, setEditInputs] = useState(false);
   const [summaryInput, setSummaryInput] = useState("");
-  const [topSkills, setTopSkills] = useState([]);
-  const [additionalSkills, setAdditionalSkills] = useState([]);
+  const [summaryInputChange, setSummaryInputChange] = useState(false);
   const [interestedLocations, setInterestedLocations] = useState([]);
+  const [locationsChange, setlocationsChange] = useState(false);
+  const [topSkills, setTopSkills] = useState([]);
+  const [topSkillsChange, setTopSkillsChange] = useState(false);
+  const [additionalSkills, setAdditionalSkills] = useState([]);
+  const [additionalSkillsChange, setAdditionalSkillsChange] = useState(false);
 
   // pass shouldReset props to Autocomplete, autoComplete checks onchange to see if it should reset inputs
   let locationRef = React.createRef();
   let topSkillsRef = React.createRef();
   let additionalSkillsRef = React.createRef();
+
+  function onEditInputs() {
+    setEditInputs(true);
+    setSummaryInput(user.summary || "");
+    setInterestedLocations(user.locations);
+    setTopSkills(user.topSkills);
+    setAdditionalSkills(user.additionalSkills);
+  }
+
+  function onSummaryInputChange(value) {
+    if (!summaryInputChange) {
+      setSummaryInputChange(true);
+    }
+    setSummaryInput(value);
+  }
 
   async function onLocationInputChange(value) {
     const [res, err] = await httpClient("POST", "/api/autocomplete", {
@@ -27,7 +47,59 @@ function AboutYou() {
       return false;
     }
 
-    return res.data;
+    let checkDups = {};
+    for (let i = 0; i < interestedLocations.length; i++) {
+      checkDups[interestedLocations[i].name] = true;
+    }
+    const results = res.data.filter(
+      prediction => !(prediction.name in checkDups)
+    );
+    return results;
+  }
+
+  function onLocationsChange(locations) {
+    if (!locationsChange) {
+      setlocationsChange(true);
+    }
+    setInterestedLocations(locations);
+  }
+
+  function onLocationsSubmit() {
+    let locationsToRemove = [];
+    let locationsToAdd = [...interestedLocations];
+    let requests = [];
+
+    let checkLocations = {};
+    for (let i = 0; i < locationsToAdd.length; i++) {
+      checkLocations[locationsToAdd[i].name] = i;
+    }
+
+    for (let i = 0; i < user.locations.length; i++) {
+      if (user.locations[i].name in checkLocations) {
+        locationsToAdd.splice(checkLocations[user.locations[i].name], 1);
+      } else {
+        locationsToRemove.push(user.locations[i]);
+      }
+    }
+
+    if (locationsToAdd.length > 0) {
+      requests.push({
+        method: "POST",
+        url: `/locations/new`,
+        data: { locations: locationsToAdd, user_id: user.id }
+      });
+    }
+
+    if (locationsToRemove.length > 0) {
+      locationsToRemove.forEach(location => {
+        requests.push({
+          method: "POST",
+          url: `/locations/delete-user-location`,
+          data: { location_id: location.id, user_id: user.id }
+        });
+      });
+    }
+    return requests;
   }
 
   async function onSkillInputChange(value) {
@@ -40,73 +112,111 @@ function AboutYou() {
       return false;
     }
 
-    return res.data;
+    let checkDups = {};
+    for (let i = 0; i < topSkills.length; i++) {
+      checkDups[topSkills[i].name] = true;
+    }
+    for (let i = 0; i < additionalSkills.length; i++) {
+      checkDups[additionalSkills[i].name] = true;
+    }
+    const results = res.data.filter(
+      prediction => !(prediction.name in checkDups)
+    );
+    return results;
   }
 
-  function addNewTopSkill(id) {
-    console.log("ADD TOP SKILL", topSkills, additionalSkills, id, user.id);
-  }
+  function onSkillsSubmit(type) {
+    let userSkills = [];
+    let skillsToAdd = [];
+    let skillsToRemove = [];
+    let requests = [];
+    let checkSkills = {};
 
-  function addNewAdditionalSkill(skill) {
-    console.log("DELETE ADDITIONAL SKILL", skill);
-  }
+    if (type === "user_additional_skills") {
+      userSkills = [...user.additionalSkills];
+      skillsToAdd = [...additionalSkills];
+    } else {
+      userSkills = [...user.topSkills];
+      skillsToAdd = [...topSkills];
+    }
 
-  function checkDups(name, type) {
-    if (type === "interested-locations") {
-      if (user.locations) {
-        if (user.locations.some(chosenName => chosenName.name === name)) {
-          return false;
-        }
+    for (let i = 0; i < skillsToAdd.length; i++) {
+      checkSkills[skillsToAdd[i].name] = i;
+    }
+
+    for (let i = 0; i < userSkills.length; i++) {
+      if (userSkills[i].name in checkSkills) {
+        skillsToAdd.splice(checkSkills[userSkills[i].name], 1);
+      } else {
+        skillsToRemove.push(userSkills[i]);
       }
     }
 
-    if (type.includes("skills")) {
-      let userBankSkills = [];
-      if (user.topSkills) {
-        userBankSkills.push(...user.topSkills);
-      }
-      if (user.additionalSkills) {
-        userBankSkills.push(...user.additionalSkills);
-      }
-
-      if (type === "top-skills") {
-        if (
-          additionalSkills.some(chosenName => chosenName.name === name) ||
-          userBankSkills.some(chosenName => chosenName.name === name)
-        ) {
-          return false;
+    if (skillsToAdd.length > 0) {
+      requests.push({
+        method: "POST",
+        url: `/skills/new-user-skill`,
+        data: {
+          skills: skillsToAdd,
+          user_id: user.id,
+          type
         }
-      }
-      if (type === "additional-skills") {
-        if (
-          topSkills.some(chosenName => chosenName.name === name) ||
-          userBankSkills.some(chosenName => chosenName.name === name)
-        ) {
-          return false;
-        }
-      }
+      });
     }
 
-    return true;
+    if (skillsToRemove.length > 0) {
+      skillsToRemove.forEach(skill => {
+        requests.push({
+          method: "POST",
+          url: `/skills/delete-user-skill`,
+          data: {
+            skill_id: skill.id,
+            user_id: user.id,
+            type
+          }
+        });
+      });
+    }
+    return requests;
+  }
+
+  function onTopSkillsChange(skills) {
+    if (!topSkillsChange) {
+      setTopSkillsChange(true);
+    }
+    setTopSkills(skills);
+  }
+
+  function addTopSkillForReview(skill) {
+    console.log(skill);
+  }
+
+  function onAdditionalSkillsChange(skills) {
+    if (!additionalSkillsChange) {
+      setAdditionalSkillsChange(true);
+    }
+    setAdditionalSkills(skills);
+  }
+
+  function addAdditionalSkillForReview(skill) {
+    console.log(skill);
   }
 
   async function submitEdit(e) {
     e.preventDefault();
 
-    // you will not need this either
-    // all you need to check is if there was any change
     if (
-      !summaryInput &&
-      interestedLocations.length === 0 &&
-      topSkills.length === 0 &&
-      additionalSkills.length === 0
+      !summaryInputChange &&
+      !locationsChange &&
+      !topSkillsChange &&
+      !additionalSkillsChange
     ) {
       return;
     }
 
     let additionalArr = [];
 
-    if (summaryInput) {
+    if (summaryInputChange) {
       additionalArr.push({
         method: "PUT",
         url: `/users/${user.id}`,
@@ -115,47 +225,45 @@ function AboutYou() {
       setSummaryInput("");
     }
 
-    if (interestedLocations.length > 0) {
-      additionalArr.push({
-        method: "POST",
-        url: `/locations/new`,
-        data: { locations: interestedLocations, user_id: user.id }
-      });
+    if (locationsChange) {
+      let locationRequests = onLocationsSubmit();
+      additionalArr = [...additionalArr, ...locationRequests];
       locationRef.current.resetOnSubmit();
       setInterestedLocations([]);
     }
 
-    if (topSkills.length > 0) {
-      additionalArr.push({
-        method: "POST",
-        url: `/skills/new-user-skill`,
-        data: { skills: topSkills, user_id: user.id, type: "user_top_skills" }
-      });
+    if (topSkillsChange) {
+      let locationRequests = onSkillsSubmit("user_top_skills");
+      additionalArr = [...additionalArr, ...locationRequests];
       topSkillsRef.current.resetOnSubmit();
       setTopSkills([]);
     }
 
-    if (additionalSkills.length > 0) {
-      additionalArr.push({
-        method: "POST",
-        url: `/skills/new-user-skill`,
-        data: {
-          skills: additionalSkills,
-          user_id: user.id,
-          type: "user_additional_skills"
-        }
-      });
+    if (additionalSkillsChange) {
+      let locationRequests = onSkillsSubmit("user_additional_skills");
+      additionalArr = [...additionalArr, ...locationRequests];
       additionalSkillsRef.current.resetOnSubmit();
       setAdditionalSkills([]);
     }
 
     addUserExtras(additionalArr);
+    setEditInputs(false);
   }
 
   console.log("===ABOUT YOU===", user);
   if (loadingUser) {
     return <h1>Loading...</h1>;
   }
+
+  if (!editInputs) {
+    return (
+      <div>
+        <h1>Edit Inputs</h1>
+        <button onClick={onEditInputs}>Edit</button>
+      </div>
+    );
+  }
+
   return (
     <Main>
       <h1>Hello About You</h1>
@@ -166,7 +274,7 @@ function AboutYou() {
           type="text"
           placeholder="Summary"
           value={summaryInput}
-          onChange={e => setSummaryInput(e.target.value)}
+          onChange={e => onSummaryInputChange(e.target.value)}
         />
 
         <br />
@@ -175,33 +283,33 @@ function AboutYou() {
         <h3>Interested Locations</h3>
         <AutoComplete
           ref={locationRef}
+          chosenInputs={interestedLocations}
           onInputChange={onLocationInputChange}
-          onChosenInput={setInterestedLocations}
-          resetInputFilter={setInterestedLocations}
+          onChosenInput={onLocationsChange}
+          removeChosenInput={onLocationsChange}
           inputName={"interested-locations"}
-          checkDups={checkDups}
         />
 
         <h3>Top Skills</h3>
         <AutoComplete
           ref={topSkillsRef}
+          chosenInputs={topSkills}
           onInputChange={onSkillInputChange}
-          onChosenInput={setTopSkills}
-          resetInputFilter={setTopSkills}
+          onChosenInput={onTopSkillsChange}
+          removeChosenInput={onTopSkillsChange}
           inputName={"top-skills"}
-          checkDups={checkDups}
-          addNewSkill={addNewTopSkill}
+          addNewSkill={addTopSkillForReview}
         />
 
         <h3>Additional Skills</h3>
         <AutoComplete
           ref={additionalSkillsRef}
+          chosenInputs={additionalSkills}
           onInputChange={onSkillInputChange}
-          onChosenInput={setAdditionalSkills}
-          resetInputFilter={setAdditionalSkills}
+          onChosenInput={onAdditionalSkillsChange}
+          removeChosenInput={onAdditionalSkillsChange}
           inputName={"additional-skills"}
-          checkDups={checkDups}
-          addNewSkill={addNewAdditionalSkill}
+          addNewSkill={addAdditionalSkillForReview}
         />
 
         <button>Submit</button>

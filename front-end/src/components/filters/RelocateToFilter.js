@@ -54,7 +54,7 @@ function RelocateToFilter(props) {
       <AutoComplete
         onInputChange={onInputChange}
         onChosenInput={onChosenLocation}
-        resetInputFilter={resetLocationFilter}
+        removeChosenInput={resetLocationFilter}
         inputName={"interested-locations"}
       />
     </section>

@@ -105,7 +105,7 @@ class CurrentLocationFilter extends React.Component {
         <AutoComplete
           onInputChange={this.onLocationInputChange}
           onChosenInput={this.onChosenLocation}
-          resetInputFilter={this.resetLocationFilter}
+          removeChosenInput={this.resetLocationFilter}
           inputName={"current-location"}
           single
         />

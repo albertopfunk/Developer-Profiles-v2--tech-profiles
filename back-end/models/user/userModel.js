@@ -123,14 +123,14 @@ async function getUserExtras(userId) {
   async function getLocations() {
     return db("locations")
       .join("user_locations", "locations.id", "user_locations.location_id")
-      .select("locations.location as name")
+      .select("locations.location as name",  "locations.id")
       .where("user_locations.user_id", userId);
   }
 
   async function getTopSkills() {
     return db("skills")
       .join("user_top_skills", "skills.id", "user_top_skills.skill_id")
-      .select("skills.skill as name")
+      .select("skills.skill as name", "skills.id")
       .where("user_top_skills.user_id", userId);
   }
 
@@ -141,7 +141,7 @@ async function getUserExtras(userId) {
         "skills.id",
         "user_additional_skills.skill_id"
       )
-      .select("skills.skill as name")
+      .select("skills.skill as name", "skills.id")
       .where("user_additional_skills.user_id", userId);
   }
 
