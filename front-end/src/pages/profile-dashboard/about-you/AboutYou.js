@@ -227,6 +227,7 @@ function AboutYou() {
         data: { summary: summaryInput }
       });
       setSummaryInput("");
+      setSummaryInputChange(false);
     }
 
     if (locationsChange) {
@@ -234,6 +235,7 @@ function AboutYou() {
       additionalArr = [...additionalArr, ...locationRequests];
       locationRef.current.resetOnSubmit();
       setInterestedLocations([]);
+      setlocationsChange(false);
     }
 
     if (topSkillsChange) {
@@ -241,6 +243,7 @@ function AboutYou() {
       additionalArr = [...additionalArr, ...locationRequests];
       topSkillsRef.current.resetOnSubmit();
       setTopSkills([]);
+      setTopSkillsChange(false);
     }
 
     if (additionalSkillsChange) {
@@ -248,6 +251,7 @@ function AboutYou() {
       additionalArr = [...additionalArr, ...locationRequests];
       additionalSkillsRef.current.resetOnSubmit();
       setAdditionalSkills([]);
+      setAdditionalSkillsChange(false);
     }
 
     addUserExtras(additionalArr);
