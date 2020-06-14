@@ -71,12 +71,14 @@ function AboutYou() {
 
     let checkLocations = {};
     for (let i = 0; i < locationsToAdd.length; i++) {
-      checkLocations[locationsToAdd[i].name] = i;
+      checkLocations[locationsToAdd[i].name] = true;
     }
 
     for (let i = 0; i < user.locations.length; i++) {
       if (user.locations[i].name in checkLocations) {
-        locationsToAdd.splice(checkLocations[user.locations[i].name], 1);
+        locationsToAdd = locationsToAdd.filter(
+          location => location.name !== user.locations[i].name
+        );
       } else {
         locationsToRemove.push(user.locations[i]);
       }
@@ -141,12 +143,14 @@ function AboutYou() {
     }
 
     for (let i = 0; i < skillsToAdd.length; i++) {
-      checkSkills[skillsToAdd[i].name] = i;
+      checkSkills[skillsToAdd[i].name] = true;
     }
 
     for (let i = 0; i < userSkills.length; i++) {
       if (userSkills[i].name in checkSkills) {
-        skillsToAdd.splice(checkSkills[userSkills[i].name], 1);
+        skillsToAdd = skillsToAdd.filter(
+          skill => skill.name !== userSkills[i].name
+        );
       } else {
         skillsToRemove.push(userSkills[i]);
       }
