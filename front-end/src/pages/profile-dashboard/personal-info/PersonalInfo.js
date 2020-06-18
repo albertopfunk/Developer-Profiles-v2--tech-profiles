@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
 import { httpClient } from "../../../components/http-requests";
-import ImageUploadForm from "../../../components/image-uploads/ImageUploadForm";
+import ImageUploadForm from "../../../components/forms/image-upload";
 
 function PersonalInfo() {
   const { loadingUser, user, editProfile, setPreviewImg } = useContext(

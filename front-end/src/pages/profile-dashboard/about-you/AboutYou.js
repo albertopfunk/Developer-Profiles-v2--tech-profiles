@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import styled from "styled-components";
 
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
-import AutoComplete from "../../../components/autocomplete/AutoComplete";
+import AutoComplete from "../../../components/forms/autocomplete";
 import { httpClient } from "../../../components/http-requests";
 
 function AboutYou() {

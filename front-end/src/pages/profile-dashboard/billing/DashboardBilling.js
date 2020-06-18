@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import { Elements, StripeProvider } from "react-stripe-elements";
-import CheckoutContainer from "./CheckoutContainer";
+import CheckoutContainer from "../../../components/forms/billing";
 
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
 

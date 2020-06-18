@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import { httpClient } from "../http-requests";
+import { httpClient } from "../../http-requests";
 
 class SubscriberForm extends Component {
   state = {

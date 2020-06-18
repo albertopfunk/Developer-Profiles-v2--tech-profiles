@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
-import { ProfileContext } from "../../global/context/user-profile/ProfileContext";
-import { httpClient } from "../http-requests";
+import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
+import { httpClient } from "../../http-requests";
 
 function ImageUploadForm({ imageInput, setImageInput }) {
   const { setPreviewImg } = useContext(ProfileContext);

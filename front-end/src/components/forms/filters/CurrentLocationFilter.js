@@ -1,7 +1,7 @@
 import React from "react";
-import { httpClient } from "../http-requests";
+import { httpClient } from "../../http-requests";
 
-import AutoComplete from "../autocomplete/AutoComplete";
+import AutoComplete from "../autocomplete";
 
 class CurrentLocationFilter extends React.Component {
   state = {
