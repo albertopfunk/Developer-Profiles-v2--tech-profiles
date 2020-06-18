@@ -149,9 +149,11 @@ async function getUserExtras(userId) {
     return db("education")
       .join("users", "users.id", "education.user_id")
       .select(
+        "education.id",
         "education.school",
         "education.school_dates",
-        "education.field_of_study"
+        "education.field_of_study",
+        "education.education_description"
       )
       .where("education.user_id", userId);
   }
