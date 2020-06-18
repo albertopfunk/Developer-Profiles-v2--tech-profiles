@@ -34,7 +34,7 @@ function PersonalInfo() {
     return () => {
       setPreviewImg({ image: "", id: "" });
     };
-  }, []);
+  }, [setPreviewImg]);
 
   function onEditInputs() {
     setEditInputs(true);
