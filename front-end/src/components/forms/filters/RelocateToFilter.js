@@ -27,7 +27,6 @@ function RelocateToFilter(props) {
   function onChosenLocation(chosenRelocateToArr) {
     let chosenRelocateToObj = convertToObj(chosenRelocateToArr);
     props.updateUsers({
-      usersPage: 1,
       isUsingRelocateToFilter: true,
       chosenRelocateToObj
     });

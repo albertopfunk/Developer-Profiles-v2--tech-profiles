@@ -66,7 +66,6 @@ class CurrentLocationFilter extends React.Component {
     }
 
     this.props.updateUsers({
-      usersPage: 1,
       isUsingCurrLocationFilter: true,
       selectedWithinMiles: +this.state.milesWithinInput,
       chosenLocationLat: res.data.lat,

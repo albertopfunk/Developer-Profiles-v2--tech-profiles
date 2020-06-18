@@ -10,7 +10,6 @@ function SortingFilter(props) {
     }
     setCurrentValue(sortChoice);
     props.updateUsers({
-      usersPage: 1,
       sortChoice
     });
   }
