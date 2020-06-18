@@ -67,18 +67,6 @@ function ProfileDashboard() {
     getFullUser(user.email);
   }
 
-  async function addExtra(data, extra) {
-    // setLoadingUser(true);
-    const [res, err] = await httpClient("POST", `/extras/new/${extra}`, data);
-
-    if (err) {
-      console.error(`${res.mssg} => ${res.err}`);
-      return;
-    }
-
-    getFullUser(user.email);
-  }
-
   async function addUserExtras(requestsArr) {
     // setLoadingUser(true);
     let main = {
@@ -175,7 +163,6 @@ function ProfileDashboard() {
           loadingUser,
           user,
           editProfile,
-          addExtra,
           addUserExtras,
           setPreviewImg
         }}
