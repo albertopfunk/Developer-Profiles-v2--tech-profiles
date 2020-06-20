@@ -37,8 +37,16 @@ class AutoComplete extends React.Component {
         if (this.optionRefs.length > 0) {
           this.setState({ currentFocusedOption: `result${0}` });
           this.optionRefs[0].focus();
-        } else {
-          return;
+        }
+      }
+
+      if (e.keyCode === 38) {
+        e.preventDefault();
+        if (this.optionRefs.length > 0) {
+          this.setState({
+            currentFocusedOption: `result${this.optionRefs.length - 1}`
+          });
+          this.optionRefs[this.optionRefs.length - 1].focus();
         }
       }
     }
