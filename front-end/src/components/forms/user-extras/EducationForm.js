@@ -6,6 +6,7 @@ function EducationForm(props) {
   const [school, setSchool] = useState("");
   const [fieldOfStudy, setFieldOfStudy] = useState("");
   const [dates, setDates] = useState("");
+  const [carotRange, seCarotRange] = useState(0);
   const [description, setDescription] = useState("");
 
   let dateRef = React.createRef();
@@ -16,7 +17,8 @@ function EducationForm(props) {
     setFieldOfStudy(props.fieldOfStudy);
     setDates(props.dates);
     setDescription(props.description);
-  }, []);
+    dateRef.current.setSelectionRange(carotRange, carotRange);
+  });
 
   function updateEducation(value) {
     props.onEducationChange(props.index, {
@@ -26,32 +28,33 @@ function EducationForm(props) {
   }
 
   function onSchoolChange(value) {
-    setSchool(value);
     updateEducation({ school: value });
   }
 
   function onFieldOfStudyChange(value) {
-    setFieldOfStudy(value);
     updateEducation({ field_of_study: value });
   }
 
   function onDatesChange(value) {
     if (value === "") {
-      setDates("");
+      updateEducation({ school_dates: "" });
       return;
     }
 
     let newValue = "";
-    let carotRange = 0;
-    let keepChecking = true;
-    
-    for (let i = 0; i < value.length; i++) {
-      console.log(value[i], "==", dates[i])
-      if (value[i] !== dates[i] && keepChecking) {
-        console.log("NO MATCH", i)
-        keepChecking = false
-        carotRange = i + 1
+    let newCarotRange = 0;
+    let i = 0;
+    if (value.length < dates.length) {
+      i++;
+    }
+    for (i = i; i <= value.length; i++) {
+      if (value[i] !== dates[i]) {
+        newCarotRange = i + 1;
+        break;
       }
+    }
+
+    for (let i = 0; i < value.length; i++) {
       if (value[i].match(/^[0-9]$/)) {
         newValue += value[i];
       }
@@ -64,12 +67,19 @@ function EducationForm(props) {
     if (newValue.length > 0) {
       if (newValue[0] > 1) {
         newValue = "0" + newValue;
+        newCarotRange++;
       }
     }
 
     if (newValue.length > 1) {
+      if (newValue[0] === "0" && newValue[1] === "0") {
+        updateEducation({ school_dates: "0" });
+        return;
+      }
+
       if (newValue[0] + newValue[1] > 12) {
         newValue = "0" + newValue;
+        newCarotRange++;
       }
     }
 
@@ -78,13 +88,15 @@ function EducationForm(props) {
         ""}${newValue[3] || ""}`;
     }
 
-    
-    setDates(newValue, dateRef.current.setSelectionRange(carotRange, carotRange))
+    if (newCarotRange === 2) {
+      newCarotRange += 3;
+    }
+
+    seCarotRange(newCarotRange);
     updateEducation({ school_dates: newValue });
   }
 
   function onDescriptionChange(value) {
-    setDescription(value);
     updateEducation({ education_description: value });
   }
 
@@ -93,6 +105,7 @@ function EducationForm(props) {
     props.removeEducation(id);
   }
 
+  console.log("===EDU FORM===", school, fieldOfStudy);
   return (
     <form>
       <button onClick={e => removeEducation(e)}>Remove</button>

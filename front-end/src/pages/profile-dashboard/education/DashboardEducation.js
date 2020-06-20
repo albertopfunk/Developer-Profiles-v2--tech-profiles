@@ -8,6 +8,7 @@ function DashboardEducation() {
   const { loadingUser, user, addUserExtras } = useContext(ProfileContext);
   const [editInputs, setEditInputs] = useState(false);
   const [education, setEducation] = useState([]);
+  const [idTracker, setIdTracker] = useState(1);
 
   function onEditInputs() {
     setEditInputs(true);
@@ -25,13 +26,14 @@ function DashboardEducation() {
     setEducation([
       ...education,
       {
-        id: false,
+        id: `f-${idTracker}`,
         school: "",
         school_dates: "",
         field_of_study: "",
         education_description: ""
       }
     ]);
+    setIdTracker(idTracker + 1);
   }
 
   function removeEducation(id) {
@@ -59,7 +61,7 @@ function DashboardEducation() {
     }
 
     for (let i = 0; i < education.length; i++) {
-      if (!education[i].id) {
+      if (education[i].id[0] === "f") {
         requests.push({
           method: "POST",
           url: `/extras/new/education`,
@@ -72,7 +74,7 @@ function DashboardEducation() {
           }
         });
       }
-      if (education[i].id && education[i].shouldEdit) {
+      if (education[i].id[0] !== "f" && education[i].shouldEdit) {
         requests.push({
           method: "PUT",
           url: `/extras/education/${education[i].id}`,
