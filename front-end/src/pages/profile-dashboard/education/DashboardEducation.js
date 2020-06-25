@@ -8,14 +8,19 @@ function DashboardEducation() {
   const { loadingUser, user, addUserExtras } = useContext(ProfileContext);
   const [editInputs, setEditInputs] = useState(false);
   const [education, setEducation] = useState([]);
+  const [educationChange, setEducationChange] = useState(false);
   const [idTracker, setIdTracker] = useState(1);
 
   function onEditInputs() {
     setEditInputs(true);
+
     setEducation(user.education);
   }
 
   function onEducationChange(index, state) {
+    if (!educationChange) {
+      setEducationChange(true);
+    }
     let newEduArr = [...education];
     let newEduObj = { ...newEduArr[index], ...state };
     newEduArr.splice(index, 1, newEduObj);
@@ -23,6 +28,9 @@ function DashboardEducation() {
   }
 
   function addEducation() {
+    if (!educationChange) {
+      setEducationChange(true);
+    }
     setEducation([
       ...education,
       {
@@ -37,18 +45,23 @@ function DashboardEducation() {
   }
 
   function removeEducation(id) {
+    if (!educationChange) {
+      setEducationChange(true);
+    }
     let newEducation = education.filter(edu => edu.id !== id);
     setEducation(newEducation);
   }
 
   function submitEdit() {
-    let requests = [];
+    if (!educationChange) {
+      return;
+    }
 
+    let requests = [];
     let checkEdu = {};
+
     for (let i = 0; i < education.length; i++) {
-      if (education[i].id) {
-        checkEdu[education[i].id] = true;
-      }
+      checkEdu[education[i].id] = true;
     }
 
     for (let i = 0; i < user.education.length; i++) {

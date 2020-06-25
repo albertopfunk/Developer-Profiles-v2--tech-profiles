@@ -53,7 +53,7 @@ export function dateFormat(value, dates) {
       ""}${newValue[3] || ""}`;
   }
 
-  if (newCarotRange === 2) {
+  if (newCarotRange === 2 || newCarotRange === 3) {
     newCarotRange += 3;
   }
 
