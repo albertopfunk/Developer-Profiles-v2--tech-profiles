@@ -120,12 +120,13 @@ function DashboardEducation() {
         return (
           <div key={index}>
             <EducationForm
-              index={index}
-              id={edu.id}
-              school={edu.school}
-              fieldOfStudy={edu.field_of_study}
-              dates={edu.school_dates}
-              description={edu.education_description}
+              eduIndex={index}
+              userId={edu.id}
+              userSchool={edu.school}
+              userFieldOfStudy={edu.field_of_study}
+              userFromDate={edu.school_dates.split(" - ")[0] || ""}
+              userToDate={edu.school_dates.split(" - ")[1] || ""}
+              userDescription={edu.education_description}
               onEducationChange={onEducationChange}
               removeEducation={removeEducation}
             />
