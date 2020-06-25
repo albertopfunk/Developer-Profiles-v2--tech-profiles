@@ -20,10 +20,6 @@ class AutoComplete extends React.Component {
     }
   }
 
-  componentDidUpdate(prevProps) {
-    console.log("UPDATED");
-  }
-
   setOptionRefs = (element, index) => {
     if (element !== null) {
       this.optionRefs[index] = element;
@@ -100,27 +96,15 @@ class AutoComplete extends React.Component {
   onInputChange = async value => {
     this.optionRefs = [];
     if (value.trim() === "") {
-      this.setState({ isUsingCombobox: false, autoCompleteResults: [] });
+      this.resetInput();
       return;
     }
 
     let predictions = await this.props.onInputChange(value);
 
-    if (!predictions) {
-      this.setState({
-        resultsInBank: false,
-        isUsingCombobox: false,
-        autoCompleteResults: []
-      });
-      return;
-    }
-
     if (predictions.length === 0) {
-      this.setState({
-        resultsInBank: false,
-        isUsingCombobox: false,
-        autoCompleteResults: []
-      });
+      this.setState({ resultsInBank: false });
+      this.resetInput(value);
       return;
     }
 
@@ -151,32 +135,25 @@ class AutoComplete extends React.Component {
 
   choosePrediction = (name, id) => {
     if (this.props.single) {
-      this.setState({
-        autoCompleteResults: [],
-        input: name,
-        chosenNames: [{ name, id }],
-        isUsingCombobox: false
-      });
+      this.setState({ chosenNames: [{ name, id }] });
+      this.resetInput(name);
       this.props.onChosenInput(name, id);
       return;
     }
 
     const newChosenNamesState = [...this.state.chosenNames];
     newChosenNamesState.push({ name, id });
-    this.setState({
-      autoCompleteResults: [],
-      input: "",
-      chosenNames: newChosenNamesState,
-      isUsingCombobox: false
-    });
+    this.setState({ chosenNames: newChosenNamesState });
+    this.resetInput();
     this.props.onChosenInput(newChosenNamesState);
   };
 
-  resetInput = () => {
+  resetInput = (name = "") => {
     this.setState({
+      input: name,
+      autoCompleteResults: [],
       isUsingCombobox: false,
-      input: "",
-      autoCompleteResults: []
+      currentFocusedOption: ""
     });
   };
 

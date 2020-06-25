@@ -11,7 +11,7 @@ function RelocateToFilter(props) {
 
     if (err) {
       console.error(`${res.mssg} => ${res.err}`);
-      return false;
+      return [];
     }
 
     return res.data;
