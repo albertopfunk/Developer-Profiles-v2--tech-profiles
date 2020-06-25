@@ -23,6 +23,8 @@ function PersonalInfo() {
   const [titleInput, setTitleInput] = useState("");
   const [titleInputChange, setTitleInputChange] = useState(false);
 
+  // removing unused preview image on unmount caused bugs
+  // current fix is using local storage to remove on mount
   useEffect(() => {
     if (localStorage.getItem("image_id")) {
       let id = localStorage.getItem("image_id");
@@ -91,6 +93,7 @@ function PersonalInfo() {
   }
 
   function onAreaOfWorkInputChange(value) {
+    // when user selects default value, indicates no change
     if (!value) {
       setAreaOfWorkInputChange(false);
       return;
