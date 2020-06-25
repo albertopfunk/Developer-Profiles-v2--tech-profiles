@@ -75,6 +75,14 @@ function PersonalInfo() {
     setImageInput(value);
   }
 
+  function removeImage() {
+    console.log("removeeeee");
+    // should not remove on the spot
+    // should set the image to remove
+    // UI that tells user this image will be removed,
+    // preview image will replace UI if user chooses another image after removing current
+  }
+
   function onEmailInputChange(value) {
     if (!emailInputChange) {
       setEmailInputChange(true);
@@ -194,10 +202,37 @@ function PersonalInfo() {
         <br />
         <br />
 
-        <ImageUploadForm
-          setImageInput={onImageInputChange}
-          imageInput={imageInput}
-        />
+        <div>
+          {user.image || imageInput.image ? (
+            <div style={{ height: "200px", width: "200px" }}>
+              {!imageInput.image ? (
+                <span
+                  style={{
+                    position: "absolute",
+                    top: "5%",
+                    right: "5%",
+                    border: "solid",
+                    zIndex: "1"
+                  }}
+                  onClick={removeImage}
+                >
+                  X
+                </span>
+              ) : null}
+
+              <img
+                style={{ height: "200px", width: "200px" }}
+                src={imageInput.image || user.image}
+                alt="current profile pic"
+              />
+            </div>
+          ) : null}
+
+          <ImageUploadForm
+            setImageInput={onImageInputChange}
+            imageInput={imageInput}
+          />
+        </div>
 
         <br />
         <br />
