@@ -36,12 +36,22 @@ function PersonalInfo() {
     };
   }, [setPreviewImg]);
 
+  // imageInput is the preview image so default should be ""
+  // area of work select value default should also be ""
   function onEditInputs() {
     setEditInputs(true);
     setFirstNameInput(user.first_name || "");
+    setFirstNameInputChange(false);
     setLastNameInput(user.last_name || "");
+    setLastNameInputChange(false);
+    setImageInput({ image: "", id: "" });
+    setImageInputChange(false);
     setPublicEmailInput(user.public_email || "");
+    setEmailInputChange(false);
+    setAreaOfWorkInput("");
+    setAreaOfWorkInputChange(false);
     setTitleInput(user.desired_title || "");
+    setTitleInputChange(false);
   }
 
   function onFirstNameInputChange(value) {
@@ -109,14 +119,10 @@ function PersonalInfo() {
 
     if (firstNameInputChange) {
       inputs.first_name = firstNameInput;
-      setFirstNameInput("");
-      setFirstNameInputChange(false);
     }
 
     if (lastNameInputChange) {
       inputs.last_name = lastNameInput;
-      setLastNameInput("");
-      setLastNameInputChange(false);
     }
 
     if (imageInputChange) {
@@ -131,27 +137,19 @@ function PersonalInfo() {
         inputs.image_id = imageInput.id;
         localStorage.removeItem("image_id");
         setPreviewImg({ image: "", id: "" });
-        setImageInput({ image: "", id: "" });
-        setImageInputChange(false);
       }
     }
 
     if (emailInputChange) {
       inputs.public_email = publicEmailInput;
-      setPublicEmailInput("");
-      setEmailInputChange(false);
     }
 
     if (areaOfWorkInputChange) {
       inputs.area_of_work = areaOfWorkInput;
-      setAreaOfWorkInput("");
-      setAreaOfWorkInputChange(false);
     }
 
     if (titleInputChange) {
       inputs.desired_title = titleInput;
-      setTitleInput("");
-      setTitleInputChange(false);
     }
 
     setEditInputs(false);
