@@ -8,8 +8,7 @@ class AutoComplete extends React.Component {
     currentFocusedOption: "",
     resultsInBank: true,
     autoCompleteResults: [],
-    chosenNames: [],
-    chosenNameDup: false
+    chosenNames: []
   };
 
   optionRefs = [];
@@ -169,10 +168,6 @@ class AutoComplete extends React.Component {
     });
 
     this.props.removeChosenInput(newChosenNamesState);
-  };
-
-  resetOnSubmit = () => {
-    this.setState({ chosenNames: [], autoCompleteResults: [], input: "" });
   };
 
   render() {

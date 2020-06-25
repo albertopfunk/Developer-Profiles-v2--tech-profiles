@@ -17,17 +17,16 @@ function AboutYou() {
   const [additionalSkills, setAdditionalSkills] = useState([]);
   const [additionalSkillsChange, setAdditionalSkillsChange] = useState(false);
 
-  // pass shouldReset props to Autocomplete, autoComplete checks onchange to see if it should reset inputs
-  let locationRef = React.createRef();
-  let topSkillsRef = React.createRef();
-  let additionalSkillsRef = React.createRef();
-
   function onEditInputs() {
     setEditInputs(true);
     setSummaryInput(user.summary || "");
+    setSummaryInputChange(false);
     setInterestedLocations(user.locations);
+    setlocationsChange(false);
     setTopSkills(user.topSkills);
+    setTopSkillsChange(false);
     setAdditionalSkills(user.additionalSkills);
+    setAdditionalSkillsChange(false);
   }
 
   function onSummaryInputChange(value) {
@@ -44,7 +43,7 @@ function AboutYou() {
 
     if (err) {
       console.error(`${res.mssg} => ${res.err}`);
-      return false;
+      return [];
     }
 
     let checkDups = {};
@@ -111,7 +110,7 @@ function AboutYou() {
 
     if (err) {
       console.error(`${res.mssg} => ${res.err}`);
-      return false;
+      return [];
     }
 
     let checkDups = {};
@@ -226,32 +225,21 @@ function AboutYou() {
         url: `/users/${user.id}`,
         data: { summary: summaryInput }
       });
-      setSummaryInput("");
-      setSummaryInputChange(false);
     }
 
     if (locationsChange) {
       let locationRequests = onLocationsSubmit();
       additionalArr = [...additionalArr, ...locationRequests];
-      locationRef.current.resetOnSubmit();
-      setInterestedLocations([]);
-      setlocationsChange(false);
     }
 
     if (topSkillsChange) {
       let locationRequests = onSkillsSubmit("user_top_skills");
       additionalArr = [...additionalArr, ...locationRequests];
-      topSkillsRef.current.resetOnSubmit();
-      setTopSkills([]);
-      setTopSkillsChange(false);
     }
 
     if (additionalSkillsChange) {
       let locationRequests = onSkillsSubmit("user_additional_skills");
       additionalArr = [...additionalArr, ...locationRequests];
-      additionalSkillsRef.current.resetOnSubmit();
-      setAdditionalSkills([]);
-      setAdditionalSkillsChange(false);
     }
 
     addUserExtras(additionalArr);
@@ -290,7 +278,6 @@ function AboutYou() {
 
         <h3>Interested Locations</h3>
         <AutoComplete
-          ref={locationRef}
           chosenInputs={interestedLocations}
           onInputChange={onLocationInputChange}
           onChosenInput={onLocationsChange}
@@ -300,7 +287,6 @@ function AboutYou() {
 
         <h3>Top Skills</h3>
         <AutoComplete
-          ref={topSkillsRef}
           chosenInputs={topSkills}
           onInputChange={onSkillInputChange}
           onChosenInput={onTopSkillsChange}
@@ -311,7 +297,6 @@ function AboutYou() {
 
         <h3>Additional Skills</h3>
         <AutoComplete
-          ref={additionalSkillsRef}
           chosenInputs={additionalSkills}
           onInputChange={onSkillInputChange}
           onChosenInput={onAdditionalSkillsChange}
