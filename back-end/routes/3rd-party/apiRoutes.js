@@ -310,7 +310,7 @@ server.post("/cancel-subscription", async (req, res) => {
       res.status(500).json({ message: "Error removing subscription" });
       return;
     }
-    res.satus(200).json(confirmation);
+    res.status(200).json(confirmation);
   });
 });
 
