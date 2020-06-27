@@ -18,12 +18,14 @@ function EducationForm({
   const [fieldOfStudy, setFieldOfStudy] = useState("");
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
+  const [isPresent, setIsPresent] = useState(false);
   const [fromCarotRange, setFromCarotRange] = useState(0);
   const [toCarotRange, setToCarotRange] = useState(0);
   const [description, setDescription] = useState("");
 
   let fromDateRef = React.createRef();
   let toDateRef = React.createRef();
+  let presentRef = React.createRef();
 
   useEffect(() => {
     SetId(userId);
@@ -33,19 +35,23 @@ function EducationForm({
   }, [userId, userSchool, userFieldOfStudy, userDescription]);
 
   useEffect(() => {
+    if (userToDate === "present") {
+      setIsPresent(true);
+    }
+    if (!isPresent) {
+      toDateRef.current.setSelectionRange(toCarotRange, toCarotRange);
+    }
     setFromDate(userFromDate);
     setToDate(userToDate);
     fromDateRef.current.setSelectionRange(fromCarotRange, fromCarotRange);
-    toDateRef.current.setSelectionRange(toCarotRange, toCarotRange);
   }, [
-    userFromDate,
     userToDate,
-    fromDate,
-    toDate,
-    fromCarotRange,
-    toCarotRange,
+    isPresent,
+    userFromDate,
     fromDateRef,
-    toDateRef
+    fromCarotRange,
+    toDateRef,
+    toCarotRange
   ]);
 
   function updateEducation(value) {
@@ -81,6 +87,16 @@ function EducationForm({
     updateEducation({ school_dates: `${userFromDate} - ${newValue}` });
   }
 
+  function presentChange() {
+    if (presentRef.current.checked) {
+      setIsPresent(true);
+      updateEducation({ school_dates: `${userFromDate} - present` });
+    } else {
+      setIsPresent(false);
+      updateEducation({ school_dates: `${userFromDate}` });
+    }
+  }
+
   function onDescriptionChange(value) {
     updateEducation({ education_description: value });
   }
@@ -90,7 +106,7 @@ function EducationForm({
     removeEducation(id);
   }
 
-  console.log("===EDU FORM===");
+  console.log("===EDU FORM===", school, fromDate, toDate, userToDate);
   return (
     <form>
       <button onClick={e => onRemoveEducation(e)}>Remove</button>
@@ -116,13 +132,27 @@ function EducationForm({
         onChange={e => fromDateChange(e.target.value)}
       />
       <span> - </span>
+
+      {!isPresent ? (
+        <input
+          type="text"
+          ref={toDateRef}
+          placeholder="MM/YY"
+          value={toDate}
+          onChange={e => toDateChange(e.target.value)}
+        />
+      ) : null}
+
       <input
-        type="text"
-        ref={toDateRef}
-        placeholder="MM/YY"
-        value={toDate}
-        onChange={e => toDateChange(e.target.value)}
+        ref={presentRef}
+        type="checkbox"
+        id={`present-${id}`}
+        name={`present-${id}`}
+        onChange={presentChange}
+        checked={isPresent}
       />
+      <label htmlFor={`present-${id}`}>Present</label>
+
       <br />
       <input
         type="text"
