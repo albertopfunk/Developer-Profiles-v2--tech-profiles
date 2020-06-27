@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
 import { httpClient } from "../../http-requests";
 
@@ -6,6 +6,21 @@ function ImageUploadForm({ imageInput, setImageInput }) {
   const { setPreviewImg } = useContext(ProfileContext);
   const [loadingImage, setLoadingImage] = useState(false);
   const [errorImage, setErrorImage] = useState(false);
+
+  // removing unused preview image on unmount caused bugs
+  // current fix is using local storage to remove on mount
+  useEffect(() => {
+    if (localStorage.getItem("image_id")) {
+      let id = localStorage.getItem("image_id");
+      localStorage.removeItem("image_id");
+      httpClient("POST", "/api/delete-image", {
+        id
+      });
+    }
+    return () => {
+      setPreviewImg({ image: "", id: "" });
+    };
+  }, [setPreviewImg]);
 
   async function onImageInputChange(e) {
     if (e.target.files.length === 0) {

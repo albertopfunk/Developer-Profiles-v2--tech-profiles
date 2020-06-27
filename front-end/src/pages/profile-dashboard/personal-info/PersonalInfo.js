@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import styled from "styled-components";
 
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
@@ -16,27 +16,10 @@ function PersonalInfo() {
   const [lastNameInputChange, setLastNameInputChange] = useState(false);
   const [imageInput, setImageInput] = useState({ image: "", id: "" });
   const [imageInputChange, setImageInputChange] = useState(false);
-  const [publicEmailInput, setPublicEmailInput] = useState("");
-  const [emailInputChange, setEmailInputChange] = useState(false);
   const [areaOfWorkInput, setAreaOfWorkInput] = useState("");
   const [areaOfWorkInputChange, setAreaOfWorkInputChange] = useState(false);
   const [titleInput, setTitleInput] = useState("");
   const [titleInputChange, setTitleInputChange] = useState(false);
-
-  // removing unused preview image on unmount caused bugs
-  // current fix is using local storage to remove on mount
-  useEffect(() => {
-    if (localStorage.getItem("image_id")) {
-      let id = localStorage.getItem("image_id");
-      localStorage.removeItem("image_id");
-      httpClient("POST", "/api/delete-image", {
-        id
-      });
-    }
-    return () => {
-      setPreviewImg({ image: "", id: "" });
-    };
-  }, [setPreviewImg]);
 
   // imageInput is the preview image so default should be ""
   // area of work select value default should also be ""
@@ -48,8 +31,6 @@ function PersonalInfo() {
     setLastNameInputChange(false);
     setImageInput({ image: "", id: "" });
     setImageInputChange(false);
-    setPublicEmailInput(user.public_email || "");
-    setEmailInputChange(false);
     setAreaOfWorkInput("");
     setAreaOfWorkInputChange(false);
     setTitleInput(user.desired_title || "");
@@ -85,13 +66,6 @@ function PersonalInfo() {
     // preview image will replace UI if user chooses another image after removing current
   }
 
-  function onEmailInputChange(value) {
-    if (!emailInputChange) {
-      setEmailInputChange(true);
-    }
-    setPublicEmailInput(value);
-  }
-
   function onAreaOfWorkInputChange(value) {
     // when user selects default value, indicates no change
     if (!value) {
@@ -119,7 +93,6 @@ function PersonalInfo() {
       !firstNameInputChange &&
       !lastNameInputChange &&
       !imageInputChange &&
-      !emailInputChange &&
       !areaOfWorkInputChange &&
       !titleInputChange
     ) {
@@ -149,10 +122,6 @@ function PersonalInfo() {
         localStorage.removeItem("image_id");
         setPreviewImg({ image: "", id: "" });
       }
-    }
-
-    if (emailInputChange) {
-      inputs.public_email = publicEmailInput;
     }
 
     if (areaOfWorkInputChange) {
@@ -236,17 +205,6 @@ function PersonalInfo() {
             imageInput={imageInput}
           />
         </div>
-
-        <br />
-        <br />
-        <br />
-
-        <input
-          type="text"
-          placeholder="Public Email"
-          value={publicEmailInput}
-          onChange={e => onEmailInputChange(e.target.value)}
-        />
 
         <br />
         <br />
