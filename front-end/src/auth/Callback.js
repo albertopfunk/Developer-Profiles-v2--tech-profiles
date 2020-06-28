@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import styled from "styled-components";
 import { withRouter } from "react-router-dom";
 import auth0Client from "./Auth";
-import { httpClient } from "../components/http-requests";
+import { httpClient } from "../global/helpers/http-requests";
 
 class Callback extends Component {
   async componentDidMount() {

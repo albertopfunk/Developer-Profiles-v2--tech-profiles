@@ -11,13 +11,13 @@ function ProfileHome() {
     return <h1>Loading...</h1>;
   }
   return (
-    <Main>
+    <Section>
       <h1>Helloo Dashboard Home</h1>
-    </Main>
+    </Section>
   );
 }
 
-const Main = styled.main`
+const Section = styled.main`
   width: 100%;
   height: 100vh;
   padding-top: 100px;

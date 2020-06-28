@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 import Filters from "../../components/forms/filters";
 import UserCards from "../../components/user-cards/UserCards";
-import { httpClient } from "../../components/http-requests";
+import { httpClient } from "../../global/helpers/http-requests";
 
 class PublicPage extends Component {
   state = {

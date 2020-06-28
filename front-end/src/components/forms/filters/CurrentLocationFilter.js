@@ -1,5 +1,5 @@
 import React from "react";
-import { httpClient } from "../../http-requests";
+import { httpClient } from "../../../global/helpers/http-requests";
 
 import AutoComplete from "../autocomplete";
 

@@ -1,7 +1,7 @@
 import React from "react";
 
 import AutoComplete from "../autocomplete";
-import { httpClient } from "../../http-requests";
+import { httpClient } from "../../../global/helpers/http-requests";
 
 function RelocateToFilter(props) {
   async function onInputChange(value) {

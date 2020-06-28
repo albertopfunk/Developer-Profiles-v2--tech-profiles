@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
 import { useState } from "react";
 import DashboardBilling from "../billing/DashboardBilling";
-import { httpClient } from "../../../components/http-requests";
+import { httpClient } from "../../../global/helpers/http-requests";
 import ImageUploadForm from "../../../components/forms/image-upload";
 import AutoComplete from "../../../components/forms/autocomplete";
 
@@ -153,7 +153,7 @@ function NewUser() {
     setLocationInput([]);
   }
 
-  async function submitEdit(e) {
+  function submitEdit(e) {
     e.preventDefault();
 
     if (
@@ -225,15 +225,15 @@ function NewUser() {
 
   if (!editInputs) {
     return (
-      <Main>
+      <Section>
         <h1>Hello New User</h1>
         <Link to="/profile-dashboard">Go Home</Link>
         <button onClick={onEditInputs}>Edit Inputs</button>
-      </Main>
+      </Section>
     );
   }
   return (
-    <Main>
+    <Section>
       <h1>Edit Infoo</h1>
       <div className="tabs">
         <div role="tablist" aria-label="quick start">
@@ -374,11 +374,11 @@ function NewUser() {
           <DashboardBilling />
         </div>
       </div>
-    </Main>
+    </Section>
   );
 }
 
-const Main = styled.main`
+const Section = styled.section`
   width: 100%;
   height: 100vh;
   padding-top: 100px;

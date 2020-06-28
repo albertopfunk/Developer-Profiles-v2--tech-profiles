@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import StripeCardInput from "./StripeCardInput";
 import styled from "styled-components";
-import { httpClient } from "../../http-requests";
+import { httpClient } from "../../../global/helpers/http-requests";
 
 class UserForm extends Component {
   state = {

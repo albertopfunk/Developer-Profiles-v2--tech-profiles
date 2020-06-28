@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useEffect } from "react";
-import { dateFormat } from "../../../global/hooks/profile-dashboard";
+import { dateFormat } from "../../../global/helpers/date-format";
 
 function EducationForm({
   userId,

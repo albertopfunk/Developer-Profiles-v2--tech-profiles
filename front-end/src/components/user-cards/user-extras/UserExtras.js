@@ -4,7 +4,7 @@ import UserProjects from "./UserProjects";
 import UserEducation from "./UserEducation";
 import UserExperience from "./UserExperience";
 import { useState } from "react";
-import { httpClient } from "../../http-requests";
+import { httpClient } from "../../../global/helpers/http-requests";
 
 function UserExtras({ dashboard, extras, setAriaExpanded, userId }) {
   const [userExtras, setUserExtras] = useState({});

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-async function composer(options) {
+function composer(options) {
   options.baseURL = process.env.REACT_APP_SERVER;
   if (options.config && options.config.headers) {
     options.headers = options.config.headers;

@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
 import AutoComplete from "../../../components/forms/autocomplete";
-import { httpClient } from "../../../components/http-requests";
+import { httpClient } from "../../../global/helpers/http-requests";
 
 function AboutYou() {
   const { loadingUser, user, addUserExtras } = useContext(ProfileContext);
@@ -205,7 +205,7 @@ function AboutYou() {
     console.log(skill);
   }
 
-  async function submitEdit(e) {
+  function submitEdit(e) {
     e.preventDefault();
 
     if (

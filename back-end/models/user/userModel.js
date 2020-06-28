@@ -120,21 +120,21 @@ function getSingle(id) {
 }
 
 async function getUserExtras(userId) {
-  async function getLocations() {
+  function getLocations() {
     return db("locations")
       .join("user_locations", "locations.id", "user_locations.location_id")
       .select("locations.location as name",  "locations.id")
       .where("user_locations.user_id", userId);
   }
 
-  async function getTopSkills() {
+  function getTopSkills() {
     return db("skills")
       .join("user_top_skills", "skills.id", "user_top_skills.skill_id")
       .select("skills.skill as name", "skills.id")
       .where("user_top_skills.user_id", userId);
   }
 
-  async function getAdditionalSkills() {
+  function getAdditionalSkills() {
     return db("skills")
       .join(
         "user_additional_skills",
@@ -145,7 +145,7 @@ async function getUserExtras(userId) {
       .where("user_additional_skills.user_id", userId);
   }
 
-  async function getEducation() {
+  function getEducation() {
     return db("education")
       .join("users", "users.id", "education.user_id")
       .select(
@@ -158,7 +158,7 @@ async function getUserExtras(userId) {
       .where("education.user_id", userId);
   }
 
-  async function getExperience() {
+  function getExperience() {
     return db("experience")
       .join("users", "users.id", "experience.user_id")
       .select(
@@ -170,7 +170,7 @@ async function getUserExtras(userId) {
       .where("experience.user_id", userId);
   }
 
-  async function getProjects() {
+  function getProjects() {
     return db("projects")
       .join("users", "users.id", "projects.user_id")
       .select(
