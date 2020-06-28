@@ -2,63 +2,164 @@ import React, { useState, useContext } from "react";
 import styled from "styled-components";
 
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
-import { httpClient } from "../../../components/http-requests";
+import { httpClient } from "../../../global/helpers/http-requests";
 import ImageUploadForm from "../../../components/forms/image-upload";
+
+/*
+
+
+validation needs to be done in the back end as well
+since hackers can bypass client
+
+
+
+2 types of validation
+
+ON BLUR
+regex validation
+toggle validation err for input
+
+ON SUBMIT
+regex validation on all
+since each input will have their own validation error
+just check which still need validation and create a summary
+see if you can put all validations in 1 state object
+
+remove image might need a loader
+
+maybe have 1 main loader that shows in the button like the original
+this would be seperate from user loading skeleton
+
+
+
+
+!STATES
+
+ASYNC
+Submit loading
+no async side effects needed
+delete-image is a background side effect
+
+
+FIRST NAME
+input
+change
+validation error
+
+
+LAST NAME INPUT
+input
+change
+validation error
+
+
+
+
+!VALIDATION
+
+FIRST NAME
+only allow alphabetical characters
+no numbers, symbols, special chars
+
+LAST NAME
+only allow alphabetical characters
+no numbers, symbols, special chars
+
+
+
+*/
+
+
+
 
 function PersonalInfo() {
   const { loadingUser, user, editProfile, setPreviewImg } = useContext(
     ProfileContext
   );
-  const [editInputs, setEditInputs] = useState(false);
+
   const [firstNameInput, setFirstNameInput] = useState("");
-  const [firstNameInputChange, setFirstNameInputChange] = useState(false);
   const [lastNameInput, setLastNameInput] = useState("");
-  const [lastNameInputChange, setLastNameInputChange] = useState(false);
   const [imageInput, setImageInput] = useState({ image: "", id: "" });
-  const [imageInputChange, setImageInputChange] = useState(false);
   const [areaOfWorkInput, setAreaOfWorkInput] = useState("");
-  const [areaOfWorkInputChange, setAreaOfWorkInputChange] = useState(false);
   const [titleInput, setTitleInput] = useState("");
-  const [titleInputChange, setTitleInputChange] = useState(false);
+  const [editInputs, setEditInputs] = useState(false);
+  const [inputChanges, setInputChanges] = useState({
+    firstName: false,
+    lastName: false,
+    image: false,
+    areaOfWork: false,
+    title: false
+  })
+  const [inputErrors, setInputErrors] = useState({
+    firstName: false,
+    lastName: false,
+    image: false,
+    areaOfWork: false,
+    title: false
+  })
+
 
   // imageInput is the preview image so default should be ""
   // area of work select value default should also be ""
   function onEditInputs() {
-    setEditInputs(true);
     setFirstNameInput(user.first_name || "");
-    setFirstNameInputChange(false);
     setLastNameInput(user.last_name || "");
-    setLastNameInputChange(false);
     setImageInput({ image: "", id: "" });
-    setImageInputChange(false);
     setAreaOfWorkInput("");
-    setAreaOfWorkInputChange(false);
     setTitleInput(user.desired_title || "");
-    setTitleInputChange(false);
+    setEditInputs(true);
+    setInputChanges({
+      firstName: false,
+      lastName: false,
+      image: false,
+      areaOfWork: false,
+      title: false
+    })
+    setInputErrors({
+      firstName: false,
+      lastName: false,
+      image: false,
+      areaOfWork: false,
+      title: false
+    })
+  }
+
+  function validateOnBlur(id) {
+    console.log(id)
+    switch(id) {
+      case "first-name":
+        console.log("fname")
+        break
+      default:
+        console.log("none")
+    }
   }
 
   function onFirstNameInputChange(value) {
-    if (!firstNameInputChange) {
-      setFirstNameInputChange(true);
+    if (!inputChanges.firstName) {
+      setInputChanges({...inputChanges, firstName: true});
     }
     setFirstNameInput(value);
   }
 
   function onLastNameInputChange(value) {
-    if (!lastNameInputChange) {
-      setLastNameInputChange(true);
+    if (!inputChanges.lastName) {
+      setInputChanges({...inputChanges, lastName: true});
     }
     setLastNameInput(value);
   }
 
   function onImageInputChange(value) {
-    if (!imageInputChange) {
-      setImageInputChange(true);
+    if (!inputChanges.image) {
+      setInputChanges({...inputChanges, image: true});
     }
     setImageInput(value);
   }
 
   function removeImage() {
+    if (!inputChanges.image) {
+      setInputChanges({...inputChanges, image: true});
+    }
     console.log("removeeeee");
     // should not remove on the spot
     // should set the image to remove
@@ -69,47 +170,47 @@ function PersonalInfo() {
   function onAreaOfWorkInputChange(value) {
     // when user selects default value, indicates no change
     if (!value) {
-      setAreaOfWorkInputChange(false);
+      setInputChanges({...inputChanges, areaOfWork: false});
       return;
     }
 
-    if (!areaOfWorkInputChange) {
-      setAreaOfWorkInputChange(true);
+    if (!inputChanges.areaOfWork) {
+      setInputChanges({...inputChanges, areaOfWork: true});
     }
     setAreaOfWorkInput(value);
   }
 
   function onTitleInputChange(value) {
-    if (!titleInputChange) {
-      setTitleInputChange(true);
+    if (!inputChanges.title) {
+      setInputChanges({...inputChanges, title: true});
     }
     setTitleInput(value);
   }
 
-  async function submitEdit(e) {
+  function submitEdit(e) {
     e.preventDefault();
 
     if (
-      !firstNameInputChange &&
-      !lastNameInputChange &&
-      !imageInputChange &&
-      !areaOfWorkInputChange &&
-      !titleInputChange
+      !inputChanges.firstName &&
+      !inputChanges.lastName &&
+      !inputChanges.image &&
+      !inputChanges.areaOfWork &&
+      !inputChanges.title
     ) {
       return;
     }
 
     const inputs = {};
 
-    if (firstNameInputChange) {
+    if (inputChanges.firstName) {
       inputs.first_name = firstNameInput;
     }
 
-    if (lastNameInputChange) {
+    if (inputChanges.lastName) {
       inputs.last_name = lastNameInput;
     }
 
-    if (imageInputChange) {
+    if (inputChanges.image) {
       if (imageInput.id !== user.image_id) {
         if (user.image_id) {
           httpClient("POST", "/api/delete-image", {
@@ -124,44 +225,79 @@ function PersonalInfo() {
       }
     }
 
-    if (areaOfWorkInputChange) {
+    if (inputChanges.areaOfWork) {
       inputs.area_of_work = areaOfWorkInput;
     }
 
-    if (titleInputChange) {
+    if (inputChanges.title) {
       inputs.desired_title = titleInput;
     }
 
+    console.log("SUB", inputs)
     setEditInputs(false);
     editProfile(inputs);
   }
 
-  console.log("===PERSONAL INFO + IMG INPUTTTT===", user);
+
+
+
   if (loadingUser) {
+    // maybe make this a skeleton loader
     return <h1>Loading...</h1>;
   }
 
+
+
   if (!editInputs) {
     return (
-      <div>
+      <section>
         <h1>Edit Inputs</h1>
         <button onClick={onEditInputs}>Edit</button>
-      </div>
+      </section>
     );
   }
 
+
+
   return (
-    <Main>
+    <Section>
+
+
       <h2>User Personal Info</h2>
+
+
       <form onSubmit={e => submitEdit(e)}>
-        <input
-          type="text"
-          placeholder="First Name"
-          value={firstNameInput}
-          onChange={e => onFirstNameInputChange(e.target.value)}
-        />
+
+        <InputContainer>
+          <label htmlFor="first-name">Name:</label>
+          <input
+            type="text"
+            id="first-name"
+            name="first-name"
+            aria-describedby="nameError"
+            value={firstNameInput}
+            onChange={e => onFirstNameInputChange(e.target.value)}
+            onBlur={e => validateOnBlur(e.target.id)}
+          />
+          <span id="nameError" className="err-mssg">
+            Name can only be alphabelical characters, no numbers
+          </span>
+        </InputContainer>
+
+
+
+
+
 
         <br />
+
+
+
+
+
+
+
+
 
         <input
           type="text"
@@ -235,15 +371,20 @@ function PersonalInfo() {
 
         <button>Submit</button>
       </form>
-    </Main>
+    </Section>
   );
 }
 
-const Main = styled.main`
+const Section = styled.section`
   width: 100%;
   height: 100vh;
   padding-top: 100px;
   background-color: pink;
+`;
+
+const InputContainer = styled.div`
+  display: flex;
+  flex-direction: column;
 `;
 
 export default PersonalInfo;
