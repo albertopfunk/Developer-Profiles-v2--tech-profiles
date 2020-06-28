@@ -1,18 +1,39 @@
 import React from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
-import HeaderNav from "../navigation/HeaderNav";
+import { Link, withRouter } from "react-router-dom";
 
-function MainHeader() {
+import auth0Client from "../../auth/Auth";
+
+function MainHeader(props) {
+  const signOut = () => {
+    auth0Client.signOut();
+    props.history.replace("/");
+  };
+
   return (
-    <Header>
-      <Link to="/">Developer Profiles</Link>
-      <HeaderNav />
-    </Header>
+    <header>
+      <Nav aria-label="site">
+        <div>
+          <Link to="/">Tech Profiles</Link>
+        </div>
+
+        <div>
+          <Link to="/profiles">Profiles</Link>
+          {auth0Client.isAuthenticated() ? (
+            <>
+              <Link to="/profile-dashboard">Dashboard</Link>
+              <button onClick={() => signOut()}>Sign Out</button>
+            </>
+          ) : (
+            <button onClick={auth0Client.signIn}>Sign In</button>
+          )}
+        </div>
+      </Nav>
+    </header>
   );
 }
 
-const Header = styled.header`
+const Nav = styled.nav`
   border: solid;
   height: 100px;
   width: 100%;
@@ -26,4 +47,4 @@ const Header = styled.header`
   justify-content: space-between;
 `;
 
-export default MainHeader;
+export default withRouter(MainHeader);

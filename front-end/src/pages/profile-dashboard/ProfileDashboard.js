@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Route, useRouteMatch, Link, Switch } from "react-router-dom";
 import styled from "styled-components";
 
+import UserCard from "../../components/user-cards/user-card/UserCard";
 import ProfileHome from "./ProfileHome";
 import NewUser from "./new-user/NewUser";
 import PersonalInfo from "./personal-info/PersonalInfo";
@@ -12,9 +13,8 @@ import DashboardEducation from "./education/DashboardEducation";
 import DashboardExperience from "./experience/DashboardExperience";
 import DashboardBilling from "./billing/DashboardBilling";
 
-import { httpClient } from "../../components/http-requests";
+import { httpClient } from "../../global/helpers/http-requests";
 import { ProfileContext } from "../../global/context/user-profile/ProfileContext";
-import UserCard from "../../components/user-cards/user-card/UserCard";
 import auth0Client from "../../auth/Auth";
 
 function ProfileDashboard() {
@@ -29,7 +29,7 @@ function ProfileDashboard() {
     }
   });
 
-  async function initProfile() {
+  function initProfile() {
     // setLoadingUser(true);
     const userProfile = auth0Client.getProfile();
     const { email } = userProfile;
@@ -95,35 +95,22 @@ function ProfileDashboard() {
     getFullUser(user.email);
   }
 
-  console.log("===PROFILE DASH + PREVIOUS IMG===");
-
   if (loadingUser) {
     return <h1>Loading...</h1>;
   }
   return (
     <Main>
-      <header>
+      <nav aria-label="page">
         <Link to={`${url}`}>Home</Link>
-        <br />
         <Link to={`${url}/new`}>New user</Link>
-        <br />
         <Link to={`${url}/personal-info`}>Personal Info</Link>
-        <br />
         <Link to={`${url}/about-you`}>About You</Link>
-        <br />
         <Link to={`${url}/where-to-find-you`}>Where to Find You</Link>
-        <br />
         <Link to={`${url}/projects`}>Projects</Link>
-        <br />
         <Link to={`${url}/education`}>Education</Link>
-        <br />
         <Link to={`${url}/experience`}>Experience</Link>
-        <br />
         <Link to={`${url}/billing`}>Billing</Link>
-      </header>
-
-      <br />
-      <hr />
+      </nav>
 
       <UserCard
         dashboard
@@ -154,9 +141,6 @@ function ProfileDashboard() {
         linkedin={user.linkedin}
         portfolio={user.portfolio}
       />
-
-      <br />
-      <hr />
 
       <ProfileContext.Provider
         value={{
