@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
 import { httpClient } from "../../../global/helpers/http-requests";
 import ImageUploadForm from "../../../components/forms/image-upload";
+import { validateInput } from "../../../global/helpers/validation";
 
 /*
 
@@ -69,9 +70,6 @@ no numbers, symbols, special chars
 
 */
 
-
-
-
 function PersonalInfo() {
   const { loadingUser, user, editProfile, setPreviewImg } = useContext(
     ProfileContext
@@ -89,15 +87,14 @@ function PersonalInfo() {
     image: false,
     areaOfWork: false,
     title: false
-  })
+  });
   const [inputErrors, setInputErrors] = useState({
     firstName: false,
     lastName: false,
     image: false,
     areaOfWork: false,
     title: false
-  })
-
+  });
 
   // imageInput is the preview image so default should be ""
   // area of work select value default should also be ""
@@ -114,51 +111,56 @@ function PersonalInfo() {
       image: false,
       areaOfWork: false,
       title: false
-    })
+    });
     setInputErrors({
       firstName: false,
       lastName: false,
       image: false,
       areaOfWork: false,
       title: false
-    })
+    });
   }
 
   function validateOnBlur(id) {
-    console.log(id)
-    switch(id) {
+    console.log(id);
+    switch (id) {
       case "first-name":
-        console.log("fname")
-        break
+        if (!validateInput("name", firstNameInput)) {
+          console.log("validation error");
+          setInputErrors({ ...inputErrors, firstName: true });
+        } else {
+          setInputErrors({ ...inputErrors, firstName: false });
+        }
+        break;
       default:
-        console.log("none")
+        console.log("none");
     }
   }
 
   function onFirstNameInputChange(value) {
     if (!inputChanges.firstName) {
-      setInputChanges({...inputChanges, firstName: true});
+      setInputChanges({ ...inputChanges, firstName: true });
     }
     setFirstNameInput(value);
   }
 
   function onLastNameInputChange(value) {
     if (!inputChanges.lastName) {
-      setInputChanges({...inputChanges, lastName: true});
+      setInputChanges({ ...inputChanges, lastName: true });
     }
     setLastNameInput(value);
   }
 
   function onImageInputChange(value) {
     if (!inputChanges.image) {
-      setInputChanges({...inputChanges, image: true});
+      setInputChanges({ ...inputChanges, image: true });
     }
     setImageInput(value);
   }
 
   function removeImage() {
     if (!inputChanges.image) {
-      setInputChanges({...inputChanges, image: true});
+      setInputChanges({ ...inputChanges, image: true });
     }
     console.log("removeeeee");
     // should not remove on the spot
@@ -170,19 +172,19 @@ function PersonalInfo() {
   function onAreaOfWorkInputChange(value) {
     // when user selects default value, indicates no change
     if (!value) {
-      setInputChanges({...inputChanges, areaOfWork: false});
+      setInputChanges({ ...inputChanges, areaOfWork: false });
       return;
     }
 
     if (!inputChanges.areaOfWork) {
-      setInputChanges({...inputChanges, areaOfWork: true});
+      setInputChanges({ ...inputChanges, areaOfWork: true });
     }
     setAreaOfWorkInput(value);
   }
 
   function onTitleInputChange(value) {
     if (!inputChanges.title) {
-      setInputChanges({...inputChanges, title: true});
+      setInputChanges({ ...inputChanges, title: true });
     }
     setTitleInput(value);
   }
@@ -233,20 +235,15 @@ function PersonalInfo() {
       inputs.desired_title = titleInput;
     }
 
-    console.log("SUB", inputs)
+    console.log("SUB", inputs);
     setEditInputs(false);
     editProfile(inputs);
   }
-
-
-
 
   if (loadingUser) {
     // maybe make this a skeleton loader
     return <h1>Loading...</h1>;
   }
-
-
 
   if (!editInputs) {
     return (
@@ -257,21 +254,17 @@ function PersonalInfo() {
     );
   }
 
-
-
   return (
     <Section>
-
-
       <h2>User Personal Info</h2>
 
-
       <form onSubmit={e => submitEdit(e)}>
-
         <InputContainer>
           <label htmlFor="first-name">Name:</label>
           <input
             type="text"
+            autoComplete="given-name"
+            inputMode="text"
             id="first-name"
             name="first-name"
             aria-describedby="nameError"
@@ -284,20 +277,7 @@ function PersonalInfo() {
           </span>
         </InputContainer>
 
-
-
-
-
-
         <br />
-
-
-
-
-
-
-
-
 
         <input
           type="text"
