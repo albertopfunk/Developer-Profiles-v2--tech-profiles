@@ -126,10 +126,18 @@ function githubCheck(value) {
     Not Allowed: hyphens/dashes at start/end
 
     optional slash at end of URL
+
+    with negative lookahead/behind
+    ^(?:https?:\/\/)?(?:www\.)?(?:[a-z]{1,7}\.)?github\.com\/(?!-)([A-Za-z0-9-]+)(?<!-)\/?$
+    ^(?!-)[A-Za-z0-9-]+(?<!-)$
+
+    without negative lookahead/behind
+    ^(?:https?:\/\/)?(?:www\.)?(?:[a-z]{1,7}\.)?github\.com\/([A-Za-z0-9][A-Za-z0-9-]+[A-Za-z0-9])\/?$
+    ^[A-Za-z0-9][A-Za-z0-9-]+[A-Za-z0-9]$
   */
 
-  const githubRegExUrl = /^(?:https?:\/\/)?(?:www\.)?(?:[a-z]{1,7}\.)?github\.com\/(?!-)([A-Za-z0-9-]+)(?<!-)\/?$/;
-  const githubRegExUser = /^(?!-)[A-Za-z0-9-]+(?<!-)$/;
+  const githubRegExUrl = /^(?:https?:\/\/)?(?:www\.)?(?:[a-z]{1,7}\.)?github\.com\/([A-Za-z0-9][A-Za-z0-9-]+[A-Za-z0-9])\/?$/;
+  const githubRegExUser = /^[A-Za-z0-9][A-Za-z0-9-]+[A-Za-z0-9]$/;
 
   const githubUrlFound = value.match(githubRegExUrl);
   const githubUserFound = value.match(githubRegExUser);
@@ -272,25 +280,19 @@ function urlCheck(value) {
     percent signs, slashes
 
     Unsure: ;, :, @, $, !, *, ,, (), '
-  */
 
-  // need to split up conditional into 2 non capturing group alternatives, seperated by or sign |
+    with conditional and negative lookahead/behind, unnamed and named group respectively
+    /^(?:https?:\/\/)?(?:www\.)?(?:(?!-)[A-Za-zÀ-ú0-9-]{1,63}(?<!-)\.){1,8}(?:[A-Za-zÀ-ú]{2,63})(\/)?(?(1)(?:[A-Za-zÀ-ú0-9-._#?=+&%\/])*)$/
+    /^(?:https?:\/\/)?(?:www\.)?(?:(?!-)[A-Za-zÀ-ú0-9-]{1,63}(?<!-)\.){1,8}(?:[A-Za-zÀ-ú]{2,63})(?<path>\/)?(?(path)(?:[A-Za-zÀ-ú0-9-._#?=+&%\/])*)$/
 
-  /*
-  
-    \/(?:[A-Za-zÀ-ú0-9-._#?=+&%\/])*) | \/?
-
-    main path starting with slash
-    or
-    optional slash at end
-
-
+    with 'or' operator and negative lookahead/behind
     ^(?:https?:\/\/)?(?:www\.)?(?:(?!-)[A-Za-zÀ-ú0-9-]{1,63}(?<!-)\.){1,8}(?:[A-Za-zÀ-ú]{2,63})(?:(?:\/(?:[A-Za-zÀ-ú0-9-._#?=+&%\/])*)|\/?)$
-    
-  
+
+    with 'or' operator
+    ^(?:https?:\/\/)?(?:www\.)?(?:[A-Za-zÀ-ú0-9][A-Za-zÀ-ú0-9-]{1,63}[A-Za-zÀ-ú0-9]\.){1,8}(?:[A-Za-zÀ-ú]{2,63})(?:(?:\/(?:[A-Za-zÀ-ú0-9-._#?=+&%\/])*)|\/?)$
   */
 
-  const regex = /^(?:https?:\/\/)?(?:www\.)?(?:(?!-)[A-Za-zÀ-ú0-9-]{1,63}(?<!-)\.){1,8}(?:[A-Za-zÀ-ú]{2,63})(?:(?:\/(?:[A-Za-zÀ-ú0-9-._#?=+&%\/])*)|\/?)$/;
+  const regex = /^(?:https?:\/\/)?(?:www\.)?(?:[A-Za-zÀ-ú0-9][A-Za-zÀ-ú0-9-]{1,63}[A-Za-zÀ-ú0-9]\.){1,8}(?:[A-Za-zÀ-ú]{2,63})(?:(?:\/(?:[A-Za-zÀ-ú0-9-._#?=+&%\/])*)|\/?)$/;
   console.log(regex.test(value));
   return regex.test(value);
 }
