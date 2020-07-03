@@ -31,7 +31,7 @@ function nameCheck(value) {
     length: 1-65 chars
   */
 
-  const regex = /^[A-Za-zÀ-ú0-9\s\.()',-]{1,65}$/;
+  const regex = /^[A-Za-zÀ-ú0-9\s.()',-]{1,65}$/;
   console.log(regex.test(value));
   return regex.test(value);
 }
@@ -75,7 +75,7 @@ function titleCheck(value) {
     length: 2-80 chars
   */
 
-  const regex = /^[A-Za-zÀ-ú0-9\s\.\/+#:()'",&-]{2,80}$/;
+  const regex = /^[A-Za-zÀ-ú0-9\s./+#:()'",&-]{2,80}$/;
   console.log(regex.test(value));
   return regex.test(value);
 }
@@ -93,7 +93,7 @@ function summaryCheck(value) {
     Unsure: ~, ^, |, \, <>, =, *, %, ?, $, ;
   */
 
-  const regex = /^[A-Za-zÀ-ú0-9\s\.\/+#:()'",&@!_-]{2,280}$/;
+  const regex = /^[A-Za-zÀ-ú0-9\s./+#:()'",&@!_-]{2,280}$/;
   console.log(regex.test(value));
   return regex.test(value);
 }
@@ -292,7 +292,7 @@ function urlCheck(value) {
     ^(?:https?:\/\/)?(?:www\.)?(?:[A-Za-zÀ-ú0-9][A-Za-zÀ-ú0-9-]{1,63}[A-Za-zÀ-ú0-9]\.){1,8}(?:[A-Za-zÀ-ú]{2,63})(?:(?:\/(?:[A-Za-zÀ-ú0-9-._#?=+&%\/])*)|\/?)$
   */
 
-  const regex = /^(?:https?:\/\/)?(?:www\.)?(?:[A-Za-zÀ-ú0-9][A-Za-zÀ-ú0-9-]{1,63}[A-Za-zÀ-ú0-9]\.){1,8}(?:[A-Za-zÀ-ú]{2,63})(?:(?:\/(?:[A-Za-zÀ-ú0-9-._#?=+&%\/])*)|\/?)$/;
+  const regex = /^(?:https?:\/\/)?(?:www\.)?(?:[A-Za-zÀ-ú0-9][A-Za-zÀ-ú0-9-]{1,63}[A-Za-zÀ-ú0-9]\.){1,8}(?:[A-Za-zÀ-ú]{2,63})(?:(?:\/(?:[A-Za-zÀ-ú0-9-._#?=+&%/])*)|\/?)$/;
   console.log(regex.test(value));
   return regex.test(value);
 }
