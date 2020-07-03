@@ -66,14 +66,14 @@ function emailCheck(value) {
 
 function titleCheck(value) {
   /*
-  Rules
+    Rules
 
-  Allowed: A-Z, a-z, À-ú(accents), 0-9, whitespace, periods, slashes, plus signs,
-  number/hash signs, colons, parentheses, apostrophes, quotation marks, commas,
-  ampersands, hyphens/dashes
+    Allowed: A-Z, a-z, À-ú(accents), 0-9, whitespace, periods, slashes, plus signs,
+    number/hash signs, colons, parentheses, apostrophes, quotation marks, commas,
+    ampersands, hyphens/dashes
 
-  length: 2-80 chars
-*/
+    length: 2-80 chars
+  */
 
   const regex = /^[A-Za-zÀ-ú0-9\s\.\/+#:()'",&-]{2,80}$/;
   console.log(regex.test(value));
@@ -82,16 +82,16 @@ function titleCheck(value) {
 
 function summaryCheck(value) {
   /*
-  Rules
+    Rules
 
-  Allowed: A-Z, a-z, À-ú(accents), 0-9, whitespace, periods, slashes, plus signs,
-  number/hash signs, colons, parentheses, apostrophes, quotation marks, commas,
-  ampersands, at sign, exclamation mark, underscores, hyphens/dashes
-  
-  length: 2-280 chars
-  
-  Unsure: ~, ^, |, \, <>, =, *, %, ?, $, ;
-*/
+    Allowed: A-Z, a-z, À-ú(accents), 0-9, whitespace, periods, slashes, plus signs,
+    number/hash signs, colons, parentheses, apostrophes, quotation marks, commas,
+    ampersands, at sign, exclamation mark, underscores, hyphens/dashes
+    
+    length: 2-280 chars
+    
+    Unsure: ~, ^, |, \, <>, =, *, %, ?, $, ;
+  */
 
   const regex = /^[A-Za-zÀ-ú0-9\s\.\/+#:()'",&@!_-]{2,280}$/;
   console.log(regex.test(value));
@@ -242,37 +242,55 @@ function twitterCheck(value) {
 
 function urlCheck(value) {
   /*
-  Rules
+    Rules
 
-  Structure: protocol:// www. domain-name . TLD / path
+    Structure: protocol:// www. domain-name . TLD / path
 
-  protocol
-  optional http(s)://
+    protocol
+    optional http(s)://
 
-  subdomain
-  optional www.
+    subdomain
+    optional www.
 
-  domain
-  1-8 domains seperated by period
-  Allowed: A-Z, a-z, À-ú(accents), 0-9, hyphens/dashes
-  Not Allowed: hyphens/dashes at start/end
-  Length: 1-63 chars
+    domain
+    1-8 domains seperated by period
+    Allowed: A-Z, a-z, À-ú(accents), 0-9, hyphens/dashes
+    Not Allowed: hyphens/dashes at start/end
+    Length: 1-63 chars
 
-  TLD
-  Allowed: A-Z, a-z, À-ú(accents)
-  Length: 2-63 chars
+    TLD
+    Allowed: A-Z, a-z, À-ú(accents)
+    Length: 2-63 chars
 
-  optional path with conditional
-  allows for paths IF first path starts with a slash after TLD
-  unlimited amount of paths/queries allowed
-  Allowed: A-Z, a-z, À-ú(accents), 0-9, hyphens/dashes, periods, underscores,
-  number/hash signs, question marks, equal signs, plus signs, ampersands,
-  percent signs, slashes
 
-  Unsure: ;, :, @, $, !, *, ,, (), '
-*/
 
-  const regex = /^(?:https?:\/\/)?(?:www\.)?(?:(?!-)[A-Za-zÀ-ú0-9-]{1,63}(?<!-)\.){1,8}(?:[A-Za-zÀ-ú]{2,63})(?<path>\/)?(?(path)(?:[A-Za-zÀ-ú0-9-._#?=+&%\/])*)$/;
+    optional path with conditional
+    allows for paths IF first path starts with a slash after TLD
+    unlimited amount of paths/queries allowed
+    Allowed: A-Z, a-z, À-ú(accents), 0-9, hyphens/dashes, periods, underscores,
+    number/hash signs, question marks, equal signs, plus signs, ampersands,
+    percent signs, slashes
+
+    Unsure: ;, :, @, $, !, *, ,, (), '
+  */
+
+  // need to split up conditional into 2 non capturing group alternatives, seperated by or sign |
+
+  /*
+  
+    \/(?:[A-Za-zÀ-ú0-9-._#?=+&%\/])*) | \/?
+
+    main path starting with slash
+    or
+    optional slash at end
+
+
+    ^(?:https?:\/\/)?(?:www\.)?(?:(?!-)[A-Za-zÀ-ú0-9-]{1,63}(?<!-)\.){1,8}(?:[A-Za-zÀ-ú]{2,63})(?:(?:\/(?:[A-Za-zÀ-ú0-9-._#?=+&%\/])*)|\/?)$
+    
+  
+  */
+
+  const regex = /^(?:https?:\/\/)?(?:www\.)?(?:(?!-)[A-Za-zÀ-ú0-9-]{1,63}(?<!-)\.){1,8}(?:[A-Za-zÀ-ú]{2,63})(?:(?:\/(?:[A-Za-zÀ-ú0-9-._#?=+&%\/])*)|\/?)$/;
   console.log(regex.test(value));
   return regex.test(value);
 }
