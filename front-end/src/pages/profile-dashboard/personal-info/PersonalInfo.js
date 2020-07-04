@@ -292,18 +292,19 @@ function PersonalInfo() {
             onChange={e => onFirstNameInputChange(e.target.value)}
             onBlur={e => validateOnBlur(e.target.id, e.target.value)}
           />
-          <span
-            id="nameError"
-            className="err-mssg"
-            aria-live="polite"
-            style={{
-              display: firstName.inputError ? "inline" : "none",
-              fontSize: "12px",
-              color: "red"
-            }}
-          >
-            Name can only be alphabelical characters, no numbers
-          </span>
+          {firstName.inputError ? (
+            <span
+              id="nameError"
+              className="err-mssg"
+              aria-live="polite"
+              style={{
+                fontSize: "12px",
+                color: "red"
+              }}
+            >
+              Name can only be alphabelical characters, no numbers
+            </span>
+          ) : null}
         </InputContainer>
 
         <br />
