@@ -8,6 +8,8 @@ import { validateInput } from "../../../global/helpers/validation";
 
 /*
 
+see if you can describe the form
+"inputs are validated, but not required"
 
 validation needs to be done in the back end as well
 since hackers can bypass client
@@ -47,6 +49,19 @@ input
 change
 validation error
 
+const [firstName, setFirstName] = useState({
+  input: "",
+  inputChange: false,
+  inputError: false
+})
+
+inputChange = true => onInputChange && if input !== user.inputName
+inputChange = false => default, input === user.inputName
+
+inputError = true => inputValue !== validated && inputValue !== ""
+inputError = false => default, inputValue === validated || inputValue === ""
+
+
 
 LAST NAME INPUT
 input
@@ -75,7 +90,6 @@ function PersonalInfo() {
     ProfileContext
   );
 
-  const [firstNameInput, setFirstNameInput] = useState("");
   const [lastNameInput, setLastNameInput] = useState("");
   const [imageInput, setImageInput] = useState({ image: "", id: "" });
   const [areaOfWorkInput, setAreaOfWorkInput] = useState("");
@@ -88,23 +102,27 @@ function PersonalInfo() {
     areaOfWork: false,
     title: false
   });
-  const [inputErrors, setInputErrors] = useState({
-    firstName: false,
-    lastName: false,
-    image: false,
-    areaOfWork: false,
-    title: false
+  const [firstName, setFirstName] = useState({
+    inputValue: "",
+    inputChange: false,
+    inputError: false
   });
 
   // imageInput is the preview image so default should be ""
   // area of work select value default should also be ""
   function onEditInputs() {
-    setFirstNameInput(user.first_name || "");
+    setEditInputs(true);
+    setFirstName({
+      inputValue: user.first_name || "",
+      inputChange: false,
+      inputError: false
+    });
+
     setLastNameInput(user.last_name || "");
     setImageInput({ image: "", id: "" });
     setAreaOfWorkInput("");
     setTitleInput(user.desired_title || "");
-    setEditInputs(true);
+
     setInputChanges({
       firstName: false,
       lastName: false,
@@ -112,25 +130,20 @@ function PersonalInfo() {
       areaOfWork: false,
       title: false
     });
-    setInputErrors({
-      firstName: false,
-      lastName: false,
-      image: false,
-      areaOfWork: false,
-      title: false
-    });
   }
 
-  function validateOnBlur(id) {
+  function validateOnBlur(id, value) {
     console.log(id);
     switch (id) {
       case "first-name":
-        if (!validateInput("name", firstNameInput)) {
+        if (!firstName.inputChange) return;
+        if (value && !validateInput("name", value)) {
           console.log("validation error");
-          setInputErrors({ ...inputErrors, firstName: true });
+          setFirstName({ ...firstName, inputError: true });
         } else {
-          setInputErrors({ ...inputErrors, firstName: false });
+          setFirstName({ ...firstName, inputError: false });
         }
+
         break;
       default:
         console.log("none");
@@ -138,10 +151,16 @@ function PersonalInfo() {
   }
 
   function onFirstNameInputChange(value) {
-    if (!inputChanges.firstName) {
-      setInputChanges({ ...inputChanges, firstName: true });
+    if (value === user.first_name) {
+      setFirstName({
+        inputChange: false,
+        inputValue: value,
+        inputError: false
+      });
+      return;
     }
-    setFirstNameInput(value);
+
+    setFirstName({ ...firstName, inputChange: true, inputValue: value });
   }
 
   function onLastNameInputChange(value) {
@@ -193,7 +212,7 @@ function PersonalInfo() {
     e.preventDefault();
 
     if (
-      !inputChanges.firstName &&
+      !firstName.inputChange &&
       !inputChanges.lastName &&
       !inputChanges.image &&
       !inputChanges.areaOfWork &&
@@ -204,8 +223,8 @@ function PersonalInfo() {
 
     const inputs = {};
 
-    if (inputChanges.firstName) {
-      inputs.first_name = firstNameInput;
+    if (firstName.inputChange) {
+      inputs.first_name = firstName.inputValue;
     }
 
     if (inputChanges.lastName) {
@@ -260,7 +279,7 @@ function PersonalInfo() {
 
       <form onSubmit={e => submitEdit(e)}>
         <InputContainer>
-          <label htmlFor="first-name">Name:</label>
+          <label htmlFor="first-name">First Name:</label>
           <input
             type="text"
             autoComplete="given-name"
@@ -268,11 +287,21 @@ function PersonalInfo() {
             id="first-name"
             name="first-name"
             aria-describedby="nameError"
-            value={firstNameInput}
+            aria-invalid={firstName.inputError}
+            value={firstName.inputValue}
             onChange={e => onFirstNameInputChange(e.target.value)}
-            onBlur={e => validateOnBlur(e.target.id)}
+            onBlur={e => validateOnBlur(e.target.id, e.target.value)}
           />
-          <span id="nameError" className="err-mssg">
+          <span
+            id="nameError"
+            className="err-mssg"
+            aria-live="polite"
+            style={{
+              display: firstName.inputError ? "inline" : "none",
+              fontSize: "12px",
+              color: "red"
+            }}
+          >
             Name can only be alphabelical characters, no numbers
           </span>
         </InputContainer>
