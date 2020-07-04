@@ -11,6 +11,18 @@ import { validateInput } from "../../../global/helpers/validation";
 see if you can describe the form
 "inputs are validated, but not required"
 
+provide relevant instructions/requirements for inputs if needed(date format, social url/username format)
+you can add them to another span, and show it if you want
+connect it with input using aria-describedby
+ex aria-describedby="nameReq nameError"
+
+you can also have shown and sr.only elements
+might have to use this for validation messages
+A-Z, a-z, 0-9 vs capital and lowercase alphabetic characters, numbers
+
+need to have page titles
+h1 for dashboard, see if you can make it dynamic to match current inpage route
+
 validation needs to be done in the back end as well
 since hackers can bypass client
 
@@ -267,25 +279,27 @@ function PersonalInfo() {
   if (!editInputs) {
     return (
       <section>
-        <h1>Edit Inputs</h1>
+        <h2>Current Information</h2>
         <button onClick={onEditInputs}>Edit</button>
       </section>
     );
   }
 
+
   return (
-    <Section>
-      <h2>User Personal Info</h2>
+    <Section aria-labelledby="personal-info-heading">
+      <h2 id="personal-info-heading">Personal Info Form</h2>
 
       <form onSubmit={e => submitEdit(e)}>
         <InputContainer>
-          <label htmlFor="first-name">First Name:</label>
+          <label id="first-name-label" htmlFor="first-name">First Name:</label>
           <input
             type="text"
             autoComplete="given-name"
             inputMode="text"
             id="first-name"
             name="first-name"
+            aria-labelledby="first-name-label"
             aria-describedby="nameError"
             aria-invalid={firstName.inputError}
             value={firstName.inputValue}
@@ -302,7 +316,7 @@ function PersonalInfo() {
                 color: "red"
               }}
             >
-              Name can only be alphabelical characters, no numbers
+              First Name can only be alphabelical characters, no numbers
             </span>
           ) : null}
         </InputContainer>
@@ -379,7 +393,11 @@ function PersonalInfo() {
           onChange={e => onTitleInputChange(e.target.value)}
         />
 
-        <button>Submit</button>
+
+
+
+        <button type="submit">Submit</button>
+
       </form>
     </Section>
   );
