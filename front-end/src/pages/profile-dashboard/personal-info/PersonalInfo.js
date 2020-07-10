@@ -5,6 +5,7 @@ import { ProfileContext } from "../../../global/context/user-profile/ProfileCont
 import { httpClient } from "../../../global/helpers/http-requests";
 import ImageUploadForm from "../../../components/forms/image-upload";
 import { validateInput } from "../../../global/helpers/validation";
+import { Helmet } from "react-helmet";
 
 /*
 
@@ -271,6 +272,10 @@ function PersonalInfo() {
     editProfile(inputs);
   }
 
+  function resetInputs() {
+    setEditInputs(false)
+  }
+
   if (loadingUser) {
     // maybe make this a skeleton loader
     return <h1>Loading...</h1>;
@@ -278,137 +283,141 @@ function PersonalInfo() {
 
   if (!editInputs) {
     return (
-      <section>
-        <h2>Current Information</h2>
-        <button onClick={onEditInputs}>Edit</button>
-      </section>
+      <main aria-labelledby="personal-info-heading-1">
+        <Helmet>
+          <title>Dashboard Personal Info | Tech Profiles</title>
+        </Helmet>
+        <h1 id="personal-info-heading-1">Personal Info</h1>
+        <section aria-labelledby="personal-info-heading-2">
+          <h2 id="personal-info-heading-2">Current Information</h2>
+          <button onClick={onEditInputs}>Edit</button>
+
+        </section>
+      </main>
     );
   }
 
-
   return (
-    <Section aria-labelledby="personal-info-heading">
-      <h2 id="personal-info-heading">Personal Info Form</h2>
+    <main aria-labelledby="personal-info-heading-1">
+      <Helmet>
+        <title>Dashboard Personal Info | Tech Profiles</title>
+      </Helmet>
+      <h1 id="personal-info-heading-1">Personal Info</h1>
 
-      <form onSubmit={e => submitEdit(e)}>
-        <InputContainer>
-          <label id="first-name-label" htmlFor="first-name">First Name:</label>
+      <section aria-labelledby="personal-info-heading-2">
+        <h2 id="personal-info-heading-2">Edit Information</h2>
+        <form onSubmit={e => submitEdit(e)}>
+          <InputContainer>
+            <label id="first-name-label" htmlFor="first-name">
+              First Name:
+            </label>
+            <input
+              type="text"
+              autoComplete="given-name"
+              inputMode="text"
+              id="first-name"
+              name="first-name"
+              aria-labelledby="first-name-label"
+              aria-describedby="nameError"
+              aria-invalid={firstName.inputError}
+              value={firstName.inputValue}
+              onChange={e => onFirstNameInputChange(e.target.value)}
+              onBlur={e => validateOnBlur(e.target.id, e.target.value)}
+            />
+            {firstName.inputError ? (
+              <span
+                id="nameError"
+                className="err-mssg"
+                aria-live="polite"
+                style={{
+                  fontSize: "12px",
+                  color: "red"
+                }}
+              >
+                First Name can only be alphabelical characters, no numbers
+              </span>
+            ) : null}
+          </InputContainer>
+
+          <br />
+
           <input
             type="text"
-            autoComplete="given-name"
-            inputMode="text"
-            id="first-name"
-            name="first-name"
-            aria-labelledby="first-name-label"
-            aria-describedby="nameError"
-            aria-invalid={firstName.inputError}
-            value={firstName.inputValue}
-            onChange={e => onFirstNameInputChange(e.target.value)}
-            onBlur={e => validateOnBlur(e.target.id, e.target.value)}
+            placeholder="Last Name"
+            value={lastNameInput}
+            onChange={e => onLastNameInputChange(e.target.value)}
           />
-          {firstName.inputError ? (
-            <span
-              id="nameError"
-              className="err-mssg"
-              aria-live="polite"
-              style={{
-                fontSize: "12px",
-                color: "red"
-              }}
-            >
-              First Name can only be alphabelical characters, no numbers
-            </span>
-          ) : null}
-        </InputContainer>
 
-        <br />
+          <br />
+          <br />
+          <br />
 
-        <input
-          type="text"
-          placeholder="Last Name"
-          value={lastNameInput}
-          onChange={e => onLastNameInputChange(e.target.value)}
-        />
+          <div>
+            {user.image || imageInput.image ? (
+              <div style={{ height: "200px", width: "200px" }}>
+                {!imageInput.image ? (
+                  <span
+                    style={{
+                      position: "absolute",
+                      top: "5%",
+                      right: "5%",
+                      border: "solid",
+                      zIndex: "1"
+                    }}
+                    onClick={removeImage}
+                  >
+                    X
+                  </span>
+                ) : null}
 
-        <br />
-        <br />
-        <br />
+                <img
+                  style={{ height: "200px", width: "200px" }}
+                  src={imageInput.image || user.image}
+                  alt="current profile pic"
+                />
+              </div>
+            ) : null}
 
-        <div>
-          {user.image || imageInput.image ? (
-            <div style={{ height: "200px", width: "200px" }}>
-              {!imageInput.image ? (
-                <span
-                  style={{
-                    position: "absolute",
-                    top: "5%",
-                    right: "5%",
-                    border: "solid",
-                    zIndex: "1"
-                  }}
-                  onClick={removeImage}
-                >
-                  X
-                </span>
-              ) : null}
+            <ImageUploadForm
+              setImageInput={onImageInputChange}
+              imageInput={imageInput}
+            />
+          </div>
 
-              <img
-                style={{ height: "200px", width: "200px" }}
-                src={imageInput.image || user.image}
-                alt="current profile pic"
-              />
-            </div>
-          ) : null}
+          <br />
+          <br />
+          <br />
 
-          <ImageUploadForm
-            setImageInput={onImageInputChange}
-            imageInput={imageInput}
+          <select
+            id="sorting-area_of_work"
+            onClick={e => onAreaOfWorkInputChange(e.target.value)}
+            onBlur={e => onAreaOfWorkInputChange(e.target.value)}
+          >
+            <option value="">--Select--</option>
+            <option value="Development">Development</option>
+            <option value="iOS">iOS</option>
+            <option value="Android">Android</option>
+            <option value="Design">Design</option>
+          </select>
+
+          <br />
+          <br />
+          <br />
+
+          <input
+            type="text"
+            placeholder="Title"
+            value={titleInput}
+            onChange={e => onTitleInputChange(e.target.value)}
           />
-        </div>
 
-        <br />
-        <br />
-        <br />
-
-        <select
-          id="sorting-area_of_work"
-          onClick={e => onAreaOfWorkInputChange(e.target.value)}
-          onBlur={e => onAreaOfWorkInputChange(e.target.value)}
-        >
-          <option value="">--Select--</option>
-          <option value="Development">Development</option>
-          <option value="iOS">iOS</option>
-          <option value="Android">Android</option>
-          <option value="Design">Design</option>
-        </select>
-
-        <br />
-        <br />
-        <br />
-
-        <input
-          type="text"
-          placeholder="Title"
-          value={titleInput}
-          onChange={e => onTitleInputChange(e.target.value)}
-        />
-
-
-
-
-        <button type="submit">Submit</button>
-
-      </form>
-    </Section>
+          <button type="submit">Submit</button>
+          <button type="reset" onClick={resetInputs}>Cancel</button>
+        </form>
+      </section>
+    </main>
   );
 }
-
-const Section = styled.section`
-  width: 100%;
-  height: 100vh;
-  padding-top: 100px;
-  background-color: pink;
-`;
 
 const InputContainer = styled.div`
   display: flex;
