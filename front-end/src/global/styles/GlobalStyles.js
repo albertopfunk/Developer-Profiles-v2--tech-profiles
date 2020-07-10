@@ -12,7 +12,7 @@ export const GlobalStyles = createGlobalStyle`
 
   /* Document */
   html {
-    line-height: 1.15;
+    line-height: 1.5;
     -webkit-text-size-adjust: 100%;
     /* custom */
     box-sizing: border-box;
@@ -24,15 +24,12 @@ export const GlobalStyles = createGlobalStyle`
     position: relative;
     transition: all 0.2s ease;
   }
-  /* custom */
-  html, body, #root {
-    width: 100%;
-    height: 100%;
-    margin: 0;
-  }
 
 
   /* Sections */
+  body {
+    margin: 0;
+  }
   main {
     display: block;
   }
@@ -105,7 +102,7 @@ export const GlobalStyles = createGlobalStyle`
   textarea {
     font-family: inherit;
     font-size: 100%;
-    line-height: 1.15;
+    line-height: 1.5;
     margin: 0;
   }
   button,
