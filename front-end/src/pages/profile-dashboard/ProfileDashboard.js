@@ -99,105 +99,112 @@ function ProfileDashboard() {
     return <h1>Loading...</h1>;
   }
   return (
-    <Main>
+    <MainContainer>
       <nav aria-label="page">
-        <Link to={`${url}`}>Home</Link>
-        <Link to={`${url}/new`}>New user</Link>
-        <Link to={`${url}/personal-info`}>Personal Info</Link>
-        <Link to={`${url}/about-you`}>About You</Link>
-        <Link to={`${url}/where-to-find-you`}>Where to Find You</Link>
-        <Link to={`${url}/projects`}>Projects</Link>
-        <Link to={`${url}/education`}>Education</Link>
-        <Link to={`${url}/experience`}>Experience</Link>
+        <Link to={`${url}`}>Home</Link><br/>
+        <Link to={`${url}/new`}>New user</Link><br/>
+        <Link to={`${url}/personal-info`}>Personal Info</Link><br/>
+        <Link to={`${url}/about-you`}>About You</Link><br/>
+        <Link to={`${url}/where-to-find-you`}>Where to Find You</Link><br/>
+        <Link to={`${url}/projects`}>Projects</Link><br/>
+        <Link to={`${url}/education`}>Education</Link><br/>
+        <Link to={`${url}/experience`}>Experience</Link><br/>
         <Link to={`${url}/billing`}>Billing</Link>
       </nav>
 
-      <UserCard
-        dashboard
-        previewImg={previewImg.image}
-        extras={{
-          locations: user.locations,
-          topSkills: user.topSkills,
-          additionalSkills: user.additionalSkills,
-          education: user.education,
-          experience: user.experience,
-          projects: user.projects
-        }}
-        usersLength={1}
-        index={1}
-        id={user.id}
-        areaOfWork={user.area_of_work}
-        email={user.public_email}
-        image={user.image}
-        firstName={user.first_name}
-        lastName={user.last_name}
-        currentLocation={user.current_location_name}
-        summary={user.summary}
-        title={user.desired_title}
-        topSkills={user.top_skills_prev}
-        additionalSkills={user.additional_skills_prev}
-        github={user.github}
-        twitter={user.twitter}
-        linkedin={user.linkedin}
-        portfolio={user.portfolio}
-      />
+      <div className="content-container">
+        <ProfileContext.Provider
+          value={{
+            loadingUser,
+            user,
+            editProfile,
+            addUserExtras,
+            setPreviewImg
+          }}
+        >
+          <Switch>
+            <Route exact path={`${path}`}>
+              <ProfileHome />
+            </Route>
 
-      <ProfileContext.Provider
-        value={{
-          loadingUser,
-          user,
-          editProfile,
-          addUserExtras,
-          setPreviewImg
-        }}
-      >
-        <Switch>
-          <Route exact path={`${path}`}>
-            <ProfileHome />
-          </Route>
+            <Route path={`${path}/new`}>
+              <NewUser />
+            </Route>
 
-          <Route path={`${path}/new`}>
-            <NewUser />
-          </Route>
+            <Route path={`${path}/personal-info`}>
+              <PersonalInfo />
+            </Route>
 
-          <Route path={`${path}/personal-info`}>
-            <PersonalInfo />
-          </Route>
+            <Route path={`${path}/about-you`}>
+              <AboutYou />
+            </Route>
 
-          <Route path={`${path}/about-you`}>
-            <AboutYou />
-          </Route>
+            <Route path={`${path}/Where-to-find-you`}>
+              <WhereToFindYou />
+            </Route>
 
-          <Route path={`${path}/Where-to-find-you`}>
-            <WhereToFindYou />
-          </Route>
+            <Route path={`${path}/projects`}>
+              <DashboardProjects />
+            </Route>
 
-          <Route path={`${path}/projects`}>
-            <DashboardProjects />
-          </Route>
+            <Route path={`${path}/education`}>
+              <DashboardEducation />
+            </Route>
 
-          <Route path={`${path}/education`}>
-            <DashboardEducation />
-          </Route>
+            <Route path={`${path}/experience`}>
+              <DashboardExperience />
+            </Route>
 
-          <Route path={`${path}/experience`}>
-            <DashboardExperience />
-          </Route>
+            <Route path={`${path}/billing`}>
+              <DashboardBilling />
+            </Route>
+          </Switch>
+        </ProfileContext.Provider>
 
-          <Route path={`${path}/billing`}>
-            <DashboardBilling />
-          </Route>
-        </Switch>
-      </ProfileContext.Provider>
-    </Main>
+        <UserCard
+          dashboard
+          previewImg={previewImg.image}
+          extras={{
+            locations: user.locations,
+            topSkills: user.topSkills,
+            additionalSkills: user.additionalSkills,
+            education: user.education,
+            experience: user.experience,
+            projects: user.projects
+          }}
+          usersLength={1}
+          index={1}
+          id={user.id}
+          areaOfWork={user.area_of_work}
+          email={user.public_email}
+          image={user.image}
+          firstName={user.first_name}
+          lastName={user.last_name}
+          currentLocation={user.current_location_name}
+          summary={user.summary}
+          title={user.desired_title}
+          topSkills={user.top_skills_prev}
+          additionalSkills={user.additional_skills_prev}
+          github={user.github}
+          twitter={user.twitter}
+          linkedin={user.linkedin}
+          portfolio={user.portfolio}
+        />
+      </div>
+    </MainContainer>
   );
 }
 
-const Main = styled.main`
+const MainContainer = styled.div`
   width: 100%;
-  height: 100vh;
   padding-top: 100px;
   background-color: pink;
+  display: flex;
+  flex-wrap: nowrap;
+  .content-container {
+    display: flex;
+    flex-wrap: wrap;
+  }
 `;
 
 export default ProfileDashboard;
