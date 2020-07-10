@@ -15,8 +15,14 @@ function MainHeader(props) {
     props.history.replace("/");
   }
 
-  function openMobileNav() {
+  function toggleMobileNav() {
     setIsMobileNavOpen(!isMobileNavOpen);
+  }
+
+  function closeMobileNav() {
+    if (isMobileNavOpen) {
+      setIsMobileNavOpen(false);
+    }
   }
 
   return (
@@ -29,6 +35,7 @@ function MainHeader(props) {
                 src="https://res.cloudinary.com/dy5hgr3ht/image/upload/c_scale,h_65/v1594347155/tech-pros-v1-main/tech-profiles-logo.png"
                 alt=""
               />
+              <span className="sr-only">Home</span>
             </Link>
           </li>
         </ul>
@@ -61,11 +68,12 @@ function MainHeader(props) {
       <nav aria-label="site" className="mobile-nav">
         <ul id="nav-logo">
           <li>
-            <Link onClick={openMobileNav} to="/">
+            <Link onClick={closeMobileNav} to="/">
               <img
                 src="https://res.cloudinary.com/dy5hgr3ht/image/upload/c_scale,h_45/v1594347155/tech-pros-v1-main/tech-profiles-logo.png"
                 alt=""
               />
+              <span className="sr-only">Home</span>
             </Link>
           </li>
         </ul>
@@ -74,7 +82,7 @@ function MainHeader(props) {
           id="menu-button"
           aria-haspopup="true"
           aria-controls="nav-menu"
-          onClick={openMobileNav}
+          onClick={toggleMobileNav}
         >
           {isMobileNavOpen ? (
             <>
@@ -99,14 +107,14 @@ function MainHeader(props) {
           className={`${isMobileNavOpen ? "_" : "hidden"}`}
         >
           <li>
-            <Link onClick={openMobileNav} to="/profiles">
+            <Link onClick={toggleMobileNav} to="/profiles">
               Profiles
             </Link>
           </li>
           {auth0Client.isAuthenticated() ? (
             <>
               <li>
-                <Link onClick={openMobileNav} to="/profile-dashboard">
+                <Link onClick={toggleMobileNav} to="/profile-dashboard">
                   Dashboard
                 </Link>
               </li>
