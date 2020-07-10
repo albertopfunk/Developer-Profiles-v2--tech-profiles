@@ -150,13 +150,13 @@ function PersonalInfo() {
     switch (id) {
       case "first-name":
         if (!firstName.inputChange) return;
-        if (value && !validateInput("name", value)) {
-          console.log("validation error");
-          setFirstName({ ...firstName, inputError: true });
-        } else {
+        if (value.trim() === "") {
+          setFirstName({ ...firstName, inputValue: "", inputError: false });
+        } else if (validateInput("name", value)) {
           setFirstName({ ...firstName, inputError: false });
+        } else {
+          setFirstName({ ...firstName, inputError: true });
         }
-
         break;
       default:
         console.log("none");
@@ -273,7 +273,7 @@ function PersonalInfo() {
   }
 
   function resetInputs() {
-    setEditInputs(false)
+    setEditInputs(false);
   }
 
   if (loadingUser) {
@@ -290,8 +290,24 @@ function PersonalInfo() {
         <h1 id="personal-info-heading-1">Personal Info</h1>
         <section aria-labelledby="personal-info-heading-2">
           <h2 id="personal-info-heading-2">Current Information</h2>
-          <button onClick={onEditInputs}>Edit</button>
-
+          <button onClick={onEditInputs}>Edit Information</button>
+          <div>
+            <p>First Name: {user.first_name || "None Set"}</p>
+            <p>Last Name: {user.last_name || "None Set"}</p>
+            <div>
+              {user.image ? (
+                <>
+                  <p>Image:</p>
+                  {/* what is a good alt tag for your profile image? */}
+                  <img src={user.image} alt="Your Profile Pic" />
+                </>
+              ) : (
+                <p>Image: None Set</p>
+              )}
+            </div>
+            <p>Area of Work: {user.area_of_work || "None Set"}</p>
+            <p>Title: {user.desired_title || "None Set"}</p>
+          </div>
         </section>
       </main>
     );
@@ -412,7 +428,9 @@ function PersonalInfo() {
           />
 
           <button type="submit">Submit</button>
-          <button type="reset" onClick={resetInputs}>Cancel</button>
+          <button type="reset" onClick={resetInputs}>
+            Cancel
+          </button>
         </form>
       </section>
     </main>
