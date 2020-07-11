@@ -1,11 +1,15 @@
 import React, { useState, useContext, useEffect } from "react";
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
 import { httpClient } from "../../../global/helpers/http-requests";
+import styled from "styled-components";
 
 function ImageUploadForm({ imageInput, setImageInput }) {
   const { setPreviewImg } = useContext(ProfileContext);
-  const [loadingImage, setLoadingImage] = useState(false);
-  const [errorImage, setErrorImage] = useState(false);
+  const [imageLoading, setImageLoading] = useState(false);
+  const [imageError, setImageError] = useState(false);
+  const [imageSuccess, setImageSuccess] = useState(false);
+
+  let imageRef = React.createRef();
 
   // removing unused preview image on unmount caused bugs
   // current fix is using local storage to remove on mount
@@ -30,7 +34,10 @@ function ImageUploadForm({ imageInput, setImageInput }) {
     const file = e.target.files[0];
     const data = new FormData();
     data.append("image", file);
-    setLoadingImage(true);
+    imageRef.current.value = "";
+    setImageLoading(true);
+    setImageError(false);
+    setImageSuccess(false);
 
     const [res, err] = await httpClient("POST", "/api/upload-image", data, {
       headers: {
@@ -40,8 +47,9 @@ function ImageUploadForm({ imageInput, setImageInput }) {
 
     if (err) {
       console.error(`${res.mssg} => ${res.err}`);
-      setLoadingImage(false);
-      setErrorImage(true);
+      setImageLoading(false);
+      setImageError(true);
+      setImageSuccess(false);
       return;
     }
 
@@ -54,25 +62,65 @@ function ImageUploadForm({ imageInput, setImageInput }) {
     localStorage.setItem("image_id", res.data.id);
     setPreviewImg(res.data);
     setImageInput(res.data);
-    setLoadingImage(false);
-    setErrorImage(false);
+    setImageLoading(false);
+    setImageError(false);
+    setImageSuccess(true);
   }
 
   console.log("=====IMAGEUPLOADFORM + IMG INPUTTTT=====", imageInput);
 
   return (
-    <div>
+    <InputContainer>
+      <label htmlFor="image-upload" id="image-upload-label">
+        Image:
+      </label>
       <input
         type="file"
+        id="image-upload"
+        ref={imageRef}
         name="image-upload"
-        placeholder="Upload Image"
+        aria-labelledby="image-upload-label"
+        aria-describedby="imageLoading imageError imageSuccess"
+        aria-invalid={imageError}
         onChange={e => onImageInputChange(e)}
       />
-      {loadingImage ? <p>Loading...</p> : null}
-      {errorImage ? <p>Error uploading image. Please try again</p> : null}
-      {imageInput.image ? <p>Success!</p> : null}
-    </div>
+
+      {imageLoading ? (
+        <span id="imageLoading" className="loading-mssg" aria-live="polite">
+          Loading...
+        </span>
+      ) : null}
+
+      {imageError ? (
+        <span id="imageError" className="err-mssg" aria-live="polite">
+          Error uploading image. Please try again
+        </span>
+      ) : null}
+
+      {imageSuccess ? (
+        <span id="imageSuccess" className="success-mssg" aria-live="polite">
+          Success!
+        </span>
+      ) : null}
+    </InputContainer>
   );
 }
+
+const InputContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  .loading-mssg {
+    color: green;
+    font-size: 0.7rem;
+  }
+  .err-mssg {
+    color: red;
+    font-size: 0.7rem;
+  }
+  .success-mssg {
+    color: green;
+    font-size: 0.7rem;
+  }
+`;
 
 export default ImageUploadForm;
