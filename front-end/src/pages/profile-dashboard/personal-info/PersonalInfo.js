@@ -103,26 +103,32 @@ function PersonalInfo() {
     ProfileContext
   );
 
-  const [lastNameInput, setLastNameInput] = useState("");
-  const [imageInput, setImageInput] = useState({ image: "", id: "" });
-  const [areaOfWorkInput, setAreaOfWorkInput] = useState("");
-  const [titleInput, setTitleInput] = useState("");
   const [editInputs, setEditInputs] = useState(false);
-  const [inputChanges, setInputChanges] = useState({
-    firstName: false,
-    lastName: false,
-    image: false,
-    areaOfWork: false,
-    title: false
-  });
   const [firstName, setFirstName] = useState({
     inputValue: "",
     inputChange: false,
     inputError: false
   });
+  const [lastName, setLastName] = useState({
+    inputValue: "",
+    inputChange: false,
+    inputError: false
+  });
+  const [image, setImage] = useState({
+    image: "",
+    id: "",
+    inputChange: false
+  });
+  const [areaOfWork, setAreaOfWork] = useState({
+    inputValue: "",
+    inputChange: false
+  });
+  const [title, setTitle] = useState({
+    inputValue: "",
+    inputChange: false,
+    inputError: false
+  });
 
-  // imageInput is the preview image so default should be ""
-  // area of work select value default should also be ""
   function onEditInputs() {
     setEditInputs(true);
     setFirstName({
@@ -130,37 +136,25 @@ function PersonalInfo() {
       inputChange: false,
       inputError: false
     });
-
-    setLastNameInput(user.last_name || "");
-    setImageInput({ image: "", id: "" });
-    setAreaOfWorkInput("");
-    setTitleInput(user.desired_title || "");
-
-    setInputChanges({
-      firstName: false,
-      lastName: false,
-      image: false,
-      areaOfWork: false,
-      title: false
+    setLastName({
+      inputValue: user.last_name || "",
+      inputChange: false,
+      inputError: false
     });
-  }
-
-  function validateOnBlur(id, value) {
-    console.log(id);
-    switch (id) {
-      case "first-name":
-        if (!firstName.inputChange) return;
-        if (value.trim() === "") {
-          setFirstName({ ...firstName, inputValue: "", inputError: false });
-        } else if (validateInput("name", value)) {
-          setFirstName({ ...firstName, inputError: false });
-        } else {
-          setFirstName({ ...firstName, inputError: true });
-        }
-        break;
-      default:
-        console.log("none");
-    }
+    setImage({
+      image: "",
+      id: "",
+      inputChange: false
+    });
+    setAreaOfWork({
+      inputValue: "",
+      inputChange: false
+    });
+    setTitle({
+      inputValue: user.desired_title || "",
+      inputChange: false,
+      inputError: false
+    });
   }
 
   function onFirstNameInputChange(value) {
@@ -176,24 +170,53 @@ function PersonalInfo() {
     setFirstName({ ...firstName, inputChange: true, inputValue: value });
   }
 
-  function onLastNameInputChange(value) {
-    if (!inputChanges.lastName) {
-      setInputChanges({ ...inputChanges, lastName: true });
+  function onFirstNameInputValidate(value) {
+    if (!firstName.inputChange) return;
+    if (value.trim() === "") {
+      setFirstName({ ...firstName, inputValue: "", inputError: false });
+    } else if (validateInput("name", value)) {
+      setFirstName({ ...firstName, inputError: false });
+    } else {
+      setFirstName({ ...firstName, inputError: true });
     }
-    setLastNameInput(value);
+  }
+
+  function onLastNameInputChange(value) {
+    if (value === user.last_name) {
+      setLastName({
+        inputChange: false,
+        inputValue: value,
+        inputError: false
+      });
+    }
+
+    setLastName({ ...lastName, inputChange: true, inputValue: value });
+  }
+
+  function onLastNameInputValidate(value) {
+    if (!lastName.inputChange) return;
+    if (value.trim() === "") {
+      setLastName({ ...lastName, inputValue: "", inputError: false });
+    } else if (validateInput("name", value)) {
+      setLastName({ ...lastName, inputError: false });
+    } else {
+      setLastName({ ...lastName, inputError: true });
+    }
   }
 
   function onImageInputChange(value) {
-    if (!inputChanges.image) {
-      setInputChanges({ ...inputChanges, image: true });
+    setImage({ ...value, inputChange: true });
+  }
+
+  function removeOldImage() {
+    if (user.image_id) {
+      httpClient("POST", "/api/delete-image", {
+        id: user.image_id
+      });
     }
-    setImageInput(value);
   }
 
   function removeImage() {
-    if (!inputChanges.image) {
-      setInputChanges({ ...inputChanges, image: true });
-    }
     console.log("removeeeee");
     // should not remove on the spot
     // should set the image to remove
@@ -202,23 +225,35 @@ function PersonalInfo() {
   }
 
   function onAreaOfWorkInputChange(value) {
-    // when user selects default value, indicates no change
-    if (!value) {
-      setInputChanges({ ...inputChanges, areaOfWork: false });
+    if (value === user.area_of_work) {
+      setAreaOfWork({ ...areaOfWork, inputChange: false });
       return;
     }
-
-    if (!inputChanges.areaOfWork) {
-      setInputChanges({ ...inputChanges, areaOfWork: true });
-    }
-    setAreaOfWorkInput(value);
+    setAreaOfWork({ ...areaOfWork, inputChange: true, inputValue: value });
   }
 
   function onTitleInputChange(value) {
-    if (!inputChanges.title) {
-      setInputChanges({ ...inputChanges, title: true });
+    if (value === user.desired_title) {
+      setTitle({
+        inputChange: false,
+        inputValue: value,
+        inputError: false
+      });
+      return;
     }
-    setTitleInput(value);
+
+    setTitle({ ...title, inputChange: true, inputValue: value });
+  }
+
+  function onTitleInputValidate(value) {
+    if (!title.inputChange) return;
+    if (value.trim() === "") {
+      setTitle({ ...title, inputValue: "", inputError: false });
+    } else if (validateInput("title", value)) {
+      setTitle({ ...title, inputError: false });
+    } else {
+      setTitle({ ...title, inputError: true });
+    }
   }
 
   function submitEdit(e) {
@@ -226,10 +261,10 @@ function PersonalInfo() {
 
     if (
       !firstName.inputChange &&
-      !inputChanges.lastName &&
-      !inputChanges.image &&
-      !inputChanges.areaOfWork &&
-      !inputChanges.title
+      !lastName.inputChange &&
+      !image.inputChange &&
+      !areaOfWork.inputChange &&
+      !title.inputChange
     ) {
       return;
     }
@@ -240,31 +275,24 @@ function PersonalInfo() {
       inputs.first_name = firstName.inputValue;
     }
 
-    if (inputChanges.lastName) {
-      inputs.last_name = lastNameInput;
+    if (lastName.inputChange) {
+      inputs.last_name = lastName.inputValue;
     }
 
-    if (inputChanges.image) {
-      if (imageInput.id !== user.image_id) {
-        if (user.image_id) {
-          httpClient("POST", "/api/delete-image", {
-            id: user.image_id
-          });
-        }
-
-        inputs.image = imageInput.image;
-        inputs.image_id = imageInput.id;
-        localStorage.removeItem("image_id");
-        setPreviewImg({ image: "", id: "" });
-      }
+    if (image.inputChange) {
+      removeOldImage();
+      inputs.image = image.image;
+      inputs.image_id = image.id;
+      localStorage.removeItem("image_id");
+      setPreviewImg({ image: "", id: "" });
     }
 
-    if (inputChanges.areaOfWork) {
-      inputs.area_of_work = areaOfWorkInput;
+    if (areaOfWork.inputChange) {
+      inputs.area_of_work = areaOfWork.inputValue;
     }
 
-    if (inputChanges.title) {
-      inputs.desired_title = titleInput;
+    if (title.inputChange) {
+      inputs.desired_title = title.inputValue;
     }
 
     console.log("SUB", inputs);
@@ -333,45 +361,61 @@ function PersonalInfo() {
               inputMode="text"
               id="first-name"
               name="first-name"
+              className={`input ${firstName.inputError ? "input-err" : ""}`}
               aria-labelledby="first-name-label"
-              aria-describedby="nameError"
+              aria-describedby="first-name-error"
               aria-invalid={firstName.inputError}
               value={firstName.inputValue}
               onChange={e => onFirstNameInputChange(e.target.value)}
-              onBlur={e => validateOnBlur(e.target.id, e.target.value)}
+              onBlur={e => onFirstNameInputValidate(e.target.value)}
             />
             {firstName.inputError ? (
               <span
-                id="nameError"
+                id="first-name-error"
                 className="err-mssg"
                 aria-live="polite"
-                style={{
-                  fontSize: "12px",
-                  color: "red"
-                }}
               >
                 First Name can only be alphabelical characters, no numbers
               </span>
             ) : null}
           </InputContainer>
 
-          <br />
-
-          <input
-            type="text"
-            placeholder="Last Name"
-            value={lastNameInput}
-            onChange={e => onLastNameInputChange(e.target.value)}
-          />
-
-          <br />
-          <br />
-          <br />
+          <InputContainer>
+            <label id="last-name-label" htmlFor="last-name">
+              Last Name:
+            </label>
+            <input
+              type="text"
+              autoComplete="family-name"
+              inputMode="text"
+              id="last-name"
+              name="last-name"
+              aria-labelledby="last-name-label"
+              aria-describedby="last-name-error"
+              aria-invalid={lastName.inputError}
+              value={lastName.inputValue}
+              onChange={e => onLastNameInputChange(e.target.value)}
+              onBlur={e => onLastNameInputValidate(e.target.value)}
+            />
+            {lastName.inputError ? (
+              <span
+                id="last-name-error"
+                className="err-mssg"
+                aria-live="polite"
+              >
+                Last Name can only be alphabelical characters, no numbers
+              </span>
+            ) : null}
+          </InputContainer>
 
           <div>
-            {user.image || imageInput.image ? (
+            <ImageUploadForm
+              setImageInput={onImageInputChange}
+              imageInput={image}
+            />
+            {user.image || image.image ? (
               <div style={{ height: "200px", width: "200px" }}>
-                {!imageInput.image ? (
+                {!image.image ? (
                   <span
                     style={{
                       position: "absolute",
@@ -388,44 +432,95 @@ function PersonalInfo() {
 
                 <img
                   style={{ height: "200px", width: "200px" }}
-                  src={imageInput.image || user.image}
+                  src={image.image || user.image}
                   alt="current profile pic"
                 />
               </div>
             ) : null}
-
-            <ImageUploadForm
-              setImageInput={onImageInputChange}
-              imageInput={imageInput}
-            />
           </div>
 
           <br />
           <br />
           <br />
 
-          <select
-            id="sorting-area_of_work"
-            onClick={e => onAreaOfWorkInputChange(e.target.value)}
-            onBlur={e => onAreaOfWorkInputChange(e.target.value)}
-          >
-            <option value="">--Select--</option>
-            <option value="Development">Development</option>
-            <option value="iOS">iOS</option>
-            <option value="Android">Android</option>
-            <option value="Design">Design</option>
-          </select>
+          <FieldSet>
+            <legend>Area of Work</legend>
+            <div className="radio-buttons-container">
+              <span className="radio-wrapper">
+                <input
+                  type="radio"
+                  name="area-of-work"
+                  id="development"
+                  value="Development"
+                  defaultChecked={user.area_of_work === "Development"}
+                  onClick={e => onAreaOfWorkInputChange(e.target.value)}
+                />
+                <label htmlFor="development">Development</label>
+              </span>
+              <span className="radio-wrapper">
+                <input
+                  type="radio"
+                  name="area-of-work"
+                  id="ios"
+                  value="iOS"
+                  defaultChecked={user.area_of_work === "iOS"}
+                  onClick={e => onAreaOfWorkInputChange(e.target.value)}
+                />
+                <label htmlFor="ios">iOS</label>
+              </span>
+              <span className="radio-wrapper">
+                <input
+                  type="radio"
+                  name="area-of-work"
+                  id="android"
+                  value="Android"
+                  defaultChecked={user.area_of_work === "Android"}
+                  onClick={e => onAreaOfWorkInputChange(e.target.value)}
+                />
+                <label htmlFor="android">Android</label>
+              </span>
+              <span className="radio-wrapper">
+                <input
+                  type="radio"
+                  name="area-of-work"
+                  id="design"
+                  value="Design"
+                  defaultChecked={user.area_of_work === "Design"}
+                  onClick={e => onAreaOfWorkInputChange(e.target.value)}
+                />
+                <label htmlFor="design">Design</label>
+              </span>
+            </div>
+          </FieldSet>
 
           <br />
           <br />
           <br />
 
-          <input
-            type="text"
-            placeholder="Title"
-            value={titleInput}
-            onChange={e => onTitleInputChange(e.target.value)}
-          />
+          <InputContainer>
+            <label id="title-label" htmlFor="title">
+              Title:
+            </label>
+            <input
+              type="text"
+              autoComplete="organization-title"
+              inputMode="text"
+              id="title"
+              name="title"
+              className={`input ${title.inputError ? "input-err" : ""}`}
+              aria-labelledby="title-label"
+              aria-describedby="title-error"
+              aria-invalid={title.inputError}
+              value={title.inputValue}
+              onChange={e => onTitleInputChange(e.target.value)}
+              onBlur={e => onTitleInputValidate(e.target.value)}
+            />
+            {title.inputError ? (
+              <span id="title-error" className="err-mssg" aria-live="polite">
+                Title can only be alphabelical characters, no numbers
+              </span>
+            ) : null}
+          </InputContainer>
 
           <button type="submit">Submit</button>
           <button type="reset" onClick={resetInputs}>
@@ -440,6 +535,24 @@ function PersonalInfo() {
 const InputContainer = styled.div`
   display: flex;
   flex-direction: column;
+  .input-err {
+    border: solid red;
+  }
+  .err-mssg {
+    color: red;
+    font-size: 0.7rem;
+  }
+`;
+
+const FieldSet = styled.fieldset`
+  .radio-buttons-container {
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    .radio-wrapper {
+      margin: 0.7em;
+    }
+  }
 `;
 
 export default PersonalInfo;
