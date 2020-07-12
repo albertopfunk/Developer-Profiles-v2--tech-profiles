@@ -6,6 +6,7 @@ import { httpClient } from "../../../global/helpers/http-requests";
 import ImageUploadForm from "../../../components/forms/image-upload";
 import { validateInput } from "../../../global/helpers/validation";
 import { Helmet } from "react-helmet";
+import { useEffect } from "react";
 
 /*
 
@@ -57,44 +58,6 @@ no async side effects needed
 delete-image is a background side effect
 
 
-FIRST NAME
-input
-change
-validation error
-
-const [firstName, setFirstName] = useState({
-  input: "",
-  inputChange: false,
-  inputError: false
-})
-
-inputChange = true => onInputChange && if input !== user.inputName
-inputChange = false => default, input === user.inputName
-
-inputError = true => inputValue !== validated && inputValue !== ""
-inputError = false => default, inputValue === validated || inputValue === ""
-
-
-
-LAST NAME INPUT
-input
-change
-validation error
-
-
-
-
-!VALIDATION
-
-FIRST NAME
-only allow alphabetical characters
-no numbers, symbols, special chars
-
-LAST NAME
-only allow alphabetical characters
-no numbers, symbols, special chars
-
-
 
 */
 
@@ -104,6 +67,7 @@ function PersonalInfo() {
   );
 
   const [editInputs, setEditInputs] = useState(false);
+  const [submitError, setSubmitError] = useState(false);
   const [firstName, setFirstName] = useState({
     inputValue: "",
     inputChange: false,
@@ -129,7 +93,10 @@ function PersonalInfo() {
     inputError: false
   });
 
+  let errorSummaryRef = React.createRef();
+
   function onEditInputs() {
+    setSubmitError(false);
     setEditInputs(true);
     setFirstName({
       inputValue: user.first_name || "",
@@ -156,6 +123,23 @@ function PersonalInfo() {
       inputError: false
     });
   }
+
+  useEffect(() => {
+    if (submitError && errorSummaryRef.current) {
+      errorSummaryRef.current.focus();
+    }
+    // another issue with required dependencies causing bugs
+    // I am using this since I need to set focus to the
+    // err summary element when user clicks submit with errors.
+    // since state needs to change for the element to appear
+    // and I can only set focus once the element appears, I have
+    // to set focus AFTER state changes and component renders
+    // so I am using useEffect to handle that
+    // this works, but if I add the required errorSummaryRef
+    // it will shift focus on that Ref on ANY state change/render
+    // since refs are re-set each time
+    // eslint-disable-next-line
+  }, [submitError]);
 
   function onFirstNameInputChange(value) {
     if (value === user.first_name) {
@@ -259,6 +243,11 @@ function PersonalInfo() {
   function submitEdit(e) {
     e.preventDefault();
 
+    if (firstName.inputError || lastName.inputError || title.inputError) {
+      setSubmitError(true);
+      return;
+    }
+
     if (
       !firstName.inputChange &&
       !lastName.inputChange &&
@@ -305,7 +294,7 @@ function PersonalInfo() {
   }
 
   if (loadingUser) {
-    // maybe make this a skeleton loader
+    // skeleton loader
     return <h1>Loading...</h1>;
   }
 
@@ -342,14 +331,32 @@ function PersonalInfo() {
   }
 
   return (
-    <main aria-labelledby="personal-info-heading-1">
+    <main aria-labelledby="personal-info-heading">
       <Helmet>
         <title>Dashboard Personal Info | Tech Profiles</title>
       </Helmet>
-      <h1 id="personal-info-heading-1">Personal Info</h1>
+      <h1 id="personal-info-heading">Personal Info</h1>
 
-      <section aria-labelledby="personal-info-heading-2">
-        <h2 id="personal-info-heading-2">Edit Information</h2>
+      <FormSection aria-labelledby="edit-info-heading">
+        <h2 id="edit-info-heading">Edit Information</h2>
+        <div
+          ref={errorSummaryRef}
+          tabIndex="0"
+          aria-live="polite"
+          aria-labelledby="error-heading"
+          className={`error-summary ${submitError ? "" : "hidden"}`}
+        >
+          <h3 id="error-heading">Error Summary</h3>
+          {firstName.inputError ? <p>First Name Error</p> : null}
+          {lastName.inputError ? <p>Last Name Error</p> : null}
+          {title.inputError ? <p>Title Error</p> : null}
+          {!firstName.inputError &&
+          !lastName.inputError &&
+          !title.inputError ? (
+            <p>No Errors, ready to submit</p>
+          ) : null}
+        </div>
+
         <form onSubmit={e => submitEdit(e)}>
           <InputContainer>
             <label id="first-name-label" htmlFor="first-name">
@@ -527,10 +534,18 @@ function PersonalInfo() {
             Cancel
           </button>
         </form>
-      </section>
+      </FormSection>
     </main>
   );
 }
+
+const FormSection = styled.section`
+  .hidden {
+    display: none;
+  }
+  .error-summary {
+  }
+`;
 
 const InputContainer = styled.div`
   display: flex;
