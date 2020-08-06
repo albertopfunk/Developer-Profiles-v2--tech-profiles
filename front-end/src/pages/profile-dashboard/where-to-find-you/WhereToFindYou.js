@@ -27,18 +27,11 @@ function WhereToFindYou() {
     inputChange: false,
     inputError: false
   });
-
-
-  const [portfolioInput, setPortfolioInput] = useState("");
-  const [portfolioInputChange, setPortfolioInputChange] = useState(false);
   const [portfolio, setPortfolio] = useState({
     inputValue: "",
     inputChange: false,
     inputError: false
   });
-
-  const [emailInput, setEmailInput] = useState("");
-  const [emailInputChange, setEmailInputChange] = useState(false);
   const [email, setEmail] = useState({
     inputValue: "",
     inputChange: false,
@@ -48,12 +41,7 @@ function WhereToFindYou() {
   const [locationInput, setLocationInput] = useState([]);
   const [locationInputChange, setLocationInputChange] = useState(false);
 
-
-
-
   function onEditInputs() {
-
-
     setSubmitError(false);
     setEditInputs(true);
     setGithub({
@@ -71,23 +59,16 @@ function WhereToFindYou() {
       inputChange: false,
       inputError: false
     });
-
-    // setPortfolioInput(user.portfolio || "");
-    // setPortfolioInputChange(false);
     setPortfolio({
       inputValue: user.portfolio || "",
       inputChange: false,
       inputError: false
     });
-
-    // setEmailInput(user.public_email || "");
-    // setEmailInputChange(false);
     setEmail({
       inputValue: user.public_email || "",
       inputChange: false,
       inputError: false
     });
-
 
     if (user.current_location_name) {
       setLocationInput([
@@ -102,11 +83,7 @@ function WhereToFindYou() {
       setLocationInput([]);
     }
     setLocationInputChange(false);
-
   }
-
-
-
 
   function onGithubInputChange(value) {
     // this will only match the full URL you use, not the username alone
@@ -133,13 +110,13 @@ function WhereToFindYou() {
       // maybe return an object instead with a 'intl' prop
       // might have to make the intl part of regex a captured group to know what to use
       // so `https://${validateInput("github", value).intl || null}github.com/${validateInput("github", value).username}`
-      const fullUrl = `https://github.com/${validateInput("github", value)}`
+      const fullUrl = `https://github.com/${validateInput("github", value)}`;
       setGithub({ ...github, inputError: false, inputValue: fullUrl });
     } else {
       setGithub({ ...github, inputError: true });
     }
   }
-  
+
   function onTwitterInputChange(value) {
     // this will only match the full URL you use, not the username alone
     // if you send value, and user.github, it will return the username on
@@ -165,7 +142,7 @@ function WhereToFindYou() {
       // maybe return an object instead with a 'intl' prop
       // might have to make the intl part of regex a captured group to know what to use
       // so `https://${validateInput("twitter", value).intl || null}twitter.com/${validateInput("twitter", value).username}`
-      const fullUrl = `https://twitter.com/${validateInput("twitter", value)}`
+      const fullUrl = `https://twitter.com/${validateInput("twitter", value)}`;
       setTwitter({ ...twitter, inputError: false, inputValue: fullUrl });
     } else {
       setTwitter({ ...twitter, inputError: true });
@@ -197,32 +174,61 @@ function WhereToFindYou() {
       // maybe return an object instead with a 'intl' prop
       // might have to make the intl part of regex a captured group to know what to use
       // so `https://${validateInput("linkedin", value).intl || null}linkedin.com/${validateInput("linkedin", value).username}`
-      const fullUrl = `https://www.linkedin.com/in/${validateInput("linkedin", value)}`
+      const fullUrl = `https://www.linkedin.com/in/${validateInput(
+        "linkedin",
+        value
+      )}`;
       setLinkedin({ ...linkedin, inputError: false, inputValue: fullUrl });
     } else {
       setLinkedin({ ...linkedin, inputError: true });
     }
   }
 
-
-
   function onPortfolioInputChange(value) {
-    if (!portfolioInputChange) {
-      setPortfolioInputChange(true);
+    if (value === user.portfolio) {
+      setPortfolio({
+        inputChange: false,
+        inputValue: value,
+        inputError: false
+      });
     }
-    setPortfolioInput(value);
+
+    setPortfolio({ ...portfolio, inputChange: true, inputValue: value });
   }
 
-
+  function onPortfolioInputValidate(value) {
+    if (!portfolio.inputChange) return;
+    if (value.trim() === "") {
+      setPortfolio({ ...portfolio, inputValue: "", inputError: false });
+    } else if (validateInput("url", value)) {
+      setPortfolio({ ...portfolio, inputError: false });
+    } else {
+      setPortfolio({ ...portfolio, inputError: true });
+    }
+  }
 
   function onEmailInputChange(value) {
-    if (!emailInputChange) {
-      setEmailInputChange(true);
+    if (value === user.public_email) {
+      setEmail({
+        inputChange: false,
+        inputValue: value,
+        inputError: false
+      });
     }
-    setEmailInput(value);
+
+    setEmail({ ...email, inputChange: true, inputValue: value });
   }
 
-
+  function onEmailInputValidate(value) {
+    if (!email.inputChange) return;
+    if (value.trim() === "") {
+      setEmail({ ...email, inputValue: "", inputError: false });
+    } else if (validateInput("email", value)) {
+      setEmail({ ...email, inputError: false });
+    } else {
+      setEmail({ ...email, inputError: true });
+    }
+  }
 
   async function onLocationInputChange(value) {
     const [res, err] = await httpClient("POST", "/api/autocomplete", {
@@ -238,7 +244,6 @@ function WhereToFindYou() {
   }
 
   async function onChosenLocation(name, id) {
-    console.log("WTFFFFF", name, id)
     if (!locationInputChange) {
       setLocationInputChange(true);
     }
@@ -269,9 +274,6 @@ function WhereToFindYou() {
     setLocationInput([]);
   }
 
-
-
-
   function submitEdit(e) {
     e.preventDefault();
 
@@ -286,9 +288,7 @@ function WhereToFindYou() {
       return;
     }
 
-
     const inputs = {};
-
 
     if (github.inputChange) {
       inputs.github = github.inputValue;
@@ -310,7 +310,6 @@ function WhereToFindYou() {
       inputs.public_email = email.inputValue;
     }
 
-
     if (locationInputChange) {
       if (locationInput.length > 0) {
         const { name, lat, lon } = locationInput[0];
@@ -324,9 +323,12 @@ function WhereToFindYou() {
       }
     }
 
-
     setEditInputs(false);
     editProfile(inputs);
+  }
+
+  function resetInputs() {
+    setEditInputs(false);
   }
 
   console.log("===Where to Find You===");
@@ -346,21 +348,17 @@ function WhereToFindYou() {
 
   return (
     <Main>
-
       <h1>Hello Where to Find You</h1>
 
-
-      <form onSubmit={e => submitEdit(e)}>
-
-
+      <form onSubmit={e => submitEdit(e)} noValidate>
         <InputContainer>
           <label id="github-label" htmlFor="github">
             Github:
           </label>
           <input
-            type="text"
+            type="url"
             autoComplete="username"
-            inputMode="text"
+            inputMode="url"
             id="github"
             name="github"
             className={`input ${github.inputError ? "input-err" : ""}`}
@@ -372,15 +370,11 @@ function WhereToFindYou() {
             onBlur={e => onGithubInputValidate(e.target.value)}
           />
           {github.inputError ? (
-              <span
-                id="github-error"
-                className="err-mssg"
-                aria-live="polite"
-              >
-                Github Username can only be alphabelical characters, no numbers
-                If full URL was used, it should be valid; for example, url, url, url
-              </span>
-            ) : null}
+            <span id="github-error" className="err-mssg" aria-live="polite">
+              Github Username can only be alphabelical characters, no numbers If
+              full URL was used, it should be valid; for example, url, url, url
+            </span>
+          ) : null}
         </InputContainer>
 
         <InputContainer>
@@ -388,9 +382,9 @@ function WhereToFindYou() {
             Twitter:
           </label>
           <input
-            type="text"
+            type="url"
             autoComplete="username"
-            inputMode="text"
+            inputMode="url"
             id="twitter"
             name="twitter"
             className={`input ${twitter.inputError ? "input-err" : ""}`}
@@ -402,15 +396,12 @@ function WhereToFindYou() {
             onBlur={e => onTwitterInputValidate(e.target.value)}
           />
           {twitter.inputError ? (
-              <span
-                id="twitter-error"
-                className="err-mssg"
-                aria-live="polite"
-              >
-                Twitter Username can only be alphabelical characters, no numbers
-                If full URL was used, it should be valid; for example, url, url, url
-              </span>
-            ) : null}
+            <span id="twitter-error" className="err-mssg" aria-live="polite">
+              Twitter Username can only be alphabelical characters, no numbers
+              If full URL was used, it should be valid; for example, url, url,
+              url
+            </span>
+          ) : null}
         </InputContainer>
 
         <InputContainer>
@@ -418,9 +409,9 @@ function WhereToFindYou() {
             Linkedin:
           </label>
           <input
-            type="text"
+            type="url"
             autoComplete="username"
-            inputMode="text"
+            inputMode="url"
             id="linkedin"
             name="linkedin"
             className={`input ${linkedin.inputError ? "input-err" : ""}`}
@@ -432,42 +423,63 @@ function WhereToFindYou() {
             onBlur={e => onLinkedinInputValidate(e.target.value)}
           />
           {linkedin.inputError ? (
-              <span
-                id="linkedin-error"
-                className="err-mssg"
-                aria-live="polite"
-              >
-                Linkedin Username can only be alphabelical characters, no numbers
-                If full URL was used, it should be valid; for example, url, url, url
-              </span>
-            ) : null}
+            <span id="linkedin-error" className="err-mssg" aria-live="polite">
+              Linkedin Username can only be alphabelical characters, no numbers
+              If full URL was used, it should be valid; for example, url, url,
+              url
+            </span>
+          ) : null}
         </InputContainer>
 
-        <br />
-        <br />
-        <br />
+        <InputContainer>
+          <label id="portfolio-label" htmlFor="portfolio">
+            Portfolio:
+          </label>
+          <input
+            type="url"
+            autoComplete="url"
+            inputMode="url"
+            id="portfolio"
+            name="portfolio"
+            className={`input ${portfolio.inputError ? "input-err" : ""}`}
+            aria-labelledby="portfolio-label"
+            aria-describedby="portfolio-error"
+            aria-invalid={portfolio.inputError}
+            value={portfolio.inputValue}
+            onChange={e => onPortfolioInputChange(e.target.value)}
+            onBlur={e => onPortfolioInputValidate(e.target.value)}
+          />
+          {portfolio.inputError ? (
+            <span id="portfolio-error" className="err-mssg" aria-live="polite">
+              URL should be valid; for example, url, url, url
+            </span>
+          ) : null}
+        </InputContainer>
 
-        <input
-          type="text"
-          placeholder="Portfolio"
-          value={portfolioInput}
-          onChange={e => onPortfolioInputChange(e.target.value)}
-        />
-
-        <br />
-        <br />
-        <br />
-
-        <input
-          type="text"
-          placeholder="Public Email"
-          value={emailInput}
-          onChange={e => onEmailInputChange(e.target.value)}
-        />
-
-        <br />
-        <br />
-        <br />
+        <InputContainer>
+          <label id="email-label" htmlFor="email">
+            Public Email:
+          </label>
+          <input
+            type="email"
+            autoComplete="email"
+            inputMode="email"
+            id="email"
+            name="email"
+            className={`input ${email.inputError ? "input-err" : ""}`}
+            aria-labelledby="email-label"
+            aria-describedby="email-error"
+            aria-invalid={email.inputError}
+            value={email.inputValue}
+            onChange={e => onEmailInputChange(e.target.value)}
+            onBlur={e => onEmailInputValidate(e.target.value)}
+          />
+          {email.inputError ? (
+            <span id="email-error" className="err-mssg" aria-live="polite">
+              email should be valid; for example, email, email, email
+            </span>
+          ) : null}
+        </InputContainer>
 
         <AutoComplete
           chosenInputs={locationInput}
@@ -478,10 +490,7 @@ function WhereToFindYou() {
           single
         />
 
-        <br />
-        <br />
-
-
+        <button type="reset" onClick={resetInputs}></button>
         <button>Submit</button>
       </form>
     </Main>
