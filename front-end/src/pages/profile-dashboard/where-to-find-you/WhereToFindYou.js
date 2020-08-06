@@ -22,10 +22,6 @@ function WhereToFindYou() {
     inputChange: false,
     inputError: false
   });
-
-
-  const [linkedinInput, setLinkedinInput] = useState("");
-  const [linkedinInputChange, setLinkedinInputChange] = useState(false);
   const [linkedin, setLinkedin] = useState({
     inputValue: "",
     inputChange: false,
@@ -70,9 +66,6 @@ function WhereToFindYou() {
       inputChange: false,
       inputError: false
     });
-
-    // setLinkedinInput(user.linkedin || "");
-    // setLinkedinInputChange(false);
     setLinkedin({
       inputValue: user.linkedin || "",
       inputChange: false,
@@ -179,13 +172,36 @@ function WhereToFindYou() {
     }
   }
 
-
-
   function onLinkedinInputChange(value) {
-    if (!linkedinInputChange) {
-      setLinkedinInputChange(true);
+    // this will only match the full URL you use, not the username alone
+    // if you send value, and user.github, it will return the username on
+    // both cases, so you can compare like that
+    if (value === user.linkedin) {
+      setLinkedin({
+        inputChange: false,
+        inputValue: value,
+        inputError: false
+      });
+      return;
     }
-    setLinkedinInput(value);
+
+    setLinkedin({ ...linkedin, inputChange: true, inputValue: value });
+  }
+
+  function onLinkedinInputValidate(value) {
+    if (!linkedin.inputChange) return;
+    if (value.trim() === "") {
+      setLinkedin({ ...linkedin, inputValue: "", inputError: false });
+    } else if (validateInput("linkedin", value)) {
+      // if it is an international URL, you'll still be setting the regular URL
+      // maybe return an object instead with a 'intl' prop
+      // might have to make the intl part of regex a captured group to know what to use
+      // so `https://${validateInput("linkedin", value).intl || null}linkedin.com/${validateInput("linkedin", value).username}`
+      const fullUrl = `https://www.linkedin.com/in/${validateInput("linkedin", value)}`
+      setLinkedin({ ...linkedin, inputError: false, inputValue: fullUrl });
+    } else {
+      setLinkedin({ ...linkedin, inputError: true });
+    }
   }
 
 
@@ -262,9 +278,9 @@ function WhereToFindYou() {
     if (
       !github.inputChange &&
       !twitter.inputChange &&
-      !linkedinInputChange &&
-      !portfolioInputChange &&
-      !emailInputChange &&
+      !linkedin.inputChange &&
+      !portfolio.inputChange &&
+      !email.inputChange &&
       !locationInputChange
     ) {
       return;
@@ -282,16 +298,16 @@ function WhereToFindYou() {
       inputs.twitter = twitter.inputValue;
     }
 
-    if (linkedinInputChange) {
-      inputs.linkedin = linkedinInput;
+    if (linkedin.inputChange) {
+      inputs.linkedin = linkedin.inputValue;
     }
 
-    if (portfolioInputChange) {
-      inputs.portfolio = linkedinInput;
+    if (portfolio.inputChange) {
+      inputs.portfolio = portfolio.inputValue;
     }
 
-    if (emailInputChange) {
-      inputs.public_email = emailInput;
+    if (email.inputChange) {
+      inputs.public_email = email.inputValue;
     }
 
 
@@ -397,16 +413,35 @@ function WhereToFindYou() {
             ) : null}
         </InputContainer>
 
-        <br />
-        <br />
-        <br />
-
-        <input
-          type="text"
-          placeholder="Linkedin"
-          value={linkedinInput}
-          onChange={e => onLinkedinInputChange(e.target.value)}
-        />
+        <InputContainer>
+          <label id="linkedin-label" htmlFor="linkedin">
+            Linkedin:
+          </label>
+          <input
+            type="text"
+            autoComplete="username"
+            inputMode="text"
+            id="linkedin"
+            name="linkedin"
+            className={`input ${linkedin.inputError ? "input-err" : ""}`}
+            aria-labelledby="linkedin-label"
+            aria-describedby="linkedin-error"
+            aria-invalid={linkedin.inputError}
+            value={linkedin.inputValue}
+            onChange={e => onLinkedinInputChange(e.target.value)}
+            onBlur={e => onLinkedinInputValidate(e.target.value)}
+          />
+          {linkedin.inputError ? (
+              <span
+                id="linkedin-error"
+                className="err-mssg"
+                aria-live="polite"
+              >
+                Linkedin Username can only be alphabelical characters, no numbers
+                If full URL was used, it should be valid; for example, url, url, url
+              </span>
+            ) : null}
+        </InputContainer>
 
         <br />
         <br />
