@@ -12,51 +12,8 @@ import { validateInput } from "../../../global/helpers/validation";
 see if you can describe the form
 "inputs are validated, but not required"
 
-provide relevant instructions/requirements for inputs if needed(date format, social url/username format)
-you can add them to another span, and show it if you want
-connect it with input using aria-describedby
-ex aria-describedby="nameReq nameError"
-
-you can also have shown and sr.only elements
-might have to use this for validation messages
-A-Z, a-z, 0-9 vs capital and lowercase alphabetic characters, numbers
-
-need to have page titles
-h1 for dashboard, see if you can make it dynamic to match current inpage route
-
-validation needs to be done in the back end as well
-since hackers can bypass client
-
-
-
-2 types of validation
-
-ON BLUR
-regex validation
-toggle validation err for input
-
-ON SUBMIT
-regex validation on all
-since each input will have their own validation error
-just check which still need validation and create a summary
-see if you can put all validations in 1 state object
-
-remove image might need a loader
-
-maybe have 1 main loader that shows in the button like the original
-this would be seperate from user loading skeleton
-
-
-
-
-!STATES
-
-ASYNC
-Submit loading
-no async side effects needed
-delete-image is a background side effect
-
-
+check function and variable names and make them better
+functions should be verbs since they DO things
 
 */
 
@@ -77,11 +34,14 @@ function PersonalInfo() {
     inputChange: false,
     inputError: false
   });
+
   const [image, setImage] = useState({
     image: "",
     id: "",
-    inputChange: false // prob seperate this to keep objects the same to image-upload
+    inputChange: false,
+    shouldRemoveUserImage: false
   });
+
   const [areaOfWork, setAreaOfWork] = useState({
     inputValue: "",
     inputChange: false
@@ -110,7 +70,8 @@ function PersonalInfo() {
     setImage({
       image: "",
       id: "",
-      inputChange: false
+      inputChange: false,
+      shouldRemoveUserImage: false
     });
     setAreaOfWork({
       inputValue: "",
@@ -140,7 +101,7 @@ function PersonalInfo() {
     // eslint-disable-next-line
   }, [submitError]);
 
-  function onFirstNameInputChange(value) {
+  function setFirstNameInput(value) {
     if (value === user.first_name) {
       setFirstName({
         inputChange: false,
@@ -153,7 +114,7 @@ function PersonalInfo() {
     setFirstName({ ...firstName, inputChange: true, inputValue: value });
   }
 
-  function onFirstNameInputValidate(value) {
+  function validateFirstNameInput(value) {
     if (!firstName.inputChange) return;
     if (value.trim() === "") {
       setFirstName({ ...firstName, inputValue: "", inputError: false });
@@ -164,7 +125,7 @@ function PersonalInfo() {
     }
   }
 
-  function onLastNameInputChange(value) {
+  function setLastNameInput(value) {
     if (value === user.last_name) {
       setLastName({
         inputChange: false,
@@ -176,7 +137,7 @@ function PersonalInfo() {
     setLastName({ ...lastName, inputChange: true, inputValue: value });
   }
 
-  function onLastNameInputValidate(value) {
+  function validateLastNameInput(value) {
     if (!lastName.inputChange) return;
     if (value.trim() === "") {
       setLastName({ ...lastName, inputValue: "", inputError: false });
@@ -187,24 +148,12 @@ function PersonalInfo() {
     }
   }
 
-  function onImageInputChange(value) {
-    setImage({ ...value, inputChange: true });
-  }
-
-  function removeOldImage() {
+  function removeUserImageFromCloudinary() {
     if (user.image_id) {
       httpClient("POST", "/api/delete-image", {
         id: user.image_id
       });
     }
-  }
-
-  function removeImage() {
-    console.log("removeeeee");
-    // should not remove on the spot
-    // should set the image to remove
-    // UI that tells user this image will be removed,
-    // preview image will replace UI if user chooses another image after removing current
   }
 
   function onAreaOfWorkInputChange(value) {
@@ -251,6 +200,7 @@ function PersonalInfo() {
       !firstName.inputChange &&
       !lastName.inputChange &&
       !image.inputChange &&
+      !image.shouldRemoveUserImage &&
       !areaOfWork.inputChange &&
       !title.inputChange
     ) {
@@ -268,11 +218,15 @@ function PersonalInfo() {
     }
 
     if (image.inputChange) {
-      removeOldImage();
+      removeUserImageFromCloudinary();
       inputs.image = image.image;
       inputs.image_id = image.id;
       localStorage.removeItem("image_id");
       setPreviewImg({ image: "", id: "" });
+    } else if (image.shouldRemoveUserImage) {
+      removeUserImageFromCloudinary();
+      inputs.image = "";
+      inputs.image_id = "";
     }
 
     if (areaOfWork.inputChange) {
@@ -372,8 +326,8 @@ function PersonalInfo() {
               aria-describedby="first-name-error"
               aria-invalid={firstName.inputError}
               value={firstName.inputValue}
-              onChange={e => onFirstNameInputChange(e.target.value)}
-              onBlur={e => onFirstNameInputValidate(e.target.value)}
+              onChange={e => setFirstNameInput(e.target.value)}
+              onBlur={e => validateFirstNameInput(e.target.value)}
             />
             {firstName.inputError ? (
               <span
@@ -400,8 +354,8 @@ function PersonalInfo() {
               aria-describedby="last-name-error"
               aria-invalid={lastName.inputError}
               value={lastName.inputValue}
-              onChange={e => onLastNameInputChange(e.target.value)}
-              onBlur={e => onLastNameInputValidate(e.target.value)}
+              onChange={e => setLastNameInput(e.target.value)}
+              onBlur={e => validateLastNameInput(e.target.value)}
             />
             {lastName.inputError ? (
               <span
@@ -414,38 +368,7 @@ function PersonalInfo() {
             ) : null}
           </InputContainer>
 
-          <ImageUploadForm
-            setImageInput={onImageInputChange}
-            imageInput={image}
-          />
-
-          {user.image || image.image ? (
-            <div style={{ height: "200px", width: "200px" }}>
-              <div
-                style={{
-                  position: "absolute",
-                  top: "5%",
-                  right: "5%",
-                  border: "solid",
-                  zIndex: "1"
-                }}
-              >
-                <label htmlFor="remove-image">
-                  <input
-                    type="checkbox"
-                    id="remove-image"
-                    name="remove-image"
-                  />
-                </label>
-              </div>
-
-              <img
-                style={{ height: "200px", width: "200px" }}
-                src={image.image || user.image}
-                alt="current profile pic"
-              />
-            </div>
-          ) : null}
+          <ImageUploadForm imageInput={image} setImageInput={setImage} />
 
           <FieldSet>
             <legend>Area of Work</legend>
