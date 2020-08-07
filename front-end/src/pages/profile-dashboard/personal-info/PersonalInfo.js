@@ -1,12 +1,11 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
+import { Helmet } from "react-helmet";
 import styled from "styled-components";
 
+import ImageUploadForm from "../../../components/forms/image-upload";
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
 import { httpClient } from "../../../global/helpers/http-requests";
-import ImageUploadForm from "../../../components/forms/image-upload";
 import { validateInput } from "../../../global/helpers/validation";
-import { Helmet } from "react-helmet";
-import { useEffect } from "react";
 
 /*
 
@@ -81,7 +80,7 @@ function PersonalInfo() {
   const [image, setImage] = useState({
     image: "",
     id: "",
-    inputChange: false
+    inputChange: false // prob seperate this to keep objects the same to image-upload
   });
   const [areaOfWork, setAreaOfWork] = useState({
     inputValue: "",
@@ -308,10 +307,10 @@ function PersonalInfo() {
         <section aria-labelledby="personal-info-heading-2">
           <h2 id="personal-info-heading-2">Current Information</h2>
           <button onClick={onEditInputs}>Edit Information</button>
-          <div>
-            <p>First Name: {user.first_name || "None Set"}</p>
-            <p>Last Name: {user.last_name || "None Set"}</p>
-            <div>
+          <ul>
+            <li>First Name: {user.first_name || "None Set"}</li>
+            <li>Last Name: {user.last_name || "None Set"}</li>
+            <li>
               {user.image ? (
                 <>
                   <p>Image:</p>
@@ -319,12 +318,12 @@ function PersonalInfo() {
                   <img src={user.image} alt="Your Profile Pic" />
                 </>
               ) : (
-                <p>Image: None Set</p>
+                "Image: None Set"
               )}
-            </div>
-            <p>Area of Work: {user.area_of_work || "None Set"}</p>
-            <p>Title: {user.desired_title || "None Set"}</p>
-          </div>
+            </li>
+            <li>Area of Work: {user.area_of_work || "None Set"}</li>
+            <li>Title: {user.desired_title || "None Set"}</li>
+          </ul>
         </section>
       </main>
     );
@@ -415,40 +414,38 @@ function PersonalInfo() {
             ) : null}
           </InputContainer>
 
-          <div>
-            <ImageUploadForm
-              setImageInput={onImageInputChange}
-              imageInput={image}
-            />
-            {user.image || image.image ? (
-              <div style={{ height: "200px", width: "200px" }}>
-                {!image.image ? (
-                  <span
-                    style={{
-                      position: "absolute",
-                      top: "5%",
-                      right: "5%",
-                      border: "solid",
-                      zIndex: "1"
-                    }}
-                    onClick={removeImage}
-                  >
-                    X
-                  </span>
-                ) : null}
+          <ImageUploadForm
+            setImageInput={onImageInputChange}
+            imageInput={image}
+          />
 
-                <img
-                  style={{ height: "200px", width: "200px" }}
-                  src={image.image || user.image}
-                  alt="current profile pic"
-                />
+          {user.image || image.image ? (
+            <div style={{ height: "200px", width: "200px" }}>
+              <div
+                style={{
+                  position: "absolute",
+                  top: "5%",
+                  right: "5%",
+                  border: "solid",
+                  zIndex: "1"
+                }}
+              >
+                <label htmlFor="remove-image">
+                  <input
+                    type="checkbox"
+                    id="remove-image"
+                    name="remove-image"
+                  />
+                </label>
               </div>
-            ) : null}
-          </div>
 
-          <br />
-          <br />
-          <br />
+              <img
+                style={{ height: "200px", width: "200px" }}
+                src={image.image || user.image}
+                alt="current profile pic"
+              />
+            </div>
+          ) : null}
 
           <FieldSet>
             <legend>Area of Work</legend>
@@ -499,10 +496,6 @@ function PersonalInfo() {
               </span>
             </div>
           </FieldSet>
-
-          <br />
-          <br />
-          <br />
 
           <InputContainer>
             <label id="title-label" htmlFor="title">
