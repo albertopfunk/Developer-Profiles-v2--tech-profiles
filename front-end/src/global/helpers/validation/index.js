@@ -239,9 +239,11 @@ function twitterCheck(value) {
   if (twitterUrlFound && twitterUrlFound[1]) {
     console.log("url found");
     console.log(twitterUrlFound[1]);
+    return twitterUrlFound[1];
   } else if (twitterUserFound && twitterUserFound[1]) {
     console.log("user found");
     console.log(twitterUserFound[1]);
+    return twitterUserFound[1];
   } else {
     console.log("not found");
     return false;
