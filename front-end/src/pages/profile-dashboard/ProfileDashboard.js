@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Route, useRouteMatch, Link, Switch } from "react-router-dom";
 import styled from "styled-components";
+import { Helmet } from "react-helmet";
 
 import UserCard from "../../components/user-cards/user-card/UserCard";
 import ProfileHome from "./ProfileHome";
@@ -100,15 +101,26 @@ function ProfileDashboard() {
   }
   return (
     <MainContainer>
+      <Helmet>
+        <title>Dashboard | Tech Profiles</title>
+      </Helmet>
       <nav aria-label="page">
-        <Link to={`${url}`}>Home</Link><br/>
-        <Link to={`${url}/new`}>New user</Link><br/>
-        <Link to={`${url}/personal-info`}>Personal Info</Link><br/>
-        <Link to={`${url}/about-you`}>About You</Link><br/>
-        <Link to={`${url}/where-to-find-you`}>Where to Find You</Link><br/>
-        <Link to={`${url}/projects`}>Projects</Link><br/>
-        <Link to={`${url}/education`}>Education</Link><br/>
-        <Link to={`${url}/experience`}>Experience</Link><br/>
+        <Link to={`${url}`}>Home</Link>
+        <br />
+        <Link to={`${url}/new`}>New user</Link>
+        <br />
+        <Link to={`${url}/personal-info`}>Personal Info</Link>
+        <br />
+        <Link to={`${url}/about-you`}>About You</Link>
+        <br />
+        <Link to={`${url}/where-to-find-you`}>Where to Find You</Link>
+        <br />
+        <Link to={`${url}/projects`}>Projects</Link>
+        <br />
+        <Link to={`${url}/education`}>Education</Link>
+        <br />
+        <Link to={`${url}/experience`}>Experience</Link>
+        <br />
         <Link to={`${url}/billing`}>Billing</Link>
       </nav>
 
@@ -161,35 +173,37 @@ function ProfileDashboard() {
           </Switch>
         </ProfileContext.Provider>
 
-        <UserCard
-          dashboard
-          previewImg={previewImg.image}
-          extras={{
-            locations: user.locations,
-            topSkills: user.topSkills,
-            additionalSkills: user.additionalSkills,
-            education: user.education,
-            experience: user.experience,
-            projects: user.projects
-          }}
-          usersLength={1}
-          index={1}
-          id={user.id}
-          areaOfWork={user.area_of_work}
-          email={user.public_email}
-          image={user.image}
-          firstName={user.first_name}
-          lastName={user.last_name}
-          currentLocation={user.current_location_name}
-          summary={user.summary}
-          title={user.desired_title}
-          topSkills={user.top_skills_prev}
-          additionalSkills={user.additional_skills_prev}
-          github={user.github}
-          twitter={user.twitter}
-          linkedin={user.linkedin}
-          portfolio={user.portfolio}
-        />
+        <aside>
+          <UserCard
+            dashboard
+            previewImg={previewImg.image}
+            extras={{
+              locations: user.locations,
+              topSkills: user.topSkills,
+              additionalSkills: user.additionalSkills,
+              education: user.education,
+              experience: user.experience,
+              projects: user.projects
+            }}
+            usersLength={1}
+            index={1}
+            id={user.id}
+            areaOfWork={user.area_of_work}
+            email={user.public_email}
+            image={user.image}
+            firstName={user.first_name}
+            lastName={user.last_name}
+            currentLocation={user.current_location_name}
+            summary={user.summary}
+            title={user.desired_title}
+            topSkills={user.top_skills_prev}
+            additionalSkills={user.additional_skills_prev}
+            github={user.github}
+            twitter={user.twitter}
+            linkedin={user.linkedin}
+            portfolio={user.portfolio}
+          />
+        </aside>
       </div>
     </MainContainer>
   );
