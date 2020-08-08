@@ -4,12 +4,9 @@ import styled from "styled-components";
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
 
 function DashboardExperience() {
-  const { loadingUser, user } = useContext(ProfileContext);
+  const { user } = useContext(ProfileContext);
 
   console.log("Experience", user);
-  if (loadingUser) {
-    return <h1>Loading...</h1>;
-  }
   return (
     <Main>
       <h1>Hello Experience</h1>

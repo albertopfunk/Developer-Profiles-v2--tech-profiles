@@ -10,7 +10,7 @@ import ImageUploadForm from "../../../components/forms/image-upload";
 import AutoComplete from "../../../components/forms/autocomplete";
 
 function NewUser() {
-  const { loadingUser, user, setPreviewImg, editProfile } = useContext(
+  const { user, setPreviewImg, editProfile } = useContext(
     ProfileContext
   );
   const [editInputs, setEditInputs] = useState(false);
@@ -219,9 +219,6 @@ function NewUser() {
   }
 
   console.log("NEW USER", user);
-  if (loadingUser) {
-    return <h1>Loading...</h1>;
-  }
 
   if (!editInputs) {
     return (

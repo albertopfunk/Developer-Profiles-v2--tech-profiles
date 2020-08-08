@@ -8,7 +8,7 @@ import AutoComplete from "../../../components/forms/autocomplete";
 import { validateInput } from "../../../global/helpers/validation";
 
 function WhereToFindYou() {
-  const { loadingUser, user, editProfile } = useContext(ProfileContext);
+  const { user, editProfile } = useContext(ProfileContext);
 
   const [editInputs, setEditInputs] = useState(false);
   const [submitError, setSubmitError] = useState(false);
@@ -333,10 +333,6 @@ function WhereToFindYou() {
 
   console.log("===Where to Find You===");
 
-  if (loadingUser) {
-    return <h1>Loading...</h1>;
-  }
-
   if (!editInputs) {
     return (
       <div>
@@ -490,8 +486,10 @@ function WhereToFindYou() {
           single
         />
 
-        <button type="reset" onClick={resetInputs}></button>
         <button>Submit</button>
+        <button type="reset" onClick={resetInputs}>
+          Cancel
+        </button>
       </form>
     </Main>
   );

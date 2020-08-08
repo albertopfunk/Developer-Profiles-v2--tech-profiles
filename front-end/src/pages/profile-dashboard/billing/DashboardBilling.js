@@ -6,7 +6,7 @@ import CheckoutContainer from "../../../components/forms/billing";
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
 
 function DashboardBilling() {
-  const { loadingUser, user, editProfile } = useContext(ProfileContext);
+  const { user, editProfile } = useContext(ProfileContext);
   const [stripe, setStripe] = useState(null);
 
   useEffect(() => {
@@ -20,7 +20,7 @@ function DashboardBilling() {
   }, []);
 
   console.log("Billing", user);
-  if (loadingUser || stripe === null) {
+  if (stripe === null) {
     return <h1>Loading...</h1>;
   }
   return (

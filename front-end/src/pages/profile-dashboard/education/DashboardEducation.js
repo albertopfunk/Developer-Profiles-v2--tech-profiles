@@ -4,8 +4,28 @@ import styled from "styled-components";
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
 import EducationForm from "../../../components/forms/user-extras/EducationForm";
 
+
+/*
+
+2 types of validation
+
+ON BLUR
+regex validation
+toggle validation for input
+
+ON SUBMIT
+required inputs validation
+regex validation on all
+
+These will also be *required
+
+
+*/
+
+
+
 function DashboardEducation() {
-  const { loadingUser, user, addUserExtras } = useContext(ProfileContext);
+  const { user, addUserExtras } = useContext(ProfileContext);
   const [editInputs, setEditInputs] = useState(false);
   const [education, setEducation] = useState([]);
   const [educationChange, setEducationChange] = useState(false);
@@ -106,10 +126,6 @@ function DashboardEducation() {
     }
     setEditInputs(false);
     addUserExtras(requests);
-  }
-
-  if (loadingUser) {
-    return <h1>Loading...</h1>;
   }
 
   if (!editInputs) {

@@ -4,12 +4,9 @@ import styled from "styled-components";
 import { ProfileContext } from "../../global/context/user-profile/ProfileContext";
 
 function ProfileHome() {
-  const { loadingUser, user } = useContext(ProfileContext);
+  const { user } = useContext(ProfileContext);
 
   console.log("===HOME RENDER===", user);
-  if (loadingUser) {
-    return <h1>Loading...</h1>;
-  }
   return (
     <Section>
       <h1>Helloo Dashboard Home</h1>
