@@ -12,9 +12,6 @@ import { validateInput } from "../../../global/helpers/validation";
 see if you can describe the form
 "inputs are validated, but not required"
 
-check function and variable names and make them better
-functions should be verbs since they DO things
-
 */
 
 function PersonalInfo() {
@@ -24,36 +21,36 @@ function PersonalInfo() {
     editProfile,
     setPreviewImg,
     editInputs,
-    setEditInputs
+    setEditInputs,
   } = useContext(ProfileContext);
 
   const [submitError, setSubmitError] = useState(false);
   const [firstName, setFirstName] = useState({
     inputValue: "",
     inputChange: false,
-    inputError: false
+    inputError: false,
   });
   const [lastName, setLastName] = useState({
     inputValue: "",
     inputChange: false,
-    inputError: false
+    inputError: false,
   });
 
   const [image, setImage] = useState({
     image: "",
     id: "",
     inputChange: false,
-    shouldRemoveUserImage: false
+    shouldRemoveUserImage: false,
   });
 
   const [areaOfWork, setAreaOfWork] = useState({
     inputValue: "",
-    inputChange: false
+    inputChange: false,
   });
   const [title, setTitle] = useState({
     inputValue: "",
     inputChange: false,
-    inputError: false
+    inputError: false,
   });
 
   let errorSummaryRef = React.createRef();
@@ -75,33 +72,39 @@ function PersonalInfo() {
     // eslint-disable-next-line
   }, [submitError]);
 
+  useEffect(() => {
+    return () => {
+      setEditInputs(false);
+    };
+  }, [setEditInputs]);
+
   function setFormInputs() {
     setEditInputs(true);
     setSubmitError(false);
     setFirstName({
       inputValue: user.first_name || "",
       inputChange: false,
-      inputError: false
+      inputError: false,
     });
     setLastName({
       inputValue: user.last_name || "",
       inputChange: false,
-      inputError: false
+      inputError: false,
     });
     setImage({
       image: "",
       id: "",
       inputChange: false,
-      shouldRemoveUserImage: false
+      shouldRemoveUserImage: false,
     });
     setAreaOfWork({
       inputValue: "",
-      inputChange: false
+      inputChange: false,
     });
     setTitle({
       inputValue: user.desired_title || "",
       inputChange: false,
-      inputError: false
+      inputError: false,
     });
   }
 
@@ -110,7 +113,7 @@ function PersonalInfo() {
       setFirstName({
         inputChange: false,
         inputValue: value,
-        inputError: false
+        inputError: false,
       });
       return;
     }
@@ -134,7 +137,7 @@ function PersonalInfo() {
       setLastName({
         inputChange: false,
         inputValue: value,
-        inputError: false
+        inputError: false,
       });
     }
 
@@ -155,7 +158,7 @@ function PersonalInfo() {
   function removeUserImageFromCloudinary() {
     if (user.image_id) {
       httpClient("POST", "/api/delete-image", {
-        id: user.image_id
+        id: user.image_id,
       });
     }
   }
@@ -173,7 +176,7 @@ function PersonalInfo() {
       setTitle({
         inputChange: false,
         inputValue: value,
-        inputError: false
+        inputError: false,
       });
       return;
     }
@@ -304,7 +307,7 @@ function PersonalInfo() {
           ) : null}
         </div>
 
-        <form onSubmit={e => submitEdit(e)}>
+        <form onSubmit={(e) => submitEdit(e)}>
           <InputContainer>
             <label id="first-name-label" htmlFor="first-name">
               First Name:
@@ -320,8 +323,8 @@ function PersonalInfo() {
               aria-describedby="first-name-error"
               aria-invalid={firstName.inputError}
               value={firstName.inputValue}
-              onChange={e => setFirstNameInput(e.target.value)}
-              onBlur={e => validateFirstNameInput(e.target.value)}
+              onChange={(e) => setFirstNameInput(e.target.value)}
+              onBlur={(e) => validateFirstNameInput(e.target.value)}
             />
             {firstName.inputError ? (
               <span
@@ -348,8 +351,8 @@ function PersonalInfo() {
               aria-describedby="last-name-error"
               aria-invalid={lastName.inputError}
               value={lastName.inputValue}
-              onChange={e => setLastNameInput(e.target.value)}
-              onBlur={e => validateLastNameInput(e.target.value)}
+              onChange={(e) => setLastNameInput(e.target.value)}
+              onBlur={(e) => validateLastNameInput(e.target.value)}
             />
             {lastName.inputError ? (
               <span
@@ -374,7 +377,7 @@ function PersonalInfo() {
                   id="development"
                   value="Development"
                   defaultChecked={user.area_of_work === "Development"}
-                  onClick={e => setAreaOfWorkInput(e.target.value)}
+                  onClick={(e) => setAreaOfWorkInput(e.target.value)}
                 />
                 <label htmlFor="development">Development</label>
               </span>
@@ -385,7 +388,7 @@ function PersonalInfo() {
                   id="ios"
                   value="iOS"
                   defaultChecked={user.area_of_work === "iOS"}
-                  onClick={e => setAreaOfWorkInput(e.target.value)}
+                  onClick={(e) => setAreaOfWorkInput(e.target.value)}
                 />
                 <label htmlFor="ios">iOS</label>
               </span>
@@ -396,7 +399,7 @@ function PersonalInfo() {
                   id="android"
                   value="Android"
                   defaultChecked={user.area_of_work === "Android"}
-                  onClick={e => setAreaOfWorkInput(e.target.value)}
+                  onClick={(e) => setAreaOfWorkInput(e.target.value)}
                 />
                 <label htmlFor="android">Android</label>
               </span>
@@ -407,7 +410,7 @@ function PersonalInfo() {
                   id="design"
                   value="Design"
                   defaultChecked={user.area_of_work === "Design"}
-                  onClick={e => setAreaOfWorkInput(e.target.value)}
+                  onClick={(e) => setAreaOfWorkInput(e.target.value)}
                 />
                 <label htmlFor="design">Design</label>
               </span>
@@ -429,8 +432,8 @@ function PersonalInfo() {
               aria-describedby="title-error"
               aria-invalid={title.inputError}
               value={title.inputValue}
-              onChange={e => setTitleInput(e.target.value)}
-              onBlur={e => validateTitleInput(e.target.value)}
+              onChange={(e) => setTitleInput(e.target.value)}
+              onBlur={(e) => validateTitleInput(e.target.value)}
             />
             {title.inputError ? (
               <span id="title-error" className="err-mssg" aria-live="polite">
