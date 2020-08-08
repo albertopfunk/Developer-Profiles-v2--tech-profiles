@@ -8,7 +8,7 @@ class Auth {
       clientID: process.env.REACT_APP_AUTH0_CLIENT_ID,
       redirectUri: process.env.REACT_APP_AUTH_REDIRECT,
       responseType: "id_token",
-      scope: "openid profile email"
+      scope: "openid profile email",
     });
 
     this.getProfile = this.getProfile.bind(this);
@@ -53,7 +53,7 @@ class Auth {
   signOut(path) {
     this.auth0.logout({
       returnTo: `${process.env.REACT_APP_HOMEPAGE}/${path || ""}`,
-      clientID: process.env.REACT_APP_AUTH0_CLIENT_ID
+      clientID: process.env.REACT_APP_AUTH0_CLIENT_ID,
     });
   }
 

@@ -10,7 +10,7 @@ function SortingFilter(props) {
     }
     setCurrentValue(sortChoice);
     props.updateUsers({
-      sortChoice
+      sortChoice,
     });
   }
 
@@ -19,8 +19,8 @@ function SortingFilter(props) {
       <label htmlFor="sorting-select">Sort By:</label>
       <select
         id="sorting-select"
-        onClick={e => sortUsers(e.target.value)}
-        onBlur={e => sortUsers(e.target.value)}
+        onClick={(e) => sortUsers(e.target.value)}
+        onBlur={(e) => sortUsers(e.target.value)}
       >
         <option value="acending(oldest-newest)">acending(oldest-newest)</option>
         <option value="descending(newest-oldest)">

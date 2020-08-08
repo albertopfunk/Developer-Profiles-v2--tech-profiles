@@ -75,7 +75,7 @@ function ProfileDashboard() {
   async function addUserExtras(requestsArr) {
     setSubmitLoading(true);
     let main = {
-      ...requestsArr.shift()
+      ...requestsArr.shift(),
     };
 
     let config;
@@ -144,7 +144,7 @@ function ProfileDashboard() {
             addUserExtras,
             setPreviewImg,
             editInputs,
-            setEditInputs
+            setEditInputs,
           }}
         >
           <Switch>
@@ -196,7 +196,7 @@ function ProfileDashboard() {
               additionalSkills: user.additionalSkills,
               education: user.education,
               experience: user.experience,
-              projects: user.projects
+              projects: user.projects,
             }}
             usersLength={1}
             index={1}

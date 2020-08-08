@@ -24,7 +24,7 @@ class PublicPage extends Component {
     chosenLocationLon: 0,
     isUsingRelocateToFilter: false,
     chosenRelocateToObj: {},
-    sortChoice: "acending(oldest-newest)"
+    sortChoice: "acending(oldest-newest)",
   };
 
   async componentDidMount() {
@@ -38,7 +38,7 @@ class PublicPage extends Component {
     this.setState({
       users: res.data.users,
       usersLength: res.data.len,
-      initialLoading: false
+      initialLoading: false,
     });
   }
 
@@ -75,7 +75,7 @@ class PublicPage extends Component {
       chosenLocationLon: this.state.chosenLocationLon,
       isUsingRelocateToFilter: this.state.isUsingRelocateToFilter,
       chosenRelocateToObj: this.state.chosenRelocateToObj,
-      sortChoice: this.state.sortChoice
+      sortChoice: this.state.sortChoice,
     });
 
     if (err) {
@@ -86,16 +86,16 @@ class PublicPage extends Component {
     this.setState({
       users: res.data.users,
       usersLength: res.data.len,
-      filtersLoading: false
+      filtersLoading: false,
     });
 
     if (res.data.users.length < this.state.usersLength) {
       this.setState({
-        noMoreUsers: false
+        noMoreUsers: false,
       });
     } else {
       this.setState({
-        noMoreUsers: true
+        noMoreUsers: true,
       });
     }
 
@@ -118,21 +118,21 @@ class PublicPage extends Component {
     this.setState({
       users: [...this.state.users, ...res.data],
       usersPage: this.state.usersPage + 1,
-      usersLoading: false
+      usersLoading: false,
     });
 
     if (this.state.users.length + res.data.length < this.state.usersLength) {
       this.setState({
-        noMoreUsers: false
+        noMoreUsers: false,
       });
     } else {
       this.setState({
-        noMoreUsers: true
+        noMoreUsers: true,
       });
     }
   };
 
-  updateUsers = stateUpdate => {
+  updateUsers = (stateUpdate) => {
     this.setState(stateUpdate, () => this.getFilteredUsers());
   };
 

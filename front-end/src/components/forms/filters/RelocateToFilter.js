@@ -6,7 +6,7 @@ import { httpClient } from "../../../global/helpers/http-requests";
 function RelocateToFilter(props) {
   async function onInputChange(value) {
     const [res, err] = await httpClient("POST", "/api/autocomplete", {
-      value
+      value,
     });
 
     if (err) {
@@ -28,14 +28,14 @@ function RelocateToFilter(props) {
     let chosenRelocateToObj = convertToObj(chosenRelocateToArr);
     props.updateUsers({
       isUsingRelocateToFilter: true,
-      chosenRelocateToObj
+      chosenRelocateToObj,
     });
   }
 
   function resetLocationFilter(chosenRelocateToArr) {
     if (chosenRelocateToArr.length === 0) {
       props.updateUsers({
-        isUsingRelocateToFilter: false
+        isUsingRelocateToFilter: false,
       });
       return;
     }
@@ -44,7 +44,7 @@ function RelocateToFilter(props) {
 
     props.updateUsers({
       isUsingRelocateToFilter: true,
-      chosenRelocateToObj
+      chosenRelocateToObj,
     });
   }
 

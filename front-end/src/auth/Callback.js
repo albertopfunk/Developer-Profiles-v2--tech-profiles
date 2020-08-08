@@ -35,7 +35,7 @@ class Callback extends Component {
     const [res, err] = await httpClient("POST", "/users/new", {
       email,
       first_name: firstName,
-      last_name: lastName
+      last_name: lastName,
     });
 
     if (err) {

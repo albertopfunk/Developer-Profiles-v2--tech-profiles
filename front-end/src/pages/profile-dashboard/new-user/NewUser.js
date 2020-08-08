@@ -10,9 +10,7 @@ import ImageUploadForm from "../../../components/forms/image-upload";
 import AutoComplete from "../../../components/forms/autocomplete";
 
 function NewUser() {
-  const { user, setPreviewImg, editProfile } = useContext(
-    ProfileContext
-  );
+  const { user, setPreviewImg, editProfile } = useContext(ProfileContext);
   const [editInputs, setEditInputs] = useState(false);
   const [selectedTab, setSelectedTab] = useState("basic-info");
   const [firstNameInput, setFirstNameInput] = useState("");
@@ -48,8 +46,8 @@ function NewUser() {
           name: user.current_location_name,
           id: 1, // autocomplete requires id for key
           lat: user.current_location_lat,
-          lon: user.current_location_lon
-        }
+          lon: user.current_location_lon,
+        },
       ]);
     } else {
       setLocationInput([]);
@@ -111,7 +109,7 @@ function NewUser() {
 
   async function onLocationInputChange(value) {
     const [res, err] = await httpClient("POST", "/api/autocomplete", {
-      value
+      value,
     });
 
     if (err) {
@@ -128,7 +126,7 @@ function NewUser() {
     }
 
     const [res, err] = await httpClient("POST", "/api/gio", {
-      placeId: id
+      placeId: id,
     });
 
     if (err) {
@@ -141,8 +139,8 @@ function NewUser() {
         name,
         id,
         lat: res.data.lat,
-        lon: res.data.lng
-      }
+        lon: res.data.lng,
+      },
     ]);
   }
 
@@ -181,7 +179,7 @@ function NewUser() {
       if (imageInput.id !== user.image_id) {
         if (user.image_id) {
           httpClient("POST", "/api/delete-image", {
-            id: user.image_id
+            id: user.image_id,
           });
         }
 
@@ -261,16 +259,16 @@ function NewUser() {
           tabIndex="0"
           aria-labelledby="basic-info"
           style={{
-            display: selectedTab === "basic-info" ? "block" : "none"
+            display: selectedTab === "basic-info" ? "block" : "none",
           }}
         >
           <div>
-            <form onSubmit={e => submitEdit(e)}>
+            <form onSubmit={(e) => submitEdit(e)}>
               <input
                 type="text"
                 placeholder="First Name"
                 value={firstNameInput}
-                onChange={e => onFirstNameInputChange(e.target.value)}
+                onChange={(e) => onFirstNameInputChange(e.target.value)}
               />
 
               <br />
@@ -280,7 +278,7 @@ function NewUser() {
                 type="text"
                 placeholder="Summary"
                 value={summaryInput}
-                onChange={e => onSummaryInputChange(e.target.value)}
+                onChange={(e) => onSummaryInputChange(e.target.value)}
               />
               <br />
               <br />
@@ -295,7 +293,7 @@ function NewUser() {
                         top: "5%",
                         right: "5%",
                         border: "solid",
-                        zIndex: "1"
+                        zIndex: "1",
                       }}
                       onClick={removeImage}
                     >
@@ -322,8 +320,8 @@ function NewUser() {
 
               <select
                 id="area-of-work"
-                onClick={e => onAreaOfWorkInputChange(e.target.value)}
-                onBlur={e => onAreaOfWorkInputChange(e.target.value)}
+                onClick={(e) => onAreaOfWorkInputChange(e.target.value)}
+                onBlur={(e) => onAreaOfWorkInputChange(e.target.value)}
               >
                 <option value="">--Select--</option>
                 <option value="Development">Development</option>
@@ -340,7 +338,7 @@ function NewUser() {
                 type="text"
                 placeholder="Title"
                 value={titleInput}
-                onChange={e => onTitleInputChange(e.target.value)}
+                onChange={(e) => onTitleInputChange(e.target.value)}
               />
 
               <br />
@@ -365,7 +363,7 @@ function NewUser() {
           tabIndex="0"
           aria-labelledby="billing-info"
           style={{
-            display: selectedTab === "billing-info" ? "block" : "none"
+            display: selectedTab === "billing-info" ? "block" : "none",
           }}
         >
           <DashboardBilling />

@@ -10,23 +10,23 @@ function AreaOfWorkFilter(props) {
   function toggleAreaOfWorkCheckbox(areaOfWork) {
     switch (areaOfWork) {
       case "Development":
-        props.updateUsers(prevState => ({
-          isWebDevChecked: !prevState.isWebDevChecked
+        props.updateUsers((prevState) => ({
+          isWebDevChecked: !prevState.isWebDevChecked,
         }));
         break;
       case "Design":
-        props.updateUsers(prevState => ({
-          isUIUXChecked: !prevState.isUIUXChecked
+        props.updateUsers((prevState) => ({
+          isUIUXChecked: !prevState.isUIUXChecked,
         }));
         break;
       case "iOS":
-        props.updateUsers(prevState => ({
-          isIOSChecked: !prevState.isIOSChecked
+        props.updateUsers((prevState) => ({
+          isIOSChecked: !prevState.isIOSChecked,
         }));
         break;
       case "Android":
-        props.updateUsers(prevState => ({
-          isAndroidChecked: !prevState.isAndroidChecked
+        props.updateUsers((prevState) => ({
+          isAndroidChecked: !prevState.isAndroidChecked,
         }));
         break;
       default:

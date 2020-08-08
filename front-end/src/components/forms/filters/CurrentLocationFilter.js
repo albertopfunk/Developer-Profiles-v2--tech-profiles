@@ -7,16 +7,16 @@ class CurrentLocationFilter extends React.Component {
   state = {
     milesWithinInput: 5,
     chosenLocationName: "",
-    chosenLocationId: ""
+    chosenLocationId: "",
   };
 
-  onInputChange = e => {
+  onInputChange = (e) => {
     this.setState({ milesWithinInput: e.target.value });
   };
 
-  onLocationInputChange = async value => {
+  onLocationInputChange = async (value) => {
     const [res, err] = await httpClient("POST", "/api/autocomplete", {
-      value
+      value,
     });
 
     if (err) {
@@ -27,7 +27,7 @@ class CurrentLocationFilter extends React.Component {
     return res.data;
   };
 
-  chooseDistanceOnKeyUp = e => {
+  chooseDistanceOnKeyUp = (e) => {
     if (
       e.keyCode !== 37 &&
       e.keyCode !== 38 &&
@@ -57,7 +57,7 @@ class CurrentLocationFilter extends React.Component {
     }
 
     const [res, err] = await httpClient("POST", "/api/gio", {
-      placeId: id
+      placeId: id,
     });
 
     if (err) {
@@ -69,13 +69,13 @@ class CurrentLocationFilter extends React.Component {
       isUsingCurrLocationFilter: true,
       selectedWithinMiles: +this.state.milesWithinInput,
       chosenLocationLat: res.data.lat,
-      chosenLocationLon: res.data.lng
+      chosenLocationLon: res.data.lng,
     });
   };
 
   resetLocationFilter = () => {
     this.props.updateUsers({
-      isUsingCurrLocationFilter: false
+      isUsingCurrLocationFilter: false,
     });
     this.setState({ chosenLocationName: "", chosenLocationId: "" });
   };

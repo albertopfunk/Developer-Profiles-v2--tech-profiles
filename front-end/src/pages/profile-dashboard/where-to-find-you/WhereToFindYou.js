@@ -15,27 +15,27 @@ function WhereToFindYou() {
   const [github, setGithub] = useState({
     inputValue: "",
     inputChange: false,
-    inputError: false
+    inputError: false,
   });
   const [twitter, setTwitter] = useState({
     inputValue: "",
     inputChange: false,
-    inputError: false
+    inputError: false,
   });
   const [linkedin, setLinkedin] = useState({
     inputValue: "",
     inputChange: false,
-    inputError: false
+    inputError: false,
   });
   const [portfolio, setPortfolio] = useState({
     inputValue: "",
     inputChange: false,
-    inputError: false
+    inputError: false,
   });
   const [email, setEmail] = useState({
     inputValue: "",
     inputChange: false,
-    inputError: false
+    inputError: false,
   });
 
   const [locationInput, setLocationInput] = useState([]);
@@ -47,27 +47,27 @@ function WhereToFindYou() {
     setGithub({
       inputValue: user.github || "",
       inputChange: false,
-      inputError: false
+      inputError: false,
     });
     setTwitter({
       inputValue: user.twitter || "",
       inputChange: false,
-      inputError: false
+      inputError: false,
     });
     setLinkedin({
       inputValue: user.linkedin || "",
       inputChange: false,
-      inputError: false
+      inputError: false,
     });
     setPortfolio({
       inputValue: user.portfolio || "",
       inputChange: false,
-      inputError: false
+      inputError: false,
     });
     setEmail({
       inputValue: user.public_email || "",
       inputChange: false,
-      inputError: false
+      inputError: false,
     });
 
     if (user.current_location_name) {
@@ -76,8 +76,8 @@ function WhereToFindYou() {
           name: user.current_location_name,
           id: 1, // autocomplete requires id for key
           lat: user.current_location_lat,
-          lon: user.current_location_lon
-        }
+          lon: user.current_location_lon,
+        },
       ]);
     } else {
       setLocationInput([]);
@@ -93,7 +93,7 @@ function WhereToFindYou() {
       setGithub({
         inputChange: false,
         inputValue: value,
-        inputError: false
+        inputError: false,
       });
       return;
     }
@@ -125,7 +125,7 @@ function WhereToFindYou() {
       setTwitter({
         inputChange: false,
         inputValue: value,
-        inputError: false
+        inputError: false,
       });
       return;
     }
@@ -157,7 +157,7 @@ function WhereToFindYou() {
       setLinkedin({
         inputChange: false,
         inputValue: value,
-        inputError: false
+        inputError: false,
       });
       return;
     }
@@ -189,7 +189,7 @@ function WhereToFindYou() {
       setPortfolio({
         inputChange: false,
         inputValue: value,
-        inputError: false
+        inputError: false,
       });
     }
 
@@ -212,7 +212,7 @@ function WhereToFindYou() {
       setEmail({
         inputChange: false,
         inputValue: value,
-        inputError: false
+        inputError: false,
       });
     }
 
@@ -232,7 +232,7 @@ function WhereToFindYou() {
 
   async function onLocationInputChange(value) {
     const [res, err] = await httpClient("POST", "/api/autocomplete", {
-      value
+      value,
     });
 
     if (err) {
@@ -249,7 +249,7 @@ function WhereToFindYou() {
     }
 
     const [res, err] = await httpClient("POST", "/api/gio", {
-      placeId: id
+      placeId: id,
     });
 
     if (err) {
@@ -262,8 +262,8 @@ function WhereToFindYou() {
         name,
         id,
         lat: res.data.lat,
-        lon: res.data.lng
-      }
+        lon: res.data.lng,
+      },
     ]);
   }
 
@@ -346,7 +346,7 @@ function WhereToFindYou() {
     <Main>
       <h1>Hello Where to Find You</h1>
 
-      <form onSubmit={e => submitEdit(e)} noValidate>
+      <form onSubmit={(e) => submitEdit(e)} noValidate>
         <InputContainer>
           <label id="github-label" htmlFor="github">
             Github:
@@ -362,8 +362,8 @@ function WhereToFindYou() {
             aria-describedby="github-error"
             aria-invalid={github.inputError}
             value={github.inputValue}
-            onChange={e => onGithubInputChange(e.target.value)}
-            onBlur={e => onGithubInputValidate(e.target.value)}
+            onChange={(e) => onGithubInputChange(e.target.value)}
+            onBlur={(e) => onGithubInputValidate(e.target.value)}
           />
           {github.inputError ? (
             <span id="github-error" className="err-mssg" aria-live="polite">
@@ -388,8 +388,8 @@ function WhereToFindYou() {
             aria-describedby="twitter-error"
             aria-invalid={twitter.inputError}
             value={twitter.inputValue}
-            onChange={e => onTwitterInputChange(e.target.value)}
-            onBlur={e => onTwitterInputValidate(e.target.value)}
+            onChange={(e) => onTwitterInputChange(e.target.value)}
+            onBlur={(e) => onTwitterInputValidate(e.target.value)}
           />
           {twitter.inputError ? (
             <span id="twitter-error" className="err-mssg" aria-live="polite">
@@ -415,8 +415,8 @@ function WhereToFindYou() {
             aria-describedby="linkedin-error"
             aria-invalid={linkedin.inputError}
             value={linkedin.inputValue}
-            onChange={e => onLinkedinInputChange(e.target.value)}
-            onBlur={e => onLinkedinInputValidate(e.target.value)}
+            onChange={(e) => onLinkedinInputChange(e.target.value)}
+            onBlur={(e) => onLinkedinInputValidate(e.target.value)}
           />
           {linkedin.inputError ? (
             <span id="linkedin-error" className="err-mssg" aria-live="polite">
@@ -442,8 +442,8 @@ function WhereToFindYou() {
             aria-describedby="portfolio-error"
             aria-invalid={portfolio.inputError}
             value={portfolio.inputValue}
-            onChange={e => onPortfolioInputChange(e.target.value)}
-            onBlur={e => onPortfolioInputValidate(e.target.value)}
+            onChange={(e) => onPortfolioInputChange(e.target.value)}
+            onBlur={(e) => onPortfolioInputValidate(e.target.value)}
           />
           {portfolio.inputError ? (
             <span id="portfolio-error" className="err-mssg" aria-live="polite">
@@ -467,8 +467,8 @@ function WhereToFindYou() {
             aria-describedby="email-error"
             aria-invalid={email.inputError}
             value={email.inputValue}
-            onChange={e => onEmailInputChange(e.target.value)}
-            onBlur={e => onEmailInputValidate(e.target.value)}
+            onChange={(e) => onEmailInputChange(e.target.value)}
+            onBlur={(e) => onEmailInputValidate(e.target.value)}
           />
           {email.inputError ? (
             <span id="email-error" className="err-mssg" aria-live="polite">

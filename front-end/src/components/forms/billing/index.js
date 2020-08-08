@@ -8,7 +8,7 @@ import CustomerForm from "./CustomerForm";
 
 class CheckoutContainer extends Component {
   state = {
-    userType: ""
+    userType: "",
   };
 
   componentDidMount() {
@@ -33,7 +33,7 @@ class CheckoutContainer extends Component {
 
   checkSubStatus = async () => {
     const [res, err] = await httpClient("POST", "/api/get-subscription", {
-      sub: this.props.stripeSubId
+      sub: this.props.stripeSubId,
     });
 
     if (err) {
@@ -49,11 +49,11 @@ class CheckoutContainer extends Component {
     this.setUserType("subscriber");
   };
 
-  setUserType = type => {
+  setUserType = (type) => {
     this.setState({ userType: type });
   };
 
-  editUserProfile = items => {
+  editUserProfile = (items) => {
     this.props.editProfile(items);
   };
 

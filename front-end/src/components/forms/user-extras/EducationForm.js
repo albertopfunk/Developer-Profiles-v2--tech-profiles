@@ -11,7 +11,7 @@ function EducationForm({
   userDescription,
   onEducationChange,
   eduIndex,
-  removeEducation
+  removeEducation,
 }) {
   const [id, SetId] = useState("");
   const [school, setSchool] = useState("");
@@ -51,13 +51,13 @@ function EducationForm({
     fromDateRef,
     fromCarotRange,
     toDateRef,
-    toCarotRange
+    toCarotRange,
   ]);
 
   function updateEducation(value) {
     onEducationChange(eduIndex, {
       shouldEdit: true,
-      ...value
+      ...value,
     });
   }
 
@@ -109,19 +109,19 @@ function EducationForm({
   console.log("===EDU FORM===", school, fromDate, toDate, userToDate);
   return (
     <form>
-      <button onClick={e => onRemoveEducation(e)}>Remove</button>
+      <button onClick={(e) => onRemoveEducation(e)}>Remove</button>
       <input
         type="text"
         placeholder="School"
         value={school}
-        onChange={e => onSchoolChange(e.target.value)}
+        onChange={(e) => onSchoolChange(e.target.value)}
       />
       <br />
       <input
         type="text"
         placeholder="Field of Study"
         value={fieldOfStudy}
-        onChange={e => onFieldOfStudyChange(e.target.value)}
+        onChange={(e) => onFieldOfStudyChange(e.target.value)}
       />
       <br />
       <input
@@ -129,7 +129,7 @@ function EducationForm({
         ref={fromDateRef}
         placeholder="MM/YY"
         value={fromDate}
-        onChange={e => fromDateChange(e.target.value)}
+        onChange={(e) => fromDateChange(e.target.value)}
       />
       <span> - </span>
 
@@ -139,7 +139,7 @@ function EducationForm({
           ref={toDateRef}
           placeholder="MM/YY"
           value={toDate}
-          onChange={e => toDateChange(e.target.value)}
+          onChange={(e) => toDateChange(e.target.value)}
         />
       ) : null}
 
@@ -158,7 +158,7 @@ function EducationForm({
         type="text"
         placeholder="description"
         value={description}
-        onChange={e => onDescriptionChange(e.target.value)}
+        onChange={(e) => onDescriptionChange(e.target.value)}
       />
     </form>
   );

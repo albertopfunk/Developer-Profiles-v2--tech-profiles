@@ -16,7 +16,7 @@ function UserSkills(props) {
             {props.topSkills
               .split(",")
               .filter((el, i) => i < 3 && el)
-              .map(skill => (
+              .map((skill) => (
                 <p key={skill}>{skill}</p>
               ))}
             <p>Expand for more skills</p>
@@ -33,7 +33,7 @@ function UserSkills(props) {
             {props.additionalSkills
               .split(",")
               .filter((el, i) => i < 3 && el)
-              .map(skill => (
+              .map((skill) => (
                 <p key={skill}>{skill}</p>
               ))}
             <p>Expand for more skills</p>

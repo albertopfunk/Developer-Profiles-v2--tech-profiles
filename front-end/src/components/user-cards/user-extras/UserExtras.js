@@ -14,8 +14,6 @@ function UserExtras({ dashboard, extras, setAriaExpanded, userId }) {
   const [hasRequestedExtras, setHasRequestedExtras] = useState(false);
 
   useEffect(() => {
-    // pass extras props from dashboard
-
     if (dashboard) {
       setHasRequestedExtras(true);
       setUserExtras(extras);
@@ -100,7 +98,7 @@ function UserExtras({ dashboard, extras, setAriaExpanded, userId }) {
     projects,
     education,
     experience,
-    locations
+    locations,
   } = userExtras;
 
   console.log("==========EXTRASSSS==========");
@@ -123,7 +121,7 @@ function UserExtras({ dashboard, extras, setAriaExpanded, userId }) {
 
           {topSkills.length > 0 ? (
             <section className="top-skills">
-              {topSkills.map(skill => (
+              {topSkills.map((skill) => (
                 <p key={skill.name}>{skill.name}</p>
               ))}
             </section>
@@ -131,7 +129,7 @@ function UserExtras({ dashboard, extras, setAriaExpanded, userId }) {
 
           {additionalSkills.length > 0 ? (
             <section className="additional-skills">
-              {additionalSkills.map(skill => (
+              {additionalSkills.map((skill) => (
                 <p key={skill.name}>{skill.name}</p>
               ))}
             </section>
@@ -149,7 +147,7 @@ function UserExtras({ dashboard, extras, setAriaExpanded, userId }) {
 
           {locations.length > 0 ? (
             <section className="interested-locations">
-              {locations.map(location => (
+              {locations.map((location) => (
                 <p key={location.name}>{location.name}</p>
               ))}
             </section>

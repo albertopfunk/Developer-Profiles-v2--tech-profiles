@@ -15,13 +15,15 @@ export async function httpClient(method, url, data, config = {}) {
     method,
     url,
     data,
-    headers: config.headers ? { ...config.headers } : null
+    headers: config.headers ? { ...config.headers } : null,
   };
 
   let optionsArr = [options, ...(config.additional ? config.additional : [])];
 
   try {
-    const res = await Promise.all(optionsArr.map(options => composer(options)));
+    const res = await Promise.all(
+      optionsArr.map((options) => composer(options))
+    );
 
     if (res.length > 1) {
       return [res, false];
@@ -30,9 +32,9 @@ export async function httpClient(method, url, data, config = {}) {
     return [
       {
         data: res[0].data,
-        status: res[0].status ? res[0].status : 200
+        status: res[0].status ? res[0].status : 200,
       },
-      false
+      false,
     ];
   } catch (err) {
     return [
@@ -41,9 +43,9 @@ export async function httpClient(method, url, data, config = {}) {
           ? err.response.data.message
           : `Unknown error with ${method} : ${url}`,
         mssg: `Error with ${method} : ${url}`,
-        status: 500
+        status: 500,
       },
-      true
+      true,
     ];
   }
 }

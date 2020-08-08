@@ -4,13 +4,14 @@ import { httpClient } from "../../../global/helpers/http-requests";
 
 class CustomerForm extends Component {
   state = {
-    subType: ""
+    subType: "",
   };
 
   yearRef = React.createRef();
   monthRef = React.createRef();
 
   toggleYearCheckbox = () => {
+    // object deep properties! if current is null then page will fail
     if (!(this.monthRef.current.checked || this.yearRef.current.checked)) {
       this.setState({ subType: "" });
       return;
@@ -41,7 +42,7 @@ class CustomerForm extends Component {
 
     const [res, err] = await httpClient("POST", "/api/subscribe-existing", {
       stripeId: this.props.stripeId,
-      subType: this.state.subType
+      subType: this.state.subType,
     });
 
     if (err) {

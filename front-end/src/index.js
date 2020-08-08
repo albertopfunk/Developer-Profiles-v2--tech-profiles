@@ -9,3 +9,31 @@ ReactDOM.render(
   </BrowserRouter>,
   document.getElementById("root")
 );
+
+/*
+
+1. Live region
+<div
+  role="status"
+  aria-live="polite"
+  aria-atomic="true"
+>
+  Notification messages goes here
+</div>
+
+2. Reset focus
+Create a component that listens to route changes and
+reset focus to container on route change
+container should be right above the <Header/>
+this will make the skip link the first tab, then the header
+
+3. Skip Link
+Skip link should be located above header
+skip to main content/first heading
+
+4. Links should have 'active states'
+
+5. Page titles should be on every 'page'
+
+
+*/

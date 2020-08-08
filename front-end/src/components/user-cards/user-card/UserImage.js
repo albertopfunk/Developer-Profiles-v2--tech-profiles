@@ -20,7 +20,7 @@ function UserImage(props) {
           style={{
             width: "200px",
             height: "200px",
-            borderRadius: "50%"
+            borderRadius: "50%",
           }}
           src={props.previewImg || props.image}
           onError={handleBrokenLink}

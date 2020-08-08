@@ -5,7 +5,7 @@ import { httpClient } from "../../../global/helpers/http-requests";
 
 class UserForm extends Component {
   state = {
-    subType: ""
+    subType: "",
   };
 
   yearRef = React.createRef();
@@ -35,7 +35,7 @@ class UserForm extends Component {
     this.setState({ subType: "monthly" });
   };
 
-  onSubscribe = async tokenId => {
+  onSubscribe = async (tokenId) => {
     if (this.state.subType !== "yearly" && this.state.subType !== "monthly") {
       return;
     }
@@ -43,7 +43,7 @@ class UserForm extends Component {
     const [res, err] = await httpClient("POST", "/api/subscribe", {
       token: tokenId,
       subType: this.state.subType,
-      email: this.props.email
+      email: this.props.email,
     });
 
     if (err) {

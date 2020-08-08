@@ -16,7 +16,7 @@ import auth0Client from "./auth/Auth";
 
 class App extends React.Component {
   state = {
-    checkingSession: true
+    checkingSession: true,
   };
 
   async componentDidMount() {
@@ -28,18 +28,22 @@ class App extends React.Component {
       await auth0Client.silentAuth();
       this.setState({ checkingSession: false });
     } catch (err) {
+      // I do not think you need the .replace, since .signout("authorize")
+      // already sends user to /authorize
       if (err.error === "login_required") {
         if (this.props.location.pathname.includes("dashboard")) {
-          this.props.history.replace("/authorize");
+          // this.props.history.replace("/authorize");
+          auth0Client.signOut("authorize");
         }
       } else {
         console.error("Silent Auth Failed", err.error);
+        // this.props.history.replace("/authorize");
+        auth0Client.signOut("authorize");
       }
     }
   }
 
   render() {
-    console.log("===APP RENDER===");
     return (
       <>
         <GlobalStyles />

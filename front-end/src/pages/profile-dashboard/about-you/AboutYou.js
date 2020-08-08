@@ -4,12 +4,17 @@ import styled from "styled-components";
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
 import AutoComplete from "../../../components/forms/autocomplete";
 import { httpClient } from "../../../global/helpers/http-requests";
+import { validateInput } from "../../../global/helpers/validation";
 
 function AboutYou() {
-  const { loadingUser, user, addUserExtras } = useContext(ProfileContext);
+  const { user, addUserExtras } = useContext(ProfileContext);
   const [editInputs, setEditInputs] = useState(false);
-  const [summaryInput, setSummaryInput] = useState("");
-  const [summaryInputChange, setSummaryInputChange] = useState(false);
+  const [submitError, setSubmitError] = useState(false);
+  const [summary, setSummary] = useState({
+    inputValue: "",
+    inputChange: false,
+    inputError: false,
+  });
   const [interestedLocations, setInterestedLocations] = useState([]);
   const [locationsChange, setlocationsChange] = useState(false);
   const [topSkills, setTopSkills] = useState([]);
@@ -18,9 +23,13 @@ function AboutYou() {
   const [additionalSkillsChange, setAdditionalSkillsChange] = useState(false);
 
   function onEditInputs() {
+    setSubmitError(false);
     setEditInputs(true);
-    setSummaryInput(user.summary || "");
-    setSummaryInputChange(false);
+    setSummary({
+      inputValue: user.summary || "",
+      inputChange: false,
+      inputError: false,
+    });
     setInterestedLocations(user.locations);
     setlocationsChange(false);
     setTopSkills(user.topSkills);
@@ -30,15 +39,32 @@ function AboutYou() {
   }
 
   function onSummaryInputChange(value) {
-    if (!summaryInputChange) {
-      setSummaryInputChange(true);
+    if (value === user.summary) {
+      setSummary({
+        inputChange: false,
+        inputValue: value,
+        inputError: false,
+      });
+      return;
     }
-    setSummaryInput(value);
+
+    setSummary({ ...summary, inputChange: true, inputValue: value });
+  }
+
+  function onSummaryInputValidate(value) {
+    if (!summary.inputChange) return;
+    if (value.trim() === "") {
+      setSummary({ ...summary, inputValue: "", inputError: false });
+    } else if (validateInput("summary", value)) {
+      setSummary({ ...summary, inputError: false });
+    } else {
+      setSummary({ ...summary, inputError: true });
+    }
   }
 
   async function onLocationInputChange(value) {
     const [res, err] = await httpClient("POST", "/api/autocomplete", {
-      value
+      value,
     });
 
     if (err) {
@@ -51,7 +77,7 @@ function AboutYou() {
       checkDups[interestedLocations[i].name] = true;
     }
     const results = res.data.filter(
-      prediction => !(prediction.name in checkDups)
+      (prediction) => !(prediction.name in checkDups)
     );
     return results;
   }
@@ -76,7 +102,7 @@ function AboutYou() {
     for (let i = 0; i < user.locations.length; i++) {
       if (user.locations[i].name in checkLocations) {
         locationsToAdd = locationsToAdd.filter(
-          location => location.name !== user.locations[i].name
+          (location) => location.name !== user.locations[i].name
         );
       } else {
         locationsToRemove.push(user.locations[i]);
@@ -87,16 +113,16 @@ function AboutYou() {
       requests.push({
         method: "POST",
         url: `/locations/new`,
-        data: { locations: locationsToAdd, user_id: user.id }
+        data: { locations: locationsToAdd, user_id: user.id },
       });
     }
 
     if (locationsToRemove.length > 0) {
-      locationsToRemove.forEach(location => {
+      locationsToRemove.forEach((location) => {
         requests.push({
           method: "POST",
           url: `/locations/delete-user-location`,
-          data: { location_id: location.id, user_id: user.id }
+          data: { location_id: location.id, user_id: user.id },
         });
       });
     }
@@ -105,7 +131,7 @@ function AboutYou() {
 
   async function onSkillInputChange(value) {
     const [res, err] = await httpClient("POST", "/skills/autocomplete", {
-      value
+      value,
     });
 
     if (err) {
@@ -121,7 +147,7 @@ function AboutYou() {
       checkDups[additionalSkills[i].name] = true;
     }
     const results = res.data.filter(
-      prediction => !(prediction.name in checkDups)
+      (prediction) => !(prediction.name in checkDups)
     );
     return results;
   }
@@ -148,7 +174,7 @@ function AboutYou() {
     for (let i = 0; i < userSkills.length; i++) {
       if (userSkills[i].name in checkSkills) {
         skillsToAdd = skillsToAdd.filter(
-          skill => skill.name !== userSkills[i].name
+          (skill) => skill.name !== userSkills[i].name
         );
       } else {
         skillsToRemove.push(userSkills[i]);
@@ -162,21 +188,21 @@ function AboutYou() {
         data: {
           skills: skillsToAdd,
           user_id: user.id,
-          type
-        }
+          type,
+        },
       });
     }
 
     if (skillsToRemove.length > 0) {
-      skillsToRemove.forEach(skill => {
+      skillsToRemove.forEach((skill) => {
         requests.push({
           method: "POST",
           url: `/skills/delete-user-skill`,
           data: {
             skill_id: skill.id,
             user_id: user.id,
-            type
-          }
+            type,
+          },
         });
       });
     }
@@ -209,7 +235,7 @@ function AboutYou() {
     e.preventDefault();
 
     if (
-      !summaryInputChange &&
+      !summary.inputChange &&
       !locationsChange &&
       !topSkillsChange &&
       !additionalSkillsChange
@@ -219,11 +245,11 @@ function AboutYou() {
 
     let additionalArr = [];
 
-    if (summaryInputChange) {
+    if (summary.inputChange) {
       additionalArr.push({
         method: "PUT",
         url: `/users/${user.id}`,
-        data: { summary: summaryInput }
+        data: { summary: summary.inputValue },
       });
     }
 
@@ -246,10 +272,11 @@ function AboutYou() {
     setEditInputs(false);
   }
 
-  console.log("===ABOUT YOU===", user);
-  if (loadingUser) {
-    return <h1>Loading...</h1>;
+  function resetInputs() {
+    setEditInputs(false);
   }
+
+  console.log("===ABOUT YOU===", user);
 
   if (!editInputs) {
     return (
@@ -264,19 +291,32 @@ function AboutYou() {
     <Main>
       <h1>Hello About You</h1>
 
-      <form onSubmit={e => submitEdit(e)}>
-        <h3>Your Summary</h3>
-        <input
-          type="text"
-          placeholder="Summary"
-          value={summaryInput}
-          onChange={e => onSummaryInputChange(e.target.value)}
-        />
+      <form onSubmit={(e) => submitEdit(e)}>
+        <InputContainer>
+          <label id="summary-label" htmlFor="summary">
+            Summary:
+          </label>
+          <textarea
+            id="summary"
+            name="summary"
+            maxLength="280"
+            cols="8"
+            rows="5"
+            className={`input ${summary.inputError ? "input-err" : ""}`}
+            aria-labelledby="summary-label"
+            aria-describedby="summary-error"
+            aria-invalid={summary.inputError}
+            value={summary.inputValue}
+            onChange={(e) => onSummaryInputChange(e.target.value)}
+            onBlur={(e) => onSummaryInputValidate(e.target.value)}
+          />
+          {summary.inputError ? (
+            <span id="summary-error" className="err-mssg" aria-live="polite">
+              Summary can only be alphabelical characters, numbers
+            </span>
+          ) : null}
+        </InputContainer>
 
-        <br />
-        <br />
-
-        <h3>Interested Locations</h3>
         <AutoComplete
           chosenInputs={interestedLocations}
           onInputChange={onLocationInputChange}
@@ -285,7 +325,6 @@ function AboutYou() {
           inputName={"interested-locations"}
         />
 
-        <h3>Top Skills</h3>
         <AutoComplete
           chosenInputs={topSkills}
           onInputChange={onSkillInputChange}
@@ -295,7 +334,6 @@ function AboutYou() {
           addNewSkill={addTopSkillForReview}
         />
 
-        <h3>Additional Skills</h3>
         <AutoComplete
           chosenInputs={additionalSkills}
           onInputChange={onSkillInputChange}
@@ -306,6 +344,9 @@ function AboutYou() {
         />
 
         <button>Submit</button>
+        <button type="reset" onClick={resetInputs}>
+          Cancel
+        </button>
       </form>
     </Main>
   );
@@ -316,6 +357,18 @@ const Main = styled.main`
   height: 100vh;
   padding-top: 100px;
   background-color: pink;
+`;
+
+const InputContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  .input-err {
+    border: solid red;
+  }
+  .err-mssg {
+    color: red;
+    font-size: 0.7rem;
+  }
 `;
 
 export default AboutYou;

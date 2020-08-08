@@ -4,7 +4,6 @@ import styled from "styled-components";
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
 import EducationForm from "../../../components/forms/user-extras/EducationForm";
 
-
 /*
 
 2 types of validation
@@ -21,8 +20,6 @@ These will also be *required
 
 
 */
-
-
 
 function DashboardEducation() {
   const { user, addUserExtras } = useContext(ProfileContext);
@@ -58,8 +55,8 @@ function DashboardEducation() {
         school: "",
         school_dates: "",
         field_of_study: "",
-        education_description: ""
-      }
+        education_description: "",
+      },
     ]);
     setIdTracker(idTracker + 1);
   }
@@ -68,7 +65,7 @@ function DashboardEducation() {
     if (!educationChange) {
       setEducationChange(true);
     }
-    let newEducation = education.filter(edu => edu.id !== id);
+    let newEducation = education.filter((edu) => edu.id !== id);
     setEducation(newEducation);
   }
 
@@ -88,7 +85,7 @@ function DashboardEducation() {
       if (!(user.education[i].id in checkEdu)) {
         requests.push({
           method: "DELETE",
-          url: `/extras/education/${user.education[i].id}`
+          url: `/extras/education/${user.education[i].id}`,
         });
       }
     }
@@ -103,8 +100,8 @@ function DashboardEducation() {
             school_dates: education[i].school_dates,
             field_of_study: education[i].field_of_study,
             education_description: education[i].education_description,
-            user_id: user.id
-          }
+            user_id: user.id,
+          },
         });
       }
       if (education[i].id[0] !== "f" && education[i].shouldEdit) {
@@ -115,8 +112,8 @@ function DashboardEducation() {
             school: education[i].school,
             school_dates: education[i].school_dates,
             field_of_study: education[i].field_of_study,
-            education_description: education[i].education_description
-          }
+            education_description: education[i].education_description,
+          },
         });
       }
     }

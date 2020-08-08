@@ -9,7 +9,7 @@ class SubscriberForm extends Component {
     type: "",
     created: "",
     startDate: "",
-    dueDate: ""
+    dueDate: "",
   };
 
   componentDidMount() {
@@ -18,7 +18,7 @@ class SubscriberForm extends Component {
 
   getSubInfo = async () => {
     const [res, err] = await httpClient("POST", "/api/get-subscription", {
-      sub: this.props.stripeSubId
+      sub: this.props.stripeSubId,
     });
 
     if (err) {
@@ -36,7 +36,7 @@ class SubscriberForm extends Component {
 
   cancelSub = async () => {
     const [res, err] = await httpClient("POST", "/api/cancel-subscription", {
-      sub: this.props.stripeSubId
+      sub: this.props.stripeSubId,
     });
 
     if (err) {
@@ -45,7 +45,7 @@ class SubscriberForm extends Component {
     }
 
     this.props.editUserProfile({
-      stripe_subscription_name: null
+      stripe_subscription_name: null,
     });
   };
 

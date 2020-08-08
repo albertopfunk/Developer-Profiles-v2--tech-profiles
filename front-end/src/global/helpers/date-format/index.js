@@ -49,8 +49,9 @@ export function dateFormat(value, dates) {
       newCarotRange++;
     }
 
-    newValue = `${newValue[0] || ""}${newValue[1] || ""} / ${newValue[2] ||
-      ""}${newValue[3] || ""}`;
+    newValue = `${newValue[0] || ""}${newValue[1] || ""} / ${
+      newValue[2] || ""
+    }${newValue[3] || ""}`;
   }
 
   if (newCarotRange === 2 || newCarotRange === 3) {

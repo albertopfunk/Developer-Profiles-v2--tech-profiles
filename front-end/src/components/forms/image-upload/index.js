@@ -19,7 +19,7 @@ function ImageUploadForm({ imageInput, setImageInput }) {
       let id = localStorage.getItem("image_id");
       localStorage.removeItem("image_id");
       httpClient("POST", "/api/delete-image", {
-        id
+        id,
       });
     }
     return () => {
@@ -30,7 +30,7 @@ function ImageUploadForm({ imageInput, setImageInput }) {
   function removePreviewImageFromCloudinary() {
     if (imageInput.id) {
       httpClient("POST", "/api/delete-image", {
-        id: imageInput.id
+        id: imageInput.id,
       });
     }
   }
@@ -50,8 +50,8 @@ function ImageUploadForm({ imageInput, setImageInput }) {
 
     const [res, err] = await httpClient("POST", "/api/upload-image", data, {
       headers: {
-        "Content-Type": "multipart/form-data"
-      }
+        "Content-Type": "multipart/form-data",
+      },
     });
 
     if (err) {
@@ -68,7 +68,7 @@ function ImageUploadForm({ imageInput, setImageInput }) {
     setImageInput({
       ...res.data,
       inputChange: true,
-      shouldRemoveUserImage: false
+      shouldRemoveUserImage: false,
     });
     setImageLoading(false);
     setImageError(false);
@@ -83,7 +83,7 @@ function ImageUploadForm({ imageInput, setImageInput }) {
       image: "",
       id: "",
       inputChange: false,
-      shouldRemoveUserImage: false
+      shouldRemoveUserImage: false,
     });
     setImageLoading(false);
     setImageError(false);
@@ -114,7 +114,7 @@ function ImageUploadForm({ imageInput, setImageInput }) {
           aria-labelledby="image-upload-label"
           aria-describedby="imageLoading imageError imageSuccess"
           aria-invalid={imageError}
-          onChange={e => uploadImage(e)}
+          onChange={(e) => uploadImage(e)}
         />
 
         {imageLoading ? (
@@ -143,7 +143,7 @@ function ImageUploadForm({ imageInput, setImageInput }) {
               top: "5%",
               right: "5%",
               border: "solid",
-              zIndex: "1"
+              zIndex: "1",
             }}
           >
             {imageInput.image ? (
