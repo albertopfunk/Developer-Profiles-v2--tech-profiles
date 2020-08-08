@@ -21,6 +21,8 @@ import auth0Client from "../../auth/Auth";
 function ProfileDashboard() {
   const [loadingUser, setLoadingUser] = useState(true);
   const [user, setUser] = useState(null);
+  const [editInputs, setEditInputs] = useState(false);
+  const [submitLoading, setSubmitLoading] = useState(false);
   const [previewImg, setPreviewImg] = useState({ image: "", id: "" });
   let { path, url } = useRouteMatch();
 
@@ -54,10 +56,12 @@ function ProfileDashboard() {
 
     setUser(res.data);
     setLoadingUser(false);
+    setSubmitLoading(false);
+    setEditInputs(false);
   }
 
   async function editProfile(data) {
-    // setLoadingUser(true);
+    setSubmitLoading(true);
     const [res, err] = await httpClient("PUT", `/users/${user.id}`, data);
 
     if (err) {
@@ -69,7 +73,7 @@ function ProfileDashboard() {
   }
 
   async function addUserExtras(requestsArr) {
-    // setLoadingUser(true);
+    setSubmitLoading(true);
     let main = {
       ...requestsArr.shift()
     };
@@ -97,7 +101,14 @@ function ProfileDashboard() {
   }
 
   if (loadingUser) {
-    return <h1>Loading...</h1>;
+    // I do not think ANY other loadingUser on children run
+    // since loadingUser will ALWAYS be false if this does not render
+    // so this can be the main skeleton loader
+    return (
+      <div>
+        <h1>Loading...</h1>
+      </div>
+    );
   }
   return (
     <MainContainer>
@@ -127,11 +138,13 @@ function ProfileDashboard() {
       <div className="content-container">
         <ProfileContext.Provider
           value={{
-            loadingUser,
             user,
             editProfile,
+            submitLoading,
             addUserExtras,
-            setPreviewImg
+            setPreviewImg,
+            editInputs,
+            setEditInputs
           }}
         >
           <Switch>
