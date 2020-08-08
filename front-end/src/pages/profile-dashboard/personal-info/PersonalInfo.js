@@ -18,11 +18,15 @@ functions should be verbs since they DO things
 */
 
 function PersonalInfo() {
-  const { loadingUser, user, editProfile, setPreviewImg } = useContext(
-    ProfileContext
-  );
+  const {
+    user,
+    submitLoading,
+    editProfile,
+    setPreviewImg,
+    editInputs,
+    setEditInputs
+  } = useContext(ProfileContext);
 
-  const [editInputs, setEditInputs] = useState(false);
   const [submitError, setSubmitError] = useState(false);
   const [firstName, setFirstName] = useState({
     inputValue: "",
@@ -54,9 +58,26 @@ function PersonalInfo() {
 
   let errorSummaryRef = React.createRef();
 
-  function onEditInputs() {
-    setSubmitError(false);
+  useEffect(() => {
+    if (submitError && errorSummaryRef.current) {
+      errorSummaryRef.current.focus();
+    }
+    // another issue with required dependencies causing bugs
+    // I am using this since I need to set focus to the
+    // err summary element when user clicks submit with errors.
+    // since state needs to change for the element to appear
+    // and I can only set focus once the element appears, I have
+    // to set focus AFTER state changes and component renders
+    // so I am using useEffect to handle that
+    // this works, but if I add the required errorSummaryRef
+    // it will shift focus on that Ref on ANY state change/render
+    // since refs are re-set each time
+    // eslint-disable-next-line
+  }, [submitError]);
+
+  function setFormInputs() {
     setEditInputs(true);
+    setSubmitError(false);
     setFirstName({
       inputValue: user.first_name || "",
       inputChange: false,
@@ -83,23 +104,6 @@ function PersonalInfo() {
       inputError: false
     });
   }
-
-  useEffect(() => {
-    if (submitError && errorSummaryRef.current) {
-      errorSummaryRef.current.focus();
-    }
-    // another issue with required dependencies causing bugs
-    // I am using this since I need to set focus to the
-    // err summary element when user clicks submit with errors.
-    // since state needs to change for the element to appear
-    // and I can only set focus once the element appears, I have
-    // to set focus AFTER state changes and component renders
-    // so I am using useEffect to handle that
-    // this works, but if I add the required errorSummaryRef
-    // it will shift focus on that Ref on ANY state change/render
-    // since refs are re-set each time
-    // eslint-disable-next-line
-  }, [submitError]);
 
   function setFirstNameInput(value) {
     if (value === user.first_name) {
@@ -156,7 +160,7 @@ function PersonalInfo() {
     }
   }
 
-  function onAreaOfWorkInputChange(value) {
+  function setAreaOfWorkInput(value) {
     if (value === user.area_of_work) {
       setAreaOfWork({ ...areaOfWork, inputChange: false });
       return;
@@ -164,7 +168,7 @@ function PersonalInfo() {
     setAreaOfWork({ ...areaOfWork, inputChange: true, inputValue: value });
   }
 
-  function onTitleInputChange(value) {
+  function setTitleInput(value) {
     if (value === user.desired_title) {
       setTitle({
         inputChange: false,
@@ -177,7 +181,7 @@ function PersonalInfo() {
     setTitle({ ...title, inputChange: true, inputValue: value });
   }
 
-  function onTitleInputValidate(value) {
+  function validateTitleInput(value) {
     if (!title.inputChange) return;
     if (value.trim() === "") {
       setTitle({ ...title, inputValue: "", inputError: false });
@@ -238,17 +242,7 @@ function PersonalInfo() {
     }
 
     console.log("SUB", inputs);
-    setEditInputs(false);
     editProfile(inputs);
-  }
-
-  function resetInputs() {
-    setEditInputs(false);
-  }
-
-  if (loadingUser) {
-    // skeleton loader
-    return <h1>Loading...</h1>;
   }
 
   if (!editInputs) {
@@ -260,7 +254,7 @@ function PersonalInfo() {
         <h1 id="personal-info-heading-1">Personal Info</h1>
         <section aria-labelledby="personal-info-heading-2">
           <h2 id="personal-info-heading-2">Current Information</h2>
-          <button onClick={onEditInputs}>Edit Information</button>
+          <button onClick={setFormInputs}>Edit Information</button>
           <ul>
             <li>First Name: {user.first_name || "None Set"}</li>
             <li>Last Name: {user.last_name || "None Set"}</li>
@@ -380,7 +374,7 @@ function PersonalInfo() {
                   id="development"
                   value="Development"
                   defaultChecked={user.area_of_work === "Development"}
-                  onClick={e => onAreaOfWorkInputChange(e.target.value)}
+                  onClick={e => setAreaOfWorkInput(e.target.value)}
                 />
                 <label htmlFor="development">Development</label>
               </span>
@@ -391,7 +385,7 @@ function PersonalInfo() {
                   id="ios"
                   value="iOS"
                   defaultChecked={user.area_of_work === "iOS"}
-                  onClick={e => onAreaOfWorkInputChange(e.target.value)}
+                  onClick={e => setAreaOfWorkInput(e.target.value)}
                 />
                 <label htmlFor="ios">iOS</label>
               </span>
@@ -402,7 +396,7 @@ function PersonalInfo() {
                   id="android"
                   value="Android"
                   defaultChecked={user.area_of_work === "Android"}
-                  onClick={e => onAreaOfWorkInputChange(e.target.value)}
+                  onClick={e => setAreaOfWorkInput(e.target.value)}
                 />
                 <label htmlFor="android">Android</label>
               </span>
@@ -413,7 +407,7 @@ function PersonalInfo() {
                   id="design"
                   value="Design"
                   defaultChecked={user.area_of_work === "Design"}
-                  onClick={e => onAreaOfWorkInputChange(e.target.value)}
+                  onClick={e => setAreaOfWorkInput(e.target.value)}
                 />
                 <label htmlFor="design">Design</label>
               </span>
@@ -435,8 +429,8 @@ function PersonalInfo() {
               aria-describedby="title-error"
               aria-invalid={title.inputError}
               value={title.inputValue}
-              onChange={e => onTitleInputChange(e.target.value)}
-              onBlur={e => onTitleInputValidate(e.target.value)}
+              onChange={e => setTitleInput(e.target.value)}
+              onBlur={e => validateTitleInput(e.target.value)}
             />
             {title.inputError ? (
               <span id="title-error" className="err-mssg" aria-live="polite">
@@ -445,8 +439,14 @@ function PersonalInfo() {
             ) : null}
           </InputContainer>
 
-          <button type="submit">Submit</button>
-          <button type="reset" onClick={resetInputs}>
+          <button disabled={submitLoading} type="submit">
+            {submitLoading ? "loading..." : "Submit"}
+          </button>
+          <button
+            disabled={submitLoading}
+            type="reset"
+            onClick={() => setEditInputs(false)}
+          >
             Cancel
           </button>
         </form>
