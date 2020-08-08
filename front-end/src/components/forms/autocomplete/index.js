@@ -1,5 +1,18 @@
 import React from "react";
 
+/*
+  when user is typing and 'tabs' out from input, then the
+  listbox should reset, value will be current value
+  
+  when the user is focusing on options, and clicks tab then
+  listbox should reset, value will be the value that was focused on 
+
+  listbox is hidden with display:none
+  appears when user starts typing
+
+
+*/
+
 class AutoComplete extends React.Component {
   state = {
     timeOut: null,
@@ -8,7 +21,7 @@ class AutoComplete extends React.Component {
     currentFocusedOption: "",
     resultsInBank: true,
     autoCompleteResults: [],
-    chosenNames: []
+    chosenNames: [],
   };
 
   optionRefs = [];
@@ -25,7 +38,7 @@ class AutoComplete extends React.Component {
     }
   };
 
-  focusOnFirstOption = e => {
+  focusOnFirstOption = (e) => {
     if (this.state.autoCompleteResults.length > 0) {
       if (e.keyCode === 40) {
         e.preventDefault();
@@ -39,7 +52,7 @@ class AutoComplete extends React.Component {
         e.preventDefault();
         if (this.optionRefs.length > 0) {
           this.setState({
-            currentFocusedOption: `result${this.optionRefs.length - 1}`
+            currentFocusedOption: `result${this.optionRefs.length - 1}`,
           });
           this.optionRefs[this.optionRefs.length - 1].focus();
         }
@@ -73,7 +86,7 @@ class AutoComplete extends React.Component {
     if (direction === "up") {
       if (index === 0) {
         this.setState({
-          currentFocusedOption: `result${this.optionRefs.length - 1}`
+          currentFocusedOption: `result${this.optionRefs.length - 1}`,
         });
         this.optionRefs[this.optionRefs.length - 1].focus();
       } else {
@@ -92,7 +105,15 @@ class AutoComplete extends React.Component {
     }
   };
 
-  onInputChange = async value => {
+  onInputChange = async (value) => {
+    /*
+      first debounce with value runs, the promise is pending
+      second debounce with no value runs, this.resetInput runs
+      second input runs first, then when resolved, the first input
+      runs second, rendering the predictions
+      this is going to be a matter of needing to cancel a request
+    */
+
     this.optionRefs = [];
     if (value.trim() === "") {
       this.resetInput();
@@ -102,7 +123,8 @@ class AutoComplete extends React.Component {
     let predictions = await this.props.onInputChange(value);
 
     if (predictions.length === 0) {
-      this.setState({ resultsInBank: false });
+      this.setState({ resultsInBank: false, isUsingCombobox: true });
+
       this.resetInput(value);
       return;
     }
@@ -110,11 +132,11 @@ class AutoComplete extends React.Component {
     this.setState({
       resultsInBank: true,
       isUsingCombobox: true,
-      autoCompleteResults: predictions
+      autoCompleteResults: predictions,
     });
   };
 
-  debounceInput = e => {
+  debounceInput = (e) => {
     let currTimeOut;
 
     const { value } = e.target;
@@ -152,19 +174,19 @@ class AutoComplete extends React.Component {
       input: name,
       autoCompleteResults: [],
       isUsingCombobox: false,
-      currentFocusedOption: ""
+      currentFocusedOption: "",
     });
   };
 
-  removeChosenName = location => {
-    let newChosenNamesState = this.state.chosenNames.filter(chosenName => {
+  removeChosenName = (location) => {
+    let newChosenNamesState = this.state.chosenNames.filter((chosenName) => {
       return chosenName.name !== location.name;
     });
 
     this.setState({
       chosenNames: newChosenNamesState,
       autoCompleteResults: [],
-      input: ""
+      input: "",
     });
 
     this.props.removeChosenInput(newChosenNamesState);
@@ -172,39 +194,48 @@ class AutoComplete extends React.Component {
 
   render() {
     console.log("====AUTOCOMPLETE====", this.state);
+
+    const { inputName } = this.props;
+    const {
+      input,
+      resultsInBank,
+      autoCompleteResults,
+      isUsingCombobox,
+      currentFocusedOption,
+      chosenNames,
+    } = this.state;
+
     return (
       <div>
-        <div>
-          {/* aria-expanded should be true when any value exists on input(no blank spaces) */}
-          {/* aria-activedescendant shows correct focused <li> based on id */}
-          {/* onChange sets new predictions based on AutoComplete API, changes <li> */}
-          {/* onKeyDown only runs when there are <li>s present */}
-          {/* onKeyDown with down arrow key focuses on first option(<li>) */}
-          {/* onKeyDown with esc key resets filter with resetInput() */}
-          <label htmlFor={`${this.props.inputName}-search-predictions`}>
-            <p style={{ textTransform: "capitalize" }}>
-              {`Choose ${this.props.inputName.split("-")[1]}`}
-            </p>
-          </label>
+        <label id={`${inputName}-label`} htmlFor={`${inputName}-search-input`}>
+          <p style={{ textTransform: "capitalize" }}>
+            {`Choose ${inputName.split("-")[1]}`}
+          </p>
+        </label>
+        <div
+          id={`${inputName}-search-combobox`}
+          // combobox on parent is recommended by ARIA 1.1
+          // eslint-disable-next-line
+          role="combobox"
+          aria-haspopup="listbox"
+          aria-owns="results no-results"
+          aria-expanded={isUsingCombobox}
+        >
           <input
-            type="text"
-            id={`${this.props.inputName}-search-predictions`}
+            type="search"
             autoComplete="off"
-            role="combobox"
-            aria-expanded={this.state.isUsingCombobox}
-            aria-haspopup="listbox"
-            aria-controls="results"
-            aria-owns="results"
+            id={`${inputName}-search-input`}
+            name={`${inputName}-search-input`}
             aria-autocomplete="list"
-            aria-activedescendant={this.state.currentFocusedOption}
-            name={`${this.props.inputName}-search-predictions`}
-            value={this.state.input}
-            onChange={e => this.debounceInput(e)}
-            onKeyDown={e => this.focusOnFirstOption(e)}
+            aria-controls="results no-results"
+            aria-activedescendant={currentFocusedOption}
+            value={input}
+            onChange={(e) => this.debounceInput(e)}
+            onKeyDown={(e) => this.focusOnFirstOption(e)}
           />
         </div>
 
-        {!this.state.resultsInBank && this.state.input ? (
+        {/* {!this.state.resultsInBank && this.state.input ? (
           <div>
             <p>No Results</p>
 
@@ -230,31 +261,39 @@ class AutoComplete extends React.Component {
               </>
             ) : null}
           </div>
+        ) : null} */}
+
+        {!resultsInBank && input ? (
+          <ul
+            id="no-results"
+            role="listbox"
+            aria-labelledby={`${inputName}-label`}
+          >
+            <li
+              id="no-results-1"
+              role="option"
+              aria-selected="false"
+              tabIndex="-1"
+            >
+              No Results
+            </li>
+          </ul>
         ) : null}
 
-        <ul id="results" role="listbox">
-          {this.state.autoCompleteResults.length === 0
-            ? null
-            : this.state.autoCompleteResults.map((prediction, i) => {
+        <ul id="results" role="listbox" aria-labelledby={`${inputName}-label`}>
+          {resultsInBank && autoCompleteResults.length > 0
+            ? autoCompleteResults.map((prediction, i) => {
                 return (
-                  // setOptionRefs each li is a custom ref based on index
-                  // chooseOnKeyDown with up or down arrow keys moves focus of <li>s respectively
-                  // chooseOnKeyDown with enter key chooses prediction with choosePrediction()
-                  // chooseOnKeyDown with esc key resets filter with resetInput()
-                  // choosePrediction chooses prediction on mouse click
-                  // shows correct name of prediction
                   <li
-                    id={`result${i}`}
+                    id={`results-${i}`}
                     key={prediction.id}
                     role="option"
-                    aria-selected={
-                      this.state.currentFocusedOption === `result${i}`
-                    }
+                    aria-selected={currentFocusedOption === `result${i}`}
                     tabIndex="-1"
-                    ref={ref => {
+                    ref={(ref) => {
                       this.setOptionRefs(ref, i);
                     }}
-                    onKeyDown={e =>
+                    onKeyDown={(e) =>
                       this.chooseOnKeyDown(e, prediction.name, prediction.id, i)
                     }
                     onClick={() =>
@@ -264,17 +303,13 @@ class AutoComplete extends React.Component {
                     {prediction.name}
                   </li>
                 );
-              })}
+              })
+            : null}
         </ul>
 
-        {/* Test */}
-        {/* Should only appear when a user chooses a location */}
-        {/* should display correct chosen location */}
-        {/* should display btn to reset location combobox */}
-        {/* resetting combobox makes chosenName an empty str again so this UI should dissapear onClick of reset btn */}
-        {this.state.chosenNames.length === 0 ? null : (
-          <ul id="results">
-            {this.state.chosenNames.map(chosenName => {
+        {chosenNames.length === 0 ? null : (
+          <ul>
+            {chosenNames.map((chosenName) => {
               return (
                 <li key={chosenName.id}>
                   <p style={{ display: "inline" }}>{chosenName.name}</p>
