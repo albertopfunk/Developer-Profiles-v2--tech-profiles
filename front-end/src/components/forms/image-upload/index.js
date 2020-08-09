@@ -1,13 +1,12 @@
 import React, { useState, useContext, useEffect } from "react";
+import styled from "styled-components";
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
 import { httpClient } from "../../../global/helpers/http-requests";
-import styled from "styled-components";
+import { STATUS } from "../../../global/helpers/variables";
 
 function ImageUploadForm({ imageInput, setImageInput }) {
   const { setPreviewImg, user } = useContext(ProfileContext);
-  const [imageLoading, setImageLoading] = useState(false);
-  const [imageError, setImageError] = useState(false);
-  const [imageSuccess, setImageSuccess] = useState(false);
+  const [imageStatus, setImageStatus] = useState(STATUS.idle);
 
   let imageRef = React.createRef();
   let imageRemovalRef = React.createRef();
@@ -44,10 +43,8 @@ function ImageUploadForm({ imageInput, setImageInput }) {
     const data = new FormData();
     data.append("image", file);
     imageRef.current.value = "";
-    setImageLoading(true);
-    setImageError(false);
-    setImageSuccess(false);
 
+    setImageStatus(STATUS.loading);
     const [res, err] = await httpClient("POST", "/api/upload-image", data, {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -56,12 +53,11 @@ function ImageUploadForm({ imageInput, setImageInput }) {
 
     if (err) {
       console.error(`${res.mssg} => ${res.err}`);
-      setImageLoading(false);
-      setImageError(true);
-      setImageSuccess(false);
+      setImageStatus(STATUS.error);
       return;
     }
 
+    setImageStatus(STATUS.success);
     removePreviewImageFromCloudinary();
     localStorage.setItem("image_id", res.data.id);
     setPreviewImg(res.data);
@@ -70,12 +66,10 @@ function ImageUploadForm({ imageInput, setImageInput }) {
       inputChange: true,
       shouldRemoveUserImage: false,
     });
-    setImageLoading(false);
-    setImageError(false);
-    setImageSuccess(true);
   }
 
   function removePreviewImage() {
+    setImageStatus(STATUS.idle);
     removePreviewImageFromCloudinary();
     localStorage.removeItem("image_id");
     setPreviewImg({ image: "", id: "" });
@@ -85,9 +79,6 @@ function ImageUploadForm({ imageInput, setImageInput }) {
       inputChange: false,
       shouldRemoveUserImage: false,
     });
-    setImageLoading(false);
-    setImageError(false);
-    setImageSuccess(false);
   }
 
   function setImageToRemove() {
@@ -97,8 +88,6 @@ function ImageUploadForm({ imageInput, setImageInput }) {
       setImageInput({ ...imageInput, shouldRemoveUserImage: false });
     }
   }
-
-  console.log("=====IMAGEUPLOADFORM + IMG INPUTTTT=====", imageInput);
 
   return (
     <div>
@@ -112,40 +101,32 @@ function ImageUploadForm({ imageInput, setImageInput }) {
           ref={imageRef}
           name="image-upload"
           aria-labelledby="image-upload-label"
-          aria-describedby="imageLoading imageError imageSuccess"
-          aria-invalid={imageError}
+          aria-describedby="image-loading image-error image-success"
+          aria-invalid={imageStatus === STATUS.error}
           onChange={(e) => uploadImage(e)}
         />
 
-        {imageLoading ? (
-          <span id="imageLoading" className="loading-mssg" aria-live="polite">
+        {imageStatus === STATUS.loading ? (
+          <span id="image-loading" role="status" className="loading-mssg">
             Loading...
           </span>
         ) : null}
 
-        {imageError ? (
-          <span id="imageError" className="err-mssg" aria-live="polite">
-            Error uploading image. Please try again
+        {imageStatus === STATUS.error ? (
+          <span id="image-error" role="status" className="err-mssg">
+            Error uploading image. Please try again.
           </span>
         ) : null}
 
-        {imageSuccess ? (
-          <span id="imageSuccess" className="success-mssg" aria-live="polite">
+        {imageStatus === STATUS.success ? (
+          <span id="image-success" role="status" className="success-mssg">
             Success!
           </span>
         ) : null}
       </InputContainer>
       {user.image || imageInput.image ? (
-        <div style={{ height: "200px", width: "200px" }}>
-          <div
-            style={{
-              position: "absolute",
-              top: "5%",
-              right: "5%",
-              border: "solid",
-              zIndex: "1",
-            }}
-          >
+        <ImageContainer>
+          <div className="img-action">
             {imageInput.image ? (
               <button onClick={removePreviewImage}>X</button>
             ) : (
@@ -162,11 +143,12 @@ function ImageUploadForm({ imageInput, setImageInput }) {
           </div>
 
           <img
-            style={{ height: "200px", width: "200px" }}
             src={imageInput.image || user.image}
             alt="current profile pic"
+            height="200px"
+            width="200px"
           />
-        </div>
+        </ImageContainer>
       ) : null}
     </div>
   );
@@ -186,6 +168,18 @@ const InputContainer = styled.div`
   .success-mssg {
     color: green;
     font-size: 0.7rem;
+  }
+`;
+
+const ImageContainer = styled.div`
+  height: 200px;
+  width: 200px;
+  .img-action {
+    position: absolute;
+    top: 5%;
+    right: 5%;
+    border: solid;
+    z-index: 1;
   }
 `;
 
