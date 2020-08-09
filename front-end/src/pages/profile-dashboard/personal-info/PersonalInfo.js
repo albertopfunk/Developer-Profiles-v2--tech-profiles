@@ -290,21 +290,42 @@ function PersonalInfo() {
       <FormSection aria-labelledby="edit-info-heading">
         <h2 id="edit-info-heading">Edit Information</h2>
         <div
-          ref={errorSummaryRef}
-          tabIndex="0"
-          aria-live="polite"
+          aria-live="assertive"
+          aria-relevant="additions removals"
           aria-labelledby="error-heading"
           className={`error-summary ${submitError ? "" : "hidden"}`}
         >
-          <h3 id="error-heading">Error Summary</h3>
-          {firstName.inputError ? <p>First Name Error</p> : null}
-          {lastName.inputError ? <p>Last Name Error</p> : null}
-          {title.inputError ? <p>Title Error</p> : null}
-          {!firstName.inputError &&
-          !lastName.inputError &&
-          !title.inputError ? (
+          <h3 id="error-heading" ref={errorSummaryRef} tabIndex="0">
+            Errors in Submission
+          </h3>
+
+          {firstName.inputError || lastName.inputError || title.inputError ? (
+            <>
+              <strong id="error-instructions">
+                Please address the following errors and re-submit the form:
+              </strong>
+
+              <ul id="error-group" aria-labelledby="error-instructions">
+                {firstName.inputError ? (
+                  <li>
+                    <a href="#first-name">First Name Error</a>
+                  </li>
+                ) : null}
+                {lastName.inputError ? (
+                  <li>
+                    <a href="#last-name">Last Name Error</a>
+                  </li>
+                ) : null}
+                {title.inputError ? (
+                  <li>
+                    <a href="#title">Title Error</a>
+                  </li>
+                ) : null}
+              </ul>
+            </>
+          ) : (
             <p>No Errors, ready to submit</p>
-          ) : null}
+          )}
         </div>
 
         <form onSubmit={(e) => submitEdit(e)}>
@@ -327,11 +348,7 @@ function PersonalInfo() {
               onBlur={(e) => validateFirstNameInput(e.target.value)}
             />
             {firstName.inputError ? (
-              <span
-                id="first-name-error"
-                className="err-mssg"
-                aria-live="polite"
-              >
+              <span id="first-name-error" role="status" className="err-mssg">
                 First Name can only be alphabelical characters, no numbers
               </span>
             ) : null}
@@ -355,11 +372,7 @@ function PersonalInfo() {
               onBlur={(e) => validateLastNameInput(e.target.value)}
             />
             {lastName.inputError ? (
-              <span
-                id="last-name-error"
-                className="err-mssg"
-                aria-live="polite"
-              >
+              <span id="last-name-error" role="status" className="err-mssg">
                 Last Name can only be alphabelical characters, no numbers
               </span>
             ) : null}
@@ -436,7 +449,7 @@ function PersonalInfo() {
               onBlur={(e) => validateTitleInput(e.target.value)}
             />
             {title.inputError ? (
-              <span id="title-error" className="err-mssg" aria-live="polite">
+              <span id="title-error" role="status" className="err-mssg">
                 Title can only be alphabelical characters, no numbers
               </span>
             ) : null}
