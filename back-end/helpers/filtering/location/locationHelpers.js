@@ -43,8 +43,8 @@ function currentLocationFilter(
 ) {
   const filteredUsers = users.filter((user) => {
     if (user.current_location_lat && user.current_location_lon) {
-      userLat = user.current_location_lat;
-      userLon = user.current_location_lon;
+      const userLat = user.current_location_lat;
+      const userLon = user.current_location_lon;
       return distanceWithinFilter(
         chosenLocationLat,
         chosenLocationLon,

@@ -29,7 +29,7 @@ server.post("/new", async (req, res) => {
 server.get("/", async (_, res) => {
   try {
     const users = await userModel.getAll();
-    cachedUsersSuccess = usersCache.set("users", users);
+    const cachedUsersSuccess = usersCache.set("users", users);
     if (cachedUsersSuccess) {
       const slicedUsers = users.slice(0, 25);
       res.status(200).json({ users: slicedUsers, len: users.length });
@@ -66,9 +66,9 @@ server.get("/load-more/:page", async (req, res) => {
 server.post("/filtered", async (req, res) => {
   try {
     const users = await userModel.getAllFiltered(req.body);
-    cachedUsersSuccess = usersCache.set("users", users);
+    const cachedUsersSuccess = usersCache.set("users", users);
     if (cachedUsersSuccess) {
-      slicedUsers = users.slice(0, 25);
+      const slicedUsers = users.slice(0, 25);
       res.status(200).json({ users: slicedUsers, len: users.length });
     } else {
       res.status(500).json({ message: "Error adding users to cache" });
@@ -112,7 +112,7 @@ server.post("/get-single", async (req, res) => {
     getSingleUser
       ? res.status(200).json(getSingleUser)
       : res.status(404).json({
-          message: `User with the specified ID of '${id}' does not exist`,
+          message: `User with the specified email ID of '${req.body.email}' does not exist`,
         });
   } catch (err) {
     res.status(500).json({ message: "Error getting user from database" });
