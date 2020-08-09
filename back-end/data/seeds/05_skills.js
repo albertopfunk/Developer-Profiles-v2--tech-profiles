@@ -3,11 +3,11 @@
 //* You can email user if their submitted skill is accepted
 //* create a Admin UI so you can add/delete skills & skills_for_review
 // eslint-disable-next-line
-exports.seed = function(knex, Promise) {
+exports.seed = function (knex, Promise) {
   // Deletes ALL existing entries
   return knex("skills")
     .del()
-    .then(function() {
+    .then(function () {
       // Inserts seed entries
       return knex("skills")
         .truncate()
@@ -45,7 +45,7 @@ exports.seed = function(knex, Promise) {
           { skill: "GSAP" },
           { skill: "UX" },
           { skill: "UI" },
-          { skill: "Sketch" }
+          { skill: "Sketch" },
         ]);
     });
 };

@@ -1,6 +1,6 @@
 // eslint-disable-next-line
-exports.up = function(knex, Promise) {
-  return knex.schema.createTable("projects", function(table) {
+exports.up = function (knex, Promise) {
+  return knex.schema.createTable("projects", function (table) {
     table.increments();
     table.string("project_title");
     table.string("project_img");
@@ -17,6 +17,6 @@ exports.up = function(knex, Promise) {
 };
 
 // eslint-disable-next-line
-exports.down = function(knex, Promise) {
+exports.down = function (knex, Promise) {
   return knex.schema.dropTableIfExists("projects");
 };

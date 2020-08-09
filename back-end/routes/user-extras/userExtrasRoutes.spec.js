@@ -32,7 +32,7 @@ describe("POST /new/:user_extra", () => {
     await db("users").insert({ email: "test@email.com" });
     const newExperience = {
       user_id: 1,
-      company_nameS: "TestCompany"
+      company_nameS: "TestCompany",
     };
 
     const err = await request(server)
@@ -72,7 +72,7 @@ describe("POST /new/:user_extra", () => {
     await db("users").insert({ email: "test@email.com" });
     const newExperience = {
       user_id: 1,
-      company_name: "TestCompany"
+      company_name: "TestCompany",
     };
 
     const newUserExtra = await request(server)
@@ -106,9 +106,7 @@ describe("GET /:user_id/:user_extra", () => {
     await db("users").insert({ email: "test@email.com" });
     await db("projects").insert({ user_id: 1 });
 
-    const err = await request(server)
-      .get("/extras/1/projectss")
-      .expect(400);
+    const err = await request(server).get("/extras/1/projectss").expect(400);
     expect(err.body.message).toBe(
       "Expected 'projects' or  'education', or 'experience' in parameters, received 'projectss'"
     );
@@ -136,7 +134,7 @@ describe("GET /:user_id/:user_extra", () => {
     await db("projects").insert([
       { user_id: 1 },
       { user_id: 1 },
-      { user_id: 1 }
+      { user_id: 1 },
     ]);
 
     userExtras = await request(server).get("/extras/1/projects");
@@ -168,7 +166,7 @@ describe("GET /single/:user_extra/:user_extra_id", () => {
     await db("education").insert([
       { user_id: 1, school: "TestSchool1" },
       { user_id: 1, school: "TestSchool2" },
-      { user_id: 1, school: "TestSchool3" }
+      { user_id: 1, school: "TestSchool3" },
     ]);
 
     const err = await request(server)
@@ -184,7 +182,7 @@ describe("GET /single/:user_extra/:user_extra_id", () => {
     await db("education").insert([
       { user_id: 1, school: "TestSchool1" },
       { user_id: 1, school: "TestSchool2" },
-      { user_id: 1, school: "TestSchool3" }
+      { user_id: 1, school: "TestSchool3" },
     ]);
 
     const err = await request(server)
@@ -200,7 +198,7 @@ describe("GET /single/:user_extra/:user_extra_id", () => {
     await db("education").insert([
       { user_id: 1, school: "TestSchool1" },
       { user_id: 1, school: "TestSchool2" },
-      { user_id: 1, school: "TestSchool3" }
+      { user_id: 1, school: "TestSchool3" },
     ]);
 
     const userExtras = await request(server)
@@ -263,7 +261,7 @@ describe("PUT /:user_extra/:user_extra_id", () => {
     await db("education").insert({ user_id: 1 });
     const update = {
       school: "TestSchool",
-      field_of_study: "TestDeveloper"
+      field_of_study: "TestDeveloper",
     };
     const updatedEducation = await request(server)
       .put("/extras/education/1")
@@ -295,9 +293,7 @@ describe("DELETE /:user_extra/:user_extra_id", () => {
     await db("users").insert({ email: "test@email.com" });
     await db("projects").insert({ user_id: 1 });
 
-    const err = await request(server)
-      .delete("/extras/projectsS/1")
-      .expect(400);
+    const err = await request(server).delete("/extras/projectsS/1").expect(400);
     expect(err.body.message).toBe(
       "Expected 'projects' or  'education', or 'experience' in parameters, received 'projectsS'"
     );
@@ -307,9 +303,7 @@ describe("DELETE /:user_extra/:user_extra_id", () => {
     await db("users").insert({ email: "test@email.com" });
     await db("projects").insert({ user_id: 1 });
 
-    const err = await request(server)
-      .delete("/extras/projects/99")
-      .expect(404);
+    const err = await request(server).delete("/extras/projects/99").expect(404);
     expect(err.body.message).toBe(
       "The user's 'projects' with the specified ID of '99' does not exist"
     );

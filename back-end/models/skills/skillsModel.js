@@ -9,16 +9,14 @@ module.exports = {
   update,
   remove,
   removeUserSkills,
-  removeUserSkill
+  removeUserSkill,
 };
 
 async function insert(newSkill) {
   const dbEnv = process.env.DB_ENV || process.env.DB;
 
   if (dbEnv === "production") {
-    const [id] = await db("skills")
-      .returning("id")
-      .insert(newSkill);
+    const [id] = await db("skills").returning("id").insert(newSkill);
     return getSingle(id);
   } else {
     const [id] = await db("skills").insert(newSkill);
@@ -51,34 +49,24 @@ function getAllFiltered(input) {
 }
 
 function getSingle(id) {
-  return db("skills")
-    .where({ id })
-    .first();
+  return db("skills").where({ id }).first();
 }
 
 function update(id, body) {
-  return db("skills")
-    .where({ id })
-    .update(body);
+  return db("skills").where({ id }).update(body);
 }
 
 function remove(id) {
-  return db("skills")
-    .where({ id })
-    .delete();
+  return db("skills").where({ id }).delete();
 }
 
 async function removeUserSkills(userId, type) {
-  await db(type)
-    .where({ user_id: userId })
-    .delete();
+  await db(type).where({ user_id: userId }).delete();
   return syncSkills(userId, type);
 }
 
 async function removeUserSkill(userId, skillId, type) {
-  await db(type)
-    .where({ user_id: userId, skill_id: skillId })
-    .delete();
+  await db(type).where({ user_id: userId, skill_id: skillId }).delete();
   return syncSkills(userId, type);
 }
 

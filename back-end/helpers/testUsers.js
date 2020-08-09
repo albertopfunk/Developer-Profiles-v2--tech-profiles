@@ -20,7 +20,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift"
+    additional_skills: "Java, Swift",
   },
   {
     email: null,
@@ -43,7 +43,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift"
+    additional_skills: "Java, Swift",
   },
   {
     email: null,
@@ -66,7 +66,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift"
+    additional_skills: "Java, Swift",
   },
   {
     email: null,
@@ -89,7 +89,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift"
+    additional_skills: "Java, Swift",
   },
   {
     email: null,
@@ -112,7 +112,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift"
+    additional_skills: "Java, Swift",
   },
   {
     email: null,
@@ -135,7 +135,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift"
+    additional_skills: "Java, Swift",
   },
   {
     email: null,
@@ -158,7 +158,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift"
+    additional_skills: "Java, Swift",
   },
   {
     email: null,
@@ -181,7 +181,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift"
+    additional_skills: "Java, Swift",
   },
   {
     email: null,
@@ -204,7 +204,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift"
+    additional_skills: "Java, Swift",
   },
   {
     email: null,
@@ -227,7 +227,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift"
+    additional_skills: "Java, Swift",
   },
   {
     email: null,
@@ -250,7 +250,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift"
+    additional_skills: "Java, Swift",
   },
   {
     email: null,
@@ -273,7 +273,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift"
+    additional_skills: "Java, Swift",
   },
   {
     email: null,
@@ -296,7 +296,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift"
+    additional_skills: "Java, Swift",
   },
   {
     email: null,
@@ -319,7 +319,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift"
+    additional_skills: "Java, Swift",
   },
   {
     email: null,
@@ -342,7 +342,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift"
+    additional_skills: "Java, Swift",
   },
   {
     email: null,
@@ -365,7 +365,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift"
+    additional_skills: "Java, Swift",
   },
   {
     email: null,
@@ -388,7 +388,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift"
+    additional_skills: "Java, Swift",
   },
   {
     email: null,
@@ -411,7 +411,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift"
+    additional_skills: "Java, Swift",
   },
   {
     email: null,
@@ -434,7 +434,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift"
+    additional_skills: "Java, Swift",
   },
   {
     email: null,
@@ -457,7 +457,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift"
+    additional_skills: "Java, Swift",
   },
   {
     email: null,
@@ -480,7 +480,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift"
+    additional_skills: "Java, Swift",
   },
   {
     email: null,
@@ -503,7 +503,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift"
+    additional_skills: "Java, Swift",
   },
   {
     email: null,
@@ -526,7 +526,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift"
+    additional_skills: "Java, Swift",
   },
   {
     email: null,
@@ -549,7 +549,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift"
+    additional_skills: "Java, Swift",
   },
   {
     email: null,
@@ -572,7 +572,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift"
+    additional_skills: "Java, Swift",
   },
   {
     email: null,
@@ -595,7 +595,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift"
+    additional_skills: "Java, Swift",
   },
   {
     email: null,
@@ -618,7 +618,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift"
+    additional_skills: "Java, Swift",
   },
   {
     email: null,
@@ -641,7 +641,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift"
+    additional_skills: "Java, Swift",
   },
   {
     email: null,
@@ -664,7 +664,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift"
+    additional_skills: "Java, Swift",
   },
   {
     email: null,
@@ -687,7 +687,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift"
+    additional_skills: "Java, Swift",
   },
   {
     email: null,
@@ -710,7 +710,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift"
+    additional_skills: "Java, Swift",
   },
   {
     email: null,
@@ -733,7 +733,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift"
+    additional_skills: "Java, Swift",
   },
   {
     email: null,
@@ -756,7 +756,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift"
+    additional_skills: "Java, Swift",
   },
   {
     email: null,
@@ -779,7 +779,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift"
+    additional_skills: "Java, Swift",
   },
   {
     email: null,
@@ -802,7 +802,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift"
+    additional_skills: "Java, Swift",
   },
   {
     email: null,
@@ -825,7 +825,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift"
+    additional_skills: "Java, Swift",
   },
   {
     email: null,
@@ -848,7 +848,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift"
+    additional_skills: "Java, Swift",
   },
   {
     email: null,
@@ -871,7 +871,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift"
+    additional_skills: "Java, Swift",
   },
   {
     email: null,
@@ -894,7 +894,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift"
+    additional_skills: "Java, Swift",
   },
   {
     email: null,
@@ -917,7 +917,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift"
+    additional_skills: "Java, Swift",
   },
   {
     email: null,
@@ -940,7 +940,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift"
+    additional_skills: "Java, Swift",
   },
   {
     email: null,
@@ -963,7 +963,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift"
+    additional_skills: "Java, Swift",
   },
   {
     email: null,
@@ -986,7 +986,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift"
+    additional_skills: "Java, Swift",
   },
   {
     email: null,
@@ -1009,7 +1009,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift"
+    additional_skills: "Java, Swift",
   },
   {
     email: null,
@@ -1032,7 +1032,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift"
+    additional_skills: "Java, Swift",
   },
   {
     email: null,
@@ -1055,7 +1055,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift"
+    additional_skills: "Java, Swift",
   },
   {
     email: null,
@@ -1078,7 +1078,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift"
+    additional_skills: "Java, Swift",
   },
   {
     email: null,
@@ -1101,7 +1101,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift"
+    additional_skills: "Java, Swift",
   },
   {
     email: null,
@@ -1124,7 +1124,7 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift"
+    additional_skills: "Java, Swift",
   },
   {
     email: null,
@@ -1147,6 +1147,6 @@ exports.usersData = [
     stripe_customer_id: null,
     stripe_subscription_name: null,
     top_skills: "JavaScript, React, React Native, Node",
-    additional_skills: "Java, Swift"
-  }
+    additional_skills: "Java, Swift",
+  },
 ];

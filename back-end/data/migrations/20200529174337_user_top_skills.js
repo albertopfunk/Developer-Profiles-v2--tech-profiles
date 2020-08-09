@@ -1,6 +1,6 @@
 // eslint-disable-next-line
-exports.up = function(knex) {
-  return knex.schema.createTable("user_top_skills", function(table) {
+exports.up = function (knex) {
+  return knex.schema.createTable("user_top_skills", function (table) {
     table.primary(["user_id", "skill_id"]);
     table
       .integer("user_id")
@@ -20,6 +20,6 @@ exports.up = function(knex) {
 };
 
 // eslint-disable-next-line
-exports.down = function(knex) {
+exports.down = function (knex) {
   return knex.schema.dropTableIfExists("user_top_skills");
 };

@@ -60,12 +60,10 @@ describe("POST /new", () => {
   });
 
   it("should return inserted new skill", async () => {
-    const newSkill = await request(server)
-      .post("/skills-for-review/new")
-      .send({
-        user_id: 1,
-        skill_for_review: "TestSkill"
-      });
+    const newSkill = await request(server).post("/skills-for-review/new").send({
+      user_id: 1,
+      skill_for_review: "TestSkill",
+    });
     expect(newSkill.body.id).toBe(1);
     expect(newSkill.body.skill_for_review).toBe("TestSkill");
   });
@@ -98,7 +96,7 @@ describe("GET /", () => {
       { user_id: 1, skill_for_review: "TestSkill5" },
       { user_id: 1, skill_for_review: "TestSkill6" },
       { user_id: 1, skill_for_review: "TestSkill7" },
-      { user_id: 1, skill_for_review: "TestSkill8" }
+      { user_id: 1, skill_for_review: "TestSkill8" },
     ]);
 
     skills = await request(server).get("/skills-for-review");
@@ -117,7 +115,7 @@ describe("GET /:id", () => {
   it("responds with 200 OK and JSON", async () => {
     await db("skills_for_review").insert({
       user_id: 1,
-      skill_for_review: "TestSkill1"
+      skill_for_review: "TestSkill1",
     });
     await request(server)
       .get("/skills-for-review/1")
@@ -128,7 +126,7 @@ describe("GET /:id", () => {
   it("responds with 404 and correct error message", async () => {
     await db("skills_for_review").insert([
       { user_id: 1, skill_for_review: "TestSkill1" },
-      { user_id: 1, skill_for_review: "TestSkill2" }
+      { user_id: 1, skill_for_review: "TestSkill2" },
     ]);
 
     const err = await request(server)
@@ -144,7 +142,7 @@ describe("GET /:id", () => {
     await db("skills_for_review").insert([
       { user_id: 1, skill_for_review: "TestSkill1" },
       { user_id: 1, skill_for_review: "TestSkill2" },
-      { user_id: 1, skill_for_review: "TestSkill3" }
+      { user_id: 1, skill_for_review: "TestSkill3" },
     ]);
 
     const skill1 = await request(server).get("/skills-for-review/1");
@@ -167,7 +165,7 @@ describe("PUT /:id", () => {
   it("responds with 200 OK and JSON", async () => {
     await db("skills_for_review").insert({
       user_id: 1,
-      skill_for_review: "TestSkill"
+      skill_for_review: "TestSkill",
     });
 
     await request(server)
@@ -180,7 +178,7 @@ describe("PUT /:id", () => {
   it("responds with 400 with correct message", async () => {
     await db("skills_for_review").insert({
       user_id: 1,
-      skill_for_review: "TestSkill"
+      skill_for_review: "TestSkill",
     });
 
     let err = await request(server)
@@ -200,7 +198,7 @@ describe("PUT /:id", () => {
   it("responds with 404 and correct error message", async () => {
     await db("skills_for_review").insert({
       user_id: 1,
-      skill_for_review: "TestSkill"
+      skill_for_review: "TestSkill",
     });
 
     const err = await request(server)
@@ -216,7 +214,7 @@ describe("PUT /:id", () => {
   it("updates skill and returns number 1 on success", async () => {
     await db("skills_for_review").insert({
       user_id: 1,
-      skill_for_review: "TestSkill"
+      skill_for_review: "TestSkill",
     });
 
     const isSuccessfull = await request(server)
@@ -224,9 +222,7 @@ describe("PUT /:id", () => {
       .send({ skill_for_review: "NEWTestSkill" });
     expect(isSuccessfull.body).toBe(1);
 
-    const updatedSkill = await db("skills_for_review")
-      .where({ id: 1 })
-      .first();
+    const updatedSkill = await db("skills_for_review").where({ id: 1 }).first();
     expect(updatedSkill.skill_for_review).toBe("NEWTestSkill");
   });
 });
@@ -242,7 +238,7 @@ describe("DELETE /:id", () => {
   it("responds with 200 OK and JSON", async () => {
     await db("skills_for_review").insert({
       user_id: 1,
-      skill_for_review: "NEWTestSkill"
+      skill_for_review: "NEWTestSkill",
     });
 
     await request(server)
@@ -254,7 +250,7 @@ describe("DELETE /:id", () => {
   it("responds with 404 and correct error message", async () => {
     await db("skills_for_review").insert({
       user_id: 1,
-      skill_for_review: "NEWTestSkill"
+      skill_for_review: "NEWTestSkill",
     });
 
     const err = await request(server)
@@ -269,7 +265,7 @@ describe("DELETE /:id", () => {
   it("deletes skill and returns number 1 on success", async () => {
     await db("skills_for_review").insert({
       user_id: 1,
-      skill_for_review: "NEWTestSkill"
+      skill_for_review: "NEWTestSkill",
     });
     let skills = await db("skills_for_review");
     expect(skills).toHaveLength(1);

@@ -6,14 +6,14 @@ const server = express.Router();
 server.post("/new", async (req, res) => {
   if (!req.body.skill_for_review) {
     res.status(400).json({
-      message: `Expected 'skill_for_review' in body, received '${req.body.skill_for_review}'`
+      message: `Expected 'skill_for_review' in body, received '${req.body.skill_for_review}'`,
     });
     return;
   }
 
   if (!req.body.user_id) {
     res.status(400).json({
-      message: `Expected 'user_id' in body, received '${req.body.user_id}'`
+      message: `Expected 'user_id' in body, received '${req.body.user_id}'`,
     });
     return;
   }
@@ -38,7 +38,7 @@ server.get("/", async (req, res) => {
 server.get("/:id", async (req, res) => {
   if (!req.params.id) {
     res.status(400).json({
-      message: `Expected 'id' in params, received '${req.params.id}'`
+      message: `Expected 'id' in params, received '${req.params.id}'`,
     });
     return;
   }
@@ -48,7 +48,7 @@ server.get("/:id", async (req, res) => {
     getSingleSkill
       ? res.status(200).json(getSingleSkill)
       : res.status(404).json({
-          message: `The skill with the specified ID of '${req.params.id}' does not exist`
+          message: `The skill with the specified ID of '${req.params.id}' does not exist`,
         });
   } catch (err) {
     res.status(500).json({ message: "Error getting skill from database" });
@@ -58,14 +58,14 @@ server.get("/:id", async (req, res) => {
 server.put("/:id", async (req, res) => {
   if (!req.params.id) {
     res.status(400).json({
-      message: `Expected 'id' in params, received '${req.params.id}'`
+      message: `Expected 'id' in params, received '${req.params.id}'`,
     });
     return;
   }
 
   if (!req.body.skill_for_review) {
     res.status(400).json({
-      message: `Expected 'skill_for_review' in body, received '${req.body.skill_for_review}'`
+      message: `Expected 'skill_for_review' in body, received '${req.body.skill_for_review}'`,
     });
     return;
   }
@@ -78,7 +78,7 @@ server.put("/:id", async (req, res) => {
     editSkill
       ? res.status(200).json(editSkill)
       : res.status(404).json({
-          message: `The skill with the specified ID of '${req.params.id}' does not exist`
+          message: `The skill with the specified ID of '${req.params.id}' does not exist`,
         });
   } catch (err) {
     res.status(500).json({ message: "Error updating skill" });
@@ -88,7 +88,7 @@ server.put("/:id", async (req, res) => {
 server.delete("/:id", async (req, res) => {
   if (!req.params.id) {
     res.status(400).json({
-      message: `Expected 'id' in params, received '${req.params.id}'`
+      message: `Expected 'id' in params, received '${req.params.id}'`,
     });
     return;
   }
@@ -98,7 +98,7 @@ server.delete("/:id", async (req, res) => {
     removeSkill
       ? res.status(200).json(removeSkill)
       : res.status(404).json({
-          message: `The skill with the specified ID of '${req.params.id}' does not exist`
+          message: `The skill with the specified ID of '${req.params.id}' does not exist`,
         });
   } catch (err) {
     res.status(500).json({ message: "Error removing skill" });

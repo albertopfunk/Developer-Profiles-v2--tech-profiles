@@ -7,7 +7,7 @@ describe("sortUsers", () => {
       { id: 104 },
       { id: 101 },
       { id: 105 },
-      { id: 102 }
+      { id: 102 },
     ];
     const sortedUsers = sortingHelpers.sortUsers(
       users,
@@ -22,7 +22,7 @@ describe("sortUsers", () => {
       { id: 103 },
       { id: 104 },
       { id: 102 },
-      { id: 105 }
+      { id: 105 },
     ];
     const sortedUsers = sortingHelpers.sortUsers(
       users,

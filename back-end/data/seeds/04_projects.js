@@ -1,7 +1,7 @@
 const faker = require("faker");
 
 // eslint-disable-next-line
-exports.seed = function(knex, Promise) {
+exports.seed = function (knex, Promise) {
   let projectArr = [];
   projectArr.push({
     user_id: 1,
@@ -10,12 +10,10 @@ exports.seed = function(knex, Promise) {
     project_title: faker.company.companyName(),
     link: "https://www.google.com/",
     project_description:
-      "245char Lorem Ipsum is dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s when an unknown printer took a galley of type and scrambled it to make a type specimen book."
+      "245char Lorem Ipsum is dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
   });
 
-  return knex("projects")
-    .truncate()
-    .insert(projectArr);
+  return knex("projects").truncate().insert(projectArr);
   // Deletes ALL existing entries
   // return knex("projects")
   //   .del()

@@ -6,33 +6,33 @@ const users = [
     current_location_lat: 34.052235,
     current_location_lon: -118.243683,
     current_location_name: "Los Angeles, CA, USA",
-    interested_location_names: "Boston, MA, USA|Seattle, WA, USA"
+    interested_location_names: "Boston, MA, USA|Seattle, WA, USA",
   },
   {
     current_location_lat: 37.773972,
     current_location_lon: -122.431297,
     current_location_name: "San Francisco, CA, USA",
-    interested_location_names: "Los Angeles, CA, USA|Seattle, WA, USA"
+    interested_location_names: "Los Angeles, CA, USA|Seattle, WA, USA",
   },
   {
     current_location_lat: 42.361145,
     current_location_lon: -71.057083,
     current_location_name: "Boston, MA, USA",
-    interested_location_names: "San Francisco, CA, USA|Seattle, WA, USA"
+    interested_location_names: "San Francisco, CA, USA|Seattle, WA, USA",
   },
   {
     current_location_lat: 47.608013,
     current_location_lon: -122.335167,
     current_location_name: "Seattle, WA, USA",
     interested_location_names:
-      "Boston, MA, USA|San Francisco, CA, USA|Boulder, CO, USA"
+      "Boston, MA, USA|San Francisco, CA, USA|Boulder, CO, USA",
   },
   {
     current_location_lat: 40.014984,
     current_location_lon: -105.270546,
     current_location_name: "Boulder, CO, USA",
-    interested_location_names: "Boston, MA, USA|Los Angeles, CA, USA"
-  }
+    interested_location_names: "Boston, MA, USA|Los Angeles, CA, USA",
+  },
 ];
 
 describe("locationFilters", () => {
@@ -44,7 +44,7 @@ describe("locationFilters", () => {
     // los angeles
     chosenLocationLat: 34.052235,
     chosenLocationLon: -118.243683,
-    chosenRelocateTo: "Los Angeles, CA, USA"
+    chosenRelocateTo: "Los Angeles, CA, USA",
   };
 
   it("should return 0 users since filters are false", () => {

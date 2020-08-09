@@ -25,7 +25,7 @@ server.post("/new/:user_extra", async (req, res) => {
       user_extra !== "experience")
   ) {
     res.status(400).json({
-      message: `Expected 'projects' or  'education', or 'experience' in params, received '${user_extra}'`
+      message: `Expected 'projects' or  'education', or 'experience' in params, received '${user_extra}'`,
     });
     return;
   }
@@ -42,7 +42,7 @@ server.post("/new/:user_extra", async (req, res) => {
     res.status(201).json(addNewUserExtra);
   } catch (err) {
     res.status(500).json({
-      message: `Error adding user's '${user_extra}' to database`
+      message: `Error adding user's '${user_extra}' to database`,
     });
   }
 });
@@ -57,7 +57,7 @@ server.get("/:user_id/:user_extra", async (req, res) => {
       user_extra !== "experience")
   ) {
     res.status(400).json({
-      message: `Expected 'projects' or  'education', or 'experience' in params, received '${user_extra}'`
+      message: `Expected 'projects' or  'education', or 'experience' in params, received '${user_extra}'`,
     });
     return;
   }
@@ -74,7 +74,7 @@ server.get("/:user_id/:user_extra", async (req, res) => {
     res.status(200).json(getAllUserExtra);
   } catch (err) {
     res.status(500).json({
-      message: `Error getting user's '${user_extra}'`
+      message: `Error getting user's '${user_extra}'`,
     });
   }
 });
@@ -89,14 +89,14 @@ server.get("/single/:user_extra/:user_extra_id", async (req, res) => {
       user_extra !== "experience")
   ) {
     res.status(400).json({
-      message: `Expected 'projects' or  'education', or 'experience' in params, received '${user_extra}'`
+      message: `Expected 'projects' or  'education', or 'experience' in params, received '${user_extra}'`,
     });
     return;
   }
 
   if (!user_extra_id) {
     res.status(400).json({
-      message: `Expected 'user_extra_id' in params, received '${user_extra_id}'`
+      message: `Expected 'user_extra_id' in params, received '${user_extra_id}'`,
     });
     return;
   }
@@ -109,11 +109,11 @@ server.get("/single/:user_extra/:user_extra_id", async (req, res) => {
     getSingleUserExtra
       ? res.status(200).json(getSingleUserExtra)
       : res.status(404).json({
-          message: `User's '${user_extra}' with the specified ID of '${user_extra_id}' does not exist`
+          message: `User's '${user_extra}' with the specified ID of '${user_extra_id}' does not exist`,
         });
   } catch (err) {
     res.status(500).json({
-      message: `Error getting user's '${user_extra}'`
+      message: `Error getting user's '${user_extra}'`,
     });
   }
 });
@@ -127,14 +127,14 @@ server.put("/:user_extra/:user_extra_id", async (req, res) => {
       user_extra !== "experience")
   ) {
     res.status(400).json({
-      message: `Expected 'projects' or  'education', or 'experience' in params, received '${user_extra}'`
+      message: `Expected 'projects' or  'education', or 'experience' in params, received '${user_extra}'`,
     });
     return;
   }
 
   if (!user_extra_id) {
     res.status(400).json({
-      message: `Expected 'user_extra_id' in params, received '${user_extra_id}'`
+      message: `Expected 'user_extra_id' in params, received '${user_extra_id}'`,
     });
     return;
   }
@@ -148,11 +148,11 @@ server.put("/:user_extra/:user_extra_id", async (req, res) => {
     editExtra
       ? res.status(200).json(editExtra)
       : res.status(404).json({
-          message: `User's '${user_extra}' with the specified ID of '${user_extra_id}' does not exist`
+          message: `User's '${user_extra}' with the specified ID of '${user_extra_id}' does not exist`,
         });
   } catch (err) {
     res.status(500).json({
-      message: `Error updating user's '${user_extra}'`
+      message: `Error updating user's '${user_extra}'`,
     });
   }
 });
@@ -167,14 +167,14 @@ server.delete("/:user_extra/:user_extra_id", async (req, res) => {
       user_extra !== "experience")
   ) {
     res.status(400).json({
-      message: `Expected 'projects' or  'education', or 'experience' in params, received '${user_extra}'`
+      message: `Expected 'projects' or  'education', or 'experience' in params, received '${user_extra}'`,
     });
     return;
   }
 
   if (!user_extra_id) {
     res.status(400).json({
-      message: `Expected 'user_extra_id' in params, received '${user_extra_id}'`
+      message: `Expected 'user_extra_id' in params, received '${user_extra_id}'`,
     });
     return;
   }
@@ -184,11 +184,11 @@ server.delete("/:user_extra/:user_extra_id", async (req, res) => {
     removeExtra
       ? res.status(200).json(removeExtra)
       : res.status(404).json({
-          message: `User's '${user_extra}' with the specified ID of '${user_extra_id}' does not exist`
+          message: `User's '${user_extra}' with the specified ID of '${user_extra_id}' does not exist`,
         });
   } catch (err) {
     res.status(500).json({
-      message: `Error removing user's '${user_extra}'`
+      message: `Error removing user's '${user_extra}'`,
     });
   }
 });

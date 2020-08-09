@@ -83,7 +83,7 @@ describe("GET /", () => {
       { skill: "TestSkill5" },
       { skill: "TestSkill6" },
       { skill: "TestSkill7" },
-      { skill: "TestSkill8" }
+      { skill: "TestSkill8" },
     ]);
 
     skills = await request(server).get("/skills");
@@ -110,7 +110,7 @@ describe("GET /:id", () => {
   it("responds with 404 and correct error message", async () => {
     await db("skills").insert([
       { skill: "TestSkill1" },
-      { skill: "TestSkill2" }
+      { skill: "TestSkill2" },
     ]);
 
     const err = await request(server)
@@ -126,7 +126,7 @@ describe("GET /:id", () => {
     await db("skills").insert([
       { skill: "TestSkill1" },
       { skill: "TestSkill2" },
-      { skill: "TestSkill3" }
+      { skill: "TestSkill3" },
     ]);
 
     const skill1 = await request(server).get("/skills/1");
@@ -194,9 +194,7 @@ describe("PUT /:id", () => {
       .send({ skill: "NEWTestSkill" });
     expect(isSuccessfull.body).toBe(1);
 
-    const updatedSkill = await db("skills")
-      .where({ id: 1 })
-      .first();
+    const updatedSkill = await db("skills").where({ id: 1 }).first();
     expect(updatedSkill.skill).toBe("NEWTestSkill");
   });
 });

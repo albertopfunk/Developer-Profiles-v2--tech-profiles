@@ -17,10 +17,10 @@ describe("insert", () => {
 
   it("should insert skills", async () => {
     await skillsModel.insert({
-      skill: "TestSkill"
+      skill: "TestSkill",
     });
     await skillsModel.insert({
-      skill: "TestSkill2"
+      skill: "TestSkill2",
     });
     const skills = await db("skills");
     expect(skills).toHaveLength(2);
@@ -28,20 +28,20 @@ describe("insert", () => {
 
   it("should return inserted skills", async () => {
     const newSkill = await skillsModel.insert({
-      skill: "TestSkill"
+      skill: "TestSkill",
     });
     expect(newSkill.id).toBe(1);
     expect(newSkill.skill).toBe("TestSkill");
 
     const newSkill2 = await skillsModel.insert({
-      skill: "TestSkill2"
+      skill: "TestSkill2",
     });
     expect(newSkill2.id).toBe(2);
     expect(newSkill2.skill).toBe("TestSkill2");
 
     const fullSkill2 = {
       id: 2,
-      skill: "TestSkill2"
+      skill: "TestSkill2",
     };
     expect(newSkill2).toEqual(fullSkill2);
   });
@@ -64,7 +64,7 @@ describe("getAll", () => {
     await db("skills").insert([
       { skill: "TestSkill1" },
       { skill: "TestSkill2" },
-      { skill: "TestSkill3" }
+      { skill: "TestSkill3" },
     ]);
 
     const skills = await skillsModel.getAll();
@@ -84,7 +84,7 @@ describe("getSingle", () => {
     await db("skills").insert([
       { skill: "TestSkill1" },
       { skill: "TestSkill2" },
-      { skill: "TestSkill3" }
+      { skill: "TestSkill3" },
     ]);
 
     const skill2 = await skillsModel.getSingle(2);
@@ -115,9 +115,7 @@ describe("update", () => {
     const update = { skill: "NEWTestSkill1" };
     await skillsModel.update(1, update);
 
-    const updatedSkill = await db("skills")
-      .where({ id: 1 })
-      .first();
+    const updatedSkill = await db("skills").where({ id: 1 }).first();
     expect(updatedSkill.skill).toBe("NEWTestSkill1");
   });
 });
@@ -140,7 +138,7 @@ describe("remove", () => {
     await db("skills").insert([
       { skill: "TestSkill1" },
       { skill: "TestSkill2" },
-      { skill: "TestSkill3" }
+      { skill: "TestSkill3" },
     ]);
     let skills = await db("skills");
     expect(skills).toHaveLength(3);

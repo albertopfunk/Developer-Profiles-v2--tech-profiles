@@ -7,7 +7,7 @@ const server = express();
 
 const corsOptions = {
   origin: process.env.CLIENT_ORIGIN,
-  optionsSuccessStatus: 200
+  optionsSuccessStatus: 200,
 };
 
 server.use(express.json());

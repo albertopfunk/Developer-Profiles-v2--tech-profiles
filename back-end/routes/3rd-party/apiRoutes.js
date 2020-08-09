@@ -22,13 +22,13 @@ const server = express.Router();
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_KEY,
-  api_secret: process.env.CLOUDINARY_SECRET
+  api_secret: process.env.CLOUDINARY_SECRET,
 });
 
 server.post(
   "/upload-image",
   fileUpload({
-    useTempFiles: true
+    useTempFiles: true,
   }),
   (req, res) => {
     if (
@@ -36,7 +36,7 @@ server.post(
       !req.headers["content-type"].includes("multipart/form-data")
     ) {
       res.status(400).json({
-        message: `Expected content-type to be 'multipart/form-data', received '${req.headers["content-type"]}'`
+        message: `Expected content-type to be 'multipart/form-data', received '${req.headers["content-type"]}'`,
       });
       return;
     }
@@ -45,7 +45,7 @@ server.post(
       res.status(400).json({
         message: `Expected 'image' file, received '${
           !req.files ? req.files : req.files.image
-        }'`
+        }'`,
       });
       return;
     }
@@ -53,7 +53,7 @@ server.post(
     cloudinary.uploader.upload(
       req.files.image.tempFilePath,
       {
-        upload_preset: process.env.CLOUDINARY_UPLOAD_PRESET
+        upload_preset: process.env.CLOUDINARY_UPLOAD_PRESET,
       },
       (err, result) => {
         if (err) {
@@ -71,7 +71,7 @@ server.post(
 server.post("/delete-image", (req, res) => {
   if (!req.body.id) {
     res.status(400).json({
-      message: `Expected 'id' in body, received '${req.body.id}'`
+      message: `Expected 'id' in body, received '${req.body.id}'`,
     });
     return;
   }
@@ -101,7 +101,7 @@ server.post("/autocomplete", async (req, res) => {
 
   if (!value) {
     res.status(400).json({
-      message: `Expected 'value' in body, received '${value}'`
+      message: `Expected 'value' in body, received '${value}'`,
     });
     return;
   }
@@ -116,10 +116,10 @@ server.post("/autocomplete", async (req, res) => {
       return;
     }
 
-    const predictions = response.data.predictions.map(prediction => {
+    const predictions = response.data.predictions.map((prediction) => {
       return {
         name: prediction.description,
-        id: prediction.place_id
+        id: prediction.place_id,
       };
     });
     res.status(200).json(predictions);
@@ -134,7 +134,7 @@ server.post("/gio", async (req, res) => {
 
   if (!placeId) {
     res.status(400).json({
-      message: `Expected 'placeId' in body, received '${placeId}'`
+      message: `Expected 'placeId' in body, received '${placeId}'`,
     });
     return;
   }
@@ -165,7 +165,7 @@ server.post("/subscribe", async (req, res) => {
 
   if (!token || !subType || !email) {
     res.status(400).json({
-      message: `Expected 'token', 'subType', 'email' in body, received '${token}', '${subType}', '${email}' `
+      message: `Expected 'token', 'subType', 'email' in body, received '${token}', '${subType}', '${email}' `,
     });
     return;
   }
@@ -176,7 +176,7 @@ server.post("/subscribe", async (req, res) => {
     plan = process.env.STRIPE_CANDIDATE_MONTHLY;
   } else {
     res.status(400).json({
-      message: `Expected 'yearly' or 'monthly' in body, received '${subType}' `
+      message: `Expected 'yearly' or 'monthly' in body, received '${subType}' `,
     });
     return;
   }
@@ -185,9 +185,9 @@ server.post("/subscribe", async (req, res) => {
     {
       description: `New customer for ${subType} plan`,
       source: token,
-      email
+      email,
     },
-    function(err, customer) {
+    function (err, customer) {
       if (err) {
         res.status(500).json({ message: "Error creating customer" });
         return;
@@ -196,16 +196,16 @@ server.post("/subscribe", async (req, res) => {
       stripe.subscriptions.create(
         {
           customer: customer.id,
-          items: [{ plan }]
+          items: [{ plan }],
         },
-        function(err, subscription) {
+        function (err, subscription) {
           if (err) {
             res.status(500).json({ message: "Error subscribing customer" });
             return;
           }
           res.status(200).json({
             stripe_customer_id: customer.id,
-            stripe_subscription_name: subscription.id
+            stripe_subscription_name: subscription.id,
           });
         }
       );
@@ -219,7 +219,7 @@ server.post("/subscribe-existing", (req, res) => {
 
   if (!stripeId || !subType) {
     res.status(400).json({
-      message: `Expected 'stripeId', 'subType' in body, received '${stripeId}', '${subType}'`
+      message: `Expected 'stripeId', 'subType' in body, received '${stripeId}', '${subType}'`,
     });
     return;
   }
@@ -230,7 +230,7 @@ server.post("/subscribe-existing", (req, res) => {
     plan = process.env.STRIPE_CANDIDATE_MONTHLY;
   } else {
     res.status(400).json({
-      message: `Expected 'yearly' or 'monthly' in body, received '${subType}' `
+      message: `Expected 'yearly' or 'monthly' in body, received '${subType}' `,
     });
     return;
   }
@@ -238,15 +238,15 @@ server.post("/subscribe-existing", (req, res) => {
   stripe.subscriptions.create(
     {
       customer: stripeId,
-      items: [{ plan }]
+      items: [{ plan }],
     },
-    function(err, subscription) {
+    function (err, subscription) {
       if (err) {
         res.status(500).json({ message: "Error re-subscribing customer" });
         return;
       }
       res.status(200).json({
-        stripe_subscription_name: subscription.id
+        stripe_subscription_name: subscription.id,
       });
     }
   );
@@ -257,12 +257,12 @@ server.post("/get-subscription", async (req, res) => {
 
   if (!sub) {
     res.status(400).json({
-      message: `Expected 'sub' in body, received '${sub}'`
+      message: `Expected 'sub' in body, received '${sub}'`,
     });
     return;
   }
 
-  stripe.subscriptions.retrieve(sub, function(err, subscription) {
+  stripe.subscriptions.retrieve(sub, function (err, subscription) {
     if (err) {
       res.status(500).json({ message: "Error getting subscription" });
       return;
@@ -290,7 +290,7 @@ server.post("/get-subscription", async (req, res) => {
       type: subscription.plan.interval,
       created: subscription.created,
       startDate: subscription.current_period_start,
-      dueDate: subscription.current_period_end
+      dueDate: subscription.current_period_end,
     });
   });
 });
@@ -300,12 +300,12 @@ server.post("/cancel-subscription", async (req, res) => {
 
   if (!sub) {
     res.status(400).json({
-      message: `Expected 'sub' in body, received '${sub}'`
+      message: `Expected 'sub' in body, received '${sub}'`,
     });
     return;
   }
 
-  stripe.subscriptions.del(sub, function(err, confirmation) {
+  stripe.subscriptions.del(sub, function (err, confirmation) {
     if (err) {
       res.status(500).json({ message: "Error removing subscription" });
       return;

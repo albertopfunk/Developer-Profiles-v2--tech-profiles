@@ -1,7 +1,7 @@
 const faker = require("faker");
 
 // eslint-disable-next-line
-exports.seed = function(knex, Promise) {
+exports.seed = function (knex, Promise) {
   const userArr = [];
 
   function randomFilterValue() {
@@ -41,7 +41,7 @@ exports.seed = function(knex, Promise) {
       {
         name: "St. Louis, MO, USA",
         lat: 38.62700249999999,
-        lon: -90.19940419999999
+        lon: -90.19940419999999,
       },
       { name: "Atlanta, GA, USA", lat: 33.7489954, lon: -84.3879824 },
       { name: "Miami, FL, USA", lat: 25.7616798, lon: -80.1917902 },
@@ -56,7 +56,7 @@ exports.seed = function(knex, Promise) {
       {
         name: "Grand Rapids, MI, USA",
         lat: 42.96335990000001,
-        lon: -85.6680863
+        lon: -85.6680863,
       },
       { name: "Madison, WI, USA", lat: 43.0730517, lon: -89.4012302 },
       { name: "Huntsville, AL, USA", lat: 34.7303688, lon: -86.5861037 },
@@ -64,7 +64,7 @@ exports.seed = function(knex, Promise) {
       {
         name: "Fayetteville, NC, USA",
         lat: 35.0526641,
-        lon: -78.87835849999999
+        lon: -78.87835849999999,
       },
       { name: "Colorado Springs, CO, USA", lat: 38.8338816, lon: -104.8213634 },
       { name: "Las Vegas, NV, USA", lat: 36.1699412, lon: -115.1398296 },
@@ -72,12 +72,12 @@ exports.seed = function(knex, Promise) {
       {
         name: "New Orleans, LA, USA",
         lat: 29.95106579999999,
-        lon: -90.0715323
+        lon: -90.0715323,
       },
       { name: "Albuquerque, NM, USA", lat: 35.0843859, lon: -106.650422 },
       { name: "Kansas City, MO, USA", lat: 39.0997265, lon: -94.5785667 },
       { name: "Oklahoma City, OK, USA", lat: 35.4675602, lon: -97.5164276 },
-      { name: "Watertown, WI, USA", lat: 43.1947211, lon: -88.7289918 }
+      { name: "Watertown, WI, USA", lat: 43.1947211, lon: -88.7289918 },
     ];
     let rand = [(Math.random() * filterOptions.length) | 0];
     return filterOptions[rand];
@@ -104,13 +104,11 @@ exports.seed = function(knex, Promise) {
     portfolio: "coolbanana.com",
     summary:
       "Lorem dummy text. Lorem Ipsum has been the industry standard dummy text ever since the 1500s when an unknown printer took a galley of type and scrambled it to make a type specimen book. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters.",
-    stripe_subscription_name: "subscriptionexname"
+    stripe_subscription_name: "subscriptionexname",
   });
 
   // Deletes ALL existing entries
-  return knex("users")
-    .truncate()
-    .insert(userArr);
+  return knex("users").truncate().insert(userArr);
   // return knex("users")
   //   .del()
   //   .then(function() {

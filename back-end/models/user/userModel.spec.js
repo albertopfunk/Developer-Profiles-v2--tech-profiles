@@ -19,11 +19,11 @@ describe("insert", () => {
   it("should insert users", async () => {
     await userModel.insert({
       first_name: "Mr. Test",
-      email: "test@email.com"
+      email: "test@email.com",
     });
     await userModel.insert({
       first_name: "Mr. Test2",
-      email: "test@email2.com"
+      email: "test@email2.com",
     });
     const users = await db("users");
     expect(users).toHaveLength(2);
@@ -32,7 +32,7 @@ describe("insert", () => {
   it("should insert and return provided user", async () => {
     const user = await userModel.insert({
       first_name: "Mr. Test",
-      email: "test@email.com"
+      email: "test@email.com",
     });
     expect(user.id).toBe(1);
     expect(user.email).toBe("test@email.com");
@@ -40,7 +40,7 @@ describe("insert", () => {
 
     const user2 = await userModel.insert({
       first_name: "Mr. Test2",
-      email: "test@email2.com"
+      email: "test@email2.com",
     });
     expect(user2.id).toBe(2);
     expect(user2.email).toBe("test@email2.com");
@@ -66,14 +66,14 @@ describe("insert", () => {
       stripe_customer_id: null,
       stripe_subscription_name: null,
       summary: null,
-      top_skills: null
+      top_skills: null,
     };
     expect(user2).toEqual(expectedFullUser2);
   });
 
   it("should accept any column of the user table", async () => {
     const user = {
-      github: "theTestUser"
+      github: "theTestUser",
     };
     const newUser = await userModel.insert(user);
     expect(newUser.id).toBe(1);
@@ -104,11 +104,11 @@ describe("getAll", () => {
   it("should return all users", async () => {
     const user = {
       first_name: "Mr. Test",
-      email: "test@email.com"
+      email: "test@email.com",
     };
     const user2 = {
       first_name: "Mr. Test2",
-      email: "test2@email.com"
+      email: "test2@email.com",
     };
     await db("users").insert(user);
     await db("users").insert(user2);
@@ -137,11 +137,11 @@ describe("getAllFiltered", () => {
     chosenLocationLat: 42.361145,
     chosenLocationLon: -71.057083,
     chosenRelocateTo: "Boston, MA, USA",
-    sortChoice: "acending(oldest-newest)"
+    sortChoice: "acending(oldest-newest)",
   };
 
   let users = [...testUsers.usersData];
-  users = users.map(user => {
+  users = users.map((user) => {
     user.current_location_lat = +user.current_location_lat;
     user.current_location_lon = +user.current_location_lon;
     return user;
@@ -300,7 +300,7 @@ describe("getSingle", () => {
   it("should return an object containing the user", async () => {
     const user = {
       first_name: "Mr. Test",
-      email: "test@email.com"
+      email: "test@email.com",
     };
     await db("users").insert(user);
     const newUser = await userModel.getSingle(user.email);
@@ -327,7 +327,7 @@ describe("getSingle", () => {
       stripe_customer_id: null,
       stripe_subscription_name: null,
       summary: null,
-      top_skills: null
+      top_skills: null,
     };
     expect(newUser).toEqual(expectedFullUser);
   });
@@ -335,7 +335,7 @@ describe("getSingle", () => {
   it("should be able to accept a users ID or Email", async () => {
     const user = {
       first_name: "Mr. Test",
-      email: "test@email.com"
+      email: "test@email.com",
     };
     await db("users").insert(user);
     const newUserById = await userModel.getSingle(1);
@@ -347,7 +347,7 @@ describe("getSingle", () => {
   it("should return undefined if an ID or Email was NOT passed in", async () => {
     const user = {
       first_name: "Mr. Test",
-      email: "test@email.com"
+      email: "test@email.com",
     };
     await db("users").insert(user);
     const newUser = await userModel.getSingle(user.first_name);
@@ -368,10 +368,10 @@ describe("update", () => {
   it("should return number 1 on success of updating user", async () => {
     const user = {
       first_name: "Mr. Test",
-      email: "test@email.com"
+      email: "test@email.com",
     };
     const updateUser = {
-      email: "NEWtest@email.com"
+      email: "NEWtest@email.com",
     };
     await db("users").insert(user);
     const isSuccessful = await userModel.update(1, updateUser);
@@ -381,16 +381,14 @@ describe("update", () => {
   it("should update the user that was added", async () => {
     const user = {
       first_name: "Mr. Test",
-      email: "test@email.com"
+      email: "test@email.com",
     };
     const updateUser = {
-      email: "NEWtest@email.com"
+      email: "NEWtest@email.com",
     };
     await db("users").insert(user);
     await userModel.update(1, updateUser);
-    const updatedUser = await db("users")
-      .where({ id: 1 })
-      .first();
+    const updatedUser = await db("users").where({ id: 1 }).first();
     expect(updatedUser.email).not.toBe(user.email);
     expect(updatedUser.email).toBe(updateUser.email);
   });
@@ -407,7 +405,7 @@ describe("remove", () => {
   it("should return number 1 on success of removing user", async () => {
     const user = {
       first_name: "Mr. Test",
-      email: "test@email.com"
+      email: "test@email.com",
     };
     await db("users").insert(user);
     const isSuccessful = await userModel.remove(1);
@@ -417,11 +415,11 @@ describe("remove", () => {
   it("should remove the user that was added", async () => {
     const user = {
       first_name: "Mr. Test",
-      email: "test@email.com"
+      email: "test@email.com",
     };
     const user2 = {
       first_name: "Mr. Test2",
-      email: "test2@email.com"
+      email: "test2@email.com",
     };
     await db("users").insert(user);
     await db("users").insert(user2);

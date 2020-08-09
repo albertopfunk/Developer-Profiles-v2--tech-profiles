@@ -1,7 +1,7 @@
 const db = require("../../../data/dbConfig");
 
 module.exports = {
-  locationFilters
+  locationFilters,
 };
 
 async function locationFilters(locationOptions, users) {
@@ -14,7 +14,7 @@ async function locationFilters(locationOptions, users) {
     selectedWithinMiles,
     chosenLocationLat,
     chosenLocationLon,
-    chosenRelocateToObj
+    chosenRelocateToObj,
   } = locationOptions;
 
   if (isUsingCurrLocationFilter) {
@@ -41,7 +41,7 @@ function currentLocationFilter(
   chosenLocationLat,
   chosenLocationLon
 ) {
-  const filteredUsers = users.filter(user => {
+  const filteredUsers = users.filter((user) => {
     if (user.current_location_lat && user.current_location_lon) {
       userLat = user.current_location_lat;
       userLon = user.current_location_lon;

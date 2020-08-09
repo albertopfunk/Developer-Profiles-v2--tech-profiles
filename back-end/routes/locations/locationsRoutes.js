@@ -6,14 +6,14 @@ const server = express.Router();
 server.post("/new", async (req, res) => {
   if (!Array.isArray(req.body.locations)) {
     res.status(400).json({
-      message: `Expected 'locations' array in body, received '${req.body.locations}'`
+      message: `Expected 'locations' array in body, received '${req.body.locations}'`,
     });
     return;
   }
 
   if (!req.body.user_id) {
     res.status(400).json({
-      message: `Expected 'user_id' in body, received '${req.body.user_id}'`
+      message: `Expected 'user_id' in body, received '${req.body.user_id}'`,
     });
     return;
   }
@@ -25,14 +25,16 @@ server.post("/new", async (req, res) => {
     res.status(201).json(addNewUserLocation);
   } catch (err) {
     console.log(err);
-    res.status(500).json({ message: "Error adding the location to the database" });
+    res
+      .status(500)
+      .json({ message: "Error adding the location to the database" });
   }
 });
 
 server.post("/delete-user-locations", async (req, res) => {
   if (!req.body.user_id) {
     res.status(400).json({
-      message: `Expected 'user_id' in body, received '${req.body.user_id}'`
+      message: `Expected 'user_id' in body, received '${req.body.user_id}'`,
     });
     return;
   }
@@ -50,14 +52,14 @@ server.post("/delete-user-locations", async (req, res) => {
 server.post("/delete-user-location", async (req, res) => {
   if (!req.body.location_id) {
     res.status(400).json({
-      message: `Expected 'location_id' in body, received '${req.body.location_id}'`
+      message: `Expected 'location_id' in body, received '${req.body.location_id}'`,
     });
     return;
   }
 
   if (!req.body.user_id) {
     res.status(400).json({
-      message: `Expected 'user_id' in body, received '${req.body.user_id}'`
+      message: `Expected 'user_id' in body, received '${req.body.user_id}'`,
     });
     return;
   }

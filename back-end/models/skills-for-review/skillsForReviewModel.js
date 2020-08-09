@@ -5,7 +5,7 @@ module.exports = {
   getAll,
   getSingle,
   update,
-  remove
+  remove,
 };
 
 async function insert(newSkillForReview) {
@@ -27,19 +27,13 @@ function getAll() {
 }
 
 function getSingle(id) {
-  return db("skills_for_review")
-    .where({ id })
-    .first();
+  return db("skills_for_review").where({ id }).first();
 }
 
 function update(id, body) {
-  return db("skills_for_review")
-    .where({ id })
-    .update(body);
+  return db("skills_for_review").where({ id }).update(body);
 }
 
 function remove(id) {
-  return db("skills_for_review")
-    .where({ id })
-    .delete();
+  return db("skills_for_review").where({ id }).delete();
 }

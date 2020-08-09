@@ -11,16 +11,14 @@ module.exports = {
   getUserExtras,
   getFullUser,
   update,
-  remove
+  remove,
 };
 
 async function insert(newUser) {
   const dbEnv = process.env.DB_ENV || process.env.DB;
 
   if (dbEnv === "production") {
-    const [id] = await db("users")
-      .returning("id")
-      .insert(newUser);
+    const [id] = await db("users").returning("id").insert(newUser);
     return getSingle(id);
   } else {
     const [id] = await db("users").insert(newUser);
@@ -46,7 +44,7 @@ async function getAllFiltered(filters) {
     chosenLocationLat,
     chosenLocationLon,
     chosenRelocateToObj,
-    sortChoice
+    sortChoice,
   } = filters;
 
   if (
@@ -82,7 +80,7 @@ async function getAllFiltered(filters) {
       users = [...users, ...tempUsers];
     }
 
-    users = users.filter(user => user.stripe_subscription_name !== null);
+    users = users.filter((user) => user.stripe_subscription_name !== null);
 
     if (users.length === 0) {
       return users;
@@ -97,7 +95,7 @@ async function getAllFiltered(filters) {
       selectedWithinMiles,
       chosenLocationLat,
       chosenLocationLon,
-      chosenRelocateToObj
+      chosenRelocateToObj,
     };
     users = await locationHelpers.locationFilters(locationOptions, users);
     if (users.length === 0) {
@@ -114,16 +112,14 @@ async function getAllFiltered(filters) {
 }
 
 function getSingle(id) {
-  return db("users")
-    .where({ id })
-    .first();
+  return db("users").where({ id }).first();
 }
 
 async function getUserExtras(userId) {
   function getLocations() {
     return db("locations")
       .join("user_locations", "locations.id", "user_locations.location_id")
-      .select("locations.location as name",  "locations.id")
+      .select("locations.location as name", "locations.id")
       .where("user_locations.user_id", userId);
   }
 
@@ -188,14 +184,14 @@ async function getUserExtras(userId) {
     additionalSkills,
     education,
     experience,
-    projects
+    projects,
   ] = await Promise.all([
     getLocations(),
     getTopSkills(),
     getAdditionalSkills(),
     getEducation(),
     getExperience(),
-    getProjects()
+    getProjects(),
   ]);
 
   return {
@@ -204,7 +200,7 @@ async function getUserExtras(userId) {
     additionalSkills,
     education,
     experience,
-    projects
+    projects,
   };
 }
 
@@ -215,20 +211,14 @@ async function getFullUser(email) {
 }
 
 function getSingleByEmail(email) {
-  return db("users")
-    .where({ email })
-    .first();
+  return db("users").where({ email }).first();
 }
 
 async function update(id, body) {
-  await db("users")
-    .where({ id })
-    .update(body);
+  await db("users").where({ id }).update(body);
   return getSingle(id);
 }
 
 function remove(id) {
-  return db("users")
-    .where({ id })
-    .delete();
+  return db("users").where({ id }).delete();
 }

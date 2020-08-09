@@ -25,7 +25,7 @@ describe("insert", () => {
     await db("users").insert({ email: "test@email.com" });
     const newProject = {
       user_id: 1,
-      project_title: "TestProject"
+      project_title: "TestProject",
     };
     const newUserExtra = await userExtrasModel.insert("projects", newProject);
     expect(newUserExtra.project_title).toBe(newProject.project_title);
@@ -35,7 +35,7 @@ describe("insert", () => {
     await db("users").insert({ email: "test@email.com" });
     const newExperience = {
       user_id: 1,
-      job_title: "TestDeveloper"
+      job_title: "TestDeveloper",
     };
     const newExperienceFull = {
       id: 1,
@@ -43,7 +43,7 @@ describe("insert", () => {
       job_title: "TestDeveloper",
       company_name: null,
       job_dates: null,
-      job_description: null
+      job_description: null,
     };
 
     const newUserExtra = await userExtrasModel.insert(
@@ -57,14 +57,14 @@ describe("insert", () => {
     await db("users").insert({ email: "test@email.com" });
     const newEducation = {
       user_id: 1,
-      school: "TestDeveloperAcademy"
+      school: "TestDeveloperAcademy",
     };
     const newEducationFull = {
       id: 1,
       user_id: 1,
       school: "TestDeveloperAcademy",
       school_dates: null,
-      field_of_study: null
+      field_of_study: null,
     };
 
     const newUserExtra = await userExtrasModel.insert(
@@ -78,7 +78,7 @@ describe("insert", () => {
     await db("users").insert({ email: "test@email.com" });
     const newProject = {
       user_id: 1,
-      project_title: "TestProject"
+      project_title: "TestProject",
     };
     const newProjectFull = {
       id: 1,
@@ -86,7 +86,7 @@ describe("insert", () => {
       project_title: "TestProject",
       link: null,
       project_description: null,
-      project_img: null
+      project_img: null,
     };
 
     const newUserExtra = await userExtrasModel.insert("projects", newProject);
@@ -129,7 +129,7 @@ describe("getAll", () => {
     await db("education").insert([
       { user_id: 1 },
       { user_id: 1 },
-      { user_id: 1 }
+      { user_id: 1 },
     ]);
 
     userExtras = await userExtrasModel.getAll(1, "education");
@@ -144,7 +144,7 @@ describe("getAll", () => {
     await db("projects").insert([
       { user_id: 1 },
       { user_id: 1 },
-      { user_id: 1 }
+      { user_id: 1 },
     ]);
 
     userExtras = await userExtrasModel.getAll(1, "projects");
@@ -159,7 +159,7 @@ describe("getAll", () => {
     await db("experience").insert([
       { user_id: 1 },
       { user_id: 1 },
-      { user_id: 1 }
+      { user_id: 1 },
     ]);
 
     userExtras = await userExtrasModel.getAll(1, "experience");
@@ -186,7 +186,7 @@ describe("getSingle", () => {
     await db("education").insert([
       { user_id: 1, school: "TestSchool1" },
       { user_id: 1, school: "TestSchool2" },
-      { user_id: 1, school: "TestSchool3" }
+      { user_id: 1, school: "TestSchool3" },
     ]);
 
     const userExtras = await userExtrasModel.getSingle("education", 2);
@@ -198,7 +198,7 @@ describe("getSingle", () => {
     await db("projects").insert([
       { user_id: 1, project_title: "TestProject1" },
       { user_id: 1, project_title: "TestProject2" },
-      { user_id: 1, project_title: "TestProject3" }
+      { user_id: 1, project_title: "TestProject3" },
     ]);
 
     const userExtras = await userExtrasModel.getSingle("projects", 3);
@@ -210,7 +210,7 @@ describe("getSingle", () => {
     await db("experience").insert([
       { user_id: 1, company_name: "TestCompany1" },
       { user_id: 1, company_name: "TestCompany2" },
-      { user_id: 1, company_name: "TestCompany3" }
+      { user_id: 1, company_name: "TestCompany3" },
     ]);
 
     const userExtras = await userExtrasModel.getSingle("experience", 1);
@@ -237,7 +237,7 @@ describe("update", () => {
     await db("experience").insert({ user_id: 1 });
     const update = {
       company_name: "TestCompany",
-      job_title: "TestDeveloper"
+      job_title: "TestDeveloper",
     };
     const updatedExperience = await userExtrasModel.update(
       "experience",
@@ -251,7 +251,7 @@ describe("update", () => {
     await db("users").insert({ email: "test@email.com" });
     await db("projects").insert({ user_id: 1 });
     const update = {
-      project_title: "TestProject"
+      project_title: "TestProject",
     };
     const updatedProjects = await userExtrasModel.update("projects", 1, update);
     expect(updatedProjects.project_title).toBe("TestProject");
@@ -262,7 +262,7 @@ describe("update", () => {
     await db("education").insert({ user_id: 1 });
     const update = {
       school: "TestSchool",
-      field_of_study: "TestDeveloper"
+      field_of_study: "TestDeveloper",
     };
     const updatededucation = await userExtrasModel.update(
       "education",

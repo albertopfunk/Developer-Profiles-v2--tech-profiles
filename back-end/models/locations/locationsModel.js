@@ -3,13 +3,11 @@ const db = require("../../data/dbConfig");
 module.exports = {
   insertUserLocation,
   removeUserLocations,
-  removeUserLocation
+  removeUserLocation,
 };
 
 function getSingle(location) {
-  return db("locations")
-    .where({ location })
-    .first();
+  return db("locations").where({ location }).first();
 }
 
 async function insertLocation(location) {
@@ -17,14 +15,12 @@ async function insertLocation(location) {
   let id;
 
   if (dbEnv === "production") {
-    id = await db("locations")
-      .returning("id")
-      .insert({
-        location
-      });
+    id = await db("locations").returning("id").insert({
+      location,
+    });
   } else {
     id = await db("locations").insert({
-      location
+      location,
     });
   }
 
@@ -44,15 +40,13 @@ async function insertUserLocation(lePackage) {
 
     await db("user_locations").insert({
       user_id: lePackage.user_id,
-      location_id: id
+      location_id: id,
     });
   }
 }
 
 function removeUserLocations(userId) {
-  return db("user_locations")
-    .where({ user_id: userId })
-    .delete();
+  return db("user_locations").where({ user_id: userId }).delete();
 }
 
 function removeUserLocation(userId, locationId) {

@@ -39,14 +39,12 @@ describe("POST /new", () => {
   });
 
   it("should return inserted new user if emails do not match", async () => {
-    const user = await request(server)
-      .post("/users/new")
-      .send({
-        first_name: "Mr. Test",
-        last_name: "Testington",
-        github: "theTester",
-        email: "test@email.com"
-      });
+    const user = await request(server).post("/users/new").send({
+      first_name: "Mr. Test",
+      last_name: "Testington",
+      github: "theTester",
+      email: "test@email.com",
+    });
     expect(user.body.id).toBe(1);
     expect(user.body.email).toEqual("test@email.com");
     expect(user.body.github).toBe("theTester");
@@ -57,7 +55,7 @@ describe("POST /new", () => {
         first_name: "Mr. Test",
         last_name: "Testington",
         github: "theTesterNEW",
-        email: "testNEW@email.com"
+        email: "testNEW@email.com",
       });
     expect(userWithDifferentEmail.body.id).toBe(2);
     expect(userWithDifferentEmail.body.email).toEqual("testNEW@email.com");
@@ -65,26 +63,22 @@ describe("POST /new", () => {
   });
 
   it("should return existing user if emails match", async () => {
-    const user = await request(server)
-      .post("/users/new")
-      .send({
-        first_name: "Mr. Test",
-        last_name: "Testington",
-        github: "theTester",
-        email: "test@email.com"
-      });
+    const user = await request(server).post("/users/new").send({
+      first_name: "Mr. Test",
+      last_name: "Testington",
+      github: "theTester",
+      email: "test@email.com",
+    });
     expect(user.body.id).toBe(1);
     expect(user.body.email).toEqual("test@email.com");
     expect(user.body.github).toBe("theTester");
 
-    const userWithSameEmail = await request(server)
-      .post("/users/new")
-      .send({
-        first_name: "Mr. Test",
-        last_name: "Testington",
-        github: "theTesterNEW",
-        email: "test@email.com"
-      });
+    const userWithSameEmail = await request(server).post("/users/new").send({
+      first_name: "Mr. Test",
+      last_name: "Testington",
+      github: "theTesterNEW",
+      email: "test@email.com",
+    });
     expect(userWithSameEmail.body.id).toBe(1);
     expect(userWithSameEmail.body.email).toEqual("test@email.com");
     expect(userWithSameEmail.body.github).toBe("theTester");
@@ -118,7 +112,7 @@ describe("GET /", () => {
       { email: "hello5@mail.com" },
       { email: "hello6@mail.com" },
       { email: "hello7@mail.com" },
-      { email: "hello8@mail.com" }
+      { email: "hello8@mail.com" },
     ]);
 
     users = await request(server).get("/users");
@@ -163,11 +157,11 @@ describe("POST /infinite", () => {
     chosenLocationLat: 42.361145,
     chosenLocationLon: -71.057083,
     chosenRelocateTo: "Boston, MA, USA",
-    sortChoice: "acending(oldest-newest)"
+    sortChoice: "acending(oldest-newest)",
   };
 
   let users = [...testUsers.usersData];
-  users = users.map(user => {
+  users = users.map((user) => {
     user.current_location_lat = +user.current_location_lat;
     user.current_location_lon = +user.current_location_lon;
     return user;
@@ -238,7 +232,7 @@ describe("POST /infinite", () => {
     expect(testUsers.body).toHaveLength(14);
 
     let areAllUsersIosAndAndroid = false;
-    const filteredUsers = testUsers.body.filter(user => {
+    const filteredUsers = testUsers.body.filter((user) => {
       return user.area_of_work === "iOS" || user.area_of_work === "Android";
     });
     filteredUsers.length !== testUsers.body.length
@@ -307,13 +301,9 @@ describe("GET /:id", () => {
   it("responds with 404 and correct error message", async () => {
     await db("users").insert({ email: "test@test.com" });
 
-    await request(server)
-      .get("/users/testR@test.com")
-      .expect(404);
+    await request(server).get("/users/testR@test.com").expect(404);
 
-    const err = await request(server)
-      .get("/users/99")
-      .expect(404);
+    const err = await request(server).get("/users/99").expect(404);
     expect(err.body.message).toBe(
       "The user with the specified ID of '99' does not exist"
     );
@@ -333,9 +323,7 @@ describe("GET /:id", () => {
 
   it("Should only accept email or ID", async () => {
     await db("users").insert({ email: "test@test.com", github: "TheTester" });
-    await request(server)
-      .get("/users/TheTester")
-      .expect(404);
+    await request(server).get("/users/TheTester").expect(404);
   });
 });
 
@@ -381,16 +369,12 @@ describe("PUT /:id", () => {
 
   it("updates user and returns number 1 on success", async () => {
     await db("users").insert({ email: "test@test.com" });
-    const user = await db("users")
-      .where({ id: 1 })
-      .first();
+    const user = await db("users").where({ id: 1 }).first();
     expect(user.email).toEqual("test@test.com");
     const isSuccessful = await request(server)
       .put("/users/1")
       .send({ email: "testNEW@test.com" });
-    const updatedUser = await db("users")
-      .where({ id: 1 })
-      .first();
+    const updatedUser = await db("users").where({ id: 1 }).first();
     expect(isSuccessful.body).toBe(1);
     expect(updatedUser.email).toEqual("testNEW@test.com");
   });
@@ -416,9 +400,7 @@ describe("DELETE /:id", () => {
   it("responds with 404 and correct error message", async () => {
     await db("users").insert({ email: "test@test.com" });
 
-    const err = await request(server)
-      .delete("/users/99")
-      .expect(404);
+    const err = await request(server).delete("/users/99").expect(404);
     expect(err.body.message).toBe(
       "The user with the specified ID of '99' does not exist"
     );

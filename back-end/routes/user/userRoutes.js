@@ -8,7 +8,7 @@ const usersCache = new NodeCache({ stdTTL: 21500, checkperiod: 22000 });
 server.post("/new", async (req, res) => {
   if (!req.body.email) {
     res.status(400).json({
-      message: `Expected 'email' in body, received '${req.body.email}'`
+      message: `Expected 'email' in body, received '${req.body.email}'`,
     });
     return;
   }
@@ -45,7 +45,7 @@ server.get("/", async (_, res) => {
 server.get("/load-more/:page", async (req, res) => {
   if (!req.params.page) {
     res.status(400).json({
-      message: `Expected 'page' in params, received '${req.params.page}'`
+      message: `Expected 'page' in params, received '${req.params.page}'`,
     });
     return;
   }
@@ -82,7 +82,7 @@ server.post("/filtered", async (req, res) => {
 server.get("/:id", async (req, res) => {
   if (!req.params.id) {
     res.status(400).json({
-      message: `Expected 'id' in params, received '${req.params.id}'`
+      message: `Expected 'id' in params, received '${req.params.id}'`,
     });
     return;
   }
@@ -92,7 +92,7 @@ server.get("/:id", async (req, res) => {
     getSingleUser
       ? res.status(200).json(getSingleUser)
       : res.status(404).json({
-          message: `User with the specified ID of '${req.params.id}' does not exist`
+          message: `User with the specified ID of '${req.params.id}' does not exist`,
         });
   } catch (err) {
     res.status(500).json({ message: "Error getting user from database" });
@@ -102,7 +102,7 @@ server.get("/:id", async (req, res) => {
 server.post("/get-single", async (req, res) => {
   if (!req.body.email) {
     res.status(400).json({
-      message: `Expected 'email' in body, received '${req.body.email}'`
+      message: `Expected 'email' in body, received '${req.body.email}'`,
     });
     return;
   }
@@ -112,7 +112,7 @@ server.post("/get-single", async (req, res) => {
     getSingleUser
       ? res.status(200).json(getSingleUser)
       : res.status(404).json({
-          message: `User with the specified ID of '${id}' does not exist`
+          message: `User with the specified ID of '${id}' does not exist`,
         });
   } catch (err) {
     res.status(500).json({ message: "Error getting user from database" });
@@ -122,7 +122,7 @@ server.post("/get-single", async (req, res) => {
 server.get("/get-extras/:id", async (req, res) => {
   if (!req.params.id) {
     res.status(400).json({
-      message: `Expected 'id' in params, received '${req.params.id}'`
+      message: `Expected 'id' in params, received '${req.params.id}'`,
     });
     return;
   }
@@ -140,7 +140,7 @@ server.get("/get-extras/:id", async (req, res) => {
 server.post("/get-full", async (req, res) => {
   if (!req.body.email) {
     res.status(400).json({
-      message: `Expected 'email' in body, received '${req.body.email}'`
+      message: `Expected 'email' in body, received '${req.body.email}'`,
     });
     return;
   }
@@ -156,7 +156,7 @@ server.post("/get-full", async (req, res) => {
 server.put("/:id", async (req, res) => {
   if (!req.params.id) {
     res.status(400).json({
-      message: `Expected 'id' in params, received '${req.params.id}'`
+      message: `Expected 'id' in params, received '${req.params.id}'`,
     });
     return;
   }
@@ -165,7 +165,7 @@ server.put("/:id", async (req, res) => {
     editUser
       ? res.status(200).json(editUser)
       : res.status(404).json({
-          message: `User with the specified ID of '${req.params.id}' does not exist`
+          message: `User with the specified ID of '${req.params.id}' does not exist`,
         });
   } catch (err) {
     res.status(500).json({ message: "Error updating user" });
@@ -175,7 +175,7 @@ server.put("/:id", async (req, res) => {
 server.delete("/:id", async (req, res) => {
   if (!req.params.id) {
     res.status(400).json({
-      message: `Expected 'id' in params, received '${req.params.id}'`
+      message: `Expected 'id' in params, received '${req.params.id}'`,
     });
     return;
   }
@@ -184,7 +184,7 @@ server.delete("/:id", async (req, res) => {
     removeUser
       ? res.status(200).json(removeUser)
       : res.status(404).json({
-          message: `User with the specified ID of '${req.params.id}' does not exist`
+          message: `User with the specified ID of '${req.params.id}' does not exist`,
         });
   } catch (err) {
     res.status(500).json({ message: "Error removing user" });

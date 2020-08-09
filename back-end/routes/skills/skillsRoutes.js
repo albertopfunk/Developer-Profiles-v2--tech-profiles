@@ -6,7 +6,7 @@ const server = express.Router();
 server.post("/new", async (req, res) => {
   if (!req.body.skill) {
     res.status(400).json({
-      message: `Expected 'skill' in body, received '${req.body.skill}'`
+      message: `Expected 'skill' in body, received '${req.body.skill}'`,
     });
     return;
   }
@@ -22,14 +22,14 @@ server.post("/new", async (req, res) => {
 server.post("/new-user-skill", async (req, res) => {
   if (!Array.isArray(req.body.skills)) {
     res.status(400).json({
-      message: `Expected 'skills' array in body, received '${req.body.skills}'`
+      message: `Expected 'skills' array in body, received '${req.body.skills}'`,
     });
     return;
   }
 
   if (!req.body.user_id) {
     res.status(400).json({
-      message: `Expected 'user_id' in body, received '${req.body.user_id}'`
+      message: `Expected 'user_id' in body, received '${req.body.user_id}'`,
     });
     return;
   }
@@ -40,7 +40,7 @@ server.post("/new-user-skill", async (req, res) => {
       req.body.type !== "user_additional_skills")
   ) {
     res.status(400).json({
-      message: `Expected 'type' to be 'user_top_skills' or 'user_additional_skills' in body, received '${req.body.type}'`
+      message: `Expected 'type' to be 'user_top_skills' or 'user_additional_skills' in body, received '${req.body.type}'`,
     });
     return;
   }
@@ -50,7 +50,7 @@ server.post("/new-user-skill", async (req, res) => {
     addNewUserSkill
       ? res.status(201).json(addNewUserSkill)
       : res.status(404).json({
-          message: `User with the specified ID of '${req.body.user_id}' does not exist`
+          message: `User with the specified ID of '${req.body.user_id}' does not exist`,
         });
   } catch (err) {
     res.status(500).json({ message: "Error adding user-skill to database" });
@@ -69,7 +69,7 @@ server.get("/", async (_, res) => {
 server.post("/autocomplete", async (req, res) => {
   if (!req.body.value) {
     res.status(400).json({
-      message: `Expected 'value' in body, received '${req.body.value}'`
+      message: `Expected 'value' in body, received '${req.body.value}'`,
     });
     return;
   }
@@ -81,10 +81,10 @@ server.post("/autocomplete", async (req, res) => {
       predictions = predictions.slice(0, 5);
     }
 
-    predictions = predictions.map(prediction => {
+    predictions = predictions.map((prediction) => {
       return {
         name: prediction.skill,
-        id: prediction.id
+        id: prediction.id,
       };
     });
 
@@ -97,7 +97,7 @@ server.post("/autocomplete", async (req, res) => {
 server.get("/:id", async (req, res) => {
   if (!req.params.id) {
     res.status(400).json({
-      message: `Expected 'id' in params, received '${req.params.id}'`
+      message: `Expected 'id' in params, received '${req.params.id}'`,
     });
     return;
   }
@@ -107,7 +107,7 @@ server.get("/:id", async (req, res) => {
     getSingleSkill
       ? res.status(200).json(getSingleSkill)
       : res.status(404).json({
-          message: `The skill with the specified ID of '${req.params.id}' does not exist`
+          message: `The skill with the specified ID of '${req.params.id}' does not exist`,
         });
   } catch (err) {
     res.status(500).json({ message: "Error getting skill from database" });
@@ -117,14 +117,14 @@ server.get("/:id", async (req, res) => {
 server.put("/:id", async (req, res) => {
   if (!req.params.id) {
     res.status(400).json({
-      message: `Expected 'id' in params, received '${req.params.id}'`
+      message: `Expected 'id' in params, received '${req.params.id}'`,
     });
     return;
   }
 
   if (!req.body.skill) {
     res.status(400).json({
-      message: `Expected 'skill' in body, received '${req.body.skill}'`
+      message: `Expected 'skill' in body, received '${req.body.skill}'`,
     });
     return;
   }
@@ -134,7 +134,7 @@ server.put("/:id", async (req, res) => {
     editSkill
       ? res.status(200).json(editSkill)
       : res.status(404).json({
-          message: `The skill with the specified ID of '${req.params.id}' does not exist`
+          message: `The skill with the specified ID of '${req.params.id}' does not exist`,
         });
   } catch (err) {
     res.status(500).json({ message: "Error updating skill" });
@@ -144,7 +144,7 @@ server.put("/:id", async (req, res) => {
 server.delete("/:id", async (req, res) => {
   if (!req.params.id) {
     res.status(400).json({
-      message: `Expected 'id' in params, received '${req.params.id}'`
+      message: `Expected 'id' in params, received '${req.params.id}'`,
     });
     return;
   }
@@ -154,7 +154,7 @@ server.delete("/:id", async (req, res) => {
     removeSkill
       ? res.status(200).json(removeSkill)
       : res.status(404).json({
-          message: `The skill with the specified ID of '${req.params.id}' does not exist`
+          message: `The skill with the specified ID of '${req.params.id}' does not exist`,
         });
   } catch (err) {
     res.status(500).json({ message: "Error removing skill" });
@@ -164,7 +164,7 @@ server.delete("/:id", async (req, res) => {
 server.post("/delete-user-skills", async (req, res) => {
   if (!req.body.user_id) {
     res.status(400).json({
-      message: `Expected 'user_id' in body, received '${req.body.user_id}'`
+      message: `Expected 'user_id' in body, received '${req.body.user_id}'`,
     });
     return;
   }
@@ -175,7 +175,7 @@ server.post("/delete-user-skills", async (req, res) => {
       req.body.type !== "user_additional_skills")
   ) {
     res.status(400).json({
-      message: `Expected 'type' to be 'user_top_skills' or 'user_additional_skills' in body, received '${req.body.type}'`
+      message: `Expected 'type' to be 'user_top_skills' or 'user_additional_skills' in body, received '${req.body.type}'`,
     });
     return;
   }
@@ -194,14 +194,14 @@ server.post("/delete-user-skills", async (req, res) => {
 server.post("/delete-user-skill", async (req, res) => {
   if (!req.body.skill_id) {
     res.status(400).json({
-      message: `Expected 'skill_id' in body, received '${req.body.skill_id}'`
+      message: `Expected 'skill_id' in body, received '${req.body.skill_id}'`,
     });
     return;
   }
 
   if (!req.body.user_id) {
     res.status(400).json({
-      message: `Expected 'user_id' in body, received '${req.body.user_id}'`
+      message: `Expected 'user_id' in body, received '${req.body.user_id}'`,
     });
     return;
   }
@@ -212,7 +212,7 @@ server.post("/delete-user-skill", async (req, res) => {
       req.body.type !== "user_additional_skills")
   ) {
     res.status(400).json({
-      message: `Expected 'type' to be 'user_top_skills' or 'user_additional_skills' in body, received '${req.body.type}'`
+      message: `Expected 'type' to be 'user_top_skills' or 'user_additional_skills' in body, received '${req.body.type}'`,
     });
     return;
   }
