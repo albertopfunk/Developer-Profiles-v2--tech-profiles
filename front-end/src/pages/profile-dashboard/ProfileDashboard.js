@@ -18,6 +18,9 @@ import { httpClient } from "../../global/helpers/http-requests";
 import { ProfileContext } from "../../global/context/user-profile/ProfileContext";
 import auth0Client from "../../auth/Auth";
 
+// having editInputs and submitLoading on children can be done
+// by returning promises
+// see if you can make code cleaner
 function ProfileDashboard() {
   const [loadingUser, setLoadingUser] = useState(true);
   const [user, setUser] = useState(null);
@@ -51,17 +54,18 @@ function ProfileDashboard() {
     if (err) {
       console.error(`${res.mssg} => ${res.err}`);
       auth0Client.signOut("authorize");
-      return;
+      return false;
     }
 
     setUser(res.data);
     setLoadingUser(false);
-    setSubmitLoading(false);
-    setEditInputs(false);
+    return true
+    // setSubmitLoading(false);
+    // setEditInputs(false);
   }
 
   async function editProfile(data) {
-    setSubmitLoading(true);
+    // setSubmitLoading(true);
     const [res, err] = await httpClient("PUT", `/users/${user.id}`, data);
 
     if (err) {
@@ -69,11 +73,17 @@ function ProfileDashboard() {
       return;
     }
 
-    getFullUser(user.email);
+    const fullUserSuccess = await getFullUser(user.email);
+    if (fullUserSuccess) {
+      return true
+    } else {
+      return false
+    }
+    
   }
 
   async function addUserExtras(requestsArr) {
-    setSubmitLoading(true);
+    // setSubmitLoading(true);
     let main = {
       ...requestsArr.shift(),
     };
