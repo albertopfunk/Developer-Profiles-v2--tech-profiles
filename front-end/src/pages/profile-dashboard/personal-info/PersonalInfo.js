@@ -6,11 +6,30 @@ import ImageUploadForm from "../../../components/forms/image-upload";
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
 import { httpClient } from "../../../global/helpers/http-requests";
 import { validateInput } from "../../../global/helpers/validation";
+import { STATUS } from "../../../global/helpers/variables";
 
 /*
 
 see if you can describe the form
 "inputs are validated, but not required"
+
+enum status on all
+
+INPUTS
+create inputs similar to bulma(remove from stretch)
+enum status will make that simple
+
+idle = nothing
+loading = none needed for inputs
+error = error mssg + error icon
+
+success = sr.only success text + success icon
+you can add success state onBlur when 
+change === true && validationSuccess === true
+
+otherwise if there is no change, it will remain idle
+
+
 
 */
 
@@ -28,21 +47,19 @@ function PersonalInfo() {
   const [firstName, setFirstName] = useState({
     inputValue: "",
     inputChange: false,
-    inputError: false,
+    inputStatus: STATUS.idle,
   });
   const [lastName, setLastName] = useState({
     inputValue: "",
     inputChange: false,
-    inputError: false,
+    inputStatus: STATUS.idle,
   });
-
   const [image, setImage] = useState({
     image: "",
     id: "",
     inputChange: false,
     shouldRemoveUserImage: false,
   });
-
   const [areaOfWork, setAreaOfWork] = useState({
     inputValue: "",
     inputChange: false,
@@ -50,7 +67,7 @@ function PersonalInfo() {
   const [title, setTitle] = useState({
     inputValue: "",
     inputChange: false,
-    inputError: false,
+    inputStatus: STATUS.idle,
   });
 
   let errorSummaryRef = React.createRef();
@@ -84,12 +101,12 @@ function PersonalInfo() {
     setFirstName({
       inputValue: user.first_name || "",
       inputChange: false,
-      inputError: false,
+      inputStatus: STATUS.idle,
     });
     setLastName({
       inputValue: user.last_name || "",
       inputChange: false,
-      inputError: false,
+      inputStatus: STATUS.idle,
     });
     setImage({
       image: "",
@@ -104,16 +121,25 @@ function PersonalInfo() {
     setTitle({
       inputValue: user.desired_title || "",
       inputChange: false,
-      inputError: false,
+      inputStatus: STATUS.idle,
     });
   }
 
   function setFirstNameInput(value) {
+    if (user.first_name === null && value.trim() === "") {
+      setFirstName({
+        inputChange: false,
+        inputValue: "",
+        inputStatus: STATUS.idle,
+      });
+      return;
+    }
+
     if (value === user.first_name) {
       setFirstName({
         inputChange: false,
         inputValue: value,
-        inputError: false,
+        inputStatus: STATUS.idle,
       });
       return;
     }
@@ -124,21 +150,35 @@ function PersonalInfo() {
   function validateFirstNameInput(value) {
     if (!firstName.inputChange) return;
     if (value.trim() === "") {
-      setFirstName({ ...firstName, inputValue: "", inputError: false });
+      setFirstName({
+        ...firstName,
+        inputValue: "",
+        inputStatus: STATUS.success,
+      });
     } else if (validateInput("name", value)) {
-      setFirstName({ ...firstName, inputError: false });
+      setFirstName({ ...firstName, inputStatus: STATUS.success });
     } else {
-      setFirstName({ ...firstName, inputError: true });
+      setFirstName({ ...firstName, inputStatus: STATUS.error });
     }
   }
 
   function setLastNameInput(value) {
+    if (user.last_name === null && value.trim() === "") {
+      setLastName({
+        inputChange: false,
+        inputValue: "",
+        inputStatus: STATUS.idle,
+      });
+      return;
+    }
+
     if (value === user.last_name) {
       setLastName({
         inputChange: false,
         inputValue: value,
-        inputError: false,
+        inputStatus: STATUS.idle,
       });
+      return;
     }
 
     setLastName({ ...lastName, inputChange: true, inputValue: value });
@@ -147,11 +187,11 @@ function PersonalInfo() {
   function validateLastNameInput(value) {
     if (!lastName.inputChange) return;
     if (value.trim() === "") {
-      setLastName({ ...lastName, inputValue: "", inputError: false });
+      setLastName({ ...lastName, inputValue: "", inputStatus: STATUS.success });
     } else if (validateInput("name", value)) {
-      setLastName({ ...lastName, inputError: false });
+      setLastName({ ...lastName, inputStatus: STATUS.success });
     } else {
-      setLastName({ ...lastName, inputError: true });
+      setLastName({ ...lastName, inputStatus: STATUS.error });
     }
   }
 
@@ -172,11 +212,20 @@ function PersonalInfo() {
   }
 
   function setTitleInput(value) {
+    if (user.desired_title === null && value.trim() === "") {
+      setTitle({
+        inputChange: false,
+        inputValue: "",
+        inputStatus: STATUS.idle,
+      });
+      return;
+    }
+
     if (value === user.desired_title) {
       setTitle({
         inputChange: false,
         inputValue: value,
-        inputError: false,
+        inputStatus: STATUS.idle,
       });
       return;
     }
@@ -187,18 +236,22 @@ function PersonalInfo() {
   function validateTitleInput(value) {
     if (!title.inputChange) return;
     if (value.trim() === "") {
-      setTitle({ ...title, inputValue: "", inputError: false });
+      setTitle({ ...title, inputValue: "", inputStatus: STATUS.success });
     } else if (validateInput("title", value)) {
-      setTitle({ ...title, inputError: false });
+      setTitle({ ...title, inputStatus: STATUS.success });
     } else {
-      setTitle({ ...title, inputError: true });
+      setTitle({ ...title, inputStatus: STATUS.error });
     }
   }
 
   function submitEdit(e) {
     e.preventDefault();
 
-    if (firstName.inputError || lastName.inputError || title.inputError) {
+    if (
+      firstName.inputStatus === STATUS.error ||
+      lastName.inputStatus === STATUS.error ||
+      title.inputStatus === STATUS.error
+    ) {
       setSubmitError(true);
       return;
     }
@@ -299,24 +352,26 @@ function PersonalInfo() {
             Errors in Submission
           </h3>
 
-          {firstName.inputError || lastName.inputError || title.inputError ? (
+          {firstName.inputStatus === STATUS.error ||
+          lastName.inputStatus === STATUS.error ||
+          title.inputStatus === STATUS.error ? (
             <>
               <strong id="error-instructions">
                 Please address the following errors and re-submit the form:
               </strong>
-
+              {/* // header is fixed so it covers input */}
               <ul id="error-group" aria-labelledby="error-instructions">
-                {firstName.inputError ? (
+                {firstName.inputStatus === STATUS.error ? (
                   <li>
                     <a href="#first-name">First Name Error</a>
                   </li>
                 ) : null}
-                {lastName.inputError ? (
+                {lastName.inputStatus === STATUS.error ? (
                   <li>
                     <a href="#last-name">Last Name Error</a>
                   </li>
                 ) : null}
-                {title.inputError ? (
+                {title.inputStatus === STATUS.error ? (
                   <li>
                     <a href="#title">Title Error</a>
                   </li>
@@ -339,15 +394,17 @@ function PersonalInfo() {
               inputMode="text"
               id="first-name"
               name="first-name"
-              className={`input ${firstName.inputError ? "input-err" : ""}`}
+              className={`input ${
+                firstName.inputStatus === STATUS.error ? "input-err" : ""
+              }`}
               aria-labelledby="first-name-label"
               aria-describedby="first-name-error"
-              aria-invalid={firstName.inputError}
+              aria-invalid={firstName.inputStatus === STATUS.error}
               value={firstName.inputValue}
               onChange={(e) => setFirstNameInput(e.target.value)}
               onBlur={(e) => validateFirstNameInput(e.target.value)}
             />
-            {firstName.inputError ? (
+            {firstName.inputStatus === STATUS.error ? (
               <span id="first-name-error" role="status" className="err-mssg">
                 First Name can only be alphabelical characters, no numbers
               </span>
@@ -364,14 +421,17 @@ function PersonalInfo() {
               inputMode="text"
               id="last-name"
               name="last-name"
+              className={`input ${
+                lastName.inputStatus === STATUS.error ? "input-err" : ""
+              }`}
               aria-labelledby="last-name-label"
               aria-describedby="last-name-error"
-              aria-invalid={lastName.inputError}
+              aria-invalid={lastName.inputStatus === STATUS.error}
               value={lastName.inputValue}
               onChange={(e) => setLastNameInput(e.target.value)}
               onBlur={(e) => validateLastNameInput(e.target.value)}
             />
-            {lastName.inputError ? (
+            {lastName.inputStatus === STATUS.error ? (
               <span id="last-name-error" role="status" className="err-mssg">
                 Last Name can only be alphabelical characters, no numbers
               </span>
@@ -440,15 +500,17 @@ function PersonalInfo() {
               inputMode="text"
               id="title"
               name="title"
-              className={`input ${title.inputError ? "input-err" : ""}`}
+              className={`input ${
+                title.inputStatus === STATUS.error ? "input-err" : ""
+              }`}
               aria-labelledby="title-label"
               aria-describedby="title-error"
-              aria-invalid={title.inputError}
+              aria-invalid={title.inputStatus === STATUS.error}
               value={title.inputValue}
               onChange={(e) => setTitleInput(e.target.value)}
               onBlur={(e) => validateTitleInput(e.target.value)}
             />
-            {title.inputError ? (
+            {title.inputStatus === STATUS.error ? (
               <span id="title-error" role="status" className="err-mssg">
                 Title can only be alphabelical characters, no numbers
               </span>
