@@ -16,16 +16,12 @@ import DashboardBilling from "./billing/DashboardBilling";
 
 import { httpClient } from "../../global/helpers/http-requests";
 import { ProfileContext } from "../../global/context/user-profile/ProfileContext";
+import { PROMISE_STATUS } from "../../global/helpers/variables";
 import auth0Client from "../../auth/Auth";
 
-// having editInputs and submitLoading on children can be done
-// by returning promises
-// see if you can make code cleaner
 function ProfileDashboard() {
-  const [loadingUser, setLoadingUser] = useState(true);
   const [user, setUser] = useState(null);
-  const [editInputs, setEditInputs] = useState(false);
-  const [submitLoading, setSubmitLoading] = useState(false);
+  const [loadingUser, setLoadingUser] = useState(true);
   const [previewImg, setPreviewImg] = useState({ image: "", id: "" });
   let { path, url } = useRouteMatch();
 
@@ -36,7 +32,6 @@ function ProfileDashboard() {
   });
 
   function initProfile() {
-    // setLoadingUser(true);
     const userProfile = auth0Client.getProfile();
     const { email } = userProfile;
 
@@ -48,24 +43,23 @@ function ProfileDashboard() {
     getFullUser(email);
   }
 
+  // I am returning so children can wait for
+  // the user to be updated before re-rendering
   async function getFullUser(email) {
     const [res, err] = await httpClient("POST", "/users/get-full", { email });
 
     if (err) {
       console.error(`${res.mssg} => ${res.err}`);
       auth0Client.signOut("authorize");
-      return false;
+      return PROMISE_STATUS.rejected;
     }
 
     setUser(res.data);
     setLoadingUser(false);
-    return true
-    // setSubmitLoading(false);
-    // setEditInputs(false);
+    return PROMISE_STATUS.resolved;
   }
 
   async function editProfile(data) {
-    // setSubmitLoading(true);
     const [res, err] = await httpClient("PUT", `/users/${user.id}`, data);
 
     if (err) {
@@ -75,15 +69,13 @@ function ProfileDashboard() {
 
     const fullUserSuccess = await getFullUser(user.email);
     if (fullUserSuccess) {
-      return true
+      return PROMISE_STATUS.resolved;
     } else {
-      return false
+      return PROMISE_STATUS.rejected;
     }
-    
   }
 
   async function addUserExtras(requestsArr) {
-    // setSubmitLoading(true);
     let main = {
       ...requestsArr.shift(),
     };
@@ -107,13 +99,16 @@ function ProfileDashboard() {
       return;
     }
 
-    getFullUser(user.email);
+    const fullUserSuccess = await getFullUser(user.email);
+    if (fullUserSuccess) {
+      return PROMISE_STATUS.resolved;
+    } else {
+      return PROMISE_STATUS.rejected;
+    }
   }
 
   if (loadingUser) {
-    // I do not think ANY other loadingUser on children run
-    // since loadingUser will ALWAYS be false if this does not render
-    // so this can be the main skeleton loader
+    // main skeleton loader
     return (
       <div>
         <h1>Loading...</h1>
@@ -150,11 +145,8 @@ function ProfileDashboard() {
           value={{
             user,
             editProfile,
-            submitLoading,
             addUserExtras,
             setPreviewImg,
-            editInputs,
-            setEditInputs,
           }}
         >
           <Switch>
