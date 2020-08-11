@@ -6,55 +6,30 @@ import ImageUploadForm from "../../../components/forms/image-upload";
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
 import { httpClient } from "../../../global/helpers/http-requests";
 import { validateInput } from "../../../global/helpers/validation";
-import { STATUS } from "../../../global/helpers/variables";
+import { FORM_STATUS } from "../../../global/helpers/variables";
 
 /*
 
 see if you can describe the form
 "inputs are validated, but not required"
-
-enum status on all
-
-INPUTS
-create inputs similar to bulma(remove from stretch)
-enum status will make that simple
-
-idle = nothing
-loading = none needed for inputs
-error = error mssg + error icon
-
-success = sr.only success text + success icon
-you can add success state onBlur when 
-change === true && validationSuccess === true
-
-otherwise if there is no change, it will remain idle
-
-
+maybe announce it when form is 'active'
 
 */
 
 function PersonalInfo() {
-  const {
-    user,
-    submitLoading,
-    editProfile,
-    setPreviewImg,
-    editInputs,
-    setEditInputs,
-  } = useContext(ProfileContext);
-
-  const [submitError, setSubmitError] = useState(false);
+  const { user, editProfile, setPreviewImg } = useContext(ProfileContext);
+  const [formStatus, setFormStatus] = useState(FORM_STATUS.idle);
   const [firstName, setFirstName] = useState({
     inputValue: "",
     inputChange: false,
-    inputStatus: STATUS.idle,
+    inputStatus: FORM_STATUS.idle,
   });
   const [lastName, setLastName] = useState({
     inputValue: "",
     inputChange: false,
-    inputStatus: STATUS.idle,
+    inputStatus: FORM_STATUS.idle,
   });
-  const [image, setImage] = useState({
+  const [previewImgInput, setPreviewImgInput] = useState({
     image: "",
     id: "",
     inputChange: false,
@@ -67,48 +42,43 @@ function PersonalInfo() {
   const [title, setTitle] = useState({
     inputValue: "",
     inputChange: false,
-    inputStatus: STATUS.idle,
+    inputStatus: FORM_STATUS.idle,
   });
 
   let errorSummaryRef = React.createRef();
 
   useEffect(() => {
-    if (submitError && errorSummaryRef.current) {
+    if (formStatus === FORM_STATUS.error && errorSummaryRef.current) {
       errorSummaryRef.current.focus();
     }
-    // another issue with required dependencies causing bugs
+    // another issue with required dependencies causing bugs.
     // I am using this since I need to set focus to the
     // err summary element when user clicks submit with errors.
     // since state needs to change for the element to appear
     // and I can only set focus once the element appears, I have
-    // to set focus AFTER state changes and component renders
+    // to set focus AFTER state changes and component renders.
     // so I am using useEffect to handle that
     // this works, but if I add the required errorSummaryRef
     // it will shift focus on that Ref on ANY state change/render
+    // when form is in an error state
     // since refs are re-set each time
     // eslint-disable-next-line
-  }, [submitError]);
-
-  useEffect(() => {
-    return () => {
-      setEditInputs(false);
-    };
-  }, [setEditInputs]);
+  }, [formStatus]);
 
   function setFormInputs() {
-    setEditInputs(true);
-    setSubmitError(false);
+    setFormStatus(FORM_STATUS.active);
+
     setFirstName({
       inputValue: user.first_name || "",
       inputChange: false,
-      inputStatus: STATUS.idle,
+      inputStatus: FORM_STATUS.idle,
     });
     setLastName({
       inputValue: user.last_name || "",
       inputChange: false,
-      inputStatus: STATUS.idle,
+      inputStatus: FORM_STATUS.idle,
     });
-    setImage({
+    setPreviewImgInput({
       image: "",
       id: "",
       inputChange: false,
@@ -121,7 +91,7 @@ function PersonalInfo() {
     setTitle({
       inputValue: user.desired_title || "",
       inputChange: false,
-      inputStatus: STATUS.idle,
+      inputStatus: FORM_STATUS.idle,
     });
   }
 
@@ -130,7 +100,7 @@ function PersonalInfo() {
       setFirstName({
         inputChange: false,
         inputValue: "",
-        inputStatus: STATUS.idle,
+        inputStatus: FORM_STATUS.idle,
       });
       return;
     }
@@ -139,7 +109,7 @@ function PersonalInfo() {
       setFirstName({
         inputChange: false,
         inputValue: value,
-        inputStatus: STATUS.idle,
+        inputStatus: FORM_STATUS.idle,
       });
       return;
     }
@@ -153,12 +123,12 @@ function PersonalInfo() {
       setFirstName({
         ...firstName,
         inputValue: "",
-        inputStatus: STATUS.success,
+        inputStatus: FORM_STATUS.success,
       });
     } else if (validateInput("name", value)) {
-      setFirstName({ ...firstName, inputStatus: STATUS.success });
+      setFirstName({ ...firstName, inputStatus: FORM_STATUS.success });
     } else {
-      setFirstName({ ...firstName, inputStatus: STATUS.error });
+      setFirstName({ ...firstName, inputStatus: FORM_STATUS.error });
     }
   }
 
@@ -167,7 +137,7 @@ function PersonalInfo() {
       setLastName({
         inputChange: false,
         inputValue: "",
-        inputStatus: STATUS.idle,
+        inputStatus: FORM_STATUS.idle,
       });
       return;
     }
@@ -176,7 +146,7 @@ function PersonalInfo() {
       setLastName({
         inputChange: false,
         inputValue: value,
-        inputStatus: STATUS.idle,
+        inputStatus: FORM_STATUS.idle,
       });
       return;
     }
@@ -187,11 +157,15 @@ function PersonalInfo() {
   function validateLastNameInput(value) {
     if (!lastName.inputChange) return;
     if (value.trim() === "") {
-      setLastName({ ...lastName, inputValue: "", inputStatus: STATUS.success });
+      setLastName({
+        ...lastName,
+        inputValue: "",
+        inputStatus: FORM_STATUS.success,
+      });
     } else if (validateInput("name", value)) {
-      setLastName({ ...lastName, inputStatus: STATUS.success });
+      setLastName({ ...lastName, inputStatus: FORM_STATUS.success });
     } else {
-      setLastName({ ...lastName, inputStatus: STATUS.error });
+      setLastName({ ...lastName, inputStatus: FORM_STATUS.error });
     }
   }
 
@@ -216,7 +190,7 @@ function PersonalInfo() {
       setTitle({
         inputChange: false,
         inputValue: "",
-        inputStatus: STATUS.idle,
+        inputStatus: FORM_STATUS.idle,
       });
       return;
     }
@@ -225,7 +199,7 @@ function PersonalInfo() {
       setTitle({
         inputChange: false,
         inputValue: value,
-        inputStatus: STATUS.idle,
+        inputStatus: FORM_STATUS.idle,
       });
       return;
     }
@@ -236,31 +210,34 @@ function PersonalInfo() {
   function validateTitleInput(value) {
     if (!title.inputChange) return;
     if (value.trim() === "") {
-      setTitle({ ...title, inputValue: "", inputStatus: STATUS.success });
+      setTitle({ ...title, inputValue: "", inputStatus: FORM_STATUS.success });
     } else if (validateInput("title", value)) {
-      setTitle({ ...title, inputStatus: STATUS.success });
+      setTitle({ ...title, inputStatus: FORM_STATUS.success });
     } else {
-      setTitle({ ...title, inputStatus: STATUS.error });
+      setTitle({ ...title, inputStatus: FORM_STATUS.error });
     }
   }
 
-  function submitEdit(e) {
+  async function submitEdit(e) {
     e.preventDefault();
 
     if (
-      firstName.inputStatus === STATUS.error ||
-      lastName.inputStatus === STATUS.error ||
-      title.inputStatus === STATUS.error
+      firstName.inputStatus === FORM_STATUS.error ||
+      lastName.inputStatus === FORM_STATUS.error ||
+      title.inputStatus === FORM_STATUS.error
     ) {
-      setSubmitError(true);
+      setFormStatus(FORM_STATUS.error);
+      if (errorSummaryRef.current) {
+        errorSummaryRef.current.focus();
+      }
       return;
     }
 
     if (
       !firstName.inputChange &&
       !lastName.inputChange &&
-      !image.inputChange &&
-      !image.shouldRemoveUserImage &&
+      !previewImgInput.inputChange &&
+      !previewImgInput.shouldRemoveUserImage &&
       !areaOfWork.inputChange &&
       !title.inputChange
     ) {
@@ -277,13 +254,13 @@ function PersonalInfo() {
       inputs.last_name = lastName.inputValue;
     }
 
-    if (image.inputChange) {
+    if (previewImgInput.inputChange) {
       removeUserImageFromCloudinary();
-      inputs.image = image.image;
-      inputs.image_id = image.id;
+      inputs.image = previewImgInput.image;
+      inputs.image_id = previewImgInput.id;
       localStorage.removeItem("image_id");
       setPreviewImg({ image: "", id: "" });
-    } else if (image.shouldRemoveUserImage) {
+    } else if (previewImgInput.shouldRemoveUserImage) {
       removeUserImageFromCloudinary();
       inputs.image = "";
       inputs.image_id = "";
@@ -297,11 +274,16 @@ function PersonalInfo() {
       inputs.desired_title = title.inputValue;
     }
 
-    console.log("SUB", inputs);
-    editProfile(inputs);
+    setFormStatus(FORM_STATUS.loading);
+    const result = await editProfile(inputs);
+    if (result) {
+      // see if you can have a success state first to announce it
+      // put idle in a setTimeout and success regular, will need to cancel on unmount
+      setFormStatus(FORM_STATUS.idle);
+    }
   }
 
-  if (!editInputs) {
+  if (formStatus === FORM_STATUS.idle) {
     return (
       <main aria-labelledby="personal-info-heading-1">
         <Helmet>
@@ -346,32 +328,34 @@ function PersonalInfo() {
           aria-live="assertive"
           aria-relevant="additions removals"
           aria-labelledby="error-heading"
-          className={`error-summary ${submitError ? "" : "hidden"}`}
+          className={`error-summary ${
+            formStatus === FORM_STATUS.error ? "" : "hidden"
+          }`}
         >
           <h3 id="error-heading" ref={errorSummaryRef} tabIndex="0">
             Errors in Submission
           </h3>
 
-          {firstName.inputStatus === STATUS.error ||
-          lastName.inputStatus === STATUS.error ||
-          title.inputStatus === STATUS.error ? (
+          {firstName.inputStatus === FORM_STATUS.error ||
+          lastName.inputStatus === FORM_STATUS.error ||
+          title.inputStatus === FORM_STATUS.error ? (
             <>
               <strong id="error-instructions">
                 Please address the following errors and re-submit the form:
               </strong>
               {/* // header is fixed so it covers input */}
               <ul id="error-group" aria-labelledby="error-instructions">
-                {firstName.inputStatus === STATUS.error ? (
+                {firstName.inputStatus === FORM_STATUS.error ? (
                   <li>
                     <a href="#first-name">First Name Error</a>
                   </li>
                 ) : null}
-                {lastName.inputStatus === STATUS.error ? (
+                {lastName.inputStatus === FORM_STATUS.error ? (
                   <li>
                     <a href="#last-name">Last Name Error</a>
                   </li>
                 ) : null}
-                {title.inputStatus === STATUS.error ? (
+                {title.inputStatus === FORM_STATUS.error ? (
                   <li>
                     <a href="#title">Title Error</a>
                   </li>
@@ -385,9 +369,7 @@ function PersonalInfo() {
 
         <form onSubmit={(e) => submitEdit(e)}>
           <InputContainer>
-            <label id="first-name-label" htmlFor="first-name">
-              First Name:
-            </label>
+            <label htmlFor="first-name">First Name:</label>
             <input
               type="text"
               autoComplete="given-name"
@@ -395,16 +377,15 @@ function PersonalInfo() {
               id="first-name"
               name="first-name"
               className={`input ${
-                firstName.inputStatus === STATUS.error ? "input-err" : ""
+                firstName.inputStatus === FORM_STATUS.error ? "input-err" : ""
               }`}
-              aria-labelledby="first-name-label"
               aria-describedby="first-name-error"
-              aria-invalid={firstName.inputStatus === STATUS.error}
+              aria-invalid={firstName.inputStatus === FORM_STATUS.error}
               value={firstName.inputValue}
               onChange={(e) => setFirstNameInput(e.target.value)}
               onBlur={(e) => validateFirstNameInput(e.target.value)}
             />
-            {firstName.inputStatus === STATUS.error ? (
+            {firstName.inputStatus === FORM_STATUS.error ? (
               <span id="first-name-error" role="status" className="err-mssg">
                 First Name can only be alphabelical characters, no numbers
               </span>
@@ -412,9 +393,7 @@ function PersonalInfo() {
           </InputContainer>
 
           <InputContainer>
-            <label id="last-name-label" htmlFor="last-name">
-              Last Name:
-            </label>
+            <label htmlFor="last-name">Last Name:</label>
             <input
               type="text"
               autoComplete="family-name"
@@ -422,23 +401,25 @@ function PersonalInfo() {
               id="last-name"
               name="last-name"
               className={`input ${
-                lastName.inputStatus === STATUS.error ? "input-err" : ""
+                lastName.inputStatus === FORM_STATUS.error ? "input-err" : ""
               }`}
-              aria-labelledby="last-name-label"
               aria-describedby="last-name-error"
-              aria-invalid={lastName.inputStatus === STATUS.error}
+              aria-invalid={lastName.inputStatus === FORM_STATUS.error}
               value={lastName.inputValue}
               onChange={(e) => setLastNameInput(e.target.value)}
               onBlur={(e) => validateLastNameInput(e.target.value)}
             />
-            {lastName.inputStatus === STATUS.error ? (
+            {lastName.inputStatus === FORM_STATUS.error ? (
               <span id="last-name-error" role="status" className="err-mssg">
                 Last Name can only be alphabelical characters, no numbers
               </span>
             ) : null}
           </InputContainer>
 
-          <ImageUploadForm imageInput={image} setImageInput={setImage} />
+          <ImageUploadForm
+            imageInput={previewImgInput}
+            setImageInput={setPreviewImgInput}
+          />
 
           <FieldSet>
             <legend>Area of Work</legend>
@@ -491,9 +472,7 @@ function PersonalInfo() {
           </FieldSet>
 
           <InputContainer>
-            <label id="title-label" htmlFor="title">
-              Title:
-            </label>
+            <label htmlFor="title">Title:</label>
             <input
               type="text"
               autoComplete="organization-title"
@@ -501,29 +480,40 @@ function PersonalInfo() {
               id="title"
               name="title"
               className={`input ${
-                title.inputStatus === STATUS.error ? "input-err" : ""
+                title.inputStatus === FORM_STATUS.error ? "input-err" : ""
               }`}
-              aria-labelledby="title-label"
               aria-describedby="title-error"
-              aria-invalid={title.inputStatus === STATUS.error}
+              aria-invalid={title.inputStatus === FORM_STATUS.error}
               value={title.inputValue}
               onChange={(e) => setTitleInput(e.target.value)}
               onBlur={(e) => validateTitleInput(e.target.value)}
             />
-            {title.inputStatus === STATUS.error ? (
+            {title.inputStatus === FORM_STATUS.error ? (
               <span id="title-error" role="status" className="err-mssg">
                 Title can only be alphabelical characters, no numbers
               </span>
             ) : null}
           </InputContainer>
 
-          <button disabled={submitLoading} type="submit">
-            {submitLoading ? "loading..." : "Submit"}
+          <button
+            disabled={
+              formStatus === FORM_STATUS.loading ||
+              formStatus === FORM_STATUS.success
+            }
+            type="submit"
+          >
+            {formStatus === FORM_STATUS.active ? "Submit" : null}
+            {formStatus === FORM_STATUS.loading ? "loading..." : null}
+            {formStatus === FORM_STATUS.success ? "Success!" : null}
+            {formStatus === FORM_STATUS.error ? "Re-Submit" : null}
           </button>
           <button
-            disabled={submitLoading}
+            disabled={
+              formStatus === FORM_STATUS.loading ||
+              formStatus === FORM_STATUS.success
+            }
             type="reset"
-            onClick={() => setEditInputs(false)}
+            onClick={() => setFormStatus(FORM_STATUS.idle)}
           >
             Cancel
           </button>
