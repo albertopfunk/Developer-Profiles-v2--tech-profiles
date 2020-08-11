@@ -2,11 +2,11 @@ import React, { useState, useContext, useEffect } from "react";
 import styled from "styled-components";
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
 import { httpClient } from "../../../global/helpers/http-requests";
-import { STATUS } from "../../../global/helpers/variables";
+import { FORM_STATUS } from "../../../global/helpers/variables";
 
 function ImageUploadForm({ imageInput, setImageInput }) {
   const { setPreviewImg, user } = useContext(ProfileContext);
-  const [imageStatus, setImageStatus] = useState(STATUS.idle);
+  const [imageStatus, setImageStatus] = useState(FORM_STATUS.idle);
 
   let imageRef = React.createRef();
   let imageRemovalRef = React.createRef();
@@ -44,7 +44,7 @@ function ImageUploadForm({ imageInput, setImageInput }) {
     data.append("image", file);
     imageRef.current.value = "";
 
-    setImageStatus(STATUS.loading);
+    setImageStatus(FORM_STATUS.loading);
     const [res, err] = await httpClient("POST", "/api/upload-image", data, {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -53,11 +53,11 @@ function ImageUploadForm({ imageInput, setImageInput }) {
 
     if (err) {
       console.error(`${res.mssg} => ${res.err}`);
-      setImageStatus(STATUS.error);
+      setImageStatus(FORM_STATUS.error);
       return;
     }
 
-    setImageStatus(STATUS.success);
+    setImageStatus(FORM_STATUS.success);
     removePreviewImageFromCloudinary();
     localStorage.setItem("image_id", res.data.id);
     setPreviewImg(res.data);
@@ -69,7 +69,7 @@ function ImageUploadForm({ imageInput, setImageInput }) {
   }
 
   function removePreviewImage() {
-    setImageStatus(STATUS.idle);
+    setImageStatus(FORM_STATUS.idle);
     removePreviewImageFromCloudinary();
     localStorage.removeItem("image_id");
     setPreviewImg({ image: "", id: "" });
@@ -102,23 +102,23 @@ function ImageUploadForm({ imageInput, setImageInput }) {
           name="image-upload"
           aria-labelledby="image-upload-label"
           aria-describedby="image-loading image-error image-success"
-          aria-invalid={imageStatus === STATUS.error}
+          aria-invalid={imageStatus === FORM_STATUS.error}
           onChange={(e) => uploadImage(e)}
         />
 
-        {imageStatus === STATUS.loading ? (
+        {imageStatus === FORM_STATUS.loading ? (
           <span id="image-loading" role="status" className="loading-mssg">
             Loading...
           </span>
         ) : null}
 
-        {imageStatus === STATUS.error ? (
+        {imageStatus === FORM_STATUS.error ? (
           <span id="image-error" role="status" className="err-mssg">
             Error uploading image. Please try again.
           </span>
         ) : null}
 
-        {imageStatus === STATUS.success ? (
+        {imageStatus === FORM_STATUS.success ? (
           <span id="image-success" role="status" className="success-mssg">
             Success!
           </span>
