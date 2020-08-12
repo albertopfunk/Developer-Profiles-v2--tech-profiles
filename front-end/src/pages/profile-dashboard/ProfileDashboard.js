@@ -16,7 +16,6 @@ import DashboardBilling from "./billing/DashboardBilling";
 
 import { httpClient } from "../../global/helpers/http-requests";
 import { ProfileContext } from "../../global/context/user-profile/ProfileContext";
-import { PROMISE_STATUS } from "../../global/helpers/variables";
 import auth0Client from "../../auth/Auth";
 
 function ProfileDashboard() {
@@ -51,12 +50,12 @@ function ProfileDashboard() {
     if (err) {
       console.error(`${res.mssg} => ${res.err}`);
       auth0Client.signOut("authorize");
-      return PROMISE_STATUS.rejected;
+      return false;
     }
 
     setUser(res.data);
     setLoadingUser(false);
-    return PROMISE_STATUS.resolved;
+    return true;
   }
 
   async function editProfile(data) {
@@ -64,14 +63,14 @@ function ProfileDashboard() {
 
     if (err) {
       console.error(`${res.mssg} => ${res.err}`);
-      return;
+      return false;
     }
 
     const fullUserSuccess = await getFullUser(user.email);
     if (fullUserSuccess) {
-      return PROMISE_STATUS.resolved;
+      return true;
     } else {
-      return PROMISE_STATUS.rejected;
+      return false;
     }
   }
 
@@ -96,14 +95,14 @@ function ProfileDashboard() {
 
     if (err) {
       console.error(`${res.mssg} => ${res.err}`);
-      return;
+      return false;
     }
 
     const fullUserSuccess = await getFullUser(user.email);
     if (fullUserSuccess) {
-      return PROMISE_STATUS.resolved;
+      return true;
     } else {
-      return PROMISE_STATUS.rejected;
+      return false;
     }
   }
 
