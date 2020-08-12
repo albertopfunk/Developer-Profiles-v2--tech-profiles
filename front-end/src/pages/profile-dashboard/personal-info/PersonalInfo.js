@@ -16,6 +16,7 @@ maybe announce it when form is 'active'
 
 */
 
+let formSuccessWait;
 function PersonalInfo() {
   const { user, editProfile, setPreviewImg } = useContext(ProfileContext);
   const [formStatus, setFormStatus] = useState(FORM_STATUS.idle);
@@ -64,6 +65,12 @@ function PersonalInfo() {
     // since refs are re-set each time
     // eslint-disable-next-line
   }, [formStatus]);
+
+  useEffect(() => {
+    return () => {
+      clearTimeout(formSuccessWait);
+    };
+  }, []);
 
   function setFormInputs() {
     setFormStatus(FORM_STATUS.active);
@@ -277,21 +284,22 @@ function PersonalInfo() {
     setFormStatus(FORM_STATUS.loading);
     const result = await editProfile(inputs);
     if (result) {
-      // see if you can have a success state first to announce it
-      // put idle in a setTimeout and success regular, will need to cancel on unmount
-      setFormStatus(FORM_STATUS.idle);
+      formSuccessWait = setTimeout(() => {
+        setFormStatus(FORM_STATUS.idle);
+      }, 1000);
+      setFormStatus(FORM_STATUS.success);
     }
   }
 
   if (formStatus === FORM_STATUS.idle) {
     return (
-      <main aria-labelledby="personal-info-heading-1">
+      <main aria-labelledby="main-heading">
         <Helmet>
           <title>Dashboard Personal Info | Tech Profiles</title>
         </Helmet>
-        <h1 id="personal-info-heading-1">Personal Info</h1>
-        <section aria-labelledby="personal-info-heading-2">
-          <h2 id="personal-info-heading-2">Current Information</h2>
+        <h1 id="main-heading">Personal Info</h1>
+        <section aria-labelledby="current-information-heading">
+          <h2 id="current-information-heading">Current Information</h2>
           <button onClick={setFormInputs}>Edit Information</button>
           <ul>
             <li>First Name: {user.first_name || "None Set"}</li>
@@ -316,14 +324,13 @@ function PersonalInfo() {
   }
 
   return (
-    <main aria-labelledby="personal-info-heading">
+    <main aria-labelledby="main-heading">
       <Helmet>
         <title>Dashboard Personal Info | Tech Profiles</title>
       </Helmet>
-      <h1 id="personal-info-heading">Personal Info</h1>
-
-      <FormSection aria-labelledby="edit-info-heading">
-        <h2 id="edit-info-heading">Edit Information</h2>
+      <h1 id="main-heading">Personal Info</h1>
+      <FormSection aria-labelledby="edit-information-heading">
+        <h2 id="edit-information-heading">Edit Information</h2>
         <div
           aria-live="assertive"
           aria-relevant="additions removals"
@@ -367,7 +374,7 @@ function PersonalInfo() {
           )}
         </div>
 
-        <form onSubmit={(e) => submitEdit(e)}>
+        <form onSubmit={(e) => submitEdit(e)} aria-busy={formStatus === FORM_STATUS.loading}>
           <InputContainer>
             <label htmlFor="first-name">First Name:</label>
             <input
