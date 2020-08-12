@@ -37,6 +37,7 @@ function UserCard(props) {
 
   return (
     <UserArticle
+      id="profile-card"
       tabIndex="0"
       aria-posinset={props.index + 1}
       aria-setsize={props.usersLength}
