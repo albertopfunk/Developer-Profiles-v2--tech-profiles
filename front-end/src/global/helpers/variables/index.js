@@ -5,8 +5,3 @@ export const FORM_STATUS = {
   success: "success",
   error: "error",
 };
-
-export const PROMISE_STATUS = {
-  rejected: 'rejected',
-  resolved: 'resolved'
-}

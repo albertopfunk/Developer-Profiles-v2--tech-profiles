@@ -353,6 +353,10 @@ function WhereToFindYou() {
           </label>
           <input
             type="url"
+            // type is url but autoComplete is username since input can take
+            // usernames or urls with usernames
+            // allows users to autofill if they have pre-defined ones
+            // eslint-disable-next-line
             autoComplete="username"
             inputMode="url"
             id="github"
@@ -379,6 +383,7 @@ function WhereToFindYou() {
           </label>
           <input
             type="url"
+            // eslint-disable-next-line
             autoComplete="username"
             inputMode="url"
             id="twitter"
@@ -406,6 +411,7 @@ function WhereToFindYou() {
           </label>
           <input
             type="url"
+            // eslint-disable-next-line
             autoComplete="username"
             inputMode="url"
             id="linkedin"

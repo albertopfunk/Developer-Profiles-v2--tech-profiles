@@ -92,15 +92,12 @@ function ImageUploadForm({ imageInput, setImageInput }) {
   return (
     <div>
       <InputContainer>
-        <label htmlFor="image-upload" id="image-upload-label">
-          Image:
-        </label>
+        <label htmlFor="image-upload">Image:</label>
         <input
           type="file"
           id="image-upload"
           ref={imageRef}
           name="image-upload"
-          aria-labelledby="image-upload-label"
           aria-describedby="image-loading image-error image-success"
           aria-invalid={imageStatus === FORM_STATUS.error}
           onChange={(e) => uploadImage(e)}
@@ -179,7 +176,7 @@ const ImageContainer = styled.div`
     top: 5%;
     right: 5%;
     border: solid;
-    z-index: 1;
+    z-index: 5;
   }
 `;
 
