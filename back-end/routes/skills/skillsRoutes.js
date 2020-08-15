@@ -77,6 +77,11 @@ server.post("/autocomplete", async (req, res) => {
   try {
     let predictions = await skillsModel.getAllFiltered(req.body.value);
 
+    if (predictions.length === 0) {
+      res.status(404).json({ message: "Zero results found" });
+      return;
+    }
+
     if (predictions.length > 5) {
       predictions = predictions.slice(0, 5);
     }

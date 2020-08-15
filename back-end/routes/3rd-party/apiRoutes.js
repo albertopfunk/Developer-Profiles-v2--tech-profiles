@@ -111,6 +111,11 @@ server.post("/autocomplete", async (req, res) => {
   try {
     const response = await axios.post(url);
 
+    if (response.data.status === "ZERO_RESULTS") {
+      res.status(404).json({ message: "Zero results found" });
+      return;
+    }
+
     if (response.data.status !== "OK") {
       res.status(500).json({ message: "Error getting predictions" });
       return;
@@ -122,6 +127,7 @@ server.post("/autocomplete", async (req, res) => {
         id: prediction.place_id,
       };
     });
+
     res.status(200).json(predictions);
   } catch (err) {
     res.status(500).json({ message: "Error getting predictions" });
