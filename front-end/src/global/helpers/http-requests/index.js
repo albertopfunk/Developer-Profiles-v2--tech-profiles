@@ -43,7 +43,7 @@ export async function httpClient(method, url, data, config = {}) {
           ? err.response.data.message
           : `Unknown error with ${method} : ${url}`,
         mssg: `Error with ${method} : ${url}`,
-        status: 500,
+        status: err.response ? err.response.status : 500,
       },
       true,
     ];
