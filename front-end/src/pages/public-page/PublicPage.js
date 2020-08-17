@@ -144,10 +144,11 @@ class PublicPage extends Component {
       this.state.usersLength
     );
     return (
-      <Main>
+      <MainContainer>
+        {/* sr-only heading */}
         <Filters updateUsers={this.updateUsers} />
         {this.state.initialLoading || this.state.filtersLoading ? (
-          <h1>Loading...</h1>
+          <p>Loading...</p>
         ) : (
           <UserCards
             loadMoreUsers={this.loadMoreUsers}
@@ -157,12 +158,12 @@ class PublicPage extends Component {
             usersLength={this.state.usersLength}
           />
         )}
-      </Main>
+      </MainContainer>
     );
   }
 }
 
-const Main = styled.main`
+const MainContainer = styled.div`
   padding-top: 100px;
   background-color: lightblue;
 `;

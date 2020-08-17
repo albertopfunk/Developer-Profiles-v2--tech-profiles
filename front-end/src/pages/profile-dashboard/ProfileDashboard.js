@@ -49,6 +49,10 @@ function ProfileDashboard() {
 
     if (err) {
       console.error(`${res.mssg} => ${res.err}`);
+      // prob better not sign out user if err
+      // OR maybe make authorize page customizable
+      // you can sign out and put a custom message
+      // like 'unable to get profile, please sign in and try again'
       auth0Client.signOut("authorize");
       return false;
     }
@@ -110,33 +114,58 @@ function ProfileDashboard() {
     // main skeleton loader
     return (
       <div>
+        <Helmet>
+          <title>Profile Dashboard • Tech Profiles</title>
+        </Helmet>
         <h1>Loading...</h1>
       </div>
     );
   }
+
   return (
     <MainContainer>
       <Helmet>
-        <title>Dashboard | Tech Profiles</title>
+        <title>Profile Dashboard • Tech Profiles</title>
       </Helmet>
-      <nav aria-label="page">
-        <Link to={`${url}`}>Home</Link>
-        <br />
-        <Link to={`${url}/new`}>New user</Link>
-        <br />
-        <Link to={`${url}/personal-info`}>Personal Info</Link>
-        <br />
-        <Link to={`${url}/about-you`}>About You</Link>
-        <br />
-        <Link to={`${url}/where-to-find-you`}>Where to Find You</Link>
-        <br />
-        <Link to={`${url}/projects`}>Projects</Link>
-        <br />
-        <Link to={`${url}/education`}>Education</Link>
-        <br />
-        <Link to={`${url}/experience`}>Experience</Link>
-        <br />
-        <Link to={`${url}/billing`}>Billing</Link>
+
+      <nav id="page-navigation" aria-label="page">
+        <ul>
+          <li>
+            <Link to={`${url}`}>Home</Link>
+          </li>
+
+          <li>
+            <Link to={`${url}/new`}>New user</Link>
+          </li>
+
+          <li>
+            <Link to={`${url}/personal-info`}>Personal Info</Link>
+          </li>
+
+          <li>
+            <Link to={`${url}/about-you`}>About You</Link>
+          </li>
+
+          <li>
+            <Link to={`${url}/where-to-find-you`}>Where to Find You</Link>
+          </li>
+
+          <li>
+            <Link to={`${url}/projects`}>Projects</Link>
+          </li>
+
+          <li>
+            <Link to={`${url}/education`}>Education</Link>
+          </li>
+
+          <li>
+            <Link to={`${url}/experience`}>Experience</Link>
+          </li>
+
+          <li>
+            <Link to={`${url}/billing`}>Billing</Link>
+          </li>
+        </ul>
       </nav>
 
       <div className="content-container">

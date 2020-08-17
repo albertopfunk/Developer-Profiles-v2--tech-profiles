@@ -45,7 +45,7 @@ function PersonalInfo() {
     inputChange: false,
     inputStatus: FORM_STATUS.idle,
   });
-
+  
   let errorSummaryRef = React.createRef();
 
   useEffect(() => {
@@ -65,6 +65,8 @@ function PersonalInfo() {
     // since refs are re-set each time
     // eslint-disable-next-line
   }, [formStatus]);
+  
+  
 
   useEffect(() => {
     return () => {
@@ -293,9 +295,9 @@ function PersonalInfo() {
 
   if (formStatus === FORM_STATUS.idle) {
     return (
-      <main aria-labelledby="main-heading">
+      <main id="main-content" aria-labelledby="main-heading">
         <Helmet>
-          <title>Dashboard Personal Info | Tech Profiles</title>
+          <title>Profile Dashboard Personal Info • Tech Profiles</title>
         </Helmet>
         <h1 id="main-heading">Personal Info</h1>
         <section aria-labelledby="current-information-heading">
@@ -324,7 +326,7 @@ function PersonalInfo() {
   }
 
   return (
-    <main aria-labelledby="main-heading">
+    <main id="main-content" aria-labelledby="main-heading">
       <Helmet>
         <title>Dashboard Personal Info | Tech Profiles</title>
       </Helmet>
