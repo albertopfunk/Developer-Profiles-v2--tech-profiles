@@ -6,27 +6,40 @@ import { ReactComponent as MenuClose } from "./close.svg";
 
 import auth0Client from "../../auth/Auth";
 import { useState } from "react";
+import Announcer from "../../global/helpers/announcer";
 
 function MainHeader(props) {
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
+  const [shouldAnnounce, setShouldAnnounce] = useState(false);
 
   function signOut() {
     auth0Client.signOut();
     props.history.replace("/");
   }
 
-  function toggleMobileNav() {
-    setIsMobileNavOpen(!isMobileNavOpen);
+  function openMobileNav() {
+    setIsMobileNavOpen(true);
+    setShouldAnnounce(true);
   }
 
   function closeMobileNav() {
-    if (isMobileNavOpen) {
-      setIsMobileNavOpen(false);
-    }
+    setIsMobileNavOpen(false);
+    setShouldAnnounce(true);
+  }
+
+  function resetNav() {
+    setIsMobileNavOpen(false);
+    setShouldAnnounce(false);
   }
 
   return (
     <Header>
+      {shouldAnnounce && isMobileNavOpen ? (
+        <Announcer announcement="Opened Mobile Navigation" />
+      ) : null}
+      {shouldAnnounce && !isMobileNavOpen ? (
+        <Announcer announcement="Closed Mobile Navigation" />
+      ) : null}
       <nav aria-label="site" className="desktop-nav">
         <ul id="nav-logo">
           <li>
@@ -35,14 +48,14 @@ function MainHeader(props) {
                 src="https://res.cloudinary.com/dy5hgr3ht/image/upload/c_scale,h_65/v1594347155/tech-pros-v1-main/tech-profiles-logo.png"
                 alt=""
               />
-              <span className="sr-only">Home</span>
+              <span className="sr-only">Home Page</span>
             </Link>
           </li>
         </ul>
 
         <ul id="nav-menu">
           <li>
-            <Link to="/profiles">Profiles</Link>
+            <Link to="/">Profiles</Link>
           </li>
           {auth0Client.isAuthenticated() ? (
             <>
@@ -68,7 +81,7 @@ function MainHeader(props) {
       <nav aria-label="site" className="mobile-nav">
         <ul id="nav-logo">
           <li>
-            <Link onClick={closeMobileNav} to="/">
+            <Link onClick={resetNav} to="/">
               <img
                 src="https://res.cloudinary.com/dy5hgr3ht/image/upload/c_scale,h_45/v1594347155/tech-pros-v1-main/tech-profiles-logo.png"
                 alt=""
@@ -78,28 +91,31 @@ function MainHeader(props) {
           </li>
         </ul>
 
-        <button
-          id="menu-button"
-          aria-haspopup="true"
-          aria-controls="nav-menu"
-          onClick={toggleMobileNav}
-        >
-          {isMobileNavOpen ? (
-            <>
-              <span aria-hidden="true">
-                <MenuClose />
-              </span>
-              <span className="sr-only">Close</span>
-            </>
-          ) : (
-            <>
-              <span aria-hidden="true">
-                <BurgerMenu />
-              </span>
-              <span className="sr-only">Open</span>
-            </>
-          )}
-        </button>
+        {isMobileNavOpen ? (
+          <button
+            id="menu-button"
+            aria-haspopup="true"
+            aria-controls="nav-menu"
+            onClick={closeMobileNav}
+          >
+            <span aria-hidden="true">
+              <MenuClose />
+            </span>
+            <span className="sr-only">Close</span>
+          </button>
+        ) : (
+          <button
+            id="menu-button"
+            aria-haspopup="true"
+            aria-controls="nav-menu"
+            onClick={openMobileNav}
+          >
+            <span aria-hidden="true">
+              <BurgerMenu />
+            </span>
+            <span className="sr-only">Open</span>
+          </button>
+        )}
 
         <ul
           id="nav-menu"
@@ -107,14 +123,14 @@ function MainHeader(props) {
           className={`${isMobileNavOpen ? "_" : "hidden"}`}
         >
           <li>
-            <Link onClick={toggleMobileNav} to="/profiles">
+            <Link onClick={resetNav} to="/">
               Profiles
             </Link>
           </li>
           {auth0Client.isAuthenticated() ? (
             <>
               <li>
-                <Link onClick={toggleMobileNav} to="/profile-dashboard">
+                <Link onClick={resetNav} to="/profile-dashboard">
                   Dashboard
                 </Link>
               </li>
