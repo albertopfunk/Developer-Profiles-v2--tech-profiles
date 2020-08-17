@@ -13,6 +13,7 @@ import PrivateRoute from "./auth/PrivateRoute";
 import MainHeader from "./components/header/MainHeader";
 
 import auth0Client from "./auth/Auth";
+import { Helmet } from "react-helmet";
 
 class App extends React.Component {
   state = {
@@ -46,13 +47,16 @@ class App extends React.Component {
   render() {
     return (
       <>
+        <Helmet>
+          <title>Profiles Page • Tech Profiles</title>
+        </Helmet>
         <GlobalStyles />
         <MainHeader />
         <Switch>
-          <Route exact path="/">
+          {/* <Route exact path="/">
             <LandingPage />
-          </Route>
-          <Route path="/profiles">
+          </Route> */}
+          <Route exact path="/">
             <PublicPage />
           </Route>
           <Route path="/profile-dashboard">
