@@ -1,69 +1,70 @@
 import React, { useEffect, useState } from "react";
 import { withRouter } from "react-router-dom";
 import styled from "styled-components";
+import Announcer from "../announcer";
 
 function FocusReset({ location, children }) {
   const [previousLocation, setPreviousLocation] = useState("");
-  const [pageLoaded, setPageLoaded] = useState(false);
+  const [shouldAnnounce, setShouldAnnounce] = useState(true);
 
   let focusRef = React.createRef();
 
   useEffect(() => {
-    setTimeout(() => {
-      setPageLoaded(true);
-    }, 300);
-  }, []);
-
-  useEffect(() => {
     if (focusRef.current && previousLocation !== location.pathname) {
       setPreviousLocation(location.pathname);
+      setShouldAnnounce(true);
       window.scroll(0, 0);
       focusRef.current.focus();
     }
   }, [focusRef, previousLocation, location.pathname]);
 
-  useEffect(() => {
-    if (previousLocation !== location.pathname) {
-      setPageLoaded(false);
-      setTimeout(() => {
-        setPageLoaded(true);
-      }, 300);
-    }
-  }, [previousLocation, location.pathname]);
-
-  const currentLocation = location.pathname.split(/[/-]/).join(" ");
+  let currentLocation;
+  if (location.pathname.includes("dashboard")) {
+    currentLocation = location.pathname.split(/[/-]/).join(" ").trim();
+  } else {
+    currentLocation = "Profiles Page";
+  }
 
   return (
     <FocusContainer tabIndex="-1" ref={focusRef}>
-      {pageLoaded ? (
-        <p role="alert">{`Navigated to ${currentLocation} • Tech Profiles, press tab for skip links`}</p>
+      {shouldAnnounce ? (
+        <Announcer
+          announcement={`Navigated to ${currentLocation} • Tech Profiles, press tab for skip links`}
+        />
       ) : null}
       <ul>
         <li>
-          <a href={`${location.pathname}#main-heading`} className="skip-link">
+          <a href={`${location.pathname}#main-content`} className="skip-link">
             <span>Skip to Main Content</span>
           </a>
         </li>
 
-        {/* <li>
-          <a href={`${location.pathname}#filters-heading`} className="skip-link">
-            <span>Skip to Filters</span>
-          </a>
-        </li> */}
-
-        <li>
-          <a
-            href={`${location.pathname}#page-navigation`}
-            className="skip-link"
-          >
-            <span>Skip to Page Navigation</span>
-          </a>
-        </li>
-        <li>
-          <a href={`${location.pathname}#profile-card`} className="skip-link">
-            <span>Skip to User Card</span>
-          </a>
-        </li>
+        {currentLocation === "Profiles Page" ? (
+          <li>
+            <a href={`${location.pathname}#filters`} className="skip-link">
+              <span>Skip to Filters</span>
+            </a>
+          </li>
+        ) : (
+          <>
+            <li>
+              <a
+                href={`${location.pathname}#page-navigation`}
+                className="skip-link"
+              >
+                <span>Skip to Page Navigation</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href={`${location.pathname}#profile-card`}
+                className="skip-link"
+              >
+                <span>Skip to User Card</span>
+              </a>
+            </li>
+          </>
+        )}
       </ul>
       {children}
     </FocusContainer>

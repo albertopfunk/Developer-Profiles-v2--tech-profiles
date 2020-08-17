@@ -9,11 +9,11 @@ function UserCards(props) {
   }
 
   return (
-    <Section role="feed" aria-busy={props.isBusy}>
+    <MainContent id="main-content" role="feed" aria-busy={props.isBusy}>
       {props.usersLength === 0 ? (
-        <h1>No Users Here! - Reset filters BTN</h1>
+        <p>No Users Here! - Reset filters BTN</p>
       ) : (
-        <div>
+        <>
           {props.users.map((user, i) => {
             return (
               <UserCard
@@ -38,13 +38,11 @@ function UserCards(props) {
               />
             );
           })}
-        </div>
+        </>
       )}
 
       {props.isBusy ? (
-        <aside>
-          <h1>Loading...</h1>
-        </aside>
+          <p>Loading...</p>
       ) : (
         <div>
           {!props.canLoadMore ? (
@@ -57,11 +55,11 @@ function UserCards(props) {
           )}
         </div>
       )}
-    </Section>
+    </MainContent>
   );
 }
 
-const Section = styled.section`
+const MainContent = styled.main`
   border: solid orange;
   padding-left: 300px;
   .back-to-top {
