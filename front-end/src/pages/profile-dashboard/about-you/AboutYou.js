@@ -308,7 +308,7 @@ function AboutYou() {
     setEditInputs(false);
   }
 
-  console.log("===ABOUT YOU===", topSkillsN);
+  console.log("===ABOUT YOU===", topSkillsN, submitError);
 
   if (!editInputs) {
     return (
