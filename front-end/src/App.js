@@ -2,7 +2,6 @@ import React from "react";
 import { Route, Switch, withRouter } from "react-router-dom";
 import { GlobalStyles } from "./global/styles/GlobalStyles";
 
-import LandingPage from "./pages/landing-page/LandingPage";
 import PublicPage from "./pages/public-page/PublicPage";
 import ProfileDashboard from "./pages/profile-dashboard/ProfileDashboard";
 import PageNotAuthorized from "./pages/error-pages/not-authorized/PageNotAuthorized";
@@ -53,9 +52,6 @@ class App extends React.Component {
         <GlobalStyles />
         <MainHeader />
         <Switch>
-          {/* <Route exact path="/">
-            <LandingPage />
-          </Route> */}
           <Route exact path="/">
             <PublicPage />
           </Route>

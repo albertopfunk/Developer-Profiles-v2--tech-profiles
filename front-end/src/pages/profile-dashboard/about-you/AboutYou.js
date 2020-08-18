@@ -17,8 +17,20 @@ function AboutYou() {
   });
   const [interestedLocations, setInterestedLocations] = useState([]);
   const [locationsChange, setlocationsChange] = useState(false);
+
   const [topSkills, setTopSkills] = useState([]);
   const [topSkillsChange, setTopSkillsChange] = useState(false);
+  // new skills should be validated on blur
+  // they can still be added
+  // make error normal, on blur ull check new skills for validation
+  const [topSkillsN, setTopSkillsN] = useState({
+    existingSkills: [],
+    newSkills: [],
+    newSkillsTracker: 0,
+    inputChange: false,
+    inputError: false,
+  });
+
   const [additionalSkills, setAdditionalSkills] = useState([]);
   const [additionalSkillsChange, setAdditionalSkillsChange] = useState(false);
 
@@ -136,6 +148,9 @@ function AboutYou() {
 
     if (err) {
       console.error(`${res.mssg} => ${res.err}`);
+      if (res.err === "Zero results found") {
+        return [{ name: value, id: `new-${topSkillsN.newSkillsTracker}` }];
+      }
       return [];
     }
 
@@ -214,6 +229,23 @@ function AboutYou() {
       setTopSkillsChange(true);
     }
     setTopSkills(skills);
+
+
+
+    // now you can validate newSkills on blur, if any 
+    // don't value then inputErr will be true
+    const existingSkills = skills.filter((skill) => Number.isInteger(skill.id));
+    const newSkills = skills.filter((skill) => !Number.isInteger(skill.id));
+
+    setTopSkillsN({
+      ...topSkillsN,
+      existingSkills,
+      newSkills,
+      newSkillsTracker: topSkillsN.newSkillsTracker + 1,
+      inputChange: true,
+    });
+
+
   }
 
   function addTopSkillForReview(skill) {
@@ -276,7 +308,7 @@ function AboutYou() {
     setEditInputs(false);
   }
 
-  console.log("===ABOUT YOU===", user);
+  console.log("===ABOUT YOU===", topSkillsN);
 
   if (!editInputs) {
     return (

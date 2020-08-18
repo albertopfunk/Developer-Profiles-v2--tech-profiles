@@ -331,7 +331,7 @@ function WhereToFindYou() {
     setEditInputs(false);
   }
 
-  console.log("===Where to Find You===");
+  console.log("===Where to Find You===", submitError);
 
   if (!editInputs) {
     return (
