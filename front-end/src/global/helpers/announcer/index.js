@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
 let announcementWait;
-function Announcer({ announcement }) {
+function Announcer({ announcement, ariaId }) {
   const [pageLoaded, setPageLoaded] = useState(false);
 
   useEffect(() => {
@@ -14,10 +14,18 @@ function Announcer({ announcement }) {
   useEffect(() => {
     announcementWait = setTimeout(() => {
       setPageLoaded(true);
-    }, 300);
+    }, 500);
   }, []);
 
-  return <>{pageLoaded ? <Alert role="alert">{announcement}</Alert> : null}</>;
+  return (
+    <>
+      {pageLoaded ? (
+        <Alert id={ariaId} aria-live="assertive" aria-relevant="all" aria-atomic="true">
+          {announcement}
+        </Alert>
+      ) : null}
+    </>
+  );
 }
 
 const Alert = styled.p`
