@@ -7,6 +7,7 @@ import { ProfileContext } from "../../../global/context/user-profile/ProfileCont
 import { httpClient } from "../../../global/helpers/http-requests";
 import { validateInput } from "../../../global/helpers/validation";
 import { FORM_STATUS } from "../../../global/helpers/variables";
+import Announcer from "../../../global/helpers/announcer";
 
 /*
 
@@ -20,6 +21,7 @@ let formSuccessWait;
 function PersonalInfo() {
   const { user, editProfile, setPreviewImg } = useContext(ProfileContext);
   const [formStatus, setFormStatus] = useState(FORM_STATUS.idle);
+  const [shouldAnnounce, setShouldAnnounce] = useState(false);
   const [firstName, setFirstName] = useState({
     inputValue: "",
     inputChange: false,
@@ -45,28 +47,26 @@ function PersonalInfo() {
     inputChange: false,
     inputStatus: FORM_STATUS.idle,
   });
-  
-  let errorSummaryRef = React.createRef();
 
-  useEffect(() => {
-    if (formStatus === FORM_STATUS.error && errorSummaryRef.current) {
-      errorSummaryRef.current.focus();
-    }
-    // another issue with required dependencies causing bugs.
-    // I am using this since I need to set focus to the
-    // err summary element when user clicks submit with errors.
-    // since state needs to change for the element to appear
-    // and I can only set focus once the element appears, I have
-    // to set focus AFTER state changes and component renders.
-    // so I am using useEffect to handle that
-    // this works, but if I add the required errorSummaryRef
-    // it will shift focus on that Ref on ANY state change/render
-    // when form is in an error state
-    // since refs are re-set each time
-    // eslint-disable-next-line
-  }, [formStatus]);
-  
-  
+  // let errorSummaryRef = React.createRef();
+
+  // useEffect(() => {
+  //   if (formStatus === FORM_STATUS.error && errorSummaryRef.current) {
+  //     errorSummaryRef.current.focus();
+  //   }
+  //   // another issue with required dependencies causing bugs.
+  //   // I am using this since I need to set focus to the
+  //   // err summary element when user clicks submit with errors.
+  //   // since state needs to change for the element to appear
+  //   // and I can only set focus once the element appears, I have
+  //   // to set focus AFTER state changes and component renders.
+  //   // so I am using useEffect to handle that
+  //   // this works, but if I add the required errorSummaryRef
+  //   // it will shift focus on that Ref on ANY state change/render
+  //   // when form is in an error state
+  //   // since refs are re-set each time
+  //   // eslint-disable-next-line
+  // }, [formStatus]);
 
   useEffect(() => {
     return () => {
@@ -76,6 +76,7 @@ function PersonalInfo() {
 
   function setFormInputs() {
     setFormStatus(FORM_STATUS.active);
+    setShouldAnnounce(true);
 
     setFirstName({
       inputValue: user.first_name || "",
@@ -236,9 +237,10 @@ function PersonalInfo() {
       title.inputStatus === FORM_STATUS.error
     ) {
       setFormStatus(FORM_STATUS.error);
-      if (errorSummaryRef.current) {
-        errorSummaryRef.current.focus();
-      }
+      window.scrollTo(0, 0);
+      // if (errorSummaryRef.current) {
+      //   errorSummaryRef.current.focus();
+      // }
       return;
     }
 
@@ -295,11 +297,14 @@ function PersonalInfo() {
 
   if (formStatus === FORM_STATUS.idle) {
     return (
-      <main id="main-content" aria-labelledby="main-heading">
+      <main tabIndex="-1" id="main-content" aria-labelledby="main-heading">
         <Helmet>
           <title>Profile Dashboard Personal Info • Tech Profiles</title>
         </Helmet>
         <h1 id="main-heading">Personal Info</h1>
+        {shouldAnnounce ? (
+          <Announcer announcement="Form is idle, press edit information button to open" />
+        ) : null}
         <section aria-labelledby="current-information-heading">
           <h2 id="current-information-heading">Current Information</h2>
           <button onClick={setFormInputs}>Edit Information</button>
@@ -326,25 +331,40 @@ function PersonalInfo() {
   }
 
   return (
-    <main id="main-content" aria-labelledby="main-heading">
+    <main tabIndex="-1" id="main-content" aria-labelledby="main-heading">
       <Helmet>
         <title>Dashboard Personal Info | Tech Profiles</title>
       </Helmet>
       <h1 id="main-heading">Personal Info</h1>
+      {shouldAnnounce && formStatus === FORM_STATUS.active ? (
+        <Announcer
+          announcement="Form is active, inputs are validated but not required to submit"
+          ariaId="active-form-announcer"
+        />
+      ) : null}
+      {shouldAnnounce && formStatus === FORM_STATUS.success ? (
+        <Announcer
+          announcement="Successfully submitted information"
+          ariaId="success-form-announcer"
+        />
+      ) : null}
+
       <FormSection aria-labelledby="edit-information-heading">
         <h2 id="edit-information-heading">Edit Information</h2>
         <div
+          // ref={errorSummaryRef}
+          // tabIndex="-1"
           aria-live="assertive"
-          aria-relevant="additions removals"
+          aria-atomic="true"
+          aria-relevant="all"
           aria-labelledby="error-heading"
           className={`error-summary ${
             formStatus === FORM_STATUS.error ? "" : "hidden"
           }`}
         >
-          <h3 id="error-heading" ref={errorSummaryRef} tabIndex="0">
+          <h3 id="error-heading">
             Errors in Submission
           </h3>
-
           {firstName.inputStatus === FORM_STATUS.error ||
           lastName.inputStatus === FORM_STATUS.error ||
           title.inputStatus === FORM_STATUS.error ? (
@@ -372,11 +392,20 @@ function PersonalInfo() {
               </ul>
             </>
           ) : (
-            <p>No Errors, ready to submit</p>
+            <>
+              <p>No Errors, ready to submit</p>
+              {/* <Announcer
+                announcement="No Errors, ready to submit"
+                ariaId="no-errors-announcer"
+              /> */}
+            </>
           )}
         </div>
 
-        <form onSubmit={(e) => submitEdit(e)} aria-busy={formStatus === FORM_STATUS.loading}>
+        <form
+          onSubmit={(e) => submitEdit(e)}
+          aria-describedby="active-form-announcer success-form-announcer"
+        >
           <InputContainer>
             <label htmlFor="first-name">First Name:</label>
             <input
