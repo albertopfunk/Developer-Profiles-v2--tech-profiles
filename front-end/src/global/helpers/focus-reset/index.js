@@ -4,19 +4,22 @@ import styled from "styled-components";
 import Announcer from "../announcer";
 
 function FocusReset({ location, children }) {
-  const [previousLocation, setPreviousLocation] = useState("");
-  const [shouldAnnounce, setShouldAnnounce] = useState(true);
+  const [previousLocation, setPreviousLocation] = useState(null);
 
   let focusRef = React.createRef();
 
   useEffect(() => {
+    console.log('-- focus reset useEffect --')
+    if (previousLocation === null) {
+      setPreviousLocation(location.pathname)
+      return;
+    }
     if (focusRef.current && previousLocation !== location.pathname) {
-      setPreviousLocation(location.pathname);
-      setShouldAnnounce(true);
+      setPreviousLocation(location.pathname)
       window.scroll(0, 0);
       focusRef.current.focus();
     }
-  }, [focusRef, previousLocation, location.pathname]);
+  }, [focusRef, location.pathname, previousLocation]);
 
   let currentLocation;
   if (location.pathname.includes("dashboard")) {
@@ -25,13 +28,14 @@ function FocusReset({ location, children }) {
     currentLocation = "Profiles Page";
   }
 
+  console.log('-- Focus Reset --')
+
   return (
     <FocusContainer tabIndex="-1" ref={focusRef}>
-      {shouldAnnounce ? (
-        <Announcer
-          announcement={`Navigated to ${currentLocation} • Tech Profiles, press tab for skip links`}
-        />
-      ) : null}
+      <Announcer
+        announcement={`Navigated to ${currentLocation} • Tech Profiles, press tab for skip links`}
+        ariaId="navigation-announcer"
+      />
       <ul>
         <li>
           <a href={`${location.pathname}#main-content`} className="skip-link">

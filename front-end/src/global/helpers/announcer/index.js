@@ -18,13 +18,9 @@ function Announcer({ announcement, ariaId }) {
   }, []);
 
   return (
-    <>
-      {pageLoaded ? (
-        <Alert id={ariaId} aria-live="assertive" aria-relevant="all" aria-atomic="true">
-          {announcement}
-        </Alert>
-      ) : null}
-    </>
+    <div aria-live="assertive">
+      {pageLoaded ? <Alert id={ariaId}>{announcement}</Alert> : null}
+    </div>
   );
 }
 

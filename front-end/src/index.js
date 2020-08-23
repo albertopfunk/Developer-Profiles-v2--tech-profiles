@@ -2,13 +2,10 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter } from "react-router-dom";
 import App from "./App";
-import FocusReset from "./global/helpers/focus-reset";
 
 ReactDOM.render(
   <BrowserRouter>
-    <FocusReset>
-      <App />
-    </FocusReset>
+    <App />
   </BrowserRouter>,
   document.getElementById("root")
 );
