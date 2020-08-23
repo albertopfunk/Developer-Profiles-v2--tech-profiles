@@ -17,6 +17,7 @@ import DashboardBilling from "./billing/DashboardBilling";
 import { httpClient } from "../../global/helpers/http-requests";
 import { ProfileContext } from "../../global/context/user-profile/ProfileContext";
 import auth0Client from "../../auth/Auth";
+import Announcer from "../../global/helpers/announcer";
 
 function ProfileDashboard() {
   const [user, setUser] = useState(null);
@@ -110,6 +111,8 @@ function ProfileDashboard() {
     }
   }
 
+  console.log("-- Main Dashboard --")
+
   if (loadingUser) {
     // main skeleton loader
     return (
@@ -117,7 +120,11 @@ function ProfileDashboard() {
         <Helmet>
           <title>Profile Dashboard • Tech Profiles</title>
         </Helmet>
-        <h1>Loading...</h1>
+        <h1>Loading Information...</h1>
+        <Announcer
+        announcement="Loading Information"
+        ariaId="loading-information-announcement"
+      />
       </div>
     );
   }
