@@ -32,13 +32,15 @@ function MainHeader(props) {
     setShouldAnnounce(false);
   }
 
+  console.log('-- Main Header --')
+
   return (
     <Header>
       {shouldAnnounce && isMobileNavOpen ? (
-        <Announcer announcement="Opened Mobile Navigation" />
+        <Announcer announcement="Opened Mobile Navigation" ariaId="mobile-nav-announcer" />
       ) : null}
       {shouldAnnounce && !isMobileNavOpen ? (
-        <Announcer announcement="Closed Mobile Navigation" />
+        <Announcer announcement="Closed Mobile Navigation" ariaId="mobile-nav-announcer" />
       ) : null}
       <nav aria-label="site" className="desktop-nav">
         <ul id="nav-logo">
@@ -57,7 +59,7 @@ function MainHeader(props) {
           <li>
             <Link to="/">Profiles</Link>
           </li>
-          {auth0Client.isAuthenticated() ? (
+          {props.isValidated ? (
             <>
               <li>
                 <Link to="/profile-dashboard">Dashboard</Link>
@@ -127,7 +129,7 @@ function MainHeader(props) {
               Profiles
             </Link>
           </li>
-          {auth0Client.isAuthenticated() ? (
+          {props.isValidated ? (
             <>
               <li>
                 <Link onClick={resetNav} to="/profile-dashboard">
