@@ -3,7 +3,15 @@ import { Redirect, withRouter } from "react-router-dom";
 import auth0Client from "./Auth";
 
 function PrivateRoute(props) {
-  if (props.checkingSession) return <h3>Validating session...</h3>;
+  console.log("-- Private Route --");
+
+  if (props.checkingSession)
+    return (
+      <main>
+        <h3>Heloooooo jelloooooo mellooooooo...</h3>
+      </main>
+    );
+
   return (
     <>
       {auth0Client.isAuthenticated() ? (
