@@ -15,7 +15,6 @@ class Callback extends Component {
     } catch (err) {
       console.error("Unable to Authorize User =>", err);
       auth0Client.signOut("authorize");
-      this.props.history.replace("/authorize");
       return;
     }
 
@@ -41,7 +40,6 @@ class Callback extends Component {
     if (err) {
       console.error(`${res.mssg} => ${res.err}`);
       auth0Client.signOut("authorize");
-      this.props.history.replace("/authorize");
       return;
     }
 
@@ -51,11 +49,12 @@ class Callback extends Component {
       this.props.history.replace("/profile-dashboard");
     } else {
       console.error("Unable to Get User");
-      this.props.history.replace("/authorize");
+      auth0Client.signOut("authorize");
     }
   }
 
   render() {
+    console.log("-- Callback --");
     return <Main>Loading profile...</Main>;
   }
 }

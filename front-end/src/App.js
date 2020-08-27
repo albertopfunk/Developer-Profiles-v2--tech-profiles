@@ -15,7 +15,7 @@ import Announcer from "./global/helpers/announcer";
 import styled from "styled-components";
 import FocusReset from "./global/helpers/focus-reset";
 
-function App(props) {
+function App({ location }) {
   const [checkingSession, setCheckingSession] = useState(true);
   const [isValidated, setIsValidated] = useState(false);
 
@@ -24,22 +24,25 @@ function App(props) {
   }, []);
 
   async function validateSession() {
-    if (props.location.pathname === "/callback") {
+    if (location.pathname === "/callback") {
       setCheckingSession(false);
       return;
     }
+
     try {
       await auth0Client.silentAuth();
-      if (auth0Client.isAuthenticated()) {
-        setIsValidated(true);
-        setCheckingSession(false);
-      } else {
-        setIsValidated(false);
-        setCheckingSession(false);
-      }
+      setIsValidated(true);
+      setCheckingSession(false);
     } catch (err) {
       console.error("Silent Auth Failed", err);
-      auth0Client.signOut("authorize");
+      setIsValidated(false);
+      setCheckingSession(false);
+      if (
+        err.error === "login_required" &&
+        location.pathname.includes("dashboard")
+      ) {
+        auth0Client.signOut("authorize");
+      }
     }
   }
 
