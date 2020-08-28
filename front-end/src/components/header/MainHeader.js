@@ -47,26 +47,25 @@ function MainHeader({ isValidated, signOut, signIn }) {
     <Header>
       {shouldAnnounce && isMobileNavOpen ? (
         <Announcer
-          announcement="Opened Navigation"
-          ariaId="mobile-nav-announcer"
+          announcement="Opened SubMenu"
+          ariaId="nav-announcer"
           ariaLive="polite"
         />
       ) : null}
       {shouldAnnounce && !isMobileNavOpen ? (
         <Announcer
-          announcement="Closed Navigation"
-          ariaId="mobile-nav-announcer"
+          announcement="Closed SubMenu"
+          ariaId="nav-announcer"
           ariaLive="polite"
         />
       ) : null}
 
       <Nav aria-label="site">
-        <Link to="/">
+        <Link to="/" aria-hidden="true" tabIndex="-1">
           <img
             src="https://res.cloudinary.com/dy5hgr3ht/image/upload/c_scale,h_65/v1594347155/tech-pros-v1-main/tech-profiles-logo.png"
             alt=""
           />
-          <span className="sr-only">Home Page</span>
         </Link>
 
         {isValidated ? (
@@ -142,6 +141,7 @@ function MainHeader({ isValidated, signOut, signIn }) {
 const Header = styled.header`
   background-color: white;
   width: 100%;
+  height: 100px;
   padding: 0.3em 1em;
   position: fixed;
   left: 0;
