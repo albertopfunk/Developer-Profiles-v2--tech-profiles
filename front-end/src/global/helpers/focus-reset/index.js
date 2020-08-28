@@ -4,18 +4,13 @@ import styled from "styled-components";
 import Announcer from "../announcer";
 
 function FocusReset({ location, children }) {
-  const [previousLocation, setPreviousLocation] = useState(null);
+  const [previousLocation, setPreviousLocation] = useState(location.pathname);
 
   let focusRef = React.createRef();
 
   useEffect(() => {
-    console.log('-- focus reset useEffect --')
-    if (previousLocation === null) {
-      setPreviousLocation(location.pathname)
-      return;
-    }
     if (focusRef.current && previousLocation !== location.pathname) {
-      setPreviousLocation(location.pathname)
+      setPreviousLocation(location.pathname);
       window.scroll(0, 0);
       focusRef.current.focus();
     }
@@ -28,7 +23,15 @@ function FocusReset({ location, children }) {
     currentLocation = "Profiles Page";
   }
 
-  console.log('-- Focus Reset --')
+  console.log("-- Focus Reset --", location.pathname);
+
+  if (location.pathname === "/callback") {
+    return (
+      <FocusContainer tabIndex="-1" ref={focusRef}>
+        {children}
+      </FocusContainer>
+    );
+  }
 
   return (
     <FocusContainer tabIndex="-1" ref={focusRef}>
@@ -61,7 +64,7 @@ function FocusReset({ location, children }) {
             </li>
             <li>
               <a
-                href={`${location.pathname}#profile-card`}
+                href={`${location.pathname}#profile-card-container`}
                 className="skip-link"
               >
                 <span>Skip to User Card</span>
