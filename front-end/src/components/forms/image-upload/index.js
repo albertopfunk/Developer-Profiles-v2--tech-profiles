@@ -89,6 +89,8 @@ function ImageUploadForm({ imageInput, setImageInput }) {
     }
   }
 
+  console.log("-- Image Upload --")
+
   return (
     <div>
       <InputContainer>
@@ -98,6 +100,7 @@ function ImageUploadForm({ imageInput, setImageInput }) {
           id="image-upload"
           ref={imageRef}
           name="image-upload"
+          aria-label="profile-image-upload"
           aria-describedby="image-loading image-error image-success"
           aria-invalid={imageStatus === FORM_STATUS.error}
           onChange={(e) => uploadImage(e)}
