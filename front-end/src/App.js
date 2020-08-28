@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Route, Switch, withRouter } from "react-router-dom";
 import { GlobalStyles } from "./global/styles/GlobalStyles";
+import { Helmet } from "react-helmet";
 
 import PublicPage from "./pages/public-page/PublicPage";
 import ProfileDashboard from "./pages/profile-dashboard/ProfileDashboard";
@@ -76,8 +77,11 @@ function App({ location }) {
       <>
         <GlobalStyles />
         <HeaderSkeleton />
-        <MainContainerSkeleton>
-          <h1>Validating Session</h1>
+        <Helmet>
+          <title>Validating Session • Tech Profiles</title>
+        </Helmet>
+        <MainContainerSkeleton aria-labelledby="main-heading">
+          <h1 id="main-heading">Validating Session</h1>
         </MainContainerSkeleton>
       </>
     );
@@ -124,6 +128,7 @@ function App({ location }) {
 const HeaderSkeleton = styled.header`
   background-color: white;
   width: 100%;
+  height: 100px;
   padding: 0.3em 1em;
   position: fixed;
   left: 0;

@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import { withRouter } from "react-router-dom";
+import { Helmet } from "react-helmet";
+
 import auth0Client from "./Auth";
 import { httpClient } from "../global/helpers/http-requests";
 
@@ -55,13 +57,19 @@ class Callback extends Component {
 
   render() {
     console.log("-- Callback --");
-    return <Main>Loading profile...</Main>;
+    return (
+      <MainContainerSkeleton aria-labelledby="main-heading">
+        <Helmet>
+          <title>Validating Session • Tech Profiles</title>
+        </Helmet>
+        <h1 id="main-heading">Validating Session</h1>
+      </MainContainerSkeleton>
+    );
   }
 }
 
-const Main = styled.main`
+const MainContainerSkeleton = styled.main`
   width: 100%;
-  height: 100vh;
   padding-top: 100px;
   background-color: pink;
 `;
