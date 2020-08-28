@@ -417,7 +417,7 @@ function PersonalInfo() {
               onBlur={(e) => validateFirstNameInput(e.target.value)}
             />
             {firstName.inputStatus === FORM_STATUS.error ? (
-              <span id="first-name-error" role="status" className="err-mssg">
+              <span id="first-name-error" className="err-mssg">
                 First Name can only be alphabelical characters, no numbers
               </span>
             ) : null}
@@ -441,7 +441,7 @@ function PersonalInfo() {
               onBlur={(e) => validateLastNameInput(e.target.value)}
             />
             {lastName.inputStatus === FORM_STATUS.error ? (
-              <span id="last-name-error" role="status" className="err-mssg">
+              <span id="last-name-error" className="err-mssg">
                 Last Name can only be alphabelical characters, no numbers
               </span>
             ) : null}
@@ -520,7 +520,7 @@ function PersonalInfo() {
               onBlur={(e) => validateTitleInput(e.target.value)}
             />
             {title.inputStatus === FORM_STATUS.error ? (
-              <span id="title-error" role="status" className="err-mssg">
+              <span id="title-error" className="err-mssg">
                 Title can only be alphabelical characters, no numbers
               </span>
             ) : null}
