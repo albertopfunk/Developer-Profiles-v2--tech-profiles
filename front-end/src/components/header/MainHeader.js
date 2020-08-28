@@ -1,21 +1,19 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Link, withRouter } from "react-router-dom";
 import { ReactComponent as BurgerMenu } from "./menu.svg";
 import { ReactComponent as MenuClose } from "./close.svg";
 
-import auth0Client from "../../auth/Auth";
-import { useState } from "react";
 import Announcer from "../../global/helpers/announcer";
 
-function MainHeader(props) {
+let closeOnBlurWait;
+function MainHeader({ isValidated, signOut, signIn }) {
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
   const [shouldAnnounce, setShouldAnnounce] = useState(false);
 
-  function signOut() {
-    auth0Client.signOut();
-    props.history.replace("/");
-  }
+  useEffect(() => {
+    return () => clearTimeout(closeOnBlurWait);
+  });
 
   function openMobileNav() {
     setIsMobileNavOpen(true);
@@ -27,130 +25,116 @@ function MainHeader(props) {
     setShouldAnnounce(true);
   }
 
-  function resetNav() {
-    setIsMobileNavOpen(false);
-    setShouldAnnounce(false);
+  function closeMobileNavOnBlur() {
+    function closeOnBlurTimeOut() {
+      if (
+        document.activeElement.id !== "menu-button" &&
+        document.activeElement.className !== "nav-item"
+      ) {
+        setIsMobileNavOpen(false);
+        setShouldAnnounce(true);
+      }
+    }
+
+    closeOnBlurWait = setTimeout(() => {
+      closeOnBlurTimeOut();
+    }, 13);
   }
 
-  console.log('-- Main Header --')
+  console.log("-- Main Header --");
 
   return (
     <Header>
       {shouldAnnounce && isMobileNavOpen ? (
-        <Announcer announcement="Opened Mobile Navigation" ariaId="mobile-nav-announcer" />
+        <Announcer
+          announcement="Opened Navigation"
+          ariaId="mobile-nav-announcer"
+          ariaLive="polite"
+        />
       ) : null}
       {shouldAnnounce && !isMobileNavOpen ? (
-        <Announcer announcement="Closed Mobile Navigation" ariaId="mobile-nav-announcer" />
+        <Announcer
+          announcement="Closed Navigation"
+          ariaId="mobile-nav-announcer"
+          ariaLive="polite"
+        />
       ) : null}
-      <nav aria-label="site" className="desktop-nav">
-        <ul id="nav-logo">
-          <li>
-            <Link to="/">
-              <img
-                src="https://res.cloudinary.com/dy5hgr3ht/image/upload/c_scale,h_65/v1594347155/tech-pros-v1-main/tech-profiles-logo.png"
-                alt=""
-              />
-              <span className="sr-only">Home Page</span>
-            </Link>
-          </li>
-        </ul>
 
-        <ul id="nav-menu">
-          <li>
-            <Link to="/">Profiles</Link>
-          </li>
-          {props.isValidated ? (
-            <>
-              <li>
-                <Link to="/profile-dashboard">Dashboard</Link>
-              </li>
-              <li>
-                <button type="button" onClick={signOut}>
-                  Sign Out
-                </button>
-              </li>
-            </>
-          ) : (
-            <li>
-              <button type="button" onClick={auth0Client.signIn}>
-                Sign In
+      <Nav aria-label="site">
+        <Link to="/">
+          <img
+            src="https://res.cloudinary.com/dy5hgr3ht/image/upload/c_scale,h_65/v1594347155/tech-pros-v1-main/tech-profiles-logo.png"
+            alt=""
+          />
+          <span className="sr-only">Home Page</span>
+        </Link>
+
+        {isValidated ? (
+          <>
+            {isMobileNavOpen ? (
+              <button
+                id="menu-button"
+                aria-haspopup="true"
+                aria-controls="nav-group"
+                onClick={closeMobileNav}
+                onBlur={closeMobileNavOnBlur}
+              >
+                <span aria-hidden="true">
+                  <MenuClose />
+                </span>
+                <span className="sr-only">Close</span>
               </button>
-            </li>
-          )}
-        </ul>
-      </nav>
+            ) : (
+              <button
+                id="menu-button"
+                aria-haspopup="true"
+                aria-controls="nav-group"
+                onClick={openMobileNav}
+              >
+                <span aria-hidden="true">
+                  <BurgerMenu />
+                </span>
+                <span className="sr-only">Open</span>
+              </button>
+            )}
 
-      <nav aria-label="site" className="mobile-nav">
-        <ul id="nav-logo">
-          <li>
-            <Link onClick={resetNav} to="/">
-              <img
-                src="https://res.cloudinary.com/dy5hgr3ht/image/upload/c_scale,h_45/v1594347155/tech-pros-v1-main/tech-profiles-logo.png"
-                alt=""
-              />
-              <span className="sr-only">Home</span>
-            </Link>
-          </li>
-        </ul>
-
-        {isMobileNavOpen ? (
-          <button
-            id="menu-button"
-            aria-haspopup="true"
-            aria-controls="nav-menu"
-            onClick={closeMobileNav}
-          >
-            <span aria-hidden="true">
-              <MenuClose />
-            </span>
-            <span className="sr-only">Close</span>
-          </button>
-        ) : (
-          <button
-            id="menu-button"
-            aria-haspopup="true"
-            aria-controls="nav-menu"
-            onClick={openMobileNav}
-          >
-            <span aria-hidden="true">
-              <BurgerMenu />
-            </span>
-            <span className="sr-only">Open</span>
-          </button>
-        )}
-
-        <ul
-          id="nav-menu"
-          aria-labelledby="menu-button"
-          className={`${isMobileNavOpen ? "_" : "hidden"}`}
-        >
-          <li>
-            <Link onClick={resetNav} to="/">
-              Profiles
-            </Link>
-          </li>
-          {props.isValidated ? (
-            <>
+            <ul
+              id="nav-group"
+              aria-labelledby="menu-button"
+              className={`${isMobileNavOpen ? "_" : "hidden"}`}
+            >
               <li>
-                <Link onClick={resetNav} to="/profile-dashboard">
+                <Link to="/" className="nav-item" onBlur={closeMobileNavOnBlur}>
+                  Profiles
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/profile-dashboard"
+                  className="nav-item"
+                  onBlur={closeMobileNavOnBlur}
+                >
                   Dashboard
                 </Link>
               </li>
               <li>
-                <button type="button" onClick={signOut}>
+                <button
+                  className="nav-item"
+                  type="button"
+                  onClick={signOut}
+                  onBlur={closeMobileNavOnBlur}
+                >
                   Sign Out
                 </button>
               </li>
-            </>
-          ) : (
-            <li>
-              <button type="button" onClick={auth0Client.signIn}>
-                Sign In
-              </button>
-            </li>
-          )}
-        </ul>
-      </nav>
+            </ul>
+          </>
+        ) : (
+          <button type="button" onClick={signIn}>
+            Sign In
+          </button>
+        )}
+      </Nav>
     </Header>
   );
 }
@@ -163,25 +147,12 @@ const Header = styled.header`
   left: 0;
   top: 0;
   z-index: 10;
+`;
 
-  nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  ul,
-  li {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-
-  #nav-logo {
-    /* unsure why there is bottom 'content' padding */
-    /* adding padding top to even out a bit */
-    padding-top: 7.5px;
-  }
+const Nav = styled.nav`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 
   .sr-only {
     position: absolute;
@@ -198,35 +169,19 @@ const Header = styled.header`
     display: none;
   }
 
-  .mobile-nav {
-    #menu-button {
-      border: none;
-      background: white;
-      padding: 0.4em;
-    }
-
-    #nav-menu {
-      background-color: white;
-      padding: 0.7em;
-      position: absolute;
-      right: 0;
-      top: 100%;
-    }
-  }
-  .desktop-nav {
-    display: none;
+  #menu-button {
+    border: none;
+    background: white;
+    padding: 0.4em;
   }
 
-  @media (min-width: 1100px) {
-    .desktop-nav {
-      display: flex;
-      #nav-menu {
-        display: flex;
-      }
-    }
-    .mobile-nav {
-      display: none;
-    }
+  #nav-group {
+    list-style: none;
+    background-color: white;
+    padding: 0.7em;
+    position: absolute;
+    right: 0;
+    top: 100%;
   }
 `;
 

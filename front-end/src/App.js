@@ -61,15 +61,21 @@ function App({ location }) {
     }
   }
 
+  function signIn() {
+    auth0Client.signIn();
+  }
+
+  function signOut() {
+    auth0Client.signOut();
+  }
+
   console.log("-- App --");
 
   if (checkingSession) {
     return (
       <>
         <GlobalStyles />
-        {/* needs to be like loading user, a skeleton */}
         <HeaderSkeleton />
-
         <MainContainerSkeleton>
           <h1>Validating Session</h1>
         </MainContainerSkeleton>
@@ -85,7 +91,11 @@ function App({ location }) {
         ariaId="validating-session-announcement"
       />
       <FocusReset>
-        <MainHeader isValidated={isValidated} />
+        <MainHeader
+          isValidated={isValidated}
+          signOut={signOut}
+          signIn={signIn}
+        />
         <Switch>
           <Route exact path="/">
             <PublicPage />
