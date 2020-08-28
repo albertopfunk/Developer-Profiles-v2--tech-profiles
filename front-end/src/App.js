@@ -15,17 +15,32 @@ import Announcer from "./global/helpers/announcer";
 import styled from "styled-components";
 import FocusReset from "./global/helpers/focus-reset";
 
+// callback handles validation when user signs in
+// since it only routes to dashboard when validation is successful
+// i'm presetting state so cb doesn't route to dash with invalidated state
 function App({ location }) {
-  const [checkingSession, setCheckingSession] = useState(true);
-  const [isValidated, setIsValidated] = useState(false);
+  const [checkingSession, setCheckingSession] = useState(() =>
+    location.pathname === "/callback" ? false : true
+  );
+  const [isValidated, setIsValidated] = useState(() =>
+    location.pathname === "/callback" ? true : false
+  );
 
   useEffect(() => {
     validateSession();
+    // another issue with useEffect
+    // eslint requires validateSession as a dep
+    // when I add it there, react warns to add the whole
+    // function inside useEffect, when I do that
+    // deps will now require location.pathname
+    // adding location.pathname to the deps will cause
+    // useEffect to run on every navigation change
+    // rechecking and changing loading states each time
+    // eslint-disable-next-line
   }, []);
 
   async function validateSession() {
     if (location.pathname === "/callback") {
-      setCheckingSession(false);
       return;
     }
 
@@ -54,10 +69,7 @@ function App({ location }) {
         <GlobalStyles />
         {/* needs to be like loading user, a skeleton */}
         <HeaderSkeleton />
-        <Announcer
-          announcement="Validating Session"
-          ariaId="validating-session-announcement"
-        />
+
         <MainContainerSkeleton>
           <h1>Validating Session</h1>
         </MainContainerSkeleton>
@@ -109,7 +121,7 @@ const HeaderSkeleton = styled.header`
   z-index: 10;
 `;
 
-const MainContainerSkeleton = styled.div`
+const MainContainerSkeleton = styled.main`
   width: 100%;
   padding-top: 100px;
   background-color: pink;
