@@ -48,25 +48,25 @@ function PersonalInfo() {
     inputStatus: FORM_STATUS.idle,
   });
 
-  // let errorSummaryRef = React.createRef();
+  let errorSummaryRef = React.createRef();
 
-  // useEffect(() => {
-  //   if (formStatus === FORM_STATUS.error && errorSummaryRef.current) {
-  //     errorSummaryRef.current.focus();
-  //   }
-  //   // another issue with required dependencies causing bugs.
-  //   // I am using this since I need to set focus to the
-  //   // err summary element when user clicks submit with errors.
-  //   // since state needs to change for the element to appear
-  //   // and I can only set focus once the element appears, I have
-  //   // to set focus AFTER state changes and component renders.
-  //   // so I am using useEffect to handle that
-  //   // this works, but if I add the required errorSummaryRef
-  //   // it will shift focus on that Ref on ANY state change/render
-  //   // when form is in an error state
-  //   // since refs are re-set each time
-  //   // eslint-disable-next-line
-  // }, [formStatus]);
+  useEffect(() => {
+    if (formStatus === FORM_STATUS.error && errorSummaryRef.current) {
+      errorSummaryRef.current.focus();
+    }
+    // another issue with required dependencies causing bugs.
+    // I am using this since I need to set focus to the
+    // err summary element when user clicks submit with errors.
+    // since state needs to change for the element to appear
+    // and I can only set focus once the element appears, I have
+    // to set focus AFTER state changes and component renders.
+    // so I am using useEffect to handle that
+    // this works, but if I add the required errorSummaryRef
+    // it will shift focus on that Ref on ANY state change/render
+    // when form is in an error state
+    // since refs are re-set each time
+    // eslint-disable-next-line
+  }, [formStatus]);
 
   useEffect(() => {
     return () => {
@@ -237,10 +237,9 @@ function PersonalInfo() {
       title.inputStatus === FORM_STATUS.error
     ) {
       setFormStatus(FORM_STATUS.error);
-      window.scrollTo(0, 0);
-      // if (errorSummaryRef.current) {
-      //   errorSummaryRef.current.focus();
-      // }
+      if (errorSummaryRef.current) {
+        errorSummaryRef.current.focus();
+      }
       return;
     }
 
@@ -294,6 +293,8 @@ function PersonalInfo() {
       setFormStatus(FORM_STATUS.success);
     }
   }
+
+  console.log("-- Personal Info Dashboard --");
 
   if (formStatus === FORM_STATUS.idle) {
     return (
@@ -351,56 +352,48 @@ function PersonalInfo() {
 
       <FormSection aria-labelledby="edit-information-heading">
         <h2 id="edit-information-heading">Edit Information</h2>
-        <div
-          // ref={errorSummaryRef}
-          // tabIndex="-1"
-          aria-live="assertive"
-          aria-atomic="true"
-          aria-relevant="all"
-          aria-labelledby="error-heading"
-          className={`error-summary ${
-            formStatus === FORM_STATUS.error ? "" : "hidden"
-          }`}
-        >
-          <h3 id="error-heading">
-            Errors in Submission
-          </h3>
-          {firstName.inputStatus === FORM_STATUS.error ||
-          lastName.inputStatus === FORM_STATUS.error ||
-          title.inputStatus === FORM_STATUS.error ? (
-            <>
-              <strong id="error-instructions">
-                Please address the following errors and re-submit the form:
-              </strong>
-              {/* // header is fixed so it covers input */}
-              <ul id="error-group" aria-labelledby="error-instructions">
-                {firstName.inputStatus === FORM_STATUS.error ? (
-                  <li>
-                    <a href="#first-name">First Name Error</a>
-                  </li>
-                ) : null}
-                {lastName.inputStatus === FORM_STATUS.error ? (
-                  <li>
-                    <a href="#last-name">Last Name Error</a>
-                  </li>
-                ) : null}
-                {title.inputStatus === FORM_STATUS.error ? (
-                  <li>
-                    <a href="#title">Title Error</a>
-                  </li>
-                ) : null}
-              </ul>
-            </>
-          ) : (
-            <>
-              <p>No Errors, ready to submit</p>
-              {/* <Announcer
-                announcement="No Errors, ready to submit"
-                ariaId="no-errors-announcer"
-              /> */}
-            </>
-          )}
-        </div>
+
+        {formStatus === FORM_STATUS.error ? (
+          <div ref={errorSummaryRef} tabIndex="-1">
+            <h3 id="error-heading">Errors in Submission</h3>
+            {firstName.inputStatus === FORM_STATUS.error ||
+            lastName.inputStatus === FORM_STATUS.error ||
+            title.inputStatus === FORM_STATUS.error ? (
+              <>
+                <strong>
+                  Please address the following errors and re-submit the form:
+                </strong>
+                {/* // header is fixed so it covers input */}
+                <ul id="error-group">
+                  {firstName.inputStatus === FORM_STATUS.error ? (
+                    <li>
+                      <a href="#first-name">First Name Error</a>
+                    </li>
+                  ) : null}
+                  {lastName.inputStatus === FORM_STATUS.error ? (
+                    <li>
+                      <a href="#last-name">Last Name Error</a>
+                    </li>
+                  ) : null}
+                  {title.inputStatus === FORM_STATUS.error ? (
+                    <li>
+                      <a href="#title">Title Error</a>
+                    </li>
+                  ) : null}
+                </ul>
+              </>
+            ) : (
+              <>
+                <p>No Errors, ready to submit</p>
+                <Announcer
+                  announcement="No Errors, ready to submit"
+                  ariaId="no-errors-announcer"
+                  ariaLive="polite"
+                />
+              </>
+            )}
+          </div>
+        ) : null}
 
         <form
           onSubmit={(e) => submitEdit(e)}
