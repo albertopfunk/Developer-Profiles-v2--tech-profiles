@@ -298,7 +298,7 @@ function PersonalInfo() {
 
   if (formStatus === FORM_STATUS.idle) {
     return (
-      <main tabIndex="-1" id="main-content" aria-labelledby="main-heading">
+      <main id="main-content" tabIndex="-1" aria-labelledby="main-heading">
         <Helmet>
           <title>Profile Dashboard Personal Info • Tech Profiles</title>
         </Helmet>
@@ -332,7 +332,7 @@ function PersonalInfo() {
   }
 
   return (
-    <main tabIndex="-1" id="main-content" aria-labelledby="main-heading">
+    <main id="main-content" tabIndex="-1" aria-labelledby="main-heading">
       <Helmet>
         <title>Dashboard Personal Info | Tech Profiles</title>
       </Helmet>

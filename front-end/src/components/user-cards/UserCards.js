@@ -9,7 +9,7 @@ function UserCards(props) {
   }
 
   return (
-    <MainContent id="main-content" role="feed" aria-busy={props.isBusy}>
+    <MainContent id="main-content" tabIndex="-1" role="feed">
       {props.usersLength === 0 ? (
         <p>No Users Here! - Reset filters BTN</p>
       ) : (

@@ -33,12 +33,14 @@ Control + Home: Move focus to the first focusable element before the feed.
 function UserCard(props) {
   const [isCardExpanded, setIsCardExpanded] = useState(false);
 
-  console.log("=====USER CARD=====");
+  console.log("-- User Card --")
 
   return (
+    // needs a heading
     <UserArticle
       id="profile-card"
-      tabIndex="0"
+      tabIndex={props.dashboard ? "-1" : "0"}
+      aria-label="profileCard"
       aria-posinset={props.index + 1}
       aria-setsize={props.usersLength}
       aria-expanded={isCardExpanded}

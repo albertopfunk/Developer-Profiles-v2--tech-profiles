@@ -8,7 +8,7 @@ import SortingFilter from "./SortingFilter";
 
 function Filters(props) {
   return (
-    <Aside id="filters">
+    <Aside id="filters" tabIndex="-1">
       <SortingFilter updateUsers={props.updateUsers} />
       <AreaOfWorkFilter updateUsers={props.updateUsers} />
       <CurrentLocationFilter updateUsers={props.updateUsers} />

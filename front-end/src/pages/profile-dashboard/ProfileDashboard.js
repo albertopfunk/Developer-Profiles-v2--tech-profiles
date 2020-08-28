@@ -50,10 +50,6 @@ function ProfileDashboard() {
 
     if (err) {
       console.error(`${res.mssg} => ${res.err}`);
-      // prob better not sign out user if err
-      // OR maybe make authorize page customizable
-      // you can sign out and put a custom message
-      // like 'unable to get profile, please sign in and try again'
       auth0Client.signOut("authorize");
       return false;
     }
@@ -111,7 +107,7 @@ function ProfileDashboard() {
     }
   }
 
-  console.log("-- Main Dashboard --")
+  console.log("-- Main Dashboard --");
 
   if (loadingUser) {
     // main skeleton loader
@@ -122,9 +118,9 @@ function ProfileDashboard() {
         </Helmet>
         <h1>Loading Information...</h1>
         <Announcer
-        announcement="Loading Information"
-        ariaId="loading-information-announcement"
-      />
+          announcement="Loading Information"
+          ariaId="loading-information-announcement"
+        />
       </div>
     );
   }
@@ -135,7 +131,7 @@ function ProfileDashboard() {
         <title>Profile Dashboard • Tech Profiles</title>
       </Helmet>
 
-      <nav id="page-navigation" aria-label="page">
+      <nav id="page-navigation" tabIndex="-1" aria-label="page">
         <ul>
           <li>
             <Link to={`${url}`}>Home</Link>
@@ -223,7 +219,7 @@ function ProfileDashboard() {
           </Switch>
         </ProfileContext.Provider>
 
-        <aside>
+        <aside id="profile-card-container" tabIndex="0">
           <UserCard
             dashboard
             previewImg={previewImg.image}
