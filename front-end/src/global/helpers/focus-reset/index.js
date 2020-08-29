@@ -5,25 +5,40 @@ import Announcer from "../announcer";
 
 function FocusReset({ location, children }) {
   const [previousLocation, setPreviousLocation] = useState(location.pathname);
+  const [shouldAnnounce, setShouldAnnounce] = useState(false);
 
   let focusRef = React.createRef();
 
   useEffect(() => {
     if (focusRef.current && previousLocation !== location.pathname) {
       setPreviousLocation(location.pathname);
+      setShouldAnnounce(true);
       window.scroll(0, 0);
       focusRef.current.focus();
     }
   }, [focusRef, location.pathname, previousLocation]);
 
+  useEffect(() => {
+    if (!shouldAnnounce) return;
+    if (previousLocation === location.pathname) {
+      setShouldAnnounce(false);
+    }
+  }, [location.pathname, previousLocation, shouldAnnounce]);
+
   let currentLocation;
-  if (location.pathname.includes("dashboard")) {
+  if (location.pathname === "/") {
+    currentLocation = "profiles page";
+  } else if (location.pathname.includes("dashboard")) {
     currentLocation = location.pathname.split(/[/-]/).join(" ").trim();
+  } else if (location.pathname === "/authorize") {
+    currentLocation = "authorize page";
+  } else if (location.pathname === "/private-policy") {
+    currentLocation = "private policy page";
   } else {
-    currentLocation = "Profiles Page";
+    currentLocation = "page not found";
   }
 
-  console.log("-- Focus Reset --", location.pathname);
+  console.log("-- Focus Reset --");
 
   if (location.pathname === "/callback") {
     return (
@@ -35,10 +50,12 @@ function FocusReset({ location, children }) {
 
   return (
     <FocusContainer tabIndex="-1" ref={focusRef}>
-      <Announcer
-        announcement={`Navigated to ${currentLocation} • Tech Profiles, press tab for skip links`}
-        ariaId="navigation-announcer"
-      />
+      {shouldAnnounce ? (
+        <Announcer
+          announcement={`Navigated to ${currentLocation} • Tech Profiles, press tab for skip links`}
+          ariaId="navigation-announcer"
+        />
+      ) : null}
       <ul>
         <li>
           <a href={`${location.pathname}#main-content`} className="skip-link">
@@ -46,13 +63,15 @@ function FocusReset({ location, children }) {
           </a>
         </li>
 
-        {currentLocation === "Profiles Page" ? (
+        {currentLocation === "profiles page" ? (
           <li>
             <a href={`${location.pathname}#filters`} className="skip-link">
               <span>Skip to Filters</span>
             </a>
           </li>
-        ) : (
+        ) : null}
+
+        {currentLocation.includes("dashboard") ? (
           <>
             <li>
               <a
@@ -71,7 +90,7 @@ function FocusReset({ location, children }) {
               </a>
             </li>
           </>
-        )}
+        ) : null}
       </ul>
       {children}
     </FocusContainer>
