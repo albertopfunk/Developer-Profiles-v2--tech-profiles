@@ -334,7 +334,7 @@ function PersonalInfo() {
   return (
     <main id="main-content" tabIndex="-1" aria-labelledby="main-heading">
       <Helmet>
-        <title>Dashboard Personal Info | Tech Profiles</title>
+        <title>Dashboard Personal Info • Tech Profiles</title>
       </Helmet>
       <h1 id="main-heading">Personal Info</h1>
       {shouldAnnounce && formStatus === FORM_STATUS.active ? (
@@ -410,7 +410,7 @@ function PersonalInfo() {
               className={`input ${
                 firstName.inputStatus === FORM_STATUS.error ? "input-err" : ""
               }`}
-              aria-describedby="first-name-error"
+              aria-describedby="first-name-error first-name-success"
               aria-invalid={firstName.inputStatus === FORM_STATUS.error}
               value={firstName.inputValue}
               onChange={(e) => setFirstNameInput(e.target.value)}
@@ -419,6 +419,11 @@ function PersonalInfo() {
             {firstName.inputStatus === FORM_STATUS.error ? (
               <span id="first-name-error" className="err-mssg">
                 First Name can only be alphabelical characters, no numbers
+              </span>
+            ) : null}
+            {firstName.inputStatus === FORM_STATUS.success ? (
+              <span id="first-name-success" className="success-mssg">
+                First Name is Validated
               </span>
             ) : null}
           </InputContainer>
@@ -434,7 +439,7 @@ function PersonalInfo() {
               className={`input ${
                 lastName.inputStatus === FORM_STATUS.error ? "input-err" : ""
               }`}
-              aria-describedby="last-name-error"
+              aria-describedby="last-name-error last-name-success"
               aria-invalid={lastName.inputStatus === FORM_STATUS.error}
               value={lastName.inputValue}
               onChange={(e) => setLastNameInput(e.target.value)}
@@ -443,6 +448,11 @@ function PersonalInfo() {
             {lastName.inputStatus === FORM_STATUS.error ? (
               <span id="last-name-error" className="err-mssg">
                 Last Name can only be alphabelical characters, no numbers
+              </span>
+            ) : null}
+            {lastName.inputStatus === FORM_STATUS.success ? (
+              <span id="last-name-success" className="success-mssg">
+                Last Name is Validated
               </span>
             ) : null}
           </InputContainer>
@@ -513,7 +523,7 @@ function PersonalInfo() {
               className={`input ${
                 title.inputStatus === FORM_STATUS.error ? "input-err" : ""
               }`}
-              aria-describedby="title-error"
+              aria-describedby="title-error title-success"
               aria-invalid={title.inputStatus === FORM_STATUS.error}
               value={title.inputValue}
               onChange={(e) => setTitleInput(e.target.value)}
@@ -522,6 +532,11 @@ function PersonalInfo() {
             {title.inputStatus === FORM_STATUS.error ? (
               <span id="title-error" className="err-mssg">
                 Title can only be alphabelical characters, no numbers
+              </span>
+            ) : null}
+            {title.inputStatus === FORM_STATUS.success ? (
+              <span id="title-success" className="success-mssg">
+                Title is Validated
               </span>
             ) : null}
           </InputContainer>
@@ -570,6 +585,10 @@ const InputContainer = styled.div`
   }
   .err-mssg {
     color: red;
+    font-size: 0.7rem;
+  }
+  .success-mssg {
+    color: green;
     font-size: 0.7rem;
   }
 `;
