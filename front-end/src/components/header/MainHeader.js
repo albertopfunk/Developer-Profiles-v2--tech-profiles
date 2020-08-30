@@ -32,7 +32,7 @@ function MainHeader({ isValidated, signOut, signIn }) {
         document.activeElement.className !== "nav-item"
       ) {
         setIsMobileNavOpen(false);
-        setShouldAnnounce(true);
+        setShouldAnnounce(false);
       }
     }
 
