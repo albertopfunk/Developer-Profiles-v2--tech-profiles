@@ -304,7 +304,10 @@ function PersonalInfo() {
         </Helmet>
         <h1 id="main-heading">Personal Info</h1>
         {shouldAnnounce ? (
-          <Announcer announcement="Form is idle, press edit information button to open" />
+          <Announcer
+            announcement="Form is idle, press edit information button to open"
+            ariaId="form-idle-announcement"
+          />
         ) : null}
         <section aria-labelledby="current-information-heading">
           <h2 id="current-information-heading">Current Information</h2>

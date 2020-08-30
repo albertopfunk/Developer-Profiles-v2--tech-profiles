@@ -54,6 +54,7 @@ function ProfileDashboard() {
       return false;
     }
 
+    // batch
     setUser(res.data);
     setLoadingUser(false);
     return true;
@@ -117,20 +118,17 @@ function ProfileDashboard() {
           <title>Profile Dashboard • Tech Profiles</title>
         </Helmet>
         <h1>Loading Information...</h1>
-        <Announcer
-          announcement="Loading Information"
-          ariaId="loading-information-announcement"
-        />
       </div>
     );
   }
 
   return (
     <MainContainer>
-      <Helmet>
-        <title>Profile Dashboard • Tech Profiles</title>
-      </Helmet>
-
+      <Announcer
+        announcement="information loaded"
+        ariaId="info-loaded-announcement"
+        ariaLive="polite"
+      />
       <nav id="page-navigation" tabIndex="-1" aria-label="page">
         <ul>
           <li>
