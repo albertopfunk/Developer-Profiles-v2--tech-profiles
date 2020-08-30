@@ -1,9 +1,11 @@
 import React, { Component } from "react";
 import styled from "styled-components";
+import { Helmet } from "react-helmet";
 
 import Filters from "../../components/forms/filters";
 import UserCards from "../../components/user-cards/UserCards";
 import { httpClient } from "../../global/helpers/http-requests";
+import Announcer from "../../global/helpers/announcer";
 
 class PublicPage extends Component {
   state = {
@@ -145,18 +147,28 @@ class PublicPage extends Component {
     );
     return (
       <MainContainer>
+        <Helmet>
+          <title>Profiles • Tech Profiles</title>
+        </Helmet>
         {/* sr-only heading */}
         <Filters updateUsers={this.updateUsers} />
         {this.state.initialLoading || this.state.filtersLoading ? (
           <p>Loading...</p>
         ) : (
-          <UserCards
-            loadMoreUsers={this.loadMoreUsers}
-            canLoadMore={this.state.noMoreUsers}
-            isBusy={this.state.usersLoading}
-            users={this.state.users}
-            usersLength={this.state.usersLength}
-          />
+          <>
+            <Announcer
+              announcement={`Showing ${this.state.users.length} Users`}
+              ariaId="users-feed-announcement"
+              ariaLive="polite"
+            />
+            <UserCards
+              loadMoreUsers={this.loadMoreUsers}
+              canLoadMore={this.state.noMoreUsers}
+              isBusy={this.state.usersLoading}
+              users={this.state.users}
+              usersLength={this.state.usersLength}
+            />
+          </>
         )}
       </MainContainer>
     );
