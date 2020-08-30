@@ -11,19 +11,12 @@ function FocusReset({ location, children }) {
 
   useEffect(() => {
     if (focusRef.current && previousLocation !== location.pathname) {
+      if (!shouldAnnounce) setShouldAnnounce(true);
       setPreviousLocation(location.pathname);
-      setShouldAnnounce(true);
       window.scroll(0, 0);
       focusRef.current.focus();
     }
-  }, [focusRef, location.pathname, previousLocation]);
-
-  useEffect(() => {
-    if (!shouldAnnounce) return;
-    if (previousLocation === location.pathname) {
-      setShouldAnnounce(false);
-    }
-  }, [location.pathname, previousLocation, shouldAnnounce]);
+  }, [focusRef, location.pathname, previousLocation, shouldAnnounce]);
 
   let currentLocation;
   if (location.pathname === "/") {
