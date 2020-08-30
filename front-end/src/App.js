@@ -47,6 +47,7 @@ function App({ location }) {
 
     try {
       await auth0Client.silentAuth();
+      // batch
       setIsValidated(true);
       setCheckingSession(false);
     } catch (err) {
@@ -90,10 +91,6 @@ function App({ location }) {
   return (
     <>
       <GlobalStyles />
-      <Announcer
-        announcement="Page Loaded"
-        ariaId="validating-session-announcement"
-      />
       <FocusReset>
         <MainHeader
           isValidated={isValidated}
