@@ -14,11 +14,13 @@ function Announcer({ announcement, ariaId, ariaLive = "assertive" }) {
   useEffect(() => {
     announcementWait = setTimeout(() => {
       setPageLoaded(true);
-    }, 300);
+    }, 150);
   }, []);
 
+  console.log("-- announcer --");
+
   return (
-    <div aria-live={ariaLive} aria-atomic="true" aria-relevant="additions">
+    <div aria-live={ariaLive} aria-atomic="true" aria-relevant="additions text">
       {pageLoaded ? <Alert id={ariaId}>{announcement}</Alert> : null}
     </div>
   );
