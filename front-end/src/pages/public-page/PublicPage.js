@@ -157,7 +157,7 @@ class PublicPage extends Component {
         ) : (
           <>
             <Announcer
-              announcement={`Showing ${this.state.users.length} Users`}
+              announcement={`Showing ${this.state.users.length} of ${this.state.usersLength} Users`}
               ariaId="users-feed-announcement"
               ariaLive="polite"
             />
