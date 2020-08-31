@@ -12,7 +12,6 @@ import Callback from "./auth/Callback";
 import MainHeader from "./components/header/MainHeader";
 
 import auth0Client from "./auth/Auth";
-import Announcer from "./global/helpers/announcer";
 import styled from "styled-components";
 import FocusReset from "./global/helpers/focus-reset";
 
