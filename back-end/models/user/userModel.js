@@ -80,8 +80,6 @@ async function getAllFiltered(filters) {
       users = [...users, ...tempUsers];
     }
 
-    users = users.filter((user) => user.stripe_subscription_name !== null);
-
     if (users.length === 0) {
       return users;
     }
@@ -107,6 +105,8 @@ async function getAllFiltered(filters) {
   if (sortChoice !== "acending(oldest-newest)") {
     users = sortingHelpers.sortUsers(users, sortChoice);
   }
+
+  users = users.filter((user) => user.stripe_subscription_name !== null);
 
   return users;
 }
