@@ -24,7 +24,11 @@ function UserImage(props) {
           }}
           src={props.previewImg || props.image}
           onError={handleBrokenLink}
-          alt="user-avatar"
+          alt={
+            props.previewImg
+              ? "current profile pic preview"
+              : "profile pic"
+          }
         />
       ) : (
         <p>Avatar Image</p>
