@@ -1,73 +1,92 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import styled from "styled-components";
+import { Helmet } from "react-helmet";
+
+import AutoComplete from "../../../components/forms/autocomplete";
 
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
-import { useState } from "react";
 import { httpClient } from "../../../global/helpers/http-requests";
-import AutoComplete from "../../../components/forms/autocomplete";
 import { validateInput } from "../../../global/helpers/validation";
+import { FORM_STATUS } from "../../../global/helpers/variables";
+import Announcer from "../../../global/helpers/announcer";
 
+let formSuccessWait;
 function WhereToFindYou() {
   const { user, editProfile } = useContext(ProfileContext);
+  const [formStatus, setFormStatus] = useState(FORM_STATUS.idle);
+  const [shouldAnnounce, setShouldAnnounce] = useState(false);
 
-  const [editInputs, setEditInputs] = useState(false);
-  const [submitError, setSubmitError] = useState(false);
   const [github, setGithub] = useState({
     inputValue: "",
     inputChange: false,
-    inputError: false,
+    inputStatus: FORM_STATUS.idle,
   });
   const [twitter, setTwitter] = useState({
     inputValue: "",
     inputChange: false,
-    inputError: false,
+    inputStatus: FORM_STATUS.idle,
   });
   const [linkedin, setLinkedin] = useState({
     inputValue: "",
     inputChange: false,
-    inputError: false,
+    inputStatus: FORM_STATUS.idle,
   });
   const [portfolio, setPortfolio] = useState({
     inputValue: "",
     inputChange: false,
-    inputError: false,
+    inputStatus: FORM_STATUS.idle,
   });
   const [email, setEmail] = useState({
     inputValue: "",
     inputChange: false,
-    inputError: false,
+    inputStatus: FORM_STATUS.idle,
   });
-
   const [locationInput, setLocationInput] = useState([]);
   const [locationInputChange, setLocationInputChange] = useState(false);
 
-  function onEditInputs() {
-    setSubmitError(false);
-    setEditInputs(true);
+  let errorSummaryRef = React.createRef();
+
+  useEffect(() => {
+    if (formStatus === FORM_STATUS.error && errorSummaryRef.current) {
+      errorSummaryRef.current.focus();
+    }
+    // eslint-disable-next-line
+  }, [formStatus]);
+
+  useEffect(() => {
+    return () => {
+      clearTimeout(formSuccessWait);
+    };
+  }, []);
+
+  function setFormInputs() {
+    setFormStatus(FORM_STATUS.active);
+    setShouldAnnounce(true);
+
     setGithub({
       inputValue: user.github || "",
       inputChange: false,
-      inputError: false,
+      inputStatus: FORM_STATUS.idle,
     });
     setTwitter({
       inputValue: user.twitter || "",
       inputChange: false,
-      inputError: false,
+      inputStatus: FORM_STATUS.idle,
     });
     setLinkedin({
       inputValue: user.linkedin || "",
       inputChange: false,
-      inputError: false,
+      inputStatus: FORM_STATUS.idle,
     });
     setPortfolio({
       inputValue: user.portfolio || "",
       inputChange: false,
-      inputError: false,
+      inputStatus: FORM_STATUS.idle,
     });
     setEmail({
       inputValue: user.public_email || "",
       inputChange: false,
-      inputError: false,
+      inputStatus: FORM_STATUS.idle,
     });
 
     if (user.current_location_name) {
@@ -85,15 +104,21 @@ function WhereToFindYou() {
     setLocationInputChange(false);
   }
 
-  function onGithubInputChange(value) {
-    // this will only match the full URL you use, not the username alone
-    // if you send value, and user.github, it will return the username on
-    // both cases, so you can compare like that
+  function setGithubInput(value) {
+    if (user.github === null && value.trim() === "") {
+      setGithub({
+        inputChange: false,
+        inputValue: "",
+        inputStatus: FORM_STATUS.idle,
+      });
+      return;
+    }
+
     if (value === user.github) {
       setGithub({
         inputChange: false,
         inputValue: value,
-        inputError: false,
+        inputStatus: FORM_STATUS.idle,
       });
       return;
     }
@@ -101,31 +126,42 @@ function WhereToFindYou() {
     setGithub({ ...github, inputChange: true, inputValue: value });
   }
 
-  function onGithubInputValidate(value) {
+  function validateGithubInput(value) {
     if (!github.inputChange) return;
     if (value.trim() === "") {
-      setGithub({ ...github, inputValue: "", inputError: false });
+      setGithub({
+        ...github,
+        inputValue: "",
+        inputStatus: FORM_STATUS.success,
+      });
     } else if (validateInput("github", value)) {
-      // if it is an international URL, you'll still be setting the regular URL
-      // maybe return an object instead with a 'intl' prop
-      // might have to make the intl part of regex a captured group to know what to use
-      // so `https://${validateInput("github", value).intl || null}github.com/${validateInput("github", value).username}`
-      const fullUrl = `https://github.com/${validateInput("github", value)}`;
-      setGithub({ ...github, inputError: false, inputValue: fullUrl });
+      const { intl, username } = validateInput("github", value);
+      const fullUrl = `https://${intl || ""}github.com/${username}`;
+      setGithub({
+        ...github,
+        inputStatus: FORM_STATUS.success,
+        inputValue: fullUrl,
+      });
     } else {
-      setGithub({ ...github, inputError: true });
+      setGithub({ ...github, inputStatus: FORM_STATUS.error });
     }
   }
 
-  function onTwitterInputChange(value) {
-    // this will only match the full URL you use, not the username alone
-    // if you send value, and user.github, it will return the username on
-    // both cases, so you can compare like that
+  function setTwitterInput(value) {
+    if (user.twitter === null && value.trim() === "") {
+      setTwitter({
+        inputChange: false,
+        inputValue: "",
+        inputStatus: FORM_STATUS.idle,
+      });
+      return;
+    }
+
     if (value === user.twitter) {
       setTwitter({
         inputChange: false,
         inputValue: value,
-        inputError: false,
+        inputStatus: FORM_STATUS.idle,
       });
       return;
     }
@@ -133,31 +169,41 @@ function WhereToFindYou() {
     setTwitter({ ...twitter, inputChange: true, inputValue: value });
   }
 
-  function onTwitterInputValidate(value) {
+  function validateTwitterInput(value) {
     if (!twitter.inputChange) return;
     if (value.trim() === "") {
-      setTwitter({ ...twitter, inputValue: "", inputError: false });
+      setTwitter({
+        ...twitter,
+        inputValue: "",
+        inputStatus: FORM_STATUS.success,
+      });
     } else if (validateInput("twitter", value)) {
-      // if it is an international URL, you'll still be setting the regular URL
-      // maybe return an object instead with a 'intl' prop
-      // might have to make the intl part of regex a captured group to know what to use
-      // so `https://${validateInput("twitter", value).intl || null}twitter.com/${validateInput("twitter", value).username}`
       const fullUrl = `https://twitter.com/${validateInput("twitter", value)}`;
-      setTwitter({ ...twitter, inputError: false, inputValue: fullUrl });
+      setTwitter({
+        ...twitter,
+        inputStatus: FORM_STATUS.success,
+        inputValue: fullUrl,
+      });
     } else {
-      setTwitter({ ...twitter, inputError: true });
+      setTwitter({ ...twitter, inputStatus: FORM_STATUS.error });
     }
   }
 
-  function onLinkedinInputChange(value) {
-    // this will only match the full URL you use, not the username alone
-    // if you send value, and user.github, it will return the username on
-    // both cases, so you can compare like that
+  function setLinkedinInput(value) {
+    if (user.linkedin === null && value.trim() === "") {
+      setLinkedin({
+        inputChange: false,
+        inputValue: "",
+        inputStatus: FORM_STATUS.idle,
+      });
+      return;
+    }
+
     if (value === user.linkedin) {
       setLinkedin({
         inputChange: false,
         inputValue: value,
-        inputError: false,
+        inputStatus: FORM_STATUS.idle,
       });
       return;
     }
@@ -165,72 +211,98 @@ function WhereToFindYou() {
     setLinkedin({ ...linkedin, inputChange: true, inputValue: value });
   }
 
-  function onLinkedinInputValidate(value) {
+  function validateLinkedinInput(value) {
     if (!linkedin.inputChange) return;
     if (value.trim() === "") {
-      setLinkedin({ ...linkedin, inputValue: "", inputError: false });
+      setLinkedin({
+        ...linkedin,
+        inputValue: "",
+        inputStatus: FORM_STATUS.success,
+      });
     } else if (validateInput("linkedin", value)) {
-      // if it is an international URL, you'll still be setting the regular URL
-      // maybe return an object instead with a 'intl' prop
-      // might have to make the intl part of regex a captured group to know what to use
-      // so `https://${validateInput("linkedin", value).intl || null}linkedin.com/${validateInput("linkedin", value).username}`
-      const fullUrl = `https://www.linkedin.com/in/${validateInput(
-        "linkedin",
-        value
-      )}`;
-      setLinkedin({ ...linkedin, inputError: false, inputValue: fullUrl });
+      const { intl, username } = validateInput("linkedin", value);
+      const fullUrl = `https://${intl || ""}linkedin.com/in/${username}`;
+      setLinkedin({
+        ...linkedin,
+        inputStatus: FORM_STATUS.success,
+        inputValue: fullUrl,
+      });
     } else {
-      setLinkedin({ ...linkedin, inputError: true });
+      setLinkedin({ ...linkedin, inputStatus: FORM_STATUS.error });
     }
   }
 
-  function onPortfolioInputChange(value) {
+  function setPortfolioInput(value) {
+    if (user.portfolio === null && value.trim() === "") {
+      setPortfolio({
+        inputChange: false,
+        inputValue: "",
+        inputStatus: FORM_STATUS.idle,
+      });
+      return;
+    }
+
     if (value === user.portfolio) {
       setPortfolio({
         inputChange: false,
         inputValue: value,
-        inputError: false,
+        inputStatus: FORM_STATUS.idle,
       });
+      return;
     }
 
     setPortfolio({ ...portfolio, inputChange: true, inputValue: value });
   }
 
-  function onPortfolioInputValidate(value) {
+  function validatePortfolioInput(value) {
     if (!portfolio.inputChange) return;
     if (value.trim() === "") {
-      setPortfolio({ ...portfolio, inputValue: "", inputError: false });
+      setPortfolio({
+        ...portfolio,
+        inputValue: "",
+        inputStatus: FORM_STATUS.success,
+      });
     } else if (validateInput("url", value)) {
-      setPortfolio({ ...portfolio, inputError: false });
+      setPortfolio({ ...portfolio, inputStatus: FORM_STATUS.success });
     } else {
-      setPortfolio({ ...portfolio, inputError: true });
+      setPortfolio({ ...portfolio, inputStatus: FORM_STATUS.error });
     }
   }
 
-  function onEmailInputChange(value) {
+  function setEmailInput(value) {
+    if (user.public_email === null && value.trim() === "") {
+      setEmail({
+        inputChange: false,
+        inputValue: "",
+        inputStatus: FORM_STATUS.idle,
+      });
+      return;
+    }
+
     if (value === user.public_email) {
       setEmail({
         inputChange: false,
         inputValue: value,
-        inputError: false,
+        inputStatus: FORM_STATUS.idle,
       });
+      return;
     }
 
     setEmail({ ...email, inputChange: true, inputValue: value });
   }
 
-  function onEmailInputValidate(value) {
+  function validateEmailInput(value) {
     if (!email.inputChange) return;
     if (value.trim() === "") {
-      setEmail({ ...email, inputValue: "", inputError: false });
+      setEmail({ ...email, inputValue: "", inputStatus: FORM_STATUS.success });
     } else if (validateInput("email", value)) {
-      setEmail({ ...email, inputError: false });
+      setEmail({ ...email, inputStatus: FORM_STATUS.success });
     } else {
-      setEmail({ ...email, inputError: true });
+      setEmail({ ...email, inputStatus: FORM_STATUS.error });
     }
   }
 
-  async function onLocationInputChange(value) {
+  async function getLocationsByValue(value) {
     const [res, err] = await httpClient("POST", "/api/autocomplete", {
       value,
     });
@@ -243,7 +315,7 @@ function WhereToFindYou() {
     return res.data;
   }
 
-  async function onChosenLocation(name, id) {
+  async function setLocationWithGio(name, id) {
     if (!locationInputChange) {
       setLocationInputChange(true);
     }
@@ -274,8 +346,22 @@ function WhereToFindYou() {
     setLocationInput([]);
   }
 
-  function submitEdit(e) {
+  async function submitEdit(e) {
     e.preventDefault();
+
+    if (
+      github.inputStatus === FORM_STATUS.error ||
+      twitter.inputStatus === FORM_STATUS.error ||
+      linkedin.inputStatus === FORM_STATUS.error ||
+      portfolio.inputStatus === FORM_STATUS.error ||
+      email.inputStatus === FORM_STATUS.error
+    ) {
+      setFormStatus(FORM_STATUS.error);
+      if (errorSummaryRef.current) {
+        errorSummaryRef.current.focus();
+      }
+      return;
+    }
 
     if (
       !github.inputChange &&
@@ -323,180 +409,316 @@ function WhereToFindYou() {
       }
     }
 
-    setEditInputs(false);
-    editProfile(inputs);
+    setFormStatus(FORM_STATUS.loading);
+    await editProfile(inputs);
+    formSuccessWait = setTimeout(() => {
+      setFormStatus(FORM_STATUS.idle);
+    }, 1000);
+    setFormStatus(FORM_STATUS.success);
   }
 
-  function resetInputs() {
-    setEditInputs(false);
-  }
+  console.log("===Where to Find You===");
 
-  console.log("===Where to Find You===", submitError);
-
-  if (!editInputs) {
+  if (formStatus === FORM_STATUS.idle) {
     return (
-      <div>
-        <h1>Edit Inputs</h1>
-        <button onClick={onEditInputs}>Edit</button>
-      </div>
+      <main id="main-content" tabIndex="-1" aria-labelledby="main-heading">
+        <Helmet>
+          <title>Profile Dashboard Where to Find You • Tech Profiles</title>
+        </Helmet>
+        <h1 id="main-heading">Where to Find You</h1>
+        {shouldAnnounce ? (
+          <Announcer
+            announcement="Form is idle, press edit information button to open"
+            ariaId="form-idle-announcement"
+          />
+        ) : null}
+        <section aria-labelledby="current-information-heading">
+          <h2 id="current-information-heading">Current Information</h2>
+          <button onClick={setFormInputs}>Edit Information</button>
+          <ul>
+            <li>Github: {user.github || "None Set"}</li>
+            <li>Twitter: {user.twitter || "None Set"}</li>
+            <li>Linkedin: {user.linkedin || "None Set"}</li>
+            <li>Portfolio: {user.portfolio || "None Set"}</li>
+            <li>
+              Current Location: {user.current_location_name || "None Set"}
+            </li>
+          </ul>
+        </section>
+      </main>
     );
   }
 
   return (
-    <Main>
-      <h1>Hello Where to Find You</h1>
-
-      <form onSubmit={(e) => submitEdit(e)} noValidate>
-        <InputContainer>
-          <label id="github-label" htmlFor="github">
-            Github:
-          </label>
-          <input
-            type="url"
-            // type is url but autoComplete is username since input can take
-            // usernames or urls with usernames
-            // allows users to autofill if they have pre-defined ones
-            // eslint-disable-next-line
-            autoComplete="username"
-            inputMode="url"
-            id="github"
-            name="github"
-            className={`input ${github.inputError ? "input-err" : ""}`}
-            aria-labelledby="github-label"
-            aria-describedby="github-error"
-            aria-invalid={github.inputError}
-            value={github.inputValue}
-            onChange={(e) => onGithubInputChange(e.target.value)}
-            onBlur={(e) => onGithubInputValidate(e.target.value)}
-          />
-          {github.inputError ? (
-            <span id="github-error" className="err-mssg" aria-live="polite">
-              Github Username can only be alphabelical characters, no numbers If
-              full URL was used, it should be valid; for example, url, url, url
-            </span>
-          ) : null}
-        </InputContainer>
-
-        <InputContainer>
-          <label id="twitter-label" htmlFor="twitter">
-            Twitter:
-          </label>
-          <input
-            type="url"
-            // eslint-disable-next-line
-            autoComplete="username"
-            inputMode="url"
-            id="twitter"
-            name="twitter"
-            className={`input ${twitter.inputError ? "input-err" : ""}`}
-            aria-labelledby="twitter-label"
-            aria-describedby="twitter-error"
-            aria-invalid={twitter.inputError}
-            value={twitter.inputValue}
-            onChange={(e) => onTwitterInputChange(e.target.value)}
-            onBlur={(e) => onTwitterInputValidate(e.target.value)}
-          />
-          {twitter.inputError ? (
-            <span id="twitter-error" className="err-mssg" aria-live="polite">
-              Twitter Username can only be alphabelical characters, no numbers
-              If full URL was used, it should be valid; for example, url, url,
-              url
-            </span>
-          ) : null}
-        </InputContainer>
-
-        <InputContainer>
-          <label id="linkedin-label" htmlFor="linkedin">
-            Linkedin:
-          </label>
-          <input
-            type="url"
-            // eslint-disable-next-line
-            autoComplete="username"
-            inputMode="url"
-            id="linkedin"
-            name="linkedin"
-            className={`input ${linkedin.inputError ? "input-err" : ""}`}
-            aria-labelledby="linkedin-label"
-            aria-describedby="linkedin-error"
-            aria-invalid={linkedin.inputError}
-            value={linkedin.inputValue}
-            onChange={(e) => onLinkedinInputChange(e.target.value)}
-            onBlur={(e) => onLinkedinInputValidate(e.target.value)}
-          />
-          {linkedin.inputError ? (
-            <span id="linkedin-error" className="err-mssg" aria-live="polite">
-              Linkedin Username can only be alphabelical characters, no numbers
-              If full URL was used, it should be valid; for example, url, url,
-              url
-            </span>
-          ) : null}
-        </InputContainer>
-
-        <InputContainer>
-          <label id="portfolio-label" htmlFor="portfolio">
-            Portfolio:
-          </label>
-          <input
-            type="url"
-            autoComplete="url"
-            inputMode="url"
-            id="portfolio"
-            name="portfolio"
-            className={`input ${portfolio.inputError ? "input-err" : ""}`}
-            aria-labelledby="portfolio-label"
-            aria-describedby="portfolio-error"
-            aria-invalid={portfolio.inputError}
-            value={portfolio.inputValue}
-            onChange={(e) => onPortfolioInputChange(e.target.value)}
-            onBlur={(e) => onPortfolioInputValidate(e.target.value)}
-          />
-          {portfolio.inputError ? (
-            <span id="portfolio-error" className="err-mssg" aria-live="polite">
-              URL should be valid; for example, url, url, url
-            </span>
-          ) : null}
-        </InputContainer>
-
-        <InputContainer>
-          <label id="email-label" htmlFor="email">
-            Public Email:
-          </label>
-          <input
-            type="email"
-            autoComplete="email"
-            inputMode="email"
-            id="email"
-            name="email"
-            className={`input ${email.inputError ? "input-err" : ""}`}
-            aria-labelledby="email-label"
-            aria-describedby="email-error"
-            aria-invalid={email.inputError}
-            value={email.inputValue}
-            onChange={(e) => onEmailInputChange(e.target.value)}
-            onBlur={(e) => onEmailInputValidate(e.target.value)}
-          />
-          {email.inputError ? (
-            <span id="email-error" className="err-mssg" aria-live="polite">
-              email should be valid; for example, email, email, email
-            </span>
-          ) : null}
-        </InputContainer>
-
-        <AutoComplete
-          chosenInputs={locationInput}
-          onInputChange={onLocationInputChange}
-          onChosenInput={onChosenLocation}
-          removeChosenInput={removeLocation}
-          inputName={"current-location"}
-          single
+    <Main id="main-content" tabIndex="-1" aria-labelledby="main-heading">
+      <Helmet>
+        <title>Dashboard Where to Find You • Tech Profiles</title>
+      </Helmet>
+      <h1 id="main-heading">Where to Find You</h1>
+      {shouldAnnounce && formStatus === FORM_STATUS.active ? (
+        <Announcer
+          announcement="Form is active, inputs are validated but not required to submit"
+          ariaId="active-form-announcer"
         />
+      ) : null}
+      {shouldAnnounce && formStatus === FORM_STATUS.success ? (
+        <Announcer
+          announcement="Successfully submitted information"
+          ariaId="success-form-announcer"
+        />
+      ) : null}
 
-        <button>Submit</button>
-        <button type="reset" onClick={resetInputs}>
-          Cancel
-        </button>
-      </form>
+      <FormSection aria-labelledby="edit-information-heading">
+        <h2 id="edit-information-heading">Edit Information</h2>
+
+        {formStatus === FORM_STATUS.error ? (
+          <div ref={errorSummaryRef} tabIndex="-1">
+            <h3 id="error-heading">Errors in Submission</h3>
+            {github.inputStatus === FORM_STATUS.error ||
+            twitter.inputStatus === FORM_STATUS.error ||
+            linkedin.inputStatus === FORM_STATUS.error ||
+            portfolio.inputStatus === FORM_STATUS.error ||
+            email.inputStatus === FORM_STATUS.error ? (
+              <>
+                <strong>
+                  Please address the following errors and re-submit the form:
+                </strong>
+                <ul id="error-group">
+                  {github.inputStatus === FORM_STATUS.error ? (
+                    <li>
+                      <a href="#github">Github Error</a>
+                    </li>
+                  ) : null}
+                  {twitter.inputStatus === FORM_STATUS.error ? (
+                    <li>
+                      <a href="#twitter"> Twitter Error</a>
+                    </li>
+                  ) : null}
+                  {linkedin.inputStatus === FORM_STATUS.error ? (
+                    <li>
+                      <a href="#linkedin">Linkedin Error</a>
+                    </li>
+                  ) : null}
+                  {portfolio.inputStatus === FORM_STATUS.error ? (
+                    <li>
+                      <a href="#portfolio">Portfolio Error</a>
+                    </li>
+                  ) : null}
+                  {email.inputStatus === FORM_STATUS.error ? (
+                    <li>
+                      <a href="#email">Email Error</a>
+                    </li>
+                  ) : null}
+                </ul>
+              </>
+            ) : (
+              <>
+                <p>No Errors, ready to submit</p>
+                <Announcer
+                  announcement="No Errors, ready to submit"
+                  ariaId="no-errors-announcer"
+                  ariaLive="polite"
+                />
+              </>
+            )}
+          </div>
+        ) : null}
+
+        <form
+          onSubmit={(e) => submitEdit(e)}
+          aria-describedby="active-form-announcer success-form-announcer"
+          noValidate
+        >
+          <InputContainer>
+            <label htmlFor="github">Github:</label>
+            <input
+              type="url"
+              // type is url but autoComplete is username since input can take
+              // usernames or urls with usernames
+              // allows users to autofill if they have pre-defined ones
+              // eslint-disable-next-line
+              autoComplete="username"
+              inputMode="url"
+              id="github"
+              name="github"
+              className={`input ${
+                github.inputStatus === FORM_STATUS.error ? "input-err" : ""
+              }`}
+              aria-describedby="github-error github-success"
+              aria-invalid={github.inputStatus === FORM_STATUS.error}
+              value={github.inputValue}
+              onChange={(e) => setGithubInput(e.target.value)}
+              onBlur={(e) => validateGithubInput(e.target.value)}
+            />
+            {github.inputStatus === FORM_STATUS.error ? (
+              <span id="github-error" className="err-mssg">
+                Github Username can only be alphabelical characters, no numbers
+                If full URL was used, it should be valid; for example, url, url,
+                url
+              </span>
+            ) : null}
+            {github.inputStatus === FORM_STATUS.success ? (
+              <span id="github-success" className="success-mssg">
+                Github is Validated and Updated with Full URL
+              </span>
+            ) : null}
+          </InputContainer>
+
+          <InputContainer>
+            <label htmlFor="twitter">Twitter:</label>
+            <input
+              type="url"
+              // eslint-disable-next-line
+              autoComplete="username"
+              inputMode="url"
+              id="twitter"
+              name="twitter"
+              className={`input ${
+                twitter.inputStatus === FORM_STATUS.error ? "input-err" : ""
+              }`}
+              aria-describedby="twitter-error twitter-success"
+              aria-invalid={twitter.inputStatus === FORM_STATUS.error}
+              value={twitter.inputValue}
+              onChange={(e) => setTwitterInput(e.target.value)}
+              onBlur={(e) => validateTwitterInput(e.target.value)}
+            />
+            {twitter.inputStatus === FORM_STATUS.error ? (
+              <span id="twitter-error" className="err-mssg">
+                Twitter Username can only be alphabelical characters, no numbers
+                If full URL was used, it should be valid; for example, url, url,
+                url
+              </span>
+            ) : null}
+            {twitter.inputStatus === FORM_STATUS.success ? (
+              <span id="twitter-success" className="success-mssg">
+                Twitter is Validated and Updated with Full URL
+              </span>
+            ) : null}
+          </InputContainer>
+
+          <InputContainer>
+            <label htmlFor="linkedin">Linkedin:</label>
+            <input
+              type="url"
+              // eslint-disable-next-line
+              autoComplete="username"
+              inputMode="url"
+              id="linkedin"
+              name="linkedin"
+              className={`input ${
+                linkedin.inputStatus === FORM_STATUS.error ? "input-err" : ""
+              }`}
+              aria-describedby="linkedin-error linkedin-success"
+              aria-invalid={linkedin.inputStatus === FORM_STATUS.error}
+              value={linkedin.inputValue}
+              onChange={(e) => setLinkedinInput(e.target.value)}
+              onBlur={(e) => validateLinkedinInput(e.target.value)}
+            />
+            {linkedin.inputStatus === FORM_STATUS.error ? (
+              <span id="linkedin-error" className="err-mssg">
+                Linkedin Username can only be alphabelical characters, no
+                numbers If full URL was used, it should be valid; for example,
+                url, url, url
+              </span>
+            ) : null}
+            {linkedin.inputStatus === FORM_STATUS.success ? (
+              <span id="linkedin-success" className="success-mssg">
+                Linkedin is Validated and Updated with Full URL
+              </span>
+            ) : null}
+          </InputContainer>
+
+          <InputContainer>
+            <label htmlFor="portfolio">Portfolio:</label>
+            <input
+              type="url"
+              autoComplete="url"
+              inputMode="url"
+              id="portfolio"
+              name="portfolio"
+              className={`input ${
+                portfolio.inputStatus === FORM_STATUS.error ? "input-err" : ""
+              }`}
+              aria-describedby="portfolio-error portfolio-success"
+              aria-invalid={portfolio.inputStatus === FORM_STATUS.error}
+              value={portfolio.inputValue}
+              onChange={(e) => setPortfolioInput(e.target.value)}
+              onBlur={(e) => validatePortfolioInput(e.target.value)}
+            />
+            {portfolio.inputStatus === FORM_STATUS.error ? (
+              <span id="portfolio-error" className="err-mssg">
+                URL should be valid; for example, url, url, url
+              </span>
+            ) : null}
+            {portfolio.inputStatus === FORM_STATUS.success ? (
+              <span id="portfolio-success" className="success-mssg">
+                Portfolio is Validated
+              </span>
+            ) : null}
+          </InputContainer>
+
+          <InputContainer>
+            <label htmlFor="email">Public Email:</label>
+            <input
+              type="email"
+              autoComplete="email"
+              inputMode="email"
+              id="email"
+              name="email"
+              className={`input ${
+                email.inputStatus === FORM_STATUS.error ? "input-err" : ""
+              }`}
+              aria-describedby="email-error email-success"
+              aria-invalid={email.inputStatus === FORM_STATUS.error}
+              value={email.inputValue}
+              onChange={(e) => setEmailInput(e.target.value)}
+              onBlur={(e) => validateEmailInput(e.target.value)}
+            />
+            {email.inputStatus === FORM_STATUS.error ? (
+              <span id="email-error" className="err-mssg">
+                email should be valid; for example, email, email, email
+              </span>
+            ) : null}
+            {email.inputStatus === FORM_STATUS.success ? (
+              <span id="email-success" className="success-mssg">
+                Email is Validated
+              </span>
+            ) : null}
+          </InputContainer>
+
+          <AutoComplete
+            chosenInputs={locationInput}
+            onInputChange={getLocationsByValue}
+            onChosenInput={setLocationWithGio}
+            removeChosenInput={removeLocation}
+            inputName={"current-location"}
+            single
+          />
+
+          <button
+            disabled={
+              formStatus === FORM_STATUS.loading ||
+              formStatus === FORM_STATUS.success
+            }
+            type="submit"
+          >
+            {formStatus === FORM_STATUS.active ? "Submit" : null}
+            {formStatus === FORM_STATUS.loading ? "loading..." : null}
+            {formStatus === FORM_STATUS.success ? "Success!" : null}
+            {formStatus === FORM_STATUS.error ? "Re-Submit" : null}
+          </button>
+          <button
+            disabled={
+              formStatus === FORM_STATUS.loading ||
+              formStatus === FORM_STATUS.success
+            }
+            type="reset"
+            onClick={() => setFormStatus(FORM_STATUS.idle)}
+          >
+            Cancel
+          </button>
+        </form>
+      </FormSection>
     </Main>
   );
 }
@@ -508,6 +730,14 @@ const Main = styled.main`
   background-color: pink;
 `;
 
+const FormSection = styled.section`
+  .hidden {
+    display: none;
+  }
+  .error-summary {
+  }
+`;
+
 const InputContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -516,6 +746,10 @@ const InputContainer = styled.div`
   }
   .err-mssg {
     color: red;
+    font-size: 0.7rem;
+  }
+  .success-mssg {
+    color: green;
     font-size: 0.7rem;
   }
 `;
