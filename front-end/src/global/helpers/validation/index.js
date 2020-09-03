@@ -32,7 +32,6 @@ function nameCheck(value) {
   */
 
   const regex = /^[A-Za-zÀ-ú0-9\s.()',-]{1,65}$/;
-  console.log(regex.test(value));
   return regex.test(value);
 }
 
@@ -60,7 +59,6 @@ function emailCheck(value) {
   */
 
   const regex = /^(?!\.|_|\+|-)[A-Za-zÀ-ú0-9._+-]{1,64}(?<!\.|_|\+|-)@(?:[A-Za-zÀ-ú0-9-]{1,63}\.){1,8}[A-Za-zÀ-ú]{2,63}$/;
-  console.log(regex.test(value));
   return regex.test(value);
 }
 
@@ -76,7 +74,6 @@ function titleCheck(value) {
   */
 
   const regex = /^[A-Za-zÀ-ú0-9\s./+#:()'",&-]{2,80}$/;
-  console.log(regex.test(value));
   return regex.test(value);
 }
 
@@ -94,7 +91,6 @@ function summaryCheck(value) {
   */
 
   const regex = /^[A-Za-zÀ-ú0-9\s./+#:()'",&@!_-]{2,280}$/;
-  console.log(regex.test(value));
   return regex.test(value);
 }
 
@@ -112,7 +108,7 @@ function githubCheck(value) {
     subdomain
     optional www.
 
-    international subdomain
+    international subdomain(captured)
     github supports international subdomain URLs
     1 subdomain seperated by period
     Allowed: a-z
@@ -121,7 +117,7 @@ function githubCheck(value) {
     domain
     required github.com/
 
-    username
+    username(captured)
     Allowed: A-Z, a-z, 0-9, hyphens/dashes
     Not Allowed: hyphens/dashes at start/end
 
@@ -136,22 +132,22 @@ function githubCheck(value) {
     ^[A-Za-z0-9][A-Za-z0-9-]+[A-Za-z0-9]$
   */
 
-  const githubRegExUrl = /^(?:https?:\/\/)?(?:www\.)?(?:[a-z]{1,7}\.)?github\.com\/([A-Za-z0-9][A-Za-z0-9-]+[A-Za-z0-9])\/?$/;
+  // first group is the intl option
+  // second group is the username
+  const githubRegExUrl = /^(?:https?:\/\/)?(?:www\.)?([a-z]{1,7}\.)?github\.com\/([A-Za-z0-9][A-Za-z0-9-]+[A-Za-z0-9])\/?$/;
   const githubRegExUser = /^[A-Za-z0-9][A-Za-z0-9-]+[A-Za-z0-9]$/;
 
   const githubUrlFound = value.match(githubRegExUrl);
   const githubUserFound = value.match(githubRegExUser);
 
-  if (githubUrlFound && githubUrlFound[1]) {
-    console.log("url found");
-    console.log(githubUrlFound[1]);
-    return githubUrlFound[1];
+  if (githubUrlFound && githubUrlFound[2]) {
+    return {
+      intl: githubUrlFound[1],
+      username: githubUrlFound[2],
+    };
   } else if (githubUserFound && githubUserFound[0]) {
-    console.log("user found");
-    console.log(githubUserFound[0]);
-    return githubUserFound[0];
+    return { username: githubUserFound[0] };
   } else {
-    console.log("not found");
     return false;
   }
 }
@@ -161,7 +157,7 @@ function linkedinCheck(value) {
     Rules
 
     Structure: protocol:// www. international. linkedin.com/in/ username /
-    linkedin usernames can contain hyphens/dashes anywhere
+    linkedin usernames can contain hyphens/dashes anywhere, they can also contain accent characters
     linkedin international URLs contain a sub domain(de.linkedin.com)
 
     protocol
@@ -170,7 +166,7 @@ function linkedinCheck(value) {
     subdomain
     optional www.
 
-    international subdomain
+    international subdomain(captured)
     linkedin supports international subdomain URLs
     1 subdomain seperated by period
     Allowed: a-z
@@ -179,28 +175,28 @@ function linkedinCheck(value) {
     domain
     required linkedin.com/in/
 
-    username
-    Allowed: A-Z, a-z, 0-9, hyphens/dashes
+    username(captured)
+    Allowed: A-Z, a-z, À-ú(accents), 0-9, hyphens/dashes
 
     optional slash at end of URL
   */
 
-  const linkedinRegExUrl = /^(?:https?:\/\/)?(?:www\.)?(?:[a-z]{1,7}\.)?linkedin\.com\/in\/([A-Za-z0-9-]+)\/?$/;
-  const linkedinRegExUser = /^[A-Za-z0-9-]+$/;
+  // first group is the intl option
+  // second group is the username
+  const linkedinRegExUrl = /^(?:https?:\/\/)?(?:www\.)?([a-z]{1,7}\.)?linkedin\.com\/in\/([A-Za-zÀ-ú0-9-]+)\/?$/;
+  const linkedinRegExUser = /^[A-Za-zÀ-ú0-9-]+$/;
 
   const linkedinUrlFound = value.match(linkedinRegExUrl);
   const linkedinUserFound = value.match(linkedinRegExUser);
 
-  if (linkedinUrlFound && linkedinUrlFound[1]) {
-    console.log("url found");
-    console.log(linkedinUrlFound[1]);
-    return linkedinUrlFound[1];
+  if (linkedinUrlFound && linkedinUrlFound[2]) {
+    return {
+      intl: linkedinUrlFound[1],
+      username: linkedinUrlFound[2],
+    };
   } else if (linkedinUserFound && linkedinUserFound[0]) {
-    console.log("user found");
-    console.log(linkedinUserFound[0]);
-    return linkedinUserFound[0];
+    return { username: linkedinUserFound[0] };
   } else {
-    console.log("not found");
     return false;
   }
 }
@@ -237,15 +233,10 @@ function twitterCheck(value) {
   const twitterUserFound = value.match(twitterRegExUser);
 
   if (twitterUrlFound && twitterUrlFound[1]) {
-    console.log("url found");
-    console.log(twitterUrlFound[1]);
     return twitterUrlFound[1];
   } else if (twitterUserFound && twitterUserFound[1]) {
-    console.log("user found");
-    console.log(twitterUserFound[1]);
     return twitterUserFound[1];
   } else {
-    console.log("not found");
     return false;
   }
 }
@@ -295,6 +286,5 @@ function urlCheck(value) {
   */
 
   const regex = /^(?:https?:\/\/)?(?:www\.)?(?:[A-Za-zÀ-ú0-9][A-Za-zÀ-ú0-9-]{1,63}[A-Za-zÀ-ú0-9]\.){1,8}(?:[A-Za-zÀ-ú]{2,63})(?:(?:\/(?:[A-Za-zÀ-ú0-9-._#?=+&%/])*)|\/?)$/;
-  console.log(regex.test(value));
   return regex.test(value);
 }
