@@ -3,25 +3,19 @@ import { Helmet } from "react-helmet";
 import styled from "styled-components";
 
 import ImageUploadForm from "../../../components/forms/image-upload";
+
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
 import { httpClient } from "../../../global/helpers/http-requests";
 import { validateInput } from "../../../global/helpers/validation";
 import { FORM_STATUS } from "../../../global/helpers/variables";
 import Announcer from "../../../global/helpers/announcer";
 
-/*
-
-see if you can describe the form
-"inputs are validated, but not required"
-maybe announce it when form is 'active'
-
-*/
-
 let formSuccessWait;
 function PersonalInfo() {
   const { user, editProfile, setPreviewImg } = useContext(ProfileContext);
   const [formStatus, setFormStatus] = useState(FORM_STATUS.idle);
   const [shouldAnnounce, setShouldAnnounce] = useState(false);
+
   const [firstName, setFirstName] = useState({
     inputValue: "",
     inputChange: false,
@@ -285,13 +279,11 @@ function PersonalInfo() {
     }
 
     setFormStatus(FORM_STATUS.loading);
-    const result = await editProfile(inputs);
-    if (result) {
-      formSuccessWait = setTimeout(() => {
-        setFormStatus(FORM_STATUS.idle);
-      }, 1000);
-      setFormStatus(FORM_STATUS.success);
-    }
+    await editProfile(inputs);
+    formSuccessWait = setTimeout(() => {
+      setFormStatus(FORM_STATUS.idle);
+    }, 1000);
+    setFormStatus(FORM_STATUS.success);
   }
 
   console.log("-- Personal Info Dashboard --");
@@ -318,12 +310,11 @@ function PersonalInfo() {
             <li>
               {user.image ? (
                 <>
-                  <p>Image:</p>
-                  {/* what is a good alt tag for your profile image? */}
-                  <img src={user.image} alt="Your Profile Pic" />
+                  <p>Profile Pic:</p>
+                  <img src={user.image} alt="profile pic" />
                 </>
               ) : (
-                "Image: None Set"
+                "Profile Pic: None Set"
               )}
             </li>
             <li>Area of Work: {user.area_of_work || "None Set"}</li>
@@ -366,7 +357,6 @@ function PersonalInfo() {
                 <strong>
                   Please address the following errors and re-submit the form:
                 </strong>
-                {/* // header is fixed so it covers input */}
                 <ul id="error-group">
                   {firstName.inputStatus === FORM_STATUS.error ? (
                     <li>

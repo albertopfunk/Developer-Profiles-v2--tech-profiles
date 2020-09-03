@@ -43,21 +43,18 @@ function ProfileDashboard() {
     getFullUser(email);
   }
 
-  // I am returning so children can wait for
-  // the user to be updated before re-rendering
   async function getFullUser(email) {
     const [res, err] = await httpClient("POST", "/users/get-full", { email });
 
     if (err) {
       console.error(`${res.mssg} => ${res.err}`);
       auth0Client.signOut("authorize");
-      return false;
+      return;
     }
 
     // batch
     setUser(res.data);
     setLoadingUser(false);
-    return true;
   }
 
   async function editProfile(data) {
@@ -65,15 +62,10 @@ function ProfileDashboard() {
 
     if (err) {
       console.error(`${res.mssg} => ${res.err}`);
-      return false;
+      return;
     }
 
-    const fullUserSuccess = await getFullUser(user.email);
-    if (fullUserSuccess) {
-      return true;
-    } else {
-      return false;
-    }
+    await getFullUser(user.email);
   }
 
   async function addUserExtras(requestsArr) {
@@ -97,21 +89,17 @@ function ProfileDashboard() {
 
     if (err) {
       console.error(`${res.mssg} => ${res.err}`);
-      return false;
+      return;
     }
 
-    const fullUserSuccess = await getFullUser(user.email);
-    if (fullUserSuccess) {
-      return true;
-    } else {
-      return false;
-    }
+    await getFullUser(user.email);
   }
 
   console.log("-- Main Dashboard --");
 
   if (loadingUser) {
     // main skeleton loader
+    // nav should be present here too
     return (
       <div>
         <Helmet>
