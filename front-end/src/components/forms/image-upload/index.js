@@ -89,37 +89,37 @@ function ImageUploadForm({ imageInput, setImageInput }) {
     }
   }
 
-  console.log("-- Image Upload --")
+  console.log("-- Image Upload --");
 
   return (
     <div>
       <InputContainer>
-        <label htmlFor="image-upload">Image:</label>
+        <label htmlFor="image-upload">Profile Pic:</label>
         <input
           type="file"
           id="image-upload"
           ref={imageRef}
           name="image-upload"
-          aria-label="profile-image-upload"
+          aria-label="profile pic upload"
           aria-describedby="image-loading image-error image-success"
           aria-invalid={imageStatus === FORM_STATUS.error}
           onChange={(e) => uploadImage(e)}
         />
 
         {imageStatus === FORM_STATUS.loading ? (
-          <span id="image-loading" role="status" className="loading-mssg">
+          <span id="image-loading" className="loading-mssg">
             Loading...
           </span>
         ) : null}
 
         {imageStatus === FORM_STATUS.error ? (
-          <span id="image-error" role="status" className="err-mssg">
-            Error uploading image. Please try again.
+          <span id="image-error" className="err-mssg">
+            Error uploading profile pic. Please try again.
           </span>
         ) : null}
 
         {imageStatus === FORM_STATUS.success ? (
-          <span id="image-success" role="status" className="success-mssg">
+          <span id="image-success" className="success-mssg">
             Success!
           </span>
         ) : null}
@@ -128,23 +128,29 @@ function ImageUploadForm({ imageInput, setImageInput }) {
         <ImageContainer>
           <div className="img-action">
             {imageInput.image ? (
-              <button onClick={removePreviewImage}>X</button>
+              <button
+                aria-label="click to remove current profile pic preview"
+                onClick={removePreviewImage}
+              >
+                X
+              </button>
             ) : (
-              <label htmlFor="remove-image">
-                <input
-                  type="checkbox"
-                  id="remove-image"
-                  name="remove-image"
-                  ref={imageRemovalRef}
-                  onChange={setImageToRemove}
-                />
-              </label>
+              <input
+                type="checkbox"
+                id="remove-image"
+                name="remove-image"
+                aria-label="check to remove profile pic on submit"
+                ref={imageRemovalRef}
+                onChange={setImageToRemove}
+              />
             )}
           </div>
 
           <img
             src={imageInput.image || user.image}
-            alt="current profile pic"
+            alt={
+              imageInput.image ? "current profile pic preview" : "profile pic"
+            }
             height="200px"
             width="200px"
           />
