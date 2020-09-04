@@ -1,22 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { withRouter } from "react-router-dom";
 import styled from "styled-components";
-import Announcer from "../announcer";
 
 function FocusReset({ location, children }) {
   const [previousLocation, setPreviousLocation] = useState(location.pathname);
-  const [shouldAnnounce, setShouldAnnounce] = useState(false);
 
   let focusRef = React.createRef();
 
   useEffect(() => {
     if (focusRef.current && previousLocation !== location.pathname) {
-      if (!shouldAnnounce) setShouldAnnounce(true);
       setPreviousLocation(location.pathname);
       window.scroll(0, 0);
       focusRef.current.focus();
     }
-  }, [focusRef, location.pathname, previousLocation, shouldAnnounce]);
+  }, [focusRef, location.pathname, previousLocation]);
 
   let currentLocation;
   if (location.pathname === "/") {
@@ -43,12 +40,6 @@ function FocusReset({ location, children }) {
 
   return (
     <FocusContainer tabIndex="-1" ref={focusRef}>
-      {shouldAnnounce ? (
-        <Announcer
-          announcement={`Navigated to ${currentLocation} • Tech Profiles, press tab for skip links`}
-          ariaId="navigation-announcer"
-        />
-      ) : null}
       <ul>
         <li>
           <a href={`${location.pathname}#main-content`} className="skip-link">
@@ -91,6 +82,17 @@ function FocusReset({ location, children }) {
 }
 
 const FocusContainer = styled.div`
+  .sr-only {
+    position: absolute;
+    clip: rect(0, 0, 0, 0);
+    height: 1px;
+    width: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+  }
+
   .skip-link {
     position: absolute;
     top: 2%;

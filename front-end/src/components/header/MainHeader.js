@@ -4,16 +4,24 @@ import { Link, withRouter } from "react-router-dom";
 import { ReactComponent as BurgerMenu } from "./menu.svg";
 import { ReactComponent as MenuClose } from "./close.svg";
 
-import Announcer from "../../global/helpers/announcer";
-
 let closeOnBlurWait;
-function MainHeader({ isValidated, signOut, signIn }) {
+function MainHeader({ isValidated, signOut, signIn, location }) {
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
   const [shouldAnnounce, setShouldAnnounce] = useState(false);
+  const [shouldAnnounceNav, setShouldAnnounceNav] = useState(false);
+  const [previousLocation, setPreviousLocation] = useState(location.pathname);
 
   useEffect(() => {
     return () => clearTimeout(closeOnBlurWait);
-  });
+  }, []);
+
+  useEffect(() => {
+    if (location.pathname !== previousLocation) {
+      setPreviousLocation(location.pathname);
+      setShouldAnnounceNav(true);
+      return;
+    }
+  }, [location, previousLocation]);
 
   function openMobileNav() {
     setIsMobileNavOpen(true);
@@ -43,22 +51,41 @@ function MainHeader({ isValidated, signOut, signIn }) {
 
   console.log("-- Main Header --");
 
+  let currentLocation;
+  if (location.pathname === "/") {
+    currentLocation = "profiles page";
+  } else if (location.pathname.includes("dashboard")) {
+    currentLocation = location.pathname.split(/[/-]/).join(" ").trim();
+  } else if (location.pathname === "/authorize") {
+    currentLocation = "authorize page";
+  } else if (location.pathname === "/private-policy") {
+    currentLocation = "private policy page";
+  } else {
+    currentLocation = "page not found";
+  }
+
   return (
     <Header>
-      {shouldAnnounce && isMobileNavOpen ? (
-        <Announcer
-          announcement="Opened SubMenu"
-          ariaId="nav-announcer"
-          ariaLive="polite"
-        />
-      ) : null}
-      {shouldAnnounce && !isMobileNavOpen ? (
-        <Announcer
-          announcement="Closed SubMenu"
-          ariaId="nav-announcer"
-          ariaLive="polite"
-        />
-      ) : null}
+      <div
+        className="sr-only"
+        aria-live="polite"
+        aria-atomic="true"
+        aria-relevant="additions text"
+      >
+        {shouldAnnounce && isMobileNavOpen ? "Opened SubMenu" : null}
+        {shouldAnnounce && !isMobileNavOpen ? "Closed SubMenu" : null}
+      </div>
+
+      <div
+        className="sr-only"
+        aria-live="assertive"
+        aria-atomic="true"
+        aria-relevant="additions text"
+      >
+        {shouldAnnounceNav
+          ? `Navigated to ${currentLocation} • Tech Profiles, press tab for skip links`
+          : null}
+      </div>
 
       <Nav aria-label="site">
         <Link to="/" aria-hidden="true" tabIndex="-1">
@@ -103,7 +130,12 @@ function MainHeader({ isValidated, signOut, signIn }) {
               className={`${isMobileNavOpen ? "_" : "hidden"}`}
             >
               <li>
-                <Link to="/" className="nav-item" onBlur={closeMobileNavOnBlur}>
+                <Link
+                  to="/"
+                  className="nav-item"
+                  onClick={closeMobileNavOnBlur}
+                  onBlur={closeMobileNavOnBlur}
+                >
                   Profiles
                 </Link>
               </li>
@@ -111,6 +143,7 @@ function MainHeader({ isValidated, signOut, signIn }) {
                 <Link
                   to="/profile-dashboard"
                   className="nav-item"
+                  onClick={closeMobileNavOnBlur}
                   onBlur={closeMobileNavOnBlur}
                 >
                   Dashboard
@@ -147,12 +180,6 @@ const Header = styled.header`
   left: 0;
   top: 0;
   z-index: 10;
-`;
-
-const Nav = styled.nav`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
 
   .sr-only {
     position: absolute;
@@ -164,6 +191,12 @@ const Nav = styled.nav`
     border: 0;
     overflow: hidden;
   }
+`;
+
+const Nav = styled.nav`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 
   .hidden {
     display: none;
