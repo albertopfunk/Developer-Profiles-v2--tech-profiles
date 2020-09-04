@@ -15,19 +15,6 @@ function FocusReset({ location, children }) {
     }
   }, [focusRef, location.pathname, previousLocation]);
 
-  let currentLocation;
-  if (location.pathname === "/") {
-    currentLocation = "profiles page";
-  } else if (location.pathname.includes("dashboard")) {
-    currentLocation = location.pathname.split(/[/-]/).join(" ").trim();
-  } else if (location.pathname === "/authorize") {
-    currentLocation = "authorize page";
-  } else if (location.pathname === "/private-policy") {
-    currentLocation = "private policy page";
-  } else {
-    currentLocation = "page not found";
-  }
-
   console.log("-- Focus Reset --");
 
   if (location.pathname === "/callback") {
@@ -40,14 +27,14 @@ function FocusReset({ location, children }) {
 
   return (
     <FocusContainer tabIndex="-1" ref={focusRef}>
-      <ul>
+      <ul aria-label="skip links">
         <li>
           <a href={`${location.pathname}#main-content`} className="skip-link">
             <span>Skip to Main Content</span>
           </a>
         </li>
 
-        {currentLocation === "profiles page" ? (
+        {location.pathname === "/" ? (
           <li>
             <a href={`${location.pathname}#filters`} className="skip-link">
               <span>Skip to Filters</span>
@@ -55,7 +42,7 @@ function FocusReset({ location, children }) {
           </li>
         ) : null}
 
-        {currentLocation.includes("dashboard") ? (
+        {location.pathname.includes("dashboard") ? (
           <>
             <li>
               <a
