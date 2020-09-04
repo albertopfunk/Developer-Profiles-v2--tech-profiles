@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import ReactDOM from "react-dom";
 import { Route, Switch, withRouter } from "react-router-dom";
 import { GlobalStyles } from "./global/styles/GlobalStyles";
 import { Helmet } from "react-helmet";
@@ -46,19 +47,22 @@ function App({ location }) {
 
     try {
       await auth0Client.silentAuth();
-      // batch
-      setIsValidated(true);
-      setCheckingSession(false);
+      ReactDOM.unstable_batchedUpdates(() => {
+        setIsValidated(true);
+        setCheckingSession(false);
+      });
     } catch (err) {
       console.error("Silent Auth Failed", err);
-      setIsValidated(false);
-      setCheckingSession(false);
       if (
         err.error === "login_required" &&
         location.pathname.includes("dashboard")
       ) {
         auth0Client.signOut("authorize");
       }
+      ReactDOM.unstable_batchedUpdates(() => {
+        setIsValidated(false);
+        setCheckingSession(false);
+      });
     }
   }
 
