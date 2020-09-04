@@ -1,17 +1,6 @@
 import React from "react";
+import styled from "styled-components";
 
-/*
-  when user is typing and 'tabs' out from input, then the
-  listbox should reset, value will be current value
-  
-  when the user is focusing on options, and clicks tab then
-  listbox should reset, value will be the value that was focused on 
-
-  listbox is hidden with display:none
-  appears when user starts typing
-
-
-*/
 
 class AutoComplete extends React.Component {
   state = {
@@ -25,6 +14,7 @@ class AutoComplete extends React.Component {
   };
 
   optionRefs = [];
+  inputRef = React.createRef();
 
   componentDidMount() {
     if (this.props.chosenInputs) {
@@ -58,6 +48,7 @@ class AutoComplete extends React.Component {
         }
       }
     }
+
     if (this.state.input.trim()) {
       if (e.keyCode === 27) {
         this.resetInput();
@@ -76,6 +67,7 @@ class AutoComplete extends React.Component {
     }
     if (e.keyCode === 13) {
       this.choosePrediction(name, id);
+      this.inputRef.current.focus();
     }
     if (e.keyCode === 27) {
       this.resetInput();
@@ -86,9 +78,9 @@ class AutoComplete extends React.Component {
     if (direction === "up") {
       if (index === 0) {
         this.setState({
-          currentFocusedOption: `result${this.optionRefs.length - 1}`,
+          currentFocusedOption: "",
         });
-        this.optionRefs[this.optionRefs.length - 1].focus();
+        this.inputRef.current.focus();
       } else {
         this.setState({ currentFocusedOption: `result${index - 1}` });
         this.optionRefs[index - 1].focus();
@@ -96,8 +88,10 @@ class AutoComplete extends React.Component {
     }
     if (direction === "down") {
       if (index === this.optionRefs.length - 1) {
-        this.setState({ currentFocusedOption: `result${0}` });
-        this.optionRefs[0].focus();
+        this.setState({
+          currentFocusedOption: "",
+        });
+        this.inputRef.current.focus();
       } else {
         this.setState({ currentFocusedOption: `result${index + 1}` });
         this.optionRefs[index + 1].focus();
@@ -114,8 +108,11 @@ class AutoComplete extends React.Component {
       this is going to be a matter of needing to cancel a request
     */
 
+    // need to reset option refs
     this.optionRefs = [];
+
     if (value.trim() === "") {
+      // cancel request
       this.resetInput();
       return;
     }
@@ -123,9 +120,13 @@ class AutoComplete extends React.Component {
     let predictions = await this.props.onInputChange(value);
 
     if (predictions.length === 0) {
-      this.setState({ resultsInBank: false, isUsingCombobox: true });
-
-      this.resetInput(value);
+      this.setState({
+        input: value,
+        autoCompleteResults: [],
+        resultsInBank: false,
+        isUsingCombobox: true,
+        currentFocusedOption: "",
+      });
       return;
     }
 
@@ -193,7 +194,7 @@ class AutoComplete extends React.Component {
   };
 
   render() {
-    console.log("====AUTOCOMPLETE====", this.state);
+    console.log("---- Autocomplete ----", this.state);
 
     const { inputName } = this.props;
     const {
@@ -212,7 +213,8 @@ class AutoComplete extends React.Component {
             {`Choose ${inputName.split("-")[1]}`}
           </p>
         </label>
-        <div
+
+        <InputContainer
           id={`${inputName}-search-combobox`}
           // combobox on parent is recommended by ARIA 1.1
           // eslint-disable-next-line
@@ -222,111 +224,142 @@ class AutoComplete extends React.Component {
           aria-expanded={isUsingCombobox}
         >
           <input
+            ref={this.inputRef}
             type="search"
             autoComplete="off"
             id={`${inputName}-search-input`}
             name={`${inputName}-search-input`}
+            aria-describedby={`${inputName}-combobox-instructions`}
             aria-autocomplete="list"
-            aria-controls="results no-results"
+            aria-controls="results"
             aria-activedescendant={currentFocusedOption}
             value={input}
             onChange={(e) => this.debounceInput(e)}
             onKeyDown={(e) => this.focusOnFirstOption(e)}
           />
+          <span id={`${inputName}-combobox-instructions`} className="sr-only">
+            {`Chosen ${inputName.split("-")[1]} will be listed below`}
+          </span>
+        </InputContainer>
+
+        <div
+          aria-live="assertive"
+          aria-atomic="true"
+          aria-relevant="additions text"
+        >
+          {!resultsInBank && input ? (
+            <>
+              <span className="sr-only">Showing Zero results</span>
+
+              <ul
+                id="results"
+                role="listbox"
+                aria-labelledby={`${inputName}-label`}
+              >
+                <li
+                  id="no-results"
+                  role="option"
+                  aria-selected="false"
+                  tabIndex="-1"
+                >
+                  No Results
+                </li>
+              </ul>
+            </>
+          ) : null}
+
+          {resultsInBank && autoCompleteResults.length > 0 ? (
+            <>
+              <span className="sr-only">
+                {`Showing ${autoCompleteResults.length} ${
+                  autoCompleteResults.length === 1 ? "result" : "results"
+                }`}
+              </span>
+
+              <ul
+                id="results"
+                role="listbox"
+                aria-labelledby={`${inputName}-label`}
+              >
+                {autoCompleteResults.map((prediction, i) => {
+                  return (
+                    <li
+                      id={`results-${i}`}
+                      key={prediction.id}
+                      role="option"
+                      aria-selected={currentFocusedOption === `result${i}`}
+                      tabIndex="-1"
+                      ref={(ref) => {
+                        this.setOptionRefs(ref, i);
+                      }}
+                      onKeyDown={(e) =>
+                        this.chooseOnKeyDown(
+                          e,
+                          prediction.name,
+                          prediction.id,
+                          i
+                        )
+                      }
+                      onClick={() =>
+                        this.choosePrediction(prediction.name, prediction.id)
+                      }
+                    >
+                      {prediction.name}
+                    </li>
+                  );
+                })}
+              </ul>
+            </>
+          ) : null}
         </div>
 
-        {/* {!this.state.resultsInBank && this.state.input ? (
-          <div>
-            <p>No Results</p>
-
-            {this.props.inputName.includes("location") ? (
-              <p>Please choose a valid city</p>
-            ) : null}
-
-            {this.props.inputName.includes("skill") ? (
-              <>
-                <p>
-                  {this.state.input} is not in our system, click on the button
-                  to add it
-                </p>
-                <p>skill will be reviewed for apporval</p>
-                <button
-                  onClick={() => {
-                    this.props.addNewSkill(this.state.input);
-                    this.setState({ input: "" });
-                  }}
-                >
-                  Add Skill
-                </button>
-              </>
-            ) : null}
-          </div>
-        ) : null} */}
-
-        {!resultsInBank && input ? (
-          <ul
-            id="no-results"
-            role="listbox"
-            aria-labelledby={`${inputName}-label`}
-          >
-            <li
-              id="no-results-1"
-              role="option"
-              aria-selected="false"
-              tabIndex="-1"
-            >
-              No Results
-            </li>
-          </ul>
-        ) : null}
-
-        <ul id="results" role="listbox" aria-labelledby={`${inputName}-label`}>
-          {resultsInBank && autoCompleteResults.length > 0
-            ? autoCompleteResults.map((prediction, i) => {
-                return (
-                  <li
-                    id={`results-${i}`}
-                    key={prediction.id}
-                    role="option"
-                    aria-selected={currentFocusedOption === `result${i}`}
-                    tabIndex="-1"
-                    ref={(ref) => {
-                      this.setOptionRefs(ref, i);
-                    }}
-                    onKeyDown={(e) =>
-                      this.chooseOnKeyDown(e, prediction.name, prediction.id, i)
-                    }
-                    onClick={() =>
-                      this.choosePrediction(prediction.name, prediction.id)
-                    }
-                  >
-                    {prediction.name}
-                  </li>
-                );
-              })
-            : null}
-        </ul>
-
-        {chosenNames.length === 0 ? null : (
-          <ul>
+        {chosenNames.length > 0 ? (
+          <ChosenNamesGroup aria-label={`Choosen ${inputName.split("-")[1]}`}>
             {chosenNames.map((chosenName) => {
               return (
                 <li key={chosenName.id}>
-                  <p style={{ display: "inline" }}>{chosenName.name}</p>
+                  <span>{chosenName.name}</span>
                   <button
                     type="button"
+                    aria-label={`remove ${chosenName.name}`}
                     onClick={() => this.removeChosenName(chosenName)}
                   >
-                    X
+                    <span>X</span>
                   </button>
                 </li>
               );
             })}
-          </ul>
-        )}
+          </ChosenNamesGroup>
+        ) : null}
       </div>
     );
   }
 }
+
+const InputContainer = styled.div`
+  .sr-only {
+    position: absolute;
+    clip: rect(0, 0, 0, 0);
+    height: 1px;
+    width: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+  }
+`;
+
+const ChosenNamesGroup = styled.ul`
+  .sr-only {
+    position: absolute;
+    clip: rect(0, 0, 0, 0);
+    height: 1px;
+    width: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+  }
+`;
 
 export default AutoComplete;
