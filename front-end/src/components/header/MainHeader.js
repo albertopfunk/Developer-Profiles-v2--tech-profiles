@@ -126,7 +126,7 @@ function MainHeader({ isValidated, signOut, signIn, location }) {
 
             <ul
               id="nav-group"
-              aria-labelledby="menu-button"
+              aria-label="sub menu"
               className={`${isMobileNavOpen ? "_" : "hidden"}`}
             >
               <li>

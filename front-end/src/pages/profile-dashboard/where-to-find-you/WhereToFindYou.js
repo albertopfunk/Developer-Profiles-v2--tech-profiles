@@ -435,7 +435,7 @@ function WhereToFindYou() {
         <section aria-labelledby="current-information-heading">
           <h2 id="current-information-heading">Current Information</h2>
           <button onClick={setFormInputs}>Edit Information</button>
-          <ul>
+          <ul aria-label="current information">
             <li>Github: {user.github || "None Set"}</li>
             <li>Twitter: {user.twitter || "None Set"}</li>
             <li>Linkedin: {user.linkedin || "None Set"}</li>
@@ -483,7 +483,7 @@ function WhereToFindYou() {
                 <strong>
                   Please address the following errors and re-submit the form:
                 </strong>
-                <ul id="error-group">
+                <ul aria-label="current errors" id="error-group">
                   {github.inputStatus === FORM_STATUS.error ? (
                     <li>
                       <a href="#github">Github Error</a>
@@ -524,11 +524,7 @@ function WhereToFindYou() {
           </div>
         ) : null}
 
-        <form
-          onSubmit={(e) => submitEdit(e)}
-          aria-describedby="active-form-announcer success-form-announcer"
-          noValidate
-        >
+        <form onSubmit={(e) => submitEdit(e)} noValidate>
           <InputContainer>
             <label htmlFor="github">Github:</label>
             <input

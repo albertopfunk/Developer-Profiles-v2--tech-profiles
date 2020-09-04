@@ -304,7 +304,7 @@ function PersonalInfo() {
         <section aria-labelledby="current-information-heading">
           <h2 id="current-information-heading">Current Information</h2>
           <button onClick={setFormInputs}>Edit Information</button>
-          <ul>
+          <ul aria-label="current information">
             <li>First Name: {user.first_name || "None Set"}</li>
             <li>Last Name: {user.last_name || "None Set"}</li>
             <li>
@@ -357,7 +357,7 @@ function PersonalInfo() {
                 <strong>
                   Please address the following errors and re-submit the form:
                 </strong>
-                <ul id="error-group">
+                <ul aria-label="current errors" id="error-group">
                   {firstName.inputStatus === FORM_STATUS.error ? (
                     <li>
                       <a href="#first-name">First Name Error</a>
@@ -388,10 +388,7 @@ function PersonalInfo() {
           </div>
         ) : null}
 
-        <form
-          onSubmit={(e) => submitEdit(e)}
-          aria-describedby="active-form-announcer success-form-announcer"
-        >
+        <form onSubmit={(e) => submitEdit(e)}>
           <InputContainer>
             <label htmlFor="first-name">First Name:</label>
             <input
