@@ -1,7 +1,7 @@
 import React from "react";
 import { httpClient } from "../../../global/helpers/http-requests";
 
-import AutoComplete from "../autocomplete";
+import Combobox from "../combobox";
 
 class CurrentLocationFilter extends React.Component {
   state = {
@@ -101,11 +101,12 @@ class CurrentLocationFilter extends React.Component {
             {this.state.milesWithinInput}
           </label>
         </div>
-        <AutoComplete
+        <Combobox
           onInputChange={this.onLocationInputChange}
-          onChosenInput={this.onChosenLocation}
-          removeChosenInput={this.resetLocationFilter}
+          onChosenOption={this.onChosenLocation}
+          onRemoveChosenOption={this.resetLocationFilter}
           inputName={"current-location"}
+          displayName={"Current Location"}
           single
         />
       </section>

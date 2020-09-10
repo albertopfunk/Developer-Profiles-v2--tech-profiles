@@ -1,8 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-
-class AutoComplete extends React.Component {
+class Combobox extends React.Component {
   state = {
     timeOut: null,
     input: "",
@@ -10,15 +9,15 @@ class AutoComplete extends React.Component {
     currentFocusedOption: "",
     resultsInBank: true,
     autoCompleteResults: [],
-    chosenNames: [],
+    chosenOptions: [],
   };
 
   optionRefs = [];
   inputRef = React.createRef();
 
   componentDidMount() {
-    if (this.props.chosenInputs) {
-      this.setState({ chosenNames: this.props.chosenInputs });
+    if (this.props.chosenOptions) {
+      this.setState({ chosenOptions: this.props.chosenOptions });
     }
   }
 
@@ -28,16 +27,19 @@ class AutoComplete extends React.Component {
     }
   };
 
-  focusOnFirstOption = (e) => {
+  inputFocusActions = (e) => {
     if (this.state.autoCompleteResults.length > 0) {
+      // up arrow
       if (e.keyCode === 40) {
         e.preventDefault();
         if (this.optionRefs.length > 0) {
           this.setState({ currentFocusedOption: `result${0}` });
           this.optionRefs[0].focus();
         }
+        return;
       }
 
+      // down arrow
       if (e.keyCode === 38) {
         e.preventDefault();
         if (this.optionRefs.length > 0) {
@@ -46,31 +48,38 @@ class AutoComplete extends React.Component {
           });
           this.optionRefs[this.optionRefs.length - 1].focus();
         }
+        return;
       }
     }
 
     if (this.state.input.trim()) {
+      // escape
       if (e.keyCode === 27) {
-        this.resetInput();
+        this.closeCombobox();
       }
     }
   };
 
-  chooseOnKeyDown = (e, name, id, index) => {
+  optionFocusActions = (e, name, id, index) => {
+    // up arrow
     if (e.keyCode === 38) {
       e.preventDefault();
       this.focusOnOption(index, "up");
     }
+    // down arrow
     if (e.keyCode === 40) {
       e.preventDefault();
       this.focusOnOption(index, "down");
     }
+    // enter
     if (e.keyCode === 13) {
-      this.choosePrediction(name, id);
+      this.chooseOption(name, id);
       this.inputRef.current.focus();
     }
+    // escape
     if (e.keyCode === 27) {
-      this.resetInput();
+      this.closeCombobox();
+      this.inputRef.current.focus();
     }
   };
 
@@ -102,9 +111,9 @@ class AutoComplete extends React.Component {
   onInputChange = async (value) => {
     /*
       first debounce with value runs, the promise is pending
-      second debounce with no value runs, this.resetInput runs
+      second debounce with no value runs, this.closeCombobox runs
       second input runs first, then when resolved, the first input
-      runs second, rendering the predictions
+      runs second, rendering the results
       this is going to be a matter of needing to cancel a request
     */
 
@@ -113,13 +122,13 @@ class AutoComplete extends React.Component {
 
     if (value.trim() === "") {
       // cancel request
-      this.resetInput();
+      this.closeCombobox();
       return;
     }
 
-    let predictions = await this.props.onInputChange(value);
+    let results = await this.props.onInputChange(value);
 
-    if (predictions.length === 0) {
+    if (results.length === 0) {
       this.setState({
         input: value,
         autoCompleteResults: [],
@@ -133,7 +142,7 @@ class AutoComplete extends React.Component {
     this.setState({
       resultsInBank: true,
       isUsingCombobox: true,
-      autoCompleteResults: predictions,
+      autoCompleteResults: results,
     });
   };
 
@@ -155,63 +164,65 @@ class AutoComplete extends React.Component {
     this.setState({ timeOut: currTimeOut });
   };
 
-  choosePrediction = (name, id) => {
+  chooseOption = (name, id) => {
     if (this.props.single) {
-      this.setState({ chosenNames: [{ name, id }] });
-      this.resetInput(name);
-      this.props.onChosenInput(name, id);
+      this.setState({ chosenOptions: [{ name, id }] });
+      this.closeCombobox(name);
+      this.props.onChosenOption(name, id);
       return;
     }
 
-    const newChosenNamesState = [...this.state.chosenNames];
-    newChosenNamesState.push({ name, id });
-    this.setState({ chosenNames: newChosenNamesState });
-    this.resetInput();
-    this.props.onChosenInput(newChosenNamesState);
+    this.setState({
+      chosenOptions: [...this.state.chosenOptions, { name, id }],
+    });
+
+    this.closeCombobox();
+    this.props.onChosenOption([...this.state.chosenOptions, { name, id }]);
   };
 
-  resetInput = (name = "") => {
+  closeCombobox = (name = "") => {
     this.setState({
       input: name,
       autoCompleteResults: [],
       isUsingCombobox: false,
       currentFocusedOption: "",
+      resultsInBank: true,
     });
   };
 
-  removeChosenName = (location) => {
-    let newChosenNamesState = this.state.chosenNames.filter((chosenName) => {
-      return chosenName.name !== location.name;
-    });
+  removeChosenOption = (location) => {
+    let filteredChosenOptions = this.state.chosenOptions.filter(
+      (chosenOption) => {
+        return chosenOption.name !== location.name;
+      }
+    );
 
     this.setState({
-      chosenNames: newChosenNamesState,
+      chosenOptions: filteredChosenOptions,
       autoCompleteResults: [],
       input: "",
     });
 
-    this.props.removeChosenInput(newChosenNamesState);
+    this.props.onRemoveChosenOption(filteredChosenOptions);
   };
 
   render() {
     console.log("---- Autocomplete ----", this.state);
 
-    const { inputName } = this.props;
+    const { inputName, displayName } = this.props;
     const {
       input,
       resultsInBank,
       autoCompleteResults,
       isUsingCombobox,
       currentFocusedOption,
-      chosenNames,
+      chosenOptions,
     } = this.state;
 
     return (
       <div>
         <label id={`${inputName}-label`} htmlFor={`${inputName}-search-input`}>
-          <p style={{ textTransform: "capitalize" }}>
-            {`Choose ${inputName.split("-")[1]}`}
-          </p>
+          {displayName}
         </label>
 
         <InputContainer
@@ -220,7 +231,7 @@ class AutoComplete extends React.Component {
           // eslint-disable-next-line
           role="combobox"
           aria-haspopup="listbox"
-          aria-owns="results no-results"
+          aria-owns="results"
           aria-expanded={isUsingCombobox}
         >
           <input
@@ -235,10 +246,10 @@ class AutoComplete extends React.Component {
             aria-activedescendant={currentFocusedOption}
             value={input}
             onChange={(e) => this.debounceInput(e)}
-            onKeyDown={(e) => this.focusOnFirstOption(e)}
+            onKeyDown={(e) => this.inputFocusActions(e)}
           />
           <span id={`${inputName}-combobox-instructions`} className="sr-only">
-            {`Chosen ${inputName.split("-")[1]} will be listed below`}
+            {`chosen ${displayName} will be listed below`}
           </span>
         </InputContainer>
 
@@ -249,7 +260,7 @@ class AutoComplete extends React.Component {
         >
           {!resultsInBank && input ? (
             <>
-              <span className="sr-only">Showing Zero results</span>
+              <span className="sr-only">showing zero results</span>
 
               <ul
                 id="results"
@@ -271,7 +282,7 @@ class AutoComplete extends React.Component {
           {resultsInBank && autoCompleteResults.length > 0 ? (
             <>
               <span className="sr-only">
-                {`Showing ${autoCompleteResults.length} ${
+                {`showing ${autoCompleteResults.length} ${
                   autoCompleteResults.length === 1 ? "result" : "results"
                 }`}
               </span>
@@ -281,11 +292,11 @@ class AutoComplete extends React.Component {
                 role="listbox"
                 aria-labelledby={`${inputName}-label`}
               >
-                {autoCompleteResults.map((prediction, i) => {
+                {autoCompleteResults.map((option, i) => {
                   return (
                     <li
                       id={`results-${i}`}
-                      key={prediction.id}
+                      key={option.id}
                       role="option"
                       aria-selected={currentFocusedOption === `result${i}`}
                       tabIndex="-1"
@@ -293,18 +304,11 @@ class AutoComplete extends React.Component {
                         this.setOptionRefs(ref, i);
                       }}
                       onKeyDown={(e) =>
-                        this.chooseOnKeyDown(
-                          e,
-                          prediction.name,
-                          prediction.id,
-                          i
-                        )
+                        this.optionFocusActions(e, option.name, option.id, i)
                       }
-                      onClick={() =>
-                        this.choosePrediction(prediction.name, prediction.id)
-                      }
+                      onClick={() => this.chooseOption(option.name, option.id)}
                     >
-                      {prediction.name}
+                      {option.name}
                     </li>
                   );
                 })}
@@ -313,16 +317,16 @@ class AutoComplete extends React.Component {
           ) : null}
         </div>
 
-        {chosenNames.length > 0 ? (
-          <ChosenNamesGroup aria-label={`Choosen ${inputName.split("-")[1]}`}>
-            {chosenNames.map((chosenName) => {
+        {chosenOptions.length > 0 ? (
+          <ChosenNamesGroup aria-label={`chosen ${displayName}`}>
+            {chosenOptions.map((chosenOption) => {
               return (
-                <li key={chosenName.id}>
-                  <span>{chosenName.name}</span>
+                <li key={chosenOption.id}>
+                  <span>{chosenOption.name}</span>
                   <button
                     type="button"
-                    aria-label={`remove ${chosenName.name}`}
-                    onClick={() => this.removeChosenName(chosenName)}
+                    aria-label={`remove ${chosenOption.name}`}
+                    onClick={() => this.removeChosenOption(chosenOption)}
                   >
                     <span>X</span>
                   </button>
@@ -362,4 +366,4 @@ const ChosenNamesGroup = styled.ul`
   }
 `;
 
-export default AutoComplete;
+export default Combobox;

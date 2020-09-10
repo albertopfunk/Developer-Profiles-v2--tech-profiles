@@ -1,6 +1,6 @@
 import React from "react";
 
-import AutoComplete from "../autocomplete";
+import Combobox from "../combobox";
 import { httpClient } from "../../../global/helpers/http-requests";
 
 function RelocateToFilter(props) {
@@ -50,11 +50,12 @@ function RelocateToFilter(props) {
 
   return (
     <section>
-      <AutoComplete
+      <Combobox
         onInputChange={onInputChange}
-        onChosenInput={onChosenLocation}
-        removeChosenInput={resetLocationFilter}
+        onChosenOption={onChosenLocation}
+        onRemoveChosenOption={resetLocationFilter}
         inputName={"interested-locations"}
+        displayName={"Interested Locations"}
       />
     </section>
   );

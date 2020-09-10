@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import styled from "styled-components";
 
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
-import AutoComplete from "../../../components/forms/autocomplete";
+import Combobox from "../../../components/forms/combobox";
 import { httpClient } from "../../../global/helpers/http-requests";
 import { validateInput } from "../../../global/helpers/validation";
 
@@ -230,9 +230,7 @@ function AboutYou() {
     }
     setTopSkills(skills);
 
-
-
-    // now you can validate newSkills on blur, if any 
+    // now you can validate newSkills on blur, if any
     // don't value then inputErr will be true
     const existingSkills = skills.filter((skill) => Number.isInteger(skill.id));
     const newSkills = skills.filter((skill) => !Number.isInteger(skill.id));
@@ -244,8 +242,6 @@ function AboutYou() {
       newSkillsTracker: topSkillsN.newSkillsTracker + 1,
       inputChange: true,
     });
-
-
   }
 
   function addTopSkillForReview(skill) {
@@ -349,29 +345,32 @@ function AboutYou() {
           ) : null}
         </InputContainer>
 
-        <AutoComplete
-          chosenInputs={interestedLocations}
+        <Combobox
+          chosenOptions={interestedLocations}
           onInputChange={onLocationInputChange}
-          onChosenInput={onLocationsChange}
-          removeChosenInput={onLocationsChange}
+          onChosenOption={onLocationsChange}
+          onRemoveChosenOption={onLocationsChange}
           inputName={"interested-locations"}
+          displayName={"Interested Locations"}
         />
 
-        <AutoComplete
-          chosenInputs={topSkills}
+        <Combobox
+          chosenOptions={topSkills}
           onInputChange={onSkillInputChange}
-          onChosenInput={onTopSkillsChange}
-          removeChosenInput={onTopSkillsChange}
+          onChosenOption={onTopSkillsChange}
+          onRemoveChosenOption={onTopSkillsChange}
           inputName={"top-skills"}
+          displayName={"Top Skills"}
           addNewSkill={addTopSkillForReview}
-        />
+          />
 
-        <AutoComplete
-          chosenInputs={additionalSkills}
+        <Combobox
+          chosenOptions={additionalSkills}
           onInputChange={onSkillInputChange}
-          onChosenInput={onAdditionalSkillsChange}
-          removeChosenInput={onAdditionalSkillsChange}
+          onChosenOption={onAdditionalSkillsChange}
+          onRemoveChosenOption={onAdditionalSkillsChange}
           inputName={"additional-skills"}
+          displayName={"Additional Skills"}
           addNewSkill={addAdditionalSkillForReview}
         />
 

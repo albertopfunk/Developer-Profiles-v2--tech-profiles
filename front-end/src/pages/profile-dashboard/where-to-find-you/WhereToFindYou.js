@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import styled from "styled-components";
 import { Helmet } from "react-helmet";
 
-import AutoComplete from "../../../components/forms/autocomplete";
+import Combobox from "../../../components/forms/combobox";
 
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
 import { httpClient } from "../../../global/helpers/http-requests";
@@ -41,8 +41,8 @@ function WhereToFindYou() {
     inputChange: false,
     inputStatus: FORM_STATUS.idle,
   });
-  const [locationInput, setLocationInput] = useState([]);
-  const [locationInputChange, setLocationInputChange] = useState(false);
+  const [currentLocation, setCurrentLocation] = useState([]);
+  const [currentLocationChange, setCurrentLocationChange] = useState(false);
 
   let errorSummaryRef = React.createRef();
 
@@ -90,18 +90,18 @@ function WhereToFindYou() {
     });
 
     if (user.current_location_name) {
-      setLocationInput([
+      setCurrentLocation([
         {
           name: user.current_location_name,
-          id: 1, // autocomplete requires id for key
+          id: 1, // combobox requires id for key
           lat: user.current_location_lat,
           lon: user.current_location_lon,
         },
       ]);
     } else {
-      setLocationInput([]);
+      setCurrentLocation([]);
     }
-    setLocationInputChange(false);
+    setCurrentLocationChange(false);
   }
 
   function setGithubInput(value) {
@@ -316,8 +316,8 @@ function WhereToFindYou() {
   }
 
   async function setLocationWithGio(name, id) {
-    if (!locationInputChange) {
-      setLocationInputChange(true);
+    if (!currentLocationChange) {
+      setCurrentLocationChange(true);
     }
 
     const [res, err] = await httpClient("POST", "/api/gio", {
@@ -329,7 +329,7 @@ function WhereToFindYou() {
       return;
     }
 
-    setLocationInput([
+    setCurrentLocation([
       {
         name,
         id,
@@ -340,10 +340,10 @@ function WhereToFindYou() {
   }
 
   function removeLocation() {
-    if (!locationInputChange) {
-      setLocationInputChange(true);
+    if (!currentLocationChange) {
+      setCurrentLocationChange(true);
     }
-    setLocationInput([]);
+    setCurrentLocation([]);
   }
 
   async function submitEdit(e) {
@@ -369,7 +369,7 @@ function WhereToFindYou() {
       !linkedin.inputChange &&
       !portfolio.inputChange &&
       !email.inputChange &&
-      !locationInputChange
+      !currentLocationChange
     ) {
       return;
     }
@@ -396,9 +396,9 @@ function WhereToFindYou() {
       inputs.public_email = email.inputValue;
     }
 
-    if (locationInputChange) {
-      if (locationInput.length > 0) {
-        const { name, lat, lon } = locationInput[0];
+    if (currentLocationChange) {
+      if (currentLocation.length > 0) {
+        const { name, lat, lon } = currentLocation[0];
         inputs.current_location_name = name;
         inputs.current_location_lat = lat;
         inputs.current_location_lon = lon;
@@ -682,12 +682,13 @@ function WhereToFindYou() {
             ) : null}
           </InputContainer>
 
-          <AutoComplete
-            chosenInputs={locationInput}
+          <Combobox
+            chosenOptions={currentLocation}
             onInputChange={getLocationsByValue}
-            onChosenInput={setLocationWithGio}
-            removeChosenInput={removeLocation}
+            onChosenOption={setLocationWithGio}
+            onRemoveChosenOption={removeLocation}
             inputName={"current-location"}
+            displayName={"Current Location"}
             single
           />
 
