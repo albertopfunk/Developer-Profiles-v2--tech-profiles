@@ -5,6 +5,7 @@ class Combobox extends React.Component {
   state = {
     timeOut: null,
     input: "",
+    inputSelectionRange: [],
     isUsingCombobox: false,
     currentFocusedOption: "",
     resultsInBank: true,
@@ -33,10 +34,15 @@ class Combobox extends React.Component {
       if (e.keyCode === 40) {
         e.preventDefault();
         if (this.optionRefs.length > 0) {
-          this.setState({ currentFocusedOption: `result${0}` });
+          this.setState({
+            currentFocusedOption: `result${0}`,
+            inputSelectionRange: [
+              this.inputRef.current.selectionStart,
+              this.inputRef.current.selectionEnd,
+            ],
+          });
           this.optionRefs[0].focus();
         }
-        return;
       }
 
       // down arrow
@@ -45,10 +51,13 @@ class Combobox extends React.Component {
         if (this.optionRefs.length > 0) {
           this.setState({
             currentFocusedOption: `result${this.optionRefs.length - 1}`,
+            inputSelectionRange: [
+              this.inputRef.current.selectionStart,
+              this.inputRef.current.selectionEnd,
+            ],
           });
           this.optionRefs[this.optionRefs.length - 1].focus();
         }
-        return;
       }
     }
 
@@ -61,6 +70,26 @@ class Combobox extends React.Component {
   };
 
   optionFocusActions = (e, name, id, index) => {
+    // home
+    if (e.keyCode === 36) {
+      e.preventDefault();
+      this.focusOnInputWithSelectionRange("start");
+    }
+    // end
+    if (e.keyCode === 35) {
+      e.preventDefault();
+      this.focusOnInputWithSelectionRange("end");
+    }
+    // left arrow
+    if (e.keyCode === 37) {
+      e.preventDefault();
+      this.focusOnInputWithSelectionRange("left");
+    }
+    // right arrow
+    if (e.keyCode === 39) {
+      e.preventDefault();
+      this.focusOnInputWithSelectionRange("right");
+    }
     // up arrow
     if (e.keyCode === 38) {
       e.preventDefault();
@@ -89,7 +118,7 @@ class Combobox extends React.Component {
         this.setState({
           currentFocusedOption: "",
         });
-        this.inputRef.current.focus();
+        this.focusOnInputWithSelectionRange("current");
       } else {
         this.setState({ currentFocusedOption: `result${index - 1}` });
         this.optionRefs[index - 1].focus();
@@ -100,11 +129,61 @@ class Combobox extends React.Component {
         this.setState({
           currentFocusedOption: "",
         });
-        this.inputRef.current.focus();
+        this.focusOnInputWithSelectionRange("current");
       } else {
         this.setState({ currentFocusedOption: `result${index + 1}` });
         this.optionRefs[index + 1].focus();
       }
+    }
+  };
+
+  focusOnInputWithSelectionRange = (action) => {
+    this.inputRef.current.focus();
+
+    if (action === "start") {
+      this.inputRef.current.setSelectionRange(0, 0);
+    }
+
+    if (action === "end") {
+      this.inputRef.current.setSelectionRange(
+        this.inputRef.current.value.length,
+        this.inputRef.current.value.length
+      );
+    }
+
+    if (action === "left") {
+      if (this.state.inputSelectionRange[0] === this.state.inputSelectionRange[1]) {
+        this.inputRef.current.setSelectionRange(
+          this.state.inputSelectionRange[0] - 1,
+          this.state.inputSelectionRange[1] - 1
+        );
+      } else {
+        this.inputRef.current.setSelectionRange(
+          this.state.inputSelectionRange[0],
+          this.state.inputSelectionRange[0]
+        );
+      }
+    }
+
+    if (action === "right") {
+      if (this.state.inputSelectionRange[0] === this.state.inputSelectionRange[1]) {
+        this.inputRef.current.setSelectionRange(
+          this.state.inputSelectionRange[0] + 1,
+          this.state.inputSelectionRange[1] + 1
+        );
+      } else {
+        this.inputRef.current.setSelectionRange(
+          this.state.inputSelectionRange[1],
+          this.state.inputSelectionRange[1]
+        );
+      }
+    }
+
+    if (action === "current") {
+      this.inputRef.current.setSelectionRange(
+        this.state.inputSelectionRange[0],
+        this.state.inputSelectionRange[1]
+      );
     }
   };
 
@@ -236,7 +315,7 @@ class Combobox extends React.Component {
         >
           <input
             ref={this.inputRef}
-            type="search"
+            type="text"
             autoComplete="off"
             id={`${inputName}-search-input`}
             name={`${inputName}-search-input`}
