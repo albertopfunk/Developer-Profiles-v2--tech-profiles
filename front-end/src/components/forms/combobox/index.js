@@ -11,6 +11,7 @@ class Combobox extends React.Component {
     resultsInBank: true,
     autoCompleteResults: [],
     chosenOptions: [],
+    ariaLiveRegions: { optionsChangeAnnounce: false },
   };
 
   optionRefs = [];
@@ -26,6 +27,76 @@ class Combobox extends React.Component {
     if (element !== null) {
       this.optionRefs[index] = element;
     }
+  };
+
+  onInputChange = async (value) => {
+    /*
+        first debounce with value runs, the promise is pending
+        second debounce with no value runs, this.closeCombobox runs
+        second input runs first, then when resolved, the first input
+        runs second, rendering the results
+        this is going to be a matter of needing to cancel a request
+      */
+
+    // need to reset option refs
+    this.optionRefs = [];
+
+    if (value.trim() === "") {
+      // cancel request
+      this.closeCombobox();
+      return;
+    }
+
+    let results = await this.props.onInputChange(value);
+
+    if (results.length === 0) {
+      this.setState({
+        input: value,
+        autoCompleteResults: [],
+        resultsInBank: false,
+        isUsingCombobox: true,
+        currentFocusedOption: "",
+        ariaLiveRegions: {
+          ...this.state.ariaLiveRegions,
+          optionsChangeAnnounce: true,
+        },
+      });
+      return;
+    }
+
+    this.setState({
+      resultsInBank: true,
+      isUsingCombobox: true,
+      autoCompleteResults: results,
+      ariaLiveRegions: {
+        ...this.state.ariaLiveRegions,
+        optionsChangeAnnounce: true,
+      },
+    });
+  };
+
+  debounceInput = (e) => {
+    let currTimeOut;
+
+    const { value } = e.target;
+    this.setState({
+      input: value,
+      ariaLiveRegions: {
+        ...this.state.ariaLiveRegions,
+        optionsChangeAnnounce: false,
+      },
+    });
+
+    if (this.state.timeOut) {
+      clearTimeout(this.state.timeOut);
+    }
+
+    currTimeOut = setTimeout(() => {
+      this.setState({ timeOut: null });
+      this.onInputChange(value);
+    }, 200);
+
+    this.setState({ timeOut: currTimeOut });
   };
 
   inputFocusActions = (e) => {
@@ -103,7 +174,7 @@ class Combobox extends React.Component {
     // enter
     if (e.keyCode === 13) {
       this.chooseOption(name, id);
-      this.inputRef.current.focus();
+      // this.inputRef.current.focus();
     }
     // escape
     if (e.keyCode === 27) {
@@ -152,7 +223,9 @@ class Combobox extends React.Component {
     }
 
     if (action === "left") {
-      if (this.state.inputSelectionRange[0] === this.state.inputSelectionRange[1]) {
+      if (
+        this.state.inputSelectionRange[0] === this.state.inputSelectionRange[1]
+      ) {
         this.inputRef.current.setSelectionRange(
           this.state.inputSelectionRange[0] - 1,
           this.state.inputSelectionRange[1] - 1
@@ -166,7 +239,9 @@ class Combobox extends React.Component {
     }
 
     if (action === "right") {
-      if (this.state.inputSelectionRange[0] === this.state.inputSelectionRange[1]) {
+      if (
+        this.state.inputSelectionRange[0] === this.state.inputSelectionRange[1]
+      ) {
         this.inputRef.current.setSelectionRange(
           this.state.inputSelectionRange[0] + 1,
           this.state.inputSelectionRange[1] + 1
@@ -185,62 +260,6 @@ class Combobox extends React.Component {
         this.state.inputSelectionRange[1]
       );
     }
-  };
-
-  onInputChange = async (value) => {
-    /*
-      first debounce with value runs, the promise is pending
-      second debounce with no value runs, this.closeCombobox runs
-      second input runs first, then when resolved, the first input
-      runs second, rendering the results
-      this is going to be a matter of needing to cancel a request
-    */
-
-    // need to reset option refs
-    this.optionRefs = [];
-
-    if (value.trim() === "") {
-      // cancel request
-      this.closeCombobox();
-      return;
-    }
-
-    let results = await this.props.onInputChange(value);
-
-    if (results.length === 0) {
-      this.setState({
-        input: value,
-        autoCompleteResults: [],
-        resultsInBank: false,
-        isUsingCombobox: true,
-        currentFocusedOption: "",
-      });
-      return;
-    }
-
-    this.setState({
-      resultsInBank: true,
-      isUsingCombobox: true,
-      autoCompleteResults: results,
-    });
-  };
-
-  debounceInput = (e) => {
-    let currTimeOut;
-
-    const { value } = e.target;
-    this.setState({ input: value });
-
-    if (this.state.timeOut) {
-      clearTimeout(this.state.timeOut);
-    }
-
-    currTimeOut = setTimeout(() => {
-      this.setState({ timeOut: null });
-      this.onInputChange(value);
-    }, 200);
-
-    this.setState({ timeOut: currTimeOut });
   };
 
   chooseOption = (name, id) => {
@@ -332,14 +351,12 @@ class Combobox extends React.Component {
           </span>
         </InputContainer>
 
-        <div
-          aria-live="assertive"
-          aria-atomic="true"
-          aria-relevant="additions text"
-        >
+        <div aria-live="assertive" aria-atomic="true" aria-relevant="additions">
           {!resultsInBank && input ? (
             <>
-              <span className="sr-only">showing zero results</span>
+              {this.state.ariaLiveRegions.optionsChangeAnnounce ? (
+                <span className="sr-only">showing zero results</span>
+              ) : null}
 
               <ul
                 id="results"
@@ -360,11 +377,13 @@ class Combobox extends React.Component {
 
           {resultsInBank && autoCompleteResults.length > 0 ? (
             <>
-              <span className="sr-only">
-                {`showing ${autoCompleteResults.length} ${
-                  autoCompleteResults.length === 1 ? "result" : "results"
-                }`}
-              </span>
+              {this.state.ariaLiveRegions.optionsChangeAnnounce ? (
+                <span className="sr-only">
+                  {`showing ${autoCompleteResults.length} ${
+                    autoCompleteResults.length === 1 ? "result" : "results"
+                  }`}
+                </span>
+              ) : null}
 
               <ul
                 id="results"
@@ -396,24 +415,32 @@ class Combobox extends React.Component {
           ) : null}
         </div>
 
-        {chosenOptions.length > 0 ? (
-          <ChosenNamesGroup aria-label={`chosen ${displayName}`}>
-            {chosenOptions.map((chosenOption) => {
-              return (
-                <li key={chosenOption.id}>
-                  <span>{chosenOption.name}</span>
-                  <button
-                    type="button"
-                    aria-label={`remove ${chosenOption.name}`}
-                    onClick={() => this.removeChosenOption(chosenOption)}
-                  >
-                    <span>X</span>
-                  </button>
-                </li>
-              );
-            })}
-          </ChosenNamesGroup>
-        ) : null}
+        <div
+          aria-live="assertive"
+          aria-atomic="false"
+          aria-relevant="additions"
+        >
+          {chosenOptions.length > 0 ? (
+            <>
+              <ChosenNamesGroup aria-label={`chosen ${displayName}`}>
+                {chosenOptions.map((chosenOption) => {
+                  return (
+                    <li key={chosenOption.id}>
+                      <span>{chosenOption.name}</span>
+                      <button
+                        type="button"
+                        aria-label={`remove ${chosenOption.name}`}
+                        onClick={() => this.removeChosenOption(chosenOption)}
+                      >
+                        <span>X</span>
+                      </button>
+                    </li>
+                  );
+                })}
+              </ChosenNamesGroup>
+            </>
+          ) : null}
+        </div>
       </div>
     );
   }
