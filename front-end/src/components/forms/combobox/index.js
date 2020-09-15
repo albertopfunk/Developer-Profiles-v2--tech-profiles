@@ -11,7 +11,7 @@ class Combobox extends React.Component {
     resultsInBank: true,
     autoCompleteResults: [],
     chosenOptions: [],
-    ariaLiveRegions: { optionsChangeAnnounce: false },
+    shouldAnnounce: false,
   };
 
   optionRefs = [];
@@ -56,10 +56,7 @@ class Combobox extends React.Component {
         resultsInBank: false,
         isUsingCombobox: true,
         currentFocusedOption: "",
-        ariaLiveRegions: {
-          ...this.state.ariaLiveRegions,
-          optionsChangeAnnounce: true,
-        },
+        shouldAnnounce: true,
       });
       return;
     }
@@ -68,10 +65,7 @@ class Combobox extends React.Component {
       resultsInBank: true,
       isUsingCombobox: true,
       autoCompleteResults: results,
-      ariaLiveRegions: {
-        ...this.state.ariaLiveRegions,
-        optionsChangeAnnounce: true,
-      },
+      shouldAnnounce: true,
     });
   };
 
@@ -81,10 +75,7 @@ class Combobox extends React.Component {
     const { value } = e.target;
     this.setState({
       input: value,
-      ariaLiveRegions: {
-        ...this.state.ariaLiveRegions,
-        optionsChangeAnnounce: false,
-      },
+      shouldAnnounce: false,
     });
 
     if (this.state.timeOut) {
@@ -94,7 +85,7 @@ class Combobox extends React.Component {
     currTimeOut = setTimeout(() => {
       this.setState({ timeOut: null });
       this.onInputChange(value);
-    }, 200);
+    }, 350);
 
     this.setState({ timeOut: currTimeOut });
   };
@@ -295,12 +286,7 @@ class Combobox extends React.Component {
       }
     );
 
-    this.setState({
-      chosenOptions: filteredChosenOptions,
-      autoCompleteResults: [],
-      input: "",
-    });
-
+    this.setState({ chosenOptions: filteredChosenOptions });
     this.props.onRemoveChosenOption(filteredChosenOptions);
   };
 
@@ -354,7 +340,7 @@ class Combobox extends React.Component {
         <div aria-live="assertive" aria-atomic="true" aria-relevant="additions">
           {!resultsInBank && input ? (
             <>
-              {this.state.ariaLiveRegions.optionsChangeAnnounce ? (
+              {this.state.shouldAnnounce ? (
                 <span className="sr-only">showing zero results</span>
               ) : null}
 
@@ -377,7 +363,7 @@ class Combobox extends React.Component {
 
           {resultsInBank && autoCompleteResults.length > 0 ? (
             <>
-              {this.state.ariaLiveRegions.optionsChangeAnnounce ? (
+              {this.state.shouldAnnounce ? (
                 <span className="sr-only">
                   {`showing ${autoCompleteResults.length} ${
                     autoCompleteResults.length === 1 ? "result" : "results"
@@ -414,12 +400,7 @@ class Combobox extends React.Component {
             </>
           ) : null}
         </div>
-
-        <div
-          aria-live="assertive"
-          aria-atomic="false"
-          aria-relevant="additions"
-        >
+        <div>
           {chosenOptions.length > 0 ? (
             <>
               <ChosenNamesGroup aria-label={`chosen ${displayName}`}>
