@@ -6,9 +6,9 @@ import { ReactComponent as MenuClose } from "./close.svg";
 
 let closeOnBlurWait;
 function MainHeader({ isValidated, signOut, signIn, location }) {
-  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
-  const [shouldAnnounce, setShouldAnnounce] = useState(false);
-  const [shouldAnnounceNav, setShouldAnnounceNav] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [announceMenuToggle, setAnnounceMenuToggle] = useState(false);
+  const [announceNavChange, setannounceNavChange] = useState(false);
   const [previousLocation, setPreviousLocation] = useState(location.pathname);
 
   useEffect(() => {
@@ -18,29 +18,29 @@ function MainHeader({ isValidated, signOut, signIn, location }) {
   useEffect(() => {
     if (location.pathname !== previousLocation) {
       setPreviousLocation(location.pathname);
-      setShouldAnnounceNav(true);
+      setannounceNavChange(true);
       return;
     }
   }, [location, previousLocation]);
 
-  function openMobileNav() {
-    setIsMobileNavOpen(true);
-    setShouldAnnounce(true);
+  function openMenu() {
+    setIsMenuOpen(true);
+    setAnnounceMenuToggle(true);
   }
 
-  function closeMobileNav() {
-    setIsMobileNavOpen(false);
-    setShouldAnnounce(true);
+  function closeMenu() {
+    setIsMenuOpen(false);
+    setAnnounceMenuToggle(true);
   }
 
-  function closeMobileNavOnBlur() {
+  function closeMenuBlur() {
     function closeOnBlurTimeOut() {
       if (
         document.activeElement.id !== "menu-button" &&
         document.activeElement.className !== "nav-item"
       ) {
-        setIsMobileNavOpen(false);
-        setShouldAnnounce(false);
+        setIsMenuOpen(false);
+        setAnnounceMenuToggle(false);
       }
     }
 
@@ -68,21 +68,12 @@ function MainHeader({ isValidated, signOut, signIn, location }) {
     <Header>
       <div
         className="sr-only"
-        aria-live="polite"
-        aria-atomic="true"
-        aria-relevant="additions text"
-      >
-        {shouldAnnounce && isMobileNavOpen ? "Opened SubMenu" : null}
-        {shouldAnnounce && !isMobileNavOpen ? "Closed SubMenu" : null}
-      </div>
-
-      <div
-        className="sr-only"
         aria-live="assertive"
-        aria-atomic="true"
         aria-relevant="additions text"
       >
-        {shouldAnnounceNav
+        {announceMenuToggle && isMenuOpen ? "Opened SubMenu" : null}
+        {announceMenuToggle && !isMenuOpen ? "Closed SubMenu" : null}
+        {announceNavChange
           ? `Navigated to ${currentLocation} • Tech Profiles, press tab for skip links`
           : null}
       </div>
@@ -97,13 +88,13 @@ function MainHeader({ isValidated, signOut, signIn, location }) {
 
         {isValidated ? (
           <>
-            {isMobileNavOpen ? (
+            {isMenuOpen ? (
               <button
                 id="menu-button"
                 aria-haspopup="true"
                 aria-controls="nav-group"
-                onClick={closeMobileNav}
-                onBlur={closeMobileNavOnBlur}
+                onClick={closeMenu}
+                onBlur={closeMenuBlur}
               >
                 <span aria-hidden="true">
                   <MenuClose />
@@ -115,7 +106,7 @@ function MainHeader({ isValidated, signOut, signIn, location }) {
                 id="menu-button"
                 aria-haspopup="true"
                 aria-controls="nav-group"
-                onClick={openMobileNav}
+                onClick={openMenu}
               >
                 <span aria-hidden="true">
                   <BurgerMenu />
@@ -127,14 +118,14 @@ function MainHeader({ isValidated, signOut, signIn, location }) {
             <ul
               id="nav-group"
               aria-label="sub menu"
-              className={`${isMobileNavOpen ? "_" : "hidden"}`}
+              className={`${isMenuOpen ? "_" : "hidden"}`}
             >
               <li>
                 <Link
                   to="/"
                   className="nav-item"
-                  onClick={closeMobileNavOnBlur}
-                  onBlur={closeMobileNavOnBlur}
+                  onClick={closeMenuBlur}
+                  onBlur={closeMenuBlur}
                 >
                   Profiles
                 </Link>
@@ -143,8 +134,8 @@ function MainHeader({ isValidated, signOut, signIn, location }) {
                 <Link
                   to="/profile-dashboard"
                   className="nav-item"
-                  onClick={closeMobileNavOnBlur}
-                  onBlur={closeMobileNavOnBlur}
+                  onClick={closeMenuBlur}
+                  onBlur={closeMenuBlur}
                 >
                   Dashboard
                 </Link>
@@ -154,7 +145,7 @@ function MainHeader({ isValidated, signOut, signIn, location }) {
                   className="nav-item"
                   type="button"
                   onClick={signOut}
-                  onBlur={closeMobileNavOnBlur}
+                  onBlur={closeMenuBlur}
                 >
                   Sign Out
                 </button>
