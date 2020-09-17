@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import ReactDOM from "react-dom";
 import { Route, useRouteMatch, Link, Switch } from "react-router-dom";
 import styled from "styled-components";
 import { Helmet } from "react-helmet";
@@ -52,9 +53,10 @@ function ProfileDashboard() {
       return;
     }
 
-    // batch
-    setUser(res.data);
-    setLoadingUser(false);
+    ReactDOM.unstable_batchedUpdates(() => {
+      setUser(res.data);
+      setLoadingUser(false);
+    });
   }
 
   async function editProfile(data) {
