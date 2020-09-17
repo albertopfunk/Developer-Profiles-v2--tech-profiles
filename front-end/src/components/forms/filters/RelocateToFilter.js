@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 
 import Combobox from "../combobox";
 import { httpClient } from "../../../global/helpers/http-requests";
 
 function RelocateToFilter(props) {
+  const [interestedLocations, setInterestedLocations] = useState([]);
+
   async function onInputChange(value) {
     const [res, err] = await httpClient("POST", "/api/autocomplete", {
       value,
@@ -14,7 +16,15 @@ function RelocateToFilter(props) {
       return [];
     }
 
-    return res.data;
+    let checkDups = {};
+    for (let i = 0; i < interestedLocations.length; i++) {
+      checkDups[interestedLocations[i].name] = true;
+    }
+    const results = res.data.filter(
+      (prediction) => !(prediction.name in checkDups)
+    );
+
+    return results;
   }
 
   function convertToObj(arr) {
@@ -24,15 +34,9 @@ function RelocateToFilter(props) {
     }, {});
   }
 
-  function onChosenLocation(chosenRelocateToArr) {
-    let chosenRelocateToObj = convertToObj(chosenRelocateToArr);
-    props.updateUsers({
-      isUsingRelocateToFilter: true,
-      chosenRelocateToObj,
-    });
-  }
+  function onLocationChange(chosenRelocateToArr) {
+    setInterestedLocations(chosenRelocateToArr);
 
-  function resetLocationFilter(chosenRelocateToArr) {
     if (chosenRelocateToArr.length === 0) {
       props.updateUsers({
         isUsingRelocateToFilter: false,
@@ -41,19 +45,21 @@ function RelocateToFilter(props) {
     }
 
     let chosenRelocateToObj = convertToObj(chosenRelocateToArr);
-
     props.updateUsers({
       isUsingRelocateToFilter: true,
       chosenRelocateToObj,
     });
   }
 
+  console.log("-- RelocateToFilter --", interestedLocations);
+
   return (
     <section>
       <Combobox
+        chosenOptions={interestedLocations}
         onInputChange={onInputChange}
-        onChosenOption={onChosenLocation}
-        onRemoveChosenOption={resetLocationFilter}
+        onChosenOption={onLocationChange}
+        onRemoveChosenOption={onLocationChange}
         inputName={"interested-locations"}
         displayName={"Interested Locations"}
       />

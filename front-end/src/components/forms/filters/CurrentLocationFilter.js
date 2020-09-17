@@ -24,7 +24,11 @@ class CurrentLocationFilter extends React.Component {
       return [];
     }
 
-    return res.data;
+    const results = res.data.filter(
+      (prediction) => prediction.name !== this.state.chosenLocationName
+    );
+
+    return results;
   };
 
   chooseDistanceOnKeyUp = (e) => {
