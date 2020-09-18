@@ -333,14 +333,14 @@ function WhereToFindYou() {
       return [];
     }
 
-    let results;
     if (location.length > 0) {
-      results = res.data.filter(
+      const results = res.data.filter(
         (prediction) => prediction.name !== location[0].name
       );
+      return results;
     }
 
-    return results;
+    return res.data;
   }
 
   async function setLocationWithGio(name, id) {
