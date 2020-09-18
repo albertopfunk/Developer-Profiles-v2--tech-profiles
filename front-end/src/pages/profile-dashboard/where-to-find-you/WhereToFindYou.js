@@ -7,14 +7,17 @@ import Combobox from "../../../components/forms/combobox";
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
 import { httpClient } from "../../../global/helpers/http-requests";
 import { validateInput } from "../../../global/helpers/validation";
-import { FORM_STATUS } from "../../../global/helpers/variables";
+import {
+  COMBOBOX_STATUS,
+  FORM_STATUS,
+} from "../../../global/helpers/variables";
 import Announcer from "../../../global/helpers/announcer";
 
 let formSuccessWait;
 function WhereToFindYou() {
   const { user, editProfile } = useContext(ProfileContext);
   const [formStatus, setFormStatus] = useState(FORM_STATUS.idle);
-  const [shouldAnnounce, setShouldAnnounce] = useState(false);
+  const [announceFormStatus, setAnnounceFormStatus] = useState(false);
 
   const [github, setGithub] = useState({
     inputValue: "",
@@ -41,8 +44,12 @@ function WhereToFindYou() {
     inputChange: false,
     inputStatus: FORM_STATUS.idle,
   });
-  const [currentLocation, setCurrentLocation] = useState([]);
-  const [currentLocationChange, setCurrentLocationChange] = useState(false);
+
+  // keeping seperate since I am using one as a dep for useEffect
+  const [location, setLocation] = useState([]);
+  const [locationChange, setLocationChange] = useState(false);
+  const [announceLocationChange, setAnnounceLocationChange] = useState(false);
+  const [locationStatus, setLocationStatus] = useState(COMBOBOX_STATUS.idle);
 
   let errorSummaryRef = React.createRef();
 
@@ -59,9 +66,21 @@ function WhereToFindYou() {
     };
   }, []);
 
+  useEffect(() => {
+    const locationAnnouncementWait = setTimeout(() => {
+      setAnnounceLocationChange(true);
+    }, 500);
+
+    setAnnounceLocationChange(false);
+
+    return () => {
+      clearTimeout(locationAnnouncementWait);
+    };
+  }, [locationStatus]);
+
   function setFormInputs() {
     setFormStatus(FORM_STATUS.active);
-    setShouldAnnounce(true);
+    setAnnounceFormStatus(true);
 
     setGithub({
       inputValue: user.github || "",
@@ -90,7 +109,7 @@ function WhereToFindYou() {
     });
 
     if (user.current_location_name) {
-      setCurrentLocation([
+      setLocation([
         {
           name: user.current_location_name,
           id: 1, // combobox requires id for key
@@ -99,9 +118,11 @@ function WhereToFindYou() {
         },
       ]);
     } else {
-      setCurrentLocation([]);
+      setLocation([]);
     }
-    setCurrentLocationChange(false);
+    setLocationChange(false);
+    setAnnounceLocationChange(false);
+    setLocationStatus(COMBOBOX_STATUS.idle);
   }
 
   function setGithubInput(value) {
@@ -316,9 +337,8 @@ function WhereToFindYou() {
   }
 
   async function setLocationWithGio(name, id) {
-    if (!currentLocationChange) {
-      setCurrentLocationChange(true);
-    }
+    setLocationStatus(COMBOBOX_STATUS.added);
+    setLocationChange(true);
 
     const [res, err] = await httpClient("POST", "/api/gio", {
       placeId: id,
@@ -329,7 +349,7 @@ function WhereToFindYou() {
       return;
     }
 
-    setCurrentLocation([
+    setLocation([
       {
         name,
         id,
@@ -340,10 +360,9 @@ function WhereToFindYou() {
   }
 
   function removeLocation() {
-    if (!currentLocationChange) {
-      setCurrentLocationChange(true);
-    }
-    setCurrentLocation([]);
+    setLocationStatus(COMBOBOX_STATUS.removed);
+    setLocationChange(true);
+    setLocation([]);
   }
 
   async function submitEdit(e) {
@@ -369,7 +388,7 @@ function WhereToFindYou() {
       !linkedin.inputChange &&
       !portfolio.inputChange &&
       !email.inputChange &&
-      !currentLocationChange
+      !locationChange
     ) {
       return;
     }
@@ -396,9 +415,9 @@ function WhereToFindYou() {
       inputs.public_email = email.inputValue;
     }
 
-    if (currentLocationChange) {
-      if (currentLocation.length > 0) {
-        const { name, lat, lon } = currentLocation[0];
+    if (locationChange) {
+      if (location.length > 0) {
+        const { name, lat, lon } = location[0];
         inputs.current_location_name = name;
         inputs.current_location_lat = lat;
         inputs.current_location_lon = lon;
@@ -426,7 +445,7 @@ function WhereToFindYou() {
           <title>Profile Dashboard Where to Find You • Tech Profiles</title>
         </Helmet>
         <h1 id="main-heading">Where to Find You</h1>
-        {shouldAnnounce ? (
+        {announceFormStatus ? (
           <Announcer
             announcement="Form is idle, press edit information button to open"
             ariaId="form-idle-announcement"
@@ -455,18 +474,34 @@ function WhereToFindYou() {
         <title>Dashboard Where to Find You • Tech Profiles</title>
       </Helmet>
       <h1 id="main-heading">Where to Find You</h1>
-      {shouldAnnounce && formStatus === FORM_STATUS.active ? (
+
+      {announceFormStatus && formStatus === FORM_STATUS.active ? (
         <Announcer
-          announcement="Form is active, inputs are validated but not required to submit"
+          announcement="Form is active, inputs are validated but not required"
           ariaId="active-form-announcer"
         />
       ) : null}
-      {shouldAnnounce && formStatus === FORM_STATUS.success ? (
+
+      {announceFormStatus && formStatus === FORM_STATUS.success ? (
         <Announcer
-          announcement="Successfully submitted information"
+          announcement="information updated"
           ariaId="success-form-announcer"
         />
       ) : null}
+
+      <div
+        className="sr-only"
+        aria-live="assertive"
+        aria-atomic="true"
+        aria-relevant="additions"
+      >
+        {announceLocationChange && locationStatus === COMBOBOX_STATUS.added
+          ? "added location"
+          : null}
+        {announceLocationChange && locationStatus === COMBOBOX_STATUS.removed
+          ? "removed location"
+          : null}
+      </div>
 
       <FormSection aria-labelledby="edit-information-heading">
         <h2 id="edit-information-heading">Edit Information</h2>
@@ -683,7 +718,7 @@ function WhereToFindYou() {
           </InputContainer>
 
           <Combobox
-            chosenOptions={currentLocation}
+            chosenOptions={location}
             onInputChange={getLocationsByValue}
             onChosenOption={setLocationWithGio}
             onRemoveChosenOption={removeLocation}
@@ -725,6 +760,17 @@ const Main = styled.main`
   height: 100vh;
   padding-top: 100px;
   background-color: pink;
+
+  .sr-only {
+    position: absolute;
+    clip: rect(0, 0, 0, 0);
+    height: 1px;
+    width: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+  }
 `;
 
 const FormSection = styled.section`

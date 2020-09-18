@@ -5,3 +5,9 @@ export const FORM_STATUS = {
   success: "success",
   error: "error",
 };
+
+export const COMBOBOX_STATUS = {
+  idle: "idle",
+  added: "added",
+  removed: "removed",
+};
