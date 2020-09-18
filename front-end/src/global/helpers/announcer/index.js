@@ -1,32 +1,34 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
-let announcementWait;
 function Announcer({ announcement, ariaId, ariaLive = "assertive" }) {
   const [pageLoaded, setPageLoaded] = useState(false);
 
   useEffect(() => {
+    const announcementWait = setTimeout(() => {
+      setPageLoaded(true);
+    }, 500);
+
     return () => {
       clearTimeout(announcementWait);
     };
   }, []);
 
-  useEffect(() => {
-    announcementWait = setTimeout(() => {
-      setPageLoaded(true);
-    }, 150);
-  }, []);
-
-  console.log("-- announcer --");
+  console.log("-- announcer --", pageLoaded, announcement);
 
   return (
-    <div aria-live={ariaLive} aria-atomic="true" aria-relevant="additions text">
-      {pageLoaded ? <Alert id={ariaId}>{announcement}</Alert> : null}
-    </div>
+    <Alert
+      id={ariaId}
+      aria-live={ariaLive}
+      aria-atomic="true"
+      aria-relevant="additions text"
+    >
+      {pageLoaded ? announcement : null}
+    </Alert>
   );
 }
 
-const Alert = styled.p`
+const Alert = styled.div`
   position: absolute;
   clip: rect(0, 0, 0, 0);
   height: 1px;
