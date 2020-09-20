@@ -215,7 +215,7 @@ function AboutYou() {
     });
   }
 
-  function onLocationsSubmit() {
+  function setUpLocationRequests() {
     let requests = [];
 
     if (location.locationsToAdd.length > 0) {
@@ -294,40 +294,6 @@ function AboutYou() {
     return results;
   }
 
-  // seperate, skills to add, remove, review
-  function onSkillsSubmit(type) {
-    let skillsToAdd = [];
-    let skillsToRemove = [];
-    let requests = [];
-
-    if (skillsToAdd.length > 0) {
-      requests.push({
-        method: "POST",
-        url: `/skills/new-user-skill`,
-        data: {
-          skills: skillsToAdd,
-          user_id: user.id,
-          type,
-        },
-      });
-    }
-
-    if (skillsToRemove.length > 0) {
-      skillsToRemove.forEach((skill) => {
-        requests.push({
-          method: "POST",
-          url: `/skills/delete-user-skill`,
-          data: {
-            skill_id: skill.id,
-            user_id: user.id,
-            type,
-          },
-        });
-      });
-    }
-    return requests;
-  }
-
   function addTopSkill(skills) {
     let checkDups = {};
     user.topSkills.forEach((skill) => (checkDups[skill.name] = true));
@@ -398,6 +364,65 @@ function AboutYou() {
     });
   }
 
+  function setUpSkillRequests(type) {
+    let requests = [];
+    let skillsToAdd;
+    let skillsToRemove;
+    let skillsForReview;
+
+    if (type === "top") {
+      skillsToAdd = [...topSkills.skillsToAdd];
+      skillsToRemove = [...topSkills.skillsToRemove];
+      skillsForReview = [...topSkills.skillsForReview];
+    } else {
+      skillsToAdd = [...additionalSkills.skillsToAdd];
+      skillsToRemove = [...additionalSkills.skillsToRemove];
+      skillsForReview = [...additionalSkills.skillsForReview];
+    }
+
+    if (skillsToAdd.length > 0) {
+      requests.push({
+        method: "POST",
+        url: `/skills/new-user-skill`,
+        data: {
+          skills: skillsToAdd,
+          user_id: user.id,
+          type,
+        },
+      });
+    }
+
+    if (skillsToRemove.length > 0) {
+      skillsToRemove.forEach((skill) => {
+        requests.push({
+          method: "POST",
+          url: `/skills/delete-user-skill`,
+          data: {
+            skill_id: skill.id,
+            user_id: user.id,
+            type,
+          },
+        });
+      });
+    }
+
+    if (skillsForReview.length > 0) {
+      skillsForReview.forEach((skill) => {
+        requests.push({
+          method: "POST",
+          url: `/skills-for-review/new`,
+          data: {
+            skill_for_review: skill.name,
+            user_id: user.id,
+            type,
+          },
+        });
+      });
+    }
+
+    return requests;
+  }
+
   async function submitEdit(e) {
     e.preventDefault();
 
@@ -429,18 +454,18 @@ function AboutYou() {
     }
 
     if (location.inputChange) {
-      let locationRequests = onLocationsSubmit();
+      let locationRequests = setUpLocationRequests();
       additionalArr = [...additionalArr, ...locationRequests];
     }
 
     if (topSkills.inputChange) {
-      let locationRequests = onSkillsSubmit("top");
-      additionalArr = [...additionalArr, ...locationRequests];
+      let skillRequests = setUpSkillRequests("top");
+      additionalArr = [...additionalArr, ...skillRequests];
     }
 
     if (additionalSkills.inputChange) {
-      let locationRequests = onSkillsSubmit("additional");
-      additionalArr = [...additionalArr, ...locationRequests];
+      let skillRequests = setUpSkillRequests("additional");
+      additionalArr = [...additionalArr, ...skillRequests];
     }
 
     setFormStatus(FORM_STATUS.loading);
