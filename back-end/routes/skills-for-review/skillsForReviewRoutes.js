@@ -6,15 +6,14 @@ const server = express.Router();
 server.post("/new", async (req, res) => {
   if (
     !req.body.type ||
-    (req.body.type !== "top" &&
-      req.body.type !== "additional")
-      ) {
-        res.status(400).json({
+    (req.body.type !== "top" && req.body.type !== "additional")
+  ) {
+    res.status(400).json({
       message: `Expected 'type' to be 'top' or 'additional' in body, received '${req.body.type}'`,
     });
     return;
   }
-  
+
   if (!req.body.skill_for_review) {
     res.status(400).json({
       message: `Expected 'skill_for_review' in body, received '${req.body.skill_for_review}'`,
@@ -55,15 +54,14 @@ server.post("/user", async (req, res) => {
   }
 
   try {
-    const userSkillsForReview = await skillsForReviewModel.getByUser(req.body.userId);
-    console.log(userSkillsForReview)
-    // userSkillsForReview
-    //   ? res.status(200).json(userSkillsForReview)
-    //   : res.status(404).json({
-    //       message: `The skill with the specified ID of '${req.params.id}' does not exist`,
-    //     });
+    const userSkillsForReview = await skillsForReviewModel.getByUser(
+      req.body.userId
+    );
+    res.status(200).json(userSkillsForReview);
   } catch (err) {
-    res.status(500).json({ message: "Error getting user skills for review from database" });
+    res
+      .status(500)
+      .json({ message: "Error getting user skills for review from database" });
   }
 });
 
