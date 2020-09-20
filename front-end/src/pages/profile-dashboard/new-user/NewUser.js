@@ -7,7 +7,7 @@ import { useState } from "react";
 import DashboardBilling from "../billing/DashboardBilling";
 import { httpClient } from "../../../global/helpers/http-requests";
 import ImageUploadForm from "../../../components/forms/image-upload";
-import AutoComplete from "../../../components/forms/autocomplete";
+import Combobox from "../../../components/forms/combobox";
 
 function NewUser() {
   const { user, setPreviewImg, editProfile } = useContext(ProfileContext);
@@ -44,7 +44,7 @@ function NewUser() {
       setLocationInput([
         {
           name: user.current_location_name,
-          id: 1, // autocomplete requires id for key
+          id: 1, // combobox requires id for key
           lat: user.current_location_lat,
           lon: user.current_location_lon,
         },
@@ -344,12 +344,13 @@ function NewUser() {
               <br />
               <br />
               <br />
-              <AutoComplete
-                chosenInputs={locationInput}
+              <Combobox
+                chosenOptions={locationInput}
                 onInputChange={onLocationInputChange}
-                onChosenInput={onChosenLocation}
-                removeChosenInput={removeLocation}
+                onChosenOption={onChosenLocation}
+                onRemoveChosenOption={removeLocation}
                 inputName={"current-location"}
+                displayName={"Current Location"}
                 single
               />
 
