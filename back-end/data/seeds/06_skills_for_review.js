@@ -8,9 +8,9 @@ exports.seed = function (knex, Promise) {
       return knex("skills_for_review")
         .truncate()
         .insert([
-          { skill_for_review: "Being Cool", user_id: 1 },
-          { skill_for_review: "Poker", user_id: 2 },
-          { skill_for_review: "Web Assembly", user_id: 1 },
+          { skill_for_review: "Being Cool", user_id: 1, type: "top" },
+          { skill_for_review: "Poker", user_id: 2, type: "additional" },
+          { skill_for_review: "Web Assembly", user_id: 1, type: "top" },
         ]);
     });
 };

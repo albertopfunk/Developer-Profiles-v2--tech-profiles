@@ -3,6 +3,7 @@ const db = require("../../data/dbConfig");
 module.exports = {
   insert,
   getAll,
+  getByUser,
   getSingle,
   update,
   remove,
@@ -24,6 +25,10 @@ async function insert(newSkillForReview) {
 
 function getAll() {
   return db("skills_for_review");
+}
+
+function getByUser(userId) {
+  return db("skills_for_review").where({user_id: userId});
 }
 
 function getSingle(id) {
