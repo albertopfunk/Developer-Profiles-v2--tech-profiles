@@ -6,10 +6,11 @@ const server = express.Router();
 server.post("/new", async (req, res) => {
   if (
     !req.body.type ||
-    (req.body.type !== "top" && req.body.type !== "additional")
+    (req.body.type !== "user_top_skills" &&
+      req.body.type !== "user_additional_skills")
   ) {
     res.status(400).json({
-      message: `Expected 'type' to be 'top' or 'additional' in body, received '${req.body.type}'`,
+      message: `Expected 'type' to be 'user_top_skills' or 'user_additional_skills' in body, received '${req.body.type}'`,
     });
     return;
   }
