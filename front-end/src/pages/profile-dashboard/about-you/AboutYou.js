@@ -19,6 +19,7 @@ function AboutYou() {
   const [formStatus, setFormStatus] = useState(FORM_STATUS.idle);
   const [announceFormStatus, setAnnounceFormStatus] = useState(false);
   const [announceLocationsChange, setAnnounceLocationsChange] = useState(false);
+  const [skillsForReviewIdTracker, setSkillsForReviewIdTracker] = useState(1);
 
   const [summary, setSummary] = useState({
     inputValue: "",
@@ -40,7 +41,6 @@ function AboutYou() {
     skillsToAdd: [],
     skillsToRemove: [],
     skillsForReview: [],
-    skillsForReviewTracker: 0,
   });
 
   const [additionalSkills, setAdditionalSkills] = useState({
@@ -49,7 +49,6 @@ function AboutYou() {
     skillsToAdd: [],
     skillsToRemove: [],
     skillsForReview: [],
-    skillsForReviewTracker: 0,
   });
 
   let errorSummaryRef = React.createRef();
@@ -70,7 +69,7 @@ function AboutYou() {
   useEffect(() => {
     const locationAnnouncementWait = setTimeout(() => {
       setAnnounceLocationsChange(true);
-    }, 500);
+    }, 300);
 
     setAnnounceLocationsChange(false);
 
@@ -79,9 +78,11 @@ function AboutYou() {
     };
   }, [locationStatus]);
 
-  function onEditInputs() {
+  function setFormInputs() {
+    console.log(user);
     setFormStatus(FORM_STATUS.active);
     setAnnounceFormStatus(true);
+    setSkillsForReviewIdTracker(1);
 
     setSummary({
       inputValue: user.summary || "",
@@ -104,7 +105,6 @@ function AboutYou() {
       skillsToAdd: [],
       skillsToRemove: [],
       skillsForReview: [],
-      skillsForReviewTracker: 0,
     });
 
     setAdditionalSkills({
@@ -113,11 +113,10 @@ function AboutYou() {
       skillsToAdd: [],
       skillsToRemove: [],
       skillsForReview: [],
-      skillsForReviewTracker: 0,
     });
   }
 
-  function onSummaryInputChange(value) {
+  function setSummaryInput(value) {
     if (user.summary === null && value.trim() === "") {
       setSummary({
         inputChange: false,
@@ -139,9 +138,8 @@ function AboutYou() {
     setSummary({ ...summary, inputChange: true, inputValue: value });
   }
 
-  function onSummaryInputValidate(value) {
+  function validateSummaryInput(value) {
     if (!summary.inputChange) return;
-
     if (value.trim() === "") {
       setSummary({
         ...summary,
@@ -155,6 +153,12 @@ function AboutYou() {
     }
   }
 
+  function createObj(objArr) {
+    const newObj = {};
+    objArr.forEach((item) => (newObj[item.name] = true));
+    return newObj;
+  }
+
   async function getLocationsByValue(value) {
     const [res, err] = await httpClient("POST", "/api/autocomplete", {
       value,
@@ -166,27 +170,21 @@ function AboutYou() {
     }
 
     if (location.inputValue.length > 0) {
-      let checkDups = {};
-      location.inputValue.forEach(
-        (location) => (checkDups[location.name] = true)
+      const locationsObj = createObj(location.inputValue);
+      const filteredData = res.data.filter(
+        (prediction) => !(prediction.name in locationsObj)
       );
 
-      const results = res.data.filter(
-        (prediction) => !(prediction.name in checkDups)
-      );
-
-      return results;
+      return filteredData;
     }
 
     return res.data;
   }
 
   function addLocation(locations) {
-    let checkDups = {};
-    user.locations.forEach((location) => (checkDups[location.name] = true));
-
+    const userLocationsObj = createObj(user.locations);
     const locationsToAdd = locations.filter(
-      (location) => !(location.name in checkDups)
+      (location) => !(location.name in userLocationsObj)
     );
 
     setLocationStatus(COMBOBOX_STATUS.added);
@@ -199,11 +197,9 @@ function AboutYou() {
   }
 
   function removeLocation(locations) {
-    let checkDups = {};
-    locations.forEach((location) => (checkDups[location.name] = true));
-
+    const locationsObj = createObj(locations);
     const locationsToRemove = user.locations.filter(
-      (location) => !(location.name in checkDups)
+      (userLocation) => !(userLocation.name in locationsObj)
     );
 
     setLocationStatus(COMBOBOX_STATUS.removed);
@@ -239,36 +235,10 @@ function AboutYou() {
     return requests;
   }
 
-  async function onTopSkillInputChange(value) {
-    let skillsObj = {};
-
-    topSkills.inputValue.forEach((skill) => (skillsObj[skill.name] = true));
-
-    const [res, err] = await httpClient("POST", "/skills/autocomplete", {
-      value,
-    });
-
-    if (err) {
-      console.error(`${res.mssg} => ${res.err}`);
-      if (res.err === "Zero results found" && !(value in skillsObj)) {
-        return [{ name: value, id: `new-${topSkills.skillsForReviewTracker}` }];
-      }
-      return [];
-    }
-
-    const results = res.data.filter(
-      (prediction) => !(prediction.name in skillsObj)
-    );
-
-    return results;
-  }
-
-  async function onAdditionalSkillInputChange(value) {
-    let skillsObj = {};
-
-    additionalSkills.inputValue.forEach(
-      (skill) => (skillsObj[skill.name] = true)
-    );
+  async function getSkillsByValue(value) {
+    const tSkillsObj = createObj(topSkills.inputValue);
+    const aSkillsObj = createObj(additionalSkills.inputValue);
+    const skillsObj = { ...tSkillsObj, ...aSkillsObj };
 
     const [res, err] = await httpClient("POST", "/skills/autocomplete", {
       value,
@@ -277,12 +247,7 @@ function AboutYou() {
     if (err) {
       console.error(`${res.mssg} => ${res.err}`);
       if (res.err === "Zero results found" && !(value in skillsObj)) {
-        return [
-          {
-            name: value,
-            id: `new-${additionalSkills.skillsForReviewTracker}`,
-          },
-        ];
+        return [{ name: value, id: `new-${skillsForReviewIdTracker}` }];
       }
       return [];
     }
@@ -295,30 +260,37 @@ function AboutYou() {
   }
 
   function addTopSkill(skills) {
-    let checkDups = {};
-    user.topSkills.forEach((skill) => (checkDups[skill.name] = true));
+    const userSkillsObj = createObj(user.topSkills);
+    const skillsToAdd = [];
+    const skillsForReview = [];
 
-    const skillsToAdd = skills.filter((skill) => !(skill.name in checkDups));
-    const skillsForReview = skillsToAdd.filter(
-      (skill) => !Number.isInteger(skill.id)
-    );
+    skills.forEach((skill) => {
+      if (!(skill.name in userSkillsObj)) {
+        if (Number.isInteger(skill.id)) {
+          skillsToAdd.push(skill);
+        } else {
+          skillsForReview.push(skill);
+        }
+      }
+    });
 
+    const skillsForReviewCurrentId =
+      skillsForReview.length + additionalSkills.skillsForReview.length + 1;
+
+    setSkillsForReviewIdTracker(skillsForReviewCurrentId);
     setTopSkills({
       ...topSkills,
       inputValue: skills,
       inputChange: true,
       skillsToAdd,
       skillsForReview,
-      skillsForReviewTracker: skillsForReview.length + 1,
     });
   }
 
   function removeTopSkill(skills) {
-    let checkDups = {};
-    skills.forEach((skill) => (checkDups[skill.name] = true));
-
+    const skillsObj = createObj(skills);
     const skillsToRemove = user.topSkills.filter(
-      (skill) => !(skill.name in checkDups)
+      (skill) => !(skill.name in skillsObj)
     );
 
     setTopSkills({
@@ -330,30 +302,37 @@ function AboutYou() {
   }
 
   function addAdditionalSkill(skills) {
-    let checkDups = {};
-    user.additionalSkills.forEach((skill) => (checkDups[skill.name] = true));
+    const userSkillsObj = createObj(user.additionalSkills);
+    const skillsToAdd = [];
+    const skillsForReview = [];
 
-    const skillsToAdd = skills.filter((skill) => !(skill.name in checkDups));
-    const skillsForReview = skillsToAdd.filter(
-      (skill) => !Number.isInteger(skill.id)
-    );
+    skills.forEach((skill) => {
+      if (!(skill.name in userSkillsObj)) {
+        if (Number.isInteger(skill.id)) {
+          skillsToAdd.push(skill);
+        } else {
+          skillsForReview.push(skill);
+        }
+      }
+    });
 
+    const skillsForReviewCurrentId =
+      skillsForReview.length + topSkills.skillsForReview.length + 1;
+
+    setSkillsForReviewIdTracker(skillsForReviewCurrentId);
     setAdditionalSkills({
       ...additionalSkills,
       inputValue: skills,
       inputChange: true,
       skillsToAdd,
       skillsForReview,
-      skillsForReviewTracker: skillsForReview.length + 1,
     });
   }
 
   function removeAdditionalSkill(skills) {
-    let checkDups = {};
-    skills.forEach((skill) => (checkDups[skill.name] = true));
-
+    const skillsObj = createObj(skills);
     const skillsToRemove = user.additionalSkills.filter(
-      (skill) => !(skill.name in checkDups)
+      (skill) => !(skill.name in skillsObj)
     );
 
     setAdditionalSkills({
@@ -370,7 +349,7 @@ function AboutYou() {
     let skillsToRemove;
     let skillsForReview;
 
-    if (type === "top") {
+    if (type === "user_top_skills") {
       skillsToAdd = [...topSkills.skillsToAdd];
       skillsToRemove = [...topSkills.skillsToRemove];
       skillsForReview = [...topSkills.skillsForReview];
@@ -454,17 +433,17 @@ function AboutYou() {
     }
 
     if (location.inputChange) {
-      let locationRequests = setUpLocationRequests();
+      const locationRequests = setUpLocationRequests();
       additionalArr = [...additionalArr, ...locationRequests];
     }
 
     if (topSkills.inputChange) {
-      let skillRequests = setUpSkillRequests("top");
+      const skillRequests = setUpSkillRequests("user_top_skills");
       additionalArr = [...additionalArr, ...skillRequests];
     }
 
     if (additionalSkills.inputChange) {
-      let skillRequests = setUpSkillRequests("additional");
+      const skillRequests = setUpSkillRequests("user_additional_skills");
       additionalArr = [...additionalArr, ...skillRequests];
     }
 
@@ -482,7 +461,7 @@ function AboutYou() {
     return (
       <div>
         <h1>Edit Inputs</h1>
-        <button onClick={onEditInputs}>Edit</button>
+        <button onClick={setFormInputs}>Edit</button>
       </div>
     );
   }
@@ -568,8 +547,8 @@ function AboutYou() {
               aria-describedby="summary-error summary-success"
               aria-invalid={summary.inputStatus === FORM_STATUS.error}
               value={summary.inputValue}
-              onChange={(e) => onSummaryInputChange(e.target.value)}
-              onBlur={(e) => onSummaryInputValidate(e.target.value)}
+              onChange={(e) => setSummaryInput(e.target.value)}
+              onBlur={(e) => validateSummaryInput(e.target.value)}
             />
             {summary.inputStatus === FORM_STATUS.error ? (
               <span id="summary-error" className="err-mssg">
@@ -594,7 +573,7 @@ function AboutYou() {
 
           <Combobox
             chosenOptions={topSkills.inputValue}
-            onInputChange={onTopSkillInputChange}
+            onInputChange={getSkillsByValue}
             onChosenOption={addTopSkill}
             onRemoveChosenOption={removeTopSkill}
             inputName={"top-skills"}
@@ -603,7 +582,7 @@ function AboutYou() {
 
           <Combobox
             chosenOptions={additionalSkills.inputValue}
-            onInputChange={onAdditionalSkillInputChange}
+            onInputChange={getSkillsByValue}
             onChosenOption={addAdditionalSkill}
             onRemoveChosenOption={removeAdditionalSkill}
             inputName={"additional-skills"}
