@@ -112,7 +112,6 @@ function AboutYou() {
   }, [additionalSkillsStatus]);
 
   function setFormInputs() {
-    console.log(user);
     setFormStatus(FORM_STATUS.active);
     setAnnounceFormStatus(true);
     setSkillsForReviewIdTracker(1);
@@ -500,10 +499,55 @@ function AboutYou() {
 
   if (formStatus === FORM_STATUS.idle) {
     return (
-      <div>
-        <h1>Edit Inputs</h1>
-        <button onClick={setFormInputs}>Edit</button>
-      </div>
+      <main id="main-content" tabIndex="-1" aria-labelledby="main-heading">
+        <Helmet>
+          <title>Profile Dashboard Personal Info • Tech Profiles</title>
+        </Helmet>
+        <h1 id="main-heading">Personal Info</h1>
+        {announceFormStatus ? (
+          <Announcer
+            announcement="Form is idle, press edit information button to open"
+            ariaId="form-idle-announcement"
+          />
+        ) : null}
+        <section aria-labelledby="current-information-heading">
+          <h2 id="current-information-heading">Current Information</h2>
+          <button onClick={setFormInputs}>Edit Information</button>
+          <ul aria-label="current information">
+            <li>Summary: {user.summary || "None Set"}</li>
+            <li>
+              Interested Locations:
+              {user.locations.length > 0 ? (
+                <ul aria-label="interested locations">
+                  {user.locations.map((location) => (
+                    <li>{location.name}</li>
+                  ))}
+                </ul>
+              ) : "None Set"}
+            </li>
+            <li>
+              Top Skills:
+              {user.topSkills.length > 0 ? (
+                <ul aria-label="top skills">
+                  {user.topSkills.map((skill) => (
+                    <li>{skill.name}</li>
+                  ))}
+                </ul>
+              ) : "None Set"}
+            </li>
+            <li>
+              Additional Skills:
+              {user.additionalSkills.length > 0 ? (
+                <ul aria-label="additional skills">
+                  {user.additionalSkills.map((skill) => (
+                    <li>{skill.name}</li>
+                  ))}
+                </ul>
+              ) : "None Set"}
+            </li>
+          </ul>
+        </section>
+      </main>
     );
   }
 
@@ -549,10 +593,10 @@ function AboutYou() {
         aria-relevant="additions"
       >
         {announceTopSkillsChange && topSkillsStatus === COMBOBOX_STATUS.added
-          ? "added skill"
+          ? "added top skill"
           : null}
         {announceTopSkillsChange && topSkillsStatus === COMBOBOX_STATUS.removed
-          ? "removed skill"
+          ? "removed top skill"
           : null}
       </div>
 
@@ -564,11 +608,11 @@ function AboutYou() {
       >
         {announceAdditionalSkillsChange &&
         additionalSkillsStatus === COMBOBOX_STATUS.added
-          ? "added location"
+          ? "added additional skill"
           : null}
         {announceAdditionalSkillsChange &&
         additionalSkillsStatus === COMBOBOX_STATUS.removed
-          ? "removed location"
+          ? "removed additional skill"
           : null}
       </div>
 
