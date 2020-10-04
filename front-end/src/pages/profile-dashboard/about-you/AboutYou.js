@@ -501,9 +501,9 @@ function AboutYou() {
     return (
       <main id="main-content" tabIndex="-1" aria-labelledby="main-heading">
         <Helmet>
-          <title>Profile Dashboard Personal Info • Tech Profiles</title>
+          <title>Profile Dashboard About You • Tech Profiles</title>
         </Helmet>
-        <h1 id="main-heading">Personal Info</h1>
+        <h1 id="main-heading">About You</h1>
         {announceFormStatus ? (
           <Announcer
             announcement="Form is idle, press edit information button to open"
