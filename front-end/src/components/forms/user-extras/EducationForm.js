@@ -1,20 +1,31 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useEffect } from "react";
+import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
 import { dateFormat } from "../../../global/helpers/date-format";
+import { validateInput } from "../../../global/helpers/validation";
+import { FORM_STATUS } from "../../../global/helpers/variables";
 
 function EducationForm({
+  eduIndex,
   userId,
   userSchool,
   userFieldOfStudy,
   userFromDate,
   userToDate,
   userDescription,
-  onEducationChange,
-  eduIndex,
+  updateEducation,
   removeEducation,
 }) {
-  const [id, SetId] = useState("");
-  const [school, setSchool] = useState("");
+
+  const {user} = useContext(ProfileContext)
+  const [id, SetId] = useState(userId);
+  // properties need to match parent
+  const [school, setSchool] = useState({
+    inputValue: userSchool,
+    inputChange: false,
+    inputStatus: FORM_STATUS.idle
+  });
+
   const [fieldOfStudy, setFieldOfStudy] = useState("");
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
@@ -26,13 +37,6 @@ function EducationForm({
   let fromDateRef = React.createRef();
   let toDateRef = React.createRef();
   let presentRef = React.createRef();
-
-  useEffect(() => {
-    SetId(userId);
-    setSchool(userSchool);
-    setFieldOfStudy(userFieldOfStudy);
-    setDescription(userDescription);
-  }, [userId, userSchool, userFieldOfStudy, userDescription]);
 
   useEffect(() => {
     if (userToDate === "present") {
@@ -54,15 +58,59 @@ function EducationForm({
     toCarotRange,
   ]);
 
-  function updateEducation(value) {
-    onEducationChange(eduIndex, {
-      shouldEdit: true,
-      ...value,
-    });
+  function setSchoolInput(value) {
+    // there will never be null values
+    let newState;
+    if (value === user.education[eduIndex].school) {
+      newState = {
+        inputChange: false,
+        inputValue: value,
+        inputStatus: "idle",
+      };
+    } else {
+      newState = {
+        ...school,
+        inputChange: true,
+        inputValue: value,
+      };
+    }
+
+    setSchool(newState);
+    // properties need to match parent
+    updateEducation(eduIndex, newState);
   }
 
-  function onSchoolChange(value) {
-    updateEducation({ school: value });
+  function validateSchool(value) {
+    // this component will update local state and send inputValue and inputStatus to parent
+
+    // validate will also check if value is empty
+    // since all are required
+    // might put noValidate on form or not put required on inputs so
+    // you can handle all validation
+    // arai-invalid will start off as true
+
+    let newState;
+    if (!school.inputChange) return;
+    if (value.trim() === "") {
+      newState = {
+        ...school,
+        inputValue: "",
+        inputStatus: "error",
+      };
+    } else if (validateInput("name", value)) {
+      newState = {
+        ...school,
+        inputStatus: "success",
+      };
+    } else {
+      newState = {
+        ...school,
+        inputStatus: "error",
+      };
+    }
+    setSchool(newState);
+    // properties need to match parent
+    updateEducation(eduIndex, newState);
   }
 
   function onFieldOfStudyChange(value) {
@@ -103,27 +151,37 @@ function EducationForm({
 
   function onRemoveEducation(e) {
     e.preventDefault();
+    // use "disabled" on fieldset vs removing it completely
+    // this will allow users to reverse decision without having to cancel form
     removeEducation(id);
   }
 
-  console.log("===EDU FORM===", school, fromDate, toDate, userToDate);
+  console.log("===EDU FORM===");
   return (
-    <form>
+    <fieldset>
+      <legend>Education: {school.inputValue || "New Education"}</legend>
+
       <button onClick={(e) => onRemoveEducation(e)}>Remove</button>
       <input
+        id={`school-${userId}`}
+        name={`school-${userId}`}
         type="text"
         placeholder="School"
-        value={school}
-        onChange={(e) => onSchoolChange(e.target.value)}
+        value={school.inputValue}
+        onChange={(e) => setSchoolInput(e.target.value)}
+        onBlur={(e) => validateSchool(e)}
       />
       <br />
       <input
         type="text"
+        id={`field-of-study-${userId}`}
+        name={`field-of-study-${userId}`}
         placeholder="Field of Study"
         value={fieldOfStudy}
         onChange={(e) => onFieldOfStudyChange(e.target.value)}
       />
       <br />
+
       <input
         type="text"
         ref={fromDateRef}
@@ -156,11 +214,13 @@ function EducationForm({
       <br />
       <input
         type="text"
+        id={`description-${userId}`}
+        name={`description-${userId}`}
         placeholder="description"
         value={description}
         onChange={(e) => onDescriptionChange(e.target.value)}
       />
-    </form>
+    </fieldset>
   );
 }
 
