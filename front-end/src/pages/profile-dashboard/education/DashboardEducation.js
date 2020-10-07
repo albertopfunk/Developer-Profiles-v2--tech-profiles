@@ -80,33 +80,45 @@ if true on changes, set up HTTP request
 if true on additions, set up HTTP request
 if true on removals, set up HTTP request
 
+
+if user adds a new edu and submits
+need to check for empty fields on submit as well
+
 */
 
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
 import EducationForm from "../../../components/forms/user-extras/EducationForm";
+import { FORM_STATUS } from "../../../global/helpers/variables";
 
+let formSuccessWait;
 function DashboardEducation() {
   const { user, addUserExtras } = useContext(ProfileContext);
   const [formStatus, setFormStatus] = useState("idle");
   const [education, setEducation] = useState([]);
   const [idTracker, setIdTracker] = useState(1);
 
+  useEffect(() => {
+    return () => {
+      clearTimeout(formSuccessWait);
+    };
+  }, []);
+
   function setFormInputs() {
-    setFormStatus("active");
+    setFormStatus(FORM_STATUS.active);
 
     const updatedUserEdu = user.education.map((edu) => {
       return {
         ...edu,
-        schoolStatus: "idle",
+        schoolStatus: FORM_STATUS.idle,
         schoolChange: false,
-        fieldOfStudyStatus: "idle",
+        fieldOfStudyStatus: FORM_STATUS.idle,
         fieldOfStudyChange: false,
-        descriptionStatus: "idle",
+        descriptionStatus: FORM_STATUS.idle,
         descriptionChange: false,
-        schoolDatesStatus: "idle",
+        schoolDatesStatus: FORM_STATUS.idle,
         schoolDatesChange: false,
       };
     });
@@ -180,7 +192,7 @@ function DashboardEducation() {
     setEducation(newEducation);
   }
 
-  function submitEdit() {
+  async function submitEdit() {
     let requests = [];
     let educationObj = {};
 
@@ -249,8 +261,12 @@ function DashboardEducation() {
       return;
     }
 
-    setFormStatus("idle");
-    addUserExtras(requests);
+    setFormStatus(FORM_STATUS.loading);
+    await addUserExtras(requests);
+    formSuccessWait = setTimeout(() => {
+      setFormStatus(FORM_STATUS.idle);
+    }, 1000);
+    setFormStatus(FORM_STATUS.success);
   }
 
   if (!formStatus) {
@@ -276,7 +292,7 @@ function DashboardEducation() {
             <div key={index}>
               <EducationForm
                 eduIndex={index}
-                userId={edu.id} // use for name and id for inputs, as well as aria-describedby
+                userId={edu.id}
                 userSchool={edu.school}
                 userFieldOfStudy={edu.field_of_study}
                 userFromDate={edu.school_dates.split(" - ")[0] || ""}
