@@ -96,7 +96,7 @@ import { FORM_STATUS } from "../../../global/helpers/variables";
 let formSuccessWait;
 function DashboardEducation() {
   const { user, addUserExtras } = useContext(ProfileContext);
-  const [formStatus, setFormStatus] = useState("idle");
+  const [formStatus, setFormStatus] = useState(FORM_STATUS.idle);
   const [education, setEducation] = useState([]);
   const [idTracker, setIdTracker] = useState(1);
 
@@ -159,19 +159,19 @@ function DashboardEducation() {
         id: `n-${idTracker}`,
 
         school: "",
-        schoolStatus: "idle",
+        schoolStatus: FORM_STATUS.idle,
         schoolChange: false,
 
         field_of_study: "",
-        fieldOfStudyStatus: "idle",
+        fieldOfStudyStatus: FORM_STATUS.idle,
         fieldOfStudyChange: false,
 
         education_description: "",
-        descriptionStatus: "idle",
+        descriptionStatus: FORM_STATUS.idle,
         descriptionChange: false,
 
         school_dates: "",
-        schoolDatesStatus: "idle",
+        schoolDatesStatus: FORM_STATUS.idle,
         schoolDatesChange: false,
       },
     ]);
