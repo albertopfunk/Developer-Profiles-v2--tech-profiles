@@ -17,7 +17,6 @@ function EducationForm({
   removeEducation,
 }) {
   const { user } = useContext(ProfileContext);
-  const [id, SetId] = useState(userId);
 
   const [school, setSchool] = useState({
     school: userSchool,
@@ -25,13 +24,23 @@ function EducationForm({
     schoolStatus: FORM_STATUS.idle,
   });
 
-  const [fieldOfStudy, setFieldOfStudy] = useState("");
+  const [fieldOfStudy, setFieldOfStudy] = useState({
+    field_of_study: userFieldOfStudy,
+    fieldOfStudyChange: false,
+    fieldOfStudyStatus: FORM_STATUS.idle,
+  });
+
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
   const [isPresent, setIsPresent] = useState(false);
   const [fromCarotRange, setFromCarotRange] = useState(0);
   const [toCarotRange, setToCarotRange] = useState(0);
-  const [description, setDescription] = useState("");
+
+  const [description, setDescription] = useState({
+    education_description: userDescription,
+    descriptionChange: false,
+    descriptionStatus: FORM_STATUS.idle,
+  });
 
   let fromDateRef = React.createRef();
   let toDateRef = React.createRef();
@@ -59,17 +68,20 @@ function EducationForm({
 
   function setSchoolInput(value) {
     let newState;
-    if (value === user.education[eduIndex].school) {
+    if (
+      user.education.length > 0 &&
+      value === user.education[eduIndex].school
+    ) {
       newState = {
-        schoolChange: false,
         school: value,
+        schoolChange: false,
         schoolStatus: FORM_STATUS.idle,
       };
     } else {
       newState = {
         ...school,
-        schoolChange: true,
         school: value,
+        schoolChange: true,
       };
     }
 
@@ -106,8 +118,51 @@ function EducationForm({
     updateEducation(eduIndex, newState);
   }
 
-  function onFieldOfStudyChange(value) {
-    updateEducation({ field_of_study: value });
+  function setFieldOfStudyInput(value) {
+    let newState;
+    if (
+      user.education.length > 0 &&
+      value === user.education[eduIndex].field_of_study
+    ) {
+      newState = {
+        field_of_study: value,
+        fieldOfStudyChange: false,
+        fieldOfStudyStatus: FORM_STATUS.idle,
+      };
+    } else {
+      newState = {
+        ...fieldOfStudy,
+        field_of_study: value,
+        fieldOfStudyChange: true,
+      };
+    }
+
+    setFieldOfStudy(newState);
+    updateEducation(eduIndex, newState);
+  }
+
+  function validateFieldOfStudy(value) {
+    let newState;
+    if (!fieldOfStudy.fieldOfStudyChange) return;
+    if (value.trim() === "") {
+      newState = {
+        ...fieldOfStudy,
+        field_of_study: "",
+        fieldOfStudyStatus: FORM_STATUS.error,
+      };
+    } else if (validateInput("title", value)) {
+      newState = {
+        ...fieldOfStudy,
+        fieldOfStudyStatus: FORM_STATUS.success,
+      };
+    } else {
+      newState = {
+        ...fieldOfStudy,
+        fieldOfStudyStatus: FORM_STATUS.error,
+      };
+    }
+    setFieldOfStudy(newState);
+    updateEducation(eduIndex, newState);
   }
 
   function fromDateChange(value) {
@@ -116,7 +171,7 @@ function EducationForm({
       return;
     }
     setFromCarotRange(newCarotRange);
-    updateEducation({ school_dates: `${newValue} - ${userToDate}` });
+    updateEducation(eduIndex, { school_dates: `${newValue} - ${userToDate}` });
   }
 
   function toDateChange(value) {
@@ -125,28 +180,66 @@ function EducationForm({
       return;
     }
     setToCarotRange(newCarotRange);
-    updateEducation({ school_dates: `${userFromDate} - ${newValue}` });
+    updateEducation(eduIndex, {
+      school_dates: `${userFromDate} - ${newValue}`,
+    });
   }
 
   function presentChange() {
     if (presentRef.current.checked) {
       setIsPresent(true);
-      updateEducation({ school_dates: `${userFromDate} - present` });
+      updateEducation(eduIndex, { school_dates: `${userFromDate} - present` });
     } else {
       setIsPresent(false);
-      updateEducation({ school_dates: `${userFromDate}` });
+      updateEducation(eduIndex, { school_dates: `${userFromDate}` });
     }
   }
 
-  function onDescriptionChange(value) {
-    updateEducation({ education_description: value });
+  function setDescriptionInput(value) {
+    let newState;
+    if (
+      user.education.length > 0 &&
+      value === user.education[eduIndex].education_description
+    ) {
+      newState = {
+        education_description: value,
+        descriptionChange: false,
+        descriptionStatus: FORM_STATUS.idle,
+      };
+    } else {
+      newState = {
+        ...description,
+        education_description: value,
+        descriptionChange: true,
+      };
+    }
+
+    setDescription(newState);
+    updateEducation(eduIndex, newState);
   }
 
-  function onRemoveEducation(e) {
-    e.preventDefault();
-    // use "disabled" on fieldset vs removing it completely
-    // this will allow users to reverse decision without having to cancel form
-    removeEducation(id);
+  function validateDescription(value) {
+    let newState;
+    if (!description.descriptionChange) return;
+    if (value.trim() === "") {
+      newState = {
+        ...description,
+        education_description: "",
+        descriptionStatus: FORM_STATUS.error,
+      };
+    } else if (validateInput("summary", value)) {
+      newState = {
+        ...description,
+        descriptionStatus: FORM_STATUS.success,
+      };
+    } else {
+      newState = {
+        ...description,
+        descriptionStatus: FORM_STATUS.error,
+      };
+    }
+    setDescription(newState);
+    updateEducation(eduIndex, newState);
   }
 
   console.log("===EDU FORM===");
@@ -154,7 +247,7 @@ function EducationForm({
     <fieldset>
       <legend>Education: {school.school || "New Education"}</legend>
 
-      <button onClick={(e) => onRemoveEducation(e)}>Remove</button>
+      <button onClick={() => removeEducation(userId)}>Remove</button>
       <input
         id={`school-${userId}`}
         name={`school-${userId}`}
@@ -162,17 +255,21 @@ function EducationForm({
         placeholder="School"
         value={school.school}
         onChange={(e) => setSchoolInput(e.target.value)}
-        onBlur={(e) => validateSchool(e)}
+        onBlur={(e) => validateSchool(e.target.value)}
       />
+
       <br />
+
       <input
         type="text"
         id={`field-of-study-${userId}`}
         name={`field-of-study-${userId}`}
         placeholder="Field of Study"
-        value={fieldOfStudy}
-        onChange={(e) => onFieldOfStudyChange(e.target.value)}
+        value={fieldOfStudy.field_of_study}
+        onChange={(e) => setFieldOfStudyInput(e.target.value)}
+        onBlur={(e) => validateFieldOfStudy(e.target.value)}
       />
+
       <br />
 
       <input
@@ -197,12 +294,12 @@ function EducationForm({
       <input
         ref={presentRef}
         type="checkbox"
-        id={`present-${id}`}
-        name={`present-${id}`}
+        id={`present-${userId}`}
+        name={`present-${userId}`}
         onChange={presentChange}
         checked={isPresent}
       />
-      <label htmlFor={`present-${id}`}>Present</label>
+      <label htmlFor={`present-${userId}`}>Present</label>
 
       <br />
       <input
@@ -210,8 +307,9 @@ function EducationForm({
         id={`description-${userId}`}
         name={`description-${userId}`}
         placeholder="description"
-        value={description}
-        onChange={(e) => onDescriptionChange(e.target.value)}
+        value={description.education_description}
+        onChange={(e) => setDescriptionInput(e.target.value)}
+        onBlur={(e) => validateDescription(e.target.value)}
       />
     </fieldset>
   );

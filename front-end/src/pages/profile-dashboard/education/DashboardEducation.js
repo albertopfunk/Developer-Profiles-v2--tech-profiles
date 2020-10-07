@@ -1,57 +1,5 @@
 /*
 
-STATE
-
-education: [{},{},{}]
-modified with updateEducation, addEducation, removeEducation-
-setFormInputs will modify with original user info + new object props-
-each object will signify a education fieldset-
-each object will track individual input change/validation-
-
-
-.
-.
-
-setFormInputs()
-
-formStatus = idle
-
-education = original user info + new object props
-{
-  ...edu,
-  schoolStatus: idle,
-  schoolChange: false,
-  fieldOfStudyStatus: idle,
-  fieldOfStudyChange: false,
-  descriptionStatus: idle,
-  descriptionChange: false,
-  schoolDatesStatus: idle,
-  schoolDatesChange: false
-}
-
-
-.
-.
-
-onInputChange()
-state value change will be handled by child
-child will send change to parent so parent can update
-child will send new input value, along with inputChange status
-using updateEducation
-
-.
-.
-
-
-validateOnBlur()
-validation will be handled by child
-child will send validation status to parent
-using updateEducation
-
-
-.
-.
-
 SubmitEdits()
 
 3 APIs
@@ -269,7 +217,7 @@ function DashboardEducation() {
     setFormStatus(FORM_STATUS.success);
   }
 
-  if (!formStatus) {
+  if (formStatus === FORM_STATUS.idle) {
     return (
       <div>
         <h1>Edit Inputs</h1>
@@ -278,7 +226,7 @@ function DashboardEducation() {
     );
   }
 
-  console.log("===EDU DASH===", education);
+  console.log("-- Dash Education --", education);
 
   return (
     <Main>
