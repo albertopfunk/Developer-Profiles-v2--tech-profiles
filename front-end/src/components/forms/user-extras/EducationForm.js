@@ -1,5 +1,5 @@
-import React, { useContext, useState } from "react";
-import { useEffect } from "react";
+import React, { useContext, useState, useEffect } from "react";
+
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
 import { dateFormat } from "../../../global/helpers/date-format";
 import { validateInput } from "../../../global/helpers/validation";
@@ -16,14 +16,13 @@ function EducationForm({
   updateEducation,
   removeEducation,
 }) {
-
-  const {user} = useContext(ProfileContext)
+  const { user } = useContext(ProfileContext);
   const [id, SetId] = useState(userId);
-  // properties need to match parent
+
   const [school, setSchool] = useState({
-    inputValue: userSchool,
-    inputChange: false,
-    inputStatus: FORM_STATUS.idle
+    school: userSchool,
+    schoolChange: false,
+    schoolStatus: FORM_STATUS.idle,
   });
 
   const [fieldOfStudy, setFieldOfStudy] = useState("");
@@ -59,57 +58,51 @@ function EducationForm({
   ]);
 
   function setSchoolInput(value) {
-    // there will never be null values
     let newState;
     if (value === user.education[eduIndex].school) {
       newState = {
-        inputChange: false,
-        inputValue: value,
-        inputStatus: "idle",
+        schoolChange: false,
+        school: value,
+        schoolStatus: FORM_STATUS.idle,
       };
     } else {
       newState = {
         ...school,
-        inputChange: true,
-        inputValue: value,
+        schoolChange: true,
+        school: value,
       };
     }
 
     setSchool(newState);
-    // properties need to match parent
     updateEducation(eduIndex, newState);
   }
 
   function validateSchool(value) {
-    // this component will update local state and send inputValue and inputStatus to parent
-
-    // validate will also check if value is empty
-    // since all are required
     // might put noValidate on form or not put required on inputs so
     // you can handle all validation
     // arai-invalid will start off as true
+    // might have to start all statuses as FORM_STATUS.error
 
     let newState;
-    if (!school.inputChange) return;
+    if (!school.schoolChange) return;
     if (value.trim() === "") {
       newState = {
         ...school,
-        inputValue: "",
-        inputStatus: "error",
+        school: "",
+        schoolStatus: FORM_STATUS.error,
       };
     } else if (validateInput("name", value)) {
       newState = {
         ...school,
-        inputStatus: "success",
+        schoolStatus: FORM_STATUS.success,
       };
     } else {
       newState = {
         ...school,
-        inputStatus: "error",
+        schoolStatus: FORM_STATUS.error,
       };
     }
     setSchool(newState);
-    // properties need to match parent
     updateEducation(eduIndex, newState);
   }
 
@@ -159,7 +152,7 @@ function EducationForm({
   console.log("===EDU FORM===");
   return (
     <fieldset>
-      <legend>Education: {school.inputValue || "New Education"}</legend>
+      <legend>Education: {school.school || "New Education"}</legend>
 
       <button onClick={(e) => onRemoveEducation(e)}>Remove</button>
       <input
@@ -167,7 +160,7 @@ function EducationForm({
         name={`school-${userId}`}
         type="text"
         placeholder="School"
-        value={school.inputValue}
+        value={school.school}
         onChange={(e) => setSchoolInput(e.target.value)}
         onBlur={(e) => validateSchool(e)}
       />
