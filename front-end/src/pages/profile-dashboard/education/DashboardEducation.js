@@ -2,21 +2,6 @@
 
 SubmitEdits()
 
-3 APIs
-
-POST /new/:user_extra
-one request for each new extra
-all inputs will be complete since all are required
-
-PUT /:user_extra/:user_extra_id
-one request for each edited existing extra
-only send values that have changed
-
-DELETE /:user_extra/:user_extra_id
-one request for each extra to remove
-
-.
-
 map thru educations to check all the input statuses
 if any are error, then form status will be in error
 if any are blank, then form status will be in error
@@ -75,18 +60,6 @@ function DashboardEducation() {
   }
 
   function updateEducation(index, state) {
-    // updating on change, value can be done in children
-    // this should only be for updating state
-
-    // on blur validation can be done in children
-    // set input status then send to parent to update state
-
-    // both inputChange and inputValidation can use this fn
-    // since all ur doing here is updating state
-    // children will send all updated state and status
-
-    // on submit parent can check each input for validation/changes
-
     let newEduArr = [...education];
     let newEduObj = { ...newEduArr[index], ...state };
     newEduArr.splice(index, 1, newEduObj);
@@ -94,17 +67,11 @@ function DashboardEducation() {
   }
 
   function addEducation() {
-    // if u only set the newEducation state then you would have to update it as well on every change
-    // might be better to just work with education
-    // the logic of new/removals can be done on submit
-
-    // new education will be any education that is a string
-
     setEducation([
       ...education,
 
       {
-        id: `n-${idTracker}`,
+        id: `new-${idTracker}`,
 
         school: "",
         schoolStatus: FORM_STATUS.idle,
@@ -128,19 +95,13 @@ function DashboardEducation() {
   }
 
   function removeEducation(id) {
-    // if u only set the newEducation state then you would have to update it as well on every change
-    // might be better to just work with education
-    // the logic of new/removals can be done on submit
-
-    // education to remove will be any education that is not present in USER educations
-    // can compare IDs
-    // new educations will not be a part of this
-
     let newEducation = education.filter((edu) => edu.id !== id);
     setEducation(newEducation);
   }
 
-  async function submitEdit() {
+  async function submitEdit(e) {
+    e.preventDefault();
+
     let requests = [];
     let educationObj = {};
 
@@ -254,7 +215,28 @@ function DashboardEducation() {
             </div>
           );
         })}
-        <button>Submit</button>
+        <button
+          disabled={
+            formStatus === FORM_STATUS.loading ||
+            formStatus === FORM_STATUS.success
+          }
+          type="submit"
+        >
+          {formStatus === FORM_STATUS.active ? "Submit" : null}
+          {formStatus === FORM_STATUS.loading ? "loading..." : null}
+          {formStatus === FORM_STATUS.success ? "Success!" : null}
+          {formStatus === FORM_STATUS.error ? "Re-Submit" : null}
+        </button>
+        <button
+          disabled={
+            formStatus === FORM_STATUS.loading ||
+            formStatus === FORM_STATUS.success
+          }
+          type="reset"
+          onClick={() => setFormStatus(FORM_STATUS.idle)}
+        >
+          Cancel
+        </button>
       </form>
     </Main>
   );
