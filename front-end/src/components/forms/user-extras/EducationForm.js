@@ -1,4 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
+import styled from "styled-components";
 
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
 import { dateFormat } from "../../../global/helpers/date-format";
@@ -84,26 +85,24 @@ function EducationForm({
         schoolChange: true,
       };
     }
-
     setSchool(newState);
     updateEducation(eduIndex, newState);
   }
 
   function validateSchool(value) {
-    // might put noValidate on form or not put required on inputs so
-    // you can handle all validation
-    // arai-invalid will start off as true
-    // might have to start all statuses as FORM_STATUS.error
-
     let newState;
-    if (!school.schoolChange) return;
     if (value.trim() === "") {
       newState = {
         ...school,
         school: "",
         schoolStatus: FORM_STATUS.error,
       };
-    } else if (validateInput("name", value)) {
+      setSchool(newState);
+      updateEducation(eduIndex, newState);
+      return;
+    }
+    if (!school.schoolChange) return;
+    if (validateInput("name", value)) {
       newState = {
         ...school,
         schoolStatus: FORM_STATUS.success,
@@ -143,14 +142,18 @@ function EducationForm({
 
   function validateFieldOfStudy(value) {
     let newState;
-    if (!fieldOfStudy.fieldOfStudyChange) return;
     if (value.trim() === "") {
       newState = {
         ...fieldOfStudy,
         field_of_study: "",
         fieldOfStudyStatus: FORM_STATUS.error,
       };
-    } else if (validateInput("title", value)) {
+      setFieldOfStudy(newState);
+      updateEducation(eduIndex, newState);
+      return;
+    }
+    if (!fieldOfStudy.fieldOfStudyChange) return;
+    if (validateInput("title", value)) {
       newState = {
         ...fieldOfStudy,
         fieldOfStudyStatus: FORM_STATUS.success,
@@ -220,14 +223,18 @@ function EducationForm({
 
   function validateDescription(value) {
     let newState;
-    if (!description.descriptionChange) return;
     if (value.trim() === "") {
       newState = {
         ...description,
         education_description: "",
         descriptionStatus: FORM_STATUS.error,
       };
-    } else if (validateInput("summary", value)) {
+      setDescription(newState);
+      updateEducation(eduIndex, newState);
+      return;
+    }
+    if (!description.descriptionChange) return;
+    if (validateInput("summary", value)) {
       newState = {
         ...description,
         descriptionStatus: FORM_STATUS.success,
@@ -242,35 +249,84 @@ function EducationForm({
     updateEducation(eduIndex, newState);
   }
 
-  console.log("===EDU FORM===");
   return (
     <fieldset>
       <legend>Education: {school.school || "New Education"}</legend>
 
-      <button onClick={() => removeEducation(userId)}>Remove</button>
-      <input
-        id={`school-${userId}`}
-        name={`school-${userId}`}
-        type="text"
-        placeholder="School"
-        value={school.school}
-        onChange={(e) => setSchoolInput(e.target.value)}
-        onBlur={(e) => validateSchool(e.target.value)}
-      />
+      <button
+        type="reset"
+        aria-label={`Remove ${school.school || "New"} Education`}
+        onClick={() => removeEducation(userId)}
+      >
+        X
+      </button>
 
-      <br />
+      <InputContainer>
+        <label htmlFor={`school-${userId}`}>School:</label>
+        <input
+          type="text"
+          id={`school-${userId}`}
+          name="school"
+          className={`input ${
+            school.schoolStatus === FORM_STATUS.error ? "input-err" : ""
+          }`}
+          aria-describedby={`school-${userId}-error school-${userId}-success`}
+          aria-invalid={
+            school.school.trim() === "" ||
+            school.schoolStatus === FORM_STATUS.error
+          }
+          value={school.school}
+          onChange={(e) => setSchoolInput(e.target.value)}
+          onBlur={(e) => validateSchool(e.target.value)}
+        />
+        {school.schoolStatus === FORM_STATUS.error ? (
+          <span id={`school-${userId}-error`} className="err-mssg">
+            Input is required. School can only be alphabelical characters, no
+            numbers
+          </span>
+        ) : null}
+        {school.schoolStatus === FORM_STATUS.success ? (
+          <span id={`school-${userId}-success`} className="success-mssg">
+            School is Validated
+          </span>
+        ) : null}
+      </InputContainer>
 
-      <input
-        type="text"
-        id={`field-of-study-${userId}`}
-        name={`field-of-study-${userId}`}
-        placeholder="Field of Study"
-        value={fieldOfStudy.field_of_study}
-        onChange={(e) => setFieldOfStudyInput(e.target.value)}
-        onBlur={(e) => validateFieldOfStudy(e.target.value)}
-      />
-
-      <br />
+      <InputContainer>
+        <label htmlFor={`field-of-study-${userId}`}>Field of Study:</label>
+        <input
+          type="text"
+          id={`field-of-study-${userId}`}
+          name="field-of-study"
+          className={`input ${
+            fieldOfStudy.fieldOfStudyStatus === FORM_STATUS.error
+              ? "input-err"
+              : ""
+          }`}
+          aria-describedby={`field-of-study-${userId}-error field-of-study-${userId}-success`}
+          aria-invalid={
+            fieldOfStudy.field_of_study.trim() === "" ||
+            fieldOfStudy.fieldOfStudyStatus === FORM_STATUS.error
+          }
+          value={fieldOfStudy.field_of_study}
+          onChange={(e) => setFieldOfStudyInput(e.target.value)}
+          onBlur={(e) => validateFieldOfStudy(e.target.value)}
+        />
+        {fieldOfStudy.fieldOfStudyStatus === FORM_STATUS.error ? (
+          <span id={`field-of-study-${userId}-error`} className="err-mssg">
+            Input is required. field of study can only be alphabelical
+            characters, no numbers
+          </span>
+        ) : null}
+        {fieldOfStudy.fieldOfStudyStatus === FORM_STATUS.success ? (
+          <span
+            id={`field-of-study-${userId}-success`}
+            className="success-mssg"
+          >
+            field of study is Validated
+          </span>
+        ) : null}
+      </InputContainer>
 
       <input
         type="text"
@@ -301,18 +357,56 @@ function EducationForm({
       />
       <label htmlFor={`present-${userId}`}>Present</label>
 
-      <br />
-      <input
-        type="text"
-        id={`description-${userId}`}
-        name={`description-${userId}`}
-        placeholder="description"
-        value={description.education_description}
-        onChange={(e) => setDescriptionInput(e.target.value)}
-        onBlur={(e) => validateDescription(e.target.value)}
-      />
+      <InputContainer>
+        <label htmlFor={`description-${userId}`}>Description:</label>
+        <input
+          type="text"
+          id={`description-${userId}`}
+          name="description"
+          className={`input ${
+            description.descriptionStatus === FORM_STATUS.error
+              ? "input-err"
+              : ""
+          }`}
+          aria-describedby={`description-${userId}-error description-${userId}-success`}
+          aria-invalid={
+            description.education_description.trim() === "" ||
+            description.descriptionStatus === FORM_STATUS.error
+          }
+          value={description.education_description}
+          onChange={(e) => setDescriptionInput(e.target.value)}
+          onBlur={(e) => validateDescription(e.target.value)}
+        />
+        {description.descriptionStatus === FORM_STATUS.error ? (
+          <span id={`description-${userId}-error`} className="err-mssg">
+            Input is required. description can only be alphabelical characters,
+            no numbers
+          </span>
+        ) : null}
+        {description.descriptionStatus === FORM_STATUS.success ? (
+          <span id={`description-${userId}-success`} className="success-mssg">
+            description is Validated
+          </span>
+        ) : null}
+      </InputContainer>
     </fieldset>
   );
 }
+
+const InputContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  .input-err {
+    border: solid red;
+  }
+  .err-mssg {
+    color: red;
+    font-size: 0.7rem;
+  }
+  .success-mssg {
+    color: green;
+    font-size: 0.7rem;
+  }
+`;
 
 export default EducationForm;
