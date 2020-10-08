@@ -394,7 +394,6 @@ function PersonalInfo() {
             <input
               type="text"
               autoComplete="given-name"
-              inputMode="text"
               id="first-name"
               name="first-name"
               className={`input ${
@@ -423,7 +422,6 @@ function PersonalInfo() {
             <input
               type="text"
               autoComplete="family-name"
-              inputMode="text"
               id="last-name"
               name="last-name"
               className={`input ${
@@ -507,7 +505,6 @@ function PersonalInfo() {
             <input
               type="text"
               autoComplete="organization-title"
-              inputMode="text"
               id="title"
               name="title"
               className={`input ${
