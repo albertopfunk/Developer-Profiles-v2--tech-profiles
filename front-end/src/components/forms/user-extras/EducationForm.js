@@ -67,12 +67,12 @@ function EducationForm({
     toCarotRange,
   ]);
 
-  function setSchoolInput(value) {
+  function setSchoolInput(e) {
+    const { value, dataset } = e.target;
+    const isUserSchool =
+      user.education.length > 0 && !dataset.inputid.includes("new");
     let newState;
-    if (
-      user.education.length > 0 &&
-      value === user.education[eduIndex].school
-    ) {
+    if (isUserSchool && value === user.education[eduIndex].school) {
       newState = {
         school: value,
         schoolChange: false,
@@ -117,12 +117,12 @@ function EducationForm({
     updateEducation(eduIndex, newState);
   }
 
-  function setFieldOfStudyInput(value) {
+  function setFieldOfStudyInput(e) {
+    const { value, dataset } = e.target;
+    const isUserSchool =
+      user.education.length > 0 && !dataset.inputid.includes("new");
     let newState;
-    if (
-      user.education.length > 0 &&
-      value === user.education[eduIndex].field_of_study
-    ) {
+    if (isUserSchool && value === user.education[eduIndex].field_of_study) {
       newState = {
         field_of_study: value,
         fieldOfStudyChange: false,
@@ -198,10 +198,13 @@ function EducationForm({
     }
   }
 
-  function setDescriptionInput(value) {
+  function setDescriptionInput(e) {
+    const { value, dataset } = e.target;
+    const isUserSchool =
+      user.education.length > 0 && !dataset.inputid.includes("new");
     let newState;
     if (
-      user.education.length > 0 &&
+      isUserSchool &&
       value === user.education[eduIndex].education_description
     ) {
       newState = {
@@ -266,6 +269,7 @@ function EducationForm({
         <input
           type="text"
           id={`school-${userId}`}
+          data-inputid={userId}
           name="school"
           className={`input ${
             school.schoolStatus === FORM_STATUS.error ? "input-err" : ""
@@ -276,7 +280,7 @@ function EducationForm({
             school.schoolStatus === FORM_STATUS.error
           }
           value={school.school}
-          onChange={(e) => setSchoolInput(e.target.value)}
+          onChange={(e) => setSchoolInput(e)}
           onBlur={(e) => validateSchool(e.target.value)}
         />
         {school.schoolStatus === FORM_STATUS.error ? (
@@ -297,6 +301,7 @@ function EducationForm({
         <input
           type="text"
           id={`field-of-study-${userId}`}
+          data-inputid={userId}
           name="field-of-study"
           className={`input ${
             fieldOfStudy.fieldOfStudyStatus === FORM_STATUS.error
@@ -309,7 +314,7 @@ function EducationForm({
             fieldOfStudy.fieldOfStudyStatus === FORM_STATUS.error
           }
           value={fieldOfStudy.field_of_study}
-          onChange={(e) => setFieldOfStudyInput(e.target.value)}
+          onChange={(e) => setFieldOfStudyInput(e)}
           onBlur={(e) => validateFieldOfStudy(e.target.value)}
         />
         {fieldOfStudy.fieldOfStudyStatus === FORM_STATUS.error ? (
@@ -362,6 +367,7 @@ function EducationForm({
         <input
           type="text"
           id={`description-${userId}`}
+          data-inputid={userId}
           name="description"
           className={`input ${
             description.descriptionStatus === FORM_STATUS.error
@@ -374,7 +380,7 @@ function EducationForm({
             description.descriptionStatus === FORM_STATUS.error
           }
           value={description.education_description}
-          onChange={(e) => setDescriptionInput(e.target.value)}
+          onChange={(e) => setDescriptionInput(e)}
           onBlur={(e) => validateDescription(e.target.value)}
         />
         {description.descriptionStatus === FORM_STATUS.error ? (
