@@ -25,6 +25,7 @@ import styled from "styled-components";
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
 import EducationForm from "../../../components/forms/user-extras/EducationForm";
 import { FORM_STATUS } from "../../../global/helpers/variables";
+import Announcer from "../../../global/helpers/announcer";
 
 let formSuccessWait;
 function DashboardEducation() {
@@ -32,6 +33,15 @@ function DashboardEducation() {
   const [formStatus, setFormStatus] = useState(FORM_STATUS.idle);
   const [education, setEducation] = useState([]);
   const [idTracker, setIdTracker] = useState(1);
+
+  let errorSummaryRef = React.createRef();
+
+  useEffect(() => {
+    if (formStatus === FORM_STATUS.error && errorSummaryRef.current) {
+      errorSummaryRef.current.focus();
+    }
+    // eslint-disable-next-line
+  }, [formStatus]);
 
   useEffect(() => {
     return () => {
@@ -106,6 +116,26 @@ function DashboardEducation() {
     let educationObj = {};
 
     // check for errors and changes
+
+    const formErrors = education.filter(
+      (edu) =>
+        edu.school.trim() === "" ||
+        edu.schoolStatus === FORM_STATUS.error ||
+        edu.field_of_study.trim() === "" ||
+        edu.fieldOfStudyStatus === FORM_STATUS.error ||
+        edu.education_description.trim() === "" ||
+        edu.descriptionStatus === FORM_STATUS.error ||
+        edu.school_dates.trim() === "" ||
+        edu.school_dates.split(" - ").length < 2
+    );
+
+    if (formErrors.length > 0) {
+      setFormStatus(FORM_STATUS.error);
+      if (errorSummaryRef.current) {
+        errorSummaryRef.current.focus();
+      }
+      return;
+    }
 
     // ADD / DELETE
     education.forEach((edu) => {
@@ -187,6 +217,21 @@ function DashboardEducation() {
     );
   }
 
+  let formErrors;
+  if (formStatus === FORM_STATUS.error) {
+    formErrors = education.filter(
+      (edu) =>
+        edu.school.trim() === "" ||
+        edu.schoolStatus === FORM_STATUS.error ||
+        edu.field_of_study.trim() === "" ||
+        edu.fieldOfStudyStatus === FORM_STATUS.error ||
+        edu.education_description.trim() === "" ||
+        edu.descriptionStatus === FORM_STATUS.error ||
+        edu.school_dates.trim() === "" ||
+        edu.school_dates.split(" - ").length < 2
+    );
+  }
+
   console.log("-- Dash Education --", education);
 
   return (
@@ -194,7 +239,58 @@ function DashboardEducation() {
       <h1>Hello Education</h1>
       <button onClick={addEducation}>Add New Location</button>
       <br />
+
+      {formStatus === FORM_STATUS.error ? (
+        <div ref={errorSummaryRef} tabIndex="-1">
+          <h3 id="error-heading">Errors in Submission</h3>
+          <>
+            <strong>
+              Please address the following errors and re-submit the form:
+            </strong>
+
+            {formErrors.length > 0 ? (
+              formErrors.map((edu) => (
+                <ul aria-label={`current ${edu.school} errors`}>
+                  {edu.school.trim() === "" ||
+                  edu.schoolStatus === FORM_STATUS.error ? (
+                    <li>
+                      <a href={`#school-${edu.id}`}>School Error</a>
+                    </li>
+                  ) : null}
+
+                  {edu.field_of_study.trim() === "" ||
+                  edu.fieldOfStudyStatus === FORM_STATUS.error ? (
+                    <li>
+                      <a href={`#field-of-study-${edu.id}`}>
+                        Field of Study Error
+                      </a>
+                    </li>
+                  ) : null}
+
+                  {edu.education_description.trim() === "" ||
+                  edu.descriptionStatus === FORM_STATUS.error ? (
+                    <li>
+                      <a href={`#description-${edu.id}`}>Description Error</a>
+                    </li>
+                  ) : null}
+                </ul>
+              ))
+            ) : (
+              <>
+                <p>No Errors, ready to submit</p>
+                <Announcer
+                  announcement="No Errors, ready to submit"
+                  ariaId="no-errors-announcer"
+                  ariaLive="polite"
+                />
+              </>
+            )}
+          </>
+        </div>
+      ) : null}
+
       <br />
+
       <form onSubmit={(e) => submitEdit(e)}>
         {education.map((edu, index) => {
           return (
