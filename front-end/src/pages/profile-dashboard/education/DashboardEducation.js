@@ -61,8 +61,10 @@ function DashboardEducation() {
         fieldOfStudyChange: false,
         descriptionStatus: FORM_STATUS.idle,
         descriptionChange: false,
-        schoolDatesStatus: FORM_STATUS.idle,
-        schoolDatesChange: false,
+        schoolToDateStatus: FORM_STATUS.idle,
+        schoolToDateChange: false,
+        schoolFromDateStatus: FORM_STATUS.idle,
+        schoolFromDateChange: false,
       };
     });
 
@@ -96,8 +98,10 @@ function DashboardEducation() {
         descriptionChange: false,
 
         school_dates: "",
-        schoolDatesStatus: FORM_STATUS.idle,
-        schoolDatesChange: false,
+        schoolToDateStatus: FORM_STATUS.idle,
+        schoolToDateChange: false,
+        schoolFromDateStatus: FORM_STATUS.idle,
+        schoolFromDateChange: false,
       },
     ]);
 
@@ -115,8 +119,19 @@ function DashboardEducation() {
     let requests = [];
     let educationObj = {};
 
-    // check for errors and changes
+    const formChanges = education.filter(
+      (edu) =>
+        edu.schoolChange ||
+        edu.fieldOfStudyChange ||
+        edu.descriptionChange ||
+        edu.schoolToDateChange ||
+        edu.schoolFromDateChange
+    );
 
+    if (formChanges.length === 0) {
+      return
+    }
+    
     const formErrors = education.filter(
       (edu) =>
         edu.school.trim() === "" ||
@@ -126,7 +141,10 @@ function DashboardEducation() {
         edu.education_description.trim() === "" ||
         edu.descriptionStatus === FORM_STATUS.error ||
         edu.school_dates.trim() === "" ||
-        edu.school_dates.split(" - ").length < 2
+        edu.school_dates.split(" - ")[0] === "" ||
+        edu.school_dates.split(" - ")[1] === "" ||
+        edu.schoolToDateStatus === FORM_STATUS.error ||
+        edu.schoolFromDateStatus === FORM_STATUS.error
     );
 
     if (formErrors.length > 0) {
@@ -172,7 +190,8 @@ function DashboardEducation() {
           edu.schoolChange ||
           edu.fieldOfStudyChange ||
           edu.descriptionChange ||
-          edu.schoolDatesChange
+          edu.schoolToDateChange ||
+          edu.schoolFromDateChange
         ) {
           const data = {};
           if (edu.schoolChange) {
@@ -184,7 +203,7 @@ function DashboardEducation() {
           if (edu.descriptionChange) {
             data.education_description = edu.education_description;
           }
-          if (edu.schoolDatesChange) {
+          if (edu.schoolToDateChange || edu.schoolFromDateChange) {
             data.school_dates = edu.school_dates;
           }
           requests.push({
@@ -228,7 +247,10 @@ function DashboardEducation() {
         edu.education_description.trim() === "" ||
         edu.descriptionStatus === FORM_STATUS.error ||
         edu.school_dates.trim() === "" ||
-        edu.school_dates.split(" - ").length < 2
+        edu.school_dates.split(" - ")[0] === "" ||
+        edu.school_dates.split(" - ")[1] === "" ||
+        edu.schoolToDateStatus === FORM_STATUS.error ||
+        edu.schoolFromDateStatus === FORM_STATUS.error
     );
   }
 
@@ -271,6 +293,20 @@ function DashboardEducation() {
                   edu.descriptionStatus === FORM_STATUS.error ? (
                     <li>
                       <a href={`#description-${edu.id}`}>Description Error</a>
+                    </li>
+                  ) : null}
+
+                  {edu.school_dates.split(" - ")[0] === "" ||
+                  edu.schoolFromDateStatus === FORM_STATUS.error ?(
+                    <li>
+                      <a href={`#from-date-${edu.id}`}>From Date Error</a>
+                    </li>
+                  ) : null}
+
+                  {edu.school_dates.split(" - ")[1] === "" ||
+                  edu.schoolToDateStatus === FORM_STATUS.error ?(
+                    <li>
+                      <a href={`#to-date-${edu.id}`}>To Date Error</a>
                     </li>
                   ) : null}
                 </ul>

@@ -174,7 +174,7 @@ function EducationForm({
       return;
     }
     setFromCarotRange(newCarotRange);
-    updateEducation(eduIndex, { school_dates: `${newValue} - ${userToDate}` });
+    updateEducation(eduIndex, { schoolFromDateChange: true, school_dates: `${newValue} - ${userToDate}` });
   }
 
   function toDateChange(value) {
@@ -183,7 +183,7 @@ function EducationForm({
       return;
     }
     setToCarotRange(newCarotRange);
-    updateEducation(eduIndex, {
+    updateEducation(eduIndex, { schoolToDateChange: true,
       school_dates: `${userFromDate} - ${newValue}`,
     });
   }
@@ -191,10 +191,28 @@ function EducationForm({
   function presentChange() {
     if (presentRef.current.checked) {
       setIsPresent(true);
-      updateEducation(eduIndex, { school_dates: `${userFromDate} - present` });
+      updateEducation(eduIndex, { schoolToDateChange: true, schoolToDateStatus: FORM_STATUS.success, school_dates: `${userFromDate} - present` });
     } else {
       setIsPresent(false);
-      updateEducation(eduIndex, { school_dates: `${userFromDate}` });
+      updateEducation(eduIndex, { schoolToDateChange: true, schoolToDateStatus: FORM_STATUS.error, school_dates: `${userFromDate} - ${""}` });
+    }
+  }
+  
+  function validateFromDate(e) {
+    const {value} = e.target
+    if (value === "") {
+      updateEducation(eduIndex, {schoolFromDateStatus: FORM_STATUS.error})
+    } else {
+      updateEducation(eduIndex, {schoolFromDateStatus: FORM_STATUS.success})
+    }
+  }
+
+  function validateToDate(e) {
+    const {value} = e.target
+    if (value === "") {
+      updateEducation(eduIndex, {schoolToDateStatus: FORM_STATUS.error})
+    } else {
+      updateEducation(eduIndex, {schoolToDateStatus: FORM_STATUS.success})
     }
   }
 
@@ -335,20 +353,24 @@ function EducationForm({
 
       <input
         type="text"
+        id={`from-date-${userId}`}
         ref={fromDateRef}
         placeholder="MM/YY"
         value={fromDate}
         onChange={(e) => fromDateChange(e.target.value)}
-      />
+        onBlur={e => validateFromDate(e)}
+        />
       <span> - </span>
 
       {!isPresent ? (
         <input
-          type="text"
-          ref={toDateRef}
-          placeholder="MM/YY"
-          value={toDate}
-          onChange={(e) => toDateChange(e.target.value)}
+        type="text"
+        id={`to-date-${userId}`}
+        ref={toDateRef}
+        placeholder="MM/YY"
+        value={toDate}
+        onChange={(e) => toDateChange(e.target.value)}
+        onBlur={e => validateToDate(e)}
         />
       ) : null}
 
