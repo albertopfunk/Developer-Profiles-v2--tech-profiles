@@ -53,6 +53,24 @@ function DashboardEducation() {
     setFormStatus(FORM_STATUS.active);
 
     const updatedUserEdu = user.education.map((edu) => {
+      const schoolFromDate = edu.school_dates.split(" - ")[0]
+      const schoolToDate = edu.school_dates.split(" - ")[0]
+      const schoolFromYear = schoolFromDate.split(" / ")[1]
+      const schoolFromMonth = schoolFromDate.split(" / ")[0]
+      
+      let schoolToYear;
+      let schoolToMonth;
+      let schoolToPresent;
+      if (schoolToDate === "Present") {
+        schoolToYear = ""
+        schoolToMonth = ""
+        schoolToPresent = "Present"
+      } else {
+        schoolToYear = schoolToDate.split(" / ")[1]
+        schoolToMonth = schoolToDate.split(" / ")[0]
+        schoolToPresent = ""
+      }
+
       return {
         ...edu,
         schoolStatus: FORM_STATUS.idle,
@@ -61,10 +79,13 @@ function DashboardEducation() {
         fieldOfStudyChange: false,
         descriptionStatus: FORM_STATUS.idle,
         descriptionChange: false,
-        schoolToDateStatus: FORM_STATUS.idle,
-        schoolToDateChange: false,
-        schoolFromDateStatus: FORM_STATUS.idle,
+        schoolFromYear,
+        schoolFromMonth,
         schoolFromDateChange: false,
+        schoolToYear,
+        schoolToMonth,
+        schoolToPresent,
+        schoolToDateChange: false,
       };
     });
 
@@ -97,11 +118,13 @@ function DashboardEducation() {
         descriptionStatus: FORM_STATUS.idle,
         descriptionChange: false,
 
-        school_dates: "",
-        schoolToDateStatus: FORM_STATUS.idle,
-        schoolToDateChange: false,
-        schoolFromDateStatus: FORM_STATUS.idle,
+        schoolFromYear: "",
+        schoolFromMonth: "",
         schoolFromDateChange: false,
+        schoolToYear: "",
+        schoolToMonth: "",
+        schoolToPresent: "",
+        schoolToDateChange: false,
       },
     ]);
 
@@ -124,8 +147,8 @@ function DashboardEducation() {
         edu.schoolChange ||
         edu.fieldOfStudyChange ||
         edu.descriptionChange ||
-        edu.schoolToDateChange ||
-        edu.schoolFromDateChange
+        edu.schoolFromDateChange ||
+        edu.schoolToDateChange
     );
 
     if (formChanges.length === 0) {
@@ -140,11 +163,11 @@ function DashboardEducation() {
         edu.fieldOfStudyStatus === FORM_STATUS.error ||
         edu.education_description.trim() === "" ||
         edu.descriptionStatus === FORM_STATUS.error ||
-        edu.school_dates.trim() === "" ||
-        edu.school_dates.split(" - ")[0] === "" ||
-        edu.school_dates.split(" - ")[1] === "" ||
-        edu.schoolToDateStatus === FORM_STATUS.error ||
-        edu.schoolFromDateStatus === FORM_STATUS.error
+        edu.schoolFromYear === "" ||
+        edu.schoolFromMonth === "" ||
+        edu.schoolToPresent === "" &&
+        (edu.schoolToYear === "" ||
+        edu.schoolToMonth === "")
     );
 
     if (formErrors.length > 0) {
@@ -155,8 +178,14 @@ function DashboardEducation() {
       return;
     }
 
-    // ADD / DELETE
+    // ADD
     education.forEach((edu) => {
+      const school_dates = 
+      `${edu.schoolFromMonth} / ${edu.schoolFromYear}`
+      + " - "
+      + edu.schoolToPresent ? "Present" :
+      `${edu.schoolToMonth} / ${edu.schoolToYear}`;
+      
       if (Number.isInteger(edu.id)) {
         educationObj[edu.id] = true;
       } else {
@@ -165,7 +194,7 @@ function DashboardEducation() {
           url: `/extras/new/education`,
           data: {
             school: edu.school,
-            school_dates: edu.school_dates,
+            school_dates,
             field_of_study: edu.field_of_study,
             education_description: edu.education_description,
             user_id: user.id,
@@ -173,7 +202,8 @@ function DashboardEducation() {
         });
       }
     });
-
+    
+    // DELETE
     user.education.forEach((edu) => {
       if (!(edu.id in educationObj)) {
         requests.push({
@@ -182,9 +212,15 @@ function DashboardEducation() {
         });
       }
     });
-
+    
     // UPDATE
     education.forEach((edu) => {
+      const school_dates = 
+      `${edu.schoolFromMonth} / ${edu.schoolFromYear}`
+      + " - "
+      + edu.schoolToPresent ? "Present" :
+      `${edu.schoolToMonth} / ${edu.schoolToYear}`;
+
       if (Number.isInteger(edu.id)) {
         if (
           edu.schoolChange ||
@@ -204,7 +240,7 @@ function DashboardEducation() {
             data.education_description = edu.education_description;
           }
           if (edu.schoolToDateChange || edu.schoolFromDateChange) {
-            data.school_dates = edu.school_dates;
+            data.school_dates = school_dates;
           }
           requests.push({
             method: "PUT",
@@ -246,11 +282,11 @@ function DashboardEducation() {
         edu.fieldOfStudyStatus === FORM_STATUS.error ||
         edu.education_description.trim() === "" ||
         edu.descriptionStatus === FORM_STATUS.error ||
-        edu.school_dates.trim() === "" ||
-        edu.school_dates.split(" - ")[0] === "" ||
-        edu.school_dates.split(" - ")[1] === "" ||
-        edu.schoolToDateStatus === FORM_STATUS.error ||
-        edu.schoolFromDateStatus === FORM_STATUS.error
+        edu.schoolFromYear === "" ||
+        edu.schoolFromMonth === "" ||
+        edu.schoolToPresent === "" &&
+        (edu.schoolToYear === "" ||
+        edu.schoolToMonth === "")
     );
   }
 
@@ -296,19 +332,30 @@ function DashboardEducation() {
                     </li>
                   ) : null}
 
-                  {edu.school_dates.split(" - ")[0] === "" ||
-                  edu.schoolFromDateStatus === FORM_STATUS.error ?(
+                  {edu.schoolFromMonth === "" ?(
                     <li>
-                      <a href={`#from-date-${edu.id}`}>From Date Error</a>
+                      <a href={`#from-month-${edu.id}`}>From Month Error</a>
                     </li>
                   ) : null}
 
-                  {edu.school_dates.split(" - ")[1] === "" ||
-                  edu.schoolToDateStatus === FORM_STATUS.error ?(
+                  {edu.schoolFromYear === "" ?(
                     <li>
-                      <a href={`#to-date-${edu.id}`}>To Date Error</a>
+                      <a href={`#from-year-${edu.id}`}>From Year Error</a>
                     </li>
                   ) : null}
+
+                  {edu.schoolToMonth === "" ?(
+                    <li>
+                      <a href={`#to-month-${edu.id}`}>To Month Error</a>
+                    </li>
+                  ) : null}
+
+                  {edu.schoolToYear === "" ?(
+                    <li>
+                      <a href={`#to-year-${edu.id}`}>To Year Error</a>
+                    </li>
+                  ) : null}
+
                 </ul>
               ))
             ) : (
@@ -336,8 +383,11 @@ function DashboardEducation() {
                 userId={edu.id}
                 userSchool={edu.school}
                 userFieldOfStudy={edu.field_of_study}
-                userFromDate={edu.school_dates.split(" - ")[0] || ""}
-                userToDate={edu.school_dates.split(" - ")[1] || ""}
+                userFromYear={edu.schoolFromYear}
+                userFromMonth={edu.schoolFromMonth}
+                userToYear={edu.schoolToYear}
+                userToMonth={edu.schoolToMonth}
+                userToPresent={edu.schoolToPresent}
                 userDescription={edu.education_description}
                 updateEducation={updateEducation}
                 removeEducation={removeEducation}
