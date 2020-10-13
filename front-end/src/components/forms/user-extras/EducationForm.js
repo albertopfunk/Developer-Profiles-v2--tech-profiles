@@ -1,8 +1,8 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState } from "react";
 import styled from "styled-components";
 
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
-import { dateFormat } from "../../../global/helpers/date-format";
+// import { dateFormat } from "../../../global/helpers/date-format";
 import { validateInput } from "../../../global/helpers/validation";
 import { FORM_STATUS } from "../../../global/helpers/variables";
 
@@ -11,8 +11,11 @@ function EducationForm({
   userId,
   userSchool,
   userFieldOfStudy,
-  userFromDate,
-  userToDate,
+  userFromYear,
+  userFromMonth,
+  userToYear,
+  userToMonth,
+  userToPresent,
   userDescription,
   updateEducation,
   removeEducation,
@@ -31,11 +34,33 @@ function EducationForm({
     fieldOfStudyStatus: FORM_STATUS.idle,
   });
 
-  const [fromDate, setFromDate] = useState("");
-  const [toDate, setToDate] = useState("");
+
+
+
+
+
+
+
+  // const [dates, setDates] = useState({
+  //   userFromYear,
+  //   userFromMonth,
+  //   userToYear,
+  //   userToMonth,
+  //   userToPresent,
+  // })
+
+
+  // const [fromDate, setFromDate] = useState("");
+  // const [toDate, setToDate] = useState("");
   const [isPresent, setIsPresent] = useState(false);
-  const [fromCarotRange, setFromCarotRange] = useState(0);
-  const [toCarotRange, setToCarotRange] = useState(0);
+  // const [fromCarotRange, setFromCarotRange] = useState(0);
+  // const [toCarotRange, setToCarotRange] = useState(0);
+
+
+
+
+
+
 
   const [description, setDescription] = useState({
     education_description: userDescription,
@@ -43,29 +68,50 @@ function EducationForm({
     descriptionStatus: FORM_STATUS.idle,
   });
 
-  let fromDateRef = React.createRef();
-  let toDateRef = React.createRef();
+
+
+
+
+
+
+
+
+  // let fromDateRef = React.createRef();
+  // let toDateRef = React.createRef();
   let presentRef = React.createRef();
 
-  useEffect(() => {
-    if (userToDate === "present") {
-      setIsPresent(true);
-    }
-    if (!isPresent) {
-      toDateRef.current.setSelectionRange(toCarotRange, toCarotRange);
-    }
-    setFromDate(userFromDate);
-    setToDate(userToDate);
-    fromDateRef.current.setSelectionRange(fromCarotRange, fromCarotRange);
-  }, [
-    userToDate,
-    isPresent,
-    userFromDate,
-    fromDateRef,
-    fromCarotRange,
-    toDateRef,
-    toCarotRange,
-  ]);
+  // useEffect(() => {
+  //   if (userToDate === "present") {
+  //     setIsPresent(true);
+  //   }
+  //   if (!isPresent) {
+  //     toDateRef.current.setSelectionRange(toCarotRange, toCarotRange);
+  //   }
+  //   setFromDate(userFromDate);
+  //   setToDate(userToDate);
+  //   fromDateRef.current.setSelectionRange(fromCarotRange, fromCarotRange);
+  // }, [
+  //   userToDate,
+  //   isPresent,
+  //   userFromDate,
+  //   fromDateRef,
+  //   fromCarotRange,
+  //   toDateRef,
+  //   toCarotRange,
+  // ]);
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   function setSchoolInput(e) {
     const { value, dataset } = e.target;
@@ -168,53 +214,79 @@ function EducationForm({
     updateEducation(eduIndex, newState);
   }
 
-  function fromDateChange(value) {
-    const [newValue, newCarotRange] = dateFormat(value, fromDate);
-    if (newValue === false) {
-      return;
-    }
-    setFromCarotRange(newCarotRange);
-    updateEducation(eduIndex, { schoolFromDateChange: true, school_dates: `${newValue} - ${userToDate}` });
-  }
 
-  function toDateChange(value) {
-    const [newValue, newCarotRange] = dateFormat(value, toDate);
-    if (newValue === false) {
-      return;
-    }
-    setToCarotRange(newCarotRange);
-    updateEducation(eduIndex, { schoolToDateChange: true,
-      school_dates: `${userFromDate} - ${newValue}`,
-    });
-  }
+
+
+
+
+
+
+
+
+
+
+
+
+  // function fromDateChange(value) {
+  //   const [newValue, newCarotRange] = dateFormat(value, fromDate);
+  //   if (newValue === false) {
+  //     return;
+  //   }
+  //   setFromCarotRange(newCarotRange);
+  //   updateEducation(eduIndex, { schoolFromDateChange: true, school_dates: `${newValue} - ${userToDate}` });
+  // }
+
+  // function toDateChange(value) {
+  //   const [newValue, newCarotRange] = dateFormat(value, toDate);
+  //   if (newValue === false) {
+  //     return;
+  //   }
+  //   setToCarotRange(newCarotRange);
+  //   updateEducation(eduIndex, { schoolToDateChange: true,
+  //     school_dates: `${userFromDate} - ${newValue}`,
+  //   });
+  // }
 
   function presentChange() {
     if (presentRef.current.checked) {
       setIsPresent(true);
-      updateEducation(eduIndex, { schoolToDateChange: true, schoolToDateStatus: FORM_STATUS.success, school_dates: `${userFromDate} - present` });
+      // updateEducation(eduIndex, { schoolToDateChange: true, schoolToDateStatus: FORM_STATUS.success, school_dates: `${userFromDate} - present` });
     } else {
       setIsPresent(false);
-      updateEducation(eduIndex, { schoolToDateChange: true, schoolToDateStatus: FORM_STATUS.error, school_dates: `${userFromDate} - ${""}` });
+      // updateEducation(eduIndex, { schoolToDateChange: true, schoolToDateStatus: FORM_STATUS.error, school_dates: `${userFromDate} - ${""}` });
     }
   }
   
-  function validateFromDate(e) {
-    const {value} = e.target
-    if (value === "") {
-      updateEducation(eduIndex, {schoolFromDateStatus: FORM_STATUS.error})
-    } else {
-      updateEducation(eduIndex, {schoolFromDateStatus: FORM_STATUS.success})
-    }
-  }
+  // function validateFromDate(e) {
+  //   const {value} = e.target
+  //   if (value === "") {
+  //     updateEducation(eduIndex, {schoolFromDateStatus: FORM_STATUS.error})
+  //   } else {
+  //     updateEducation(eduIndex, {schoolFromDateStatus: FORM_STATUS.success})
+  //   }
+  // }
 
-  function validateToDate(e) {
-    const {value} = e.target
-    if (value === "") {
-      updateEducation(eduIndex, {schoolToDateStatus: FORM_STATUS.error})
-    } else {
-      updateEducation(eduIndex, {schoolToDateStatus: FORM_STATUS.success})
-    }
-  }
+  // function validateToDate(e) {
+  //   const {value} = e.target
+  //   if (value === "") {
+  //     updateEducation(eduIndex, {schoolToDateStatus: FORM_STATUS.error})
+  //   } else {
+  //     updateEducation(eduIndex, {schoolToDateStatus: FORM_STATUS.success})
+  //   }
+  // }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   function setDescriptionInput(e) {
     const { value, dataset } = e.target;
@@ -351,6 +423,73 @@ function EducationForm({
         ) : null}
       </InputContainer>
 
+
+      <label htmlFor={`from-month-${userId}`}>From Month:</label>
+      <select name="from-month" id={`from-month-${userId}`} defaultValue={userFromMonth}>
+        <option value="">--Select Month--</option>
+        <option value="January">01 | January</option>
+        <option value="February">02 | February</option>
+        <option value="March">03 | March</option>
+        <option value="April">04 | April</option>
+        <option value="May">05 | May</option>
+        <option value="June">06 | June</option>
+        <option value="July">07 | July</option>
+        <option value="August">08 | August</option>
+        <option value="September">09 | September</option>
+        <option value="October">10 | October</option>
+        <option value="November">11 | November</option>
+        <option value="December">12 | December</option>
+      </select>
+      <br/>
+      <label htmlFor={`from-year-${userId}`}>From Year:</label>
+      <select name="from-year" id={`from-year-${userId}`} defaultValue={userFromYear}>
+        {Array.from(Array(50)).map(
+          (_, i) => <option key={`${i}-${userId}`} value={2020 - i}>{2020 - i}</option>
+        )}
+      </select>
+
+
+      {userToPresent !== "Present" ?
+        (
+          <>
+            <label htmlFor={`#to-month-${userId}`}>To Month:</label>
+            <select name="to-month" id={`#to-month-${userId}`} defaultValue={userToMonth}>
+              <option value="">--Select Month--</option>
+              <option value="January">01 | January</option>
+              <option value="February">02 | February</option>
+              <option value="March">03 | March</option>
+              <option value="April">04 | April</option>
+              <option value="May">05 | May</option>
+              <option value="June">06 | June</option>
+              <option value="July">07 | July</option>
+              <option value="August">08 | August</option>
+              <option value="September">09 | September</option>
+              <option value="October">10 | October</option>
+              <option value="November">11 | November</option>
+              <option value="December">12 | December</option>
+            </select>
+            <br/>
+            <label htmlFor={`to-year-${userId}`}>To Year:</label>
+            <select name="to-year" id={`to-year-${userId}`} defaultValue={userToYear}>
+              {Array.from(Array(50)).map(
+                (_, i) => <option key={`${i}-${userId}`} value={2020 - i}>{2020 - i}</option>
+              )}
+            </select>
+          </>
+        ) : null
+      }
+
+      <input
+        ref={presentRef}
+        type="checkbox"
+        id={`present-${userId}`}
+        name={`present-${userId}`}
+        onChange={presentChange}
+        checked={userToPresent === "Present"}
+        />
+        <label htmlFor={`present-${userId}`}>Present</label>
+
+{/* 
       <input
         type="text"
         id={`from-date-${userId}`}
@@ -373,16 +512,16 @@ function EducationForm({
         onBlur={e => validateToDate(e)}
         />
       ) : null}
+ */}
 
-      <input
-        ref={presentRef}
-        type="checkbox"
-        id={`present-${userId}`}
-        name={`present-${userId}`}
-        onChange={presentChange}
-        checked={isPresent}
-      />
-      <label htmlFor={`present-${userId}`}>Present</label>
+
+
+
+
+
+
+
+
 
       <InputContainer>
         <label htmlFor={`description-${userId}`}>Description:</label>
