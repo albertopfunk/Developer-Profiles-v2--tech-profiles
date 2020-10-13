@@ -157,7 +157,7 @@ function DashboardEducation() {
     
     const formErrors = education.filter(
       (edu) =>
-        edu.school.trim() === "" ||
+        (edu.school.trim() === "" ||
         edu.schoolStatus === FORM_STATUS.error ||
         edu.field_of_study.trim() === "" ||
         edu.fieldOfStudyStatus === FORM_STATUS.error ||
@@ -165,7 +165,7 @@ function DashboardEducation() {
         edu.descriptionStatus === FORM_STATUS.error ||
         edu.schoolFromYear === "" ||
         edu.schoolFromMonth === "" ||
-        edu.schoolToPresent === "" &&
+        edu.schoolToPresent === "") &&
         (edu.schoolToYear === "" ||
         edu.schoolToMonth === "")
     );
@@ -276,7 +276,7 @@ function DashboardEducation() {
   if (formStatus === FORM_STATUS.error) {
     formErrors = education.filter(
       (edu) =>
-        edu.school.trim() === "" ||
+        (edu.school.trim() === "" ||
         edu.schoolStatus === FORM_STATUS.error ||
         edu.field_of_study.trim() === "" ||
         edu.fieldOfStudyStatus === FORM_STATUS.error ||
@@ -284,7 +284,7 @@ function DashboardEducation() {
         edu.descriptionStatus === FORM_STATUS.error ||
         edu.schoolFromYear === "" ||
         edu.schoolFromMonth === "" ||
-        edu.schoolToPresent === "" &&
+        edu.schoolToPresent === "") &&
         (edu.schoolToYear === "" ||
         edu.schoolToMonth === "")
     );
@@ -377,7 +377,7 @@ function DashboardEducation() {
       <form onSubmit={(e) => submitEdit(e)}>
         {education.map((edu, index) => {
           return (
-            <div key={index}>
+            <div key={edu.id}>
               <EducationForm
                 eduIndex={index}
                 userId={edu.id}
