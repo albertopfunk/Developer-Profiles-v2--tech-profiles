@@ -36,23 +36,22 @@ function EducationForm({
 
 
 
-
-
-
-
-
-  // const [dates, setDates] = useState({
-  //   userFromYear,
-  //   userFromMonth,
-  //   userToYear,
-  //   userToMonth,
-  //   userToPresent,
-  // })
+  const [dates, setDates] = useState({
+    schoolFromYear: userFromYear,
+    schoolFromYearStatus: FORM_STATUS.idle,
+    schoolFromMonth: userFromMonth,
+    schoolFromMonthStatus: FORM_STATUS.idle,
+    schoolToYear: userToYear,
+    schoolToYearStatus: FORM_STATUS.idle,
+    schoolToMonth: userToMonth,
+    schoolToMonthStatus: FORM_STATUS.idle,
+    schoolToPresent: userToPresent,
+  })
 
 
   // const [fromDate, setFromDate] = useState("");
   // const [toDate, setToDate] = useState("");
-  const [isPresent, setIsPresent] = useState(false);
+  // const [isPresent, setIsPresent] = useState(false);
   // const [fromCarotRange, setFromCarotRange] = useState(0);
   // const [toCarotRange, setToCarotRange] = useState(0);
 
@@ -220,10 +219,85 @@ function EducationForm({
 
 
 
+  function setFromMonthDate(value) {
+    if (value === "") {
+      setDates({
+        ...dates,
+        schoolFromMonthStatus: FORM_STATUS.error,
+        schoolFromMonth: value
+      })
+    } else {
+      setDates({
+        ...dates,
+        schoolFromMonthStatus: FORM_STATUS.success,
+        schoolFromMonth: value
+      })
+    }
+    updateEducation(eduIndex, { schoolFromDateChange: true, schoolFromMonth: value });
+  }
 
+  function setFromYearDate(value) {
+    if (value === "") {
+      setDates({
+        ...dates,
+        schoolFromYearStatus: FORM_STATUS.error,
+        schoolFromYear: value
+      })
+    } else {
+      setDates({
+        ...dates,
+        schoolFromYearStatus: FORM_STATUS.success,
+        schoolFromYear: value
+      })
+    }
+    updateEducation(eduIndex, { schoolFromDateChange: true, schoolFromYear: value });
+  }
+  
+  function setToMonthDate(value) {
+    setDates({
+      ...dates,
+      schoolToMonth: value
+    })
+    if (value === "") {
+      setDates({
+        ...dates,
+        schoolToMonthStatus: FORM_STATUS.error,
+        schoolToMonth: value
+      })
+    } else {
+      setDates({
+        ...dates,
+        schoolToMonthStatus: FORM_STATUS.success,
+        schoolToMonth: value
+      })
+    }
+    updateEducation(eduIndex, { schoolToDateChange: true, schoolToMonth: value });
+  }
+  
+  function setToYearDate(value) {
+    if (value === "") {
+      setDates({
+        ...dates,
+        schoolToYearStatus: FORM_STATUS.error,
+        schoolToYear: value
+      })
+    } else {
+      setDates({
+        ...dates,
+        schoolToYearStatus: FORM_STATUS.success,
+        schoolToYear: value
+      })
+    }
+    updateEducation(eduIndex, { schoolToDateChange: true, schoolToYear: value });
+  }
 
-
-
+  function setToPresentDate() {
+    if (presentRef.current.checked) {
+      updateEducation(eduIndex, { schoolToDateChange: true, schoolToPresent: "Present" });
+    } else {
+      updateEducation(eduIndex, { schoolToDateChange: true, schoolToPresent: "" });
+    }
+  }
 
 
 
@@ -247,15 +321,15 @@ function EducationForm({
   //   });
   // }
 
-  function presentChange() {
-    if (presentRef.current.checked) {
-      setIsPresent(true);
-      // updateEducation(eduIndex, { schoolToDateChange: true, schoolToDateStatus: FORM_STATUS.success, school_dates: `${userFromDate} - present` });
-    } else {
-      setIsPresent(false);
-      // updateEducation(eduIndex, { schoolToDateChange: true, schoolToDateStatus: FORM_STATUS.error, school_dates: `${userFromDate} - ${""}` });
-    }
-  }
+  // function presentChange() {
+  //   if (presentRef.current.checked) {
+  //     setIsPresent(true);
+  //     // updateEducation(eduIndex, { schoolToDateChange: true, schoolToDateStatus: FORM_STATUS.success, school_dates: `${userFromDate} - present` });
+  //   } else {
+  //     setIsPresent(false);
+  //     // updateEducation(eduIndex, { schoolToDateChange: true, schoolToDateStatus: FORM_STATUS.error, school_dates: `${userFromDate} - ${""}` });
+  //   }
+  // }
   
   // function validateFromDate(e) {
   //   const {value} = e.target
@@ -425,7 +499,13 @@ function EducationForm({
 
 
       <label htmlFor={`from-month-${userId}`}>From Month:</label>
-      <select name="from-month" id={`from-month-${userId}`} defaultValue={userFromMonth}>
+      <select
+        name="from-month"
+        id={`from-month-${userId}`}
+        defaultValue={userFromMonth}
+        onChange={e => setFromMonthDate(e.target.value)}
+        onBlur={e => setFromMonthDate(e.target.value)}
+      >
         <option value="">--Select Month--</option>
         <option value="January">01 | January</option>
         <option value="February">02 | February</option>
@@ -442,7 +522,14 @@ function EducationForm({
       </select>
       <br/>
       <label htmlFor={`from-year-${userId}`}>From Year:</label>
-      <select name="from-year" id={`from-year-${userId}`} defaultValue={userFromYear}>
+      <select
+        name="from-year"
+        id={`from-year-${userId}`}
+        defaultValue={userFromYear}
+        onChange={e => setFromYearDate(e.target.value)}
+        onBlur={e => setFromYearDate(e.target.value)}
+      >
+        <option value="">--Select Year--</option>
         {Array.from(Array(50)).map(
           (_, i) => <option key={`${i}-${userId}`} value={2020 - i}>{2020 - i}</option>
         )}
@@ -453,7 +540,13 @@ function EducationForm({
         (
           <>
             <label htmlFor={`#to-month-${userId}`}>To Month:</label>
-            <select name="to-month" id={`#to-month-${userId}`} defaultValue={userToMonth}>
+            <select
+              name="to-month"
+              id={`to-month-${userId}`}
+              defaultValue={userToMonth}
+              onChange={e => setToMonthDate(e.target.value)}
+              onBlur={e => setToMonthDate(e.target.value)}
+            >
               <option value="">--Select Month--</option>
               <option value="January">01 | January</option>
               <option value="February">02 | February</option>
@@ -470,7 +563,14 @@ function EducationForm({
             </select>
             <br/>
             <label htmlFor={`to-year-${userId}`}>To Year:</label>
-            <select name="to-year" id={`to-year-${userId}`} defaultValue={userToYear}>
+            <select
+              name="to-year"
+              id={`to-year-${userId}`}
+              defaultValue={userToYear}
+              onChange={e => setToYearDate(e.target.value)}
+              onBlur={e => setToYearDate(e.target.value)}
+            >
+              <option value="">--Select Year--</option>
               {Array.from(Array(50)).map(
                 (_, i) => <option key={`${i}-${userId}`} value={2020 - i}>{2020 - i}</option>
               )}
@@ -482,46 +582,12 @@ function EducationForm({
       <input
         ref={presentRef}
         type="checkbox"
-        id={`present-${userId}`}
-        name={`present-${userId}`}
-        onChange={presentChange}
+        id={`to-present-${userId}`}
+        name="to-present"
+        onChange={setToPresentDate}
         checked={userToPresent === "Present"}
         />
         <label htmlFor={`present-${userId}`}>Present</label>
-
-{/* 
-      <input
-        type="text"
-        id={`from-date-${userId}`}
-        ref={fromDateRef}
-        placeholder="MM/YY"
-        value={fromDate}
-        onChange={(e) => fromDateChange(e.target.value)}
-        onBlur={e => validateFromDate(e)}
-        />
-      <span> - </span>
-
-      {!isPresent ? (
-        <input
-        type="text"
-        id={`to-date-${userId}`}
-        ref={toDateRef}
-        placeholder="MM/YY"
-        value={toDate}
-        onChange={(e) => toDateChange(e.target.value)}
-        onBlur={e => validateToDate(e)}
-        />
-      ) : null}
- */}
-
-
-
-
-
-
-
-
-
 
       <InputContainer>
         <label htmlFor={`description-${userId}`}>Description:</label>
