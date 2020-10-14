@@ -32,6 +32,7 @@ function DashboardEducation() {
   const { user, addUserExtras } = useContext(ProfileContext);
   const [formStatus, setFormStatus] = useState(FORM_STATUS.idle);
   const [education, setEducation] = useState([]);
+  const [educationChange, setEducationChange] = useState(false);
   const [idTracker, setIdTracker] = useState(1);
 
   let errorSummaryRef = React.createRef();
@@ -51,24 +52,24 @@ function DashboardEducation() {
 
   function setFormInputs() {
     setFormStatus(FORM_STATUS.active);
+    const updatedUserEducation = user.education.map((edu) => {
+      const schoolDatesArr = edu.school_dates.split(" - ");
+      const schoolFromDate = schoolDatesArr[0]
+      const schoolToDate = schoolDatesArr[1]
+      const schoolFromYear = schoolFromDate.split(" ")[1]
+      const schoolFromMonth = schoolFromDate.split(" ")[0]
 
-    const updatedUserEdu = user.education.map((edu) => {
-      const schoolFromDate = edu.school_dates.split(" - ")[0]
-      const schoolToDate = edu.school_dates.split(" - ")[0]
-      const schoolFromYear = schoolFromDate.split(" / ")[1]
-      const schoolFromMonth = schoolFromDate.split(" / ")[0]
-      
       let schoolToYear;
       let schoolToMonth;
       let schoolToPresent;
       if (schoolToDate === "Present") {
+        schoolToPresent = "Present"
         schoolToYear = ""
         schoolToMonth = ""
-        schoolToPresent = "Present"
       } else {
-        schoolToYear = schoolToDate.split(" / ")[1]
-        schoolToMonth = schoolToDate.split(" / ")[0]
         schoolToPresent = ""
+        schoolToYear = schoolToDate.split(" ")[1]
+        schoolToMonth = schoolToDate.split(" ")[0]
       }
 
       return {
@@ -89,7 +90,7 @@ function DashboardEducation() {
       };
     });
 
-    setEducation(updatedUserEdu);
+    setEducation(updatedUserEducation);
   }
 
   function updateEducation(index, state) {
@@ -129,11 +130,13 @@ function DashboardEducation() {
     ]);
 
     setIdTracker(idTracker + 1);
+    setEducationChange(true)
   }
 
   function removeEducation(id) {
     let newEducation = education.filter((edu) => edu.id !== id);
     setEducation(newEducation);
+    setEducationChange(true)
   }
 
   async function submitEdit(e) {
@@ -151,7 +154,7 @@ function DashboardEducation() {
         edu.schoolToDateChange
     );
 
-    if (formChanges.length === 0) {
+    if (formChanges.length === 0 && !educationChange) {
       return
     }
     
@@ -180,12 +183,12 @@ function DashboardEducation() {
 
     // ADD
     education.forEach((edu) => {
-      const school_dates = 
-      `${edu.schoolFromMonth} / ${edu.schoolFromYear}`
-      + " - "
-      + edu.schoolToPresent ? "Present" :
-      `${edu.schoolToMonth} / ${edu.schoolToYear}`;
-      
+      const fromDates = `${edu.schoolFromMonth} ${edu.schoolFromYear}`
+      const toDates = edu.schoolToPresent ? 
+        "Present"
+        :
+        `${edu.schoolToMonth} ${edu.schoolToYear}`;
+      const school_dates = `${fromDates} - ${toDates}`
       if (Number.isInteger(edu.id)) {
         educationObj[edu.id] = true;
       } else {
@@ -215,12 +218,6 @@ function DashboardEducation() {
     
     // UPDATE
     education.forEach((edu) => {
-      const school_dates = 
-      `${edu.schoolFromMonth} / ${edu.schoolFromYear}`
-      + " - "
-      + edu.schoolToPresent ? "Present" :
-      `${edu.schoolToMonth} / ${edu.schoolToYear}`;
-
       if (Number.isInteger(edu.id)) {
         if (
           edu.schoolChange ||
@@ -240,7 +237,13 @@ function DashboardEducation() {
             data.education_description = edu.education_description;
           }
           if (edu.schoolToDateChange || edu.schoolFromDateChange) {
-            data.school_dates = school_dates;
+            const fromDates = `${edu.schoolFromMonth} ${edu.schoolFromYear}`;
+            const toDates = edu.schoolToPresent ? 
+              "Present"
+              :
+              `${edu.schoolToMonth} ${edu.schoolToYear}`;
+
+            data.school_dates = `${fromDates} - ${toDates}`;
           }
           requests.push({
             method: "PUT",
@@ -308,7 +311,7 @@ function DashboardEducation() {
 
             {formErrors.length > 0 ? (
               formErrors.map((edu) => (
-                <ul aria-label={`current ${edu.school} errors`}>
+                <ul key={edu.id} aria-label={`current ${edu.school} errors`}>
                   {edu.school.trim() === "" ||
                   edu.schoolStatus === FORM_STATUS.error ? (
                     <li>
