@@ -101,8 +101,6 @@ function UserExtras({ dashboard, extras, setAriaExpanded, userId }) {
     locations,
   } = userExtras;
 
-  console.log("==========EXTRASSSS==========");
-
   return (
     <section>
       <section>
