@@ -1,24 +1,3 @@
-/*
-
-SubmitEdits()
-
-map thru educations to check all the input statuses
-if any are error, then form status will be in error
-if any are blank, then form status will be in error
-
-map thru educations to check if any changes on EXISTING only
-or any additions or removals
-if no on everything then return
-if true on changes, set up HTTP request
-if true on additions, set up HTTP request
-if true on removals, set up HTTP request
-
-
-if user adds a new edu and submits
-need to check for empty fields on submit as well
-
-*/
-
 import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 
@@ -52,24 +31,25 @@ function DashboardEducation() {
 
   function setFormInputs() {
     setFormStatus(FORM_STATUS.active);
+
     const updatedUserEducation = user.education.map((edu) => {
       const schoolDatesArr = edu.school_dates.split(" - ");
-      const schoolFromDate = schoolDatesArr[0]
-      const schoolToDate = schoolDatesArr[1]
-      const schoolFromYear = schoolFromDate.split(" ")[1]
-      const schoolFromMonth = schoolFromDate.split(" ")[0]
+      const schoolFromDate = schoolDatesArr[0];
+      const schoolToDate = schoolDatesArr[1];
+      const schoolFromMonth = schoolFromDate.split(" ")[0];
+      const schoolFromYear = schoolFromDate.split(" ")[1];
 
-      let schoolToYear;
       let schoolToMonth;
+      let schoolToYear;
       let schoolToPresent;
       if (schoolToDate === "Present") {
-        schoolToPresent = "Present"
-        schoolToYear = ""
-        schoolToMonth = ""
+        schoolToPresent = "Present";
+        schoolToMonth = "";
+        schoolToYear = "";
       } else {
-        schoolToPresent = ""
-        schoolToYear = schoolToDate.split(" ")[1]
-        schoolToMonth = schoolToDate.split(" ")[0]
+        schoolToPresent = "";
+        schoolToMonth = schoolToDate.split(" ")[0];
+        schoolToYear = schoolToDate.split(" ")[1];
       }
 
       return {
@@ -80,11 +60,11 @@ function DashboardEducation() {
         fieldOfStudyChange: false,
         descriptionStatus: FORM_STATUS.idle,
         descriptionChange: false,
-        schoolFromYear,
         schoolFromMonth,
+        schoolFromYear,
         schoolFromDateChange: false,
-        schoolToYear,
         schoolToMonth,
+        schoolToYear,
         schoolToPresent,
         schoolToDateChange: false,
       };
@@ -119,79 +99,63 @@ function DashboardEducation() {
         descriptionStatus: FORM_STATUS.idle,
         descriptionChange: false,
 
-        schoolFromYear: "",
         schoolFromMonth: "",
+        schoolFromYear: "",
         schoolFromDateChange: false,
-        schoolToYear: "",
         schoolToMonth: "",
+        schoolToYear: "",
         schoolToPresent: "",
         schoolToDateChange: false,
       },
     ]);
 
     setIdTracker(idTracker + 1);
-    setEducationChange(true)
+    setEducationChange(true);
   }
 
   function removeEducation(id) {
     let newEducation = education.filter((edu) => edu.id !== id);
     setEducation(newEducation);
-    setEducationChange(true)
+    setEducationChange(true);
   }
 
-  async function submitEdit(e) {
-    e.preventDefault();
-
-    let requests = [];
-    let educationObj = {};
-
-    const formChanges = education.filter(
-      (edu) =>
-        edu.schoolChange ||
-        edu.fieldOfStudyChange ||
-        edu.descriptionChange ||
-        edu.schoolFromDateChange ||
-        edu.schoolToDateChange
-    );
-
-    if (formChanges.length === 0 && !educationChange) {
-      return
-    }
-    
-    const formErrors = education.filter(
-      (edu) =>
-        (edu.school.trim() === "" ||
+  function checkFormErrors() {
+    return education.filter((edu) => {
+      let isErrors = false;
+      if (
+        edu.school.trim() === "" ||
         edu.schoolStatus === FORM_STATUS.error ||
         edu.field_of_study.trim() === "" ||
         edu.fieldOfStudyStatus === FORM_STATUS.error ||
         edu.education_description.trim() === "" ||
         edu.descriptionStatus === FORM_STATUS.error ||
-        edu.schoolFromYear === "" ||
         edu.schoolFromMonth === "" ||
-        edu.schoolToPresent === "") &&
-        (edu.schoolToYear === "" ||
-        edu.schoolToMonth === "")
-    );
-
-    if (formErrors.length > 0) {
-      setFormStatus(FORM_STATUS.error);
-      if (errorSummaryRef.current) {
-        errorSummaryRef.current.focus();
+        edu.schoolFromYear === ""
+      ) {
+        isErrors = true;
       }
-      return;
-    }
 
-    // ADD
+      if (
+        edu.schoolToPresent === "" &&
+        (edu.schoolToMonth === "" || edu.schoolToYear === "")
+      ) {
+        isErrors = true;
+      }
+
+      return isErrors;
+    });
+  }
+
+  function addNewEducation() {
+    const requests = [];
+
     education.forEach((edu) => {
-      const fromDates = `${edu.schoolFromMonth} ${edu.schoolFromYear}`
-      const toDates = edu.schoolToPresent ? 
-        "Present"
-        :
-        `${edu.schoolToMonth} ${edu.schoolToYear}`;
-      const school_dates = `${fromDates} - ${toDates}`
-      if (Number.isInteger(edu.id)) {
-        educationObj[edu.id] = true;
-      } else {
+      if (!Number.isInteger(edu.id)) {
+        const fromDates = `${edu.schoolFromMonth} ${edu.schoolFromYear}`;
+        const toDates = edu.schoolToPresent
+          ? "Present"
+          : `${edu.schoolToMonth} ${edu.schoolToYear}`;
+        const school_dates = `${fromDates} - ${toDates}`;
         requests.push({
           method: "POST",
           url: `/extras/new/education`,
@@ -205,8 +169,20 @@ function DashboardEducation() {
         });
       }
     });
-    
-    // DELETE
+
+    return requests;
+  }
+
+  function removeUserEducation() {
+    const requests = [];
+    const educationObj = {};
+
+    education.forEach((edu) => {
+      if (Number.isInteger(edu.id)) {
+        educationObj[edu.id] = true;
+      }
+    });
+
     user.education.forEach((edu) => {
       if (!(edu.id in educationObj)) {
         requests.push({
@@ -215,16 +191,21 @@ function DashboardEducation() {
         });
       }
     });
-    
-    // UPDATE
+
+    return requests;
+  }
+
+  function updateUserEducation() {
+    const requests = [];
+
     education.forEach((edu) => {
       if (Number.isInteger(edu.id)) {
         if (
           edu.schoolChange ||
           edu.fieldOfStudyChange ||
           edu.descriptionChange ||
-          edu.schoolToDateChange ||
-          edu.schoolFromDateChange
+          edu.schoolFromDateChange ||
+          edu.schoolToDateChange
         ) {
           const data = {};
           if (edu.schoolChange) {
@@ -238,11 +219,9 @@ function DashboardEducation() {
           }
           if (edu.schoolToDateChange || edu.schoolFromDateChange) {
             const fromDates = `${edu.schoolFromMonth} ${edu.schoolFromYear}`;
-            const toDates = edu.schoolToPresent ? 
-              "Present"
-              :
-              `${edu.schoolToMonth} ${edu.schoolToYear}`;
-
+            const toDates = edu.schoolToPresent
+              ? "Present"
+              : `${edu.schoolToMonth} ${edu.schoolToYear}`;
             data.school_dates = `${fromDates} - ${toDates}`;
           }
           requests.push({
@@ -253,6 +232,43 @@ function DashboardEducation() {
         }
       }
     });
+
+    return requests;
+  }
+
+  async function submitEdit(e) {
+    e.preventDefault();
+    let requests = [];
+
+    const formErrors = checkFormErrors();
+    if (formErrors.length > 0) {
+      setFormStatus(FORM_STATUS.error);
+      if (errorSummaryRef.current) {
+        errorSummaryRef.current.focus();
+      }
+      return;
+    }
+
+    if (educationChange) {
+      const newEduRequests = addNewEducation();
+      const removeEduRequests = removeUserEducation();
+      requests = [...newEduRequests, ...removeEduRequests];
+    }
+
+    const userEduChange = education.filter(
+      (edu) =>
+        Number.isInteger(edu.id) &&
+        (edu.schoolChange ||
+          edu.fieldOfStudyChange ||
+          edu.descriptionChange ||
+          edu.schoolFromDateChange ||
+          edu.schoolToDateChange)
+    );
+
+    if (userEduChange.length > 0) {
+      const updatedEduRequests = updateUserEducation();
+      requests = [...requests, ...updatedEduRequests];
+    }
 
     if (requests.length === 0) {
       return;
@@ -277,23 +293,10 @@ function DashboardEducation() {
 
   let formErrors;
   if (formStatus === FORM_STATUS.error) {
-    formErrors = education.filter(
-      (edu) =>
-        (edu.school.trim() === "" ||
-        edu.schoolStatus === FORM_STATUS.error ||
-        edu.field_of_study.trim() === "" ||
-        edu.fieldOfStudyStatus === FORM_STATUS.error ||
-        edu.education_description.trim() === "" ||
-        edu.descriptionStatus === FORM_STATUS.error ||
-        edu.schoolFromYear === "" ||
-        edu.schoolFromMonth === "" ||
-        edu.schoolToPresent === "") &&
-        (edu.schoolToYear === "" ||
-        edu.schoolToMonth === "")
-    );
+    formErrors = checkFormErrors();
   }
 
-  console.log("-- Dash Education --", education);
+  console.log("-- Dash Education --");
 
   return (
     <Main>
@@ -335,30 +338,29 @@ function DashboardEducation() {
                     </li>
                   ) : null}
 
-                  {edu.schoolFromMonth === "" ?(
+                  {edu.schoolFromMonth === "" ? (
                     <li>
                       <a href={`#from-month-${edu.id}`}>From Month Error</a>
                     </li>
                   ) : null}
 
-                  {edu.schoolFromYear === "" ?(
+                  {edu.schoolFromYear === "" ? (
                     <li>
                       <a href={`#from-year-${edu.id}`}>From Year Error</a>
                     </li>
                   ) : null}
 
-                  {edu.schoolToMonth === "" ?(
+                  {edu.schoolToMonth === "" ? (
                     <li>
                       <a href={`#to-month-${edu.id}`}>To Month Error</a>
                     </li>
                   ) : null}
 
-                  {edu.schoolToYear === "" ?(
+                  {edu.schoolToYear === "" ? (
                     <li>
                       <a href={`#to-year-${edu.id}`}>To Year Error</a>
                     </li>
                   ) : null}
-
                 </ul>
               ))
             ) : (
@@ -386,10 +388,10 @@ function DashboardEducation() {
                 userId={edu.id}
                 userSchool={edu.school}
                 userFieldOfStudy={edu.field_of_study}
-                userFromYear={edu.schoolFromYear}
                 userFromMonth={edu.schoolFromMonth}
-                userToYear={edu.schoolToYear}
+                userFromYear={edu.schoolFromYear}
                 userToMonth={edu.schoolToMonth}
+                userToYear={edu.schoolToYear}
                 userToPresent={edu.schoolToPresent}
                 userDescription={edu.education_description}
                 updateEducation={updateEducation}
