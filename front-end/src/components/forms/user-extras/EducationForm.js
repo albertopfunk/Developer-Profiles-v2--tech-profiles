@@ -68,11 +68,13 @@ function EducationForm({
     const isUserSchool =
       user.education.length > 0 && !dataset.inputid.includes("new");
     if (isUserSchool && value === user.education[eduIndex].school) {
-      setSchool({
+      newState = {
         school: value,
         schoolChange: false,
         schoolStatus: FORM_STATUS.idle,
-      });
+      };
+      setSchool(newState);
+      updateEducation(eduIndex, newState);
       return;
     }
 
@@ -119,11 +121,13 @@ function EducationForm({
     const isUserSchool =
       user.education.length > 0 && !dataset.inputid.includes("new");
     if (isUserSchool && value === user.education[eduIndex].field_of_study) {
-      setFieldOfStudy({
+      newState = {
         field_of_study: value,
         fieldOfStudyChange: false,
         fieldOfStudyStatus: FORM_STATUS.idle,
-      });
+      };
+      setFieldOfStudy(newState);
+      updateEducation(eduIndex, newState);
       return;
     }
 
@@ -271,11 +275,13 @@ function EducationForm({
       isUserSchool &&
       value === user.education[eduIndex].education_description
     ) {
-      setDescription({
+      newState = {
         education_description: value,
         descriptionChange: false,
         descriptionStatus: FORM_STATUS.idle,
-      });
+      };
+      setDescription(newState);
+      updateEducation(eduIndex, newState);
       return;
     }
 
