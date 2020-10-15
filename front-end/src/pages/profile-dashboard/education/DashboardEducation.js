@@ -29,28 +29,40 @@ function DashboardEducation() {
     };
   }, []);
 
+  function splitDates(dates) {
+    const schoolDatesArr = dates.split(" - ");
+    const schoolFromDate = schoolDatesArr[0];
+    const schoolToDate = schoolDatesArr[1];
+    const schoolFromMonth = schoolFromDate.split(" ")[0];
+    const schoolFromYear = schoolFromDate.split(" ")[1];
+
+    let schoolToMonth;
+    let schoolToYear;
+    let schoolToPresent;
+    if (schoolToDate === "Present") {
+      schoolToPresent = "Present";
+      schoolToMonth = "";
+      schoolToYear = "";
+    } else {
+      schoolToPresent = "";
+      schoolToMonth = schoolToDate.split(" ")[0];
+      schoolToYear = schoolToDate.split(" ")[1];
+    }
+
+    return {
+      schoolFromMonth,
+      schoolFromYear,
+      schoolToMonth,
+      schoolToYear,
+      schoolToPresent,
+    };
+  }
+
   function setFormInputs() {
     setFormStatus(FORM_STATUS.active);
 
     const updatedUserEducation = user.education.map((edu) => {
-      const schoolDatesArr = edu.school_dates.split(" - ");
-      const schoolFromDate = schoolDatesArr[0];
-      const schoolToDate = schoolDatesArr[1];
-      const schoolFromMonth = schoolFromDate.split(" ")[0];
-      const schoolFromYear = schoolFromDate.split(" ")[1];
-
-      let schoolToMonth;
-      let schoolToYear;
-      let schoolToPresent;
-      if (schoolToDate === "Present") {
-        schoolToPresent = "Present";
-        schoolToMonth = "";
-        schoolToYear = "";
-      } else {
-        schoolToPresent = "";
-        schoolToMonth = schoolToDate.split(" ")[0];
-        schoolToYear = schoolToDate.split(" ")[1];
-      }
+      const schoolDatesObj = splitDates(edu.school_dates);
 
       return {
         ...edu,
@@ -60,12 +72,8 @@ function DashboardEducation() {
         fieldOfStudyChange: false,
         descriptionStatus: FORM_STATUS.idle,
         descriptionChange: false,
-        schoolFromMonth,
-        schoolFromYear,
-        schoolToMonth,
-        schoolToYear,
-        schoolToPresent,
         schoolDateChange: false,
+        ...schoolDatesObj,
       };
     });
 
