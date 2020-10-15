@@ -170,7 +170,7 @@ function EducationForm({
       });
     }
     updateEducation(eduIndex, {
-      schoolFromDateChange: true,
+      schoolDateChange: true,
       schoolFromMonth: value,
     });
   }
@@ -190,7 +190,7 @@ function EducationForm({
       });
     }
     updateEducation(eduIndex, {
-      schoolFromDateChange: true,
+      schoolDateChange: true,
       schoolFromYear: value,
     });
   }
@@ -214,7 +214,7 @@ function EducationForm({
       });
     }
     updateEducation(eduIndex, {
-      schoolToDateChange: true,
+      schoolDateChange: true,
       schoolToMonth: value,
     });
   }
@@ -234,7 +234,7 @@ function EducationForm({
       });
     }
     updateEducation(eduIndex, {
-      schoolToDateChange: true,
+      schoolDateChange: true,
       schoolToYear: value,
     });
   }
@@ -242,12 +242,12 @@ function EducationForm({
   function setToPresentDate() {
     if (presentRef.current.checked) {
       updateEducation(eduIndex, {
-        schoolToDateChange: true,
+        schoolDateChange: true,
         schoolToPresent: "Present",
       });
     } else {
       updateEducation(eduIndex, {
-        schoolToDateChange: true,
+        schoolDateChange: true,
         schoolToPresent: "",
       });
     }

@@ -62,11 +62,10 @@ function DashboardEducation() {
         descriptionChange: false,
         schoolFromMonth,
         schoolFromYear,
-        schoolFromDateChange: false,
         schoolToMonth,
         schoolToYear,
         schoolToPresent,
-        schoolToDateChange: false,
+        schoolDateChange: false,
       };
     });
 
@@ -101,11 +100,10 @@ function DashboardEducation() {
 
         schoolFromMonth: "",
         schoolFromYear: "",
-        schoolFromDateChange: false,
         schoolToMonth: "",
         schoolToYear: "",
         schoolToPresent: "",
-        schoolToDateChange: false,
+        schoolDateChange: false,
       },
     ]);
 
@@ -156,6 +154,7 @@ function DashboardEducation() {
           ? "Present"
           : `${edu.schoolToMonth} ${edu.schoolToYear}`;
         const school_dates = `${fromDates} - ${toDates}`;
+
         requests.push({
           method: "POST",
           url: `/extras/new/education`,
@@ -204,8 +203,7 @@ function DashboardEducation() {
           edu.schoolChange ||
           edu.fieldOfStudyChange ||
           edu.descriptionChange ||
-          edu.schoolFromDateChange ||
-          edu.schoolToDateChange
+          edu.schoolDateChange
         ) {
           const data = {};
           if (edu.schoolChange) {
@@ -217,7 +215,7 @@ function DashboardEducation() {
           if (edu.descriptionChange) {
             data.education_description = edu.education_description;
           }
-          if (edu.schoolToDateChange || edu.schoolFromDateChange) {
+          if (edu.schoolDateChange) {
             const fromDates = `${edu.schoolFromMonth} ${edu.schoolFromYear}`;
             const toDates = edu.schoolToPresent
               ? "Present"
@@ -261,8 +259,7 @@ function DashboardEducation() {
         (edu.schoolChange ||
           edu.fieldOfStudyChange ||
           edu.descriptionChange ||
-          edu.schoolFromDateChange ||
-          edu.schoolToDateChange)
+          edu.schoolDateChange)
     );
 
     if (userEduChange.length > 0) {
