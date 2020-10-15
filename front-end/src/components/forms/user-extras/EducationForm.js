@@ -2,7 +2,6 @@ import React, { useContext, useState } from "react";
 import styled from "styled-components";
 
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
-// import { dateFormat } from "../../../global/helpers/date-format";
 import { validateInput } from "../../../global/helpers/validation";
 import { FORM_STATUS } from "../../../global/helpers/variables";
 
@@ -34,8 +33,6 @@ function EducationForm({
     fieldOfStudyStatus: FORM_STATUS.idle,
   });
 
-
-
   const [dates, setDates] = useState({
     schoolFromYear: userFromYear,
     schoolFromYearStatus: FORM_STATUS.idle,
@@ -46,20 +43,7 @@ function EducationForm({
     schoolToMonth: userToMonth,
     schoolToMonthStatus: FORM_STATUS.idle,
     schoolToPresent: userToPresent,
-  })
-
-
-  // const [fromDate, setFromDate] = useState("");
-  // const [toDate, setToDate] = useState("");
-  // const [isPresent, setIsPresent] = useState(false);
-  // const [fromCarotRange, setFromCarotRange] = useState(0);
-  // const [toCarotRange, setToCarotRange] = useState(0);
-
-
-
-
-
-
+  });
 
   const [description, setDescription] = useState({
     education_description: userDescription,
@@ -67,75 +51,31 @@ function EducationForm({
     descriptionStatus: FORM_STATUS.idle,
   });
 
-
-
-
-
-
-
-
-
-  // let fromDateRef = React.createRef();
-  // let toDateRef = React.createRef();
   let presentRef = React.createRef();
 
-  // useEffect(() => {
-  //   if (userToDate === "present") {
-  //     setIsPresent(true);
-  //   }
-  //   if (!isPresent) {
-  //     toDateRef.current.setSelectionRange(toCarotRange, toCarotRange);
-  //   }
-  //   setFromDate(userFromDate);
-  //   setToDate(userToDate);
-  //   fromDateRef.current.setSelectionRange(fromCarotRange, fromCarotRange);
-  // }, [
-  //   userToDate,
-  //   isPresent,
-  //   userFromDate,
-  //   fromDateRef,
-  //   fromCarotRange,
-  //   toDateRef,
-  //   toCarotRange,
-  // ]);
+  function setSchoolInput(value) {
+    setSchool({
+      ...school,
+      school: value,
+      schoolChange: true,
+    });
+  }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-  function setSchoolInput(e) {
+  function validateSchool(e) {
+    let newState;
     const { value, dataset } = e.target;
+
     const isUserSchool =
       user.education.length > 0 && !dataset.inputid.includes("new");
-    let newState;
     if (isUserSchool && value === user.education[eduIndex].school) {
-      newState = {
+      setSchool({
         school: value,
         schoolChange: false,
         schoolStatus: FORM_STATUS.idle,
-      };
-    } else {
-      newState = {
-        ...school,
-        school: value,
-        schoolChange: true,
-      };
+      });
+      return;
     }
-    setSchool(newState);
-    updateEducation(eduIndex, newState);
-  }
 
-  function validateSchool(value) {
-    let newState;
     if (value.trim() === "") {
       newState = {
         ...school,
@@ -146,6 +86,7 @@ function EducationForm({
       updateEducation(eduIndex, newState);
       return;
     }
+
     if (!school.schoolChange) return;
     if (validateInput("name", value)) {
       newState = {
@@ -158,35 +99,34 @@ function EducationForm({
         schoolStatus: FORM_STATUS.error,
       };
     }
+
     setSchool(newState);
     updateEducation(eduIndex, newState);
   }
 
-  function setFieldOfStudyInput(e) {
+  function setFieldOfStudyInput(value) {
+    setFieldOfStudy({
+      ...fieldOfStudy,
+      field_of_study: value,
+      fieldOfStudyChange: true,
+    });
+  }
+
+  function validateFieldOfStudy(e) {
+    let newState;
     const { value, dataset } = e.target;
+
     const isUserSchool =
       user.education.length > 0 && !dataset.inputid.includes("new");
-    let newState;
     if (isUserSchool && value === user.education[eduIndex].field_of_study) {
-      newState = {
+      setFieldOfStudy({
         field_of_study: value,
         fieldOfStudyChange: false,
         fieldOfStudyStatus: FORM_STATUS.idle,
-      };
-    } else {
-      newState = {
-        ...fieldOfStudy,
-        field_of_study: value,
-        fieldOfStudyChange: true,
-      };
+      });
+      return;
     }
 
-    setFieldOfStudy(newState);
-    updateEducation(eduIndex, newState);
-  }
-
-  function validateFieldOfStudy(value) {
-    let newState;
     if (value.trim() === "") {
       newState = {
         ...fieldOfStudy,
@@ -197,6 +137,7 @@ function EducationForm({
       updateEducation(eduIndex, newState);
       return;
     }
+
     if (!fieldOfStudy.fieldOfStudyChange) return;
     if (validateInput("title", value)) {
       newState = {
@@ -209,31 +150,29 @@ function EducationForm({
         fieldOfStudyStatus: FORM_STATUS.error,
       };
     }
+
     setFieldOfStudy(newState);
     updateEducation(eduIndex, newState);
   }
-
-
-
-
-
-
 
   function setFromMonthDate(value) {
     if (value === "") {
       setDates({
         ...dates,
         schoolFromMonthStatus: FORM_STATUS.error,
-        schoolFromMonth: value
-      })
+        schoolFromMonth: value,
+      });
     } else {
       setDates({
         ...dates,
         schoolFromMonthStatus: FORM_STATUS.success,
-        schoolFromMonth: value
-      })
+        schoolFromMonth: value,
+      });
     }
-    updateEducation(eduIndex, { schoolFromDateChange: true, schoolFromMonth: value });
+    updateEducation(eduIndex, {
+      schoolFromDateChange: true,
+      schoolFromMonth: value,
+    });
   }
 
   function setFromYearDate(value) {
@@ -241,155 +180,105 @@ function EducationForm({
       setDates({
         ...dates,
         schoolFromYearStatus: FORM_STATUS.error,
-        schoolFromYear: value
-      })
+        schoolFromYear: value,
+      });
     } else {
       setDates({
         ...dates,
         schoolFromYearStatus: FORM_STATUS.success,
-        schoolFromYear: value
-      })
+        schoolFromYear: value,
+      });
     }
-    updateEducation(eduIndex, { schoolFromDateChange: true, schoolFromYear: value });
+    updateEducation(eduIndex, {
+      schoolFromDateChange: true,
+      schoolFromYear: value,
+    });
   }
-  
+
   function setToMonthDate(value) {
     setDates({
       ...dates,
-      schoolToMonth: value
-    })
+      schoolToMonth: value,
+    });
     if (value === "") {
       setDates({
         ...dates,
         schoolToMonthStatus: FORM_STATUS.error,
-        schoolToMonth: value
-      })
+        schoolToMonth: value,
+      });
     } else {
       setDates({
         ...dates,
         schoolToMonthStatus: FORM_STATUS.success,
-        schoolToMonth: value
-      })
+        schoolToMonth: value,
+      });
     }
-    updateEducation(eduIndex, { schoolToDateChange: true, schoolToMonth: value });
+    updateEducation(eduIndex, {
+      schoolToDateChange: true,
+      schoolToMonth: value,
+    });
   }
-  
+
   function setToYearDate(value) {
     if (value === "") {
       setDates({
         ...dates,
         schoolToYearStatus: FORM_STATUS.error,
-        schoolToYear: value
-      })
+        schoolToYear: value,
+      });
     } else {
       setDates({
         ...dates,
         schoolToYearStatus: FORM_STATUS.success,
-        schoolToYear: value
-      })
+        schoolToYear: value,
+      });
     }
-    updateEducation(eduIndex, { schoolToDateChange: true, schoolToYear: value });
+    updateEducation(eduIndex, {
+      schoolToDateChange: true,
+      schoolToYear: value,
+    });
   }
 
   function setToPresentDate() {
     if (presentRef.current.checked) {
-      updateEducation(eduIndex, { schoolToDateChange: true, schoolToPresent: "Present" });
+      updateEducation(eduIndex, {
+        schoolToDateChange: true,
+        schoolToPresent: "Present",
+      });
     } else {
-      updateEducation(eduIndex, { schoolToDateChange: true, schoolToPresent: "" });
+      updateEducation(eduIndex, {
+        schoolToDateChange: true,
+        schoolToPresent: "",
+      });
     }
   }
 
+  function setDescriptionInput(value) {
+    setDescription({
+      ...description,
+      education_description: value,
+      descriptionChange: true,
+    });
+  }
 
-
-  // function fromDateChange(value) {
-  //   const [newValue, newCarotRange] = dateFormat(value, fromDate);
-  //   if (newValue === false) {
-  //     return;
-  //   }
-  //   setFromCarotRange(newCarotRange);
-  //   updateEducation(eduIndex, { schoolFromDateChange: true, school_dates: `${newValue} - ${userToDate}` });
-  // }
-
-  // function toDateChange(value) {
-  //   const [newValue, newCarotRange] = dateFormat(value, toDate);
-  //   if (newValue === false) {
-  //     return;
-  //   }
-  //   setToCarotRange(newCarotRange);
-  //   updateEducation(eduIndex, { schoolToDateChange: true,
-  //     school_dates: `${userFromDate} - ${newValue}`,
-  //   });
-  // }
-
-  // function presentChange() {
-  //   if (presentRef.current.checked) {
-  //     setIsPresent(true);
-  //     // updateEducation(eduIndex, { schoolToDateChange: true, schoolToDateStatus: FORM_STATUS.success, school_dates: `${userFromDate} - present` });
-  //   } else {
-  //     setIsPresent(false);
-  //     // updateEducation(eduIndex, { schoolToDateChange: true, schoolToDateStatus: FORM_STATUS.error, school_dates: `${userFromDate} - ${""}` });
-  //   }
-  // }
-  
-  // function validateFromDate(e) {
-  //   const {value} = e.target
-  //   if (value === "") {
-  //     updateEducation(eduIndex, {schoolFromDateStatus: FORM_STATUS.error})
-  //   } else {
-  //     updateEducation(eduIndex, {schoolFromDateStatus: FORM_STATUS.success})
-  //   }
-  // }
-
-  // function validateToDate(e) {
-  //   const {value} = e.target
-  //   if (value === "") {
-  //     updateEducation(eduIndex, {schoolToDateStatus: FORM_STATUS.error})
-  //   } else {
-  //     updateEducation(eduIndex, {schoolToDateStatus: FORM_STATUS.success})
-  //   }
-  // }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  function setDescriptionInput(e) {
+  function validateDescription(e) {
+    let newState;
     const { value, dataset } = e.target;
+
     const isUserSchool =
       user.education.length > 0 && !dataset.inputid.includes("new");
-    let newState;
     if (
       isUserSchool &&
       value === user.education[eduIndex].education_description
     ) {
-      newState = {
+      setDescription({
         education_description: value,
         descriptionChange: false,
         descriptionStatus: FORM_STATUS.idle,
-      };
-    } else {
-      newState = {
-        ...description,
-        education_description: value,
-        descriptionChange: true,
-      };
+      });
+      return;
     }
 
-    setDescription(newState);
-    updateEducation(eduIndex, newState);
-  }
-
-  function validateDescription(value) {
-    let newState;
     if (value.trim() === "") {
       newState = {
         ...description,
@@ -400,6 +289,7 @@ function EducationForm({
       updateEducation(eduIndex, newState);
       return;
     }
+
     if (!description.descriptionChange) return;
     if (validateInput("summary", value)) {
       newState = {
@@ -412,6 +302,7 @@ function EducationForm({
         descriptionStatus: FORM_STATUS.error,
       };
     }
+
     setDescription(newState);
     updateEducation(eduIndex, newState);
   }
@@ -444,8 +335,8 @@ function EducationForm({
             school.schoolStatus === FORM_STATUS.error
           }
           value={school.school}
-          onChange={(e) => setSchoolInput(e)}
-          onBlur={(e) => validateSchool(e.target.value)}
+          onChange={(e) => setSchoolInput(e.target.value)}
+          onBlur={(e) => validateSchool(e)}
         />
         {school.schoolStatus === FORM_STATUS.error ? (
           <span id={`school-${userId}-error`} className="err-mssg">
@@ -478,8 +369,8 @@ function EducationForm({
             fieldOfStudy.fieldOfStudyStatus === FORM_STATUS.error
           }
           value={fieldOfStudy.field_of_study}
-          onChange={(e) => setFieldOfStudyInput(e)}
-          onBlur={(e) => validateFieldOfStudy(e.target.value)}
+          onChange={(e) => setFieldOfStudyInput(e.target.value)}
+          onBlur={(e) => validateFieldOfStudy(e)}
         />
         {fieldOfStudy.fieldOfStudyStatus === FORM_STATUS.error ? (
           <span id={`field-of-study-${userId}-error`} className="err-mssg">
@@ -497,14 +388,13 @@ function EducationForm({
         ) : null}
       </InputContainer>
 
-
       <label htmlFor={`from-month-${userId}`}>From Month:</label>
       <select
         name="from-month"
         id={`from-month-${userId}`}
         defaultValue={userFromMonth}
-        onChange={e => setFromMonthDate(e.target.value)}
-        onBlur={e => setFromMonthDate(e.target.value)}
+        onChange={(e) => setFromMonthDate(e.target.value)}
+        onBlur={(e) => setFromMonthDate(e.target.value)}
       >
         <option value="">--Select Month--</option>
         <option value="January">01 | January</option>
@@ -520,64 +410,65 @@ function EducationForm({
         <option value="November">11 | November</option>
         <option value="December">12 | December</option>
       </select>
-      <br/>
+      <br />
       <label htmlFor={`from-year-${userId}`}>From Year:</label>
       <select
         name="from-year"
         id={`from-year-${userId}`}
         defaultValue={userFromYear}
-        onChange={e => setFromYearDate(e.target.value)}
-        onBlur={e => setFromYearDate(e.target.value)}
+        onChange={(e) => setFromYearDate(e.target.value)}
+        onBlur={(e) => setFromYearDate(e.target.value)}
       >
         <option value="">--Select Year--</option>
-        {Array.from(Array(50)).map(
-          (_, i) => <option key={`${i}-${userId}`} value={2020 - i}>{2020 - i}</option>
-        )}
+        {Array.from(Array(50)).map((_, i) => (
+          <option key={`${i}-${userId}`} value={2020 - i}>
+            {2020 - i}
+          </option>
+        ))}
       </select>
 
-
-      {userToPresent !== "Present" ?
-        (
-          <>
-            <label htmlFor={`#to-month-${userId}`}>To Month:</label>
-            <select
-              name="to-month"
-              id={`to-month-${userId}`}
-              defaultValue={userToMonth}
-              onChange={e => setToMonthDate(e.target.value)}
-              onBlur={e => setToMonthDate(e.target.value)}
-            >
-              <option value="">--Select Month--</option>
-              <option value="January">01 | January</option>
-              <option value="February">02 | February</option>
-              <option value="March">03 | March</option>
-              <option value="April">04 | April</option>
-              <option value="May">05 | May</option>
-              <option value="June">06 | June</option>
-              <option value="July">07 | July</option>
-              <option value="August">08 | August</option>
-              <option value="September">09 | September</option>
-              <option value="October">10 | October</option>
-              <option value="November">11 | November</option>
-              <option value="December">12 | December</option>
-            </select>
-            <br/>
-            <label htmlFor={`to-year-${userId}`}>To Year:</label>
-            <select
-              name="to-year"
-              id={`to-year-${userId}`}
-              defaultValue={userToYear}
-              onChange={e => setToYearDate(e.target.value)}
-              onBlur={e => setToYearDate(e.target.value)}
-            >
-              <option value="">--Select Year--</option>
-              {Array.from(Array(50)).map(
-                (_, i) => <option key={`${i}-${userId}`} value={2020 - i}>{2020 - i}</option>
-              )}
-            </select>
-          </>
-        ) : null
-      }
+      {userToPresent !== "Present" ? (
+        <>
+          <label htmlFor={`#to-month-${userId}`}>To Month:</label>
+          <select
+            name="to-month"
+            id={`to-month-${userId}`}
+            defaultValue={userToMonth}
+            onChange={(e) => setToMonthDate(e.target.value)}
+            onBlur={(e) => setToMonthDate(e.target.value)}
+          >
+            <option value="">--Select Month--</option>
+            <option value="January">01 | January</option>
+            <option value="February">02 | February</option>
+            <option value="March">03 | March</option>
+            <option value="April">04 | April</option>
+            <option value="May">05 | May</option>
+            <option value="June">06 | June</option>
+            <option value="July">07 | July</option>
+            <option value="August">08 | August</option>
+            <option value="September">09 | September</option>
+            <option value="October">10 | October</option>
+            <option value="November">11 | November</option>
+            <option value="December">12 | December</option>
+          </select>
+          <br />
+          <label htmlFor={`to-year-${userId}`}>To Year:</label>
+          <select
+            name="to-year"
+            id={`to-year-${userId}`}
+            defaultValue={userToYear}
+            onChange={(e) => setToYearDate(e.target.value)}
+            onBlur={(e) => setToYearDate(e.target.value)}
+          >
+            <option value="">--Select Year--</option>
+            {Array.from(Array(50)).map((_, i) => (
+              <option key={`${i}-${userId}`} value={2020 - i}>
+                {2020 - i}
+              </option>
+            ))}
+          </select>
+        </>
+      ) : null}
 
       <input
         ref={presentRef}
@@ -586,8 +477,8 @@ function EducationForm({
         name="to-present"
         onChange={setToPresentDate}
         checked={userToPresent === "Present"}
-        />
-        <label htmlFor={`present-${userId}`}>Present</label>
+      />
+      <label htmlFor={`present-${userId}`}>Present</label>
 
       <InputContainer>
         <label htmlFor={`description-${userId}`}>Description:</label>
@@ -607,8 +498,8 @@ function EducationForm({
             description.descriptionStatus === FORM_STATUS.error
           }
           value={description.education_description}
-          onChange={(e) => setDescriptionInput(e)}
-          onBlur={(e) => validateDescription(e.target.value)}
+          onChange={(e) => setDescriptionInput(e.target.value)}
+          onBlur={(e) => validateDescription(e)}
         />
         {description.descriptionStatus === FORM_STATUS.error ? (
           <span id={`description-${userId}-error`} className="err-mssg">
