@@ -322,54 +322,61 @@ function DashboardEducation() {
 
             {formErrors.length > 0 ? (
               formErrors.map((edu) => (
-                <ul key={edu.id} aria-label={`current ${edu.school} errors`}>
-                  {edu.school.trim() === "" ||
-                  edu.schoolStatus === FORM_STATUS.error ? (
-                    <li>
-                      <a href={`#school-${edu.id}`}>School Error</a>
-                    </li>
-                  ) : null}
+                <div key={edu.id}>
+                  <h4>{`Current "${edu.school || "New Education"}" Errors`}</h4>
+                  <ul
+                    aria-label={`current ${
+                      edu.school || "new education"
+                    } errors`}
+                  >
+                    {edu.school.trim() === "" ||
+                    edu.schoolStatus === FORM_STATUS.error ? (
+                      <li>
+                        <a href={`#school-${edu.id}`}>School Error</a>
+                      </li>
+                    ) : null}
 
-                  {edu.field_of_study.trim() === "" ||
-                  edu.fieldOfStudyStatus === FORM_STATUS.error ? (
-                    <li>
-                      <a href={`#field-of-study-${edu.id}`}>
-                        Field of Study Error
-                      </a>
-                    </li>
-                  ) : null}
+                    {edu.field_of_study.trim() === "" ||
+                    edu.fieldOfStudyStatus === FORM_STATUS.error ? (
+                      <li>
+                        <a href={`#field-of-study-${edu.id}`}>
+                          Field of Study Error
+                        </a>
+                      </li>
+                    ) : null}
 
-                  {edu.education_description.trim() === "" ||
-                  edu.descriptionStatus === FORM_STATUS.error ? (
-                    <li>
-                      <a href={`#description-${edu.id}`}>Description Error</a>
-                    </li>
-                  ) : null}
+                    {edu.education_description.trim() === "" ||
+                    edu.descriptionStatus === FORM_STATUS.error ? (
+                      <li>
+                        <a href={`#description-${edu.id}`}>Description Error</a>
+                      </li>
+                    ) : null}
 
-                  {edu.schoolFromMonth === "" ? (
-                    <li>
-                      <a href={`#from-month-${edu.id}`}>From Month Error</a>
-                    </li>
-                  ) : null}
+                    {edu.schoolFromMonth === "" ? (
+                      <li>
+                        <a href={`#from-month-${edu.id}`}>From Month Error</a>
+                      </li>
+                    ) : null}
 
-                  {edu.schoolFromYear === "" ? (
-                    <li>
-                      <a href={`#from-year-${edu.id}`}>From Year Error</a>
-                    </li>
-                  ) : null}
+                    {edu.schoolFromYear === "" ? (
+                      <li>
+                        <a href={`#from-year-${edu.id}`}>From Year Error</a>
+                      </li>
+                    ) : null}
 
-                  {edu.schoolToMonth === "" ? (
-                    <li>
-                      <a href={`#to-month-${edu.id}`}>To Month Error</a>
-                    </li>
-                  ) : null}
+                    {edu.schoolToMonth === "" ? (
+                      <li>
+                        <a href={`#to-month-${edu.id}`}>To Month Error</a>
+                      </li>
+                    ) : null}
 
-                  {edu.schoolToYear === "" ? (
-                    <li>
-                      <a href={`#to-year-${edu.id}`}>To Year Error</a>
-                    </li>
-                  ) : null}
-                </ul>
+                    {edu.schoolToYear === "" ? (
+                      <li>
+                        <a href={`#to-year-${edu.id}`}>To Year Error</a>
+                      </li>
+                    ) : null}
+                  </ul>
+                </div>
               ))
             ) : (
               <>
