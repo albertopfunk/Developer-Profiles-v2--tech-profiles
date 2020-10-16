@@ -407,6 +407,11 @@ function EducationForm({
                 ? "input-err"
                 : ""
             }`}
+            aria-describedby={`from-month-${userId}-error from-month-${userId}-success`}
+            aria-invalid={
+              dates.schoolFromMonth === "" ||
+              dates.schoolFromMonthStatus === FORM_STATUS.error
+            }
             onChange={(e) => setFromMonthDate(e.target.value)}
             onBlur={(e) => setFromMonthDate(e.target.value)}
           >
@@ -424,6 +429,16 @@ function EducationForm({
             <option value="November">11 | November</option>
             <option value="December">12 | December</option>
           </select>
+          {dates.schoolFromMonthStatus === FORM_STATUS.error ? (
+            <span id={`from-month-${userId}-error`} className="err-mssg">
+              month is required
+            </span>
+          ) : null}
+          {dates.schoolFromMonthStatus === FORM_STATUS.success ? (
+            <span id={`from-month-${userId}-success`} className="success-mssg">
+              month is Validated
+            </span>
+          ) : null}
         </InputContainer>
         <InputContainer>
           <label htmlFor={`from-year-${userId}`}>From Year:</label>
@@ -436,6 +451,11 @@ function EducationForm({
                 ? "input-err"
                 : ""
             }`}
+            aria-describedby={`from-year-${userId}-error from-year-${userId}-success`}
+            aria-invalid={
+              dates.schoolFromYear === "" ||
+              dates.schoolFromYearStatus === FORM_STATUS.error
+            }
             onChange={(e) => setFromYearDate(e.target.value)}
             onBlur={(e) => setFromYearDate(e.target.value)}
           >
@@ -446,6 +466,16 @@ function EducationForm({
               </option>
             ))}
           </select>
+          {dates.schoolFromYearStatus === FORM_STATUS.error ? (
+            <span id={`from-year-${userId}-error`} className="err-mssg">
+              year is required
+            </span>
+          ) : null}
+          {dates.schoolFromYearStatus === FORM_STATUS.success ? (
+            <span id={`from-year-${userId}-success`} className="success-mssg">
+              year is Validated
+            </span>
+          ) : null}
         </InputContainer>
       </div>
 
@@ -462,6 +492,11 @@ function EducationForm({
                   ? "input-err"
                   : ""
               }`}
+              aria-describedby={`to-month-${userId}-error to-month-${userId}-success`}
+              aria-invalid={
+                dates.schoolToMonth === "" ||
+                dates.schoolToMonthStatus === FORM_STATUS.error
+              }
               onChange={(e) => setToMonthDate(e.target.value)}
               onBlur={(e) => setToMonthDate(e.target.value)}
             >
@@ -479,6 +514,16 @@ function EducationForm({
               <option value="November">11 | November</option>
               <option value="December">12 | December</option>
             </select>
+            {dates.schoolToMonthStatus === FORM_STATUS.error ? (
+              <span id={`to-month-${userId}-error`} className="err-mssg">
+                month is required
+              </span>
+            ) : null}
+            {dates.schoolToMonthStatus === FORM_STATUS.success ? (
+              <span id={`to-month-${userId}-success`} className="success-mssg">
+                month is Validated
+              </span>
+            ) : null}
           </InputContainer>
           <InputContainer>
             <label htmlFor={`to-year-${userId}`}>To Year:</label>
@@ -491,6 +536,11 @@ function EducationForm({
                   ? "input-err"
                   : ""
               }`}
+              aria-describedby={`to-year-${userId}-error to-year-${userId}-success`}
+              aria-invalid={
+                dates.schoolToYear === "" ||
+                dates.schoolToYearStatus === FORM_STATUS.error
+              }
               onChange={(e) => setToYearDate(e.target.value)}
               onBlur={(e) => setToYearDate(e.target.value)}
             >
@@ -501,6 +551,16 @@ function EducationForm({
                 </option>
               ))}
             </select>
+            {dates.schoolToYearStatus === FORM_STATUS.error ? (
+              <span id={`to-year-${userId}-error`} className="err-mssg">
+                year is required
+              </span>
+            ) : null}
+            {dates.schoolToYearStatus === FORM_STATUS.success ? (
+              <span id={`to-year-${userId}-success`} className="success-mssg">
+                year is Validated
+              </span>
+            ) : null}
           </InputContainer>
         </div>
       ) : null}

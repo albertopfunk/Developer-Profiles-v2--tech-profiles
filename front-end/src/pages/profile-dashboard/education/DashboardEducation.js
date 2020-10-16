@@ -89,7 +89,9 @@ function DashboardEducation() {
     setEducation(newEduArr);
   }
 
-  function addEducation() {
+  function addEducation(e) {
+    e.preventDefault();
+
     setEducation([
       ...education,
 
@@ -308,8 +310,6 @@ function DashboardEducation() {
   return (
     <Main>
       <h1>Hello Education</h1>
-      {/* need to associate this with form */}
-      <button onClick={addEducation}>Add New Location</button>
       <br />
 
       {formStatus === FORM_STATUS.error ? (
@@ -388,6 +388,9 @@ function DashboardEducation() {
       <br />
 
       <form onSubmit={(e) => submitEdit(e)}>
+        <button aria-label="add new education" onClick={(e) => addEducation(e)}>
+          Add New Education
+        </button>
         {education.map((edu, index) => {
           return (
             <div key={edu.id}>
