@@ -16,6 +16,7 @@ function EducationForm({
   userToYear,
   userToMonth,
   userToPresent,
+  schoolDateChange,
   userDescription,
   updateEducation,
   removeEducation,
@@ -161,6 +162,7 @@ function EducationForm({
   }
 
   function setFromMonthDate(value) {
+    if (!schoolDateChange) return;
     if (value === "") {
       setDates({
         ...dates,
@@ -181,6 +183,7 @@ function EducationForm({
   }
 
   function setFromYearDate(value) {
+    if (!schoolDateChange) return;
     if (value === "") {
       setDates({
         ...dates,
@@ -201,10 +204,7 @@ function EducationForm({
   }
 
   function setToMonthDate(value) {
-    setDates({
-      ...dates,
-      schoolToMonth: value,
-    });
+    if (!schoolDateChange) return;
     if (value === "") {
       setDates({
         ...dates,
@@ -225,6 +225,7 @@ function EducationForm({
   }
 
   function setToYearDate(value) {
+    if (!schoolDateChange) return;
     if (value === "") {
       setDates({
         ...dates,
@@ -319,7 +320,7 @@ function EducationForm({
       <legend>Education: {school.school || "New Education"}</legend>
 
       <button
-        type="reset"
+        type="button"
         aria-label={`Remove ${school.school || "New"} Education`}
         onClick={() => removeEducation(userId)}
       >
@@ -412,7 +413,6 @@ function EducationForm({
               dates.schoolFromMonth === "" ||
               dates.schoolFromMonthStatus === FORM_STATUS.error
             }
-            onChange={(e) => setFromMonthDate(e.target.value)}
             onBlur={(e) => setFromMonthDate(e.target.value)}
           >
             <option value="">--Select Month--</option>
@@ -456,7 +456,6 @@ function EducationForm({
               dates.schoolFromYear === "" ||
               dates.schoolFromYearStatus === FORM_STATUS.error
             }
-            onChange={(e) => setFromYearDate(e.target.value)}
             onBlur={(e) => setFromYearDate(e.target.value)}
           >
             <option value="">--Select Year--</option>
@@ -497,7 +496,6 @@ function EducationForm({
                 dates.schoolToMonth === "" ||
                 dates.schoolToMonthStatus === FORM_STATUS.error
               }
-              onChange={(e) => setToMonthDate(e.target.value)}
               onBlur={(e) => setToMonthDate(e.target.value)}
             >
               <option value="">--Select Month--</option>
@@ -541,7 +539,6 @@ function EducationForm({
                 dates.schoolToYear === "" ||
                 dates.schoolToYearStatus === FORM_STATUS.error
               }
-              onChange={(e) => setToYearDate(e.target.value)}
               onBlur={(e) => setToYearDate(e.target.value)}
             >
               <option value="">--Select Year--</option>
