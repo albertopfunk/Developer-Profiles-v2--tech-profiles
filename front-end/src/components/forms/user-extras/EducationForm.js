@@ -7,6 +7,7 @@ import { FORM_STATUS } from "../../../global/helpers/variables";
 
 function EducationForm({
   eduIndex,
+  currentYear,
   userId,
   userSchool,
   userFieldOfStudy,
@@ -394,54 +395,20 @@ function EducationForm({
         ) : null}
       </InputContainer>
 
-      <label htmlFor={`from-month-${userId}`}>From Month:</label>
-      <select
-        name="from-month"
-        id={`from-month-${userId}`}
-        defaultValue={userFromMonth}
-        onChange={(e) => setFromMonthDate(e.target.value)}
-        onBlur={(e) => setFromMonthDate(e.target.value)}
-      >
-        <option value="">--Select Month--</option>
-        <option value="January">01 | January</option>
-        <option value="February">02 | February</option>
-        <option value="March">03 | March</option>
-        <option value="April">04 | April</option>
-        <option value="May">05 | May</option>
-        <option value="June">06 | June</option>
-        <option value="July">07 | July</option>
-        <option value="August">08 | August</option>
-        <option value="September">09 | September</option>
-        <option value="October">10 | October</option>
-        <option value="November">11 | November</option>
-        <option value="December">12 | December</option>
-      </select>
-      <br />
-      <label htmlFor={`from-year-${userId}`}>From Year:</label>
-      <select
-        name="from-year"
-        id={`from-year-${userId}`}
-        defaultValue={userFromYear}
-        onChange={(e) => setFromYearDate(e.target.value)}
-        onBlur={(e) => setFromYearDate(e.target.value)}
-      >
-        <option value="">--Select Year--</option>
-        {Array.from(Array(50)).map((_, i) => (
-          <option key={`${i}-${userId}`} value={2020 - i}>
-            {2020 - i}
-          </option>
-        ))}
-      </select>
-
-      {userToPresent !== "Present" ? (
-        <>
-          <label htmlFor={`#to-month-${userId}`}>To Month:</label>
+      <div>
+        <InputContainer>
+          <label htmlFor={`from-month-${userId}`}>From Month:</label>
           <select
-            name="to-month"
-            id={`to-month-${userId}`}
-            defaultValue={userToMonth}
-            onChange={(e) => setToMonthDate(e.target.value)}
-            onBlur={(e) => setToMonthDate(e.target.value)}
+            name="from-month"
+            id={`from-month-${userId}`}
+            defaultValue={userFromMonth}
+            className={`input ${
+              dates.schoolFromMonthStatus === FORM_STATUS.error
+                ? "input-err"
+                : ""
+            }`}
+            onChange={(e) => setFromMonthDate(e.target.value)}
+            onBlur={(e) => setFromMonthDate(e.target.value)}
           >
             <option value="">--Select Month--</option>
             <option value="January">01 | January</option>
@@ -457,25 +424,86 @@ function EducationForm({
             <option value="November">11 | November</option>
             <option value="December">12 | December</option>
           </select>
-          <br />
-          <label htmlFor={`to-year-${userId}`}>To Year:</label>
+        </InputContainer>
+        <InputContainer>
+          <label htmlFor={`from-year-${userId}`}>From Year:</label>
           <select
-            name="to-year"
-            id={`to-year-${userId}`}
-            defaultValue={userToYear}
-            onChange={(e) => setToYearDate(e.target.value)}
-            onBlur={(e) => setToYearDate(e.target.value)}
+            name="from-year"
+            id={`from-year-${userId}`}
+            defaultValue={userFromYear}
+            className={`input ${
+              dates.schoolFromYearStatus === FORM_STATUS.error
+                ? "input-err"
+                : ""
+            }`}
+            onChange={(e) => setFromYearDate(e.target.value)}
+            onBlur={(e) => setFromYearDate(e.target.value)}
           >
             <option value="">--Select Year--</option>
             {Array.from(Array(50)).map((_, i) => (
-              <option key={`${i}-${userId}`} value={2020 - i}>
-                {2020 - i}
+              <option key={`${i}-${userId}`} value={currentYear - i}>
+                {currentYear - i}
               </option>
             ))}
           </select>
-        </>
-      ) : null}
+        </InputContainer>
+      </div>
 
+      {userToPresent !== "Present" ? (
+        <div>
+          <InputContainer>
+            <label htmlFor={`to-month-${userId}`}>To Month:</label>
+            <select
+              name="to-month"
+              id={`to-month-${userId}`}
+              defaultValue={userToMonth}
+              className={`input ${
+                dates.schoolToMonthStatus === FORM_STATUS.error
+                  ? "input-err"
+                  : ""
+              }`}
+              onChange={(e) => setToMonthDate(e.target.value)}
+              onBlur={(e) => setToMonthDate(e.target.value)}
+            >
+              <option value="">--Select Month--</option>
+              <option value="January">01 | January</option>
+              <option value="February">02 | February</option>
+              <option value="March">03 | March</option>
+              <option value="April">04 | April</option>
+              <option value="May">05 | May</option>
+              <option value="June">06 | June</option>
+              <option value="July">07 | July</option>
+              <option value="August">08 | August</option>
+              <option value="September">09 | September</option>
+              <option value="October">10 | October</option>
+              <option value="November">11 | November</option>
+              <option value="December">12 | December</option>
+            </select>
+          </InputContainer>
+          <InputContainer>
+            <label htmlFor={`to-year-${userId}`}>To Year:</label>
+            <select
+              name="to-year"
+              id={`to-year-${userId}`}
+              defaultValue={userToYear}
+              className={`input ${
+                dates.schoolToYearStatus === FORM_STATUS.error
+                  ? "input-err"
+                  : ""
+              }`}
+              onChange={(e) => setToYearDate(e.target.value)}
+              onBlur={(e) => setToYearDate(e.target.value)}
+            >
+              <option value="">--Select Year--</option>
+              {Array.from(Array(50)).map((_, i) => (
+                <option key={`${i}-${userId}`} value={currentYear - i}>
+                  {currentYear - i}
+                </option>
+              ))}
+            </select>
+          </InputContainer>
+        </div>
+      ) : null}
       <input
         ref={presentRef}
         type="checkbox"

@@ -3,12 +3,14 @@ import styled from "styled-components";
 
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
 import EducationForm from "../../../components/forms/user-extras/EducationForm";
+import useCurrentYear from "../../../global/helpers/hooks/useCurrentYear";
 import { FORM_STATUS } from "../../../global/helpers/variables";
 import Announcer from "../../../global/helpers/announcer";
 
 let formSuccessWait;
 function DashboardEducation() {
   const { user, addUserExtras } = useContext(ProfileContext);
+  const currentYear = useCurrentYear();
   const [formStatus, setFormStatus] = useState(FORM_STATUS.idle);
   const [education, setEducation] = useState([]);
   const [educationChange, setEducationChange] = useState(false);
@@ -306,6 +308,7 @@ function DashboardEducation() {
   return (
     <Main>
       <h1>Hello Education</h1>
+      {/* need to associate this with form */}
       <button onClick={addEducation}>Add New Location</button>
       <br />
 
@@ -391,6 +394,7 @@ function DashboardEducation() {
               <EducationForm
                 eduIndex={index}
                 userId={edu.id}
+                currentYear={currentYear}
                 userSchool={edu.school}
                 userFieldOfStudy={edu.field_of_study}
                 userFromMonth={edu.schoolFromMonth}
