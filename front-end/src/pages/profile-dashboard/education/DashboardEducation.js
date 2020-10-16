@@ -2,10 +2,11 @@ import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
-import EducationForm from "../../../components/forms/user-extras/EducationForm";
 import useCurrentYear from "../../../global/helpers/hooks/useCurrentYear";
 import { FORM_STATUS } from "../../../global/helpers/variables";
 import Announcer from "../../../global/helpers/announcer";
+
+import EducationForm from "../../../components/forms/user-extras/EducationForm";
 
 let formSuccessWait;
 function DashboardEducation() {
@@ -83,8 +84,8 @@ function DashboardEducation() {
   }
 
   function updateEducation(index, state) {
-    let newEduArr = [...education];
-    let newEduObj = { ...newEduArr[index], ...state };
+    const newEduArr = [...education];
+    const newEduObj = { ...newEduArr[index], ...state };
     newEduArr.splice(index, 1, newEduObj);
     setEducation(newEduArr);
   }
@@ -124,7 +125,7 @@ function DashboardEducation() {
   }
 
   function removeEducation(id) {
-    let newEducation = education.filter((edu) => edu.id !== id);
+    const newEducation = education.filter((edu) => edu.id !== id);
     setEducation(newEducation);
     setEducationChange(true);
   }
@@ -310,7 +311,6 @@ function DashboardEducation() {
   return (
     <Main>
       <h1>Hello Education</h1>
-      <br />
 
       {formStatus === FORM_STATUS.error ? (
         <div ref={errorSummaryRef} tabIndex="-1">
@@ -385,12 +385,15 @@ function DashboardEducation() {
         </div>
       ) : null}
 
-      <br />
-
-      <form onSubmit={(e) => submitEdit(e)}>
-        <button aria-label="add new education" onClick={(e) => addEducation(e)}>
-          Add New Education
-        </button>
+      <button
+        form="education-form"
+        type="button"
+        aria-label="add new education"
+        onClick={(e) => addEducation(e)}
+      >
+        + New Education
+      </button>
+      <form id="education-form" onSubmit={(e) => submitEdit(e)}>
         {education.map((edu, index) => {
           return (
             <div key={edu.id}>
@@ -405,6 +408,7 @@ function DashboardEducation() {
                 userToMonth={edu.schoolToMonth}
                 userToYear={edu.schoolToYear}
                 userToPresent={edu.schoolToPresent}
+                schoolDateChange={edu.schoolDateChange}
                 userDescription={edu.education_description}
                 updateEducation={updateEducation}
                 removeEducation={removeEducation}
