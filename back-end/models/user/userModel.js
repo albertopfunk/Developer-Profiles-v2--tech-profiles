@@ -158,6 +158,7 @@ async function getUserExtras(userId) {
     return db("experience")
       .join("users", "users.id", "experience.user_id")
       .select(
+        "experience.id",
         "experience.company_name",
         "experience.job_title",
         "experience.job_dates",
@@ -170,6 +171,7 @@ async function getUserExtras(userId) {
     return db("projects")
       .join("users", "users.id", "projects.user_id")
       .select(
+        "projects.id",
         "projects.project_title",
         "projects.link",
         "projects.project_description",
