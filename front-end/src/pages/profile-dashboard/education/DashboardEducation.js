@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
+import { Helmet } from "react-helmet";
 import styled from "styled-components";
 
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
@@ -294,10 +295,31 @@ function DashboardEducation() {
 
   if (formStatus === FORM_STATUS.idle) {
     return (
-      <div>
-        <h1>Edit Inputs</h1>
-        <button onClick={setFormInputs}>Edit</button>
-      </div>
+      <main id="main-content" tabIndex="-1" aria-labelledby="main-heading">
+        <Helmet>
+          <title>Profile Dashboard Education • Tech Profiles</title>
+        </Helmet>
+        <h1 id="main-heading">Education</h1>
+        <section aria-labelledby="current-information-heading">
+          <h2 id="current-information-heading">Current Information</h2>
+          <button onClick={setFormInputs}>Edit</button>
+          {user.education.length > 0 ? (
+            user.education.map((edu) => (
+              <div key={edu.id}>
+                <h3>{`Current "${edu.school}" Education`}</h3>
+                <ul aria-label={`${edu.school} Education`}>
+                  <li>School: {edu.school}</li>
+                  <li>Field of Study: {edu.field_of_study}</li>
+                  <li>Dates: {edu.school_dates}</li>
+                  <li>Description: {edu.education_description}</li>
+                </ul>
+              </div>
+            ))
+          ) : (
+            <p>No Education</p>
+          )}
+        </section>
+      </main>
     );
   }
 
@@ -306,148 +328,158 @@ function DashboardEducation() {
     formErrors = checkFormErrors();
   }
 
-  console.log("-- Dash Education --");
+  console.log("-- Dash Education --", user);
 
   return (
-    <Main>
-      <h1>Hello Education</h1>
+    <Main id="main-content" tabIndex="-1" aria-labelledby="main-heading">
+      <Helmet>
+        <title>Profile Dashboard Education • Tech Profiles</title>
+      </Helmet>
+      <h1 id="main-heading">Education</h1>
 
-      {formStatus === FORM_STATUS.error ? (
-        <div ref={errorSummaryRef} tabIndex="-1">
-          <h3 id="error-heading">Errors in Submission</h3>
-          <>
-            <strong>
-              Please address the following errors and re-submit the form:
-            </strong>
+      <section aria-labelledby="edit-information-heading">
+        <h2 id="edit-information-heading">Edit Information</h2>
 
-            {formErrors.length > 0 ? (
-              formErrors.map((edu) => (
+        {formStatus === FORM_STATUS.error ? (
+          <div ref={errorSummaryRef} tabIndex="-1">
+            <h3 id="error-heading">Errors in Submission</h3>
+            <>
+              <strong>
+                Please address the following errors and re-submit the form:
+              </strong>
+
+              {formErrors.length > 0 ? (
+                formErrors.map((edu) => (
+                  <div key={edu.id}>
+                    <h4>{`Current "${
+                      edu.school || "New Education"
+                    }" Errors`}</h4>
+                    <ul
+                      aria-label={`current ${
+                        edu.school || "new education"
+                      } errors`}
+                    >
+                      {edu.school.trim() === "" ||
+                      edu.schoolStatus === FORM_STATUS.error ? (
+                        <li>
+                          <a href={`#school-${edu.id}`}>School Error</a>
+                        </li>
+                      ) : null}
+
+                      {edu.field_of_study.trim() === "" ||
+                      edu.fieldOfStudyStatus === FORM_STATUS.error ? (
+                        <li>
+                          <a href={`#field-of-study-${edu.id}`}>
+                            Field of Study Error
+                          </a>
+                        </li>
+                      ) : null}
+
+                      {edu.schoolFromMonth === "" ? (
+                        <li>
+                          <a href={`#from-month-${edu.id}`}>From Month Error</a>
+                        </li>
+                      ) : null}
+
+                      {edu.schoolFromYear === "" ? (
+                        <li>
+                          <a href={`#from-year-${edu.id}`}>From Year Error</a>
+                        </li>
+                      ) : null}
+
+                      {edu.schoolToMonth === "" ? (
+                        <li>
+                          <a href={`#to-month-${edu.id}`}>To Month Error</a>
+                        </li>
+                      ) : null}
+
+                      {edu.schoolToYear === "" ? (
+                        <li>
+                          <a href={`#to-year-${edu.id}`}>To Year Error</a>
+                        </li>
+                      ) : null}
+
+                      {edu.education_description.trim() === "" ||
+                      edu.descriptionStatus === FORM_STATUS.error ? (
+                        <li>
+                          <a href={`#description-${edu.id}`}>
+                            Description Error
+                          </a>
+                        </li>
+                      ) : null}
+                    </ul>
+                  </div>
+                ))
+              ) : (
+                <>
+                  <p>No Errors, ready to submit</p>
+                  <Announcer
+                    announcement="No Errors, ready to submit"
+                    ariaId="no-errors-announcer"
+                    ariaLive="polite"
+                  />
+                </>
+              )}
+            </>
+          </div>
+        ) : null}
+
+        <div>
+          <button
+            form="education-form"
+            type="button"
+            aria-label="add new education"
+            onClick={(e) => addEducation(e)}
+          >
+            + New Education
+          </button>
+          <form id="education-form" onSubmit={(e) => submitEdit(e)}>
+            {education.map((edu, index) => {
+              return (
                 <div key={edu.id}>
-                  <h4>{`Current "${edu.school || "New Education"}" Errors`}</h4>
-                  <ul
-                    aria-label={`current ${
-                      edu.school || "new education"
-                    } errors`}
-                  >
-                    {edu.school.trim() === "" ||
-                    edu.schoolStatus === FORM_STATUS.error ? (
-                      <li>
-                        <a href={`#school-${edu.id}`}>School Error</a>
-                      </li>
-                    ) : null}
-
-                    {edu.field_of_study.trim() === "" ||
-                    edu.fieldOfStudyStatus === FORM_STATUS.error ? (
-                      <li>
-                        <a href={`#field-of-study-${edu.id}`}>
-                          Field of Study Error
-                        </a>
-                      </li>
-                    ) : null}
-
-                    {edu.education_description.trim() === "" ||
-                    edu.descriptionStatus === FORM_STATUS.error ? (
-                      <li>
-                        <a href={`#description-${edu.id}`}>Description Error</a>
-                      </li>
-                    ) : null}
-
-                    {edu.schoolFromMonth === "" ? (
-                      <li>
-                        <a href={`#from-month-${edu.id}`}>From Month Error</a>
-                      </li>
-                    ) : null}
-
-                    {edu.schoolFromYear === "" ? (
-                      <li>
-                        <a href={`#from-year-${edu.id}`}>From Year Error</a>
-                      </li>
-                    ) : null}
-
-                    {edu.schoolToMonth === "" ? (
-                      <li>
-                        <a href={`#to-month-${edu.id}`}>To Month Error</a>
-                      </li>
-                    ) : null}
-
-                    {edu.schoolToYear === "" ? (
-                      <li>
-                        <a href={`#to-year-${edu.id}`}>To Year Error</a>
-                      </li>
-                    ) : null}
-                  </ul>
+                  <EducationForm
+                    eduIndex={index}
+                    userId={edu.id}
+                    currentYear={currentYear}
+                    userSchool={edu.school}
+                    userFieldOfStudy={edu.field_of_study}
+                    userFromMonth={edu.schoolFromMonth}
+                    userFromYear={edu.schoolFromYear}
+                    userToMonth={edu.schoolToMonth}
+                    userToYear={edu.schoolToYear}
+                    userToPresent={edu.schoolToPresent}
+                    userDescription={edu.education_description}
+                    updateEducation={updateEducation}
+                    removeEducation={removeEducation}
+                  />
                 </div>
-              ))
-            ) : (
-              <>
-                <p>No Errors, ready to submit</p>
-                <Announcer
-                  announcement="No Errors, ready to submit"
-                  ariaId="no-errors-announcer"
-                  ariaLive="polite"
-                />
-              </>
-            )}
-          </>
+              );
+            })}
+            <button
+              disabled={
+                formStatus === FORM_STATUS.loading ||
+                formStatus === FORM_STATUS.success
+              }
+              type="submit"
+            >
+              {formStatus === FORM_STATUS.active ? "Submit" : null}
+              {formStatus === FORM_STATUS.loading ? "loading..." : null}
+              {formStatus === FORM_STATUS.success ? "Success!" : null}
+              {formStatus === FORM_STATUS.error ? "Re-Submit" : null}
+            </button>
+            <button
+              disabled={
+                formStatus === FORM_STATUS.loading ||
+                formStatus === FORM_STATUS.success
+              }
+              type="reset"
+              onClick={() => setFormStatus(FORM_STATUS.idle)}
+            >
+              Cancel
+            </button>
+          </form>
         </div>
-      ) : null}
-
-      <button
-        form="education-form"
-        type="button"
-        aria-label="add new education"
-        onClick={(e) => addEducation(e)}
-      >
-        + New Education
-      </button>
-      <form id="education-form" onSubmit={(e) => submitEdit(e)}>
-        {education.map((edu, index) => {
-          return (
-            <div key={edu.id}>
-              <EducationForm
-                eduIndex={index}
-                userId={edu.id}
-                currentYear={currentYear}
-                userSchool={edu.school}
-                userFieldOfStudy={edu.field_of_study}
-                userFromMonth={edu.schoolFromMonth}
-                userFromYear={edu.schoolFromYear}
-                userToMonth={edu.schoolToMonth}
-                userToYear={edu.schoolToYear}
-                userToPresent={edu.schoolToPresent}
-                schoolDateChange={edu.schoolDateChange}
-                userDescription={edu.education_description}
-                updateEducation={updateEducation}
-                removeEducation={removeEducation}
-              />
-              <br />
-              <br />
-            </div>
-          );
-        })}
-        <button
-          disabled={
-            formStatus === FORM_STATUS.loading ||
-            formStatus === FORM_STATUS.success
-          }
-          type="submit"
-        >
-          {formStatus === FORM_STATUS.active ? "Submit" : null}
-          {formStatus === FORM_STATUS.loading ? "loading..." : null}
-          {formStatus === FORM_STATUS.success ? "Success!" : null}
-          {formStatus === FORM_STATUS.error ? "Re-Submit" : null}
-        </button>
-        <button
-          disabled={
-            formStatus === FORM_STATUS.loading ||
-            formStatus === FORM_STATUS.success
-          }
-          type="reset"
-          onClick={() => setFormStatus(FORM_STATUS.idle)}
-        >
-          Cancel
-        </button>
-      </form>
+      </section>
     </Main>
   );
 }
