@@ -16,7 +16,6 @@ function EducationForm({
   userToYear,
   userToMonth,
   userToPresent,
-  schoolDateChange,
   userDescription,
   updateEducation,
   removeEducation,
@@ -171,7 +170,7 @@ function EducationForm({
   }
 
   function validateFromMonthDate(value) {
-    if (!dates.schoolDateChange) return;
+    if (!dates.schoolDateChange && value) return;
     if (value === "") {
       setDates({
         ...dates,
@@ -200,7 +199,7 @@ function EducationForm({
   }
 
   function validateFromYearDate(value) {
-    if (!dates.schoolDateChange) return;
+    if (!dates.schoolDateChange && value) return;
     if (value === "") {
       setDates({
         ...dates,
@@ -229,7 +228,7 @@ function EducationForm({
   }
 
   function validateToMonthDate(value) {
-    if (!dates.schoolDateChange) return;
+    if (!dates.schoolDateChange && value) return;
     if (value === "") {
       setDates({
         ...dates,
@@ -258,7 +257,7 @@ function EducationForm({
   }
 
   function validateToYearDate(value) {
-    if (!dates.schoolDateChange) return;
+    if (!dates.schoolDateChange && value) return;
     if (value === "") {
       setDates({
         ...dates,
@@ -290,6 +289,10 @@ function EducationForm({
         schoolToPresent: "",
       });
     }
+    setDates({
+      ...dates,
+      schoolDateChange: true,
+    });
   }
 
   function setDescriptionInput(value) {
