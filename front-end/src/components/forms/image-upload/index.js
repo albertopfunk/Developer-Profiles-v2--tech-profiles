@@ -1,38 +1,15 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import styled from "styled-components";
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
 import { httpClient } from "../../../global/helpers/http-requests";
 import { FORM_STATUS } from "../../../global/helpers/variables";
 
-function ImageUploadForm({ imageInput, setImageInput }) {
-  const { setPreviewImg, user } = useContext(ProfileContext);
+function ImageUploadForm({ imageInput, setImageInput, removeImageInput, removeUserImage }) {
+  const { user } = useContext(ProfileContext);
   const [imageStatus, setImageStatus] = useState(FORM_STATUS.idle);
 
   let imageRef = React.createRef();
   let imageRemovalRef = React.createRef();
-
-  // removing unused preview image on unmount caused bugs
-  // current fix is using local storage to remove on mount
-  useEffect(() => {
-    if (localStorage.getItem("image_id")) {
-      let id = localStorage.getItem("image_id");
-      localStorage.removeItem("image_id");
-      httpClient("POST", "/api/delete-image", {
-        id,
-      });
-    }
-    return () => {
-      setPreviewImg({ image: "", id: "" });
-    };
-  }, [setPreviewImg]);
-
-  function removePreviewImageFromCloudinary() {
-    if (imageInput.id) {
-      httpClient("POST", "/api/delete-image", {
-        id: imageInput.id,
-      });
-    }
-  }
 
   async function uploadImage(e) {
     if (e.target.files.length === 0) {
@@ -58,34 +35,22 @@ function ImageUploadForm({ imageInput, setImageInput }) {
     }
 
     setImageStatus(FORM_STATUS.success);
-    removePreviewImageFromCloudinary();
-    localStorage.setItem("image_id", res.data.id);
-    setPreviewImg(res.data);
-    setImageInput({
-      ...res.data,
-      inputChange: true,
-      shouldRemoveUserImage: false,
-    });
+    setImageInput({...res.data});
   }
 
-  function removePreviewImage() {
+  function removeImage() {
     setImageStatus(FORM_STATUS.idle);
-    removePreviewImageFromCloudinary();
-    localStorage.removeItem("image_id");
-    setPreviewImg({ image: "", id: "" });
-    setImageInput({
+    removeImageInput({
       image: "",
       id: "",
-      inputChange: false,
-      shouldRemoveUserImage: false,
     });
   }
 
-  function setImageToRemove() {
+  function setUserImageToRemove() {
     if (imageRemovalRef.current && imageRemovalRef.current.checked) {
-      setImageInput({ ...imageInput, shouldRemoveUserImage: true });
+      removeUserImage(true);
     } else {
-      setImageInput({ ...imageInput, shouldRemoveUserImage: false });
+      removeUserImage(false);
     }
   }
 
@@ -130,7 +95,7 @@ function ImageUploadForm({ imageInput, setImageInput }) {
             {imageInput.image ? (
               <button
                 aria-label="click to remove current profile pic preview"
-                onClick={removePreviewImage}
+                onClick={removeImage}
               >
                 X
               </button>
@@ -141,7 +106,7 @@ function ImageUploadForm({ imageInput, setImageInput }) {
                 name="remove-image"
                 aria-label="check to remove profile pic on submit"
                 ref={imageRemovalRef}
-                onChange={setImageToRemove}
+                onChange={setUserImageToRemove}
               />
             )}
           </div>

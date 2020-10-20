@@ -68,6 +68,22 @@ function PersonalInfo() {
     };
   }, []);
 
+  useEffect(() => {
+    return () => {
+      if (previewImgInput.id) {
+        httpClient("POST", "/api/delete-image", {
+          id: previewImgInput.id,
+        });
+      }
+    }
+  }, [previewImgInput])
+
+  useEffect(() => {
+    return () => {
+      setPreviewImg({ image: "", id: "" })
+    }
+  }, [setPreviewImg])
+
   function setFormInputs() {
     setFormStatus(FORM_STATUS.active);
     setAnnounceFormStatus(true);
@@ -178,6 +194,38 @@ function PersonalInfo() {
       httpClient("POST", "/api/delete-image", {
         id: user.image_id,
       });
+    }
+  }
+
+  function setImageInput(data) {
+    setPreviewImg(data)
+    setPreviewImgInput({
+      ...data,
+      inputChange: true,
+      shouldRemoveUserImage: false,
+    })
+  }
+  
+  function removeImageInput(data) {
+    setPreviewImg({ image: "", id: "" });
+    setPreviewImgInput({
+      ...data,
+      inputChange: false,
+      shouldRemoveUserImage: false,
+    })
+  }
+  
+  function removeUserImage(shouldRemove) {
+    if (shouldRemove) {
+      setPreviewImgInput({
+        ...previewImgInput,
+        shouldRemoveUserImage: true,
+      })
+    } else {
+      setPreviewImgInput({
+        ...previewImgInput,
+        shouldRemoveUserImage: false,
+      })
     }
   }
 
@@ -447,7 +495,9 @@ function PersonalInfo() {
 
           <ImageUploadForm
             imageInput={previewImgInput}
-            setImageInput={setPreviewImgInput}
+            setImageInput={setImageInput}
+            removeImageInput={removeImageInput}
+            removeUserImage={removeUserImage}
           />
 
           <FieldSet>
