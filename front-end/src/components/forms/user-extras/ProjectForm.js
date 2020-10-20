@@ -1,9 +1,13 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
+
+import ImageUploadForm from "../image-upload"
 
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
 import { validateInput } from "../../../global/helpers/validation";
 import { FORM_STATUS } from "../../../global/helpers/variables";
+import { httpClient } from "../../../global/helpers/http-requests";
+
 
 function ProjectForm({
   projIndex,
@@ -22,6 +26,13 @@ function ProjectForm({
     projectStatus: FORM_STATUS.idle,
   });
 
+  const [image, setImage] = useState({
+    image: "",
+    imageId: "",
+    imageChange: false,
+    shouldRemoveUserImage: false,
+  });
+
   const [link, setLink] = useState({
     link: userProjectLink,
     linkChange: false,
@@ -33,6 +44,16 @@ function ProjectForm({
     descriptionChange: false,
     descriptionStatus: FORM_STATUS.idle,
   });
+
+  useEffect(() => {
+    return () => {
+      if (image.imageId) {
+        httpClient("POST", "/api/delete-image", {
+          id: image.imageId,
+        });
+      }
+    }
+  }, [image.imageId])
 
   function setProjectInput(value) {
     setProject({
@@ -85,6 +106,42 @@ function ProjectForm({
     }
     setProject(newState);
     updateProject(projIndex, newState);
+  }
+
+  function setImageInput(data) {
+    const newState = {
+      image: data.image,
+      imageId: data.id,
+      imageChange: true,
+      shouldRemoveUserImage: false,
+    }
+    setImage(newState)
+    updateProject(projIndex, newState);
+  }
+  
+  function removeImageInput() {
+    const newState = {
+      image: "",
+      imageId: "",
+      imageChange: false,
+      shouldRemoveUserImage: false,
+    }
+    setImage(newState)
+    updateProject(projIndex, newState);
+  }
+  
+  function removeUserImage(shouldRemove) {
+    if (shouldRemove) {
+      setImage({
+        ...image,
+        shouldRemoveUserImage: true,
+      })
+    } else {
+      setImage({
+        ...image,
+        shouldRemoveUserImage: false,
+      })
+    }
   }
 
   function setLinkInput(value) {
@@ -237,6 +294,13 @@ function ProjectForm({
           </span>
         ) : null}
       </InputContainer>
+
+      <ImageUploadForm
+        imageInput={Image}
+        setImageInput={setImageInput}
+        removeImageInput={removeImageInput}
+        removeUserImage={removeUserImage}
+      />
 
       <InputContainer>
         <label htmlFor={`link-${userId}`}>Link:</label>

@@ -47,6 +47,11 @@ function DashboardProjects() {
         projectStatus: FORM_STATUS.idle,
         projectChange: false,
 
+        image: "",
+        imageId: "",
+        imageChange: false,
+        shouldRemoveUserImage: false,
+
         linkStatus: FORM_STATUS.idle,
         linkChange: false,
 
