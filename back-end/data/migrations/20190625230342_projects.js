@@ -4,6 +4,7 @@ exports.up = function (knex, Promise) {
     table.increments();
     table.string("project_title");
     table.string("project_img");
+    table.string("image_id");
     table.string("link");
     table.string("project_description", 280);
     table
