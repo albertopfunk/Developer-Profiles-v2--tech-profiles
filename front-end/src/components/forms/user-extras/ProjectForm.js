@@ -13,6 +13,8 @@ function ProjectForm({
   projIndex,
   userId,
   userProjectName,
+  userProjectImage,
+  userProjectImageId,
   userProjectLink,
   userDescription,
   updateProject,
@@ -27,8 +29,8 @@ function ProjectForm({
   });
 
   const [image, setImage] = useState({
-    image: "",
-    imageId: "",
+    imageInput: userProjectImage,
+    imageInputId: userProjectImageId,
     imageChange: false,
     shouldRemoveUserImage: false,
   });
@@ -47,13 +49,13 @@ function ProjectForm({
 
   useEffect(() => {
     return () => {
-      if (image.imageId) {
+      if (image.imageInputId) {
         httpClient("POST", "/api/delete-image", {
-          id: image.imageId,
+          id: image.imageInputId,
         });
       }
     }
-  }, [image.imageId])
+  }, [image.imageInputId])
 
   function setProjectInput(value) {
     setProject({
@@ -110,8 +112,8 @@ function ProjectForm({
 
   function setImageInput(data) {
     const newState = {
-      image: data.image,
-      imageId: data.id,
+      imageInput: data.image,
+      imageInputId: data.id,
       imageChange: true,
       shouldRemoveUserImage: false,
     }
@@ -121,8 +123,8 @@ function ProjectForm({
   
   function removeImageInput() {
     const newState = {
-      image: "",
-      imageId: "",
+      imageInput: "",
+      imageInputId: "",
       imageChange: false,
       shouldRemoveUserImage: false,
     }
@@ -135,11 +137,13 @@ function ProjectForm({
       setImage({
         ...image,
         shouldRemoveUserImage: true,
+        imageChange: true,
       })
     } else {
       setImage({
         ...image,
         shouldRemoveUserImage: false,
+        imageChange: false,
       })
     }
   }
@@ -296,8 +300,8 @@ function ProjectForm({
       </InputContainer>
 
       <ImageUploadForm
-        previewImage={image.image}
-        userImage={user.image}
+        previewImage={image.imageInput}
+        userImage={userProjectImage}
         setImageInput={setImageInput}
         removeImageInput={removeImageInput}
         removeUserImage={removeUserImage}

@@ -13,6 +13,7 @@ import { FORM_STATUS } from "../../../global/helpers/variables";
 import Announcer from "../../../global/helpers/announcer";
 
 import ProjectForm from "../../../components/forms/user-extras/ProjectForm";
+import { httpClient } from "../../../global/helpers/http-requests";
 
 let formSuccessWait;
 function DashboardProjects() {
@@ -47,8 +48,8 @@ function DashboardProjects() {
         projectStatus: FORM_STATUS.idle,
         projectChange: false,
 
-        image: "",
-        imageId: "",
+        imageInput: "",
+        imageInputId: "",
         imageChange: false,
         shouldRemoveUserImage: false,
 
@@ -83,6 +84,11 @@ function DashboardProjects() {
         projectStatus: FORM_STATUS.idle,
         projectChange: false,
 
+        imageInput: "",
+        imageInputId: "",
+        imageChange: false,
+        shouldRemoveUserImage: false,
+
         link: "",
         linkStatus: FORM_STATUS.idle,
         linkChange: false,
@@ -101,6 +107,12 @@ function DashboardProjects() {
     const filteredProjects = projects.filter((proj) => proj.id !== id);
     setProjects(filteredProjects);
     setProjectsChange(true);
+  }
+
+  function removeUserImageFromCloudinary(id) {
+    httpClient("POST", "/api/delete-image", {
+      id,
+    });
   }
 
   function checkFormErrors() {
@@ -169,30 +181,37 @@ function DashboardProjects() {
 
     projects.forEach((proj) => {
       if (Number.isInteger(proj.id)) {
-        if (
-          proj.projectChange ||
-          proj.linkChange ||
-          proj.descriptionChange
-        ) {
-          const data = {};
-          if (proj.projectChange) {
-            data.project_title = proj.project_title;
-          }
+        const data = {};
 
-          if (proj.linkChange) {
-            data.link = proj.link;
-          }
-
-          if (proj.descriptionChange) {
-            data.project_description = proj.project_description;
-          }
-
-          requests.push({
-            method: "PUT",
-            url: `/extras/projects/${proj.id}`,
-            data,
-          });
+        if (proj.projectChange) {
+          data.project_title = proj.project_title;
         }
+
+        if (proj.imageChange) {
+          console.log("JYGIJKHYIBG", proj)
+          removeUserImageFromCloudinary(proj.id);
+          if (proj.shouldRemoveUserImage) {
+            data.project_img = "";
+            // data.image_id = "";
+          } else {
+            data.project_img = proj.imageInput;
+            // data.image_id = proj.imageInputId;
+          }
+        }
+
+        if (proj.linkChange) {
+          data.link = proj.link;
+        }
+
+        if (proj.descriptionChange) {
+          data.project_description = proj.project_description;
+        }
+
+        requests.push({
+          method: "PUT",
+          url: `/extras/projects/${proj.id}`,
+          data,
+        });
       }
     });
 
@@ -222,6 +241,7 @@ function DashboardProjects() {
       (proj) =>
         Number.isInteger(proj.id) &&
         (proj.projectChange ||
+          proj.imageChange ||
           proj.linkChange ||
           proj.descriptionChange)
     );
@@ -370,6 +390,8 @@ function DashboardProjects() {
                     projIndex={index}
                     userId={proj.id}
                     userProjectName={proj.project_title}
+                    userProjectImage={proj.project_img}
+                    userProjectImageId={proj.image_id}
                     userProjectLink={proj.link}
                     userDescription={proj.project_description}
                     updateProject={updateProject}
