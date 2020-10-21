@@ -220,11 +220,13 @@ function PersonalInfo() {
       setPreviewImgInput({
         ...previewImgInput,
         shouldRemoveUserImage: true,
+        inputChange: true,
       })
     } else {
       setPreviewImgInput({
         ...previewImgInput,
         shouldRemoveUserImage: false,
+        inputChange: false,
       })
     }
   }
@@ -308,14 +310,14 @@ function PersonalInfo() {
 
     if (previewImgInput.inputChange) {
       removeUserImageFromCloudinary();
-      inputs.image = previewImgInput.image;
-      inputs.image_id = previewImgInput.id;
-      localStorage.removeItem("image_id");
-      setPreviewImg({ image: "", id: "" });
-    } else if (previewImgInput.shouldRemoveUserImage) {
-      removeUserImageFromCloudinary();
-      inputs.image = "";
-      inputs.image_id = "";
+      if (previewImgInput.shouldRemoveUserImage) {
+        inputs.image = "";
+        inputs.image_id = "";
+      } else {
+        inputs.image = previewImgInput.image;
+        inputs.image_id = previewImgInput.id;
+        // setPreviewImg({ image: "", id: "" });
+      }
     }
 
     if (areaOfWork.inputChange) {
