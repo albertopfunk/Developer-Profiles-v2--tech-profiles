@@ -192,10 +192,10 @@ function DashboardProjects() {
           removeUserImageFromCloudinary(proj.id);
           if (proj.shouldRemoveUserImage) {
             data.project_img = "";
-            // data.image_id = "";
+            data.image_id = "";
           } else {
             data.project_img = proj.imageInput;
-            // data.image_id = proj.imageInputId;
+            data.image_id = proj.imageInputId;
           }
         }
 
