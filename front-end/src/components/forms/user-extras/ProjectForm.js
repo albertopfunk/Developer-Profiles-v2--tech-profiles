@@ -296,7 +296,8 @@ function ProjectForm({
       </InputContainer>
 
       <ImageUploadForm
-        imageInput={Image}
+        previewImage={image.image}
+        userImage={user.image}
         setImageInput={setImageInput}
         removeImageInput={removeImageInput}
         removeUserImage={removeUserImage}
