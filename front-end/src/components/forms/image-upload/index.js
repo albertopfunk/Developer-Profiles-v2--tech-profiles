@@ -1,11 +1,15 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
 import { httpClient } from "../../../global/helpers/http-requests";
 import { FORM_STATUS } from "../../../global/helpers/variables";
 
-function ImageUploadForm({ imageInput, setImageInput, removeImageInput, removeUserImage }) {
-  const { user } = useContext(ProfileContext);
+function ImageUploadForm({
+  previewImage,
+  userImage,
+  setImageInput,
+  removeImageInput,
+  removeUserImage
+}) {
   const [imageStatus, setImageStatus] = useState(FORM_STATUS.idle);
 
   let imageRef = React.createRef();
@@ -89,12 +93,12 @@ function ImageUploadForm({ imageInput, setImageInput, removeImageInput, removeUs
           </span>
         ) : null}
       </InputContainer>
-      {user.image || imageInput.image ? (
+      {userImage || previewImage ? (
         <ImageContainer>
           <div className="img-action">
-            {imageInput.image ? (
+            {previewImage ? (
               <button
-                aria-label="click to remove current profile pic preview"
+                aria-label="remove current preview pic"
                 onClick={removeImage}
               >
                 X
@@ -104,7 +108,7 @@ function ImageUploadForm({ imageInput, setImageInput, removeImageInput, removeUs
                 type="checkbox"
                 id="remove-image"
                 name="remove-image"
-                aria-label="check to remove profile pic on submit"
+                aria-label="remove saved pic on submit"
                 ref={imageRemovalRef}
                 onChange={setUserImageToRemove}
               />
@@ -112,9 +116,9 @@ function ImageUploadForm({ imageInput, setImageInput, removeImageInput, removeUs
           </div>
 
           <img
-            src={imageInput.image || user.image}
+            src={previewImage || userImage}
             alt={
-              imageInput.image ? "current profile pic preview" : "profile pic"
+              previewImage ? "current preview pic" : "saved pic"
             }
             height="200px"
             width="200px"
