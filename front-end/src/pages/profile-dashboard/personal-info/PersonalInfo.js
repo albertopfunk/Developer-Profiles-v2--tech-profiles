@@ -494,7 +494,8 @@ function PersonalInfo() {
           </InputContainer>
 
           <ImageUploadForm
-            imageInput={previewImgInput}
+            previewImage={previewImgInput.image}
+            userImage={user.image}
             setImageInput={setImageInput}
             removeImageInput={removeImageInput}
             removeUserImage={removeUserImage}
