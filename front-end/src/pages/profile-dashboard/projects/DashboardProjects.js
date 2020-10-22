@@ -1,19 +1,13 @@
-/*
-  project_title - same as title
-  project_img - image upload
-  link - url validation
-  project_description - same
-*/
 import React, { useContext, useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import styled from "styled-components";
 
+import ProjectForm from "../../../components/forms/user-extras/ProjectForm";
+
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
 import { FORM_STATUS } from "../../../global/helpers/variables";
-import Announcer from "../../../global/helpers/announcer";
-
-import ProjectForm from "../../../components/forms/user-extras/ProjectForm";
 import { httpClient } from "../../../global/helpers/http-requests";
+import Announcer from "../../../global/helpers/announcer";
 
 let formSuccessWait;
 function DashboardProjects() {
@@ -109,12 +103,6 @@ function DashboardProjects() {
     setProjectsChange(true);
   }
 
-  function removeUserImageFromCloudinary(id) {
-    httpClient("POST", "/api/delete-image", {
-      id,
-    });
-  }
-
   function checkFormErrors() {
     return projects.filter((proj) => {
       let isErrors = false;
@@ -143,6 +131,8 @@ function DashboardProjects() {
           url: `/extras/new/projects`,
           data: {
             project_title: proj.project_title,
+            project_img: proj.imageInput,
+            image_id: proj.imageInputId,
             link: proj.link,
             project_description: proj.project_description,
             user_id: user.id,
@@ -188,8 +178,10 @@ function DashboardProjects() {
         }
 
         if (proj.imageChange) {
-          console.log("JYGIJKHYIBG", proj);
-          removeUserImageFromCloudinary(proj.id);
+          httpClient("POST", "/api/delete-image", {
+            id: proj.id,
+          });
+
           if (proj.shouldRemoveUserImage) {
             data.project_img = "";
             data.image_id = "";
@@ -263,6 +255,8 @@ function DashboardProjects() {
     setFormStatus(FORM_STATUS.success);
   }
 
+  console.log("-- dash projects", projects);
+
   if (formStatus === FORM_STATUS.idle) {
     return (
       <main id="main-content" tabIndex="-1" aria-labelledby="main-heading">
@@ -282,6 +276,16 @@ function DashboardProjects() {
                 <h3>{`Current "${proj.project_title}" Project`}</h3>
                 <ul aria-label={`${proj.project_title} Project`}>
                   <li>Project Name: {proj.project_title}</li>
+                  <li>
+                    {proj.project_img ? (
+                      <>
+                        <p>Project Pic:</p>
+                        <img src={proj.project_img} alt="project pic" />
+                      </>
+                    ) : (
+                      "Project Pic: None Set"
+                    )}
+                  </li>
                   <li>Project Link: {proj.link}</li>
                   <li>Description: {proj.project_description}</li>
                 </ul>

@@ -28,8 +28,8 @@ function ProjectForm({
   });
 
   const [image, setImage] = useState({
-    imageInput: userProjectImage,
-    imageInputId: userProjectImageId,
+    imageInput: "",
+    imageInputId: "",
     imageChange: false,
     shouldRemoveUserImage: false,
   });
@@ -121,6 +121,10 @@ function ProjectForm({
   }
 
   function removeImageInput() {
+    httpClient("POST", "/api/delete-image", {
+      id: image.imageInputId,
+    });
+
     const newState = {
       imageInput: "",
       imageInputId: "",
@@ -132,18 +136,24 @@ function ProjectForm({
   }
 
   function removeUserImage(shouldRemove) {
+    let newState;
+
     if (shouldRemove) {
-      setImage({
+      newState = {
         ...image,
         shouldRemoveUserImage: true,
         imageChange: true,
-      });
+      };
+      setImage(newState);
+      updateProject(projIndex, newState);
     } else {
-      setImage({
+      newState = {
         ...image,
         shouldRemoveUserImage: false,
         imageChange: false,
-      });
+      };
+      setImage(newState);
+      updateProject(projIndex, newState);
     }
   }
 
@@ -255,6 +265,8 @@ function ProjectForm({
     setDescription(newState);
     updateProject(projIndex, newState);
   }
+
+  console.log("-- project form --", image);
 
   return (
     <fieldset>
