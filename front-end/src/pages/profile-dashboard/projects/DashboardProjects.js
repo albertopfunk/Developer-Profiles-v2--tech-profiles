@@ -188,7 +188,7 @@ function DashboardProjects() {
         }
 
         if (proj.imageChange) {
-          console.log("JYGIJKHYIBG", proj)
+          console.log("JYGIJKHYIBG", proj);
           removeUserImageFromCloudinary(proj.id);
           if (proj.shouldRemoveUserImage) {
             data.project_img = "";
@@ -438,4 +438,3 @@ const Main = styled.main`
 `;
 
 export default DashboardProjects;
-

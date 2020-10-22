@@ -1,13 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 
-import ImageUploadForm from "../image-upload"
+import ImageUploadForm from "../image-upload";
 
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
 import { validateInput } from "../../../global/helpers/validation";
 import { FORM_STATUS } from "../../../global/helpers/variables";
 import { httpClient } from "../../../global/helpers/http-requests";
-
 
 function ProjectForm({
   projIndex,
@@ -54,8 +53,8 @@ function ProjectForm({
           id: image.imageInputId,
         });
       }
-    }
-  }, [image.imageInputId])
+    };
+  }, [image.imageInputId]);
 
   function setProjectInput(value) {
     setProject({
@@ -116,35 +115,35 @@ function ProjectForm({
       imageInputId: data.id,
       imageChange: true,
       shouldRemoveUserImage: false,
-    }
-    setImage(newState)
+    };
+    setImage(newState);
     updateProject(projIndex, newState);
   }
-  
+
   function removeImageInput() {
     const newState = {
       imageInput: "",
       imageInputId: "",
       imageChange: false,
       shouldRemoveUserImage: false,
-    }
-    setImage(newState)
+    };
+    setImage(newState);
     updateProject(projIndex, newState);
   }
-  
+
   function removeUserImage(shouldRemove) {
     if (shouldRemove) {
       setImage({
         ...image,
         shouldRemoveUserImage: true,
         imageChange: true,
-      })
+      });
     } else {
       setImage({
         ...image,
         shouldRemoveUserImage: false,
         imageChange: false,
-      })
+      });
     }
   }
 
@@ -216,7 +215,10 @@ function ProjectForm({
     const isUserProject =
       user.projects.length > 0 && !dataset.inputid.includes("new");
 
-    if (isUserProject && value === user.projects[projIndex].project_description) {
+    if (
+      isUserProject &&
+      value === user.projects[projIndex].project_description
+    ) {
       newState = {
         project_description: value,
         descriptionChange: false,
@@ -320,8 +322,7 @@ function ProjectForm({
           }`}
           aria-describedby={`link-${userId}-error link-${userId}-success`}
           aria-invalid={
-            link.link.trim() === "" ||
-            link.linkStatus === FORM_STATUS.error
+            link.link.trim() === "" || link.linkStatus === FORM_STATUS.error
           }
           value={link.link}
           onChange={(e) => setLinkInput(e.target.value)}
