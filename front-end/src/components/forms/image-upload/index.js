@@ -98,6 +98,7 @@ function ImageUploadForm({
           <div className="img-action">
             {previewImage ? (
               <button
+                type="button"
                 aria-label="remove current preview pic"
                 onClick={removeImage}
               >
