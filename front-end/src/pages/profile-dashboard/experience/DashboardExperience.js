@@ -70,12 +70,15 @@ function DashboardExperience() {
 
       return {
         ...exp,
+        companyNameInput: exp.company_name,
         companyStatus: FORM_STATUS.idle,
         companyChange: false,
 
+        titleInput: exp.job_title,
         titleStatus: FORM_STATUS.idle,
         titleChange: false,
 
+        descriptionInput: exp.job_description,
         descriptionStatus: FORM_STATUS.idle,
         descriptionChange: false,
 
@@ -103,15 +106,15 @@ function DashboardExperience() {
       {
         id: `new-${idTracker}`,
 
-        company_name: "",
+        companyNameInput: "",
         companyStatus: FORM_STATUS.idle,
         companyChange: false,
 
-        job_title: "",
+        titleInput: "",
         titleStatus: FORM_STATUS.idle,
         titleChange: false,
 
-        job_description: "",
+        descriptionInput: "",
         descriptionStatus: FORM_STATUS.idle,
         descriptionChange: false,
 
@@ -138,11 +141,11 @@ function DashboardExperience() {
     return experience.filter((exp) => {
       let isErrors = false;
       if (
-        exp.company_name.trim() === "" ||
+        exp.companyNameInput.trim() === "" ||
         exp.companyStatus === FORM_STATUS.error ||
-        exp.job_title.trim() === "" ||
+        exp.titleInput.trim() === "" ||
         exp.titleStatus === FORM_STATUS.error ||
-        exp.job_description.trim() === "" ||
+        exp.descriptionInput.trim() === "" ||
         exp.descriptionStatus === FORM_STATUS.error ||
         exp.fromMonth === "" ||
         exp.fromYear === ""
@@ -174,10 +177,10 @@ function DashboardExperience() {
           method: "POST",
           url: `/extras/new/experience`,
           data: {
-            company_name: exp.company_name,
+            company_name: exp.companyNameInput,
             job_dates,
-            job_title: exp.job_title,
-            job_description: exp.job_description,
+            job_title: exp.titleInput,
+            job_description: exp.descriptionInput,
             user_id: user.id,
           },
         });
@@ -222,15 +225,15 @@ function DashboardExperience() {
         ) {
           const data = {};
           if (exp.companyChange) {
-            data.company_name = exp.company_name;
+            data.company_name = exp.companyNameInput;
           }
 
           if (exp.titleChange) {
-            data.job_title = exp.job_title;
+            data.job_title = exp.titleInput;
           }
 
           if (exp.descriptionChange) {
-            data.job_description = exp.job_description;
+            data.job_description = exp.descriptionInput;
           }
 
           if (exp.dateChange) {
@@ -362,22 +365,22 @@ function DashboardExperience() {
                 formErrors.map((exp) => (
                   <div key={exp.id}>
                     <h4>{`Current "${
-                      exp.company_name || "New Experience"
+                      exp.companyNameInput || "New Experience"
                     }" Errors`}</h4>
 
                     <ul
                       aria-label={`current ${
-                        exp.company_name || "new experience"
+                        exp.companyNameInput || "new experience"
                       } errors`}
                     >
-                      {exp.company_name.trim() === "" ||
+                      {exp.companyNameInput.trim() === "" ||
                       exp.companyStatus === FORM_STATUS.error ? (
                         <li>
                           <a href={`#company-${exp.id}`}>Company Name Error</a>
                         </li>
                       ) : null}
 
-                      {exp.job_title.trim() === "" ||
+                      {exp.titleInput.trim() === "" ||
                       exp.titleStatus === FORM_STATUS.error ? (
                         <li>
                           <a href={`#title-${exp.id}`}>Title Error</a>
@@ -408,7 +411,7 @@ function DashboardExperience() {
                         </li>
                       ) : null}
 
-                      {exp.job_description.trim() === "" ||
+                      {exp.descriptionInput.trim() === "" ||
                       exp.descriptionStatus === FORM_STATUS.error ? (
                         <li>
                           <a href={`#description-${exp.id}`}>
@@ -445,21 +448,20 @@ function DashboardExperience() {
 
           <form id="experience-form" onSubmit={(e) => submitEdit(e)}>
             {experience.map((exp, index) => {
-              console.log(exp)
               return (
                 <div key={exp.id}>
                   <ExperienceForm
                     expIndex={index}
                     userId={exp.id}
                     currentYear={currentYear}
-                    userCompanyName={exp.company_name}
-                    userJobTitle={exp.job_title}
+                    userCompanyName={exp.company_name || ""}
+                    userJobTitle={exp.job_title || ""}
                     userFromMonth={exp.fromMonth}
                     userFromYear={exp.fromYear}
                     userToMonth={exp.toMonth}
                     userToYear={exp.toYear}
                     userToPresent={exp.toPresent}
-                    userDescription={exp.job_description}
+                    userDescription={exp.job_description || ""}
                     updateExperience={updateExperience}
                     removeExperience={removeExperience}
                   />

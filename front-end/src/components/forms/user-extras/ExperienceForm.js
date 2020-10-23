@@ -1,7 +1,6 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
-import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
 import { validateInput } from "../../../global/helpers/validation";
 import { FORM_STATUS } from "../../../global/helpers/variables";
 
@@ -20,15 +19,14 @@ function ExperienceForm({
   updateExperience,
   removeExperience,
 }) {
-  const { user } = useContext(ProfileContext);
   const [company, setCompany] = useState({
-    company_name: userCompanyName,
+    companyNameInput: userCompanyName,
     companyChange: false,
     companyStatus: FORM_STATUS.idle,
   });
 
   const [title, setTitle] = useState({
-    job_title: userJobTitle,
+    titleInput: userJobTitle,
     titleChange: false,
     titleStatus: FORM_STATUS.idle,
   });
@@ -47,7 +45,7 @@ function ExperienceForm({
   });
 
   const [description, setDescription] = useState({
-    job_description: userDescription,
+    descriptionInput: userDescription,
     descriptionChange: false,
     descriptionStatus: FORM_STATUS.idle,
   });
@@ -57,21 +55,28 @@ function ExperienceForm({
   function setCompanyInput(value) {
     setCompany({
       ...company,
-      company_name: value,
+      companyNameInput: value,
       companyChange: true,
     });
   }
 
-  function validateCompany(e) {
+  function validateCompany(value) {
     let newState;
-    const { value, dataset } = e.target;
 
-    const isUserCompany =
-      user.experience.length > 0 && !dataset.inputid.includes("new");
-
-    if (isUserCompany && value === user.experience[expIndex].company_name) {
+    if (value.trim() === "") {
       newState = {
-        company_name: value,
+        ...company,
+        companyNameInput: "",
+        companyStatus: FORM_STATUS.error,
+      };
+      setCompany(newState);
+      updateExperience(expIndex, newState);
+      return;
+    }
+
+    if (value === userCompanyName) {
+      newState = {
+        companyNameInput: value,
         companyChange: false,
         companyStatus: FORM_STATUS.idle,
       };
@@ -80,18 +85,6 @@ function ExperienceForm({
       return;
     }
 
-    if (value.trim() === "") {
-      newState = {
-        ...company,
-        company_name: "",
-        companyStatus: FORM_STATUS.error,
-      };
-      setCompany(newState);
-      updateExperience(expIndex, newState);
-      return;
-    }
-
-    if (!company.companyChange) return;
     if (validateInput("name", value)) {
       newState = {
         ...company,
@@ -110,21 +103,28 @@ function ExperienceForm({
   function setTitleInput(value) {
     setTitle({
       ...title,
-      job_title: value,
+      titleInput: value,
       titleChange: true,
     });
   }
 
-  function validateTitle(e) {
+  function validateTitle(value) {
     let newState;
-    const { value, dataset } = e.target;
 
-    const isUserCompany =
-      user.experience.length > 0 && !dataset.inputid.includes("new");
-
-    if (isUserCompany && value === user.experience[expIndex].job_title) {
+    if (value.trim() === "") {
       newState = {
-        job_title: value,
+        ...title,
+        titleInput: "",
+        titleStatus: FORM_STATUS.error,
+      };
+      setTitle(newState);
+      updateExperience(expIndex, newState);
+      return;
+    }
+
+    if (value === userJobTitle) {
+      newState = {
+        titleInput: value,
         titleChange: false,
         titleStatus: FORM_STATUS.idle,
       };
@@ -133,18 +133,6 @@ function ExperienceForm({
       return;
     }
 
-    if (value.trim() === "") {
-      newState = {
-        ...title,
-        job_title: "",
-        titleStatus: FORM_STATUS.error,
-      };
-      setTitle(newState);
-      updateExperience(expIndex, newState);
-      return;
-    }
-
-    if (!title.titleChange) return;
     if (validateInput("title", value)) {
       newState = {
         ...title,
@@ -297,21 +285,28 @@ function ExperienceForm({
   function setDescriptionInput(value) {
     setDescription({
       ...description,
-      job_description: value,
+      descriptionInput: value,
       descriptionChange: true,
     });
   }
 
-  function validateDescription(e) {
+  function validateDescription(value) {
     let newState;
-    const { value, dataset } = e.target;
 
-    const isUserCompany =
-      user.experience.length > 0 && !dataset.inputid.includes("new");
-
-    if (isUserCompany && value === user.experience[expIndex].job_description) {
+    if (value.trim() === "") {
       newState = {
-        job_description: value,
+        ...description,
+        descriptionInput: "",
+        descriptionStatus: FORM_STATUS.error,
+      };
+      setDescription(newState);
+      updateExperience(expIndex, newState);
+      return;
+    }
+
+    if (value === userDescription) {
+      newState = {
+        descriptionInput: value,
         descriptionChange: false,
         descriptionStatus: FORM_STATUS.idle,
       };
@@ -320,18 +315,6 @@ function ExperienceForm({
       return;
     }
 
-    if (value.trim() === "") {
-      newState = {
-        ...description,
-        job_description: "",
-        descriptionStatus: FORM_STATUS.error,
-      };
-      setDescription(newState);
-      updateExperience(expIndex, newState);
-      return;
-    }
-
-    if (!description.descriptionChange) return;
     if (validateInput("summary", value)) {
       newState = {
         ...description,
@@ -347,15 +330,13 @@ function ExperienceForm({
     updateExperience(expIndex, newState);
   }
 
-  console.log("WWWTF", userId);
-
   return (
     <fieldset>
-      <legend>Experience: {company.company_name || "New Company"}</legend>
+      <legend>Experience: {company.companyNameInput || "New Company"}</legend>
 
       <button
         type="button"
-        aria-label={`Remove ${company.company_name || "New"} Company`}
+        aria-label={`Remove ${company.companyNameInput || "New"} Company`}
         onClick={() => removeExperience(userId)}
       >
         X
@@ -367,19 +348,18 @@ function ExperienceForm({
           type="text"
           autoComplete="organization"
           id={`company-${userId}`}
-          data-inputid={userId}
           name="company"
           className={`input ${
             company.companyStatus === FORM_STATUS.error ? "input-err" : ""
           }`}
           aria-describedby={`company-${userId}-error company-${userId}-success`}
           aria-invalid={
-            company.company_name.trim() === "" ||
+            company.companyNameInput.trim() === "" ||
             company.companyStatus === FORM_STATUS.error
           }
-          value={company.company_name}
+          value={company.companyNameInput}
           onChange={(e) => setCompanyInput(e.target.value)}
-          onBlur={(e) => validateCompany(e)}
+          onBlur={(e) => validateCompany(e.target.value)}
         />
         {company.companyStatus === FORM_STATUS.error ? (
           <span id={`company-${userId}-error`} className="err-mssg">
@@ -400,19 +380,18 @@ function ExperienceForm({
           type="text"
           autoComplete="organization-title"
           id={`title-${userId}`}
-          data-inputid={userId}
           name="title"
           className={`input ${
             title.titleStatus === FORM_STATUS.error ? "input-err" : ""
           }`}
           aria-describedby={`title-${userId}-error title-${userId}-success`}
           aria-invalid={
-            title.job_title.trim() === "" ||
+            title.titleInput.trim() === "" ||
             title.titleStatus === FORM_STATUS.error
           }
-          value={title.job_title}
+          value={title.titleInput}
           onChange={(e) => setTitleInput(e.target.value)}
-          onBlur={(e) => validateTitle(e)}
+          onBlur={(e) => validateTitle(e.target.value)}
         />
         {title.titleStatus === FORM_STATUS.error ? (
           <span id={`title-${userId}-error`} className="err-mssg">
@@ -605,7 +584,6 @@ function ExperienceForm({
         <input
           type="text"
           id={`description-${userId}`}
-          data-inputid={userId}
           name="description"
           className={`input ${
             description.descriptionStatus === FORM_STATUS.error
@@ -614,12 +592,12 @@ function ExperienceForm({
           }`}
           aria-describedby={`description-${userId}-error description-${userId}-success`}
           aria-invalid={
-            description.job_description.trim() === "" ||
+            description.descriptionInput.trim() === "" ||
             description.descriptionStatus === FORM_STATUS.error
           }
-          value={description.job_description}
+          value={description.descriptionInput}
           onChange={(e) => setDescriptionInput(e.target.value)}
-          onBlur={(e) => validateDescription(e)}
+          onBlur={(e) => validateDescription(e.target.value)}
         />
         {description.descriptionStatus === FORM_STATUS.error ? (
           <span id={`description-${userId}-error`} className="err-mssg">
