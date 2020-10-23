@@ -1,9 +1,8 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
 import ImageUploadForm from "../image-upload";
 
-import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
 import { validateInput } from "../../../global/helpers/validation";
 import { FORM_STATUS } from "../../../global/helpers/variables";
 import { httpClient } from "../../../global/helpers/http-requests";
@@ -18,8 +17,6 @@ function ProjectForm({
   updateProject,
   removeProject,
 }) {
-  const { user } = useContext(ProfileContext);
-
   const [project, setProject] = useState({
     projectNameInput: userProjectName,
     projectChange: false,
@@ -66,17 +63,6 @@ function ProjectForm({
   function validateProject(value) {
     let newState;
 
-    if (value.trim() !== "" && value === userProjectName) {
-      newState = {
-        projectNameInput: value,
-        projectChange: false,
-        projectStatus: FORM_STATUS.idle,
-      };
-      setProject(newState);
-      updateProject(projIndex, newState);
-      return;
-    }
-
     if (value.trim() === "") {
       newState = {
         ...project,
@@ -88,7 +74,17 @@ function ProjectForm({
       return;
     }
 
-    if (!project.projectChange) return;
+    if (value === userProjectName) {
+      newState = {
+        projectNameInput: value,
+        projectChange: false,
+        projectStatus: FORM_STATUS.idle,
+      };
+      setProject(newState);
+      updateProject(projIndex, newState);
+      return;
+    }
+
     if (validateInput("name", value)) {
       newState = {
         ...project,
@@ -163,17 +159,6 @@ function ProjectForm({
   function validateLink(value) {
     let newState;
 
-    if (value.trim() !== "" && value === userProjectLink) {
-      newState = {
-        linkInput: value,
-        linkChange: false,
-        linkStatus: FORM_STATUS.idle,
-      };
-      setLink(newState);
-      updateProject(projIndex, newState);
-      return;
-    }
-
     if (value.trim() === "") {
       newState = {
         ...link,
@@ -185,7 +170,17 @@ function ProjectForm({
       return;
     }
 
-    if (!link.linkChange) return;
+    if (value === userProjectLink) {
+      newState = {
+        linkInput: value,
+        linkChange: false,
+        linkStatus: FORM_STATUS.idle,
+      };
+      setLink(newState);
+      updateProject(projIndex, newState);
+      return;
+    }
+
     if (validateInput("url", value)) {
       newState = {
         ...link,
@@ -212,17 +207,6 @@ function ProjectForm({
   function validateDescription(value) {
     let newState;
 
-    if (value.trim() !== "" && value === userProjectDescription) {
-      newState = {
-        descriptionInput: value,
-        descriptionChange: false,
-        descriptionStatus: FORM_STATUS.idle,
-      };
-      setDescription(newState);
-      updateProject(projIndex, newState);
-      return;
-    }
-
     if (value.trim() === "") {
       newState = {
         ...description,
@@ -234,7 +218,17 @@ function ProjectForm({
       return;
     }
 
-    if (!description.descriptionChange) return;
+    if (value === userProjectDescription) {
+      newState = {
+        descriptionInput: value,
+        descriptionChange: false,
+        descriptionStatus: FORM_STATUS.idle,
+      };
+      setDescription(newState);
+      updateProject(projIndex, newState);
+      return;
+    }
+
     if (validateInput("summary", value)) {
       newState = {
         ...description,

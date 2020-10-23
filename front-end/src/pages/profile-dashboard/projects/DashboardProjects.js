@@ -39,7 +39,7 @@ function DashboardProjects() {
     const updatedUserProjects = user.projects.map((proj) => {
       return {
         ...proj,
-        projectNameInput: "",
+        projectNameInput: proj.project_title,
         projectStatus: FORM_STATUS.idle,
         projectChange: false,
 
@@ -48,11 +48,11 @@ function DashboardProjects() {
         imageChange: false,
         shouldRemoveUserImage: false,
 
-        linkInput: "",
+        linkInput: proj.link,
         linkStatus: FORM_STATUS.idle,
         linkChange: false,
 
-        descriptionInput: "",
+        descriptionInput: proj.project_description,
         descriptionStatus: FORM_STATUS.idle,
         descriptionChange: false,
       };
@@ -104,6 +104,14 @@ function DashboardProjects() {
     const filteredProjects = projects.filter((proj) => proj.id !== id);
     setProjects(filteredProjects);
     setProjectsChange(true);
+  }
+
+  function removeUserImageFromCloudinary(id) {
+    if (id) {
+      httpClient("POST", "/api/delete-image", {
+        id,
+      });
+    }
   }
 
   function checkFormErrors() {
@@ -181,10 +189,7 @@ function DashboardProjects() {
         }
 
         if (proj.imageChange) {
-          httpClient("POST", "/api/delete-image", {
-            id: proj.id,
-          });
-
+          removeUserImageFromCloudinary(proj.image_id);
           if (proj.shouldRemoveUserImage) {
             data.project_img = "";
             data.image_id = "";
@@ -258,7 +263,7 @@ function DashboardProjects() {
     setFormStatus(FORM_STATUS.success);
   }
 
-  console.log("-- dash projects", projects);
+  console.log("-- dash projects --");
 
   if (formStatus === FORM_STATUS.idle) {
     return (
@@ -306,8 +311,6 @@ function DashboardProjects() {
   if (formStatus === FORM_STATUS.error) {
     formErrors = checkFormErrors();
   }
-
-  console.log("-- Dash Projects --", user);
 
   return (
     <Main id="main-content" tabIndex="-1" aria-labelledby="main-heading">
