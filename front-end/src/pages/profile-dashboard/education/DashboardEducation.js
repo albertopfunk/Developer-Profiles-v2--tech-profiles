@@ -70,12 +70,18 @@ function DashboardEducation() {
 
       return {
         ...edu,
+        schoolNameInput: edu.school,
         schoolStatus: FORM_STATUS.idle,
         schoolChange: false,
+
+        fieldOfStudyInput: edu.field_of_study,
         fieldOfStudyStatus: FORM_STATUS.idle,
         fieldOfStudyChange: false,
+
+        descriptionInput: edu.education_description,
         descriptionStatus: FORM_STATUS.idle,
         descriptionChange: false,
+
         schoolDateChange: false,
         ...schoolDatesObj,
       };
@@ -100,15 +106,15 @@ function DashboardEducation() {
       {
         id: `new-${idTracker}`,
 
-        school: "",
+        schoolNameInput: "",
         schoolStatus: FORM_STATUS.idle,
         schoolChange: false,
 
-        field_of_study: "",
+        fieldOfStudyInput: "",
         fieldOfStudyStatus: FORM_STATUS.idle,
         fieldOfStudyChange: false,
 
-        education_description: "",
+        descriptionInput: "",
         descriptionStatus: FORM_STATUS.idle,
         descriptionChange: false,
 
@@ -135,11 +141,11 @@ function DashboardEducation() {
     return education.filter((edu) => {
       let isErrors = false;
       if (
-        edu.school.trim() === "" ||
+        edu.schoolNameInput.trim() === "" ||
         edu.schoolStatus === FORM_STATUS.error ||
-        edu.field_of_study.trim() === "" ||
+        edu.fieldOfStudyInput.trim() === "" ||
         edu.fieldOfStudyStatus === FORM_STATUS.error ||
-        edu.education_description.trim() === "" ||
+        edu.descriptionInput.trim() === "" ||
         edu.descriptionStatus === FORM_STATUS.error ||
         edu.schoolFromMonth === "" ||
         edu.schoolFromYear === ""
@@ -173,10 +179,10 @@ function DashboardEducation() {
           method: "POST",
           url: `/extras/new/education`,
           data: {
-            school: edu.school,
+            school: edu.schoolNameInput,
             school_dates,
-            field_of_study: edu.field_of_study,
-            education_description: edu.education_description,
+            field_of_study: edu.fieldOfStudyInput,
+            education_description: edu.descriptionInput,
             user_id: user.id,
           },
         });
@@ -221,14 +227,17 @@ function DashboardEducation() {
         ) {
           const data = {};
           if (edu.schoolChange) {
-            data.school = edu.school;
+            data.school = edu.schoolNameInput;
           }
+
           if (edu.fieldOfStudyChange) {
-            data.field_of_study = edu.field_of_study;
+            data.field_of_study = edu.fieldOfStudyInput;
           }
+
           if (edu.descriptionChange) {
-            data.education_description = edu.education_description;
+            data.education_description = edu.descriptionInput;
           }
+
           if (edu.schoolDateChange) {
             const fromDates = `${edu.schoolFromMonth} ${edu.schoolFromYear}`;
             const toDates = edu.schoolToPresent
@@ -236,6 +245,7 @@ function DashboardEducation() {
               : `${edu.schoolToMonth} ${edu.schoolToYear}`;
             data.school_dates = `${fromDates} - ${toDates}`;
           }
+
           requests.push({
             method: "PUT",
             url: `/extras/education/${edu.id}`,
@@ -328,7 +338,7 @@ function DashboardEducation() {
     formErrors = checkFormErrors();
   }
 
-  console.log("-- Dash Education --", user);
+  console.log("-- Dash Education --");
 
   return (
     <Main id="main-content" tabIndex="-1" aria-labelledby="main-heading">
@@ -352,21 +362,21 @@ function DashboardEducation() {
                 formErrors.map((edu) => (
                   <div key={edu.id}>
                     <h4>{`Current "${
-                      edu.school || "New Education"
+                      edu.schoolNameInput || "New Education"
                     }" Errors`}</h4>
                     <ul
                       aria-label={`current ${
-                        edu.school || "new education"
+                        edu.schoolNameInput || "new education"
                       } errors`}
                     >
-                      {edu.school.trim() === "" ||
+                      {edu.schoolNameInput.trim() === "" ||
                       edu.schoolStatus === FORM_STATUS.error ? (
                         <li>
                           <a href={`#school-${edu.id}`}>School Error</a>
                         </li>
                       ) : null}
 
-                      {edu.field_of_study.trim() === "" ||
+                      {edu.fieldOfStudyInput.trim() === "" ||
                       edu.fieldOfStudyStatus === FORM_STATUS.error ? (
                         <li>
                           <a href={`#field-of-study-${edu.id}`}>
@@ -399,7 +409,7 @@ function DashboardEducation() {
                         </li>
                       ) : null}
 
-                      {edu.education_description.trim() === "" ||
+                      {edu.descriptionInput.trim() === "" ||
                       edu.descriptionStatus === FORM_STATUS.error ? (
                         <li>
                           <a href={`#description-${edu.id}`}>
@@ -441,14 +451,14 @@ function DashboardEducation() {
                     eduIndex={index}
                     userId={edu.id}
                     currentYear={currentYear}
-                    userSchool={edu.school}
-                    userFieldOfStudy={edu.field_of_study}
+                    userSchool={edu.school || ""}
+                    userFieldOfStudy={edu.field_of_study || ""}
                     userFromMonth={edu.schoolFromMonth}
                     userFromYear={edu.schoolFromYear}
                     userToMonth={edu.schoolToMonth}
                     userToYear={edu.schoolToYear}
                     userToPresent={edu.schoolToPresent}
-                    userDescription={edu.education_description}
+                    userDescription={edu.education_description || ""}
                     updateEducation={updateEducation}
                     removeEducation={removeEducation}
                   />

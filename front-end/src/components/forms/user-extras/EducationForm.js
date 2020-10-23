@@ -1,7 +1,6 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
-import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
 import { validateInput } from "../../../global/helpers/validation";
 import { FORM_STATUS } from "../../../global/helpers/variables";
 
@@ -20,16 +19,15 @@ function EducationForm({
   updateEducation,
   removeEducation,
 }) {
-  const { user } = useContext(ProfileContext);
 
   const [school, setSchool] = useState({
-    school: userSchool,
+    schoolNameInput: userSchool,
     schoolChange: false,
     schoolStatus: FORM_STATUS.idle,
   });
 
   const [fieldOfStudy, setFieldOfStudy] = useState({
-    field_of_study: userFieldOfStudy,
+    fieldOfStudyInput: userFieldOfStudy,
     fieldOfStudyChange: false,
     fieldOfStudyStatus: FORM_STATUS.idle,
   });
@@ -48,7 +46,7 @@ function EducationForm({
   });
 
   const [description, setDescription] = useState({
-    education_description: userDescription,
+    descriptionInput: userDescription,
     descriptionChange: false,
     descriptionStatus: FORM_STATUS.idle,
   });
@@ -58,20 +56,28 @@ function EducationForm({
   function setSchoolInput(value) {
     setSchool({
       ...school,
-      school: value,
+      schoolNameInput: value,
       schoolChange: true,
     });
   }
 
-  function validateSchool(e) {
+  function validateSchool(value) {
     let newState;
-    const { value, dataset } = e.target;
 
-    const isUserSchool =
-      user.education.length > 0 && !dataset.inputid.includes("new");
-    if (isUserSchool && value === user.education[eduIndex].school) {
+    if (value.trim() === "") {
       newState = {
-        school: value,
+        ...school,
+        schoolNameInput: "",
+        schoolStatus: FORM_STATUS.error,
+      };
+      setSchool(newState);
+      updateEducation(eduIndex, newState);
+      return;
+    }
+
+    if (value === userSchool) {
+      newState = {
+        schoolNameInput: value,
         schoolChange: false,
         schoolStatus: FORM_STATUS.idle,
       };
@@ -80,18 +86,6 @@ function EducationForm({
       return;
     }
 
-    if (value.trim() === "") {
-      newState = {
-        ...school,
-        school: "",
-        schoolStatus: FORM_STATUS.error,
-      };
-      setSchool(newState);
-      updateEducation(eduIndex, newState);
-      return;
-    }
-
-    if (!school.schoolChange) return;
     if (validateInput("name", value)) {
       newState = {
         ...school,
@@ -111,20 +105,28 @@ function EducationForm({
   function setFieldOfStudyInput(value) {
     setFieldOfStudy({
       ...fieldOfStudy,
-      field_of_study: value,
+      fieldOfStudyInput: value,
       fieldOfStudyChange: true,
     });
   }
 
-  function validateFieldOfStudy(e) {
+  function validateFieldOfStudy(value) {
     let newState;
-    const { value, dataset } = e.target;
 
-    const isUserSchool =
-      user.education.length > 0 && !dataset.inputid.includes("new");
-    if (isUserSchool && value === user.education[eduIndex].field_of_study) {
+    if (value.trim() === "") {
       newState = {
-        field_of_study: value,
+        ...fieldOfStudy,
+        fieldOfStudyInput: "",
+        fieldOfStudyStatus: FORM_STATUS.error,
+      };
+      setFieldOfStudy(newState);
+      updateEducation(eduIndex, newState);
+      return;
+    }
+
+    if (value === userFieldOfStudy) {
+      newState = {
+        fieldOfStudyInput: value,
         fieldOfStudyChange: false,
         fieldOfStudyStatus: FORM_STATUS.idle,
       };
@@ -133,18 +135,6 @@ function EducationForm({
       return;
     }
 
-    if (value.trim() === "") {
-      newState = {
-        ...fieldOfStudy,
-        field_of_study: "",
-        fieldOfStudyStatus: FORM_STATUS.error,
-      };
-      setFieldOfStudy(newState);
-      updateEducation(eduIndex, newState);
-      return;
-    }
-
-    if (!fieldOfStudy.fieldOfStudyChange) return;
     if (validateInput("title", value)) {
       newState = {
         ...fieldOfStudy,
@@ -298,23 +288,28 @@ function EducationForm({
   function setDescriptionInput(value) {
     setDescription({
       ...description,
-      education_description: value,
+      descriptionInput: value,
       descriptionChange: true,
     });
   }
 
-  function validateDescription(e) {
+  function validateDescription(value) {
     let newState;
-    const { value, dataset } = e.target;
 
-    const isUserSchool =
-      user.education.length > 0 && !dataset.inputid.includes("new");
-    if (
-      isUserSchool &&
-      value === user.education[eduIndex].education_description
-    ) {
+    if (value.trim() === "") {
       newState = {
-        education_description: value,
+        ...description,
+        descriptionInput: "",
+        descriptionStatus: FORM_STATUS.error,
+      };
+      setDescription(newState);
+      updateEducation(eduIndex, newState);
+      return;
+    }
+
+    if (value === userDescription) {
+      newState = {
+        descriptionInput: value,
         descriptionChange: false,
         descriptionStatus: FORM_STATUS.idle,
       };
@@ -323,18 +318,6 @@ function EducationForm({
       return;
     }
 
-    if (value.trim() === "") {
-      newState = {
-        ...description,
-        education_description: "",
-        descriptionStatus: FORM_STATUS.error,
-      };
-      setDescription(newState);
-      updateEducation(eduIndex, newState);
-      return;
-    }
-
-    if (!description.descriptionChange) return;
     if (validateInput("summary", value)) {
       newState = {
         ...description,
@@ -353,11 +336,11 @@ function EducationForm({
 
   return (
     <fieldset>
-      <legend>Education: {school.school || "New Education"}</legend>
+      <legend>Education: {school.schoolNameInput || "New Education"}</legend>
 
       <button
         type="button"
-        aria-label={`Remove ${school.school || "New"} Education`}
+        aria-label={`Remove ${school.schoolNameInput || "New"} Education`}
         onClick={() => removeEducation(userId)}
       >
         X
@@ -368,19 +351,18 @@ function EducationForm({
         <input
           type="text"
           id={`school-${userId}`}
-          data-inputid={userId}
           name="school"
           className={`input ${
             school.schoolStatus === FORM_STATUS.error ? "input-err" : ""
           }`}
           aria-describedby={`school-${userId}-error school-${userId}-success`}
           aria-invalid={
-            school.school.trim() === "" ||
+            school.schoolNameInput.trim() === "" ||
             school.schoolStatus === FORM_STATUS.error
           }
-          value={school.school}
+          value={school.schoolNameInput}
           onChange={(e) => setSchoolInput(e.target.value)}
-          onBlur={(e) => validateSchool(e)}
+          onBlur={(e) => validateSchool(e.target.value)}
         />
         {school.schoolStatus === FORM_STATUS.error ? (
           <span id={`school-${userId}-error`} className="err-mssg">
@@ -400,7 +382,6 @@ function EducationForm({
         <input
           type="text"
           id={`field-of-study-${userId}`}
-          data-inputid={userId}
           name="field-of-study"
           className={`input ${
             fieldOfStudy.fieldOfStudyStatus === FORM_STATUS.error
@@ -409,12 +390,12 @@ function EducationForm({
           }`}
           aria-describedby={`field-of-study-${userId}-error field-of-study-${userId}-success`}
           aria-invalid={
-            fieldOfStudy.field_of_study.trim() === "" ||
+            fieldOfStudy.fieldOfStudyInput.trim() === "" ||
             fieldOfStudy.fieldOfStudyStatus === FORM_STATUS.error
           }
-          value={fieldOfStudy.field_of_study}
+          value={fieldOfStudy.fieldOfStudyInput}
           onChange={(e) => setFieldOfStudyInput(e.target.value)}
-          onBlur={(e) => validateFieldOfStudy(e)}
+          onBlur={(e) => validateFieldOfStudy(e.target.value)}
         />
         {fieldOfStudy.fieldOfStudyStatus === FORM_STATUS.error ? (
           <span id={`field-of-study-${userId}-error`} className="err-mssg">
@@ -616,7 +597,6 @@ function EducationForm({
         <input
           type="text"
           id={`description-${userId}`}
-          data-inputid={userId}
           name="description"
           className={`input ${
             description.descriptionStatus === FORM_STATUS.error
@@ -625,12 +605,12 @@ function EducationForm({
           }`}
           aria-describedby={`description-${userId}-error description-${userId}-success`}
           aria-invalid={
-            description.education_description.trim() === "" ||
+            description.descriptionInput.trim() === "" ||
             description.descriptionStatus === FORM_STATUS.error
           }
-          value={description.education_description}
+          value={description.descriptionInput}
           onChange={(e) => setDescriptionInput(e.target.value)}
-          onBlur={(e) => validateDescription(e)}
+          onBlur={(e) => validateDescription(e.target.value)}
         />
         {description.descriptionStatus === FORM_STATUS.error ? (
           <span id={`description-${userId}-error`} className="err-mssg">
