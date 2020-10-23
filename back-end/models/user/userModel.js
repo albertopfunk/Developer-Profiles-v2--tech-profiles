@@ -173,9 +173,10 @@ async function getUserExtras(userId) {
       .select(
         "projects.id",
         "projects.project_title",
+        "projects.project_img",
+        "projects.image_id",
         "projects.link",
-        "projects.project_description",
-        "projects.project_img"
+        "projects.project_description"
       )
       .where("projects.user_id", userId);
   }
