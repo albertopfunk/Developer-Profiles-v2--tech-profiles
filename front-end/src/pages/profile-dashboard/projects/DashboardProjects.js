@@ -39,6 +39,7 @@ function DashboardProjects() {
     const updatedUserProjects = user.projects.map((proj) => {
       return {
         ...proj,
+        projectNameInput: "",
         projectStatus: FORM_STATUS.idle,
         projectChange: false,
 
@@ -47,9 +48,11 @@ function DashboardProjects() {
         imageChange: false,
         shouldRemoveUserImage: false,
 
+        linkInput: "",
         linkStatus: FORM_STATUS.idle,
         linkChange: false,
 
+        descriptionInput: "",
         descriptionStatus: FORM_STATUS.idle,
         descriptionChange: false,
       };
@@ -74,7 +77,7 @@ function DashboardProjects() {
       {
         id: `new-${idTracker}`,
 
-        project_title: "",
+        projectNameInput: "",
         projectStatus: FORM_STATUS.idle,
         projectChange: false,
 
@@ -83,11 +86,11 @@ function DashboardProjects() {
         imageChange: false,
         shouldRemoveUserImage: false,
 
-        link: "",
+        linkInput: "",
         linkStatus: FORM_STATUS.idle,
         linkChange: false,
 
-        project_description: "",
+        descriptionInput: "",
         descriptionStatus: FORM_STATUS.idle,
         descriptionChange: false,
       },
@@ -107,11 +110,11 @@ function DashboardProjects() {
     return projects.filter((proj) => {
       let isErrors = false;
       if (
-        proj.project_title.trim() === "" ||
+        proj.projectNameInput.trim() === "" ||
         proj.projectStatus === FORM_STATUS.error ||
-        proj.link.trim() === "" ||
+        proj.linkInput.trim() === "" ||
         proj.linkStatus === FORM_STATUS.error ||
-        proj.project_description.trim() === "" ||
+        proj.descriptionInput.trim() === "" ||
         proj.descriptionStatus === FORM_STATUS.error
       ) {
         isErrors = true;
@@ -130,11 +133,11 @@ function DashboardProjects() {
           method: "POST",
           url: `/extras/new/projects`,
           data: {
-            project_title: proj.project_title,
+            project_title: proj.projectNameInput,
             project_img: proj.imageInput,
             image_id: proj.imageInputId,
-            link: proj.link,
-            project_description: proj.project_description,
+            link: proj.linkInput,
+            project_description: proj.descriptionInput,
             user_id: user.id,
           },
         });
@@ -174,7 +177,7 @@ function DashboardProjects() {
         const data = {};
 
         if (proj.projectChange) {
-          data.project_title = proj.project_title;
+          data.project_title = proj.projectNameInput;
         }
 
         if (proj.imageChange) {
@@ -192,11 +195,11 @@ function DashboardProjects() {
         }
 
         if (proj.linkChange) {
-          data.link = proj.link;
+          data.link = proj.linkInput;
         }
 
         if (proj.descriptionChange) {
-          data.project_description = proj.project_description;
+          data.project_description = proj.descriptionInput;
         }
 
         requests.push({
@@ -329,29 +332,29 @@ function DashboardProjects() {
                 formErrors.map((proj) => (
                   <div key={proj.id}>
                     <h4>{`Current "${
-                      proj.project_title || "New Project"
+                      proj.projectNameInput || "New Project"
                     }" Errors`}</h4>
 
                     <ul
                       aria-label={`current ${
-                        proj.project_title || "new project"
+                        proj.projectNameInput || "new project"
                       } errors`}
                     >
-                      {proj.project_title.trim() === "" ||
+                      {proj.projectNameInput.trim() === "" ||
                       proj.projectStatus === FORM_STATUS.error ? (
                         <li>
                           <a href={`#project-${proj.id}`}>project Name Error</a>
                         </li>
                       ) : null}
 
-                      {proj.link.trim() === "" ||
+                      {proj.linkInput.trim() === "" ||
                       proj.linkStatus === FORM_STATUS.error ? (
                         <li>
                           <a href={`#link-${proj.id}`}>Link Error</a>
                         </li>
                       ) : null}
 
-                      {proj.project_description.trim() === "" ||
+                      {proj.descriptionInput.trim() === "" ||
                       proj.descriptionStatus === FORM_STATUS.error ? (
                         <li>
                           <a href={`#description-${proj.id}`}>
@@ -393,11 +396,10 @@ function DashboardProjects() {
                   <ProjectForm
                     projIndex={index}
                     userId={proj.id}
-                    userProjectName={proj.project_title}
-                    userProjectImage={proj.project_img}
-                    userProjectImageId={proj.image_id}
-                    userProjectLink={proj.link}
-                    userDescription={proj.project_description}
+                    userProjectName={proj.project_title || ""}
+                    userProjectImage={proj.project_img || ""}
+                    userProjectLink={proj.link || ""}
+                    userProjectDescription={proj.project_description || ""}
                     updateProject={updateProject}
                     removeProject={removeProject}
                   />

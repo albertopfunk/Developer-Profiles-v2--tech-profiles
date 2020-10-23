@@ -13,16 +13,15 @@ function ProjectForm({
   userId,
   userProjectName,
   userProjectImage,
-  userProjectImageId,
   userProjectLink,
-  userDescription,
+  userProjectDescription,
   updateProject,
   removeProject,
 }) {
   const { user } = useContext(ProfileContext);
 
   const [project, setProject] = useState({
-    project_title: userProjectName,
+    projectNameInput: userProjectName,
     projectChange: false,
     projectStatus: FORM_STATUS.idle,
   });
@@ -35,13 +34,13 @@ function ProjectForm({
   });
 
   const [link, setLink] = useState({
-    link: userProjectLink,
+    linkInput: userProjectLink,
     linkChange: false,
     linkStatus: FORM_STATUS.idle,
   });
 
   const [description, setDescription] = useState({
-    project_description: userDescription,
+    descriptionInput: userProjectDescription,
     descriptionChange: false,
     descriptionStatus: FORM_STATUS.idle,
   });
@@ -59,21 +58,17 @@ function ProjectForm({
   function setProjectInput(value) {
     setProject({
       ...project,
-      project_title: value,
+      projectNameInput: value,
       projectChange: true,
     });
   }
 
-  function validateProject(e) {
+  function validateProject(value) {
     let newState;
-    const { value, dataset } = e.target;
 
-    const isUserProject =
-      user.projects.length > 0 && !dataset.inputid.includes("new");
-
-    if (isUserProject && value === user.projects[projIndex].project_title) {
+    if (value.trim() !== "" && value === userProjectName) {
       newState = {
-        project_title: value,
+        projectNameInput: value,
         projectChange: false,
         projectStatus: FORM_STATUS.idle,
       };
@@ -85,7 +80,7 @@ function ProjectForm({
     if (value.trim() === "") {
       newState = {
         ...project,
-        project_title: "",
+        projectNameInput: "",
         projectStatus: FORM_STATUS.error,
       };
       setProject(newState);
@@ -160,21 +155,17 @@ function ProjectForm({
   function setLinkInput(value) {
     setLink({
       ...link,
-      link: value,
+      linkInput: value,
       linkChange: true,
     });
   }
 
-  function validateLink(e) {
+  function validateLink(value) {
     let newState;
-    const { value, dataset } = e.target;
 
-    const isUserProject =
-      user.projects.length > 0 && !dataset.inputid.includes("new");
-
-    if (isUserProject && value === user.projects[projIndex].link) {
+    if (value.trim() !== "" && value === userProjectLink) {
       newState = {
-        link: value,
+        linkInput: value,
         linkChange: false,
         linkStatus: FORM_STATUS.idle,
       };
@@ -186,7 +177,7 @@ function ProjectForm({
     if (value.trim() === "") {
       newState = {
         ...link,
-        link: "",
+        linkInput: "",
         linkStatus: FORM_STATUS.error,
       };
       setLink(newState);
@@ -213,24 +204,17 @@ function ProjectForm({
   function setDescriptionInput(value) {
     setDescription({
       ...description,
-      project_description: value,
+      descriptionInput: value,
       descriptionChange: true,
     });
   }
 
-  function validateDescription(e) {
+  function validateDescription(value) {
     let newState;
-    const { value, dataset } = e.target;
 
-    const isUserProject =
-      user.projects.length > 0 && !dataset.inputid.includes("new");
-
-    if (
-      isUserProject &&
-      value === user.projects[projIndex].project_description
-    ) {
+    if (value.trim() !== "" && value === userProjectDescription) {
       newState = {
-        project_description: value,
+        descriptionInput: value,
         descriptionChange: false,
         descriptionStatus: FORM_STATUS.idle,
       };
@@ -242,7 +226,7 @@ function ProjectForm({
     if (value.trim() === "") {
       newState = {
         ...description,
-        project_description: "",
+        descriptionInput: "",
         descriptionStatus: FORM_STATUS.error,
       };
       setDescription(newState);
@@ -270,11 +254,11 @@ function ProjectForm({
 
   return (
     <fieldset>
-      <legend>Project: {project.project_title || "New Project"}</legend>
+      <legend>Project: {project.projectNameInput || "New Project"}</legend>
 
       <button
         type="button"
-        aria-label={`Remove ${project.project_title || "New"} Project`}
+        aria-label={`Remove ${project.projectNameInput || "New"} Project`}
         onClick={() => removeProject(userId)}
       >
         X
@@ -286,19 +270,18 @@ function ProjectForm({
           type="text"
           autoComplete="organization"
           id={`project-${userId}`}
-          data-inputid={userId}
           name="project"
           className={`input ${
             project.projectStatus === FORM_STATUS.error ? "input-err" : ""
           }`}
           aria-describedby={`project-${userId}-error project-${userId}-success`}
           aria-invalid={
-            project.project_title.trim() === "" ||
+            project.projectNameInput.trim() === "" ||
             project.projectStatus === FORM_STATUS.error
           }
-          value={project.project_title}
+          value={project.projectNameInput}
           onChange={(e) => setProjectInput(e.target.value)}
-          onBlur={(e) => validateProject(e)}
+          onBlur={(e) => validateProject(e.target.value)}
         />
         {project.projectStatus === FORM_STATUS.error ? (
           <span id={`project-${userId}-error`} className="err-mssg">
@@ -327,18 +310,18 @@ function ProjectForm({
           type="text"
           autoComplete="url"
           id={`link-${userId}`}
-          data-inputid={userId}
           name="link"
           className={`input ${
             link.linkStatus === FORM_STATUS.error ? "input-err" : ""
           }`}
           aria-describedby={`link-${userId}-error link-${userId}-success`}
           aria-invalid={
-            link.link.trim() === "" || link.linkStatus === FORM_STATUS.error
+            link.linkInput.trim() === "" ||
+            link.linkStatus === FORM_STATUS.error
           }
-          value={link.link}
+          value={link.linkInput}
           onChange={(e) => setLinkInput(e.target.value)}
-          onBlur={(e) => validateLink(e)}
+          onBlur={(e) => validateLink(e.target.value)}
         />
         {link.linkStatus === FORM_STATUS.error ? (
           <span id={`link-${userId}-error`} className="err-mssg">
@@ -358,7 +341,6 @@ function ProjectForm({
         <input
           type="text"
           id={`description-${userId}`}
-          data-inputid={userId}
           name="description"
           className={`input ${
             description.descriptionStatus === FORM_STATUS.error
@@ -367,12 +349,12 @@ function ProjectForm({
           }`}
           aria-describedby={`description-${userId}-error description-${userId}-success`}
           aria-invalid={
-            description.project_description.trim() === "" ||
+            description.descriptionInput.trim() === "" ||
             description.descriptionStatus === FORM_STATUS.error
           }
-          value={description.project_description}
+          value={description.descriptionInput}
           onChange={(e) => setDescriptionInput(e.target.value)}
-          onBlur={(e) => validateDescription(e)}
+          onBlur={(e) => validateDescription(e.target.value)}
         />
         {description.descriptionStatus === FORM_STATUS.error ? (
           <span id={`description-${userId}-error`} className="err-mssg">
