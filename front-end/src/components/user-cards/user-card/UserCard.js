@@ -33,7 +33,7 @@ Control + Home: Move focus to the first focusable element before the feed.
 function UserCard(props) {
   const [isCardExpanded, setIsCardExpanded] = useState(false);
 
-  console.log("-- User Card --")
+  console.log("-- User Card --");
 
   return (
     // needs a heading

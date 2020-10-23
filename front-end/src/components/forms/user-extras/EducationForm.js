@@ -19,7 +19,6 @@ function EducationForm({
   updateEducation,
   removeEducation,
 }) {
-
   const [school, setSchool] = useState({
     schoolNameInput: userSchool,
     schoolChange: false,

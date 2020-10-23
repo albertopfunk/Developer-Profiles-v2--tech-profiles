@@ -75,14 +75,14 @@ function PersonalInfo() {
           id: previewImgInput.id,
         });
       }
-    }
-  }, [previewImgInput])
+    };
+  }, [previewImgInput]);
 
   useEffect(() => {
     return () => {
-      setPreviewImg({ image: "", id: "" })
-    }
-  }, [setPreviewImg])
+      setPreviewImg({ image: "", id: "" });
+    };
+  }, [setPreviewImg]);
 
   function setFormInputs() {
     setFormStatus(FORM_STATUS.active);
@@ -198,36 +198,36 @@ function PersonalInfo() {
   }
 
   function setImageInput(data) {
-    setPreviewImg(data)
+    setPreviewImg(data);
     setPreviewImgInput({
       ...data,
       inputChange: true,
       shouldRemoveUserImage: false,
-    })
+    });
   }
-  
+
   function removeImageInput(data) {
     setPreviewImg({ image: "", id: "" });
     setPreviewImgInput({
       ...data,
       inputChange: false,
       shouldRemoveUserImage: false,
-    })
+    });
   }
-  
+
   function removeUserImage(shouldRemove) {
     if (shouldRemove) {
       setPreviewImgInput({
         ...previewImgInput,
         shouldRemoveUserImage: true,
         inputChange: true,
-      })
+      });
     } else {
       setPreviewImgInput({
         ...previewImgInput,
         shouldRemoveUserImage: false,
         inputChange: false,
-      })
+      });
     }
   }
 

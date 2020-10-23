@@ -42,7 +42,7 @@ function UserCards(props) {
       )}
 
       {props.isBusy ? (
-          <p>Loading...</p>
+        <p>Loading...</p>
       ) : (
         <div>
           {!props.canLoadMore ? (

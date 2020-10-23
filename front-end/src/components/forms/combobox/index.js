@@ -289,7 +289,7 @@ class Combobox extends React.Component {
     if (this.props.single && !this.state.isUsingCombobox) {
       this.setState({ input: "" });
     }
-    
+
     this.setState({ chosenOptions: filteredChosenOptions });
     this.props.onRemoveChosenOption(filteredChosenOptions);
   };

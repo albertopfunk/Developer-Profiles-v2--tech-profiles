@@ -523,7 +523,9 @@ function AboutYou() {
                     <li>{location.name}</li>
                   ))}
                 </ul>
-              ) : "None Set"}
+              ) : (
+                "None Set"
+              )}
             </li>
             <li>
               Top Skills:
@@ -533,7 +535,9 @@ function AboutYou() {
                     <li>{skill.name}</li>
                   ))}
                 </ul>
-              ) : "None Set"}
+              ) : (
+                "None Set"
+              )}
             </li>
             <li>
               Additional Skills:
@@ -543,7 +547,9 @@ function AboutYou() {
                     <li>{skill.name}</li>
                   ))}
                 </ul>
-              ) : "None Set"}
+              ) : (
+                "None Set"
+              )}
             </li>
           </ul>
         </section>

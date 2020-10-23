@@ -8,7 +8,7 @@ function ImageUploadForm({
   userImage,
   setImageInput,
   removeImageInput,
-  removeUserImage
+  removeUserImage,
 }) {
   const [imageStatus, setImageStatus] = useState(FORM_STATUS.idle);
 
@@ -39,7 +39,7 @@ function ImageUploadForm({
     }
 
     setImageStatus(FORM_STATUS.success);
-    setImageInput({...res.data});
+    setImageInput({ ...res.data });
   }
 
   function removeImage() {
@@ -118,9 +118,7 @@ function ImageUploadForm({
 
           <img
             src={previewImage || userImage}
-            alt={
-              previewImage ? "current preview pic" : "saved pic"
-            }
+            alt={previewImage ? "current preview pic" : "saved pic"}
             height="200px"
             width="200px"
           />
