@@ -113,9 +113,9 @@ function ProjectForm({
   }
 
   function removeImageInput() {
-    httpClient("POST", "/api/delete-image", {
-      id: image.imageInputId,
-    });
+    // httpClient("POST", "/api/delete-image", {
+    //   id: image.imageInputId,
+    // });
 
     const newState = {
       imageInput: "",
