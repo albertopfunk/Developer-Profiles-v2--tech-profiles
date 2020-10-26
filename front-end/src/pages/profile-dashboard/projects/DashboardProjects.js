@@ -405,6 +405,7 @@ function DashboardProjects() {
                     userProjectDescription={proj.project_description || ""}
                     updateProject={updateProject}
                     removeProject={removeProject}
+                    isSubmitted={formStatus === FORM_STATUS.success}
                   />
                 </div>
               );

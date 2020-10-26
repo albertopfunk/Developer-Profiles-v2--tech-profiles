@@ -16,6 +16,7 @@ function ProjectForm({
   userProjectDescription,
   updateProject,
   removeProject,
+  isSubmitted
 }) {
   const [project, setProject] = useState({
     projectNameInput: userProjectName,
@@ -44,13 +45,13 @@ function ProjectForm({
 
   useEffect(() => {
     return () => {
-      if (image.imageInputId) {
+      if (image.imageInputId && !isSubmitted) {
         httpClient("POST", "/api/delete-image", {
           id: image.imageInputId,
         });
       }
     };
-  }, [image.imageInputId]);
+  }, [image.imageInputId, isSubmitted]);
 
   function setProjectInput(value) {
     setProject({
