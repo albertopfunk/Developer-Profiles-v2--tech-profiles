@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
 import ImageUploadForm from "../image-upload";
@@ -15,8 +15,7 @@ function ProjectForm({
   userProjectLink,
   userProjectDescription,
   updateProject,
-  removeProject,
-  isSubmitted
+  removeProject
 }) {
   const [project, setProject] = useState({
     projectNameInput: userProjectName,
@@ -42,16 +41,6 @@ function ProjectForm({
     descriptionChange: false,
     descriptionStatus: FORM_STATUS.idle,
   });
-
-  useEffect(() => {
-    return () => {
-      if (image.imageInputId && !isSubmitted) {
-        httpClient("POST", "/api/delete-image", {
-          id: image.imageInputId,
-        });
-      }
-    };
-  }, [image.imageInputId, isSubmitted]);
 
   function setProjectInput(value) {
     setProject({
@@ -101,7 +90,16 @@ function ProjectForm({
     updateProject(projIndex, newState);
   }
 
+  function removeImageFromCloudinary() {
+    if (image.imageInputId) {
+      httpClient("POST", "/api/delete-image", {
+        id: image.imageInputId,
+      });
+    }
+  }
+
   function setImageInput(data) {
+    removeImageFromCloudinary();
     const newState = {
       imageInput: data.image,
       imageInputId: data.id,
@@ -113,10 +111,7 @@ function ProjectForm({
   }
 
   function removeImageInput() {
-    // httpClient("POST", "/api/delete-image", {
-    //   id: image.imageInputId,
-    // });
-
+    removeImageFromCloudinary();
     const newState = {
       imageInput: "",
       imageInputId: "",
