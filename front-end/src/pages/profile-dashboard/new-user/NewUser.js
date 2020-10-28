@@ -9,6 +9,7 @@ import { ProfileContext } from "../../../global/context/user-profile/ProfileCont
 import { httpClient } from "../../../global/helpers/http-requests";
 import { validateInput } from "../../../global/helpers/validation";
 import { FORM_STATUS } from "../../../global/helpers/variables";
+import Combobox from "../../../components/forms/combobox";
 
 let formSuccessWait;
 function NewUser() {
@@ -41,6 +42,8 @@ function NewUser() {
     inputChange: false,
     inputStatus: FORM_STATUS.idle,
   });
+  const [location, setLocation] = useState([]);
+  const [locationChange, setLocationChange] = useState(false);
   
   let errorSummaryRef = React.createRef();
 
@@ -102,6 +105,20 @@ function NewUser() {
       inputChange: false,
       inputStatus: FORM_STATUS.idle,
     });
+
+    if (user.current_location_name) {
+      setLocation([
+        {
+          name: user.current_location_name,
+          id: 1, // combobox requires id for key
+          lat: user.current_location_lat,
+          lon: user.current_location_lon,
+        },
+      ]);
+    } else {
+      setLocation([]);
+    }
+    setLocationChange(false);
   }
 
   function onTabChange(tab) {
@@ -265,6 +282,53 @@ function NewUser() {
     }
   }
 
+  async function getLocationsByValue(value) {
+    const [res, err] = await httpClient("POST", "/api/autocomplete", {
+      value,
+    });
+
+    if (err) {
+      console.error(`${res.mssg} => ${res.err}`);
+      return [];
+    }
+
+    if (location.length > 0) {
+      const results = res.data.filter(
+        (prediction) => prediction.name !== location[0].name
+      );
+      return results;
+    }
+
+    return res.data;
+  }
+
+  async function setLocationWithGio(name, id) {
+    setLocationChange(true);
+
+    const [res, err] = await httpClient("POST", "/api/gio", {
+      placeId: id,
+    });
+
+    if (err) {
+      console.error(`${res.mssg} => ${res.err}`);
+      return;
+    }
+
+    setLocation([
+      {
+        name,
+        id,
+        lat: res.data.lat,
+        lon: res.data.lng,
+      },
+    ]);
+  }
+
+  function removeLocation() {
+    setLocationChange(true);
+    setLocation([]);
+  }
+
   async function submitEdit(e) {
     e.preventDefault();
 
@@ -286,7 +350,8 @@ function NewUser() {
       !previewImgInput.shouldRemoveUserImage &&
       !areaOfWork.inputChange &&
       !title.inputChange &&
-      !summary.inputChange
+      !summary.inputChange &&
+      !locationChange
     ) {
       return;
     }
@@ -319,6 +384,19 @@ function NewUser() {
 
     if (summary.inputChange) {
       inputs.summary = summary.inputValue;
+    }
+
+    if (locationChange) {
+      if (location.length > 0) {
+        const { name, lat, lon } = location[0];
+        inputs.current_location_name = name;
+        inputs.current_location_lat = lat;
+        inputs.current_location_lon = lon;
+      } else {
+        inputs.current_location_name = null;
+        inputs.current_location_lat = null;
+        inputs.current_location_lon = null;
+      }
     }
 
     setFormStatus(FORM_STATUS.loading);
@@ -521,6 +599,16 @@ function NewUser() {
                 </span>
               ) : null}
             </InputContainer>
+
+            <Combobox
+              chosenOptions={location}
+              onInputChange={getLocationsByValue}
+              onChosenOption={setLocationWithGio}
+              onRemoveChosenOption={removeLocation}
+              inputName={"current-location"}
+              displayName={"Current Location"}
+              single
+            />
 
             <button
               disabled={
