@@ -312,7 +312,7 @@ function DashboardEducation() {
         <h1 id="main-heading">Education</h1>
         <section aria-labelledby="current-information-heading">
           <h2 id="current-information-heading">Current Information</h2>
-          <button onClick={setFormInputs}>Edit</button>
+          <button onClick={setFormInputs}>Edit Information</button>
           {user.education.length > 0 ? (
             user.education.map((edu) => (
               <div key={edu.id}>

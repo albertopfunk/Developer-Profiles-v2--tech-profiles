@@ -313,7 +313,7 @@ function DashboardExperience() {
         <section aria-labelledby="current-information-heading">
           <h2 id="current-information-heading">Current Information</h2>
 
-          <button onClick={setFormInputs}>Edit</button>
+          <button onClick={setFormInputs}>Edit Information</button>
 
           {user.experience.length > 0 ? (
             user.experience.map((exp) => (

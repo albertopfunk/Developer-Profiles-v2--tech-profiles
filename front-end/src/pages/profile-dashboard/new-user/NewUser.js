@@ -10,6 +10,7 @@ import { httpClient } from "../../../global/helpers/http-requests";
 import { validateInput } from "../../../global/helpers/validation";
 import { FORM_STATUS } from "../../../global/helpers/variables";
 import Combobox from "../../../components/forms/combobox";
+import { Helmet } from "react-helmet";
 
 let formSuccessWait;
 function NewUser() {
@@ -412,246 +413,262 @@ function NewUser() {
 
   if (formStatus === FORM_STATUS.idle) {
     return (
-      <Section>
-        <h1>Hello New User</h1>
+      <Main id="main-content" tabIndex="-1" aria-labelledby="main-heading">
+        <Helmet>
+          <title>Profile Dashboard Welcome • Tech Profiles</title>
+        </Helmet>
+        <h1 id="main-heading">Welcome {user.first_name || "Newcomer"}!</h1>
+        {/* welcome image */}
         <Link to="/profile-dashboard">Go Home</Link>
-        <button onClick={setFormInputs}>Edit Inputs</button>
-      </Section>
+        <button onClick={setFormInputs}>Edit Quickstart Information</button>
+      </Main>
     );
   }
 
   return (
-    <Section>
-      <h1>Edit Infoo</h1>
-      <div className="tabs">
-        <div role="tablist" aria-label="quick start">
-          <button
-            id="basic-info"
-            role="tab"
-            tabIndex="-1"
-            aria-controls="basic-info-panel"
-            aria-selected={selectedTab === "basic-info"}
-            onClick={() => onTabChange("basic-info")}
-          >
-            Basic Info
-          </button>
-          <button
-            id="billing-info"
-            role="tab"
-            tabIndex="-1"
-            aria-controls="billing-info-panel"
-            aria-selected={selectedTab === "billing-info"}
-            onClick={() => onTabChange("billing-info")}
-          >
-            Billing
-          </button>
-        </div>
-        <div
-          id="basic-info-panel"
-          role="tabpanel"
-          tabIndex="0"
-          aria-labelledby="basic-info"
-          style={{
-            display: selectedTab === "basic-info" ? "block" : "none",
-          }}
-        >
-          <div>
-            <form onSubmit={(e) => submitEdit(e)}>
-            <InputContainer>
-              <label htmlFor="first-name">First Name:</label>
-              <input
-                type="text"
-                autoComplete="given-name"
-                id="first-name"
-                name="first-name"
-                className={`input ${
-                  firstName.inputStatus === FORM_STATUS.error ? "input-err" : ""
-                }`}
-                aria-describedby="first-name-error first-name-success"
-                aria-invalid={firstName.inputStatus === FORM_STATUS.error}
-                value={firstName.inputValue}
-                onChange={(e) => setFirstNameInput(e.target.value)}
-                onBlur={(e) => validateFirstNameInput(e.target.value)}
-              />
-              {firstName.inputStatus === FORM_STATUS.error ? (
-                <span id="first-name-error" className="err-mssg">
-                  First Name can only be alphabelical characters, no numbers
-                </span>
-              ) : null}
-              {firstName.inputStatus === FORM_STATUS.success ? (
-                <span id="first-name-success" className="success-mssg">
-                  First Name is Validated
-                </span>
-              ) : null}
-            </InputContainer>
+    <Main id="main-content" tabIndex="-1" aria-labelledby="main-heading">
+      <Helmet>
+        <title>Dashboard Welcome • Tech Profiles</title>
+      </Helmet>
+      <h1 id="main-heading">Welcome {user.first_name || "Newcomer"}!</h1>
 
-            <ImageUploadForm
-              previewImage={previewImgInput.image}
-              userImage={user.image}
-              setImageInput={setImageInput}
-              removeImageInput={removeImageInput}
-              removeUserImage={removeUserImage}
-            />
+      <section aria-labelledby="edit-information-heading">
+        <h2 id="edit-information-heading">Edit Information</h2>
+        {/* error summary */}
+        <div className="tabs">
 
-            <FieldSet>
-              <legend>Area of Work</legend>
-              <div className="radio-buttons-container">
-                <span className="radio-wrapper">
-                  <input
-                    type="radio"
-                    name="area-of-work"
-                    id="development"
-                    value="Development"
-                    defaultChecked={user.area_of_work === "Development"}
-                    onClick={(e) => setAreaOfWorkInput(e.target.value)}
-                  />
-                  <label htmlFor="development">Development</label>
-                </span>
-                <span className="radio-wrapper">
-                  <input
-                    type="radio"
-                    name="area-of-work"
-                    id="ios"
-                    value="iOS"
-                    defaultChecked={user.area_of_work === "iOS"}
-                    onClick={(e) => setAreaOfWorkInput(e.target.value)}
-                  />
-                  <label htmlFor="ios">iOS</label>
-                </span>
-                <span className="radio-wrapper">
-                  <input
-                    type="radio"
-                    name="area-of-work"
-                    id="android"
-                    value="Android"
-                    defaultChecked={user.area_of_work === "Android"}
-                    onClick={(e) => setAreaOfWorkInput(e.target.value)}
-                  />
-                  <label htmlFor="android">Android</label>
-                </span>
-                <span className="radio-wrapper">
-                  <input
-                    type="radio"
-                    name="area-of-work"
-                    id="design"
-                    value="Design"
-                    defaultChecked={user.area_of_work === "Design"}
-                    onClick={(e) => setAreaOfWorkInput(e.target.value)}
-                  />
-                  <label htmlFor="design">Design</label>
-                </span>
-              </div>
-            </FieldSet>
-
-            <InputContainer>
-              <label htmlFor="title">Title:</label>
-              <input
-                type="text"
-                autoComplete="organization-title"
-                id="title"
-                name="title"
-                className={`input ${
-                  title.inputStatus === FORM_STATUS.error ? "input-err" : ""
-                }`}
-                aria-describedby="title-error title-success"
-                aria-invalid={title.inputStatus === FORM_STATUS.error}
-                value={title.inputValue}
-                onChange={(e) => setTitleInput(e.target.value)}
-                onBlur={(e) => validateTitleInput(e.target.value)}
-              />
-              {title.inputStatus === FORM_STATUS.error ? (
-                <span id="title-error" className="err-mssg">
-                  Title can only be alphabelical characters, no numbers
-                </span>
-              ) : null}
-              {title.inputStatus === FORM_STATUS.success ? (
-                <span id="title-success" className="success-mssg">
-                  Title is Validated
-                </span>
-              ) : null}
-            </InputContainer>
-
-            <InputContainer>
-              <label htmlFor="summary">Profile Summary:</label>
-              <textarea
-                id="summary"
-                name="profile-summary"
-                maxLength="280"
-                cols="8"
-                rows="5"
-                className={`input ${
-                  summary.inputStatus === FORM_STATUS.error ? "input-err" : ""
-                }`}
-                aria-describedby="summary-error summary-success"
-                aria-invalid={summary.inputStatus === FORM_STATUS.error}
-                value={summary.inputValue}
-                onChange={(e) => setSummaryInput(e.target.value)}
-                onBlur={(e) => validateSummaryInput(e.target.value)}
-              />
-              {summary.inputStatus === FORM_STATUS.error ? (
-                <span id="summary-error" className="err-mssg">
-                  Summary can only be alphabelical characters, numbers
-                </span>
-              ) : null}
-              {summary.inputStatus === FORM_STATUS.success ? (
-                <span id="summary-success" className="success-mssg">
-                  Summary is Validated
-                </span>
-              ) : null}
-            </InputContainer>
-
-            <Combobox
-              chosenOptions={location}
-              onInputChange={getLocationsByValue}
-              onChosenOption={setLocationWithGio}
-              onRemoveChosenOption={removeLocation}
-              inputName={"current-location"}
-              displayName={"Current Location"}
-              single
-            />
-
+          <div role="tablist" aria-label="quick start">
             <button
-              disabled={
-                formStatus === FORM_STATUS.loading ||
-                formStatus === FORM_STATUS.success
-              }
-              type="submit"
+              id="basic-info"
+              role="tab"
+              tabIndex="-1"
+              aria-controls="basic-info-panel"
+              aria-selected={selectedTab === "basic-info"}
+              onClick={() => onTabChange("basic-info")}
             >
-              {formStatus === FORM_STATUS.active ? "Submit" : null}
-              {formStatus === FORM_STATUS.loading ? "loading..." : null}
-              {formStatus === FORM_STATUS.success ? "Success!" : null}
-              {formStatus === FORM_STATUS.error ? "Re-Submit" : null}
+              Basic Info
             </button>
             <button
-              disabled={
-                formStatus === FORM_STATUS.loading ||
-                formStatus === FORM_STATUS.success
-              }
-              type="reset"
-              onClick={() => setFormStatus(FORM_STATUS.idle)}
+              id="billing-info"
+              role="tab"
+              tabIndex="-1"
+              aria-controls="billing-info-panel"
+              aria-selected={selectedTab === "billing-info"}
+              onClick={() => onTabChange("billing-info")}
             >
-              Cancel
+              Billing
             </button>
-          </form>
           </div>
+
+          <div
+            id="basic-info-panel"
+            role="tabpanel"
+            tabIndex="0"
+            aria-labelledby="basic-info"
+            style={{
+              display: selectedTab === "basic-info" ? "block" : "none",
+            }}
+          >
+            <form onSubmit={(e) => submitEdit(e)}>
+              <InputContainer>
+                <label htmlFor="first-name">First Name:</label>
+                <input
+                  type="text"
+                  autoComplete="given-name"
+                  id="first-name"
+                  name="first-name"
+                  className={`input ${
+                    firstName.inputStatus === FORM_STATUS.error ? "input-err" : ""
+                  }`}
+                  aria-describedby="first-name-error first-name-success"
+                  aria-invalid={firstName.inputStatus === FORM_STATUS.error}
+                  value={firstName.inputValue}
+                  onChange={(e) => setFirstNameInput(e.target.value)}
+                  onBlur={(e) => validateFirstNameInput(e.target.value)}
+                />
+                {firstName.inputStatus === FORM_STATUS.error ? (
+                  <span id="first-name-error" className="err-mssg">
+                    First Name can only be alphabelical characters, no numbers
+                  </span>
+                ) : null}
+                {firstName.inputStatus === FORM_STATUS.success ? (
+                  <span id="first-name-success" className="success-mssg">
+                    First Name is Validated
+                  </span>
+                ) : null}
+              </InputContainer>
+
+              <ImageUploadForm
+                previewImage={previewImgInput.image}
+                userImage={user.image}
+                setImageInput={setImageInput}
+                removeImageInput={removeImageInput}
+                removeUserImage={removeUserImage}
+              />
+
+              <FieldSet>
+                <legend>Area of Work</legend>
+                <div className="radio-buttons-container">
+                  <span className="radio-wrapper">
+                    <input
+                      type="radio"
+                      name="area-of-work"
+                      id="development"
+                      value="Development"
+                      defaultChecked={user.area_of_work === "Development"}
+                      onClick={(e) => setAreaOfWorkInput(e.target.value)}
+                    />
+                    <label htmlFor="development">Development</label>
+                  </span>
+                  <span className="radio-wrapper">
+                    <input
+                      type="radio"
+                      name="area-of-work"
+                      id="ios"
+                      value="iOS"
+                      defaultChecked={user.area_of_work === "iOS"}
+                      onClick={(e) => setAreaOfWorkInput(e.target.value)}
+                    />
+                    <label htmlFor="ios">iOS</label>
+                  </span>
+                  <span className="radio-wrapper">
+                    <input
+                      type="radio"
+                      name="area-of-work"
+                      id="android"
+                      value="Android"
+                      defaultChecked={user.area_of_work === "Android"}
+                      onClick={(e) => setAreaOfWorkInput(e.target.value)}
+                    />
+                    <label htmlFor="android">Android</label>
+                  </span>
+                  <span className="radio-wrapper">
+                    <input
+                      type="radio"
+                      name="area-of-work"
+                      id="design"
+                      value="Design"
+                      defaultChecked={user.area_of_work === "Design"}
+                      onClick={(e) => setAreaOfWorkInput(e.target.value)}
+                    />
+                    <label htmlFor="design">Design</label>
+                  </span>
+                </div>
+              </FieldSet>
+
+              <InputContainer>
+                <label htmlFor="title">Title:</label>
+                <input
+                  type="text"
+                  autoComplete="organization-title"
+                  id="title"
+                  name="title"
+                  className={`input ${
+                    title.inputStatus === FORM_STATUS.error ? "input-err" : ""
+                  }`}
+                  aria-describedby="title-error title-success"
+                  aria-invalid={title.inputStatus === FORM_STATUS.error}
+                  value={title.inputValue}
+                  onChange={(e) => setTitleInput(e.target.value)}
+                  onBlur={(e) => validateTitleInput(e.target.value)}
+                />
+                {title.inputStatus === FORM_STATUS.error ? (
+                  <span id="title-error" className="err-mssg">
+                    Title can only be alphabelical characters, no numbers
+                  </span>
+                ) : null}
+                {title.inputStatus === FORM_STATUS.success ? (
+                  <span id="title-success" className="success-mssg">
+                    Title is Validated
+                  </span>
+                ) : null}
+              </InputContainer>
+
+              <InputContainer>
+                <label htmlFor="summary">Profile Summary:</label>
+                <textarea
+                  id="summary"
+                  name="profile-summary"
+                  maxLength="280"
+                  cols="8"
+                  rows="5"
+                  className={`input ${
+                    summary.inputStatus === FORM_STATUS.error ? "input-err" : ""
+                  }`}
+                  aria-describedby="summary-error summary-success"
+                  aria-invalid={summary.inputStatus === FORM_STATUS.error}
+                  value={summary.inputValue}
+                  onChange={(e) => setSummaryInput(e.target.value)}
+                  onBlur={(e) => validateSummaryInput(e.target.value)}
+                />
+                {summary.inputStatus === FORM_STATUS.error ? (
+                  <span id="summary-error" className="err-mssg">
+                    Summary can only be alphabelical characters, numbers
+                  </span>
+                ) : null}
+                {summary.inputStatus === FORM_STATUS.success ? (
+                  <span id="summary-success" className="success-mssg">
+                    Summary is Validated
+                  </span>
+                ) : null}
+              </InputContainer>
+
+              <Combobox
+                chosenOptions={location}
+                onInputChange={getLocationsByValue}
+                onChosenOption={setLocationWithGio}
+                onRemoveChosenOption={removeLocation}
+                inputName={"current-location"}
+                displayName={"Current Location"}
+                single
+              />
+
+              <button
+                disabled={
+                  formStatus === FORM_STATUS.loading ||
+                  formStatus === FORM_STATUS.success
+                }
+                type="submit"
+              >
+                {formStatus === FORM_STATUS.active ? "Submit" : null}
+                {formStatus === FORM_STATUS.loading ? "loading..." : null}
+                {formStatus === FORM_STATUS.success ? "Success!" : null}
+                {formStatus === FORM_STATUS.error ? "Re-Submit" : null}
+              </button>
+              <button
+                disabled={
+                  formStatus === FORM_STATUS.loading ||
+                  formStatus === FORM_STATUS.success
+                }
+                type="reset"
+                onClick={() => setFormStatus(FORM_STATUS.idle)}
+              >
+                Cancel
+              </button>
+            </form>
+          </div>
+
+          <div
+            id="billing-info-panel"
+            role="tabpanel"
+            tabIndex="0"
+            aria-labelledby="billing-info"
+            style={{
+              display: selectedTab === "billing-info" ? "block" : "none",
+            }}
+          >
+            {/* renders full page, main, helmet, etc */}
+            <DashboardBilling />
+          </div>
+
         </div>
-        <div
-          id="billing-info-panel"
-          role="tabpanel"
-          tabIndex="0"
-          aria-labelledby="billing-info"
-          style={{
-            display: selectedTab === "billing-info" ? "block" : "none",
-          }}
-        >
-          <DashboardBilling />
-        </div>
-      </div>
-    </Section>
+
+      </section>
+    </Main>
   );
 }
 
-const Section = styled.section`
+const Main = styled.main`
   width: 100%;
   height: 100vh;
   padding-top: 100px;
