@@ -520,7 +520,7 @@ function AboutYou() {
               {user.locations.length > 0 ? (
                 <ul aria-label="interested locations">
                   {user.locations.map((location) => (
-                    <li>{location.name}</li>
+                    <li key={location.id}>{location.name}</li>
                   ))}
                 </ul>
               ) : (
@@ -532,7 +532,7 @@ function AboutYou() {
               {user.topSkills.length > 0 ? (
                 <ul aria-label="top skills">
                   {user.topSkills.map((skill) => (
-                    <li>{skill.name}</li>
+                    <li key={skill.id}>{skill.name}</li>
                   ))}
                 </ul>
               ) : (
@@ -544,7 +544,7 @@ function AboutYou() {
               {user.additionalSkills.length > 0 ? (
                 <ul aria-label="additional skills">
                   {user.additionalSkills.map((skill) => (
-                    <li>{skill.name}</li>
+                    <li key={skill.id}>{skill.name}</li>
                   ))}
                 </ul>
               ) : (

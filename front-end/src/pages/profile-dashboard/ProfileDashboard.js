@@ -207,7 +207,7 @@ function ProfileDashboard() {
           </Switch>
         </ProfileContext.Provider>
 
-        <aside id="profile-card-container" tabIndex="0">
+        <aside id="profile-card-container" tabIndex="-1">
           <UserCard
             dashboard
             previewImg={previewImg.image}

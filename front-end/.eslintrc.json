@@ -11,8 +11,7 @@
   "rules": {
     "react/prop-types": 0,
     "no-console": 0,
-    "jest/lowercase-name": "warn",
-    "jest/no-empty-title": "warn"
+    "jest/lowercase-name": "warn"
   },
   "plugins": ["react", "import", "jsx-a11y", "jest"],
   "parserOptions": {
