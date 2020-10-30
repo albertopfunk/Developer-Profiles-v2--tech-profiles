@@ -1,43 +1,27 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
+import { Helmet } from "react-helmet";
 import styled from "styled-components";
-import { Elements, StripeProvider } from "react-stripe-elements";
-import CheckoutContainer from "../../../components/forms/billing";
 
+import CheckoutContainer from "../../../components/forms/billing";
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
 
 function DashboardBilling() {
   const { user, editProfile } = useContext(ProfileContext);
-  const [stripe, setStripe] = useState(null);
 
-  useEffect(() => {
-    if (window.Stripe) {
-      setStripe(window.Stripe(process.env.REACT_APP_STRIPE));
-    } else {
-      document.querySelector("#stripe-js").addEventListener("load", () => {
-        setStripe(window.Stripe(process.env.REACT_APP_STRIPE));
-      });
-    }
-  }, []);
-
-  console.log("Billing", user);
-  if (stripe === null) {
-    return <h1>Loading...</h1>;
-  }
   return (
-    <StripeProvider stripe={stripe}>
-      <Main>
-        <h1>React Stripe Elements Example</h1>
-        <Elements>
-          <CheckoutContainer
-            stripeId={user.stripe_customer_id}
-            stripeSubId={user.stripe_subscription_name}
-            email={user.email}
-            id={user.id}
-            editProfile={editProfile}
-          />
-        </Elements>
-      </Main>
-    </StripeProvider>
+    <Main id="main-content" tabIndex="-1" aria-labelledby="main-heading">
+      <Helmet>
+        <title>Dashboard Billing • Tech Profiles</title>
+      </Helmet>
+      <h1 id="main-heading">Billing</h1>
+      <CheckoutContainer
+        stripeId={user.stripe_customer_id}
+        stripeSubId={user.stripe_subscription_name}
+        email={user.email}
+        id={user.id}
+        editProfile={editProfile}
+      />
+    </Main>
   );
 }
 

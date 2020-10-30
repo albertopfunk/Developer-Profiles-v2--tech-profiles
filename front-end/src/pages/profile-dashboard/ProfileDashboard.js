@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import { Route, useRouteMatch, Link, Switch } from "react-router-dom";
 import styled from "styled-components";
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
 import { Helmet } from "react-helmet";
 
 import UserCard from "../../components/user-cards/user-card/UserCard";
@@ -24,6 +26,7 @@ function ProfileDashboard() {
   const [user, setUser] = useState(null);
   const [loadingUser, setLoadingUser] = useState(true);
   const [previewImg, setPreviewImg] = useState({ image: "", id: "" });
+  const stripePromise = loadStripe(process.env.REACT_APP_STRIPE);
   let { path, url } = useRouteMatch();
 
   useEffect(() => {
@@ -160,52 +163,54 @@ function ProfileDashboard() {
       </nav>
 
       <div className="content-container">
-        <ProfileContext.Provider
-          value={{
-            user,
-            editProfile,
-            addUserExtras,
-            setPreviewImg,
-          }}
-        >
-          <Switch>
-            <Route exact path={`${path}`}>
-              <ProfileHome />
-            </Route>
+        <Elements stripe={stripePromise}>
+          <ProfileContext.Provider
+            value={{
+              user,
+              editProfile,
+              addUserExtras,
+              setPreviewImg,
+            }}
+          >
+            <Switch>
+              <Route exact path={`${path}`}>
+                <ProfileHome />
+              </Route>
 
-            <Route path={`${path}/new`}>
-              <NewUser />
-            </Route>
+              <Route path={`${path}/new`}>
+                <NewUser />
+              </Route>
 
-            <Route path={`${path}/personal-info`}>
-              <PersonalInfo />
-            </Route>
+              <Route path={`${path}/personal-info`}>
+                <PersonalInfo />
+              </Route>
 
-            <Route path={`${path}/about-you`}>
-              <AboutYou />
-            </Route>
+              <Route path={`${path}/about-you`}>
+                <AboutYou />
+              </Route>
 
-            <Route path={`${path}/Where-to-find-you`}>
-              <WhereToFindYou />
-            </Route>
+              <Route path={`${path}/Where-to-find-you`}>
+                <WhereToFindYou />
+              </Route>
 
-            <Route path={`${path}/projects`}>
-              <DashboardProjects />
-            </Route>
+              <Route path={`${path}/projects`}>
+                <DashboardProjects />
+              </Route>
 
-            <Route path={`${path}/education`}>
-              <DashboardEducation />
-            </Route>
+              <Route path={`${path}/education`}>
+                <DashboardEducation />
+              </Route>
 
-            <Route path={`${path}/experience`}>
-              <DashboardExperience />
-            </Route>
+              <Route path={`${path}/experience`}>
+                <DashboardExperience />
+              </Route>
 
-            <Route path={`${path}/billing`}>
-              <DashboardBilling />
-            </Route>
-          </Switch>
-        </ProfileContext.Provider>
+              <Route path={`${path}/billing`}>
+                <DashboardBilling />
+              </Route>
+            </Switch>
+          </ProfileContext.Provider>
+        </Elements>
 
         <aside id="profile-card-container" tabIndex="-1">
           <UserCard

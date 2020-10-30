@@ -1,44 +1,60 @@
-import React, { Component } from "react";
-import { CardElement, injectStripe } from "react-stripe-elements";
+import React from "react";
+import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 
-class StripeCardInput extends Component {
-  createToken = async () => {
-    let { token } = await this.props.stripe.createToken({
-      name: this.props.email,
+function StripeCardInput(props) {
+  const stripe = useStripe();
+  const elements = useElements();
+
+  async function createToken(e) {
+    e.preventDefault();
+
+    if (!stripe || !elements) {
+      // Stripe.js has not loaded yet. Make sure to disable
+      // form submission until Stripe.js has loaded.
+      return;
+    }
+
+    const { error, paymentMethod } = await stripe.createPaymentMethod({
+      type: "card",
+      name: props.email,
+      card: elements.getElement(CardElement),
     });
 
-    // token is undefined if you click on purchase with no cc info, causing app to crash
-    this.props.subUser(token.id);
-  };
-
-  render() {
-    return (
-      <>
-        <CardElement style={elementStyles} />
-        <button
-          onClick={this.createToken}
-          disabled={this.props.subType ? false : true}
-        >
-          Purchase
-        </button>
-      </>
-    );
+    if (error || !paymentMethod) {
+      console.error(error);
+      return;
+    }
+    props.subUser(paymentMethod.id);
   }
+
+  return (
+    <>
+      <CardElement
+        options={{
+          style: {
+            base: {
+              fontSize: "16px",
+              color: "#424770",
+              "::placeholder": {
+                color: "#aab7c4",
+              },
+            },
+            invalid: {
+              color: "#9e2146",
+            },
+          },
+        }}
+      />
+
+      <button
+        type="submit"
+        onClick={createToken}
+        disabled={!stripe || !this.props.subType}
+      >
+        Purchase
+      </button>
+    </>
+  );
 }
 
-const elementStyles = {
-  base: {
-    fontSize: "20px",
-    color: "#000",
-    letterSpacing: "0.025em",
-    fontFamily: "Source Code Pro, monospace",
-    "::placeholder": {
-      color: "#000099",
-    },
-  },
-  invalid: {
-    color: "#9e2146",
-  },
-};
-
-export default injectStripe(StripeCardInput);
+export default StripeCardInput;
