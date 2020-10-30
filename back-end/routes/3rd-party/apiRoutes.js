@@ -190,8 +190,11 @@ server.post("/subscribe", async (req, res) => {
   stripe.customers.create(
     {
       description: `New customer for ${subType} plan`,
-      source: token,
+      payment_method: token,
       email,
+      invoice_settings: {
+        default_payment_method: token,
+      },
     },
     function (err, customer) {
       if (err) {
