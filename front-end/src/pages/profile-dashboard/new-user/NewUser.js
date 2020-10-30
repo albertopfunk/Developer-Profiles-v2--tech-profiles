@@ -2,8 +2,8 @@ import React, { useState, useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
-import DashboardBilling from "../billing/DashboardBilling";
 import ImageUploadForm from "../../../components/forms/image-upload";
+import CheckoutContainer from "../../../components/forms/billing";
 
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
 import { httpClient } from "../../../global/helpers/http-requests";
@@ -17,7 +17,7 @@ function NewUser() {
   const { user, setPreviewImg, editProfile } = useContext(ProfileContext);
   const [selectedTab, setSelectedTab] = useState("basic-info");
   const [formStatus, setFormStatus] = useState(FORM_STATUS.idle);
-  
+
   const [firstName, setFirstName] = useState({
     inputValue: "",
     inputChange: false,
@@ -45,7 +45,7 @@ function NewUser() {
   });
   const [location, setLocation] = useState([]);
   const [locationChange, setLocationChange] = useState(false);
-  
+
   let errorSummaryRef = React.createRef();
 
   useEffect(() => {
@@ -403,10 +403,8 @@ function NewUser() {
     setFormStatus(FORM_STATUS.loading);
     await editProfile(inputs);
     formSuccessWait = setTimeout(() => {
-
       // route to home page instead
       setFormStatus(FORM_STATUS.idle);
-
     }, 1000);
     setFormStatus(FORM_STATUS.success);
   }
@@ -436,7 +434,6 @@ function NewUser() {
         <h2 id="edit-information-heading">Edit Information</h2>
         {/* error summary */}
         <div className="tabs">
-
           <div role="tablist" aria-label="quick start">
             <button
               id="basic-info"
@@ -478,7 +475,9 @@ function NewUser() {
                   id="first-name"
                   name="first-name"
                   className={`input ${
-                    firstName.inputStatus === FORM_STATUS.error ? "input-err" : ""
+                    firstName.inputStatus === FORM_STATUS.error
+                      ? "input-err"
+                      : ""
                   }`}
                   aria-describedby="first-name-error first-name-success"
                   aria-invalid={firstName.inputStatus === FORM_STATUS.error}
@@ -657,12 +656,15 @@ function NewUser() {
               display: selectedTab === "billing-info" ? "block" : "none",
             }}
           >
-            {/* renders full page, main, helmet, etc */}
-            <DashboardBilling />
+            <CheckoutContainer
+              stripeId={user.stripe_customer_id}
+              stripeSubId={user.stripe_subscription_name}
+              email={user.email}
+              id={user.id}
+              editProfile={editProfile}
+            />
           </div>
-
         </div>
-
       </section>
     </Main>
   );
