@@ -11,7 +11,10 @@ class CustomerForm extends Component {
   monthRef = React.createRef();
 
   toggleYearCheckbox = () => {
-    // object deep properties! if current is null then page will fail
+    if (!this.monthRef.current || !this.yearRef.current) {
+      return;
+    }
+
     if (!(this.monthRef.current.checked || this.yearRef.current.checked)) {
       this.setState({ subType: "" });
       return;
@@ -24,6 +27,10 @@ class CustomerForm extends Component {
   };
 
   toggleMonthCheckbox = () => {
+    if (!this.monthRef.current || !this.yearRef.current) {
+      return;
+    }
+    
     if (!(this.monthRef.current.checked || this.yearRef.current.checked)) {
       this.setState({ subType: "" });
       return;

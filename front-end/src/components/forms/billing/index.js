@@ -58,15 +58,8 @@ class CheckoutContainer extends Component {
   };
 
   render() {
-    console.log(
-      "===CHECKOUT===",
-      this.props.stripeId,
-      this.props.stripeSubId,
-      this.state.userType
-    );
-
     if (!this.state.userType) {
-      return <h1>Loading...</h1>;
+      return <h1>Skeleton Loader...</h1>;
     }
 
     if (this.state.userType === "user") {
@@ -84,8 +77,8 @@ class CheckoutContainer extends Component {
       return (
         <CheckoutSection>
           <SubscriberForm
-            stripeSubId={this.props.stripeSubId}
             editUserProfile={this.editUserProfile}
+            stripeSubId={this.props.stripeSubId}
             setUserType={this.setUserType}
           />
         </CheckoutSection>
@@ -97,8 +90,8 @@ class CheckoutContainer extends Component {
         <CheckoutSection>
           <CustomerForm
             editUserProfile={this.editUserProfile}
-            setUserType={this.setUserType}
             stripeId={this.props.stripeId}
+            setUserType={this.setUserType}
           />
         </CheckoutSection>
       );
@@ -111,6 +104,12 @@ class CheckoutContainer extends Component {
         </CheckoutSection>
       );
     }
+
+    return (
+      <CheckoutSection>
+        <h1>UNKNOWN</h1>
+      </CheckoutSection>
+    );
   }
 }
 

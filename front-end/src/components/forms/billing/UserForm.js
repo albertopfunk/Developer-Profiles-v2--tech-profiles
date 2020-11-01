@@ -1,5 +1,7 @@
 import React, { Component } from "react";
+
 import StripeCardInput from "./StripeCardInput";
+
 import styled from "styled-components";
 import { httpClient } from "../../../global/helpers/http-requests";
 
@@ -93,11 +95,12 @@ class UserForm extends Component {
               />
               Monthly
             </label>
+
+            <StripeCardInput
+              subUser={this.onSubscribe}
+              subType={this.state.subType}
+            />
           </form>
-          <StripeCardInput
-            subUser={this.onSubscribe}
-            subType={this.state.subType}
-          />
         </Article>
       </CheckoutContainer>
     );
