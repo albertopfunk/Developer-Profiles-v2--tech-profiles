@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
-import styled from "styled-components";
 
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
 import useCurrentYear from "../../../global/helpers/hooks/useCurrentYear";
@@ -304,17 +303,15 @@ function DashboardExperience() {
 
   if (formStatus === FORM_STATUS.idle) {
     return (
-      <main id="main-content" tabIndex="-1" aria-labelledby="main-heading">
+      <>
         <Helmet>
           <title>Profile Dashboard Experience • Tech Profiles</title>
         </Helmet>
         <h1 id="main-heading">Experience</h1>
 
-        <section aria-labelledby="current-information-heading">
+        <section id="profile-information" tabIndex="-1" aria-labelledby="current-information-heading">
           <h2 id="current-information-heading">Current Information</h2>
-
           <button onClick={setFormInputs}>Edit Information</button>
-
           {user.experience.length > 0 ? (
             user.experience.map((exp) => (
               <div key={exp.id}>
@@ -331,7 +328,7 @@ function DashboardExperience() {
             <p>No Experience</p>
           )}
         </section>
-      </main>
+      </>
     );
   }
 
@@ -343,14 +340,13 @@ function DashboardExperience() {
   console.log("-- Dash Experience --", user);
 
   return (
-    <Main id="main-content" tabIndex="-1" aria-labelledby="main-heading">
+    <>
       <Helmet>
         <title>Profile Dashboard Experience • Tech Profiles</title>
       </Helmet>
-
       <h1 id="main-heading">Experience</h1>
 
-      <section aria-labelledby="edit-information-heading">
+      <section id="profile-information" tabIndex="-1" aria-labelledby="edit-information-heading">
         <h2 id="edit-information-heading">Edit Information</h2>
 
         {formStatus === FORM_STATUS.error ? (
@@ -494,15 +490,8 @@ function DashboardExperience() {
           </form>
         </div>
       </section>
-    </Main>
+    </>
   );
 }
-
-const Main = styled.main`
-  width: 100%;
-  height: 100vh;
-  padding-top: 100px;
-  background-color: pink;
-`;
 
 export default DashboardExperience;

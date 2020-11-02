@@ -411,26 +411,29 @@ function NewUser() {
 
   if (formStatus === FORM_STATUS.idle) {
     return (
-      <Main id="main-content" tabIndex="-1" aria-labelledby="main-heading">
+      <>
         <Helmet>
-          <title>Profile Dashboard Welcome • Tech Profiles</title>
+          <title>Profile Dashboard Quickstart • Tech Profiles</title>
         </Helmet>
-        <h1 id="main-heading">Welcome {user.first_name || "Newcomer"}!</h1>
-        {/* welcome image */}
-        <Link to="/profile-dashboard">Go Home</Link>
-        <button onClick={setFormInputs}>Edit Quickstart Information</button>
-      </Main>
+        <h1 id="main-heading">Quickstart</h1>
+        <section id="profile-information" tabIndex="-1" aria-labelledby="welcome-heading">
+          <h2 id="welcome-heading">Welcome {user.first_name || "Newcomer"}!</h2>
+          {/* welcome image */}
+          <Link to="/profile-dashboard">Go Home</Link>
+          <button onClick={setFormInputs}>Edit Quickstart Information</button>
+        </section>
+      </>
     );
   }
 
   return (
-    <Main id="main-content" tabIndex="-1" aria-labelledby="main-heading">
+    <>
       <Helmet>
-        <title>Dashboard Welcome • Tech Profiles</title>
+        <title>Profile Dashboard Quickstart • Tech Profiles</title>
       </Helmet>
-      <h1 id="main-heading">Welcome {user.first_name || "Newcomer"}!</h1>
+      <h1 id="main-heading">Quickstart</h1>
 
-      <section aria-labelledby="edit-information-heading">
+      <section id="profile-information" tabIndex="-1" aria-labelledby="edit-information-heading">
         <h2 id="edit-information-heading">Edit Information</h2>
         {/* error summary */}
         <div className="tabs">
@@ -666,16 +669,9 @@ function NewUser() {
           </div>
         </div>
       </section>
-    </Main>
+    </>
   );
 }
-
-const Main = styled.main`
-  width: 100%;
-  height: 100vh;
-  padding-top: 100px;
-  background-color: pink;
-`;
 
 const InputContainer = styled.div`
   display: flex;

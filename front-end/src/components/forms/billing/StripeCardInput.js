@@ -49,7 +49,7 @@ function StripeCardInput(props) {
       <button
         type="submit"
         onClick={createToken}
-        disabled={!stripe || !this.props.subType}
+        disabled={!stripe || !props.subType}
       >
         Purchase
       </button>

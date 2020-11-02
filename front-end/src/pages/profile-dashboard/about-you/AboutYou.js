@@ -499,7 +499,7 @@ function AboutYou() {
 
   if (formStatus === FORM_STATUS.idle) {
     return (
-      <main id="main-content" tabIndex="-1" aria-labelledby="main-heading">
+      <>
         <Helmet>
           <title>Profile Dashboard About You • Tech Profiles</title>
         </Helmet>
@@ -510,7 +510,7 @@ function AboutYou() {
             ariaId="form-idle-announcement"
           />
         ) : null}
-        <section aria-labelledby="current-information-heading">
+        <section id="profile-information" tabIndex="-1" aria-labelledby="current-information-heading">
           <h2 id="current-information-heading">Current Information</h2>
           <button onClick={setFormInputs}>Edit Information</button>
           <ul aria-label="current information">
@@ -553,24 +553,22 @@ function AboutYou() {
             </li>
           </ul>
         </section>
-      </main>
+      </>
     );
   }
 
   return (
-    <Main id="main-content" tabIndex="-1" aria-labelledby="main-heading">
+    <>
       <Helmet>
         <title>Dashboard About You • Tech Profiles</title>
       </Helmet>
       <h1 id="main-heading">About You</h1>
-
       {announceFormStatus && formStatus === FORM_STATUS.active ? (
         <Announcer
           announcement="Form is active, inputs are validated but not required"
           ariaId="active-form-announcer"
         />
       ) : null}
-
       {announceFormStatus && formStatus === FORM_STATUS.success ? (
         <Announcer
           announcement="information updated"
@@ -622,7 +620,7 @@ function AboutYou() {
           : null}
       </div>
 
-      <section aria-labelledby="edit-information-heading">
+      <section id="profile-information" tabIndex="-1" aria-labelledby="edit-information-heading">
         <h2 id="edit-information-heading">Edit Information</h2>
 
         {formStatus === FORM_STATUS.error ? (
@@ -735,16 +733,9 @@ function AboutYou() {
           </button>
         </form>
       </section>
-    </Main>
+    </>
   );
 }
-
-const Main = styled.main`
-  width: 100%;
-  height: 100vh;
-  padding-top: 100px;
-  background-color: pink;
-`;
 
 const InputContainer = styled.div`
   display: flex;

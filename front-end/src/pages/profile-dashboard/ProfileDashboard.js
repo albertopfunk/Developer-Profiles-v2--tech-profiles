@@ -1,3 +1,30 @@
+
+/*
+
+<div>
+  focus container
+  <header>nav</header>
+  <nav>page nav #page nav</nav>
+  <main>
+    h1 dashboard page
+    <section>
+      h2 form section #user information
+      <div>err summary</div>
+      <form></form>
+    </section>
+    <section>
+      h2 user card section #user card
+      <article>
+        h3 user card
+      </article>
+    </section>
+  <main>
+</div>
+
+*/
+
+
+
 import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import { Route, useRouteMatch, Link, Switch } from "react-router-dom";
@@ -162,7 +189,7 @@ function ProfileDashboard() {
         </ul>
       </nav>
 
-      <div className="content-container">
+      <main aria-labelledby="main-heading">
         <Elements stripe={stripePromise}>
           <ProfileContext.Provider
             value={{
@@ -212,7 +239,8 @@ function ProfileDashboard() {
           </ProfileContext.Provider>
         </Elements>
 
-        <aside id="profile-card-container" tabIndex="-1">
+        <section id="profile-card" tabIndex="-1"  aria-labelledby="profile-card-heading">
+          <h2 id="profile-card-heading">Current Profile Card Preview</h2>
           <UserCard
             dashboard
             previewImg={previewImg.image}
@@ -242,8 +270,8 @@ function ProfileDashboard() {
             linkedin={user.linkedin}
             portfolio={user.portfolio}
           />
-        </aside>
-      </div>
+        </section>
+      </main>
     </MainContainer>
   );
 }
@@ -254,10 +282,6 @@ const MainContainer = styled.div`
   background-color: pink;
   display: flex;
   flex-wrap: nowrap;
-  .content-container {
-    display: flex;
-    flex-wrap: wrap;
-  }
 `;
 
 export default ProfileDashboard;

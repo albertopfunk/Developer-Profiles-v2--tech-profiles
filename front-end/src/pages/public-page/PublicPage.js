@@ -1,11 +1,40 @@
+
+
+/*
+
+<div>
+  focus container
+  <header>nav</header>
+  <main>
+    h1 profiles page
+    <section>
+      h2 profile filters #filters
+      aria controls main content?
+      <form>
+        fieldset
+        fieldset
+      </form>
+    </section>
+    <section>
+      h2 profile content #profiles
+      article h3
+      article
+      article
+    </section>
+  <main>
+</div>
+
+*/
+
+
 import React, { Component } from "react";
 import styled from "styled-components";
 import { Helmet } from "react-helmet";
 
 import Filters from "../../components/forms/filters";
 import UserCards from "../../components/user-cards/UserCards";
+
 import { httpClient } from "../../global/helpers/http-requests";
-import Announcer from "../../global/helpers/announcer";
 
 class PublicPage extends Component {
   state = {
@@ -139,43 +168,47 @@ class PublicPage extends Component {
   };
 
   render() {
-    console.log(
-      "===PUBLIC PAGE===",
-      this.state.users.length,
-      "TOTAL",
-      this.state.usersLength
-    );
     return (
-      <MainContainer>
+      <Main aria-labelledby="main-heading">
         <Helmet>
           <title>Profiles • Tech Profiles</title>
         </Helmet>
-        {/* sr-only heading */}
-        <Filters updateUsers={this.updateUsers} />
+        <h1 id="main-heading">Profiles</h1>
+        <div
+          className="sr-only"
+          aria-live="assertive"
+          aria-relevant="additions text"
+        >
+          {`Showing ${this.state.users.length} of ${this.state.usersLength} Profiles`}
+        </div>
+        <Filters
+          updateUsers={this.updateUsers}
+          currentUsers={this.state.users.length}
+          totalUsers={this.state.usersLength}
+        />
         {this.state.initialLoading || this.state.filtersLoading ? (
-          <p>Loading...</p>
+          <section
+            id="profiles-feed"
+            tabIndex="-1"
+            aria-labelledby="profiles-heading"
+          >
+            <h2 id="profiles-heading">Loading Profiles</h2>
+          </section>
         ) : (
-          <>
-            <Announcer
-              announcement={`Showing ${this.state.users.length} of ${this.state.usersLength} Users`}
-              ariaId="users-feed-announcement"
-              ariaLive="polite"
-            />
-            <UserCards
-              loadMoreUsers={this.loadMoreUsers}
-              canLoadMore={this.state.noMoreUsers}
-              isBusy={this.state.usersLoading}
-              users={this.state.users}
-              usersLength={this.state.usersLength}
-            />
-          </>
+          <UserCards
+            loadMoreUsers={this.loadMoreUsers}
+            canLoadMore={this.state.noMoreUsers}
+            isBusy={this.state.usersLoading}
+            users={this.state.users}
+            usersLength={this.state.usersLength}
+          />
         )}
-      </MainContainer>
+      </Main>
     );
   }
 }
 
-const MainContainer = styled.div`
+const Main = styled.main`
   padding-top: 100px;
   background-color: lightblue;
 `;

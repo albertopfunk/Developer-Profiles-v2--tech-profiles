@@ -36,7 +36,6 @@ function UserCard(props) {
   console.log("-- User Card --");
 
   return (
-    // needs a heading
     <UserArticle
       id="profile-card"
       tabIndex={props.dashboard ? "-1" : "0"}
@@ -44,7 +43,9 @@ function UserCard(props) {
       aria-posinset={props.index + 1}
       aria-setsize={props.usersLength}
       aria-expanded={isCardExpanded}
+      aria-labelledby="profile-heading"
     >
+      <h3 id="profile-heading">{`${props.firstName || "user"}'s Profile`}</h3>
       {/* <aside className="favorite">Favorite</aside> */}
 
       <UserSection>

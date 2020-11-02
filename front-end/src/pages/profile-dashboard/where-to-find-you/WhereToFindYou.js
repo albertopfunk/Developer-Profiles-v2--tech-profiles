@@ -447,7 +447,7 @@ function WhereToFindYou() {
 
   if (formStatus === FORM_STATUS.idle) {
     return (
-      <main id="main-content" tabIndex="-1" aria-labelledby="main-heading">
+      <>
         <Helmet>
           <title>Profile Dashboard Where to Find You • Tech Profiles</title>
         </Helmet>
@@ -458,7 +458,7 @@ function WhereToFindYou() {
             ariaId="form-idle-announcement"
           />
         ) : null}
-        <section aria-labelledby="current-information-heading">
+        <section id="profile-information" tabIndex="-1" aria-labelledby="current-information-heading">
           <h2 id="current-information-heading">Current Information</h2>
           <button onClick={setFormInputs}>Edit Information</button>
           <ul aria-label="current information">
@@ -471,12 +471,12 @@ function WhereToFindYou() {
             </li>
           </ul>
         </section>
-      </main>
+      </>
     );
   }
 
   return (
-    <Main id="main-content" tabIndex="-1" aria-labelledby="main-heading">
+    <>
       <Helmet>
         <title>Dashboard Where to Find You • Tech Profiles</title>
       </Helmet>
@@ -510,7 +510,7 @@ function WhereToFindYou() {
           : null}
       </div>
 
-      <FormSection aria-labelledby="edit-information-heading">
+      <FormSection id="profile-information" tabIndex="-1" aria-labelledby="edit-information-heading">
         <h2 id="edit-information-heading">Edit Information</h2>
 
         {formStatus === FORM_STATUS.error ? (
@@ -752,27 +752,9 @@ function WhereToFindYou() {
           </button>
         </form>
       </FormSection>
-    </Main>
+    </>
   );
 }
-
-const Main = styled.main`
-  width: 100%;
-  height: 100vh;
-  padding-top: 100px;
-  background-color: pink;
-
-  .sr-only {
-    position: absolute;
-    clip: rect(0, 0, 0, 0);
-    height: 1px;
-    width: 1px;
-    margin: -1px;
-    padding: 0;
-    border: 0;
-    overflow: hidden;
-  }
-`;
 
 const FormSection = styled.section`
   .hidden {

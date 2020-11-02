@@ -9,7 +9,13 @@ function UserCards(props) {
   }
 
   return (
-    <MainContent id="main-content" tabIndex="-1" role="feed">
+    <FeedSection
+      id="profiles-feed"
+      tabIndex="-1"
+      role="feed"
+      aria-labelledby="profiles-heading"
+    >
+      <h2 id="profiles-heading">Current Profiles</h2>
       {props.usersLength === 0 ? (
         <p>No Users Here! - Reset filters BTN</p>
       ) : (
@@ -55,11 +61,11 @@ function UserCards(props) {
           )}
         </div>
       )}
-    </MainContent>
+    </FeedSection>
   );
 }
 
-const MainContent = styled.main`
+const FeedSection = styled.section`
   border: solid orange;
   padding-left: 300px;
   .back-to-top {

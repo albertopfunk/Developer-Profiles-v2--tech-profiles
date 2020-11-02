@@ -25,43 +25,69 @@ function FocusReset({ location, children }) {
     );
   }
 
-  return (
-    <FocusContainer tabIndex="-1" ref={focusRef}>
-      <ul aria-label="skip links">
-        <li>
-          <a href={`${location.pathname}#main-content`} className="skip-link">
-            <span>Skip to Main Content</span>
-          </a>
-        </li>
+  if (location.pathname.includes("dashboard")) {
+    return (
+      <FocusContainer tabIndex="-1" ref={focusRef}>
+        <ul aria-label="skip links">
+          <li>
+            <a
+              href={`${location.pathname}#page-navigation`}
+              className="skip-link"
+            >
+              <span>Skip to Page Navigation</span>
+            </a>
+          </li>
 
-        {location.pathname === "/" ? (
+          <li>
+            <a href={`${location.pathname}#profile-information`} className="skip-link">
+              <span>Skip to profile Information</span>
+            </a>
+          </li>
+
+          <li>
+            <a
+              href={`${location.pathname}#profile-card`}
+              className="skip-link"
+            >
+              <span>Skip to Profile Card</span>
+            </a>
+          </li>
+
+        </ul>
+        {children}
+      </FocusContainer>
+    );
+  }
+
+  if (location.pathname === "/") {
+    return (
+      <FocusContainer tabIndex="-1" ref={focusRef}>
+        <ul aria-label="skip links">
           <li>
             <a href={`${location.pathname}#filters`} className="skip-link">
               <span>Skip to Filters</span>
             </a>
           </li>
-        ) : null}
+  
+          <li>
+            <a href={`${location.pathname}#profiles-feed`} className="skip-link">
+              <span>Skip to Profiles Feed</span>
+            </a>
+          </li>
+        </ul>
+        {children}
+      </FocusContainer>
+    );
+  }
 
-        {location.pathname.includes("dashboard") ? (
-          <>
-            <li>
-              <a
-                href={`${location.pathname}#page-navigation`}
-                className="skip-link"
-              >
-                <span>Skip to Page Navigation</span>
-              </a>
-            </li>
-            <li>
-              <a
-                href={`${location.pathname}#profile-card-container`}
-                className="skip-link"
-              >
-                <span>Skip to User Card</span>
-              </a>
-            </li>
-          </>
-        ) : null}
+  return (
+    <FocusContainer tabIndex="-1" ref={focusRef}>
+      <ul aria-label="skip links">
+        <li>
+          <a href={`${location.pathname}#main-content`} className="skip-link">
+            <span>Main Content</span>
+          </a>
+        </li>
       </ul>
       {children}
     </FocusContainer>

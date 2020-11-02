@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
-import styled from "styled-components";
 
 import ProjectForm from "../../../components/forms/user-extras/ProjectForm";
 
@@ -267,17 +266,15 @@ function DashboardProjects() {
 
   if (formStatus === FORM_STATUS.idle) {
     return (
-      <main id="main-content" tabIndex="-1" aria-labelledby="main-heading">
+      <>
         <Helmet>
           <title>Profile Dashboard Projects • Tech Profiles</title>
         </Helmet>
         <h1 id="main-heading">Projects</h1>
 
-        <section aria-labelledby="current-information-heading">
+        <section id="profile-information" tabIndex="-1" aria-labelledby="current-information-heading">
           <h2 id="current-information-heading">Current Information</h2>
-
           <button onClick={setFormInputs}>Edit Information</button>
-
           {user.projects.length > 0 ? (
             user.projects.map((proj) => (
               <div key={proj.id}>
@@ -303,7 +300,7 @@ function DashboardProjects() {
             <p>No Projects</p>
           )}
         </section>
-      </main>
+      </>
     );
   }
 
@@ -313,14 +310,13 @@ function DashboardProjects() {
   }
 
   return (
-    <Main id="main-content" tabIndex="-1" aria-labelledby="main-heading">
+    <>
       <Helmet>
         <title>Profile Dashboard Projects • Tech Profiles</title>
       </Helmet>
-
       <h1 id="main-heading">Projects</h1>
 
-      <section aria-labelledby="edit-information-heading">
+      <section id="profile-information" tabIndex="-1" aria-labelledby="edit-information-heading">
         <h2 id="edit-information-heading">Edit Information</h2>
 
         {formStatus === FORM_STATUS.error ? (
@@ -435,15 +431,8 @@ function DashboardProjects() {
           </form>
         </div>
       </section>
-    </Main>
+    </>
   );
 }
-
-const Main = styled.main`
-  width: 100%;
-  height: 100vh;
-  padding-top: 100px;
-  background-color: pink;
-`;
 
 export default DashboardProjects;

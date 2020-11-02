@@ -8,16 +8,18 @@ import SortingFilter from "./SortingFilter";
 
 function Filters(props) {
   return (
-    <Aside id="filters" tabIndex="-1">
+    <Section id="filters" tabIndex="-1" aria-labelledby="filters-heading">
+      <h2 id="filters-heading">Filters</h2>
+      <p>{`Showing ${props.currentUsers} of ${props.totalUsers} Profiles`}</p>
       <SortingFilter updateUsers={props.updateUsers} />
       <AreaOfWorkFilter updateUsers={props.updateUsers} />
       <CurrentLocationFilter updateUsers={props.updateUsers} />
       <RelocateToFilter updateUsers={props.updateUsers} />
-    </Aside>
+    </Section>
   );
 }
 
-const Aside = styled.aside`
+const Section = styled.section`
   border: solid yellow;
   background-color: white;
   height: 100vh;

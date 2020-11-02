@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
-import styled from "styled-components";
 
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
 import useCurrentYear from "../../../global/helpers/hooks/useCurrentYear";
@@ -305,12 +304,13 @@ function DashboardEducation() {
 
   if (formStatus === FORM_STATUS.idle) {
     return (
-      <main id="main-content" tabIndex="-1" aria-labelledby="main-heading">
+      <>
         <Helmet>
           <title>Profile Dashboard Education • Tech Profiles</title>
         </Helmet>
         <h1 id="main-heading">Education</h1>
-        <section aria-labelledby="current-information-heading">
+
+        <section id="profile-information" tabIndex="-1" aria-labelledby="current-information-heading">
           <h2 id="current-information-heading">Current Information</h2>
           <button onClick={setFormInputs}>Edit Information</button>
           {user.education.length > 0 ? (
@@ -329,7 +329,7 @@ function DashboardEducation() {
             <p>No Education</p>
           )}
         </section>
-      </main>
+      </>
     );
   }
 
@@ -341,13 +341,13 @@ function DashboardEducation() {
   console.log("-- Dash Education --");
 
   return (
-    <Main id="main-content" tabIndex="-1" aria-labelledby="main-heading">
+    <>
       <Helmet>
         <title>Profile Dashboard Education • Tech Profiles</title>
       </Helmet>
       <h1 id="main-heading">Education</h1>
 
-      <section aria-labelledby="edit-information-heading">
+      <section id="profile-information" tabIndex="-1" aria-labelledby="edit-information-heading">
         <h2 id="edit-information-heading">Edit Information</h2>
 
         {formStatus === FORM_STATUS.error ? (
@@ -490,15 +490,8 @@ function DashboardEducation() {
           </form>
         </div>
       </section>
-    </Main>
+    </>
   );
 }
-
-const Main = styled.main`
-  width: 100%;
-  height: 100vh;
-  padding-top: 100px;
-  background-color: pink;
-`;
 
 export default DashboardEducation;

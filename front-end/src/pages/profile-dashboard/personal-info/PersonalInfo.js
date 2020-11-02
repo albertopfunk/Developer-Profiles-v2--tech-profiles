@@ -340,7 +340,7 @@ function PersonalInfo() {
 
   if (formStatus === FORM_STATUS.idle) {
     return (
-      <main id="main-content" tabIndex="-1" aria-labelledby="main-heading">
+      <>
         <Helmet>
           <title>Profile Dashboard Personal Info • Tech Profiles</title>
         </Helmet>
@@ -351,7 +351,7 @@ function PersonalInfo() {
             ariaId="form-idle-announcement"
           />
         ) : null}
-        <section aria-labelledby="current-information-heading">
+        <section id="profile-information" tabIndex="-1" aria-labelledby="current-information-heading">
           <h2 id="current-information-heading">Current Information</h2>
           <button onClick={setFormInputs}>Edit Information</button>
           <ul aria-label="current information">
@@ -371,12 +371,12 @@ function PersonalInfo() {
             <li>Title: {user.desired_title || "None Set"}</li>
           </ul>
         </section>
-      </main>
+      </>
     );
   }
 
   return (
-    <main id="main-content" tabIndex="-1" aria-labelledby="main-heading">
+    <>
       <Helmet>
         <title>Dashboard Personal Info • Tech Profiles</title>
       </Helmet>
@@ -394,7 +394,7 @@ function PersonalInfo() {
         />
       ) : null}
 
-      <FormSection aria-labelledby="edit-information-heading">
+      <FormSection id="profile-information" tabIndex="-1" aria-labelledby="edit-information-heading">
         <h2 id="edit-information-heading">Edit Information</h2>
 
         {formStatus === FORM_STATUS.error ? (
@@ -605,7 +605,7 @@ function PersonalInfo() {
           </button>
         </form>
       </FormSection>
-    </main>
+    </>
   );
 }
 
