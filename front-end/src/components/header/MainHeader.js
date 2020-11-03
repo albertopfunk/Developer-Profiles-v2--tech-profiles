@@ -79,10 +79,10 @@ function MainHeader({ isValidated, signOut, signIn, location }) {
       </div>
 
       <Nav aria-label="site">
-        <Link to="/" aria-hidden="true" tabIndex="-1">
+        <Link to="/">
           <img
             src="https://res.cloudinary.com/dy5hgr3ht/image/upload/c_scale,h_65/v1594347155/tech-pros-v1-main/tech-profiles-logo.png"
-            alt=""
+            alt="website logo link to profiles page"
           />
         </Link>
 
@@ -91,32 +91,34 @@ function MainHeader({ isValidated, signOut, signIn, location }) {
             {isMenuOpen ? (
               <button
                 id="menu-button"
+                type="button"
+                aria-label="close sub menu"
                 aria-haspopup="true"
-                aria-controls="nav-group"
+                aria-controls="sub-menu-group"
                 onClick={closeMenu}
                 onBlur={closeMenuBlur}
-              >
+                >
                 <span aria-hidden="true">
                   <MenuClose />
                 </span>
-                <span className="sr-only">Close</span>
               </button>
             ) : (
               <button
                 id="menu-button"
+                type="button"
+                aria-label="open sub menu"
                 aria-haspopup="true"
-                aria-controls="nav-group"
+                aria-controls="sub-menu-group"
                 onClick={openMenu}
               >
                 <span aria-hidden="true">
                   <BurgerMenu />
                 </span>
-                <span className="sr-only">Open</span>
               </button>
             )}
 
             <ul
-              id="nav-group"
+              id="sub-menu-group"
               aria-label="sub menu"
               className={`${isMenuOpen ? "_" : "hidden"}`}
             >
@@ -199,7 +201,7 @@ const Nav = styled.nav`
     padding: 0.4em;
   }
 
-  #nav-group {
+  #sub-menu-group {
     list-style: none;
     background-color: white;
     padding: 0.7em;
