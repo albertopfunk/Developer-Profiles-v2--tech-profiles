@@ -36,15 +36,7 @@ function UserCard(props) {
   console.log("-- User Card --");
 
   return (
-    <UserArticle
-      id="profile-card"
-      tabIndex={props.dashboard ? "-1" : "0"}
-      aria-label="profileCard"
-      aria-posinset={props.index + 1}
-      aria-setsize={props.usersLength}
-      aria-expanded={isCardExpanded}
-      aria-labelledby="profile-heading"
-    >
+    <>
       <h3 id="profile-heading">{`${props.firstName || "user"}'s Profile`}</h3>
       {/* <aside className="favorite">Favorite</aside> */}
 
@@ -82,6 +74,19 @@ function UserCard(props) {
           portfolio={props.portfolio}
         />
       </UserSection>
+      
+
+      {/* need to move logic of loading extras up as well */}
+      {/* UserExtras should only render UI */}
+      <section>
+        {!isCardExpanded ? (
+          <button disabled={loadingExtras} onClick={expandUserCard}>
+            Expand
+          </button>
+        ) : (
+          <button onClick={closeUserCard}>Close</button>
+        )}
+      </section>
 
       <UserExtras
         dashboard={props.dashboard}
@@ -89,7 +94,10 @@ function UserCard(props) {
         extras={props.extras}
         setAriaExpanded={setIsCardExpanded}
       />
-    </UserArticle>
+
+
+
+    </>
   );
 }
 

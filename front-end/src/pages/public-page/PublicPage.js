@@ -200,7 +200,8 @@ class PublicPage extends Component {
             canLoadMore={this.state.noMoreUsers}
             isBusy={this.state.usersLoading}
             users={this.state.users}
-            usersLength={this.state.usersLength}
+            currentUsers={this.state.users.length}
+            totalUsers={this.state.usersLength}
           />
         )}
       </Main>
