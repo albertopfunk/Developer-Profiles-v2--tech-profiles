@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
 import UserImage from "./UserImage";
@@ -7,7 +7,8 @@ import UserTitle from "./UserTitle";
 import UserSkills from "./UserSkills";
 import UserIcons from "./UserIcons";
 import UserExtras from "../user-extras/UserExtras";
-import { useState } from "react";
+
+import { httpClient } from "../../../global/helpers/http-requests";
 
 // resume link?
 // codesandbox link?
@@ -31,9 +32,73 @@ Control + Home: Move focus to the first focusable element before the feed.
 */
 
 function UserCard(props) {
+  const [userExtras, setUserExtras] = useState({});
+  const [loadingExtras, setLoadingExtras] = useState(false);
   const [isCardExpanded, setIsCardExpanded] = useState(false);
+  const [noExtras, setNoExtras] = useState(false);
+  const [hasRequestedExtras, setHasRequestedExtras] = useState(false);
+  
+  useEffect(() => {
+    if (props.userExtras) {
+      setIsCardExpanded(false);
+      setHasRequestedExtras(true);
+      setUserExtras(props.userExtras);
 
-  console.log("-- User Card --");
+      if (
+        props.userExtras.locations.length === 0 &&
+        props.userExtras.topSkills.length === 0 &&
+        props.userExtras.additionalSkills.length === 0 &&
+        props.userExtras.education.length === 0 &&
+        props.userExtras.experience.length === 0 &&
+        props.userExtras.projects.length === 0
+      ) {
+        setNoExtras(true);
+      } else {
+        setNoExtras(false);
+      }
+    }
+  }, [props.userExtras]);
+  
+  async function expandUserCard() {
+    if (hasRequestedExtras) {
+      setIsCardExpanded(true);
+      return;
+    }
+
+    setLoadingExtras(true);
+    const [res, err] = await httpClient("GET", `/users/get-extras/${props.userId}`);
+
+    if (err) {
+      console.error(`${res.mssg} => ${res.err}`);
+      return;
+    }
+
+    if (
+      res.data.locations.length === 0 &&
+      res.data.topSkills.length === 0 &&
+      res.data.additionalSkills.length === 0 &&
+      res.data.education.length === 0 &&
+      res.data.experience.length === 0 &&
+      res.data.projects.length === 0
+    ) {
+      setUserExtras({});
+      setNoExtras(true);
+      setHasRequestedExtras(true);
+      setIsCardExpanded(true);
+      setLoadingExtras(false);
+      return;
+    }
+    
+    setUserExtras(res.data);
+    setNoExtras(false);
+    setHasRequestedExtras(true);
+    setIsCardExpanded(true);
+    setLoadingExtras(false);
+  }
+
+  function closeUserCard() {
+    setIsCardExpanded(false);
+  }
 
   return (
     <>
@@ -43,13 +108,12 @@ function UserCard(props) {
       <UserSection>
         <div>
           <div>
-            <strong>{props.id}</strong>
+            <strong>{props.userId}</strong>
 
-            {props.dashboard ? (
-              <UserImage previewImg={props.previewImg} image={props.image} />
-            ) : (
-              <UserImage image={props.image} />
-            )}
+            <UserImage
+              previewImg={props.previewImg}
+              image={props.image}
+            />
 
             <UserInfo
               firstName={props.firstName}
@@ -75,9 +139,6 @@ function UserCard(props) {
         />
       </UserSection>
       
-
-      {/* need to move logic of loading extras up as well */}
-      {/* UserExtras should only render UI */}
       <section>
         {!isCardExpanded ? (
           <button disabled={loadingExtras} onClick={expandUserCard}>
@@ -87,25 +148,16 @@ function UserCard(props) {
           <button onClick={closeUserCard}>Close</button>
         )}
       </section>
-
-      <UserExtras
-        dashboard={props.dashboard}
-        userId={props.id}
-        extras={props.extras}
-        setAriaExpanded={setIsCardExpanded}
-      />
-
-
-
+      
+      {isCardExpanded ?
+        <UserExtras
+          userExtras={userExtras}
+          noExtras={noExtras}
+        /> : null
+      }
     </>
   );
 }
-
-const UserArticle = styled.article`
-  margin: 40px;
-  border: solid blue;
-  max-width: 1000px;
-`;
 
 const UserSection = styled.section`
   border: solid green;

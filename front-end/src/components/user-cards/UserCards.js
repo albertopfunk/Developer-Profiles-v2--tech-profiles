@@ -46,8 +46,7 @@ class UserCards extends React.Component {
                   aria-labelledby="profile-heading"
                 >
                   <UserCard
-                    index={i}
-                    id={user.id}
+                    userId={user.id}
                     areaOfWork={user.area_of_work}
                     email={user.public_email}
                     image={user.image}

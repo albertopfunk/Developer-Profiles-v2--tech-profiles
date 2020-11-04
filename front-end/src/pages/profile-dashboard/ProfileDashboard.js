@@ -242,9 +242,8 @@ function ProfileDashboard() {
         <section id="profile-card" tabIndex="-1"  aria-labelledby="profile-card-heading">
           <h2 id="profile-card-heading">Current Profile Card Preview</h2>
           <UserCard
-            dashboard
             previewImg={previewImg.image}
-            extras={{
+            userExtras={{
               locations: user.locations,
               topSkills: user.topSkills,
               additionalSkills: user.additionalSkills,
@@ -252,9 +251,7 @@ function ProfileDashboard() {
               experience: user.experience,
               projects: user.projects,
             }}
-            usersLength={1}
-            index={1}
-            id={user.id}
+            userId={user.id}
             areaOfWork={user.area_of_work}
             email={user.public_email}
             image={user.image}
