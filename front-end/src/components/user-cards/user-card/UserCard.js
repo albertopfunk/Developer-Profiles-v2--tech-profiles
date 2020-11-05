@@ -31,13 +31,13 @@ Control + End: Move focus to the first focusable element after the feed.
 Control + Home: Move focus to the first focusable element before the feed.
 */
 
-function UserCard(props) {
+const UserCard = React.forwardRef((props, articleRef) => {
   const [userExtras, setUserExtras] = useState({});
   const [loadingExtras, setLoadingExtras] = useState(false);
   const [isCardExpanded, setIsCardExpanded] = useState(false);
   const [noExtras, setNoExtras] = useState(false);
   const [hasRequestedExtras, setHasRequestedExtras] = useState(false);
-  
+
   useEffect(() => {
     if (props.userExtras) {
       setIsCardExpanded(false);
@@ -58,7 +58,7 @@ function UserCard(props) {
       }
     }
   }, [props.userExtras]);
-  
+
   async function expandUserCard() {
     if (hasRequestedExtras) {
       setIsCardExpanded(true);
@@ -66,7 +66,10 @@ function UserCard(props) {
     }
 
     setLoadingExtras(true);
-    const [res, err] = await httpClient("GET", `/users/get-extras/${props.userId}`);
+    const [res, err] = await httpClient(
+      "GET",
+      `/users/get-extras/${props.userId}`
+    );
 
     if (err) {
       console.error(`${res.mssg} => ${res.err}`);
@@ -88,7 +91,7 @@ function UserCard(props) {
       setLoadingExtras(false);
       return;
     }
-    
+
     setUserExtras(res.data);
     setNoExtras(false);
     setHasRequestedExtras(true);
@@ -101,7 +104,14 @@ function UserCard(props) {
   }
 
   return (
-    <>
+    <article
+      ref={articleRef}
+      id="profile-card"
+      tabIndex="-1"
+      aria-posinset={props.index}
+      aria-setsize={props.totalUsers}
+      aria-labelledby="profile-heading"
+    >
       <h3 id="profile-heading">{`${props.firstName || "user"}'s Profile`}</h3>
       {/* <aside className="favorite">Favorite</aside> */}
 
@@ -110,10 +120,7 @@ function UserCard(props) {
           <div>
             <strong>{props.userId}</strong>
 
-            <UserImage
-              previewImg={props.previewImg}
-              image={props.image}
-            />
+            <UserImage previewImg={props.previewImg} image={props.image} />
 
             <UserInfo
               firstName={props.firstName}
@@ -138,7 +145,7 @@ function UserCard(props) {
           portfolio={props.portfolio}
         />
       </UserSection>
-      
+
       <section>
         {!isCardExpanded ? (
           <button disabled={loadingExtras} onClick={expandUserCard}>
@@ -148,16 +155,13 @@ function UserCard(props) {
           <button onClick={closeUserCard}>Close</button>
         )}
       </section>
-      
-      {isCardExpanded ?
-        <UserExtras
-          userExtras={userExtras}
-          noExtras={noExtras}
-        /> : null
-      }
-    </>
+
+      {isCardExpanded ? (
+        <UserExtras userExtras={userExtras} noExtras={noExtras} />
+      ) : null}
+    </article>
   );
-}
+});
 
 const UserSection = styled.section`
   border: solid green;

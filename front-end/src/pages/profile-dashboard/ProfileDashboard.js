@@ -252,6 +252,8 @@ function ProfileDashboard() {
                 experience: user.experience,
                 projects: user.projects,
               }}
+              index={1}
+              totalUsers={1}
               userId={user.id}
               areaOfWork={user.area_of_work}
               email={user.public_email}

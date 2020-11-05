@@ -14,7 +14,7 @@ class UserCards extends React.Component {
 
   backToTop = () => {
     window.scrollTo(0, 0);
-  }
+  };
   // moving user card element to here
   // since I will be needing it for refs and keyboard control
   render() {
@@ -33,37 +33,29 @@ class UserCards extends React.Component {
           <>
             {this.props.users.map((user, i) => {
               return (
-                <article
+                <UserCard
                   ref={(ref) => {
                     this.setOptionRefs(ref, i);
                   }}
                   key={user.id}
-                  id="profile-card"
-                  // tabIndex="0"
-                  aria-posinset={i + 1}
-                  aria-setsize={this.props.totalUsers}
-                  // aria-expanded={isCardExpanded}
-                  aria-labelledby="profile-heading"
-                >
-                  <UserCard
-                    userId={user.id}
-                    areaOfWork={user.area_of_work}
-                    email={user.public_email}
-                    image={user.image}
-                    firstName={user.first_name}
-                    lastName={user.last_name}
-                    currentLocation={user.current_location_name}
-                    summary={user.summary}
-                    title={user.desired_title}
-                    topSkills={user.top_skills_prev}
-                    additionalSkills={user.additional_skills_prev}
-                    github={user.github}
-                    twitter={user.twitter}
-                    linkedin={user.linkedin}
-                    portfolio={user.portfolio}
-                    />
-                  </article>
-
+                  index={i + 1}
+                  totalUsers={this.props.totalUsers}
+                  userId={user.id}
+                  areaOfWork={user.area_of_work}
+                  email={user.public_email}
+                  image={user.image}
+                  firstName={user.first_name}
+                  lastName={user.last_name}
+                  currentLocation={user.current_location_name}
+                  summary={user.summary}
+                  title={user.desired_title}
+                  topSkills={user.top_skills_prev}
+                  additionalSkills={user.additional_skills_prev}
+                  github={user.github}
+                  twitter={user.twitter}
+                  linkedin={user.linkedin}
+                  portfolio={user.portfolio}
+                />
               );
             })}
           </>
@@ -74,17 +66,15 @@ class UserCards extends React.Component {
               type="button"
               onClick={this.props.loadMoreUsers}
               disabled={this.props.isBusy}
-              >
-                {this.props.isBusy ?
-                  "Load More Profiles"
-                  :
-                  "Loading"
-                }
-              </button>
+            >
+              {this.props.isBusy ? "Load More Profiles" : "Loading"}
+            </button>
           ) : (
             <div>
               <p>No more profiles to load</p>
-              <button type="button" onClick={this.backToTop}>Back to Top</button>
+              <button type="button" onClick={this.backToTop}>
+                Back to Top
+              </button>
             </div>
           )}
         </div>
