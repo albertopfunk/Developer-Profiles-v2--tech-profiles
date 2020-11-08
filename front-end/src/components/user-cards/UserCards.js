@@ -15,6 +15,7 @@ function UserCards(props) {
   }, [props.shouldFocusFeedButton])
 
   function backToTop() {
+    window.scrollTo(0, 0);
     feedSectionRef.current.focus()
   };
 
