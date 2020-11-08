@@ -1,32 +1,3 @@
-
-
-/*
-
-<div>
-  focus container
-  <header>nav</header>
-  <main>
-    h1 profiles page
-    <section>
-      h2 profile filters #filters
-      aria controls main content?
-      <form>
-        fieldset
-        fieldset
-      </form>
-    </section>
-    <section>
-      h2 profile content #profiles
-      article h3
-      article
-      article
-    </section>
-  <main>
-</div>
-
-*/
-
-
 import React, { Component } from "react";
 import styled from "styled-components";
 import { Helmet } from "react-helmet";
@@ -44,6 +15,7 @@ class PublicPage extends Component {
     initialLoading: true,
     usersLoading: false,
     filtersLoading: false,
+    shouldFocusFeedButton: false,
     usersPage: 1,
     isWebDevChecked: false,
     isUIUXChecked: false,
@@ -70,6 +42,7 @@ class PublicPage extends Component {
       users: res.data.users,
       usersLength: res.data.len,
       initialLoading: false,
+      noMoreUsers: res.data.users.length <= 25 ? true : false
     });
   }
 
@@ -118,17 +91,9 @@ class PublicPage extends Component {
       users: res.data.users,
       usersLength: res.data.len,
       filtersLoading: false,
+      shouldFocusFeedButton: false,
+      noMoreUsers: res.data.users.length <= 25 ? true : false
     });
-
-    if (res.data.users.length < this.state.usersLength) {
-      this.setState({
-        noMoreUsers: false,
-      });
-    } else {
-      this.setState({
-        noMoreUsers: true,
-      });
-    }
 
     window.scrollTo(0, 0);
   };
@@ -155,10 +120,12 @@ class PublicPage extends Component {
     if (this.state.users.length + res.data.length < this.state.usersLength) {
       this.setState({
         noMoreUsers: false,
+        shouldFocusFeedButton: false
       });
     } else {
       this.setState({
         noMoreUsers: true,
+        shouldFocusFeedButton: true
       });
     }
   };
@@ -197,7 +164,8 @@ class PublicPage extends Component {
         ) : (
           <UserCards
             loadMoreUsers={this.loadMoreUsers}
-            canLoadMore={this.state.noMoreUsers}
+            noMoreUsers={this.state.noMoreUsers}
+            shouldFocusFeedButton={this.state.shouldFocusFeedButton}
             isBusy={this.state.usersLoading}
             users={this.state.users}
             currentUsers={this.state.users.length}
