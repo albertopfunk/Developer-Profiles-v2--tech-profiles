@@ -9,10 +9,8 @@ function UserCards(props) {
   const feedButton = useRef(null)
 
   useEffect(() => {
-    if (props.shouldFocusFeedButton) {
-      feedButton.current.focus()
-    }
-  }, [props.shouldFocusFeedButton])
+    profileCardRefs.current[props.focusOnNextCard].current.focus()
+  }, [props.focusOnNextCard])
 
   function backToTop() {
     window.scrollTo(0, 0);
@@ -45,10 +43,6 @@ function UserCards(props) {
       }
       profileCardRefs.current[index + 1].current.focus()
     }
-
-    // if index === 0
-    // if index === props.currentUsers
-    console.log("action", action, index)
   }
 
   return (
@@ -105,6 +99,13 @@ function UserCards(props) {
                 </button>
               </div>
             ) : (
+              /*
+                Alternatively, authors MAY include an article at either or 
+                both ends of the loaded set of articles that includes an element, 
+                such as a button, that lets the user request more articles to be loaded
+
+                when user loads more cards, focus should go back to newest loaded card
+              */
               <button
                 type="button"
                 ref={feedButton}

@@ -15,7 +15,7 @@ class PublicPage extends Component {
     initialLoading: true,
     usersLoading: false,
     filtersLoading: false,
-    shouldFocusFeedButton: false,
+    focusOnNextCard: 0,
     usersPage: 1,
     isWebDevChecked: false,
     isUIUXChecked: false,
@@ -91,7 +91,6 @@ class PublicPage extends Component {
       users: res.data.users,
       usersLength: res.data.len,
       filtersLoading: false,
-      shouldFocusFeedButton: false,
       noMoreUsers: res.data.users.length <= 25 ? true : false
     });
 
@@ -115,17 +114,16 @@ class PublicPage extends Component {
       users: [...this.state.users, ...res.data],
       usersPage: this.state.usersPage + 1,
       usersLoading: false,
+      focusOnNextCard: this.state.users.length + 1
     });
 
-    if (this.state.users.length + res.data.length < this.state.usersLength) {
+    if (this.state.users.length + res.data.length <= this.state.usersLength) {
       this.setState({
         noMoreUsers: false,
-        shouldFocusFeedButton: false
       });
     } else {
       this.setState({
         noMoreUsers: true,
-        shouldFocusFeedButton: true
       });
     }
   };
@@ -165,7 +163,7 @@ class PublicPage extends Component {
           <UserCards
             loadMoreUsers={this.loadMoreUsers}
             noMoreUsers={this.state.noMoreUsers}
-            shouldFocusFeedButton={this.state.shouldFocusFeedButton}
+            focusOnNextCard={this.state.focusOnNextCard}
             isBusy={this.state.usersLoading}
             users={this.state.users}
             currentUsers={this.state.users.length}
