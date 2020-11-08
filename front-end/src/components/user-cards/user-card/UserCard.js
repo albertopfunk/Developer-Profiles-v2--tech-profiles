@@ -103,16 +103,50 @@ const UserCard = React.forwardRef((props, articleRef) => {
     setIsCardExpanded(false);
   }
 
+  function sendCardAction(e) {
+    if (!props.userCardActions) {
+      return
+    }
+
+    // ctrl+home
+    if (e.ctrlKey && e.keyCode === 36) {
+      e.preventDefault()
+      props.userCardActions("start", props.index)
+    }
+    
+    // ctrl+end
+    if (e.ctrlKey && e.keyCode === 35) {
+      e.preventDefault()
+      props.userCardActions("end", props.index)
+    }
+    
+    // page up
+    if (e.keyCode === 33) {
+      e.preventDefault()
+      props.userCardActions("previous", props.index)
+    }
+    
+    // page down
+    if (e.keyCode === 34) {
+      e.preventDefault()
+      props.userCardActions("next", props.index)
+    }
+  }
+
   return (
+    // articles in feed are interactive
+    // eslint-disable-next-line
     <article
-      ref={articleRef}
-      id="profile-card"
-      tabIndex="-1"
-      aria-posinset={props.index}
-      aria-setsize={props.totalUsers}
-      aria-labelledby="profile-heading"
+    ref={articleRef}
+    id={`profile-${props.userId}-card`}
+    tabIndex="0" // eslint-disable-line
+    aria-posinset={props.index + 1}
+    aria-setsize={props.totalUsers}
+    aria-labelledby={`profile-${props.userId}-heading`}
+    aria-describedby={`profile-${props.userId}-summary`}
+    onKeyDown={e => sendCardAction(e)}
     >
-      <h3 id="profile-heading">{`${props.firstName || "user"}'s Profile`}</h3>
+      <h3 id={`profile-${props.userId}-heading`}>{`${props.firstName || "user"}'s Profile`}</h3>
       {/* <aside className="favorite">Favorite</aside> */}
 
       <UserSection>
@@ -123,6 +157,7 @@ const UserCard = React.forwardRef((props, articleRef) => {
             <UserImage previewImg={props.previewImg} image={props.image} />
 
             <UserInfo
+              userId={props.userId}
               firstName={props.firstName}
               lastName={props.lastName}
               currentLocation={props.currentLocation}
@@ -164,7 +199,6 @@ const UserCard = React.forwardRef((props, articleRef) => {
 });
 
 const UserSection = styled.section`
-  border: solid green;
   display: flex;
   > div {
     > div {

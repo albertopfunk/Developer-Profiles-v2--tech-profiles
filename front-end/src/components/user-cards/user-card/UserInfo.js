@@ -24,7 +24,7 @@ function UserInfo(props) {
           <p>No Location Listed</p>
         )}
       </section>
-      <section className="summary">
+      <section id={`profile-${props.userId}-summary`} className="summary">
         {props.summary ? <p>{props.summary}</p> : <p>No Summary Listed</p>}
       </section>
     </section>
