@@ -1,45 +1,76 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
 
 import UserCard from "./user-card/UserCard";
 
-class UserCards extends React.Component {
-  optionRefs = [];
+function UserCards(props) {
+  const feedSectionRef = useRef(null)
+  const profileCardRefs = useRef(props.users.map(() => React.createRef()));
+  const feedButton = useRef(null)
 
-  setOptionRefs = (element, index) => {
-    if (element !== null) {
-      this.optionRefs[index] = element;
+  useEffect(() => {
+    if (props.shouldFocusFeedButton) {
+      feedButton.current.focus()
     }
+  }, [props.shouldFocusFeedButton])
+
+  function backToTop() {
+    feedSectionRef.current.focus()
   };
 
-  backToTop = () => {
-    window.scrollTo(0, 0);
-  };
-  // moving user card element to here
-  // since I will be needing it for refs and keyboard control
-  render() {
-    return (
-      <FeedSection
-        id="profiles-feed"
-        tabIndex="-1"
-        role="feed"
-        aria-labelledby="profiles-heading"
-        aria-busy={this.props.isBusy}
-      >
-        <h2 id="profiles-heading">Current Profiles</h2>
-        {this.propstotalUsers === 0 ? (
-          <p>No Users Here! - Reset filters BTN</p>
-        ) : (
-          <>
-            {this.props.users.map((user, i) => {
+  function userCardActions(action, index) {
+    
+    if (action === "start") {
+      feedSectionRef.current.focus()
+    }
+
+    if (action === "end") {
+      feedButton.current.focus()
+    }
+
+    if (action === "previous") {
+      if (index === 0) {
+        profileCardRefs.current[props.currentUsers - 1].current.focus()
+        return
+      }
+      profileCardRefs.current[index - 1].current.focus()
+    }
+
+    if (action === "next") {
+      console.log(index, props.currentUsers)
+      if (index === props.currentUsers - 1) {
+        profileCardRefs.current[0].current.focus()
+        return
+      }
+      profileCardRefs.current[index + 1].current.focus()
+    }
+
+    // if index === 0
+    // if index === props.currentUsers
+    console.log("action", action, index)
+  }
+
+  return (
+    <FeedSection
+      ref={feedSectionRef}
+      id="profiles-feed"
+      tabIndex="-1"
+      aria-labelledby="profiles-heading"
+    >
+      <h2 id="profiles-heading">Current Profiles</h2>
+      {props.totalUsers === 0 ? (
+        <p>No Users Here! - Reset filters BTN</p>
+      ) : (
+        <>
+          <div role="feed" aria-busy={props.isBusy} aria-label="profiles-feed">
+            {props.users.map((user, i) => {
               return (
                 <UserCard
-                  ref={(ref) => {
-                    this.setOptionRefs(ref, i);
-                  }}
+                  ref={profileCardRefs.current[i]}
                   key={user.id}
-                  index={i + 1}
-                  totalUsers={this.props.totalUsers}
+                  userCardActions={userCardActions}
+                  index={i}
+                  totalUsers={props.totalUsers}
                   userId={user.id}
                   areaOfWork={user.area_of_work}
                   email={user.public_email}
@@ -58,33 +89,38 @@ class UserCards extends React.Component {
                 />
               );
             })}
-          </>
-        )}
-        <div>
-          {!this.props.canLoadMore ? (
-            <button
-              type="button"
-              onClick={this.props.loadMoreUsers}
-              disabled={this.props.isBusy}
-            >
-              {this.props.isBusy ? "Load More Profiles" : "Loading"}
-            </button>
-          ) : (
-            <div>
-              <p>No more profiles to load</p>
-              <button type="button" onClick={this.backToTop}>
-                Back to Top
+          </div>
+          <div>
+            {props.noMoreUsers ? (
+              <div>
+                <p>No more profiles to load</p>
+                <button
+                  type="button"
+                  ref={feedButton}
+                  aria-label="no more profiles to load, back to top"
+                  onClick={backToTop}
+                >
+                  Back to Top
+                </button>
+              </div>
+            ) : (
+              <button
+                type="button"
+                ref={feedButton}
+                disabled={props.isBusy}
+                onClick={props.loadMoreUsers}
+              >
+                {props.isBusy ? "Loading" : "Load More Profiles"}
               </button>
-            </div>
-          )}
-        </div>
-      </FeedSection>
-    );
-  }
+            )}
+          </div>
+        </>
+      )}
+    </FeedSection>
+  );
 }
 
-const FeedSection = styled.section`
-  border: solid orange;
+const FeedSection = styled.div`
   padding-left: 300px;
   .back-to-top {
     position: fixed;

@@ -20,7 +20,6 @@ function Filters(props) {
 }
 
 const Section = styled.section`
-  border: solid yellow;
   background-color: white;
   height: 100vh;
   width: 300px;
