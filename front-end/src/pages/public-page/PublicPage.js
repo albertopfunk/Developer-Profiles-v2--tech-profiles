@@ -114,7 +114,7 @@ class PublicPage extends Component {
       users: [...this.state.users, ...res.data],
       usersPage: this.state.usersPage + 1,
       usersLoading: false,
-      focusOnNextCard: this.state.users.length + 1
+      focusOnNextCard: this.state.users.length
     });
 
     if (this.state.users.length + res.data.length <= this.state.usersLength) {
