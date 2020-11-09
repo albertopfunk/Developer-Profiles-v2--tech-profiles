@@ -86,10 +86,10 @@ class CurrentLocationFilter extends React.Component {
 
   render() {
     return (
-      <section>
+      <div>
         <div className="miles">
           <label htmlFor="choose-miles">
-            Select Distance
+            Distance from Current Location
             <input
               type="range"
               min="5"
@@ -113,7 +113,7 @@ class CurrentLocationFilter extends React.Component {
           displayName={"Current Location"}
           single
         />
-      </section>
+      </div>
     );
   }
 }

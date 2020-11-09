@@ -54,16 +54,14 @@ function RelocateToFilter(props) {
   console.log("-- RelocateToFilter --", interestedLocations);
 
   return (
-    <section>
-      <Combobox
-        chosenOptions={interestedLocations}
-        onInputChange={onInputChange}
-        onChosenOption={onLocationChange}
-        onRemoveChosenOption={onLocationChange}
-        inputName={"interested-locations"}
-        displayName={"Interested Locations"}
-      />
-    </section>
+    <Combobox
+      chosenOptions={interestedLocations}
+      onInputChange={onInputChange}
+      onChosenOption={onLocationChange}
+      onRemoveChosenOption={onLocationChange}
+      inputName={"interested-locations"}
+      displayName={"Interested Locations"}
+    />
   );
 }
 

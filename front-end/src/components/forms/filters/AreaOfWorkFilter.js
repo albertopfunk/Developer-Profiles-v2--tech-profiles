@@ -36,50 +36,48 @@ function AreaOfWorkFilter(props) {
   }
 
   return (
-    <section>
-      <h2>Filter by Area of Work</h2>
-      <form>
-        <label htmlFor="web-development">
-          <input
-            type="checkbox"
-            name="area-of-work"
-            id="web-development"
-            onChange={() => toggleAreaOfWorkCheckbox("Development")}
-          />
-          Development
-        </label>
-        <br />
-        <label htmlFor="Design">
-          <input
-            type="checkbox"
-            name="area-of-work"
-            id="Design"
-            onChange={() => toggleAreaOfWorkCheckbox("Design")}
-          />
-          Design
-        </label>
-        <br />
-        <label htmlFor="iOS">
-          <input
-            type="checkbox"
-            name="area-of-work"
-            id="iOS"
-            onChange={() => toggleAreaOfWorkCheckbox("iOS")}
-          />
-          iOS
-        </label>
-        <br />
-        <label htmlFor="Android">
-          <input
-            type="checkbox"
-            name="area-of-work"
-            id="Android"
-            onChange={() => toggleAreaOfWorkCheckbox("Android")}
-          />
-          Android
-        </label>
-      </form>
-    </section>
+    <fieldset>
+      <legend>Filter by Area of Work</legend>
+      <label htmlFor="web-development">
+        <input
+          type="checkbox"
+          name="area-of-work"
+          id="web-development"
+          onChange={() => toggleAreaOfWorkCheckbox("Development")}
+        />
+        Development
+      </label>
+      <br />
+      <label htmlFor="Design">
+        <input
+          type="checkbox"
+          name="area-of-work"
+          id="Design"
+          onChange={() => toggleAreaOfWorkCheckbox("Design")}
+        />
+        Design
+      </label>
+      <br />
+      <label htmlFor="iOS">
+        <input
+          type="checkbox"
+          name="area-of-work"
+          id="iOS"
+          onChange={() => toggleAreaOfWorkCheckbox("iOS")}
+        />
+        iOS
+      </label>
+      <br />
+      <label htmlFor="Android">
+        <input
+          type="checkbox"
+          name="area-of-work"
+          id="Android"
+          onChange={() => toggleAreaOfWorkCheckbox("Android")}
+        />
+        Android
+      </label>
+    </fieldset>
   );
 }
 

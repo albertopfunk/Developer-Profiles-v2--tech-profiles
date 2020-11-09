@@ -15,7 +15,8 @@ function SortingFilter(props) {
   }
 
   return (
-    <section>
+    <fieldset>
+      <legend>Sort Profiles</legend>
       <label htmlFor="sorting-select">Sort By:</label>
       <select
         id="sorting-select"
@@ -27,7 +28,7 @@ function SortingFilter(props) {
           descending(newest-oldest)
         </option>
       </select>
-    </section>
+    </fieldset>
   );
 }
 

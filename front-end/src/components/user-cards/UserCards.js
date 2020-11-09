@@ -6,7 +6,7 @@ import UserCard from "./user-card/UserCard";
 function UserCards(props) {
   const feedSectionRef = useRef(null)
   const profileCardRefs = useRef(props.users.map(() => React.createRef()));
-  const feedButton = useRef(null)
+  const feedButtonRef = useRef(null)
 
   useEffect(() => {
     profileCardRefs.current[props.focusOnNextCard].current.focus()
@@ -18,13 +18,12 @@ function UserCards(props) {
   };
 
   function userCardActions(action, index) {
-    
     if (action === "start") {
       feedSectionRef.current.focus()
     }
 
     if (action === "end") {
-      feedButton.current.focus()
+      feedButtonRef.current.focus()
     }
 
     if (action === "previous") {
@@ -36,7 +35,6 @@ function UserCards(props) {
     }
 
     if (action === "next") {
-      console.log(index, props.currentUsers)
       if (index === props.currentUsers - 1) {
         profileCardRefs.current[0].current.focus()
         return
@@ -91,7 +89,7 @@ function UserCards(props) {
                 <p>No more profiles to load</p>
                 <button
                   type="button"
-                  ref={feedButton}
+                  ref={feedButtonRef}
                   aria-label="no more profiles to load, back to top"
                   onClick={backToTop}
                 >
@@ -104,11 +102,11 @@ function UserCards(props) {
                 both ends of the loaded set of articles that includes an element, 
                 such as a button, that lets the user request more articles to be loaded
 
-                when user loads more cards, focus should go back to newest loaded card
+                should this be inside the feed container?
               */
               <button
                 type="button"
-                ref={feedButton}
+                ref={feedButtonRef}
                 disabled={props.isBusy}
                 onClick={props.loadMoreUsers}
               >
@@ -122,7 +120,7 @@ function UserCards(props) {
   );
 }
 
-const FeedSection = styled.div`
+const FeedSection = styled.section`
   padding-left: 300px;
   .back-to-top {
     position: fixed;

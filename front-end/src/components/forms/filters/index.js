@@ -9,12 +9,17 @@ import SortingFilter from "./SortingFilter";
 function Filters(props) {
   return (
     <Section id="filters" tabIndex="-1" aria-labelledby="filters-heading">
-      <h2 id="filters-heading">Filters</h2>
+      <h2 id="filters-heading">Profile Filters</h2>
       <p>{`Showing ${props.currentUsers} of ${props.totalUsers} Profiles`}</p>
-      <SortingFilter updateUsers={props.updateUsers} />
-      <AreaOfWorkFilter updateUsers={props.updateUsers} />
-      <CurrentLocationFilter updateUsers={props.updateUsers} />
-      <RelocateToFilter updateUsers={props.updateUsers} />
+      <form>
+        <SortingFilter updateUsers={props.updateUsers} />
+        <AreaOfWorkFilter updateUsers={props.updateUsers} />
+        <fieldset>
+          <legend>Filter by Locations</legend>
+          <CurrentLocationFilter updateUsers={props.updateUsers} />
+          <RelocateToFilter updateUsers={props.updateUsers} />
+        </fieldset>
+      </form>
     </Section>
   );
 }
