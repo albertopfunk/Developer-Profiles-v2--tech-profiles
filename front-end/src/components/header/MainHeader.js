@@ -56,7 +56,7 @@ function MainHeader({ isValidated, signOut, signIn }) {
         <Link to="/">
           <img
             src="https://res.cloudinary.com/dy5hgr3ht/image/upload/c_scale,h_65/v1594347155/tech-pros-v1-main/tech-profiles-logo.png"
-            alt="website logo link to profiles page"
+            alt="site logo link to profiles page"
           />
         </Link>
 
@@ -66,9 +66,8 @@ function MainHeader({ isValidated, signOut, signIn }) {
               <button
                 id="menu-button"
                 type="button"
-                aria-label="close sub menu"
-                aria-haspopup="true"
-                aria-controls="sub-menu-group"
+                aria-label="close menu"
+                aria-expanded="true"                
                 onClick={closeMenu}
                 onBlur={closeMenuBlur}
                 >
@@ -80,9 +79,8 @@ function MainHeader({ isValidated, signOut, signIn }) {
               <button
                 id="menu-button"
                 type="button"
-                aria-label="open sub menu"
-                aria-haspopup="true"
-                aria-controls="sub-menu-group"
+                aria-label="open menu"
+                aria-expanded="false"                
                 onClick={openMenu}
               >
                 <span aria-hidden="true">
@@ -92,8 +90,8 @@ function MainHeader({ isValidated, signOut, signIn }) {
             )}
 
             <ul
-              id="sub-menu-group"
-              aria-label="sub menu"
+              id="menu-group"
+              aria-label="site navigation menu"
               className={`${isMenuOpen ? "_" : "hidden"}`}
             >
               <li>
