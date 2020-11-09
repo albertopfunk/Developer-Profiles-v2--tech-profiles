@@ -139,13 +139,6 @@ class PublicPage extends Component {
           <title>Profiles • Tech Profiles</title>
         </Helmet>
         <h1 id="main-heading">Profiles</h1>
-        <div
-          className="sr-only"
-          aria-live="assertive"
-          aria-relevant="additions text"
-        >
-          {`Showing ${this.state.users.length} of ${this.state.usersLength} Profiles`}
-        </div>
         <Filters
           updateUsers={this.updateUsers}
           currentUsers={this.state.users.length}
