@@ -9,7 +9,10 @@ function UserCards(props) {
   const feedButtonRef = useRef(null)
 
   useEffect(() => {
-    profileCardRefs.current[props.focusOnNextCard].current.focus()
+    if (props.focusOnNextCard !== 0) {
+      profileCardRefs.current[props.focusOnNextCard].current.focus()
+    }
+
   }, [props.focusOnNextCard])
 
   function backToTop() {

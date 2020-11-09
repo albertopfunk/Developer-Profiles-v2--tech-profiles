@@ -137,15 +137,14 @@ const UserCard = React.forwardRef((props, articleRef) => {
     // articles in feed are interactive
     // eslint-disable-next-line
     <article
-    ref={articleRef}
-    id={`profile-${props.userId}-card`}
-    tabIndex="0" // eslint-disable-line
-    aria-posinset={props.index + 1}
-    aria-setsize={props.totalUsers}
-    aria-labelledby={`profile-${props.userId}-heading`}
-    aria-describedby={`profile-${props.userId}-summary`}
-    onKeyDown={e => sendCardAction(e)}
-    onFocus={e => e.target.scrollIntoView()}
+      ref={articleRef}
+      id={`profile-${props.userId}-card`}
+      tabIndex="0" // eslint-disable-line
+      aria-posinset={props.index + 1}
+      aria-setsize={props.totalUsers}
+      aria-labelledby={`profile-${props.userId}-heading`}
+      aria-describedby={`profile-${props.userId}-summary`}
+      onKeyDown={e => sendCardAction(e)}
     >
       <h3 id={`profile-${props.userId}-heading`}>{`${props.firstName || "user"}'s Profile`}</h3>
       {/* <aside className="favorite">Favorite</aside> */}
