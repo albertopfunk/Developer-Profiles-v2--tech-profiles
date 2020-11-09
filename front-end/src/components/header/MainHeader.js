@@ -1,27 +1,17 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { Link, withRouter } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { ReactComponent as BurgerMenu } from "./menu.svg";
 import { ReactComponent as MenuClose } from "./close.svg";
 
 let closeOnBlurWait;
-function MainHeader({ isValidated, signOut, signIn, location }) {
+function MainHeader({ isValidated, signOut, signIn }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [announceMenuToggle, setAnnounceMenuToggle] = useState(false);
-  const [announceNavChange, setannounceNavChange] = useState(false);
-  const [previousLocation, setPreviousLocation] = useState(location.pathname);
 
   useEffect(() => {
     return () => clearTimeout(closeOnBlurWait);
   }, []);
-
-  useEffect(() => {
-    if (location.pathname !== previousLocation) {
-      setPreviousLocation(location.pathname);
-      setannounceNavChange(true);
-      return;
-    }
-  }, [location, previousLocation]);
 
   function openMenu() {
     setIsMenuOpen(true);
@@ -51,31 +41,15 @@ function MainHeader({ isValidated, signOut, signIn, location }) {
 
   console.log("-- Main Header --");
 
-  let currentLocation;
-  if (location.pathname === "/") {
-    currentLocation = "profiles page";
-  } else if (location.pathname.includes("dashboard")) {
-    currentLocation = location.pathname.split(/[/-]/).join(" ").trim();
-  } else if (location.pathname === "/authorize") {
-    currentLocation = "authorize page";
-  } else if (location.pathname === "/private-policy") {
-    currentLocation = "private policy page";
-  } else {
-    currentLocation = "page not found";
-  }
-
   return (
     <Header>
       <div
         className="sr-only"
-        aria-live="assertive"
-        aria-relevant="additions text"
+        aria-live="polite"
+        aria-relevant="additions"
       >
         {announceMenuToggle && isMenuOpen ? "Opened SubMenu" : null}
         {announceMenuToggle && !isMenuOpen ? "Closed SubMenu" : null}
-        {announceNavChange
-          ? `Navigated to ${currentLocation} • Tech Profiles, press tab for skip links`
-          : null}
       </div>
 
       <Nav aria-label="site">
@@ -211,4 +185,4 @@ const Nav = styled.nav`
   }
 `;
 
-export default withRouter(MainHeader);
+export default MainHeader;

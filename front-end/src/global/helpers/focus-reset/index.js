@@ -6,6 +6,7 @@ function FocusReset({ location, children }) {
   const [previousLocation, setPreviousLocation] = useState(location.pathname);
 
   let focusRef = React.createRef();
+  let currentLocation;
 
   useEffect(() => {
     if (focusRef.current && previousLocation !== location.pathname) {
@@ -15,7 +16,6 @@ function FocusReset({ location, children }) {
     }
   }, [focusRef, location.pathname, previousLocation]);
 
-  console.log("-- Focus Reset --");
 
   if (location.pathname === "/callback") {
     return (
@@ -26,8 +26,13 @@ function FocusReset({ location, children }) {
   }
 
   if (location.pathname.includes("dashboard")) {
+    currentLocation = location.pathname.split(/[/-]/).join(" ").trim();
     return (
-      <FocusContainer tabIndex="-1" ref={focusRef}>
+      <FocusContainer
+        ref={focusRef}
+        tabIndex="-1"
+        aria-label={`Navigated to ${currentLocation}, press tab for skip links`}
+      >
         <ul aria-label="skip links">
           <li>
             <a
@@ -52,7 +57,6 @@ function FocusReset({ location, children }) {
               <span>Skip to Profile Card</span>
             </a>
           </li>
-
         </ul>
         {children}
       </FocusContainer>
@@ -61,7 +65,11 @@ function FocusReset({ location, children }) {
 
   if (location.pathname === "/") {
     return (
-      <FocusContainer tabIndex="-1" ref={focusRef}>
+      <FocusContainer
+        ref={focusRef}
+        tabIndex="-1"
+        aria-label={"Navigated to profiles page, press tab for skip links"}
+      >
         <ul aria-label="skip links">
           <li>
             <a href={`${location.pathname}#filters`} className="skip-link">
@@ -80,8 +88,20 @@ function FocusReset({ location, children }) {
     );
   }
 
+  if (location.pathname === "/authorize") {
+    currentLocation = "authorize page";
+  } else if (location.pathname === "/private-policy") {
+    currentLocation = "private policy page";
+  } else {
+    currentLocation = "page not found";
+  }
+
   return (
-    <FocusContainer tabIndex="-1" ref={focusRef}>
+    <FocusContainer
+      ref={focusRef}
+      tabIndex="-1"
+      aria-label={`Navigated to ${currentLocation}, press tab for skip links`}
+    >
       <ul aria-label="skip links">
         <li>
           <a href={`${location.pathname}#main-content`} className="skip-link">
