@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import styled from "styled-components";
 
 import ImageUploadForm from "../../../components/forms/image-upload";
@@ -18,6 +18,7 @@ function NewUser() {
   const [selectedTab, setSelectedTab] = useState("basic-info");
   const [formStatus, setFormStatus] = useState(FORM_STATUS.idle);
   const [formFocus, setFormFocus] = useState("");
+  let history = useHistory();
 
   const [firstName, setFirstName] = useState({
     inputValue: "",
@@ -460,8 +461,7 @@ function NewUser() {
     setFormStatus(FORM_STATUS.loading);
     await editProfile(inputs);
     formSuccessWait = setTimeout(() => {
-      // route to home page instead
-      setFormStatus(FORM_STATUS.idle);
+      history.push("/profile-dashboard")
     }, 1000);
     setFormStatus(FORM_STATUS.success);
   }
@@ -483,13 +483,11 @@ function NewUser() {
           id="profile-information"
           tabIndex="-1"
           aria-labelledby="welcome-heading"
-          aria-describedby="edit-information-desc"
         >
           <h2 id="welcome-heading">Welcome {user.first_name || "Newcomer"}!</h2>
-          <p id="edit-information-desc">press edit information button to open form</p>
           {/* welcome image */}
-          <Link to="/profile-dashboard">Go Home</Link>
           <button onClick={setFormInputs}>Edit Quickstart Information</button>
+          <Link to="/profile-dashboard">Go Home</Link>
         </section>
       </>
     );
@@ -506,8 +504,7 @@ function NewUser() {
         ref={infoSection}
         id="profile-information"
         tabIndex="-1"
-        aria-labelledby="edit-information-heading"
-        aria-describedby="edit-information-desc"
+        aria-labelledby="edit-information-heading edit-information-desc"
       >
         <h2 id="edit-information-heading">Edit Information</h2>
         <p id="edit-information-desc">inputs are validated but not required to submit</p>
