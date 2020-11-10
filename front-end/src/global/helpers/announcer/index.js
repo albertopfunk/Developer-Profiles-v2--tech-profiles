@@ -14,8 +14,6 @@ function Announcer({ announcement, ariaId, ariaLive = "assertive" }) {
     };
   }, []);
 
-  console.log("-- announcer --", pageLoaded, announcement);
-
   return (
     <Alert
       id={ariaId}

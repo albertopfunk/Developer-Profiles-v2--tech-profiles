@@ -24,7 +24,6 @@ server.post("/new", async (req, res) => {
     );
     res.status(201).json(addNewUserLocation);
   } catch (err) {
-    console.log(err);
     res
       .status(500)
       .json({ message: "Error adding the location to the database" });

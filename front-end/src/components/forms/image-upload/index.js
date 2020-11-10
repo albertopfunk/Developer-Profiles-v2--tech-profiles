@@ -58,8 +58,6 @@ function ImageUploadForm({
     }
   }
 
-  console.log("-- Image Upload --");
-
   return (
     <div>
       <InputContainer>

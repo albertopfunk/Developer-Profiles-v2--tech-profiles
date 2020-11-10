@@ -74,8 +74,6 @@ function App({ location }) {
     auth0Client.signOut();
   }
 
-  console.log("-- App --");
-
   if (checkingSession) {
     return (
       <>

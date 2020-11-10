@@ -56,7 +56,6 @@ class Callback extends Component {
   }
 
   render() {
-    console.log("-- Callback --");
     return (
       <MainContainerSkeleton aria-labelledby="main-heading">
         <Helmet>

@@ -37,7 +37,6 @@ server.get("/", async (_, res) => {
       res.status(500).json({ message: "Error adding users to cache" });
     }
   } catch (err) {
-    console.log(err);
     res.status(500).json({ message: "Error getting users from database" });
   }
 });
@@ -74,7 +73,6 @@ server.post("/filtered", async (req, res) => {
       res.status(500).json({ message: "Error adding users to cache" });
     }
   } catch (err) {
-    console.log(err);
     res.status(500).json({ message: "Error getting users from database" });
   }
 });

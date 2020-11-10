@@ -240,8 +240,6 @@ function ProjectForm({
     updateProject(projIndex, newState);
   }
 
-  console.log("-- project form --", image);
-
   return (
     <fieldset>
       <legend>Project: {project.projectNameInput || "New Project"}</legend>

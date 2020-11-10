@@ -338,8 +338,6 @@ function DashboardEducation() {
     formErrors = checkFormErrors();
   }
 
-  console.log("-- Dash Education --");
-
   return (
     <>
       <Helmet>

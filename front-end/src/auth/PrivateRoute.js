@@ -3,8 +3,6 @@ import { Redirect, withRouter } from "react-router-dom";
 import auth0Client from "./Auth";
 
 function PrivateRoute(props) {
-  console.log("-- Private Route --");
-
   if (props.checkingSession)
     return (
       <main>

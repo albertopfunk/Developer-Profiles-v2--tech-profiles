@@ -443,8 +443,6 @@ function WhereToFindYou() {
     setFormStatus(FORM_STATUS.success);
   }
 
-  console.log("===Where to Find You===");
-
   if (formStatus === FORM_STATUS.idle) {
     return (
       <>

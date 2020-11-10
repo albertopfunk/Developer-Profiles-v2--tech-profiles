@@ -337,8 +337,6 @@ function DashboardExperience() {
     formErrors = checkFormErrors();
   }
 
-  console.log("-- Dash Experience --", user);
-
   return (
     <>
       <Helmet>

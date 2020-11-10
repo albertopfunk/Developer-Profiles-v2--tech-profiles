@@ -295,8 +295,6 @@ class Combobox extends React.Component {
   };
 
   render() {
-    console.log("---- Autocomplete ----", this.state);
-
     const { inputName, displayName } = this.props;
     const {
       input,

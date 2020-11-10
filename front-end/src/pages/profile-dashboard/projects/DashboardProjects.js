@@ -262,8 +262,6 @@ function DashboardProjects() {
     setFormStatus(FORM_STATUS.success);
   }
 
-  console.log("-- dash projects --");
-
   if (formStatus === FORM_STATUS.idle) {
     return (
       <>

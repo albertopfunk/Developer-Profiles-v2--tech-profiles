@@ -51,8 +51,6 @@ function RelocateToFilter(props) {
     });
   }
 
-  console.log("-- RelocateToFilter --", interestedLocations);
-
   return (
     <Combobox
       chosenOptions={interestedLocations}

@@ -495,8 +495,6 @@ function AboutYou() {
     setFormStatus(FORM_STATUS.success);
   }
 
-  console.log("--- About You ---");
-
   if (formStatus === FORM_STATUS.idle) {
     return (
       <>

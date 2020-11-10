@@ -127,8 +127,6 @@ function ProfileDashboard() {
     await getFullUser(user.email);
   }
 
-  console.log("-- Main Dashboard --");
-
   if (loadingUser) {
     // main skeleton loader
     // nav should be present here too

@@ -39,8 +39,6 @@ function MainHeader({ isValidated, signOut, signIn }) {
     }, 13);
   }
 
-  console.log("-- Main Header --");
-
   return (
     <Header>
       <div

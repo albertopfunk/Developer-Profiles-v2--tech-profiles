@@ -336,8 +336,6 @@ function PersonalInfo() {
     setFormStatus(FORM_STATUS.success);
   }
 
-  console.log("-- Personal Info Dashboard --");
-
   if (formStatus === FORM_STATUS.idle) {
     return (
       <>
