@@ -17,6 +17,7 @@ function NewUser() {
   const { user, setPreviewImg, editProfile } = useContext(ProfileContext);
   const [selectedTab, setSelectedTab] = useState("basic-info");
   const [formStatus, setFormStatus] = useState(FORM_STATUS.idle);
+  const [formFocus, setFormFocus] = useState("");
 
   const [firstName, setFirstName] = useState({
     inputValue: "",
@@ -47,6 +48,7 @@ function NewUser() {
   const [locationChange, setLocationChange] = useState(false);
 
   let errorSummaryRef = React.createRef();
+  let infoSection = React.createRef();
   let basicInfoTabRef = React.createRef();
   let basicInfoPanelRef = React.createRef();
   let billingInfoTabRef = React.createRef();
@@ -82,8 +84,15 @@ function NewUser() {
     };
   }, [setPreviewImg]);
 
+  useEffect(() => {
+    if (formFocus) {
+      infoSection.current.focus()
+    }
+  }, [formFocus])
+
   function setFormInputs() {
     setFormStatus(FORM_STATUS.active);
+    setFormFocus(FORM_STATUS.active);
 
     setFirstName({
       inputValue: user.first_name || "",
@@ -457,6 +466,11 @@ function NewUser() {
     setFormStatus(FORM_STATUS.success);
   }
 
+  function resetForm() {
+    setFormStatus(FORM_STATUS.idle)
+    setFormFocus(FORM_STATUS.idle)
+  }
+
   if (formStatus === FORM_STATUS.idle) {
     return (
       <>
@@ -464,8 +478,15 @@ function NewUser() {
           <title>Profile Dashboard Quickstart • Tech Profiles</title>
         </Helmet>
         <h1 id="main-heading">Quickstart</h1>
-        <section id="profile-information" tabIndex="-1" aria-labelledby="welcome-heading">
+        <section
+          ref={infoSection}
+          id="profile-information"
+          tabIndex="-1"
+          aria-labelledby="welcome-heading"
+          aria-describedby="edit-information-desc"
+        >
           <h2 id="welcome-heading">Welcome {user.first_name || "Newcomer"}!</h2>
+          <p id="edit-information-desc">press edit information button to open form</p>
           {/* welcome image */}
           <Link to="/profile-dashboard">Go Home</Link>
           <button onClick={setFormInputs}>Edit Quickstart Information</button>
@@ -481,8 +502,15 @@ function NewUser() {
       </Helmet>
       <h1 id="main-heading">Quickstart</h1>
 
-      <section id="profile-information" tabIndex="-1" aria-labelledby="edit-information-heading">
+      <section
+        ref={infoSection}
+        id="profile-information"
+        tabIndex="-1"
+        aria-labelledby="edit-information-heading"
+        aria-describedby="edit-information-desc"
+      >
         <h2 id="edit-information-heading">Edit Information</h2>
+        <p id="edit-information-desc">inputs are validated but not required to submit</p>
         {/* error summary */}
         <div className="tabs">
           <ul role="tablist" aria-label="quick start">
@@ -702,7 +730,7 @@ function NewUser() {
                   formStatus === FORM_STATUS.success
                 }
                 type="reset"
-                onClick={() => setFormStatus(FORM_STATUS.idle)}
+                onClick={resetForm}
               >
                 Cancel
               </button>
