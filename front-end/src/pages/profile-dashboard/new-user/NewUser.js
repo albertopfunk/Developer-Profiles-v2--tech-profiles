@@ -47,6 +47,10 @@ function NewUser() {
   const [locationChange, setLocationChange] = useState(false);
 
   let errorSummaryRef = React.createRef();
+  let basicInfoTabRef = React.createRef();
+  let basicInfoPanelRef = React.createRef();
+  let billingInfoTabRef = React.createRef();
+  let billingInfoPanelRef = React.createRef();
 
   useEffect(() => {
     if (formStatus === FORM_STATUS.error && errorSummaryRef.current) {
@@ -122,10 +126,54 @@ function NewUser() {
     setLocationChange(false);
   }
 
-  function onTabChange(tab) {
+  function changeTab(tab, e=null) {
+    e && e.preventDefault()
     setSelectedTab(tab);
   }
 
+  function tabActions(e) {
+    // left/right arrow keys
+    if (e.keyCode === 37 || e.keyCode === 39) {
+      e.preventDefault();
+      if (e.target.id === "basic-info") {
+        changeTab("billing-info");
+        billingInfoTabRef.current.focus()
+      } else {
+        changeTab("basic-info");
+        basicInfoTabRef.current.focus()
+      }
+    }
+    
+    // down arrow
+    if (e.keyCode === 40) {
+      e.preventDefault()
+      if (e.target.id === "basic-info") {
+        basicInfoPanelRef.current.focus()
+      } else {
+        billingInfoPanelRef.current.focus()
+      }
+    }
+    
+    // enter and space
+    if (e.keyCode === 13 || e.keyCode === 32) {
+      e.preventDefault()
+    }
+    
+    // home
+    if (e.keyCode === 36) {
+      e.preventDefault();
+      changeTab("basic-info");
+      basicInfoTabRef.current.focus()
+    }
+    
+    // end
+    if (e.keyCode === 35) {
+      e.preventDefault();
+      changeTab("billing-info");
+      billingInfoTabRef.current.focus()
+    }
+  }
+  
   function setFirstNameInput(value) {
     if (user.first_name === null && value.trim() === "") {
       setFirstName({
@@ -437,33 +485,44 @@ function NewUser() {
         <h2 id="edit-information-heading">Edit Information</h2>
         {/* error summary */}
         <div className="tabs">
-          <div role="tablist" aria-label="quick start">
-            <button
-              id="basic-info"
-              role="tab"
-              tabIndex="-1"
-              aria-controls="basic-info-panel"
-              aria-selected={selectedTab === "basic-info"}
-              onClick={() => onTabChange("basic-info")}
-            >
-              Basic Info
-            </button>
-            <button
-              id="billing-info"
-              role="tab"
-              tabIndex="-1"
-              aria-controls="billing-info-panel"
-              aria-selected={selectedTab === "billing-info"}
-              onClick={() => onTabChange("billing-info")}
-            >
-              Billing
-            </button>
-          </div>
-
-          <div
+          <ul role="tablist" aria-label="quick start">
+            <li role="presentation">
+              <a
+                ref={basicInfoTabRef}
+                href="#basic-info-panel"
+                id="basic-info"
+                role="tab"
+                tabIndex={selectedTab === "basic-info" ? "0" : "-1"}
+                // aria-controls="basic-info-panel"
+                aria-selected={selectedTab === "basic-info"}
+                onClick={(e) => changeTab("basic-info", e)}
+                onKeyDown={e => tabActions(e)}
+                >
+                Basic Info
+              </a>
+            </li>
+            <li role="presentation">
+              <a
+                ref={billingInfoTabRef}
+                href="#billing-info-panel"
+                id="billing-info"
+                role="tab"
+                tabIndex={selectedTab === "billing-info" ? "0" : "-1"}
+                // aria-controls="billing-info-panel"
+                aria-selected={selectedTab === "billing-info"}
+                onClick={(e) => changeTab("billing-info", e)}
+                onKeyDown={e => tabActions(e)}
+              >
+                Billing
+              </a>
+            </li>
+          </ul>
+          
+          <section
+            ref={basicInfoPanelRef}
             id="basic-info-panel"
             role="tabpanel"
-            tabIndex="0"
+            tabIndex="-1"
             aria-labelledby="basic-info"
             style={{
               display: selectedTab === "basic-info" ? "block" : "none",
@@ -648,12 +707,12 @@ function NewUser() {
                 Cancel
               </button>
             </form>
-          </div>
-
-          <div
+          </section>
+          <section
+            ref={billingInfoPanelRef}
             id="billing-info-panel"
             role="tabpanel"
-            tabIndex="0"
+            tabIndex="-1"
             aria-labelledby="billing-info"
             style={{
               display: selectedTab === "billing-info" ? "block" : "none",
@@ -666,7 +725,7 @@ function NewUser() {
               id={user.id}
               editProfile={editProfile}
             />
-          </div>
+          </section>
         </div>
       </section>
     </>
