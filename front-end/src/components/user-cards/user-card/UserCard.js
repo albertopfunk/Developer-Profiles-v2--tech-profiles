@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import ReactDOM from "react-dom";
 import styled from "styled-components";
 
 import UserImage from "./UserImage";
@@ -35,6 +36,7 @@ const UserCard = React.forwardRef((props, articleRef) => {
   const [userExtras, setUserExtras] = useState({});
   const [loadingExtras, setLoadingExtras] = useState(false);
   const [isCardExpanded, setIsCardExpanded] = useState(false);
+  const [announceCardToggle, setAnnounceCardToggle] = useState(false);
   const [noExtras, setNoExtras] = useState(false);
   const [hasRequestedExtras, setHasRequestedExtras] = useState(false);
 
@@ -61,10 +63,13 @@ const UserCard = React.forwardRef((props, articleRef) => {
 
   async function expandUserCard() {
     if (hasRequestedExtras) {
-      setIsCardExpanded(true);
+      ReactDOM.unstable_batchedUpdates(() => {
+        setIsCardExpanded(true);
+        setAnnounceCardToggle(true)
+      });
       return;
     }
-
+    
     setLoadingExtras(true);
     const [res, err] = await httpClient(
       "GET",
@@ -84,23 +89,30 @@ const UserCard = React.forwardRef((props, articleRef) => {
       res.data.experience.length === 0 &&
       res.data.projects.length === 0
     ) {
-      setUserExtras({});
-      setNoExtras(true);
-      setHasRequestedExtras(true);
-      setIsCardExpanded(true);
-      setLoadingExtras(false);
+      ReactDOM.unstable_batchedUpdates(() => {
+        setUserExtras({});
+        setNoExtras(true);
+        setHasRequestedExtras(true);
+        setIsCardExpanded(true);
+        setAnnounceCardToggle(true)
+        setLoadingExtras(false);
+      });
       return;
     }
 
-    setUserExtras(res.data);
-    setNoExtras(false);
-    setHasRequestedExtras(true);
-    setIsCardExpanded(true);
-    setLoadingExtras(false);
+    ReactDOM.unstable_batchedUpdates(() => {
+      setUserExtras(res.data);
+      setNoExtras(false);
+      setHasRequestedExtras(true);
+      setIsCardExpanded(true);
+      setAnnounceCardToggle(true)
+      setLoadingExtras(false);
+    });
   }
 
   function closeUserCard() {
     setIsCardExpanded(false);
+    setAnnounceCardToggle(true)
   }
 
   function sendCardAction(e) {
@@ -131,6 +143,15 @@ const UserCard = React.forwardRef((props, articleRef) => {
       e.preventDefault()
       props.userCardActions("next", props.index)
     }
+
+    // enter and space
+    if (e.keyCode === 13 || e.keyCode === 32) {
+      if (!isCardExpanded) {
+        expandUserCard()
+      } else {
+        closeUserCard()
+      }
+    }
   }
   
   return (
@@ -149,6 +170,15 @@ const UserCard = React.forwardRef((props, articleRef) => {
     >
       <h3 id={`profile-${props.userId}-heading`}>{`${props.firstName || "user"}'s Profile`}</h3>
       {/* <aside className="favorite">Favorite</aside> */}
+
+      <div
+        className="sr-only"
+        aria-live="polite"
+        aria-relevant="additions"
+      >
+        {announceCardToggle && isCardExpanded ? "card expanded" : null}
+        {announceCardToggle && !isCardExpanded ? "card collapsed" : null}
+      </div>
 
       <UserSection>
         <div>
