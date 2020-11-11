@@ -136,12 +136,13 @@ const UserCard = React.forwardRef((props, articleRef) => {
   return (
     // articles in feed are interactive
     // eslint-disable-next-line
-    <article
+    <li
       ref={articleRef}
       id={`profile-${props.userId}-card`}
       tabIndex="0" // eslint-disable-line
-      aria-posinset={props.index + 1}
-      aria-setsize={props.totalUsers}
+      // aria-posinset={props.index + 1}
+      // aria-setsize={props.totalUsers}
+      aria-expanded={isCardExpanded}
       aria-labelledby={`profile-${props.userId}-heading`}
       aria-describedby={`profile-${props.userId}-summary`}
       onKeyDown={e => sendCardAction(e)}
@@ -183,18 +184,27 @@ const UserCard = React.forwardRef((props, articleRef) => {
 
       <section>
         {!isCardExpanded ? (
-          <button disabled={loadingExtras} onClick={expandUserCard}>
-            Expand
+          <button
+            type="button"
+            disabled={loadingExtras}
+            onClick={expandUserCard}
+          >
+            Expand Profile
           </button>
         ) : (
-          <button onClick={closeUserCard}>Close</button>
+          <button
+            type="button"
+            onClick={closeUserCard}
+          >
+            Collapse Profile
+          </button>
         )}
       </section>
 
       {isCardExpanded ? (
         <UserExtras userExtras={userExtras} noExtras={noExtras} />
       ) : null}
-    </article>
+    </li>
   );
 });
 

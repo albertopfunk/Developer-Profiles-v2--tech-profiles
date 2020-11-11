@@ -58,7 +58,7 @@ function UserCards(props) {
         <p>No Users Here! - Reset filters BTN</p>
       ) : (
         <>
-          <div role="feed" aria-busy={props.isBusy} aria-label="profiles-feed">
+          <ul aria-busy={props.isBusy} aria-label="profiles-feed">
             {props.users.map((user, i) => {
               return (
                 <UserCard
@@ -85,7 +85,7 @@ function UserCards(props) {
                 />
               );
             })}
-          </div>
+          </ul>
           <div>
             {props.noMoreUsers ? (
               <div>
