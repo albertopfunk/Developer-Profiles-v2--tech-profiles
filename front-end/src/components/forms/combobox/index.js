@@ -25,12 +25,15 @@ if option selected, choose option
 
 
 tab - tab to next, if an option is highlighted, option will be selected
+
+-
 since option still not on dom when tab pressed, preventDefault, and use
 useeffect to focus on new chosen item
 if no options are selected, and input is not empty, do not clear input
 
 css only to show selected option
 
+-
 on focus
 if input is not empty, automatically show current options
 
@@ -45,10 +48,12 @@ use index to update selectedOption
 option onClick
 I think this will stay the same
 
+-
 announcing
 since u are no longer focusing on options
 will need to be aria live, using text change
 
+-
 this will also now handle chosen options announcement
 u will do this with focus
 when user chooses an option(no matter what way), focus on chosen option
@@ -138,6 +143,16 @@ class Combobox extends React.Component {
     this.setState({ timeOut: currTimeOut });
   };
 
+  inputFocusGetResults = (e) => {
+    if (this.props.single) {
+      return
+    }
+
+    if (this.state.input) {
+      this.onInputChange(e.target.value)
+    }
+  }
+
   inputFocusActions = (e) => {
     if (this.state.autoCompleteResults.length === 0) {
       return;
@@ -218,7 +233,7 @@ class Combobox extends React.Component {
     // tab
     if (e.keyCode === 9) {
       if (this.state.selectedOptionIndex === null) {
-        this.closeCombobox();
+        this.closeCombobox(e.target.value);
       } else {
         const { name, id } = this.state.selectedOption;
         this.chooseOption(name, id);
@@ -305,6 +320,7 @@ class Combobox extends React.Component {
             aria-controls="results"
             aria-activedescendant={selectedOptionId}
             value={input}
+            onFocus={(e) => this.inputFocusGetResults(e)}
             onChange={(e) => this.debounceInput(e)}
             onKeyDown={(e) => this.inputFocusActions(e)}
           />
