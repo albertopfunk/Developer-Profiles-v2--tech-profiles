@@ -11,10 +11,10 @@ function Filters(props) {
     <Section id="filters" tabIndex="-1" aria-labelledby="filters-heading">
       <h2 id="filters-heading">Profile Filters</h2>
       <div
-          className="sr-only"
-          aria-live="assertive"
-          aria-relevant="additions text"
-        >
+        className="sr-only"
+        aria-live="assertive"
+        aria-relevant="additions text"
+      >
         <p>{`Showing ${props.currentUsers} of ${props.totalUsers} Profiles`}</p>
       </div>
       <form>

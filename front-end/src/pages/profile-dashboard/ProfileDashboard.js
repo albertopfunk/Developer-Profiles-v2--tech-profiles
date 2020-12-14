@@ -1,4 +1,3 @@
-
 /*
 
 <div>
@@ -22,8 +21,6 @@
 </div>
 
 */
-
-
 
 import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
@@ -237,7 +234,11 @@ function ProfileDashboard() {
           </ProfileContext.Provider>
         </Elements>
 
-        <section id="profile-card" tabIndex="-1"  aria-labelledby="profile-card-heading">
+        <section
+          id="profile-card"
+          tabIndex="-1"
+          aria-labelledby="profile-card-heading"
+        >
           <h2 id="profile-card-heading">Current Profile Card Preview</h2>
           <UserCard
             previewImg={previewImg.image}

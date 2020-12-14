@@ -15,7 +15,7 @@ function ProjectForm({
   userProjectLink,
   userProjectDescription,
   updateProject,
-  removeProject
+  removeProject,
 }) {
   const [project, setProject] = useState({
     projectNameInput: userProjectName,

@@ -87,9 +87,9 @@ function NewUser() {
 
   useEffect(() => {
     if (formFocus) {
-      infoSection.current.focus()
+      infoSection.current.focus();
     }
-  }, [formFocus])
+  }, [formFocus]);
 
   function setFormInputs() {
     setFormStatus(FORM_STATUS.active);
@@ -136,8 +136,8 @@ function NewUser() {
     setLocationChange(false);
   }
 
-  function changeTab(tab, e=null) {
-    e && e.preventDefault()
+  function changeTab(tab, e = null) {
+    e && e.preventDefault();
     setSelectedTab(tab);
   }
 
@@ -147,43 +147,43 @@ function NewUser() {
       e.preventDefault();
       if (e.target.id === "basic-info") {
         changeTab("billing-info");
-        billingInfoTabRef.current.focus()
+        billingInfoTabRef.current.focus();
       } else {
         changeTab("basic-info");
-        basicInfoTabRef.current.focus()
+        basicInfoTabRef.current.focus();
       }
     }
-    
+
     // down arrow
     if (e.keyCode === 40) {
-      e.preventDefault()
+      e.preventDefault();
       if (e.target.id === "basic-info") {
-        basicInfoPanelRef.current.focus()
+        basicInfoPanelRef.current.focus();
       } else {
-        billingInfoPanelRef.current.focus()
+        billingInfoPanelRef.current.focus();
       }
     }
-    
+
     // enter and space
     if (e.keyCode === 13 || e.keyCode === 32) {
-      e.preventDefault()
+      e.preventDefault();
     }
-    
+
     // home
     if (e.keyCode === 36) {
       e.preventDefault();
       changeTab("basic-info");
-      basicInfoTabRef.current.focus()
+      basicInfoTabRef.current.focus();
     }
-    
+
     // end
     if (e.keyCode === 35) {
       e.preventDefault();
       changeTab("billing-info");
-      billingInfoTabRef.current.focus()
+      billingInfoTabRef.current.focus();
     }
   }
-  
+
   function setFirstNameInput(value) {
     if (user.first_name === null && value.trim() === "") {
       setFirstName({
@@ -461,14 +461,14 @@ function NewUser() {
     setFormStatus(FORM_STATUS.loading);
     await editProfile(inputs);
     formSuccessWait = setTimeout(() => {
-      history.push("/profile-dashboard")
+      history.push("/profile-dashboard");
     }, 1000);
     setFormStatus(FORM_STATUS.success);
   }
 
   function resetForm() {
-    setFormStatus(FORM_STATUS.idle)
-    setFormFocus(FORM_STATUS.idle)
+    setFormStatus(FORM_STATUS.idle);
+    setFormFocus(FORM_STATUS.idle);
   }
 
   if (formStatus === FORM_STATUS.idle) {
@@ -507,7 +507,9 @@ function NewUser() {
         aria-labelledby="edit-information-heading edit-information-desc"
       >
         <h2 id="edit-information-heading">Edit Information</h2>
-        <p id="edit-information-desc">inputs are validated but not required to submit</p>
+        <p id="edit-information-desc">
+          inputs are validated but not required to submit
+        </p>
         {/* error summary */}
         <div className="tabs">
           <ul role="tablist" aria-label="quick start">
@@ -521,8 +523,8 @@ function NewUser() {
                 // aria-controls="basic-info-panel"
                 aria-selected={selectedTab === "basic-info"}
                 onClick={(e) => changeTab("basic-info", e)}
-                onKeyDown={e => tabActions(e)}
-                >
+                onKeyDown={(e) => tabActions(e)}
+              >
                 Basic Info
               </a>
             </li>
@@ -536,13 +538,13 @@ function NewUser() {
                 // aria-controls="billing-info-panel"
                 aria-selected={selectedTab === "billing-info"}
                 onClick={(e) => changeTab("billing-info", e)}
-                onKeyDown={e => tabActions(e)}
+                onKeyDown={(e) => tabActions(e)}
               >
                 Billing
               </a>
             </li>
           </ul>
-          
+
           <section
             ref={basicInfoPanelRef}
             id="basic-info-panel"

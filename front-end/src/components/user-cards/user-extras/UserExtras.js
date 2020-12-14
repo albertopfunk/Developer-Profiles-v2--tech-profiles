@@ -6,9 +6,9 @@ import UserExperience from "./UserExperience";
 
 function UserExtras({ userExtras, noExtras }) {
   if (noExtras) {
-    return <p>Nothing to Show...</p>
+    return <p>Nothing to Show...</p>;
   }
-  
+
   const {
     topSkills,
     additionalSkills,
@@ -39,9 +39,7 @@ function UserExtras({ userExtras, noExtras }) {
 
         {projects.length > 0 ? <UserProjects projects={projects} /> : null}
 
-        {education.length > 0 ? (
-          <UserEducation education={education} />
-        ) : null}
+        {education.length > 0 ? <UserEducation education={education} /> : null}
 
         {experience.length > 0 ? (
           <UserExperience experience={experience} />

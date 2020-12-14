@@ -41,11 +41,7 @@ function MainHeader({ isValidated, signOut, signIn }) {
 
   return (
     <Header>
-      <div
-        className="sr-only"
-        aria-live="polite"
-        aria-relevant="additions"
-      >
+      <div className="sr-only" aria-live="polite" aria-relevant="additions">
         {announceMenuToggle && isMenuOpen ? "Opened SubMenu" : null}
         {announceMenuToggle && !isMenuOpen ? "Closed SubMenu" : null}
       </div>
@@ -65,10 +61,10 @@ function MainHeader({ isValidated, signOut, signIn }) {
                 id="menu-button"
                 type="button"
                 aria-label="close menu"
-                aria-expanded="true"                
+                aria-expanded="true"
                 onClick={closeMenu}
                 onBlur={closeMenuBlur}
-                >
+              >
                 <span aria-hidden="true">
                   <MenuClose />
                 </span>
@@ -78,7 +74,7 @@ function MainHeader({ isValidated, signOut, signIn }) {
                 id="menu-button"
                 type="button"
                 aria-label="open menu"
-                aria-expanded="false"                
+                aria-expanded="false"
                 onClick={openMenu}
               >
                 <span aria-hidden="true">

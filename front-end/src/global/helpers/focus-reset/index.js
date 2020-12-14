@@ -16,7 +16,6 @@ function FocusReset({ location, children }) {
     }
   }, [focusRef, location.pathname, previousLocation]);
 
-
   if (location.pathname === "/callback") {
     return (
       <FocusContainer tabIndex="-1" ref={focusRef}>
@@ -44,16 +43,16 @@ function FocusReset({ location, children }) {
           </li>
 
           <li>
-            <a href={`${location.pathname}#profile-information`} className="skip-link">
+            <a
+              href={`${location.pathname}#profile-information`}
+              className="skip-link"
+            >
               <span>Skip to profile Information</span>
             </a>
           </li>
 
           <li>
-            <a
-              href={`${location.pathname}#profile-card`}
-              className="skip-link"
-            >
+            <a href={`${location.pathname}#profile-card`} className="skip-link">
               <span>Skip to Profile Card</span>
             </a>
           </li>
@@ -76,9 +75,12 @@ function FocusReset({ location, children }) {
               <span>Skip to Filters</span>
             </a>
           </li>
-  
+
           <li>
-            <a href={`${location.pathname}#profiles-feed`} className="skip-link">
+            <a
+              href={`${location.pathname}#profiles-feed`}
+              className="skip-link"
+            >
               <span>Skip to Profiles Feed</span>
             </a>
           </li>

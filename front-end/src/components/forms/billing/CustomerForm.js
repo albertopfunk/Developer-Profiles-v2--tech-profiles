@@ -30,7 +30,7 @@ class CustomerForm extends Component {
     if (!this.monthRef.current || !this.yearRef.current) {
       return;
     }
-    
+
     if (!(this.monthRef.current.checked || this.yearRef.current.checked)) {
       this.setState({ subType: "" });
       return;

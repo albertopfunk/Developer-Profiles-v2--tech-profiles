@@ -5,7 +5,7 @@ import { ProfileContext } from "../../global/context/user-profile/ProfileContext
 
 function ProfileHome() {
   const { user } = useContext(ProfileContext);
-
+  console.dir(user);
   return (
     <Section>
       <h1>Helloo Dashboard Home</h1>

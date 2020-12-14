@@ -42,7 +42,7 @@ class PublicPage extends Component {
       users: res.data.users,
       usersLength: res.data.len,
       initialLoading: false,
-      noMoreUsers: res.data.users.length <= 25 ? true : false
+      noMoreUsers: res.data.users.length <= 25 ? true : false,
     });
   }
 
@@ -91,7 +91,7 @@ class PublicPage extends Component {
       users: res.data.users,
       usersLength: res.data.len,
       filtersLoading: false,
-      noMoreUsers: res.data.users.length <= 25 ? true : false
+      noMoreUsers: res.data.users.length <= 25 ? true : false,
     });
 
     window.scrollTo(0, 0);
@@ -114,7 +114,7 @@ class PublicPage extends Component {
       users: [...this.state.users, ...res.data],
       usersPage: this.state.usersPage + 1,
       usersLoading: false,
-      focusOnNextCard: this.state.users.length
+      focusOnNextCard: this.state.users.length,
     });
 
     if (this.state.users.length + res.data.length <= this.state.usersLength) {

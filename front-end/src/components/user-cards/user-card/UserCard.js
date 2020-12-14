@@ -65,11 +65,11 @@ const UserCard = React.forwardRef((props, articleRef) => {
     if (hasRequestedExtras) {
       ReactDOM.unstable_batchedUpdates(() => {
         setIsCardExpanded(true);
-        setAnnounceCardToggle(true)
+        setAnnounceCardToggle(true);
       });
       return;
     }
-    
+
     setLoadingExtras(true);
     const [res, err] = await httpClient(
       "GET",
@@ -94,7 +94,7 @@ const UserCard = React.forwardRef((props, articleRef) => {
         setNoExtras(true);
         setHasRequestedExtras(true);
         setIsCardExpanded(true);
-        setAnnounceCardToggle(true)
+        setAnnounceCardToggle(true);
         setLoadingExtras(false);
       });
       return;
@@ -105,55 +105,55 @@ const UserCard = React.forwardRef((props, articleRef) => {
       setNoExtras(false);
       setHasRequestedExtras(true);
       setIsCardExpanded(true);
-      setAnnounceCardToggle(true)
+      setAnnounceCardToggle(true);
       setLoadingExtras(false);
     });
   }
 
   function closeUserCard() {
     setIsCardExpanded(false);
-    setAnnounceCardToggle(true)
+    setAnnounceCardToggle(true);
   }
 
   function sendCardAction(e) {
     if (!props.userCardActions) {
-      return
+      return;
     }
 
     // ctrl+home
     if (e.ctrlKey && e.keyCode === 36) {
-      e.preventDefault()
-      props.userCardActions("start", props.index)
+      e.preventDefault();
+      props.userCardActions("start", props.index);
     }
-    
+
     // ctrl+end
     if (e.ctrlKey && e.keyCode === 35) {
-      e.preventDefault()
-      props.userCardActions("end", props.index)
+      e.preventDefault();
+      props.userCardActions("end", props.index);
     }
-    
+
     // page up
     if (e.keyCode === 33) {
-      e.preventDefault()
-      props.userCardActions("previous", props.index)
+      e.preventDefault();
+      props.userCardActions("previous", props.index);
     }
-    
+
     // page down
     if (e.keyCode === 34) {
-      e.preventDefault()
-      props.userCardActions("next", props.index)
+      e.preventDefault();
+      props.userCardActions("next", props.index);
     }
 
     // enter and space
     if (e.keyCode === 13 || e.keyCode === 32) {
       if (!isCardExpanded) {
-        expandUserCard()
+        expandUserCard();
       } else {
-        closeUserCard()
+        closeUserCard();
       }
     }
   }
-  
+
   return (
     // articles in feed are interactive
     // eslint-disable-next-line
@@ -166,16 +166,14 @@ const UserCard = React.forwardRef((props, articleRef) => {
       aria-expanded={isCardExpanded}
       aria-labelledby={`profile-${props.userId}-heading`}
       aria-describedby={`profile-${props.userId}-summary`}
-      onKeyDown={e => sendCardAction(e)}
+      onKeyDown={(e) => sendCardAction(e)}
     >
-      <h3 id={`profile-${props.userId}-heading`}>{`${props.firstName || "user"}'s Profile`}</h3>
+      <h3 id={`profile-${props.userId}-heading`}>{`${
+        props.firstName || "user"
+      }'s Profile`}</h3>
       {/* <aside className="favorite">Favorite</aside> */}
 
-      <div
-        className="sr-only"
-        aria-live="polite"
-        aria-relevant="additions"
-      >
+      <div className="sr-only" aria-live="polite" aria-relevant="additions">
         {announceCardToggle && isCardExpanded ? "card expanded" : null}
         {announceCardToggle && !isCardExpanded ? "card collapsed" : null}
       </div>
@@ -222,10 +220,7 @@ const UserCard = React.forwardRef((props, articleRef) => {
             Expand Profile
           </button>
         ) : (
-          <button
-            type="button"
-            onClick={closeUserCard}
-          >
+          <button type="button" onClick={closeUserCard}>
             Collapse Profile
           </button>
         )}

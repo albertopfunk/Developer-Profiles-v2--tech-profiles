@@ -4,45 +4,44 @@ import styled from "styled-components";
 import UserCard from "./user-card/UserCard";
 
 function UserCards(props) {
-  const feedSectionRef = useRef(null)
+  const feedSectionRef = useRef(null);
   const profileCardRefs = useRef(props.users.map(() => React.createRef()));
-  const feedButtonRef = useRef(null)
+  const feedButtonRef = useRef(null);
 
   useEffect(() => {
     if (props.focusOnNextCard !== 0) {
-      profileCardRefs.current[props.focusOnNextCard].current.focus()
+      profileCardRefs.current[props.focusOnNextCard].current.focus();
     }
-
-  }, [props.focusOnNextCard])
+  }, [props.focusOnNextCard]);
 
   function backToTop() {
     window.scrollTo(0, 0);
-    feedSectionRef.current.focus()
-  };
+    feedSectionRef.current.focus();
+  }
 
   function userCardActions(action, index) {
     if (action === "start") {
-      feedSectionRef.current.focus()
+      feedSectionRef.current.focus();
     }
 
     if (action === "end") {
-      feedButtonRef.current.focus()
+      feedButtonRef.current.focus();
     }
 
     if (action === "previous") {
       if (index === 0) {
-        profileCardRefs.current[props.currentUsers - 1].current.focus()
-        return
+        profileCardRefs.current[props.currentUsers - 1].current.focus();
+        return;
       }
-      profileCardRefs.current[index - 1].current.focus()
+      profileCardRefs.current[index - 1].current.focus();
     }
 
     if (action === "next") {
       if (index === props.currentUsers - 1) {
-        profileCardRefs.current[0].current.focus()
-        return
+        profileCardRefs.current[0].current.focus();
+        return;
       }
-      profileCardRefs.current[index + 1].current.focus()
+      profileCardRefs.current[index + 1].current.focus();
     }
   }
 
