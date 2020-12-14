@@ -33,7 +33,6 @@ if no options are selected, and input is not empty, do not clear input
 
 css only to show selected option
 
--
 on focus
 if input is not empty, automatically show current options
 
