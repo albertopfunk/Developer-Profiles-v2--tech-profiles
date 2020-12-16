@@ -73,7 +73,7 @@ class Combobox extends React.Component {
     selectedOptionIndex: null,
     selectedOptionId: "",
     chosenOptions: [],
-    shouldAnnounce: false,
+    shouldAnnounceResults: false,
   };
 
   componentDidMount() {
@@ -108,7 +108,7 @@ class Combobox extends React.Component {
         selectedOption: {},
         selectedOptionIndex: null,
         selectedOptionId: "",
-        shouldAnnounce: true,
+        shouldAnnounceResults: true,
       });
       return;
     }
@@ -117,7 +117,7 @@ class Combobox extends React.Component {
       resultsInBank: true,
       isUsingCombobox: true,
       autoCompleteResults: results,
-      shouldAnnounce: true,
+      shouldAnnounceResults: true,
     });
   };
 
@@ -127,7 +127,7 @@ class Combobox extends React.Component {
     const { value } = e.target;
     this.setState({
       input: value,
-      shouldAnnounce: false,
+      shouldAnnounceResults: false,
     });
 
     if (this.state.timeOut) {
@@ -142,17 +142,41 @@ class Combobox extends React.Component {
     this.setState({ timeOut: currTimeOut });
   };
 
-  inputFocusGetResults = (e) => {
-    if (this.props.single) {
-      return
+  getCurrentResults = (e) => {
+    const { value } = e.target;
+
+    if (!value) {
+      return;
     }
 
-    if (this.state.input) {
-      this.onInputChange(e.target.value)
+    if (this.props.single) {
+      if (this.state.chosenOptions.length === 0) {
+        this.onInputChange(value);
+        return;
+      }
+
+      // shouldn't fetch if single has chosen option
+      if (value === this.state.chosenOptions[0].name) {
+        return;
+      }
     }
-  }
+
+    this.onInputChange(value);
+  };
 
   inputFocusActions = (e) => {
+    // tab
+    // should close if combobox open with no results
+    if (e.keyCode === 9) {
+      if (this.state.selectedOptionIndex === null) {
+        this.closeCombobox(e.target.value);
+      } else {
+        const { name, id } = this.state.selectedOption;
+        this.chooseOption(name, id);
+      }
+      return;
+    }
+
     if (this.state.autoCompleteResults.length === 0) {
       return;
     }
@@ -227,16 +251,6 @@ class Combobox extends React.Component {
 
       const { name, id } = this.state.selectedOption;
       this.chooseOption(name, id);
-    }
-
-    // tab
-    if (e.keyCode === 9) {
-      if (this.state.selectedOptionIndex === null) {
-        this.closeCombobox(e.target.value);
-      } else {
-        const { name, id } = this.state.selectedOption;
-        this.chooseOption(name, id);
-      }
     }
   };
 
@@ -319,7 +333,7 @@ class Combobox extends React.Component {
             aria-controls="results"
             aria-activedescendant={selectedOptionId}
             value={input}
-            onFocus={(e) => this.inputFocusGetResults(e)}
+            onFocus={(e) => this.getCurrentResults(e)}
             onChange={(e) => this.debounceInput(e)}
             onKeyDown={(e) => this.inputFocusActions(e)}
           />
@@ -335,7 +349,7 @@ class Combobox extends React.Component {
         >
           {!resultsInBank && input ? (
             <>
-              {this.state.shouldAnnounce ? (
+              {this.state.shouldAnnounceResults ? (
                 <span className="sr-only">showing zero results</span>
               ) : null}
 
@@ -348,7 +362,6 @@ class Combobox extends React.Component {
                   id="no-results"
                   role="option"
                   aria-selected="false"
-                  tabIndex="-1"
                 >
                   No Results
                 </li>
@@ -358,7 +371,7 @@ class Combobox extends React.Component {
 
           {resultsInBank && autoCompleteResults.length > 0 ? (
             <>
-              {this.state.shouldAnnounce ? (
+              {this.state.shouldAnnounceResults ? (
                 <span className="sr-only">
                   {`showing ${autoCompleteResults.length} ${
                     autoCompleteResults.length === 1 ? "result" : "results"
