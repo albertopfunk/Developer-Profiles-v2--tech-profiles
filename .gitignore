@@ -25,6 +25,7 @@ dev.sqlite3
 devtest.sqlite3
 notes.txt
 Playground.js
+.eslintcache
 
 npm-debug.log*
 yarn-debug.log*
