@@ -116,6 +116,9 @@ class Combobox extends React.Component {
     this.setState({
       resultsInBank: true,
       isUsingCombobox: true,
+      selectedOption: {},
+      selectedOptionIndex: null,
+      selectedOptionId: "",
       autoCompleteResults: results,
       shouldAnnounceResults: true,
     });
@@ -358,11 +361,7 @@ class Combobox extends React.Component {
                 role="listbox"
                 aria-labelledby={`${inputName}-label`}
               >
-                <li
-                  id="no-results"
-                  role="option"
-                  aria-selected="false"
-                >
+                <li id="no-results" role="option" aria-selected="false">
                   No Results
                 </li>
               </ul>
