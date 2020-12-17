@@ -60,6 +60,10 @@ when user removes an option, focus on next option
 if no options left, focus back on input
 
 
+close combobox onblur? for mouse users
+u can prob replace tab inputAction and use on blur instead to close
+combobox or choose a selected result if one is selected
+
 */
 
 class Combobox extends React.Component {
@@ -167,19 +171,25 @@ class Combobox extends React.Component {
     this.onInputChange(value);
   };
 
-  inputFocusActions = (e) => {
-    // tab
-    // should close if combobox open with no results
-    if (e.keyCode === 9) {
-      if (this.state.selectedOptionIndex === null) {
-        this.closeCombobox(e.target.value);
-      } else {
+  inputBlurAction(e) {
+    const { value } = e.target;
+    // on click action needs to run first
+    setTimeout(() => {
+      if (
+        this.state.selectedOptionIndex === null &&
+        this.state.isUsingCombobox
+      ) {
+        this.closeCombobox(value);
+      }
+
+      if (this.state.selectedOptionId && this.state.isUsingCombobox) {
         const { name, id } = this.state.selectedOption;
         this.chooseOption(name, id);
       }
-      return;
-    }
+    }, 150);
+  }
 
+  inputFocusActions = (e) => {
     if (this.state.autoCompleteResults.length === 0) {
       return;
     }
@@ -297,6 +307,9 @@ class Combobox extends React.Component {
 
     this.setState({ chosenOptions: filteredChosenOptions });
     this.props.onRemoveChosenOption(filteredChosenOptions);
+
+    // focus on next chosen option
+    // if no chosen options, focus on input
   };
 
   render() {
@@ -337,6 +350,7 @@ class Combobox extends React.Component {
             aria-activedescendant={selectedOptionId}
             value={input}
             onFocus={(e) => this.getCurrentResults(e)}
+            onBlur={(e) => this.inputBlurAction(e)}
             onChange={(e) => this.debounceInput(e)}
             onKeyDown={(e) => this.inputFocusActions(e)}
           />
@@ -394,6 +408,7 @@ class Combobox extends React.Component {
                       className={
                         selectedOptionId === `results-${i}` ? "selected" : ""
                       }
+                      
                       onClick={() => this.chooseOption(option.name, option.id)}
                     >
                       {option.name}
