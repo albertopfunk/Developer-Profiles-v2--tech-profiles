@@ -388,6 +388,7 @@ class Combobox extends React.Component {
 
               <ul
                 id="results"
+                className="results-group"
                 role="listbox"
                 aria-labelledby={`${inputName}-label`}
               >
@@ -467,6 +468,11 @@ const ChosenNamesGroup = styled.ul`
 `;
 
 const ResultsContainer = styled.div`
+  .results-group {
+    position: absolute;
+    z-index: 20;
+    background-color: white;
+  }
   .selected {
     border: solid;
     background-color: green;
