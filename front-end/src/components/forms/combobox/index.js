@@ -172,21 +172,15 @@ class Combobox extends React.Component {
   };
 
   inputBlurAction(e) {
-    const { value } = e.target;
-    // on click action needs to run first
-    setTimeout(() => {
-      if (
-        this.state.selectedOptionIndex === null &&
-        this.state.isUsingCombobox
-      ) {
-        this.closeCombobox(value);
-      }
+    if (this.state.selectedOptionIndex === null && this.state.isUsingCombobox) {
+      this.closeCombobox(e.target.value);
+      return;
+    }
 
-      if (this.state.selectedOptionId && this.state.isUsingCombobox) {
-        const { name, id } = this.state.selectedOption;
-        this.chooseOption(name, id);
-      }
-    }, 150);
+    if (this.state.selectedOptionId && this.state.isUsingCombobox) {
+      const { name, id } = this.state.selectedOption;
+      this.chooseOption(name, id);
+    }
   }
 
   inputFocusActions = (e) => {
@@ -408,7 +402,7 @@ class Combobox extends React.Component {
                       className={
                         selectedOptionId === `results-${i}` ? "selected" : ""
                       }
-                      
+                      onMouseDown={(e) => e.preventDefault()}
                       onClick={() => this.chooseOption(option.name, option.id)}
                     >
                       {option.name}
