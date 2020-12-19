@@ -80,11 +80,19 @@ class Combobox extends React.Component {
     shouldAnnounceResults: false,
   };
 
+  chosenOptionRefs = [];
+
   componentDidMount() {
     if (this.props.chosenOptions) {
       this.setState({ chosenOptions: this.props.chosenOptions });
     }
   }
+
+  setChosenOptionRefs = (element, index) => {
+    if (element !== null) {
+      this.chosenOptionRefs[index] = element;
+    }
+  };
 
   onInputChange = async (value) => {
     /*
@@ -288,17 +296,18 @@ class Combobox extends React.Component {
     });
   };
 
-  removeChosenOption = (location) => {
-    let filteredChosenOptions = this.state.chosenOptions.filter(
-      (chosenOption) => {
-        return chosenOption.name !== location.name;
-      }
-    );
-
+  removeChosenOption = (optionIndex) => {
     if (this.props.single && !this.state.isUsingCombobox) {
       this.setState({ input: "" });
     }
 
+    let filteredChosenOptions = [...this.state.chosenOptions];
+    let filteredChosenOptionRefs = [...this.chosenOptionRefs];
+
+    filteredChosenOptions.splice(optionIndex, 1);
+    filteredChosenOptionRefs.splice(optionIndex, 1);
+
+    this.chosenOptionRefs = filteredChosenOptionRefs;
     this.setState({ chosenOptions: filteredChosenOptions });
     this.props.onRemoveChosenOption(filteredChosenOptions);
 
@@ -403,6 +412,7 @@ class Combobox extends React.Component {
                       className={
                         selectedOptionId === `results-${i}` ? "selected" : ""
                       }
+                      // prevent onblur input event so onclick can run
                       onMouseDown={(e) => e.preventDefault()}
                       onClick={() => this.chooseOption(option.name, option.id)}
                     >
@@ -418,14 +428,19 @@ class Combobox extends React.Component {
           {chosenOptions.length > 0 ? (
             <>
               <ChosenNamesGroup aria-label={`chosen ${displayName}`}>
-                {chosenOptions.map((chosenOption) => {
+                {chosenOptions.map((chosenOption, i) => {
                   return (
-                    <li key={chosenOption.id}>
+                    <li
+                      key={chosenOption.id}
+                      ref={(ref) => {
+                        this.setChosenOptionRefs(ref, i);
+                      }}
+                    >
                       <span>{chosenOption.name}</span>
                       <button
                         type="button"
                         aria-label={`remove ${chosenOption.name}`}
-                        onClick={() => this.removeChosenOption(chosenOption)}
+                        onClick={() => this.removeChosenOption(i)}
                       >
                         <span>X</span>
                       </button>
