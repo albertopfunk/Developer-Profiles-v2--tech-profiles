@@ -6,8 +6,7 @@ import Combobox from "../combobox";
 class CurrentLocationFilter extends React.Component {
   state = {
     milesWithinInput: 5,
-    chosenLocationName: "",
-    chosenLocationId: "",
+    location: [],
   };
 
   onInputChange = (e) => {
@@ -24,11 +23,14 @@ class CurrentLocationFilter extends React.Component {
       return [];
     }
 
-    const results = res.data.filter(
-      (prediction) => prediction.name !== this.state.chosenLocationName
-    );
+    if (this.state.location.length > 0) {
+      const results = res.data.filter(
+        (prediction) => prediction.name !== this.state.location[0].name
+      );
+      return results;
+    }
 
-    return results;
+    return res.data;
   };
 
   chooseDistanceOnKeyUp = (e) => {
@@ -44,20 +46,20 @@ class CurrentLocationFilter extends React.Component {
   };
 
   onDistanceChange = () => {
-    if (!this.state.chosenLocationName) {
+    if (this.state.location.length === 0) {
       return;
     }
 
     this.onChosenLocation(
-      this.state.chosenLocationName,
-      this.state.chosenLocationId,
+      this.state.location[0].name,
+      this.state.location[0].id,
       true
     );
   };
 
   onChosenLocation = async (name, id, distChange) => {
     if (!distChange) {
-      this.setState({ chosenLocationName: name, chosenLocationId: id });
+      this.setState({ location: [{ name, id }] });
     }
 
     const [res, err] = await httpClient("POST", "/api/gio", {
@@ -81,7 +83,7 @@ class CurrentLocationFilter extends React.Component {
     this.props.updateUsers({
       isUsingCurrLocationFilter: false,
     });
-    this.setState({ chosenLocationName: "", chosenLocationId: "" });
+    this.setState({ location: [] });
   };
 
   render() {
@@ -106,6 +108,7 @@ class CurrentLocationFilter extends React.Component {
           </label>
         </div>
         <Combobox
+          chosenOptions={this.state.location}
           onInputChange={this.onLocationInputChange}
           onChosenOption={this.onChosenLocation}
           onRemoveChosenOption={this.resetLocationFilter}
