@@ -77,10 +77,11 @@ class Combobox extends React.Component {
     selectedOptionIndex: null,
     selectedOptionId: "",
     chosenOptions: [],
+    removedChosenOptionIndex: null,
     shouldAnnounceResults: false,
   };
 
-  chosenOptionRefs = [];
+  chosenOptionBtnRefs = [];
   inputRef = React.createRef();
 
   componentDidMount() {
@@ -90,29 +91,30 @@ class Combobox extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    // focus on next chosen option
-    // if no chosen options, focus on input
-
-    // if no more optionRefs
-    // focus on input
-    // if length is 1
-    // focus on that item
-    // if greater than 1
-    // check next item(+) first
-    // check prev item(-) second
-
-    // ---
-
-    if (this.props.chosenOptions !== prevProps.chosenOptions) {
-      if (this.chosenOptionRefs.length === 0) {
+    if (this.props.chosenOptions.length < prevProps.chosenOptions.length) {
+      if (this.chosenOptionBtnRefs.length === 0) {
         this.inputRef.current.focus();
+        return;
+      }
+
+      if (this.chosenOptionBtnRefs.length === 1) {
+        // unsure why current is undefined
+        this.chosenOptionBtnRefs[0].focus();
+        return;
+      }
+
+      const index = this.state.removedChosenOptionIndex;
+      if (this.chosenOptionBtnRefs[index]) {
+        this.chosenOptionBtnRefs[index].focus();
+      } else {
+        this.chosenOptionBtnRefs[index - 1].focus();
       }
     }
   }
 
-  setChosenOptionRefs = (element, index) => {
+  setChosenOptionBtnRefs = (element, index) => {
     if (element !== null) {
-      this.chosenOptionRefs[index] = element;
+      this.chosenOptionBtnRefs[index] = element;
     }
   };
 
@@ -324,13 +326,16 @@ class Combobox extends React.Component {
     }
 
     let filteredChosenOptions = [...this.state.chosenOptions];
-    let filteredChosenOptionRefs = [...this.chosenOptionRefs];
+    let filteredChosenOptionBtnRefs = [...this.chosenOptionBtnRefs];
 
     filteredChosenOptions.splice(optionIndex, 1);
-    filteredChosenOptionRefs.splice(optionIndex, 1);
+    filteredChosenOptionBtnRefs.splice(optionIndex, 1);
 
-    this.chosenOptionRefs = filteredChosenOptionRefs;
-    this.setState({ chosenOptions: filteredChosenOptions });
+    this.chosenOptionBtnRefs = filteredChosenOptionBtnRefs;
+    this.setState({
+      chosenOptions: filteredChosenOptions,
+      removedChosenOptionIndex: optionIndex,
+    });
     this.props.onRemoveChosenOption(filteredChosenOptions);
   };
 
@@ -449,15 +454,13 @@ class Combobox extends React.Component {
               <ChosenNamesGroup aria-label={`chosen ${displayName}`}>
                 {chosenOptions.map((chosenOption, i) => {
                   return (
-                    <li
-                      key={chosenOption.id}
-                      ref={(ref) => {
-                        this.setChosenOptionRefs(ref, i);
-                      }}
-                    >
+                    <li key={chosenOption.id}>
                       <span>{chosenOption.name}</span>
                       <button
                         type="button"
+                        ref={(ref) => {
+                          this.setChosenOptionBtnRefs(ref, i);
+                        }}
                         aria-label={`remove ${chosenOption.name}`}
                         onClick={() => this.removeChosenOption(i)}
                       >
