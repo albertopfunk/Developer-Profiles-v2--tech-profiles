@@ -7,10 +7,7 @@ import Combobox from "../../../components/forms/combobox";
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
 import { httpClient } from "../../../global/helpers/http-requests";
 import { validateInput } from "../../../global/helpers/validation";
-import {
-  COMBOBOX_STATUS,
-  FORM_STATUS,
-} from "../../../global/helpers/variables";
+import { FORM_STATUS } from "../../../global/helpers/variables";
 import Announcer from "../../../global/helpers/announcer";
 
 let formSuccessWait;
@@ -18,12 +15,6 @@ function AboutYou() {
   const { user, addUserExtras } = useContext(ProfileContext);
   const [formStatus, setFormStatus] = useState(FORM_STATUS.idle);
   const [announceFormStatus, setAnnounceFormStatus] = useState(false);
-  const [announceLocationsChange, setAnnounceLocationsChange] = useState(false);
-  const [announceTopSkillsChange, setAnnounceTopSkillsChange] = useState(false);
-  const [
-    announceAdditionalSkillsChange,
-    setAnnounceAdditionalSkillsChange,
-  ] = useState(false);
   const [skillsForReviewIdTracker, setSkillsForReviewIdTracker] = useState(1);
 
   const [summary, setSummary] = useState({
@@ -32,7 +23,6 @@ function AboutYou() {
     inputStatus: FORM_STATUS.idle,
   });
 
-  const [locationStatus, setLocationStatus] = useState(COMBOBOX_STATUS.idle);
   const [location, setLocation] = useState({
     inputValue: [],
     inputChange: false,
@@ -40,7 +30,6 @@ function AboutYou() {
     locationsToRemove: [],
   });
 
-  const [topSkillsStatus, setTopSkillsStatus] = useState(COMBOBOX_STATUS.idle);
   const [topSkills, setTopSkills] = useState({
     inputValue: [],
     inputChange: false,
@@ -49,9 +38,6 @@ function AboutYou() {
     skillsForReview: [],
   });
 
-  const [additionalSkillsStatus, setAdditionalSkillsStatus] = useState(
-    COMBOBOX_STATUS.idle
-  );
   const [additionalSkills, setAdditionalSkills] = useState({
     inputValue: [],
     inputChange: false,
@@ -75,42 +61,6 @@ function AboutYou() {
     };
   }, []);
 
-  useEffect(() => {
-    const locationAnnouncementWait = setTimeout(() => {
-      setAnnounceLocationsChange(true);
-    }, 300);
-
-    setAnnounceLocationsChange(false);
-
-    return () => {
-      clearTimeout(locationAnnouncementWait);
-    };
-  }, [locationStatus]);
-
-  useEffect(() => {
-    const skillAnnouncementWait = setTimeout(() => {
-      setAnnounceTopSkillsChange(true);
-    }, 300);
-
-    setAnnounceTopSkillsChange(false);
-
-    return () => {
-      clearTimeout(skillAnnouncementWait);
-    };
-  }, [topSkillsStatus]);
-
-  useEffect(() => {
-    const skillAnnouncementWait = setTimeout(() => {
-      setAnnounceAdditionalSkillsChange(true);
-    }, 300);
-
-    setAnnounceAdditionalSkillsChange(false);
-
-    return () => {
-      clearTimeout(skillAnnouncementWait);
-    };
-  }, [additionalSkillsStatus]);
-
   function setFormInputs() {
     setFormStatus(FORM_STATUS.active);
     setAnnounceFormStatus(true);
@@ -122,8 +72,6 @@ function AboutYou() {
       inputStatus: FORM_STATUS.idle,
     });
 
-    setLocationStatus(COMBOBOX_STATUS.idle);
-    setAnnounceLocationsChange(false);
     setLocation({
       inputValue: user.locations,
       inputChange: false,
@@ -131,8 +79,6 @@ function AboutYou() {
       locationsToRemove: [],
     });
 
-    setTopSkillsStatus(COMBOBOX_STATUS.idle);
-    setAnnounceTopSkillsChange(false);
     setTopSkills({
       inputValue: user.topSkills,
       inputChange: false,
@@ -141,8 +87,6 @@ function AboutYou() {
       skillsForReview: [],
     });
 
-    setAdditionalSkillsStatus(COMBOBOX_STATUS.idle);
-    setAnnounceAdditionalSkillsChange(false);
     setAdditionalSkills({
       inputValue: user.additionalSkills,
       inputChange: false,
@@ -223,7 +167,6 @@ function AboutYou() {
       (location) => !(location.name in userLocationsObj)
     );
 
-    setLocationStatus(COMBOBOX_STATUS.added);
     setLocation({
       ...location,
       inputValue: locations,
@@ -238,7 +181,6 @@ function AboutYou() {
       (userLocation) => !(userLocation.name in locationsObj)
     );
 
-    setLocationStatus(COMBOBOX_STATUS.removed);
     setLocation({
       ...location,
       inputValue: locations,
@@ -314,7 +256,6 @@ function AboutYou() {
       skillsForReview.length + additionalSkills.skillsForReview.length + 1;
 
     setSkillsForReviewIdTracker(skillsForReviewCurrentId);
-    setTopSkillsStatus(COMBOBOX_STATUS.added);
     setTopSkills({
       ...topSkills,
       inputValue: skills,
@@ -330,7 +271,6 @@ function AboutYou() {
       (skill) => !(skill.name in skillsObj)
     );
 
-    setTopSkillsStatus(COMBOBOX_STATUS.removed);
     setTopSkills({
       ...topSkills,
       inputValue: skills,
@@ -358,7 +298,6 @@ function AboutYou() {
       skillsForReview.length + topSkills.skillsForReview.length + 1;
 
     setSkillsForReviewIdTracker(skillsForReviewCurrentId);
-    setAdditionalSkillsStatus(COMBOBOX_STATUS.added);
     setAdditionalSkills({
       ...additionalSkills,
       inputValue: skills,
@@ -374,7 +313,6 @@ function AboutYou() {
       (skill) => !(skill.name in skillsObj)
     );
 
-    setAdditionalSkillsStatus(COMBOBOX_STATUS.removed);
     setAdditionalSkills({
       ...additionalSkills,
       inputValue: skills,
@@ -577,50 +515,6 @@ function AboutYou() {
           ariaId="success-form-announcer"
         />
       ) : null}
-
-      <div
-        className="sr-only"
-        aria-live="assertive"
-        aria-atomic="true"
-        aria-relevant="additions"
-      >
-        {announceLocationsChange && locationStatus === COMBOBOX_STATUS.added
-          ? "added location"
-          : null}
-        {announceLocationsChange && locationStatus === COMBOBOX_STATUS.removed
-          ? "removed location"
-          : null}
-      </div>
-
-      <div
-        className="sr-only"
-        aria-live="assertive"
-        aria-atomic="true"
-        aria-relevant="additions"
-      >
-        {announceTopSkillsChange && topSkillsStatus === COMBOBOX_STATUS.added
-          ? "added top skill"
-          : null}
-        {announceTopSkillsChange && topSkillsStatus === COMBOBOX_STATUS.removed
-          ? "removed top skill"
-          : null}
-      </div>
-
-      <div
-        className="sr-only"
-        aria-live="assertive"
-        aria-atomic="true"
-        aria-relevant="additions"
-      >
-        {announceAdditionalSkillsChange &&
-        additionalSkillsStatus === COMBOBOX_STATUS.added
-          ? "added additional skill"
-          : null}
-        {announceAdditionalSkillsChange &&
-        additionalSkillsStatus === COMBOBOX_STATUS.removed
-          ? "removed additional skill"
-          : null}
-      </div>
 
       <section
         id="profile-information"

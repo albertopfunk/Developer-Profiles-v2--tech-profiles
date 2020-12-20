@@ -7,10 +7,7 @@ import Combobox from "../../../components/forms/combobox";
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
 import { httpClient } from "../../../global/helpers/http-requests";
 import { validateInput } from "../../../global/helpers/validation";
-import {
-  COMBOBOX_STATUS,
-  FORM_STATUS,
-} from "../../../global/helpers/variables";
+import { FORM_STATUS } from "../../../global/helpers/variables";
 import Announcer from "../../../global/helpers/announcer";
 
 let formSuccessWait;
@@ -48,8 +45,6 @@ function WhereToFindYou() {
   // keeping seperate since I am using one as a dep for useEffect
   const [location, setLocation] = useState([]);
   const [locationChange, setLocationChange] = useState(false);
-  const [announceLocationChange, setAnnounceLocationChange] = useState(false);
-  const [locationStatus, setLocationStatus] = useState(COMBOBOX_STATUS.idle);
 
   let errorSummaryRef = React.createRef();
 
@@ -65,18 +60,6 @@ function WhereToFindYou() {
       clearTimeout(formSuccessWait);
     };
   }, []);
-
-  useEffect(() => {
-    const locationAnnouncementWait = setTimeout(() => {
-      setAnnounceLocationChange(true);
-    }, 500);
-
-    setAnnounceLocationChange(false);
-
-    return () => {
-      clearTimeout(locationAnnouncementWait);
-    };
-  }, [locationStatus]);
 
   function setFormInputs() {
     setFormStatus(FORM_STATUS.active);
@@ -121,8 +104,6 @@ function WhereToFindYou() {
       setLocation([]);
     }
     setLocationChange(false);
-    setAnnounceLocationChange(false);
-    setLocationStatus(COMBOBOX_STATUS.idle);
   }
 
   function setGithubInput(value) {
@@ -344,9 +325,8 @@ function WhereToFindYou() {
   }
 
   async function setLocationWithGio(name, id) {
-    setLocationStatus(COMBOBOX_STATUS.added);
     setLocationChange(true);
-
+    
     const [res, err] = await httpClient("POST", "/api/gio", {
       placeId: id,
     });
@@ -367,7 +347,6 @@ function WhereToFindYou() {
   }
 
   function removeLocation() {
-    setLocationStatus(COMBOBOX_STATUS.removed);
     setLocationChange(true);
     setLocation([]);
   }
@@ -497,20 +476,6 @@ function WhereToFindYou() {
           ariaId="success-form-announcer"
         />
       ) : null}
-
-      <div
-        className="sr-only"
-        aria-live="assertive"
-        aria-atomic="true"
-        aria-relevant="additions"
-      >
-        {announceLocationChange && locationStatus === COMBOBOX_STATUS.added
-          ? "added location"
-          : null}
-        {announceLocationChange && locationStatus === COMBOBOX_STATUS.removed
-          ? "removed location"
-          : null}
-      </div>
 
       <FormSection
         id="profile-information"
