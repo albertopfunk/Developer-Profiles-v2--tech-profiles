@@ -81,10 +81,32 @@ class Combobox extends React.Component {
   };
 
   chosenOptionRefs = [];
+  inputRef = React.createRef();
 
   componentDidMount() {
-    if (this.props.chosenOptions) {
+    if (this.props.chosenOptions.length > 0) {
       this.setState({ chosenOptions: this.props.chosenOptions });
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    // focus on next chosen option
+    // if no chosen options, focus on input
+
+    // if no more optionRefs
+    // focus on input
+    // if length is 1
+    // focus on that item
+    // if greater than 1
+    // check next item(+) first
+    // check prev item(-) second
+
+    // ---
+
+    if (this.props.chosenOptions !== prevProps.chosenOptions) {
+      if (this.chosenOptionRefs.length === 0) {
+        this.inputRef.current.focus();
+      }
     }
   }
 
@@ -310,9 +332,6 @@ class Combobox extends React.Component {
     this.chosenOptionRefs = filteredChosenOptionRefs;
     this.setState({ chosenOptions: filteredChosenOptions });
     this.props.onRemoveChosenOption(filteredChosenOptions);
-
-    // focus on next chosen option
-    // if no chosen options, focus on input
   };
 
   render() {
