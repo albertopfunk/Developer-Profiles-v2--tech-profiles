@@ -49,7 +49,7 @@ function NewUser() {
   const [locationChange, setLocationChange] = useState(false);
 
   let errorSummaryRef = React.createRef();
-  let infoSection = React.createRef();
+  let infoSectionBtnRef = React.createRef();
   let basicInfoTabRef = React.createRef();
   let basicInfoPanelRef = React.createRef();
   let billingInfoTabRef = React.createRef();
@@ -87,7 +87,14 @@ function NewUser() {
 
   useEffect(() => {
     if (formFocus) {
-      infoSection.current.focus();
+      if (formFocus === FORM_STATUS.idle) {
+        infoSectionBtnRef.current.focus();
+        return;
+      }
+      
+      if (formFocus === FORM_STATUS.active) {
+        basicInfoTabRef.current.focus();
+      }
     }
   }, [formFocus]);
 
@@ -483,7 +490,7 @@ function NewUser() {
         >
           <h2 id="welcome-heading">Welcome {user.first_name || "Newcomer"}!</h2>
           {/* welcome image */}
-          <button ref={infoSection} id="edit-info-btn" data-main-content onClick={setFormInputs}>Edit Quickstart Information</button>
+          <button ref={infoSectionBtnRef} id="edit-info-btn" data-main-content onClick={setFormInputs}>Edit Quickstart Information</button>
           <Link to="/profile-dashboard">Go Home</Link>
         </section>
       </>
@@ -498,7 +505,6 @@ function NewUser() {
       <h1 id="main-heading">Quickstart</h1>
 
       <section
-        ref={infoSection}
         aria-labelledby="edit-information-heading edit-information-desc"
       >
         <h2 id="edit-information-heading">Edit Information</h2>
