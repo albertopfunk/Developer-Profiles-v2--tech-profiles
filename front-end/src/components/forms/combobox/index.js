@@ -33,7 +33,6 @@ class Combobox extends React.Component {
       }
 
       if (this.chosenOptionBtnRefs.length === 1) {
-        // unsure why current is undefined
         this.chosenOptionBtnRefs[0].focus();
         return;
       }
