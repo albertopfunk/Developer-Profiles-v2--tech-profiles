@@ -479,14 +479,11 @@ function NewUser() {
         </Helmet>
         <h1 id="main-heading">Quickstart</h1>
         <section
-          ref={infoSection}
-          id="profile-information"
-          tabIndex="-1"
           aria-labelledby="welcome-heading"
         >
           <h2 id="welcome-heading">Welcome {user.first_name || "Newcomer"}!</h2>
           {/* welcome image */}
-          <button onClick={setFormInputs}>Edit Quickstart Information</button>
+          <button ref={infoSection} id="profile-information" onClick={setFormInputs}>Edit Quickstart Information</button>
           <Link to="/profile-dashboard">Go Home</Link>
         </section>
       </>
