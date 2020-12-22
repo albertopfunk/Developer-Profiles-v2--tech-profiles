@@ -326,7 +326,7 @@ function WhereToFindYou() {
 
   async function setLocationWithGio(name, id) {
     setLocationChange(true);
-    
+
     const [res, err] = await httpClient("POST", "/api/gio", {
       placeId: id,
     });

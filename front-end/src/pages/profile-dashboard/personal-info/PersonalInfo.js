@@ -349,11 +349,11 @@ function PersonalInfo() {
             ariaId="form-idle-announcement"
           />
         ) : null}
-        <section
-          aria-labelledby="current-information-heading"
-        >
+        <section aria-labelledby="current-information-heading">
           <h2 id="current-information-heading">Current Information</h2>
-          <button id="profile-information" onClick={setFormInputs}>Edit Information</button>
+          <button id="profile-information" onClick={setFormInputs}>
+            Edit Information
+          </button>
           <ul aria-label="current information">
             <li>First Name: {user.first_name || "None Set"}</li>
             <li>Last Name: {user.last_name || "None Set"}</li>

@@ -4,7 +4,7 @@ import styled from "styled-components";
 
 function FocusReset({ location, children }) {
   const [previousLocation, setPreviousLocation] = useState(location.pathname);
-  const [currentMainContentEl, setCurrentMainContentEl] = useState("")
+  const [currentMainContentEl, setCurrentMainContentEl] = useState("");
 
   let focusRef = React.createRef();
   let currentLocation;
@@ -18,12 +18,12 @@ function FocusReset({ location, children }) {
   }, [focusRef, location.pathname, previousLocation]);
 
   function checkIds() {
-    console.log("EL", document.querySelector('[data-main-content]'))
-    console.log(currentMainContentEl)
+    console.log("EL", document.querySelector("[data-main-content]"));
+    console.log(currentMainContentEl);
 
-    const mainContentId = document.querySelector('[data-main-content]').id
-    console.log("ID", mainContentId)
-    setCurrentMainContentEl(mainContentId)
+    const mainContentId = document.querySelector("[data-main-content]").id;
+    console.log("ID", mainContentId);
+    setCurrentMainContentEl(mainContentId);
   }
 
   if (location.pathname === "/callback") {

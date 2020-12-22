@@ -91,7 +91,7 @@ function NewUser() {
         infoSectionBtnRef.current.focus();
         return;
       }
-      
+
       if (formFocus === FORM_STATUS.active) {
         basicInfoTabRef.current.focus();
       }
@@ -485,12 +485,17 @@ function NewUser() {
           <title>Profile Dashboard Quickstart • Tech Profiles</title>
         </Helmet>
         <h1 id="main-heading">Quickstart</h1>
-        <section
-          aria-labelledby="welcome-heading"
-        >
+        <section aria-labelledby="welcome-heading">
           <h2 id="welcome-heading">Welcome {user.first_name || "Newcomer"}!</h2>
           {/* welcome image */}
-          <button ref={infoSectionBtnRef} id="edit-info-btn" data-main-content onClick={setFormInputs}>Edit Quickstart Information</button>
+          <button
+            ref={infoSectionBtnRef}
+            id="edit-info-btn"
+            data-main-content
+            onClick={setFormInputs}
+          >
+            Edit Quickstart Information
+          </button>
           <Link to="/profile-dashboard">Go Home</Link>
         </section>
       </>
@@ -504,9 +509,7 @@ function NewUser() {
       </Helmet>
       <h1 id="main-heading">Quickstart</h1>
 
-      <section
-        aria-labelledby="edit-information-heading edit-information-desc"
-      >
+      <section aria-labelledby="edit-information-heading edit-information-desc">
         <h2 id="edit-information-heading">Edit Information</h2>
         <p id="edit-information-desc">
           inputs are validated but not required to submit

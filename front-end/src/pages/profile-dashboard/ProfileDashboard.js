@@ -147,7 +147,9 @@ function ProfileDashboard() {
       <nav aria-label="page">
         <ul>
           <li>
-            <Link id="page-navigation" to={`${url}`}>Home</Link>
+            <Link id="page-navigation" to={`${url}`}>
+              Home
+            </Link>
           </li>
 
           <li>
