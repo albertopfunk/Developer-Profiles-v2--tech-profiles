@@ -160,6 +160,7 @@ const UserCard = React.forwardRef((props, articleRef) => {
     <li
       ref={articleRef}
       id={`profile-${props.userId}-card`}
+      data-user-card={props.index === 0 ? "true" : "false"}
       tabIndex="0" // eslint-disable-line
       // aria-posinset={props.index + 1}
       // aria-setsize={props.totalUsers}

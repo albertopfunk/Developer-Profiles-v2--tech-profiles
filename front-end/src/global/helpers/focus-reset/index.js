@@ -5,6 +5,7 @@ import styled from "styled-components";
 function FocusReset({ location, children }) {
   const [previousLocation, setPreviousLocation] = useState(location.pathname);
   const [currentMainContentEl, setCurrentMainContentEl] = useState("");
+  const [currentUserCardEl, setCurrentUserCardEl] = useState("");
 
   let focusRef = React.createRef();
   let currentLocation;
@@ -24,6 +25,13 @@ function FocusReset({ location, children }) {
     const mainContentId = document.querySelector("[data-main-content]").id;
     console.log("ID", mainContentId);
     setCurrentMainContentEl(mainContentId);
+  }
+
+  function getUserCardId() {
+    console.log("data-user-card", document.querySelector("[data-user-card='true']"))
+
+    const userCardId = document.querySelector("[data-user-card='true']").id
+    setCurrentUserCardEl(userCardId)
   }
 
   if (location.pathname === "/callback") {
@@ -63,7 +71,7 @@ function FocusReset({ location, children }) {
           </li>
 
           <li>
-            <a href={`${location.pathname}#profile-card`} className="skip-link">
+            <a href={`${location.pathname}#${currentUserCardEl}`} className="skip-link" onFocus={getUserCardId}>
               <span>Skip to Profile Card</span>
             </a>
           </li>
@@ -89,8 +97,9 @@ function FocusReset({ location, children }) {
 
           <li>
             <a
-              href={`${location.pathname}#profiles-feed`}
+              href={`${location.pathname}#${currentUserCardEl}`}
               className="skip-link"
+              onFocus={getUserCardId}
             >
               <span>Skip to Profiles Feed</span>
             </a>
