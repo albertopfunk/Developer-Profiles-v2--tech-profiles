@@ -17,7 +17,7 @@ function NewUser() {
   const { user, setPreviewImg, editProfile } = useContext(ProfileContext);
   const [selectedTab, setSelectedTab] = useState("basic-info");
   const [formStatus, setFormStatus] = useState(FORM_STATUS.idle);
-  const [formFocus, setFormFocus] = useState("");
+  const [formFocusStatus, setFormFocusStatus] = useState("");
   let history = useHistory();
 
   const [firstName, setFirstName] = useState({
@@ -86,21 +86,38 @@ function NewUser() {
   }, [setPreviewImg]);
 
   useEffect(() => {
-    if (formFocus) {
-      if (formFocus === FORM_STATUS.idle) {
+    if (formFocusStatus) {
+      if (formFocusStatus === FORM_STATUS.idle) {
         infoSectionBtnRef.current.focus();
         return;
       }
 
-      if (formFocus === FORM_STATUS.active) {
+      if (formFocusStatus === FORM_STATUS.active) {
         basicInfoTabRef.current.focus();
       }
     }
-  }, [formFocus]);
+  }, [formFocusStatus]);
+
+  function formFocusAction(e, status) {
+    // enter/space
+    if (e.keyCode !== 13 && e.keyCode !== 32) {
+      return;
+    }
+
+    if (status === FORM_STATUS.active) {
+      setFormInputs();
+      setFormFocusStatus(FORM_STATUS.active);
+      return;
+    }
+
+    if (status === FORM_STATUS.idle) {
+      resetForm();
+      setFormFocusStatus(FORM_STATUS.idle);
+    }
+  }
 
   function setFormInputs() {
     setFormStatus(FORM_STATUS.active);
-    setFormFocus(FORM_STATUS.active);
 
     setFirstName({
       inputValue: user.first_name || "",
@@ -475,7 +492,6 @@ function NewUser() {
 
   function resetForm() {
     setFormStatus(FORM_STATUS.idle);
-    setFormFocus(FORM_STATUS.idle);
   }
 
   if (formStatus === FORM_STATUS.idle) {
@@ -493,6 +509,7 @@ function NewUser() {
             id="edit-info-btn"
             data-main-content
             onClick={setFormInputs}
+            onKeyDown={(e) => formFocusAction(e, FORM_STATUS.active)}
           >
             Edit Quickstart Information
           </button>
@@ -735,6 +752,7 @@ function NewUser() {
                 }
                 type="reset"
                 onClick={resetForm}
+                onKeyDown={(e) => formFocusAction(e, FORM_STATUS.idle)}
               >
                 Cancel
               </button>
