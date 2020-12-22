@@ -144,10 +144,10 @@ function ProfileDashboard() {
         ariaId="info-loaded-announcement"
         ariaLive="polite"
       />
-      <nav id="page-navigation" tabIndex="-1" aria-label="page">
+      <nav aria-label="page">
         <ul>
           <li>
-            <Link to={`${url}`}>Home</Link>
+            <Link id="page-navigation" to={`${url}`}>Home</Link>
           </li>
 
           <li>
