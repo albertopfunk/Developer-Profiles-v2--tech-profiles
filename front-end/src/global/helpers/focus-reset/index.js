@@ -4,6 +4,7 @@ import styled from "styled-components";
 
 function FocusReset({ location, children }) {
   const [previousLocation, setPreviousLocation] = useState(location.pathname);
+  const [currentMainContentEl, setCurrentMainContentEl] = useState("")
 
   let focusRef = React.createRef();
   let currentLocation;
@@ -15,6 +16,15 @@ function FocusReset({ location, children }) {
       focusRef.current.focus();
     }
   }, [focusRef, location.pathname, previousLocation]);
+
+  function checkIds() {
+    console.log("EL", document.querySelector('[data-main-content]'))
+    console.log(currentMainContentEl)
+
+    const mainContentId = document.querySelector('[data-main-content]').id
+    console.log("ID", mainContentId)
+    setCurrentMainContentEl(mainContentId)
+  }
 
   if (location.pathname === "/callback") {
     return (
@@ -44,8 +54,9 @@ function FocusReset({ location, children }) {
 
           <li>
             <a
-              href={`${location.pathname}#profile-information`}
+              href={`${location.pathname}#${currentMainContentEl}`}
               className="skip-link"
+              onFocus={checkIds}
             >
               <span>Skip to profile Information</span>
             </a>

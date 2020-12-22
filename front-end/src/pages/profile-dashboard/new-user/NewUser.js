@@ -483,7 +483,7 @@ function NewUser() {
         >
           <h2 id="welcome-heading">Welcome {user.first_name || "Newcomer"}!</h2>
           {/* welcome image */}
-          <button ref={infoSection} id="profile-information" onClick={setFormInputs}>Edit Quickstart Information</button>
+          <button ref={infoSection} id="edit-info-btn" data-main-content onClick={setFormInputs}>Edit Quickstart Information</button>
           <Link to="/profile-dashboard">Go Home</Link>
         </section>
       </>
@@ -499,8 +499,6 @@ function NewUser() {
 
       <section
         ref={infoSection}
-        id="profile-information"
-        tabIndex="-1"
         aria-labelledby="edit-information-heading edit-information-desc"
       >
         <h2 id="edit-information-heading">Edit Information</h2>
@@ -515,6 +513,7 @@ function NewUser() {
                 ref={basicInfoTabRef}
                 href="#basic-info-panel"
                 id="basic-info"
+                data-main-content
                 role="tab"
                 tabIndex={selectedTab === "basic-info" ? "0" : "-1"}
                 // aria-controls="basic-info-panel"
