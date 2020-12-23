@@ -9,7 +9,7 @@ function DashboardBilling() {
   const { user, editProfile } = useContext(ProfileContext);
 
   return (
-    <Main id="main-content" tabIndex="-1" aria-labelledby="main-heading">
+    <Main aria-labelledby="main-heading">
       <Helmet>
         <title>Dashboard Billing • Tech Profiles</title>
       </Helmet>

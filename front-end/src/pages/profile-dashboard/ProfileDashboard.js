@@ -236,9 +236,7 @@ function ProfileDashboard() {
           </ProfileContext.Provider>
         </Elements>
 
-        <section
-          aria-labelledby="profile-card-heading"
-        >
+        <section aria-labelledby="profile-card-heading">
           <h2 id="profile-card-heading">Current Profile Card Preview</h2>
           <UserCard
             previewImg={previewImg.image}

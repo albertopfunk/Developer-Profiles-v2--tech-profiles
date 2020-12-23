@@ -19,7 +19,8 @@ function FocusReset({ location, children }) {
   }, [focusRef, location.pathname, previousLocation]);
 
   function getMainContentId() {
-    const mainContentId = document.querySelector("[data-main-content='true']").id;
+    const mainContentId = document.querySelector("[data-main-content='true']")
+      .id;
     setCurrentMainContentEl(mainContentId);
   }
 
@@ -88,7 +89,10 @@ function FocusReset({ location, children }) {
       >
         <ul aria-label="skip links">
           <li>
-            <a href={`${location.pathname}#sorting-select`} className="skip-link">
+            <a
+              href={`${location.pathname}#sorting-select`}
+              className="skip-link"
+            >
               <span>Skip to Filters</span>
             </a>
           </li>

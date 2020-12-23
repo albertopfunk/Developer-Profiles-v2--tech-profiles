@@ -435,13 +435,11 @@ function WhereToFindYou() {
             ariaId="form-idle-announcement"
           />
         ) : null}
-        <section
-          id="profile-information"
-          tabIndex="-1"
-          aria-labelledby="current-information-heading"
-        >
+        <section aria-labelledby="current-information-heading">
           <h2 id="current-information-heading">Current Information</h2>
-          <button onClick={setFormInputs}>Edit Information</button>
+          <button data-main-content="true" onClick={setFormInputs}>
+            Edit Information
+          </button>
           <ul aria-label="current information">
             <li>Github: {user.github || "None Set"}</li>
             <li>Twitter: {user.twitter || "None Set"}</li>

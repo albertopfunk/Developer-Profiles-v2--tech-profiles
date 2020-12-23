@@ -270,13 +270,11 @@ function DashboardProjects() {
         </Helmet>
         <h1 id="main-heading">Projects</h1>
 
-        <section
-          id="profile-information"
-          tabIndex="-1"
-          aria-labelledby="current-information-heading"
-        >
+        <section aria-labelledby="current-information-heading">
           <h2 id="current-information-heading">Current Information</h2>
-          <button onClick={setFormInputs}>Edit Information</button>
+          <button data-main-content="true" onClick={setFormInputs}>
+            Edit Information
+          </button>
           {user.projects.length > 0 ? (
             user.projects.map((proj) => (
               <div key={proj.id}>
