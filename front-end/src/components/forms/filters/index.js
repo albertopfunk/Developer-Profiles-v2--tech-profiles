@@ -8,7 +8,7 @@ import SortingFilter from "./SortingFilter";
 
 function Filters(props) {
   return (
-    <Section id="filters" tabIndex="-1" aria-labelledby="filters-heading">
+    <Section aria-labelledby="filters-heading">
       <h2 id="filters-heading">Profile Filters</h2>
       <div
         className="sr-only"

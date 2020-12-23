@@ -18,21 +18,12 @@ function FocusReset({ location, children }) {
     }
   }, [focusRef, location.pathname, previousLocation]);
 
-  function checkIds() {
-    console.log("EL", document.querySelector("[data-main-content]"));
-    console.log(currentMainContentEl);
-
+  function getMainContentId() {
     const mainContentId = document.querySelector("[data-main-content]").id;
-    console.log("ID", mainContentId);
     setCurrentMainContentEl(mainContentId);
   }
 
   function getUserCardId() {
-    console.log(
-      "data-user-card",
-      document.querySelector("[data-user-card='true']")
-    );
-
     const userCardId = document.querySelector("[data-user-card='true']").id;
     setCurrentUserCardEl(userCardId);
   }
@@ -67,9 +58,9 @@ function FocusReset({ location, children }) {
             <a
               href={`${location.pathname}#${currentMainContentEl}`}
               className="skip-link"
-              onFocus={checkIds}
+              onFocus={getMainContentId}
             >
-              <span>Skip to profile Information</span>
+              <span>Skip to Main Content</span>
             </a>
           </li>
 
@@ -97,7 +88,7 @@ function FocusReset({ location, children }) {
       >
         <ul aria-label="skip links">
           <li>
-            <a href={`${location.pathname}#filters`} className="skip-link">
+            <a href={`${location.pathname}#sorting-select`} className="skip-link">
               <span>Skip to Filters</span>
             </a>
           </li>
@@ -108,7 +99,7 @@ function FocusReset({ location, children }) {
               className="skip-link"
               onFocus={getUserCardId}
             >
-              <span>Skip to Profiles Feed</span>
+              <span>Skip to Main Content</span>
             </a>
           </li>
         </ul>
