@@ -28,10 +28,13 @@ function FocusReset({ location, children }) {
   }
 
   function getUserCardId() {
-    console.log("data-user-card", document.querySelector("[data-user-card='true']"))
+    console.log(
+      "data-user-card",
+      document.querySelector("[data-user-card='true']")
+    );
 
-    const userCardId = document.querySelector("[data-user-card='true']").id
-    setCurrentUserCardEl(userCardId)
+    const userCardId = document.querySelector("[data-user-card='true']").id;
+    setCurrentUserCardEl(userCardId);
   }
 
   if (location.pathname === "/callback") {
@@ -71,7 +74,11 @@ function FocusReset({ location, children }) {
           </li>
 
           <li>
-            <a href={`${location.pathname}#${currentUserCardEl}`} className="skip-link" onFocus={getUserCardId}>
+            <a
+              href={`${location.pathname}#${currentUserCardEl}`}
+              className="skip-link"
+              onFocus={getUserCardId}
+            >
               <span>Skip to Profile Card</span>
             </a>
           </li>
