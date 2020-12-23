@@ -539,7 +539,9 @@ function NewUser() {
                 ref={basicInfoTabRef}
                 href="#basic-info-panel"
                 id="basic-info"
-                data-main-content="true"
+                data-main-content={
+                  selectedTab === "basic-info" ? "true" : "false"
+                }
                 role="tab"
                 tabIndex={selectedTab === "basic-info" ? "0" : "-1"}
                 // aria-controls="basic-info-panel"
@@ -555,6 +557,9 @@ function NewUser() {
                 ref={billingInfoTabRef}
                 href="#billing-info-panel"
                 id="billing-info"
+                data-main-content={
+                  selectedTab === "billing-info" ? "true" : "false"
+                }
                 role="tab"
                 tabIndex={selectedTab === "billing-info" ? "0" : "-1"}
                 // aria-controls="billing-info-panel"
