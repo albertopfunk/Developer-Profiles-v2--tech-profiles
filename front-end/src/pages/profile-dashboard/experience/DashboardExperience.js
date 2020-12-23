@@ -350,11 +350,7 @@ function DashboardExperience() {
       </Helmet>
       <h1 id="main-heading">Experience</h1>
 
-      <section
-        id="profile-information"
-        tabIndex="-1"
-        aria-labelledby="edit-information-heading"
-      >
+      <section aria-labelledby="edit-information-heading">
         <h2 id="edit-information-heading">Edit Information</h2>
 
         {formStatus === FORM_STATUS.error ? (
@@ -442,6 +438,8 @@ function DashboardExperience() {
 
         <div>
           <button
+            id="add-new-btn"
+            data-main-content="true"
             form="experience-form"
             type="button"
             aria-label="add new experience"
