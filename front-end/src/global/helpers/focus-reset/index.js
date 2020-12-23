@@ -19,7 +19,7 @@ function FocusReset({ location, children }) {
   }, [focusRef, location.pathname, previousLocation]);
 
   function getMainContentId() {
-    const mainContentId = document.querySelector("[data-main-content]").id;
+    const mainContentId = document.querySelector("[data-main-content='true']").id;
     setCurrentMainContentEl(mainContentId);
   }
 

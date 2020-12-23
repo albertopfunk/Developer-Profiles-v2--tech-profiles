@@ -237,8 +237,6 @@ function ProfileDashboard() {
         </Elements>
 
         <section
-          id="profile-card"
-          tabIndex="-1"
           aria-labelledby="profile-card-heading"
         >
           <h2 id="profile-card-heading">Current Profile Card Preview</h2>

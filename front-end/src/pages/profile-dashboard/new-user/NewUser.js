@@ -507,7 +507,7 @@ function NewUser() {
           <button
             ref={infoSectionBtnRef}
             id="edit-info-btn"
-            data-main-content
+            data-main-content="true"
             onClick={setFormInputs}
             onKeyDown={(e) => formFocusAction(e, FORM_STATUS.active)}
           >
@@ -539,7 +539,7 @@ function NewUser() {
                 ref={basicInfoTabRef}
                 href="#basic-info-panel"
                 id="basic-info"
-                data-main-content
+                data-main-content="true"
                 role="tab"
                 tabIndex={selectedTab === "basic-info" ? "0" : "-1"}
                 // aria-controls="basic-info-panel"
