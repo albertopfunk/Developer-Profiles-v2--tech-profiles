@@ -398,11 +398,7 @@ function PersonalInfo() {
         />
       ) : null}
 
-      <FormSection
-        id="profile-information"
-        tabIndex="-1"
-        aria-labelledby="edit-information-heading"
-      >
+      <FormSection aria-labelledby="edit-information-heading">
         <h2 id="edit-information-heading">Edit Information</h2>
 
         {formStatus === FORM_STATUS.error ? (
@@ -453,6 +449,7 @@ function PersonalInfo() {
               type="text"
               autoComplete="given-name"
               id="first-name"
+              data-main-content="true"
               name="first-name"
               className={`input ${
                 firstName.inputStatus === FORM_STATUS.error ? "input-err" : ""

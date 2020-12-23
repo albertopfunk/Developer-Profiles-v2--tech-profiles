@@ -518,11 +518,7 @@ function AboutYou() {
         />
       ) : null}
 
-      <section
-        id="profile-information"
-        tabIndex="-1"
-        aria-labelledby="edit-information-heading"
-      >
+      <section aria-labelledby="edit-information-heading">
         <h2 id="edit-information-heading">Edit Information</h2>
 
         {formStatus === FORM_STATUS.error ? (
@@ -558,6 +554,7 @@ function AboutYou() {
             <label htmlFor="summary">Profile Summary:</label>
             <textarea
               id="summary"
+              data-main-content="true"
               name="profile-summary"
               maxLength="280"
               cols="8"
