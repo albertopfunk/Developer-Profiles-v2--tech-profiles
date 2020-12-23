@@ -311,7 +311,11 @@ function DashboardExperience() {
 
         <section aria-labelledby="current-information-heading">
           <h2 id="current-information-heading">Current Information</h2>
-          <button data-main-content="true" onClick={setFormInputs}>
+          <button
+            id="edit-info-btn"
+            data-main-content="true"
+            onClick={setFormInputs}
+          >
             Edit Information
           </button>
           {user.experience.length > 0 ? (
