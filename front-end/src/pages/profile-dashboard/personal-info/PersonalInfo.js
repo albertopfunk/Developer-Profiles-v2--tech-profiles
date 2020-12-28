@@ -15,7 +15,6 @@ function PersonalInfo() {
   const { user, editProfile, setPreviewImg } = useContext(ProfileContext);
   const [formStatus, setFormStatus] = useState(FORM_STATUS.idle);
   const [formFocusStatus, setFormFocusStatus] = useState("");
-  const [announceFormStatus, setAnnounceFormStatus] = useState(false);
 
   const [firstName, setFirstName] = useState({
     inputValue: "",
@@ -120,7 +119,6 @@ function PersonalInfo() {
 
   function setFormInputs() {
     setFormStatus(FORM_STATUS.active);
-    setAnnounceFormStatus(true);
 
     setFirstName({
       inputValue: user.first_name || "",
@@ -381,12 +379,6 @@ function PersonalInfo() {
           <title>Profile Dashboard Personal Info • Tech Profiles</title>
         </Helmet>
         <h1 id="main-heading">Personal Info</h1>
-        {announceFormStatus ? (
-          <Announcer
-            announcement="Form is idle, press edit information button to open"
-            ariaId="form-idle-announcement"
-          />
-        ) : null}
         <section aria-labelledby="current-information-heading">
           <h2 id="current-information-heading">Current Information</h2>
           <button
@@ -425,13 +417,7 @@ function PersonalInfo() {
         <title>Dashboard Personal Info • Tech Profiles</title>
       </Helmet>
       <h1 id="main-heading">Personal Info</h1>
-      {announceFormStatus && formStatus === FORM_STATUS.active ? (
-        <Announcer
-          announcement="Form is active, inputs are validated but not required to submit"
-          ariaId="active-form-announcer"
-        />
-      ) : null}
-      {announceFormStatus && formStatus === FORM_STATUS.success ? (
+      {formStatus === FORM_STATUS.success ? (
         <Announcer
           announcement="Successfully submitted information"
           ariaId="success-form-announcer"
