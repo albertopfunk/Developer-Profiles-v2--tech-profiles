@@ -13,11 +13,14 @@ function DashboardEducation() {
   const { user, addUserExtras } = useContext(ProfileContext);
   const currentYear = useCurrentYear();
   const [formStatus, setFormStatus] = useState(FORM_STATUS.idle);
+  const [formFocusStatus, setFormFocusStatus] = useState("");
   const [education, setEducation] = useState([]);
   const [educationChange, setEducationChange] = useState(false);
   const [idTracker, setIdTracker] = useState(1);
 
   let errorSummaryRef = React.createRef();
+  let editInfoBtnRef = React.createRef();
+  let addNewBtnRef = React.createRef();
 
   useEffect(() => {
     if (formStatus === FORM_STATUS.error && errorSummaryRef.current) {
@@ -31,6 +34,37 @@ function DashboardEducation() {
       clearTimeout(formSuccessWait);
     };
   }, []);
+
+  useEffect(() => {
+    if (formFocusStatus) {
+      if (formFocusStatus === FORM_STATUS.idle) {
+        editInfoBtnRef.current.focus();
+        return;
+      }
+
+      if (formFocusStatus === FORM_STATUS.active) {
+        addNewBtnRef.current.focus();
+      }
+    }
+  }, [formFocusStatus]);
+
+  function formFocusAction(e, status) {
+    // enter/space
+    if (e.keyCode !== 13 && e.keyCode !== 32) {
+      return;
+    }
+
+    if (status === FORM_STATUS.active) {
+      setFormInputs();
+      setFormFocusStatus(FORM_STATUS.active);
+      return;
+    }
+
+    if (status === FORM_STATUS.idle) {
+      resetForm();
+      setFormFocusStatus(FORM_STATUS.idle);
+    }
+  }
 
   function splitDates(dates) {
     const schoolDatesArr = dates.split(" - ");
@@ -302,6 +336,10 @@ function DashboardEducation() {
     setFormStatus(FORM_STATUS.success);
   }
 
+  function resetForm() {
+    setFormStatus(FORM_STATUS.idle);
+  }
+
   if (formStatus === FORM_STATUS.idle) {
     return (
       <>
@@ -313,9 +351,11 @@ function DashboardEducation() {
         <section aria-labelledby="current-information-heading">
           <h2 id="current-information-heading">Current Information</h2>
           <button
+            ref={editInfoBtnRef}
             id="edit-info-btn"
             data-main-content="true"
             onClick={setFormInputs}
+            onKeyDown={(e) => formFocusAction(e, FORM_STATUS.active)}
           >
             Edit Information
           </button>
@@ -440,6 +480,7 @@ function DashboardEducation() {
 
         <div>
           <button
+            ref={addNewBtnRef}
             id="add-new-btn"
             data-main-content="true"
             form="education-form"
@@ -489,7 +530,8 @@ function DashboardEducation() {
                 formStatus === FORM_STATUS.success
               }
               type="reset"
-              onClick={() => setFormStatus(FORM_STATUS.idle)}
+              onClick={resetForm}
+              onKeyDown={(e) => formFocusAction(e, FORM_STATUS.idle)}
             >
               Cancel
             </button>
