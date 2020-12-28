@@ -49,7 +49,7 @@ function NewUser() {
   const [locationChange, setLocationChange] = useState(false);
 
   let errorSummaryRef = React.createRef();
-  let infoSectionBtnRef = React.createRef();
+  let editInfoBtnRef = React.createRef();
   let basicInfoTabRef = React.createRef();
   let basicInfoPanelRef = React.createRef();
   let billingInfoTabRef = React.createRef();
@@ -88,7 +88,7 @@ function NewUser() {
   useEffect(() => {
     if (formFocusStatus) {
       if (formFocusStatus === FORM_STATUS.idle) {
-        infoSectionBtnRef.current.focus();
+        editInfoBtnRef.current.focus();
         return;
       }
 
@@ -505,7 +505,7 @@ function NewUser() {
           <h2 id="welcome-heading">Welcome {user.first_name || "Newcomer"}!</h2>
           {/* welcome image */}
           <button
-            ref={infoSectionBtnRef}
+            ref={editInfoBtnRef}
             id="edit-info-btn"
             data-main-content="true"
             onClick={setFormInputs}
