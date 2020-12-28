@@ -14,7 +14,7 @@ let formSuccessWait;
 function WhereToFindYou() {
   const { user, editProfile } = useContext(ProfileContext);
   const [formStatus, setFormStatus] = useState(FORM_STATUS.idle);
-  const [announceFormStatus, setAnnounceFormStatus] = useState(false);
+  const [formFocusStatus, setFormFocusStatus] = useState("");
 
   const [github, setGithub] = useState({
     inputValue: "",
@@ -47,6 +47,8 @@ function WhereToFindYou() {
   const [locationChange, setLocationChange] = useState(false);
 
   let errorSummaryRef = React.createRef();
+  let editInfoBtnRef = React.createRef();
+  let githubInputRef = React.createRef();
 
   useEffect(() => {
     if (formStatus === FORM_STATUS.error && errorSummaryRef.current) {
@@ -61,9 +63,39 @@ function WhereToFindYou() {
     };
   }, []);
 
+  useEffect(() => {
+    if (formFocusStatus) {
+      if (formFocusStatus === FORM_STATUS.idle) {
+        editInfoBtnRef.current.focus();
+        return;
+      }
+
+      if (formFocusStatus === FORM_STATUS.active) {
+        githubInputRef.current.focus();
+      }
+    }
+  }, [formFocusStatus]);
+
+  function formFocusAction(e, status) {
+    // enter/space
+    if (e.keyCode !== 13 && e.keyCode !== 32) {
+      return;
+    }
+
+    if (status === FORM_STATUS.active) {
+      setFormInputs();
+      setFormFocusStatus(FORM_STATUS.active);
+      return;
+    }
+
+    if (status === FORM_STATUS.idle) {
+      resetForm();
+      setFormFocusStatus(FORM_STATUS.idle);
+    }
+  }
+
   function setFormInputs() {
     setFormStatus(FORM_STATUS.active);
-    setAnnounceFormStatus(true);
 
     setGithub({
       inputValue: user.github || "",
@@ -422,6 +454,10 @@ function WhereToFindYou() {
     setFormStatus(FORM_STATUS.success);
   }
 
+  function resetForm() {
+    setFormStatus(FORM_STATUS.idle);
+  }
+
   if (formStatus === FORM_STATUS.idle) {
     return (
       <>
@@ -429,18 +465,14 @@ function WhereToFindYou() {
           <title>Profile Dashboard Where to Find You • Tech Profiles</title>
         </Helmet>
         <h1 id="main-heading">Where to Find You</h1>
-        {announceFormStatus ? (
-          <Announcer
-            announcement="Form is idle, press edit information button to open"
-            ariaId="form-idle-announcement"
-          />
-        ) : null}
         <section aria-labelledby="current-information-heading">
           <h2 id="current-information-heading">Current Information</h2>
           <button
+            ref={editInfoBtnRef}
             id="edit-info-btn"
             data-main-content="true"
             onClick={setFormInputs}
+            onKeyDown={(e) => formFocusAction(e, FORM_STATUS.active)}
           >
             Edit Information
           </button>
@@ -464,15 +496,7 @@ function WhereToFindYou() {
         <title>Dashboard Where to Find You • Tech Profiles</title>
       </Helmet>
       <h1 id="main-heading">Where to Find You</h1>
-
-      {announceFormStatus && formStatus === FORM_STATUS.active ? (
-        <Announcer
-          announcement="Form is active, inputs are validated but not required"
-          ariaId="active-form-announcer"
-        />
-      ) : null}
-
-      {announceFormStatus && formStatus === FORM_STATUS.success ? (
+      {formStatus === FORM_STATUS.success ? (
         <Announcer
           announcement="information updated"
           ariaId="success-form-announcer"
@@ -539,6 +563,7 @@ function WhereToFindYou() {
           <InputContainer>
             <label htmlFor="github">Github:</label>
             <input
+              ref={githubInputRef}
               type="text"
               autoComplete="username"
               inputMode="url"
@@ -716,7 +741,8 @@ function WhereToFindYou() {
               formStatus === FORM_STATUS.success
             }
             type="reset"
-            onClick={() => setFormStatus(FORM_STATUS.idle)}
+            onClick={resetForm}
+            onKeyDown={(e) => formFocusAction(e, FORM_STATUS.idle)}
           >
             Cancel
           </button>

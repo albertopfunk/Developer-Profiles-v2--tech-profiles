@@ -14,7 +14,7 @@ let formSuccessWait;
 function AboutYou() {
   const { user, addUserExtras } = useContext(ProfileContext);
   const [formStatus, setFormStatus] = useState(FORM_STATUS.idle);
-  const [announceFormStatus, setAnnounceFormStatus] = useState(false);
+  const [formFocusStatus, setFormFocusStatus] = useState("");
   const [skillsForReviewIdTracker, setSkillsForReviewIdTracker] = useState(1);
 
   const [summary, setSummary] = useState({
@@ -47,6 +47,8 @@ function AboutYou() {
   });
 
   let errorSummaryRef = React.createRef();
+  let editInfoBtnRef = React.createRef();
+  let summaryInputRef = React.createRef();
 
   useEffect(() => {
     if (formStatus === FORM_STATUS.error && errorSummaryRef.current) {
@@ -61,9 +63,39 @@ function AboutYou() {
     };
   }, []);
 
+  useEffect(() => {
+    if (formFocusStatus) {
+      if (formFocusStatus === FORM_STATUS.idle) {
+        editInfoBtnRef.current.focus();
+        return;
+      }
+
+      if (formFocusStatus === FORM_STATUS.active) {
+        summaryInputRef.current.focus();
+      }
+    }
+  }, [formFocusStatus]);
+
+  function formFocusAction(e, status) {
+    // enter/space
+    if (e.keyCode !== 13 && e.keyCode !== 32) {
+      return;
+    }
+
+    if (status === FORM_STATUS.active) {
+      setFormInputs();
+      setFormFocusStatus(FORM_STATUS.active);
+      return;
+    }
+
+    if (status === FORM_STATUS.idle) {
+      resetForm();
+      setFormFocusStatus(FORM_STATUS.idle);
+    }
+  }
+
   function setFormInputs() {
     setFormStatus(FORM_STATUS.active);
-    setAnnounceFormStatus(true);
     setSkillsForReviewIdTracker(1);
 
     setSummary({
@@ -433,6 +465,10 @@ function AboutYou() {
     setFormStatus(FORM_STATUS.success);
   }
 
+  function resetForm() {
+    setFormStatus(FORM_STATUS.idle);
+  }
+
   if (formStatus === FORM_STATUS.idle) {
     return (
       <>
@@ -440,18 +476,14 @@ function AboutYou() {
           <title>Profile Dashboard About You • Tech Profiles</title>
         </Helmet>
         <h1 id="main-heading">About You</h1>
-        {announceFormStatus ? (
-          <Announcer
-            announcement="Form is idle, press edit information button to open"
-            ariaId="form-idle-announcement"
-          />
-        ) : null}
         <section aria-labelledby="current-information-heading">
           <h2 id="current-information-heading">Current Information</h2>
           <button
+            ref={editInfoBtnRef}
             id="edit-info-btn"
             data-main-content="true"
             onClick={setFormInputs}
+            onKeyDown={(e) => formFocusAction(e, FORM_STATUS.active)}
           >
             Edit Information
           </button>
@@ -505,13 +537,7 @@ function AboutYou() {
         <title>Dashboard About You • Tech Profiles</title>
       </Helmet>
       <h1 id="main-heading">About You</h1>
-      {announceFormStatus && formStatus === FORM_STATUS.active ? (
-        <Announcer
-          announcement="Form is active, inputs are validated but not required"
-          ariaId="active-form-announcer"
-        />
-      ) : null}
-      {announceFormStatus && formStatus === FORM_STATUS.success ? (
+      {formStatus === FORM_STATUS.success ? (
         <Announcer
           announcement="information updated"
           ariaId="success-form-announcer"
@@ -553,6 +579,7 @@ function AboutYou() {
           <InputContainer>
             <label htmlFor="summary">Profile Summary:</label>
             <textarea
+              ref={summaryInputRef}
               id="summary"
               data-main-content="true"
               name="profile-summary"
@@ -626,7 +653,8 @@ function AboutYou() {
               formStatus === FORM_STATUS.success
             }
             type="reset"
-            onClick={() => setFormStatus(FORM_STATUS.idle)}
+            onClick={resetForm}
+            onKeyDown={(e) => formFocusAction(e, FORM_STATUS.idle)}
           >
             Cancel
           </button>
