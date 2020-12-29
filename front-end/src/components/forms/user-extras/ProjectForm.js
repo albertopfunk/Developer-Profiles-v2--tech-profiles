@@ -252,7 +252,7 @@ const ProjectForm = React.forwardRef(
           ref={removeBtnRef}
           type="button"
           aria-label={`Remove ${project.projectNameInput || "New"} Project`}
-          onClick={() => removeProject(userId)}
+          onClick={() => removeProject(projIndex)}
         >
           X
         </button>

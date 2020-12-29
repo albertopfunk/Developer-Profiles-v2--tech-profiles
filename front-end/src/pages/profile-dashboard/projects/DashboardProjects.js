@@ -15,6 +15,8 @@ function DashboardProjects() {
   const [formStatus, setFormStatus] = useState(FORM_STATUS.idle);
   const [formFocusStatus, setFormFocusStatus] = useState("");
   const [projects, setProjects] = useState([]);
+  const [removedProjIndex, setRemovedProjIndex] = useState(null);
+  const [removedProjUpdate, setRemovedProjUpdate] = useState(true);
   const [projectsChange, setProjectsChange] = useState(false);
   const [idTracker, setIdTracker] = useState(1);
 
@@ -38,8 +40,26 @@ function DashboardProjects() {
   }, []);
 
   useEffect(() => {
-    console.log("RUNNNN", projects, removeBtnRefs, removeBtnRefs.current);
-  }, [projects]);
+    if (removedProjIndex === null) {
+      return;
+    }
+
+    if (removeBtnRefs.current.length === 0) {
+      addNewBtnRef.current.focus();
+      return;
+    }
+
+    if (removeBtnRefs.current.length === 1) {
+      removeBtnRefs.current[0].current.focus();
+      return;
+    }
+
+    if (removeBtnRefs.current[removedProjIndex]) {
+      removeBtnRefs.current[removedProjIndex].current.focus();
+    } else {
+      removeBtnRefs.current[removedProjIndex - 1].current.focus();
+    }
+  }, [removedProjUpdate]);
 
   useEffect(() => {
     if (formFocusStatus) {
@@ -142,10 +162,13 @@ function DashboardProjects() {
     setProjectsChange(true);
   }
 
-  function removeProject(id) {
-    const filteredProjects = projects.filter((proj) => proj.id !== id);
+  function removeProject(projIndex) {
+    const filteredProjects = [...projects];
+    filteredProjects.splice(projIndex, 1);
     removeBtnRefs.current = filteredProjects.map(() => React.createRef());
     setProjects(filteredProjects);
+    setRemovedProjIndex(projIndex);
+    setRemovedProjUpdate(!removedProjUpdate);
     setProjectsChange(true);
   }
 
