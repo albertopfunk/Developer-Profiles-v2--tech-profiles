@@ -38,8 +38,8 @@ function DashboardProjects() {
   }, []);
 
   useEffect(() => {
-    console.log("RUNNNN", projects, removeBtnRefs, removeBtnRefs.current)
-  }, [projects])
+    console.log("RUNNNN", projects, removeBtnRefs, removeBtnRefs.current);
+  }, [projects]);
 
   useEffect(() => {
     if (formFocusStatus) {
@@ -97,7 +97,7 @@ function DashboardProjects() {
       };
     });
 
-    removeBtnRefs.current = updatedUserProjects.map(() => React.createRef())
+    removeBtnRefs.current = updatedUserProjects.map(() => React.createRef());
     setProjects(updatedUserProjects);
   }
 
@@ -134,9 +134,9 @@ function DashboardProjects() {
         descriptionStatus: FORM_STATUS.idle,
         descriptionChange: false,
       },
-    ]
+    ];
 
-    removeBtnRefs.current = currentProjects.map(() => React.createRef())
+    removeBtnRefs.current = currentProjects.map(() => React.createRef());
     setProjects(currentProjects);
     setIdTracker(idTracker + 1);
     setProjectsChange(true);
@@ -144,7 +144,7 @@ function DashboardProjects() {
 
   function removeProject(id) {
     const filteredProjects = projects.filter((proj) => proj.id !== id);
-    removeBtnRefs.current = filteredProjects.map(() => React.createRef())
+    removeBtnRefs.current = filteredProjects.map(() => React.createRef());
     setProjects(filteredProjects);
     setProjectsChange(true);
   }
