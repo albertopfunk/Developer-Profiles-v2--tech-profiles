@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { Helmet } from "react-helmet";
 
 import ProjectForm from "../../../components/forms/user-extras/ProjectForm";
@@ -22,6 +22,8 @@ function DashboardProjects() {
   let editInfoBtnRef = React.createRef();
   let addNewBtnRef = React.createRef();
 
+  const removeBtnRefs = useRef([]);
+
   useEffect(() => {
     if (formStatus === FORM_STATUS.error && errorSummaryRef.current) {
       errorSummaryRef.current.focus();
@@ -34,6 +36,10 @@ function DashboardProjects() {
       clearTimeout(formSuccessWait);
     };
   }, []);
+
+  useEffect(() => {
+    console.log("RUNNNN", projects, removeBtnRefs, removeBtnRefs.current)
+  }, [projects])
 
   useEffect(() => {
     if (formFocusStatus) {
@@ -91,6 +97,7 @@ function DashboardProjects() {
       };
     });
 
+    removeBtnRefs.current = updatedUserProjects.map(() => React.createRef())
     setProjects(updatedUserProjects);
   }
 
@@ -104,7 +111,7 @@ function DashboardProjects() {
   function addProject(e) {
     e.preventDefault();
 
-    setProjects([
+    const currentProjects = [
       ...projects,
 
       {
@@ -127,14 +134,17 @@ function DashboardProjects() {
         descriptionStatus: FORM_STATUS.idle,
         descriptionChange: false,
       },
-    ]);
+    ]
 
+    removeBtnRefs.current = currentProjects.map(() => React.createRef())
+    setProjects(currentProjects);
     setIdTracker(idTracker + 1);
     setProjectsChange(true);
   }
 
   function removeProject(id) {
     const filteredProjects = projects.filter((proj) => proj.id !== id);
+    removeBtnRefs.current = filteredProjects.map(() => React.createRef())
     setProjects(filteredProjects);
     setProjectsChange(true);
   }
@@ -437,9 +447,23 @@ function DashboardProjects() {
 
           <form id="projects-form" onSubmit={(e) => submitEdit(e)}>
             {projects.map((proj, index) => {
+              /*
+                array of button refs
+                forward ref to remove btn
+                set up refs
+                
+                when user removes, update projects+btn refs
+                useeffect to focus on next proj btn
+                dep will be projects state
+
+                might need extra state to keep track of removals
+                only run useeffect when proj.len < prevProj.len
+              
+              */
               return (
                 <div key={proj.id}>
                   <ProjectForm
+                    ref={removeBtnRefs.current[index]}
                     projIndex={index}
                     userId={proj.id}
                     userProjectName={proj.project_title || ""}

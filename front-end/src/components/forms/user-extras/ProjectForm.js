@@ -7,7 +7,7 @@ import { validateInput } from "../../../global/helpers/validation";
 import { FORM_STATUS } from "../../../global/helpers/variables";
 import { httpClient } from "../../../global/helpers/http-requests";
 
-function ProjectForm({
+const ProjectForm = React.forwardRef(({
   projIndex,
   userId,
   userProjectName,
@@ -16,7 +16,7 @@ function ProjectForm({
   userProjectDescription,
   updateProject,
   removeProject,
-}) {
+}, removeBtnRef) => {
   const [project, setProject] = useState({
     projectNameInput: userProjectName,
     projectChange: false,
@@ -245,6 +245,7 @@ function ProjectForm({
       <legend>Project: {project.projectNameInput || "New Project"}</legend>
 
       <button
+        ref={removeBtnRef}
         type="button"
         aria-label={`Remove ${project.projectNameInput || "New"} Project`}
         onClick={() => removeProject(userId)}
@@ -358,7 +359,7 @@ function ProjectForm({
       </InputContainer>
     </fieldset>
   );
-}
+})
 
 const InputContainer = styled.div`
   display: flex;
