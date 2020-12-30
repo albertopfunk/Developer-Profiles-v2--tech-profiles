@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { Helmet } from "react-helmet";
 
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
@@ -12,15 +12,19 @@ let formSuccessWait;
 function DashboardExperience() {
   const { user, addUserExtras } = useContext(ProfileContext);
   const currentYear = useCurrentYear();
+
   const [formStatus, setFormStatus] = useState(FORM_STATUS.idle);
   const [formFocusStatus, setFormFocusStatus] = useState("");
   const [experience, setExperience] = useState([]);
   const [experienceChange, setExperienceChange] = useState(false);
+  const [removedExpIndex, setRemovedExpIndex] = useState(null);
+  const [removedExpUpdate, setRemovedExpUpdate] = useState(true);
   const [idTracker, setIdTracker] = useState(1);
 
-  let errorSummaryRef = React.createRef();
-  let editInfoBtnRef = React.createRef();
-  let addNewBtnRef = React.createRef();
+  const errorSummaryRef = React.createRef();
+  const editInfoBtnRef = React.createRef();
+  const addNewBtnRef = React.createRef();
+  const removeBtnRefs = useRef([]);
 
   useEffect(() => {
     if (formStatus === FORM_STATUS.error && errorSummaryRef.current) {
@@ -34,6 +38,28 @@ function DashboardExperience() {
       clearTimeout(formSuccessWait);
     };
   }, []);
+
+  useEffect(() => {
+    if (removedExpIndex === null) {
+      return;
+    }
+
+    if (removeBtnRefs.current.length === 0) {
+      addNewBtnRef.current.focus();
+      return;
+    }
+
+    if (removeBtnRefs.current.length === 1) {
+      removeBtnRefs.current[0].current.focus();
+      return;
+    }
+
+    if (removeBtnRefs.current[removedExpIndex]) {
+      removeBtnRefs.current[removedExpIndex].current.focus();
+    } else {
+      removeBtnRefs.current[removedExpIndex - 1].current.focus();
+    }
+  }, [removedExpUpdate]);
 
   useEffect(() => {
     if (formFocusStatus) {
@@ -120,6 +146,7 @@ function DashboardExperience() {
       };
     });
 
+    removeBtnRefs.current = updatedUserExperience.map(() => React.createRef());
     setExperience(updatedUserExperience);
   }
 
@@ -133,7 +160,7 @@ function DashboardExperience() {
   function addExperience(e) {
     e.preventDefault();
 
-    setExperience([
+    const currentExperience = [
       ...experience,
 
       {
@@ -158,15 +185,21 @@ function DashboardExperience() {
         toPresent: "",
         dateChange: false,
       },
-    ]);
+    ];
 
+    removeBtnRefs.current = currentExperience.map(() => React.createRef());
+    setExperience(currentExperience);
     setIdTracker(idTracker + 1);
     setExperienceChange(true);
   }
 
-  function removeExperience(id) {
-    const newExperience = experience.filter((exp) => exp.id !== id);
+  function removeExperience(expIndex) {
+    const newExperience = [...experience];
+    newExperience.splice(expIndex, 1);
+    removeBtnRefs.current = newExperience.map(() => React.createRef());
     setExperience(newExperience);
+    setRemovedExpIndex(expIndex);
+    setRemovedExpUpdate(!removedExpUpdate);
     setExperienceChange(true);
   }
 
@@ -494,6 +527,7 @@ function DashboardExperience() {
               return (
                 <div key={exp.id}>
                   <ExperienceForm
+                    ref={removeBtnRefs.current[index]}
                     expIndex={index}
                     userId={exp.id}
                     currentYear={currentYear}
