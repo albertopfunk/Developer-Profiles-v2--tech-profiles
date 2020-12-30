@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { Helmet } from "react-helmet";
 
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
@@ -12,15 +12,19 @@ let formSuccessWait;
 function DashboardEducation() {
   const { user, addUserExtras } = useContext(ProfileContext);
   const currentYear = useCurrentYear();
+
   const [formStatus, setFormStatus] = useState(FORM_STATUS.idle);
   const [formFocusStatus, setFormFocusStatus] = useState("");
   const [education, setEducation] = useState([]);
   const [educationChange, setEducationChange] = useState(false);
+  const [removedEduIndex, setRemovedEduIndex] = useState(null);
+  const [removedEduUpdate, setRemovedEduUpdate] = useState(true);
   const [idTracker, setIdTracker] = useState(1);
 
-  let errorSummaryRef = React.createRef();
-  let editInfoBtnRef = React.createRef();
-  let addNewBtnRef = React.createRef();
+  const errorSummaryRef = React.createRef();
+  const editInfoBtnRef = React.createRef();
+  const addNewBtnRef = React.createRef();
+  const removeBtnRefs = useRef([]);
 
   useEffect(() => {
     if (formStatus === FORM_STATUS.error && errorSummaryRef.current) {
@@ -34,6 +38,28 @@ function DashboardEducation() {
       clearTimeout(formSuccessWait);
     };
   }, []);
+
+  useEffect(() => {
+    if (removedEduIndex === null) {
+      return;
+    }
+
+    if (removeBtnRefs.current.length === 0) {
+      addNewBtnRef.current.focus();
+      return;
+    }
+
+    if (removeBtnRefs.current.length === 1) {
+      removeBtnRefs.current[0].current.focus();
+      return;
+    }
+
+    if (removeBtnRefs.current[removedEduIndex]) {
+      removeBtnRefs.current[removedEduIndex].current.focus();
+    } else {
+      removeBtnRefs.current[removedEduIndex - 1].current.focus();
+    }
+  }, [removedEduUpdate]);
 
   useEffect(() => {
     if (formFocusStatus) {
@@ -120,6 +146,7 @@ function DashboardEducation() {
       };
     });
 
+    removeBtnRefs.current = updatedUserEducation.map(() => React.createRef());
     setEducation(updatedUserEducation);
   }
 
@@ -133,7 +160,7 @@ function DashboardEducation() {
   function addEducation(e) {
     e.preventDefault();
 
-    setEducation([
+    const currentEducation = [
       ...education,
 
       {
@@ -158,15 +185,21 @@ function DashboardEducation() {
         schoolToPresent: "",
         schoolDateChange: false,
       },
-    ]);
+    ];
 
+    removeBtnRefs.current = currentEducation.map(() => React.createRef());
+    setEducation(currentEducation);
     setIdTracker(idTracker + 1);
     setEducationChange(true);
   }
 
-  function removeEducation(id) {
-    const newEducation = education.filter((edu) => edu.id !== id);
+  function removeEducation(eduIndex) {
+    const newEducation = [...education];
+    newEducation.splice(eduIndex, 1);
+    removeBtnRefs.current = newEducation.map(() => React.createRef());
     setEducation(newEducation);
+    setRemovedEduIndex(eduIndex);
+    setRemovedEduUpdate(!removedEduUpdate);
     setEducationChange(true);
   }
 
@@ -495,6 +528,7 @@ function DashboardEducation() {
               return (
                 <div key={edu.id}>
                   <EducationForm
+                    ref={removeBtnRefs.current[index]}
                     eduIndex={index}
                     userId={edu.id}
                     currentYear={currentYear}
