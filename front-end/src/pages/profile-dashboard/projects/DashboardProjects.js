@@ -15,15 +15,14 @@ function DashboardProjects() {
   const [formStatus, setFormStatus] = useState(FORM_STATUS.idle);
   const [formFocusStatus, setFormFocusStatus] = useState("");
   const [projects, setProjects] = useState([]);
+  const [projectsChange, setProjectsChange] = useState(false);
   const [removedProjIndex, setRemovedProjIndex] = useState(null);
   const [removedProjUpdate, setRemovedProjUpdate] = useState(true);
-  const [projectsChange, setProjectsChange] = useState(false);
   const [idTracker, setIdTracker] = useState(1);
 
-  let errorSummaryRef = React.createRef();
-  let editInfoBtnRef = React.createRef();
-  let addNewBtnRef = React.createRef();
-
+  const errorSummaryRef = React.createRef();
+  const editInfoBtnRef = React.createRef();
+  const addNewBtnRef = React.createRef();
   const removeBtnRefs = useRef([]);
 
   useEffect(() => {
@@ -163,10 +162,10 @@ function DashboardProjects() {
   }
 
   function removeProject(projIndex) {
-    const filteredProjects = [...projects];
-    filteredProjects.splice(projIndex, 1);
-    removeBtnRefs.current = filteredProjects.map(() => React.createRef());
-    setProjects(filteredProjects);
+    const newProjects = [...projects];
+    newProjects.splice(projIndex, 1);
+    removeBtnRefs.current = newProjects.map(() => React.createRef());
+    setProjects(newProjects);
     setRemovedProjIndex(projIndex);
     setRemovedProjUpdate(!removedProjUpdate);
     setProjectsChange(true);
@@ -470,19 +469,6 @@ function DashboardProjects() {
 
           <form id="projects-form" onSubmit={(e) => submitEdit(e)}>
             {projects.map((proj, index) => {
-              /*
-                array of button refs
-                forward ref to remove btn
-                set up refs
-                
-                when user removes, update projects+btn refs
-                useeffect to focus on next proj btn
-                dep will be projects state
-
-                might need extra state to keep track of removals
-                only run useeffect when proj.len < prevProj.len
-              
-              */
               return (
                 <div key={proj.id}>
                   <ProjectForm
