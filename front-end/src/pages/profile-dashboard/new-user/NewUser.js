@@ -774,6 +774,7 @@ function NewUser() {
             }}
           >
             <CheckoutContainer
+              isMainContent={false}
               stripeId={user.stripe_customer_id}
               stripeSubId={user.stripe_subscription_name}
               email={user.email}

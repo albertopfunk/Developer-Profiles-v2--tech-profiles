@@ -70,7 +70,13 @@ class SubscriberForm extends Component {
         <h3>Status</h3>
         <p>{this.state.status}</p>
 
-        <button onClick={this.cancelSub}>Cancel Subscription</button>
+        <button
+          id="cancel-subscribe-btn"
+          data-main-content={this.props.isMainContent ? "true" : "false"}
+          onClick={this.cancelSub}
+        >
+          Cancel Subscription
+        </button>
       </CheckoutContainer>
     );
   }

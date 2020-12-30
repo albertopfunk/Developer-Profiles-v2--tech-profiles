@@ -15,6 +15,7 @@ function DashboardBilling() {
       </Helmet>
       <h1 id="main-heading">Billing</h1>
       <CheckoutContainer
+        isMainContent={true}
         stripeId={user.stripe_customer_id}
         stripeSubId={user.stripe_subscription_name}
         email={user.email}

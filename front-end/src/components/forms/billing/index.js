@@ -66,6 +66,7 @@ class CheckoutContainer extends Component {
       return (
         <CheckoutSection>
           <UserForm
+            isMainContent={this.props.isMainContent}
             editUserProfile={this.editUserProfile}
             email={this.props.email}
           />
@@ -77,6 +78,7 @@ class CheckoutContainer extends Component {
       return (
         <CheckoutSection>
           <SubscriberForm
+            isMainContent={this.props.isMainContent}
             editUserProfile={this.editUserProfile}
             stripeSubId={this.props.stripeSubId}
             setUserType={this.setUserType}
@@ -89,6 +91,7 @@ class CheckoutContainer extends Component {
       return (
         <CheckoutSection>
           <CustomerForm
+            isMainContent={this.props.isMainContent}
             editUserProfile={this.editUserProfile}
             stripeId={this.props.stripeId}
             setUserType={this.setUserType}

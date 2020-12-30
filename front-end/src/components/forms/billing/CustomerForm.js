@@ -82,6 +82,7 @@ class CustomerForm extends Component {
                 type="checkbox"
                 name="subscription-type"
                 id="yearly"
+                data-main-content={this.props.isMainContent ? "true" : "false"}
                 onChange={this.toggleYearCheckbox}
               />
               Yearly
