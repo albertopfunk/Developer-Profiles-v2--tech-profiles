@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { httpClient } from "../../../global/helpers/http-requests";
 import { FORM_STATUS } from "../../../global/helpers/variables";
@@ -12,8 +12,18 @@ function ImageUploadForm({
 }) {
   const [imageStatus, setImageStatus] = useState(FORM_STATUS.idle);
 
-  let imageRef = React.createRef();
-  let imageRemovalRef = React.createRef();
+  const imageInputRef = React.createRef();
+  const removeImageInputRef = React.createRef();
+  let focusOnImageInputRef = useRef();
+
+  useEffect(() => {
+    if (!focusOnImageInputRef.current) {
+      return;
+    }
+
+    focusOnImageInputRef.current = false;
+    imageInputRef.current.focus();
+  });
 
   async function uploadImage(e) {
     if (e.target.files.length === 0) {
@@ -23,7 +33,7 @@ function ImageUploadForm({
     const file = e.target.files[0];
     const data = new FormData();
     data.append("image", file);
-    imageRef.current.value = "";
+    imageInputRef.current.value = "";
 
     setImageStatus(FORM_STATUS.loading);
     const [res, err] = await httpClient("POST", "/api/upload-image", data, {
@@ -42,6 +52,15 @@ function ImageUploadForm({
     setImageInput({ ...res.data });
   }
 
+  function imageInputFocusAction(e) {
+    if (e.keyCode !== 13 && e.keyCode !== 32) {
+      return;
+    }
+
+    focusOnImageInputRef.current = true;
+    removeImage();
+  }
+
   function removeImage() {
     setImageStatus(FORM_STATUS.idle);
     removeImageInput({
@@ -51,7 +70,7 @@ function ImageUploadForm({
   }
 
   function setUserImageToRemove() {
-    if (imageRemovalRef.current && imageRemovalRef.current.checked) {
+    if (removeImageInputRef.current && removeImageInputRef.current.checked) {
       removeUserImage(true);
     } else {
       removeUserImage(false);
@@ -65,7 +84,7 @@ function ImageUploadForm({
         <input
           type="file"
           id="image-upload"
-          ref={imageRef}
+          ref={imageInputRef}
           name="image-upload"
           aria-label="profile pic upload"
           aria-describedby="image-loading image-error image-success"
@@ -99,6 +118,7 @@ function ImageUploadForm({
                 type="button"
                 aria-label="remove current preview pic"
                 onClick={removeImage}
+                onKeyDown={imageInputFocusAction}
               >
                 X
               </button>
@@ -108,7 +128,7 @@ function ImageUploadForm({
                 id="remove-image"
                 name="remove-image"
                 aria-label="remove saved pic on submit"
-                ref={imageRemovalRef}
+                ref={removeImageInputRef}
                 onChange={setUserImageToRemove}
               />
             )}
