@@ -145,11 +145,7 @@ class PublicPage extends Component {
           totalUsers={this.state.usersLength}
         />
         {this.state.initialLoading || this.state.filtersLoading ? (
-          <section
-            id="profiles-feed"
-            tabIndex="-1"
-            aria-labelledby="profiles-heading"
-          >
+          <section aria-labelledby="profiles-heading">
             <h2 id="profiles-heading">Loading Profiles</h2>
           </section>
         ) : (
