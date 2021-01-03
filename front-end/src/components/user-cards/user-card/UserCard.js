@@ -99,7 +99,19 @@ const UserCard = React.forwardRef((props, articleRef) => {
     setAnnounceCardToggle(true);
   }
 
-  function sendCardAction(e) {
+  function userCardActions(e) {
+    // enter and space
+    // local actions
+    if (e.keyCode === 13 || e.keyCode === 32) {
+      e.preventDefault();
+      if (!isCardExpanded) {
+        expandUserCard();
+      } else {
+        closeUserCard();
+      }
+      return;
+    }
+
     if (!props.userCardActions) {
       return;
     }
@@ -127,15 +139,6 @@ const UserCard = React.forwardRef((props, articleRef) => {
       e.preventDefault();
       props.userCardActions("next", props.index);
     }
-
-    // enter and space
-    if (e.keyCode === 13 || e.keyCode === 32) {
-      if (!isCardExpanded) {
-        expandUserCard();
-      } else {
-        closeUserCard();
-      }
-    }
   }
 
   return (
@@ -151,7 +154,7 @@ const UserCard = React.forwardRef((props, articleRef) => {
       aria-expanded={isCardExpanded}
       aria-labelledby={`profile-${props.userId}-heading`}
       aria-describedby={`profile-${props.userId}-summary`}
-      onKeyDown={(e) => sendCardAction(e)}
+      onKeyDown={(e) => userCardActions(e)}
     >
       <h3 id={`profile-${props.userId}-heading`}>{`${
         props.firstName || "user"

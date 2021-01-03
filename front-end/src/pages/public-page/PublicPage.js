@@ -145,11 +145,7 @@ class PublicPage extends Component {
           totalUsers={this.state.usersLength}
         />
         {this.state.initialLoading || this.state.filtersLoading ? (
-          <div
-            role="feed"
-            aria-busy="true"
-            aria-labelledby="profiles-heading"
-          >
+          <div role="feed" aria-busy="true" aria-labelledby="profiles-heading">
             <h2 id="profiles-heading">Loading Profiles</h2>
           </div>
         ) : (
