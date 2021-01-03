@@ -60,40 +60,42 @@ function UserCards(props) {
   }
 
   return (
-    <FeedSection aria-labelledby="profiles-heading">
+    <Feed
+      role="feed"
+      aria-busy={props.isBusy}
+      aria-labelledby="profiles-heading"
+    >
       <h2 id="profiles-heading">Current Profiles</h2>
       {props.totalUsers === 0 ? (
         <p>No Users Here! - Reset filters BTN</p>
       ) : (
         <>
-          <ul aria-busy={props.isBusy} aria-label="profiles-feed">
-            {props.users.map((user, i) => {
-              return (
-                <UserCard
-                  ref={profileCardRefs.current[i]}
-                  key={user.id}
-                  userCardActions={userCardActions}
-                  index={i}
-                  totalUsers={props.totalUsers}
-                  userId={user.id}
-                  areaOfWork={user.area_of_work}
-                  email={user.public_email}
-                  image={user.image}
-                  firstName={user.first_name}
-                  lastName={user.last_name}
-                  currentLocation={user.current_location_name}
-                  summary={user.summary}
-                  title={user.desired_title}
-                  topSkills={user.top_skills_prev}
-                  additionalSkills={user.additional_skills_prev}
-                  github={user.github}
-                  twitter={user.twitter}
-                  linkedin={user.linkedin}
-                  portfolio={user.portfolio}
-                />
-              );
-            })}
-          </ul>
+          {props.users.map((user, i) => {
+            return (
+              <UserCard
+                ref={profileCardRefs.current[i]}
+                key={user.id}
+                userCardActions={userCardActions}
+                index={i}
+                totalUsers={props.totalUsers}
+                userId={user.id}
+                areaOfWork={user.area_of_work}
+                email={user.public_email}
+                image={user.image}
+                firstName={user.first_name}
+                lastName={user.last_name}
+                currentLocation={user.current_location_name}
+                summary={user.summary}
+                title={user.desired_title}
+                topSkills={user.top_skills_prev}
+                additionalSkills={user.additional_skills_prev}
+                github={user.github}
+                twitter={user.twitter}
+                linkedin={user.linkedin}
+                portfolio={user.portfolio}
+              />
+            );
+          })}
           <div>
             {props.noMoreUsers ? (
               <div>
@@ -120,11 +122,11 @@ function UserCards(props) {
           </div>
         </>
       )}
-    </FeedSection>
+    </Feed>
   );
 }
 
-const FeedSection = styled.section`
+const Feed = styled.div`
   padding-left: 300px;
   .back-to-top {
     position: fixed;

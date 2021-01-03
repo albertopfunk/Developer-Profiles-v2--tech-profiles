@@ -16,22 +16,6 @@ import { httpClient } from "../../../global/helpers/http-requests";
 // codepen link?
 // share profile?
 
-// missing aria
-/*
-https://www.w3.org/TR/wai-aria-practices/examples/feed/feedDisplay.html
-aria-label
-aria-describedby
-*/
-
-// Keyboard control
-/*
-https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/Feed_Role
-Page Down: Move focus to next article.
-Page Up: Move focus to previous article.
-Control + End: Move focus to the first focusable element after the feed.
-Control + Home: Move focus to the first focusable element before the feed.
-*/
-
 const UserCard = React.forwardRef((props, articleRef) => {
   const [userExtras, setUserExtras] = useState({});
   const [loadingExtras, setLoadingExtras] = useState(false);
@@ -155,15 +139,15 @@ const UserCard = React.forwardRef((props, articleRef) => {
   }
 
   return (
-    // articles in feed are interactive
+    // feed article is interactive and expandable
     // eslint-disable-next-line
-    <li
+    <article
       ref={articleRef}
       id={`profile-${props.userId}-card`}
       data-user-card={props.index === 0 ? "true" : "false"}
       tabIndex="0" // eslint-disable-line
-      // aria-posinset={props.index + 1}
-      // aria-setsize={props.totalUsers}
+      aria-posinset={props.index + 1}
+      aria-setsize={props.totalUsers}
       aria-expanded={isCardExpanded}
       aria-labelledby={`profile-${props.userId}-heading`}
       aria-describedby={`profile-${props.userId}-summary`}
@@ -230,7 +214,7 @@ const UserCard = React.forwardRef((props, articleRef) => {
       {isCardExpanded ? (
         <UserExtras userExtras={userExtras} noExtras={noExtras} />
       ) : null}
-    </li>
+    </article>
   );
 });
 
