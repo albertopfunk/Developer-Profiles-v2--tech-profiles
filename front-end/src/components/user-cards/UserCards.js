@@ -46,12 +46,7 @@ function UserCards(props) {
   }
 
   return (
-    <FeedSection
-      ref={feedSectionRef}
-      id="profiles-feed"
-      tabIndex="-1"
-      aria-labelledby="profiles-heading"
-    >
+    <FeedSection ref={feedSectionRef} aria-labelledby="profiles-heading">
       <h2 id="profiles-heading">Current Profiles</h2>
       {props.totalUsers === 0 ? (
         <p>No Users Here! - Reset filters BTN</p>
