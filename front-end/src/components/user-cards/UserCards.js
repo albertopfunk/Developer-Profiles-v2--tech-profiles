@@ -4,28 +4,42 @@ import styled from "styled-components";
 import UserCard from "./user-card/UserCard";
 
 function UserCards(props) {
-  const feedSectionRef = useRef(null);
   const profileCardRefs = useRef(props.users.map(() => React.createRef()));
-  const feedButtonRef = useRef(null);
+  let focusOnNextCardRef = useRef();
 
   useEffect(() => {
-    if (props.focusOnNextCard !== 0) {
-      profileCardRefs.current[props.focusOnNextCard].current.focus();
+    if (!focusOnNextCardRef.current) {
+      return;
     }
-  }, [props.focusOnNextCard]);
+    profileCardRefs.current[props.nextCardIndex].current.focus();
+    focusOnNextCardRef.current = false;
+  }, [props.nextCardIndex]);
+
+  function backToTopFocus(e) {
+    if (e.keyCode !== 13 && e.keyCode !== 32) {
+      return;
+    }
+    profileCardRefs.current[0].current.focus();
+  }
 
   function backToTop() {
     window.scrollTo(0, 0);
-    feedSectionRef.current.focus();
+  }
+
+  function loadMoreFocus(e) {
+    if (e.keyCode !== 13 && e.keyCode !== 32) {
+      return;
+    }
+    focusOnNextCardRef.current = true;
   }
 
   function userCardActions(action, index) {
     if (action === "start") {
-      feedSectionRef.current.focus();
+      profileCardRefs.current[0].current.focus();
     }
 
     if (action === "end") {
-      feedButtonRef.current.focus();
+      profileCardRefs.current[props.currentUsers - 1].current.focus();
     }
 
     if (action === "previous") {
@@ -46,7 +60,7 @@ function UserCards(props) {
   }
 
   return (
-    <FeedSection ref={feedSectionRef} aria-labelledby="profiles-heading">
+    <FeedSection aria-labelledby="profiles-heading">
       <h2 id="profiles-heading">Current Profiles</h2>
       {props.totalUsers === 0 ? (
         <p>No Users Here! - Reset filters BTN</p>
@@ -86,26 +100,19 @@ function UserCards(props) {
                 <p>No more profiles to load</p>
                 <button
                   type="button"
-                  ref={feedButtonRef}
                   aria-label="no more profiles to load, back to top"
                   onClick={backToTop}
+                  onKeyDown={(e) => backToTopFocus(e)}
                 >
                   Back to Top
                 </button>
               </div>
             ) : (
-              /*
-                Alternatively, authors MAY include an article at either or 
-                both ends of the loaded set of articles that includes an element, 
-                such as a button, that lets the user request more articles to be loaded
-
-                should this be inside the feed container?
-              */
               <button
                 type="button"
-                ref={feedButtonRef}
                 disabled={props.isBusy}
                 onClick={props.loadMoreUsers}
+                onKeyDown={(e) => loadMoreFocus(e)}
               >
                 {props.isBusy ? "Loading" : "Load More Profiles"}
               </button>

@@ -15,7 +15,7 @@ class PublicPage extends Component {
     initialLoading: true,
     usersLoading: false,
     filtersLoading: false,
-    focusOnNextCard: 0,
+    nextCardIndex: 0,
     usersPage: 1,
     isWebDevChecked: false,
     isUIUXChecked: false,
@@ -114,7 +114,7 @@ class PublicPage extends Component {
       users: [...this.state.users, ...res.data],
       usersPage: this.state.usersPage + 1,
       usersLoading: false,
-      focusOnNextCard: this.state.users.length,
+      nextCardIndex: this.state.users.length,
     });
 
     if (this.state.users.length + res.data.length <= this.state.usersLength) {
@@ -152,7 +152,7 @@ class PublicPage extends Component {
           <UserCards
             loadMoreUsers={this.loadMoreUsers}
             noMoreUsers={this.state.noMoreUsers}
-            focusOnNextCard={this.state.focusOnNextCard}
+            nextCardIndex={this.state.nextCardIndex}
             isBusy={this.state.usersLoading}
             users={this.state.users}
             currentUsers={this.state.users.length}
