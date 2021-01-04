@@ -1,21 +1,58 @@
 import axios from "axios";
 
 function composer(options) {
-  options.baseURL = process.env.REACT_APP_SERVER;
-  if (options.config && options.config.headers) {
-    options.headers = options.config.headers;
+  const { method, url, data, config } = options;
+  const headers = config?.headers ?? null;
+  const setOptions = {
+    baseURL: process.env.REACT_APP_SERVER,
+    timeout: 5000,
+    method,
+    url,
+    data,
+    headers,
+  };
+
+  return axios(setOptions);
+}
+
+function sendResponse(res) {
+  const newRes = res.map((res) => {
+    return {
+      data: res.data,
+      status: res?.status ?? 200,
+    };
+  });
+
+  if (res.length > 1) {
+    return [newRes, false];
   }
 
-  return axios(options);
+  return [newRes[0], false];
+}
+
+function sendError(err, method, url) {
+  const errMethod = err?.response?.config?.method ?? method;
+  const errUrl = err?.response?.config?.url ?? url;
+  const errMssg =
+    err?.response?.data?.message ??
+    `Unknown error with ${errMethod} : ${errUrl}`;
+
+  return [
+    {
+      err: errMssg,
+      mssg: `Error with ${errMethod} : ${errUrl}`,
+      status: err?.response?.status ?? 500,
+    },
+    true,
+  ];
 }
 
 export async function httpClient(method, url, data, config = {}) {
   const options = {
-    baseURL: `${process.env.REACT_APP_SERVER}`,
     method,
     url,
     data,
-    headers: config.headers ? { ...config.headers } : null,
+    config,
   };
 
   let optionsArr = [options, ...(config.additional ? config.additional : [])];
@@ -24,28 +61,8 @@ export async function httpClient(method, url, data, config = {}) {
     const res = await Promise.all(
       optionsArr.map((options) => composer(options))
     );
-
-    if (res.length > 1) {
-      return [res, false];
-    }
-
-    return [
-      {
-        data: res[0].data,
-        status: res[0].status ? res[0].status : 200,
-      },
-      false,
-    ];
+    return sendResponse(res);
   } catch (err) {
-    return [
-      {
-        err: err.response
-          ? err.response.data.message
-          : `Unknown error with ${method} : ${url}`,
-        mssg: `Error with ${method} : ${url}`,
-        status: err.response ? err.response.status : 500,
-      },
-      true,
-    ];
+    return sendError(err, method, url);
   }
 }
