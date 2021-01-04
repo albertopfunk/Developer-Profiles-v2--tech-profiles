@@ -19,13 +19,14 @@ function FocusReset({ location, children }) {
   }, [focusRef, location.pathname, previousLocation]);
 
   function getMainContentId() {
-    const mainContentId = document.querySelector("[data-main-content='true']")
-      .id;
+    const mainContent = document.querySelector("[data-main-content='true']")
+    const mainContentId = mainContent?.id ?? ""
     setCurrentMainContentEl(mainContentId);
   }
 
   function getUserCardId() {
-    const userCardId = document.querySelector("[data-user-card='true']").id;
+    const userCard = document.querySelector("[data-user-card='true']")
+    const userCardId = userCard?.id ?? ""
     setCurrentUserCardEl(userCardId);
   }
 
