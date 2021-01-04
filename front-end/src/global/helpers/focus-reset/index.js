@@ -19,14 +19,14 @@ function FocusReset({ location, children }) {
   }, [focusRef, location.pathname, previousLocation]);
 
   function getMainContentId() {
-    const mainContent = document.querySelector("[data-main-content='true']")
-    const mainContentId = mainContent?.id ?? ""
+    const mainContent = document.querySelector("[data-main-content='true']");
+    const mainContentId = mainContent?.id ?? "";
     setCurrentMainContentEl(mainContentId);
   }
 
   function getUserCardId() {
-    const userCard = document.querySelector("[data-user-card='true']")
-    const userCardId = userCard?.id ?? ""
+    const userCard = document.querySelector("[data-user-card='true']");
+    const userCardId = userCard?.id ?? "";
     setCurrentUserCardEl(userCardId);
   }
 
