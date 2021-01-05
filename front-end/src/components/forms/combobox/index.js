@@ -18,6 +18,7 @@ class Combobox extends React.Component {
 
   chosenOptionBtnRefs = [];
   inputRef = React.createRef();
+  cancelRef = React.createRef();
 
   componentDidMount() {
     if (this.props.chosenOptions.length > 0) {
@@ -53,21 +54,17 @@ class Combobox extends React.Component {
   };
 
   onInputChange = async (value) => {
-    /*
-      first debounce with value runs, the promise is pending
-      second debounce with no value runs, this.closeCombobox runs
-      second input runs first, then when resolved, the first input
-      runs second, rendering the results
-      this is going to be a matter of needing to cancel a request
-    */
-
     if (value.trim() === "") {
-      // cancel request
+      this.cancelRef.current = "cancel";
       this.closeCombobox();
       return;
     }
 
     let results = await this.props.onInputChange(value);
+
+    if (this.cancelRef.current === "cancel") {
+      return;
+    }
 
     if (results.length === 0) {
       this.setState({
@@ -95,6 +92,7 @@ class Combobox extends React.Component {
   };
 
   debounceInput = (e) => {
+    this.cancelRef.current = "ok";
     let currTimeOut;
 
     const { value } = e.target;

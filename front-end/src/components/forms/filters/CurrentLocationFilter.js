@@ -14,12 +14,9 @@ class CurrentLocationFilter extends React.Component {
   };
 
   onLocationInputChange = async (value) => {
-    const [res, err, source] = await httpClient("POST", "/api/autocomplete", {
+    const [res, err] = await httpClient("POST", "/api/autocomplete", {
       value,
     });
-
-    source.cancel("Operation canceled by the user.");
-    console.log(source.token.reason);
 
     if (err) {
       console.error(`${res.mssg} => ${res.err}`);

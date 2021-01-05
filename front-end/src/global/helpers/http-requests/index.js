@@ -1,7 +1,7 @@
 import axios from "axios";
 
 function composer(options) {
-  const { method, url, data, config, cancelToken } = options;
+  const { method, url, data, config } = options;
   const headers = config?.headers ?? null;
   const setOptions = {
     baseURL: process.env.REACT_APP_SERVER,
@@ -10,13 +10,12 @@ function composer(options) {
     url,
     data,
     headers,
-    cancelToken,
   };
 
   return axios(setOptions);
 }
 
-function sendResponse(res, source) {
+function sendResponse(res) {
   const newRes = res.map((res) => {
     return {
       data: res.data,
@@ -25,10 +24,10 @@ function sendResponse(res, source) {
   });
 
   if (res.length > 1) {
-    return [newRes, false, source];
+    return [newRes, false];
   }
 
-  return [newRes[0], false, source];
+  return [newRes[0], false];
 }
 
 function sendError(err, method, url) {
@@ -49,15 +48,11 @@ function sendError(err, method, url) {
 }
 
 export async function httpClient(method, url, data, config = {}) {
-  const CancelToken = axios.CancelToken;
-  const source = CancelToken.source();
-
   const options = {
     method,
     url,
     data,
     config,
-    cancelToken: source.token,
   };
 
   let optionsArr = [options, ...(config.additional ? config.additional : [])];
@@ -66,7 +61,7 @@ export async function httpClient(method, url, data, config = {}) {
     const res = await Promise.all(
       optionsArr.map((options) => composer(options))
     );
-    return sendResponse(res, source);
+    return sendResponse(res);
   } catch (err) {
     return sendError(err, method, url);
   }
