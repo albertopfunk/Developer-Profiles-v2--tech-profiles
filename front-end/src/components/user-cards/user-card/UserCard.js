@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
-import styled from "styled-components";
 
 import UserImage from "./UserImage";
 import UserInfo from "./UserInfo";
@@ -10,6 +9,7 @@ import UserIcons from "./UserIcons";
 import UserExtras from "../user-extras/UserExtras";
 
 import { httpClient } from "../../../global/helpers/http-requests";
+import styled from "styled-components";
 
 // resume link?
 // codesandbox link?
@@ -144,7 +144,7 @@ const UserCard = React.forwardRef((props, articleRef) => {
   return (
     // feed article is interactive and expandable
     // eslint-disable-next-line
-    <article
+    <UserCardContainer
       ref={articleRef}
       id={`profile-${props.userId}-card`}
       data-user-card={props.index === 0 ? "true" : "false"}
@@ -166,37 +166,33 @@ const UserCard = React.forwardRef((props, articleRef) => {
         {announceCardToggle && !isCardExpanded ? "card collapsed" : null}
       </div>
 
-      <UserSection>
-        <div>
-          <div>
-            <strong>{props.userId}</strong>
+      <section>
+        <UserImage previewImg={props.previewImg} image={props.image} />
 
-            <UserImage previewImg={props.previewImg} image={props.image} />
-
-            <UserInfo
-              userId={props.userId}
-              firstName={props.firstName}
-              lastName={props.lastName}
-              currentLocation={props.currentLocation}
-              summary={props.summary}
-            />
-          </div>
-
-          <UserTitle title={props.title} />
-
-          <UserSkills
-            topSkills={props.topSkills}
-            additionalSkills={props.additionalSkills}
-          />
-        </div>
-
-        <UserIcons
-          github={props.github}
-          twitter={props.twitter}
-          linkedin={props.linkedin}
-          portfolio={props.portfolio}
+        <UserInfo
+          userId={props.userId}
+          firstName={props.firstName}
+          lastName={props.lastName}
+          currentLocation={props.currentLocation}
+          summary={props.summary}
         />
-      </UserSection>
+      </section>
+
+      <section>
+        <UserTitle title={props.title} />
+
+        <UserSkills
+          topSkills={props.topSkills}
+          additionalSkills={props.additionalSkills}
+        />
+      </section>
+
+      <UserIcons
+        github={props.github}
+        twitter={props.twitter}
+        linkedin={props.linkedin}
+        portfolio={props.portfolio}
+      />
 
       <section>
         {!isCardExpanded ? (
@@ -217,17 +213,12 @@ const UserCard = React.forwardRef((props, articleRef) => {
       {isCardExpanded ? (
         <UserExtras userExtras={userExtras} noExtras={noExtras} />
       ) : null}
-    </article>
+    </UserCardContainer>
   );
 });
 
-const UserSection = styled.section`
-  display: flex;
-  > div {
-    > div {
-      display: flex;
-    }
-  }
+const UserCardContainer = styled.article`
+  border: solid olivedrab;
 `;
 
 export default UserCard;

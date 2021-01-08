@@ -12,7 +12,7 @@ function UserImage(props) {
   }
 
   return (
-    <section>
+    <div>
       {/* add figure/figcation to all images */}
 
       {(props.previewImg || props.image) && !imageErr ? (
@@ -29,7 +29,7 @@ function UserImage(props) {
       ) : (
         <p>Avatar Image</p>
       )}
-    </section>
+    </div>
   );
 }
 

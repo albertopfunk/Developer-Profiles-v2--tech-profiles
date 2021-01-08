@@ -1,15 +1,9 @@
 import React from "react";
-import styled from "styled-components";
-
-// Test Ideas
-// renders with 3 skills + 'Expand for more skills' if there are more than 3 skills
-// renders all skills if there are less than 3 skills
-// renders no skills listed if there are 0 skills
 
 function UserSkills(props) {
   return (
-    <Section>
-      <section className="top">
+    <div>
+      <div className="top">
         <strong>Top Skills</strong>
         {props.topSkills ? (
           <div>
@@ -24,9 +18,9 @@ function UserSkills(props) {
         ) : (
           <p>No Top Skills Listed</p>
         )}
-      </section>
+      </div>
 
-      <section className="additional">
+      <div className="additional">
         <strong>Additional Skills</strong>
         {props.additionalSkills ? (
           <div>
@@ -41,16 +35,9 @@ function UserSkills(props) {
         ) : (
           <p>No Top Skills Listed</p>
         )}
-      </section>
-    </Section>
+      </div>
+    </div>
   );
 }
-
-const Section = styled.section`
-  display: flex;
-  > section {
-    width: 50%;
-  }
-`;
 
 export default UserSkills;

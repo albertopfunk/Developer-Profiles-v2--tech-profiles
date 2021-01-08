@@ -20,39 +20,39 @@ function UserExtras({ userExtras, noExtras }) {
 
   return (
     <section>
-      <div>
+      <section>
         {topSkills.length > 0 ? (
-          <section className="top-skills">
+          <div className="top-skills">
             {topSkills.map((skill) => (
               <p key={skill.name}>{skill.name}</p>
             ))}
-          </section>
+          </div>
         ) : null}
 
         {additionalSkills.length > 0 ? (
-          <section className="additional-skills">
+          <div className="additional-skills">
             {additionalSkills.map((skill) => (
               <p key={skill.name}>{skill.name}</p>
             ))}
-          </section>
+          </div>
         ) : null}
+      </section>
 
-        {projects.length > 0 ? <UserProjects projects={projects} /> : null}
+      {projects.length > 0 ? <UserProjects projects={projects} /> : null}
 
-        {education.length > 0 ? <UserEducation education={education} /> : null}
+      {education.length > 0 ? <UserEducation education={education} /> : null}
 
-        {experience.length > 0 ? (
-          <UserExperience experience={experience} />
-        ) : null}
+      {experience.length > 0 ? (
+        <UserExperience experience={experience} />
+      ) : null}
 
-        {locations.length > 0 ? (
-          <section className="interested-locations">
-            {locations.map((location) => (
-              <p key={location.name}>{location.name}</p>
-            ))}
-          </section>
-        ) : null}
-      </div>
+      {locations.length > 0 ? (
+        <section className="interested-locations">
+          {locations.map((location) => (
+            <p key={location.name}>{location.name}</p>
+          ))}
+        </section>
+      ) : null}
     </section>
   );
 }
