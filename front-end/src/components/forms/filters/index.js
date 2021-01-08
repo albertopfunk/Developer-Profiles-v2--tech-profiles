@@ -8,7 +8,7 @@ import SortingFilter from "./SortingFilter";
 
 function Filters(props) {
   return (
-    <Section aria-labelledby="filters-heading">
+    <FiltersContainer aria-labelledby="filters-heading">
       <h2 id="filters-heading">Profile Filters</h2>
       <div
         className="sr-only"
@@ -26,18 +26,13 @@ function Filters(props) {
           <RelocateToFilter updateUsers={props.updateUsers} />
         </fieldset>
       </form>
-    </Section>
+    </FiltersContainer>
   );
 }
 
-const Section = styled.section`
-  background-color: white;
-  height: 100vh;
-  width: 300px;
-  position: fixed;
-  left: 0;
-  top: 100px;
-  z-index: 5;
+const FiltersContainer = styled.aside`
+  border: solid blue;
+  width: 100%;
 `;
 
 const MemoFilters = React.memo(Filters);

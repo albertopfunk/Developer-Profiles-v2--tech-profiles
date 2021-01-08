@@ -6,6 +6,7 @@ import Filters from "../../components/forms/filters";
 import UserCards from "../../components/user-cards/UserCards";
 
 import { httpClient } from "../../global/helpers/http-requests";
+import MainHeader from "../../components/header/MainHeader";
 
 class PublicPage extends Component {
   state = {
@@ -134,16 +135,25 @@ class PublicPage extends Component {
 
   render() {
     return (
-      <Main aria-labelledby="main-heading">
-        <Helmet>
-          <title>Profiles • Tech Profiles</title>
-        </Helmet>
-        <h1 id="main-heading">Profiles</h1>
+      <>
+      <div>
+        <MainHeader
+          isValidated={this.props.isValidated}
+          signOut={this.props.signOut}
+          signIn={this.props.signIn}
+        />
         <Filters
           updateUsers={this.updateUsers}
           currentUsers={this.state.users.length}
           totalUsers={this.state.usersLength}
         />
+      </div>
+
+      <Main aria-labelledby="main-heading">
+        <Helmet>
+          <title>Profiles • Tech Profiles</title>
+        </Helmet>
+        <h1 id="main-heading">Profiles</h1>
         {this.state.initialLoading || this.state.filtersLoading ? (
           <div role="feed" aria-busy="true" aria-labelledby="profiles-heading">
             <h2 id="profiles-heading">Loading Profiles</h2>
@@ -160,13 +170,13 @@ class PublicPage extends Component {
           />
         )}
       </Main>
+      </>
     );
   }
 }
 
 const Main = styled.main`
-  padding-top: 100px;
-  background-color: lightblue;
+  border: solid lightblue;
 `;
 
 export default PublicPage;

@@ -10,7 +10,6 @@ import PageNotAuthorized from "./pages/error-pages/not-authorized/PageNotAuthori
 import PageNotFound from "./pages/error-pages/404/PageNotFound";
 import PrivatePolicy from "./pages/misc-pages/private-policy/PrivatePolicy";
 import Callback from "./auth/Callback";
-import MainHeader from "./components/header/MainHeader";
 
 import auth0Client from "./auth/Auth";
 import styled from "styled-components";
@@ -93,14 +92,13 @@ function App({ location }) {
     <>
       <GlobalStyles />
       <FocusReset>
-        <MainHeader
-          isValidated={isValidated}
-          signOut={signOut}
-          signIn={signIn}
-        />
         <Switch>
           <Route exact path="/">
-            <PublicPage />
+            <PublicPage
+              isValidated={isValidated}
+              signOut={signOut}
+              signIn={signIn}
+            />
           </Route>
           <Route path="/profile-dashboard">
             {isValidated ? <ProfileDashboard /> : <PageNotAuthorized />}

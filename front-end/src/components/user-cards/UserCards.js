@@ -127,7 +127,7 @@ function UserCards(props) {
 }
 
 const Feed = styled.div`
-  padding-left: 300px;
+  border: solid greenyellow;
   .back-to-top {
     position: fixed;
     top: 50%;

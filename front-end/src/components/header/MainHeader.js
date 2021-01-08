@@ -131,14 +131,9 @@ function MainHeader({ isValidated, signOut, signIn }) {
 }
 
 const Header = styled.header`
-  background-color: white;
+  border: solid red;
   width: 100%;
-  height: 100px;
   padding: 0.3em 1em;
-  position: fixed;
-  left: 0;
-  top: 0;
-  z-index: 10;
 
   .sr-only {
     position: absolute;
@@ -171,9 +166,6 @@ const Nav = styled.nav`
     list-style: none;
     background-color: white;
     padding: 0.7em;
-    position: absolute;
-    right: 0;
-    top: 100%;
   }
 `;
 

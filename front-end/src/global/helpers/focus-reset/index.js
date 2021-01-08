@@ -46,7 +46,7 @@ function FocusReset({ location, children }) {
         tabIndex="-1"
         aria-label={`Navigated to ${currentLocation}, press tab for skip links`}
       >
-        <ul aria-label="skip links">
+        <ul aria-label="skip links" className="skip-links">
           <li>
             <a
               href={`${location.pathname}#page-navigation`}
@@ -88,7 +88,7 @@ function FocusReset({ location, children }) {
         tabIndex="-1"
         aria-label={"Navigated to profiles page, press tab for skip links"}
       >
-        <ul aria-label="skip links">
+        <ul aria-label="skip links" className="skip-links">
           <li>
             <a
               href={`${location.pathname}#sorting-select`}
@@ -127,7 +127,7 @@ function FocusReset({ location, children }) {
       tabIndex="-1"
       aria-label={`Navigated to ${currentLocation}, press tab for skip links`}
     >
-      <ul aria-label="skip links">
+      <ul aria-label="skip links" className="skip-links">
         <li>
           <a href={`${location.pathname}#main-content`} className="skip-link">
             <span>Main Content</span>
@@ -149,6 +149,11 @@ const FocusContainer = styled.div`
     padding: 0;
     border: 0;
     overflow: hidden;
+  }
+
+  .skip-links {
+    margin: 0;
+    list-style: none;
   }
 
   .skip-link {
