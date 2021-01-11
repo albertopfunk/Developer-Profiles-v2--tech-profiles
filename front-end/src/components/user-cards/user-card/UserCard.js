@@ -156,7 +156,7 @@ const UserCard = React.forwardRef((props, articleRef) => {
       aria-describedby={`profile-${props.userId}-summary`}
       onKeyDown={(e) => userCardActions(e)}
     >
-      <h3 id={`profile-${props.userId}-heading`}>{`${
+      <h3 id={`profile-${props.userId}-heading`} className="sr-only">{`${
         props.firstName || "user"
       }'s Profile`}</h3>
       {/* <aside className="favorite">Favorite</aside> */}
