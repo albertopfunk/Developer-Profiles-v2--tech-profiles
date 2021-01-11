@@ -136,40 +136,44 @@ class PublicPage extends Component {
   render() {
     return (
       <>
-      <div>
-        <MainHeader
-          isValidated={this.props.isValidated}
-          signOut={this.props.signOut}
-          signIn={this.props.signIn}
-        />
-        <Filters
-          updateUsers={this.updateUsers}
-          currentUsers={this.state.users.length}
-          totalUsers={this.state.usersLength}
-        />
-      </div>
-
-      <Main aria-labelledby="main-heading">
-        <Helmet>
-          <title>Profiles • Tech Profiles</title>
-        </Helmet>
-        <h1 id="main-heading">Profiles</h1>
-        {this.state.initialLoading || this.state.filtersLoading ? (
-          <div role="feed" aria-busy="true" aria-labelledby="profiles-heading">
-            <h2 id="profiles-heading">Loading Profiles</h2>
-          </div>
-        ) : (
-          <UserCards
-            loadMoreUsers={this.loadMoreUsers}
-            noMoreUsers={this.state.noMoreUsers}
-            nextCardIndex={this.state.nextCardIndex}
-            isBusy={this.state.usersLoading}
-            users={this.state.users}
+        <div>
+          <MainHeader
+            isValidated={this.props.isValidated}
+            signOut={this.props.signOut}
+            signIn={this.props.signIn}
+          />
+          <Filters
+            updateUsers={this.updateUsers}
             currentUsers={this.state.users.length}
             totalUsers={this.state.usersLength}
           />
-        )}
-      </Main>
+        </div>
+
+        <Main aria-labelledby="main-heading">
+          <Helmet>
+            <title>Profiles • Tech Profiles</title>
+          </Helmet>
+          <h1 id="main-heading">Profiles</h1>
+          {this.state.initialLoading || this.state.filtersLoading ? (
+            <div
+              role="feed"
+              aria-busy="true"
+              aria-labelledby="profiles-heading"
+            >
+              <h2 id="profiles-heading">Loading Profiles</h2>
+            </div>
+          ) : (
+            <UserCards
+              loadMoreUsers={this.loadMoreUsers}
+              noMoreUsers={this.state.noMoreUsers}
+              nextCardIndex={this.state.nextCardIndex}
+              isBusy={this.state.usersLoading}
+              users={this.state.users}
+              currentUsers={this.state.users.length}
+              totalUsers={this.state.usersLength}
+            />
+          )}
+        </Main>
       </>
     );
   }
