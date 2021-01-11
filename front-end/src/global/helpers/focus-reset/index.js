@@ -156,7 +156,7 @@ const FocusContainer = styled.div`
       position: absolute;
       top: 2%;
       left: -999px;
-      z-index: 15;
+      z-index: 100;
       border: solid 0.5px;
       color: black;
       background-color: white;
