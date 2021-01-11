@@ -200,4 +200,19 @@ export const GlobalStyles = createGlobalStyle`
     --primary_color:#001940;
     --secondary-color:#EE6C4D;
   }
+
+  .sr-only {
+    position: absolute;
+    clip: rect(0, 0, 0, 0);
+    height: 1px;
+    width: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+  }
+
+  .hidden {
+    display: none;
+  }
 `;
