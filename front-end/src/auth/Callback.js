@@ -69,7 +69,6 @@ class Callback extends Component {
 
 const MainContainerSkeleton = styled.main`
   width: 100%;
-  padding-top: 100px;
   background-color: pink;
 `;
 
