@@ -136,7 +136,7 @@ class PublicPage extends Component {
   render() {
     return (
       <>
-        <div>
+        <PageHeader>
           <MainHeader
             isValidated={this.props.isValidated}
             signOut={this.props.signOut}
@@ -147,13 +147,13 @@ class PublicPage extends Component {
             currentUsers={this.state.users.length}
             totalUsers={this.state.usersLength}
           />
-        </div>
+        </PageHeader>
 
         <Main aria-labelledby="main-heading">
           <Helmet>
             <title>Profiles • Tech Profiles</title>
           </Helmet>
-          <h1 id="main-heading">Profiles</h1>
+          <h1 id="main-heading" className="sr-only">Profiles</h1>
           {this.state.initialLoading || this.state.filtersLoading ? (
             <div
               role="feed"
@@ -179,7 +179,17 @@ class PublicPage extends Component {
   }
 }
 
+const PageHeader = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 20;
+  width: 100%;
+  background-color: white;
+`;
+
 const Main = styled.main`
+  padding-top: 150px;
   border: solid lightblue;
 `;
 
