@@ -59,8 +59,18 @@ function Filters(props) {
 }
 
 const FiltersContainer = styled.aside`
-  border: solid blue;
   width: 100%;
+
+  @media (min-width: 1100px) {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 5;
+    padding-top: 100px;
+    width: 300px;
+    height: 100vh;
+    border-right: solid .5px;
+  }
 
   .filters-bar {
     display: flex;

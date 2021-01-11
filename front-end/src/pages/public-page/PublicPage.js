@@ -183,14 +183,19 @@ const PageHeader = styled.div`
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 20;
+  z-index: 10;
   width: 100%;
   background-color: white;
+  border-bottom: solid .5px;
 `;
 
 const Main = styled.main`
   padding-top: 150px;
-  border: solid lightblue;
+  
+  @media (min-width: 1100px) {
+    padding-top: 100px;
+    padding-left: 320px;
+  }
 `;
 
 export default PublicPage;

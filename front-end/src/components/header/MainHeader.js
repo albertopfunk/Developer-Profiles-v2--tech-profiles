@@ -142,9 +142,17 @@ function MainHeader({ isValidated, signOut, signIn }) {
 }
 
 const Header = styled.header`
-  border: solid red;
   width: 100%;
   padding: 0.3em 1em;
+
+  @media (min-width: 1100px) {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    background-color: white;
+    border-bottom: solid .5px;
+  }
 `;
 
 const Nav = styled.nav`
