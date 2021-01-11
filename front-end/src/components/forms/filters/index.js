@@ -15,12 +15,11 @@ function Filters(props) {
 
   return (
     <FiltersContainer aria-labelledby="filters-heading">
-      <h2 id="filters-heading">Profile Filters</h2>
+      <h2 id="filters-heading" className="sr-only">
+        Profile Filters
+      </h2>
       <section className="filters-bar">
-        <div
-          aria-live="assertive"
-          aria-relevant="additions text"
-        >
+        <div aria-live="assertive" aria-relevant="additions text">
           {/* if full str isn't dynamic, sr will not announce full str */}
           <p>{`Showing ${props.currentUsers} of ${props.totalUsers} Profiles`}</p>
         </div>
@@ -72,7 +71,7 @@ const FiltersContainer = styled.aside`
       display: block;
     }
   }
-  
+
   .filters-control {
     @media (min-width: 1100px) {
       display: none;
