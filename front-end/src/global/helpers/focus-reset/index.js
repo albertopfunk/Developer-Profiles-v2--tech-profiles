@@ -5,6 +5,7 @@ import styled from "styled-components";
 function FocusReset({ location, children }) {
   const [previousLocation, setPreviousLocation] = useState(location.pathname);
   const [currentMainContentEl, setCurrentMainContentEl] = useState("");
+  const [currentFilterEl, setCurrentFilterEl] = useState("");
   const [currentUserCardEl, setCurrentUserCardEl] = useState("");
 
   let focusRef = React.createRef();
@@ -22,6 +23,12 @@ function FocusReset({ location, children }) {
     const mainContent = document.querySelector("[data-main-content='true']");
     const mainContentId = mainContent?.id ?? "";
     setCurrentMainContentEl(mainContentId);
+  }
+
+  function getFilterId() {
+    const filter = document.querySelector("[data-filter-content='true']");
+    const filterId = filter?.id ?? "";
+    setCurrentFilterEl(filterId);
   }
 
   function getUserCardId() {
@@ -52,7 +59,7 @@ function FocusReset({ location, children }) {
               href={`${location.pathname}#page-navigation`}
               className="skip-link"
             >
-              <span>Skip to Page Navigation</span>
+              Skip to Page Navigation
             </a>
           </li>
 
@@ -62,7 +69,7 @@ function FocusReset({ location, children }) {
               className="skip-link"
               onFocus={getMainContentId}
             >
-              <span>Skip to Main Content</span>
+              Skip to Main Content
             </a>
           </li>
 
@@ -72,7 +79,7 @@ function FocusReset({ location, children }) {
               className="skip-link"
               onFocus={getUserCardId}
             >
-              <span>Skip to Profile Card</span>
+              Skip to Profile Card
             </a>
           </li>
         </ul>
@@ -91,10 +98,11 @@ function FocusReset({ location, children }) {
         <ul aria-label="skip links" className="skip-links">
           <li>
             <a
-              href={`${location.pathname}#sorting-select`}
+              href={`${location.pathname}#${currentFilterEl}`}
               className="skip-link"
+              onFocus={getFilterId}
             >
-              <span>Skip to Filters</span>
+              Skip to Filters
             </a>
           </li>
 
@@ -104,7 +112,7 @@ function FocusReset({ location, children }) {
               className="skip-link"
               onFocus={getUserCardId}
             >
-              <span>Skip to Main Content</span>
+              Skip to Main Content
             </a>
           </li>
         </ul>
@@ -130,7 +138,7 @@ function FocusReset({ location, children }) {
       <ul aria-label="skip links" className="skip-links">
         <li>
           <a href={`${location.pathname}#main-content`} className="skip-link">
-            <span>Main Content</span>
+            Main Content
           </a>
         </li>
       </ul>
@@ -140,37 +148,24 @@ function FocusReset({ location, children }) {
 }
 
 const FocusContainer = styled.div`
-  .sr-only {
-    position: absolute;
-    clip: rect(0, 0, 0, 0);
-    height: 1px;
-    width: 1px;
-    margin: -1px;
-    padding: 0;
-    border: 0;
-    overflow: hidden;
-  }
-
-  .skip-links {
+  ul.skip-links {
     margin: 0;
     list-style: none;
-  }
 
-  .skip-link {
-    position: absolute;
-    top: 2%;
-    left: -999px;
-    z-index: 15;
-
-    &:focus {
-      left: 2%;
-    }
-
-    span {
-      display: inline-block;
+    .skip-link {
+      position: absolute;
+      top: 2%;
+      left: -999px;
+      z-index: 15;
+      border: solid 0.5px;
+      color: black;
+      background-color: white;
       padding: 0.7em;
-      background-color: antiquewhite;
-      border: solid;
+      text-decoration: none;
+
+      &:focus {
+        left: 2%;
+      }
     }
   }
 `;
