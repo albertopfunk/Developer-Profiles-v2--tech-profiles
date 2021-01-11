@@ -48,10 +48,21 @@ function MainHeader({ isValidated, signOut, signIn }) {
 
       <Nav aria-label="site">
         <Link to="/">
-          <img
-            src="https://res.cloudinary.com/dy5hgr3ht/image/upload/c_scale,h_65/v1594347155/tech-pros-v1-main/tech-profiles-logo.png"
-            alt="site logo link to profiles page"
-          />
+          <picture>
+            <source
+              srcSet="https://res.cloudinary.com/dy5hgr3ht/image/upload/c_scale,h_40/v1594347155/tech-pros-v1-main/tech-profiles-logo.webp"
+              media="(max-width: 800px)"
+            />
+            <source
+              srcSet="https://res.cloudinary.com/dy5hgr3ht/image/upload/c_scale,h_40/v1594347155/tech-pros-v1-main/tech-profiles-logo.png"
+              media="(max-width: 800px)"
+            />
+            <source srcSet="https://res.cloudinary.com/dy5hgr3ht/image/upload/c_scale,h_65/v1594347155/tech-pros-v1-main/tech-profiles-logo.webp" />
+            <img
+              src="https://res.cloudinary.com/dy5hgr3ht/image/upload/c_scale,h_65/v1594347155/tech-pros-v1-main/tech-profiles-logo.png"
+              alt="site logo link to profiles page"
+            />
+          </picture>
         </Link>
 
         {isValidated ? (
