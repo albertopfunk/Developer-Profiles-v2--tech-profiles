@@ -47,7 +47,7 @@ function MainHeader({ isValidated, signOut, signIn }) {
       </div>
 
       <Nav aria-label="site">
-        <Link to="/">
+        <Link to="/" className="site-logo">
           <picture>
             <source
               srcSet="https://res.cloudinary.com/dy5hgr3ht/image/upload/c_scale,h_40/v1594347155/tech-pros-v1-main/tech-profiles-logo.webp"
@@ -69,8 +69,8 @@ function MainHeader({ isValidated, signOut, signIn }) {
           <>
             {isMenuOpen ? (
               <button
-                id="menu-button"
                 type="button"
+                className="menu-button"
                 aria-label="close menu"
                 aria-expanded="true"
                 onClick={closeMenu}
@@ -82,8 +82,8 @@ function MainHeader({ isValidated, signOut, signIn }) {
               </button>
             ) : (
               <button
-                id="menu-button"
                 type="button"
+                className="menu-button"
                 aria-label="open menu"
                 aria-expanded="false"
                 onClick={openMenu}
@@ -95,9 +95,8 @@ function MainHeader({ isValidated, signOut, signIn }) {
             )}
 
             <ul
-              id="menu-group"
               aria-label="site navigation menu"
-              className={`${isMenuOpen ? "_" : "hidden"}`}
+              className={`menu-group ${isMenuOpen ? "visible" : "hidden"}`}
             >
               <li>
                 <Link
@@ -132,7 +131,7 @@ function MainHeader({ isValidated, signOut, signIn }) {
             </ul>
           </>
         ) : (
-          <button type="button" onClick={signIn}>
+          <button type="button" className="menu-button" onClick={signIn}>
             Sign In
           </button>
         )}
@@ -143,33 +142,67 @@ function MainHeader({ isValidated, signOut, signIn }) {
 
 const Header = styled.header`
   width: 100%;
-  padding: 0.3em 1em;
+  border-bottom: solid 0.5px;
+  background-color: white;
 
   @media (min-width: 1100px) {
     position: fixed;
     top: 0;
     left: 0;
     z-index: 10;
-    background-color: white;
-    border-bottom: solid .5px;
   }
 `;
 
 const Nav = styled.nav`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto;
 
-  #menu-button {
+  @media (min-width: 1100px) {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .site-logo {
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
+  }
+
+  .menu-button {
+    grid-column: 2 / 3;
+    grid-row: 1 / 2;
     border: none;
     background: white;
     padding: 0.4em;
   }
 
-  #sub-menu-group {
+  .menu-group {
+    grid-column: 1 / 3;
+    grid-row: 2 / 3;
     list-style: none;
     background-color: white;
-    padding: 0.7em;
+    border-top: solid 0.5px;
+    margin: 0;
+    padding: 0;
+  }
+
+  .menu-group.hidden {
+    display: none;
+  }
+
+  .menu-group.visible {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+
+    @media (min-width: 1100px) {
+      flex-direction: column;
+      position: absolute;
+      border: solid 0.5px;
+      right: 5%;
+      top: 100%;
+    }
   }
 `;
 
