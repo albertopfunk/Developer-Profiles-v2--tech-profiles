@@ -69,7 +69,7 @@ const FiltersContainer = styled.aside`
     padding-top: 100px;
     width: 300px;
     height: 100vh;
-    border-right: solid .5px;
+    border-right: solid 0.5px;
   }
 
   .filters-bar {

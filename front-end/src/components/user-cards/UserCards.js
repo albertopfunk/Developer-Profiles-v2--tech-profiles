@@ -65,7 +65,9 @@ function UserCards(props) {
       aria-busy={props.isBusy}
       aria-labelledby="profiles-heading"
     >
-      <h2 id="profiles-heading" className="sr-only">Current Profiles</h2>
+      <h2 id="profiles-heading" className="sr-only">
+        Current Profiles
+      </h2>
       {props.totalUsers === 0 ? (
         <p>No Users Here! - Reset filters BTN</p>
       ) : (

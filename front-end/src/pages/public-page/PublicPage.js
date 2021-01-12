@@ -153,7 +153,9 @@ class PublicPage extends Component {
           <Helmet>
             <title>Profiles • Tech Profiles</title>
           </Helmet>
-          <h1 id="main-heading" className="sr-only">Profiles</h1>
+          <h1 id="main-heading" className="sr-only">
+            Profiles
+          </h1>
           {this.state.initialLoading || this.state.filtersLoading ? (
             <div
               role="feed"
@@ -186,12 +188,12 @@ const PageHeader = styled.div`
   z-index: 10;
   width: 100%;
   background-color: white;
-  border-bottom: solid .5px;
+  border-bottom: solid 0.5px;
 `;
 
 const Main = styled.main`
   padding-top: 150px;
-  
+
   @media (min-width: 1100px) {
     padding-top: 100px;
     padding-left: 320px;
