@@ -19,7 +19,7 @@ function Filters(props) {
         Profile Filters
       </h2>
       <section className="filters-bar">
-        <div aria-live="assertive" aria-relevant="additions text">
+        <div className="filters-info" aria-live="assertive" aria-relevant="additions text">
           {/* if full str isn't dynamic, sr will not announce full str */}
           <p>{`Showing ${props.currentUsers} of ${props.totalUsers} Profiles`}</p>
         </div>
@@ -73,8 +73,10 @@ const FiltersContainer = styled.aside`
   }
 
   .filters-bar {
-    display: flex;
-    justify-content: space-evenly;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto;
+    justify-items: center;
     align-items: center;
 
     @media (min-width: 1100px) {
@@ -82,10 +84,20 @@ const FiltersContainer = styled.aside`
     }
   }
 
+  .filters-info {
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
+  }
+
   .filters-control {
     @media (min-width: 1100px) {
       display: none;
     }
+  }
+
+  .filters-control.top {
+    grid-column: 2 / 3;
+    grid-row: 1 / 2;
   }
 `;
 
