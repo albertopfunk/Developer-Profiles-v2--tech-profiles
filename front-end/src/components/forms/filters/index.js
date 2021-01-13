@@ -18,7 +18,7 @@ function Filters(props) {
       <h2 id="filters-heading" className="sr-only">
         Profile Filters
       </h2>
-      <section className="filters-bar">
+      <div className="filters-bar">
         <div className="filters-info" aria-live="assertive" aria-relevant="additions text">
           {/* if full str isn't dynamic, sr will not announce full str */}
           <p>{`Showing ${props.currentUsers} of ${props.totalUsers} Profiles`}</p>
@@ -34,7 +34,7 @@ function Filters(props) {
             filters
           </button>
         </div>
-      </section>
+      </div>
       <FiltersForm showForm={areFiltersShowing}>
         <SortingFilter updateUsers={props.updateUsers} />
         <AreaOfWorkFilter updateUsers={props.updateUsers} />
@@ -82,22 +82,22 @@ const FiltersContainer = styled.aside`
     @media (min-width: 1100px) {
       display: block;
     }
-  }
 
-  .filters-info {
-    grid-column: 1 / 2;
-    grid-row: 1 / 2;
+    .filters-info {
+      grid-column: 1 / 2;
+      grid-row: 1 / 2;
+    }
+
+    .filters-control.top {
+      grid-column: 2 / 3;
+      grid-row: 1 / 2;
+    }
   }
 
   .filters-control {
     @media (min-width: 1100px) {
       display: none;
     }
-  }
-
-  .filters-control.top {
-    grid-column: 2 / 3;
-    grid-row: 1 / 2;
   }
 `;
 
