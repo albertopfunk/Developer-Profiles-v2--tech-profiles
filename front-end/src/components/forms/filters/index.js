@@ -19,7 +19,11 @@ function Filters(props) {
         Profile Filters
       </h2>
       <div className="filters-bar">
-        <div className="filters-info" aria-live="assertive" aria-relevant="additions text">
+        <div
+          className="filters-info"
+          aria-live="assertive"
+          aria-relevant="additions text"
+        >
           {/* if full str isn't dynamic, sr will not announce full str */}
           <p>{`Showing ${props.currentUsers} of ${props.totalUsers} Profiles`}</p>
         </div>
