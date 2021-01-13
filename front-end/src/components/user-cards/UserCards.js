@@ -69,7 +69,12 @@ function UserCards(props) {
         Current Profiles
       </h2>
       {props.totalUsers === 0 ? (
-        <p>No Users Here! - Reset filters BTN</p>
+        <>
+          <p>No Users Here!</p>
+          <button type="reset" onClick={props.resetFilters}>
+            reset filters
+          </button>
+        </>
       ) : (
         <>
           {props.users.map((user, i) => {

@@ -6,7 +6,7 @@ import CurrentLocationFilter from "./CurrentLocationFilter";
 import RelocateToFilter from "./RelocateToFilter";
 import SortingFilter from "./SortingFilter";
 
-function Filters(props) {
+const Filters = React.forwardRef((props, formRef) => {
   const [areFiltersShowing, setAreFiltersShowing] = useState(false);
 
   function setFilters() {
@@ -39,7 +39,7 @@ function Filters(props) {
           </button>
         </div>
       </div>
-      <FiltersForm showForm={areFiltersShowing}>
+      <FiltersForm ref={formRef} showForm={areFiltersShowing}>
         <SortingFilter updateUsers={props.updateUsers} />
         <AreaOfWorkFilter updateUsers={props.updateUsers} />
         <fieldset>
@@ -60,7 +60,7 @@ function Filters(props) {
       </FiltersForm>
     </FiltersContainer>
   );
-}
+});
 
 const FiltersContainer = styled.aside`
   width: 100%;
@@ -112,6 +112,8 @@ const FiltersForm = styled.form`
     display: block;
   }
 `;
+
+Filters.displayName = "Filters";
 
 const MemoFilters = React.memo(Filters);
 

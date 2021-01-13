@@ -31,6 +31,8 @@ class PublicPage extends Component {
     sortChoice: "acending(oldest-newest)",
   };
 
+  formRef = React.createRef();
+
   async componentDidMount() {
     const [res, err] = await httpClient("GET", "/users");
 
@@ -48,6 +50,10 @@ class PublicPage extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
+    if (this.state.users !== nextState.users) {
+      return true;
+    }
+
     if (
       this.state.isWebDevChecked !== nextState.isWebDevChecked ||
       this.state.isUIUXChecked !== nextState.isUIUXChecked ||
@@ -133,6 +139,36 @@ class PublicPage extends Component {
     this.setState(stateUpdate, () => this.getFilteredUsers());
   };
 
+  resetFilters = async () => {
+    const [res, err] = await httpClient("GET", "/users");
+
+    if (err) {
+      console.error(`${res.mssg} => ${res.err}`);
+      return;
+    }
+
+    this.setState({
+      users: res.data.users,
+      usersLength: res.data.len,
+      noMoreUsers: res.data.users.length <= 25 ? true : false,
+      nextCardIndex: 0,
+      usersPage: 1,
+      isWebDevChecked: false,
+      isUIUXChecked: false,
+      isIOSChecked: false,
+      isAndroidChecked: false,
+      isUsingCurrLocationFilter: false,
+      selectedWithinMiles: 0,
+      chosenLocationLat: 0,
+      chosenLocationLon: 0,
+      isUsingRelocateToFilter: false,
+      chosenRelocateToObj: {},
+      sortChoice: "acending(oldest-newest)",
+    });
+
+    this.formRef.current.reset();
+  };
+
   render() {
     return (
       <>
@@ -143,6 +179,7 @@ class PublicPage extends Component {
             signIn={this.props.signIn}
           />
           <Filters
+            ref={this.formRef}
             updateUsers={this.updateUsers}
             currentUsers={this.state.users.length}
             totalUsers={this.state.usersLength}
@@ -173,6 +210,7 @@ class PublicPage extends Component {
               users={this.state.users}
               currentUsers={this.state.users.length}
               totalUsers={this.state.usersLength}
+              resetFilters={this.resetFilters}
             />
           )}
         </Main>
