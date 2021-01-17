@@ -172,6 +172,7 @@ const UserCard = React.forwardRef((props, articleRef) => {
           userId={props.userId}
           firstName={props.firstName}
           lastName={props.lastName}
+          title={props.title}
           currentLocation={props.currentLocation}
           summary={props.summary}
         />
