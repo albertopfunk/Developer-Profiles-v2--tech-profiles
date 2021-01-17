@@ -1,27 +1,34 @@
 import React from "react";
 
-function UserInfo(props) {
+function UserInfo({
+  userId,
+  firstName,
+  lastName,
+  title,
+  currentLocation,
+  summary
+}) {
   return (
     <div>
       <div className="name">
-        {props.firstName || props.lastName ? (
+        {firstName || lastName ? (
           <p>
-            {props.firstName} {props.lastName}
+            {firstName} {lastName}
           </p>
         ) : (
           <p>No Name Listed</p>
         )}
       </div>
-      <div>{props.title}</div>
+      <div>{title}</div>
       <div className="location">
-        {props.currentLocation ? (
-          <p>{props.currentLocation}</p>
+        {currentLocation ? (
+          <p>{currentLocation}</p>
         ) : (
           <p>No Location Listed</p>
         )}
       </div>
-      <div id={`profile-${props.userId}-summary`} className="summary">
-        {props.summary ? <p>{props.summary}</p> : <p>No Summary Listed</p>}
+      <div id={`profile-${userId}-summary`} className="summary">
+        {summary ? <p>{summary}</p> : <p>No Summary Listed</p>}
       </div>
     </div>
   );
