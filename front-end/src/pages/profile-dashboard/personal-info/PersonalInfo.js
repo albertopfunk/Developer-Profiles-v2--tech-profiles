@@ -12,7 +12,7 @@ import Announcer from "../../../global/helpers/announcer";
 
 let formSuccessWait;
 function PersonalInfo() {
-  const { user, editProfile, setPreviewImg } = useContext(ProfileContext);
+  const { user, editProfile } = useContext(ProfileContext);
   const [formStatus, setFormStatus] = useState(FORM_STATUS.idle);
   const [formFocusStatus, setFormFocusStatus] = useState("");
 
@@ -69,22 +69,6 @@ function PersonalInfo() {
       clearTimeout(formSuccessWait);
     };
   }, []);
-
-  useEffect(() => {
-    return () => {
-      if (previewImgInput.id) {
-        httpClient("POST", "/api/delete-image", {
-          id: previewImgInput.id,
-        });
-      }
-    };
-  }, [previewImgInput]);
-
-  useEffect(() => {
-    return () => {
-      setPreviewImg({ image: "", id: "" });
-    };
-  }, [setPreviewImg]);
 
   useEffect(() => {
     if (formFocusStatus) {
@@ -230,7 +214,6 @@ function PersonalInfo() {
   }
 
   function setImageInput(data) {
-    setPreviewImg(data);
     setPreviewImgInput({
       ...data,
       inputChange: true,
@@ -239,7 +222,6 @@ function PersonalInfo() {
   }
 
   function removeImageInput(data) {
-    setPreviewImg({ image: "", id: "" });
     setPreviewImgInput({
       ...data,
       inputChange: false,
@@ -348,7 +330,6 @@ function PersonalInfo() {
       } else {
         inputs.image = previewImgInput.image;
         inputs.image_id = previewImgInput.id;
-        // setPreviewImg({ image: "", id: "" });
       }
     }
 
@@ -529,10 +510,12 @@ function PersonalInfo() {
 
           <ImageUploadForm
             previewImage={previewImgInput.image}
+            previewImageId={previewImgInput.id}
             userImage={user.image}
             setImageInput={setImageInput}
             removeImageInput={removeImageInput}
             removeUserImage={removeUserImage}
+            submitSuccess={formStatus === FORM_STATUS.success}
           />
 
           <FieldSet>
