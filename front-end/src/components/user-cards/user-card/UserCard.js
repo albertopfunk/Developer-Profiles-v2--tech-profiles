@@ -3,7 +3,6 @@ import ReactDOM from "react-dom";
 
 import UserImage from "./UserImage";
 import UserInfo from "./UserInfo";
-import UserTitle from "./UserTitle";
 import UserSkills from "./UserSkills";
 import UserIcons from "./UserIcons";
 import UserExtras from "../user-extras/UserExtras";
@@ -179,8 +178,6 @@ const UserCard = React.forwardRef((props, articleRef) => {
       </section>
 
       <section>
-        <UserTitle title={props.title} />
-
         <UserSkills
           topSkills={props.topSkills}
           additionalSkills={props.additionalSkills}

@@ -12,6 +12,7 @@ function UserInfo(props) {
           <p>No Name Listed</p>
         )}
       </div>
+      <div>{props.title}</div>
       <div className="location">
         {props.currentLocation ? (
           <p>{props.currentLocation}</p>
