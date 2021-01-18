@@ -25,6 +25,98 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_SECRET,
 });
 
+
+
+
+server.post(
+  "/upload-preview-image",
+  fileUpload({
+    useTempFiles: true,
+  }),
+  (req, res) => {
+    if (
+      !req.headers["content-type"] ||
+      !req.headers["content-type"].includes("multipart/form-data")
+    ) {
+      res.status(400).json({
+        message: `Expected content-type to be 'multipart/form-data', received '${req.headers["content-type"]}'`,
+      });
+      return;
+    }
+
+    if (!req.files || !req.files.image) {
+      res.status(400).json({
+        message: `Expected 'image' file, received '${
+          !req.files ? req.files : req.files.image
+        }'`,
+      });
+      return;
+    }
+
+    if (!req.body.publicId) {
+      // profile-0-image-preview
+
+      res.status(400).json({
+        message: `Expected 'publicId' in body, received '${req.body.publicId}'`,
+      });
+      return;
+    }
+
+    cloudinary.uploader.upload(
+      req.files.image.tempFilePath,
+      {
+        upload_preset: process.env.CLOUDINARY_UPLOAD_PRESET,
+        public_id: publicId,
+      },
+      (err, result) => {
+        if (err) {
+          res.status(500).json({ message: "Error uploading image" });
+          return;
+        }
+        res
+          .status(200)
+          .json({ image: result.secure_url, id: result.public_id });
+      }
+    );
+  }
+);
+
+server.post("/upload-main-image", (req, res) => {
+  if (!req.body.imageUrl) {
+    res.status(400).json({
+      message: `Expected 'imageUrl' in body, received '${req.body.imageUrl}'`,
+    });
+    return;
+  }
+
+  if (!req.body.publicId) {
+    // profile-0-image-main
+
+    res.status(400).json({
+      message: `Expected 'publicId' in body, received '${req.body.publicId}'`,
+    });
+    return;
+  }
+
+  cloudinary.uploader.upload(
+    req.body.imageUrl,
+    {
+      upload_preset: process.env.CLOUDINARY_UPLOAD_PRESET,
+      public_id: publicId,
+    },
+    (err, result) => {
+      if (err) {
+        res.status(500).json({ message: "Error uploading image" });
+        return;
+      }
+      res.status(200).json({ image: result.secure_url, id: result.public_id });
+    }
+  );
+});
+
+
+
+
 server.post(
   "/upload-image",
   fileUpload({
