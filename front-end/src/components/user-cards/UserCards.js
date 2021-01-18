@@ -71,7 +71,7 @@ function UserCards(props) {
       {props.totalUsers === 0 ? (
         <>
           <p>No Users Here!</p>
-          <button type="reset" onClick={props.resetFilters}>
+          <button type="reset" onClick={() => props.resetFilters(true)}>
             reset filters
           </button>
         </>

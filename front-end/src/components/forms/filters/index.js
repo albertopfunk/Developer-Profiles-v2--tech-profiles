@@ -6,11 +6,17 @@ import CurrentLocationFilter from "./CurrentLocationFilter";
 import RelocateToFilter from "./RelocateToFilter";
 import SortingFilter from "./SortingFilter";
 
-const Filters = React.forwardRef((props, formRef) => {
+function Filters(props) {
   const [areFiltersShowing, setAreFiltersShowing] = useState(false);
+  const [resetFilterChange, setResetFilterChange] = useState(false);
 
   function setFilters() {
     setAreFiltersShowing(!areFiltersShowing);
+  }
+
+  function resetLocalFilters() {
+    setResetFilterChange(!resetFilterChange);
+    props.resetFilters(false);
   }
 
   return (
@@ -39,14 +45,30 @@ const Filters = React.forwardRef((props, formRef) => {
           </button>
         </div>
       </div>
-      <FiltersForm ref={formRef} showForm={areFiltersShowing}>
-        <SortingFilter updateUsers={props.updateUsers} />
-        <AreaOfWorkFilter updateUsers={props.updateUsers} />
-        <fieldset>
-          <legend>Filter by Locations</legend>
-          <CurrentLocationFilter updateUsers={props.updateUsers} />
-          <RelocateToFilter updateUsers={props.updateUsers} />
-        </fieldset>
+
+      <FiltersForm showForm={areFiltersShowing}>
+        {resetFilterChange ? (
+          <div>
+            <SortingFilter updateUsers={props.updateUsers} />
+            <AreaOfWorkFilter updateUsers={props.updateUsers} />
+            <fieldset>
+              <legend>Filter by Locations</legend>
+              <CurrentLocationFilter updateUsers={props.updateUsers} />
+              <RelocateToFilter updateUsers={props.updateUsers} />
+            </fieldset>
+          </div>
+        ) : (
+          <>
+            <SortingFilter updateUsers={props.updateUsers} />
+            <AreaOfWorkFilter updateUsers={props.updateUsers} />
+            <fieldset>
+              <legend>Filter by Locations</legend>
+              <CurrentLocationFilter updateUsers={props.updateUsers} />
+              <RelocateToFilter updateUsers={props.updateUsers} />
+            </fieldset>
+          </>
+        )}
+
         <div className="filters-control bottom">
           <button
             type="button"
@@ -57,10 +79,19 @@ const Filters = React.forwardRef((props, formRef) => {
             done
           </button>
         </div>
+        <div>
+          <button
+            type="reset"
+            aria-label="reset filters"
+            onClick={resetLocalFilters}
+          >
+            reset
+          </button>
+        </div>
       </FiltersForm>
     </FiltersContainer>
   );
-});
+}
 
 const FiltersContainer = styled.aside`
   width: 100%;
@@ -112,8 +143,6 @@ const FiltersForm = styled.form`
     display: block;
   }
 `;
-
-Filters.displayName = "Filters";
 
 const MemoFilters = React.memo(Filters);
 

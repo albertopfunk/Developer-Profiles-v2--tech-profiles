@@ -12,6 +12,7 @@ class PublicPage extends Component {
   state = {
     users: [],
     usersLength: 0,
+    resetFilterChange: false,
     noMoreUsers: false,
     initialLoading: true,
     usersLoading: false,
@@ -30,8 +31,6 @@ class PublicPage extends Component {
     chosenRelocateToObj: {},
     sortChoice: "acending(oldest-newest)",
   };
-
-  formRef = React.createRef();
 
   async componentDidMount() {
     const [res, err] = await httpClient("GET", "/users");
@@ -139,7 +138,7 @@ class PublicPage extends Component {
     this.setState(stateUpdate, () => this.getFilteredUsers());
   };
 
-  resetFilters = async () => {
+  resetFilters = async (shouldUnmount) => {
     const [res, err] = await httpClient("GET", "/users");
 
     if (err) {
@@ -166,7 +165,13 @@ class PublicPage extends Component {
       sortChoice: "acending(oldest-newest)",
     });
 
-    this.formRef.current.reset();
+    if (!shouldUnmount) {
+      return;
+    }
+
+    this.setState((state) => {
+      return { resetFilterChange: !state.resetFilterChange };
+    });
   };
 
   render() {
@@ -178,12 +183,27 @@ class PublicPage extends Component {
             signOut={this.props.signOut}
             signIn={this.props.signIn}
           />
-          <Filters
-            ref={this.formRef}
-            updateUsers={this.updateUsers}
-            currentUsers={this.state.users.length}
-            totalUsers={this.state.usersLength}
-          />
+
+          {/* not too happy about this workaround, found this to be the
+          least hacky way to reset filters without having to make big
+          changes, this will reset all state of children */}
+          {this.state.resetFilterChange ? (
+            <>
+              <Filters
+                updateUsers={this.updateUsers}
+                currentUsers={this.state.users.length}
+                totalUsers={this.state.usersLength}
+                resetFilters={this.resetFilters}
+              />
+            </>
+          ) : (
+            <Filters
+              updateUsers={this.updateUsers}
+              currentUsers={this.state.users.length}
+              totalUsers={this.state.usersLength}
+              resetFilters={this.resetFilters}
+            />
+          )}
         </PageHeader>
 
         <Main aria-labelledby="main-heading">
