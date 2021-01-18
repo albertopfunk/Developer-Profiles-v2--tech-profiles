@@ -28,7 +28,7 @@ function getAll() {
 }
 
 function getByUser(userId) {
-  return db("skills_for_review").where({user_id: userId});
+  return db("skills_for_review").where({ user_id: userId });
 }
 
 function getSingle(id) {
