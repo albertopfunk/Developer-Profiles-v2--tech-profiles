@@ -6,7 +6,7 @@ function UserInfo({
   lastName,
   title,
   currentLocation,
-  summary
+  summary,
 }) {
   return (
     <div>
@@ -21,11 +21,7 @@ function UserInfo({
       </div>
       <div>{title}</div>
       <div className="location">
-        {currentLocation ? (
-          <p>{currentLocation}</p>
-        ) : (
-          <p>No Location Listed</p>
-        )}
+        {currentLocation ? <p>{currentLocation}</p> : <p>No Location Listed</p>}
       </div>
       <div id={`profile-${userId}-summary`} className="summary">
         {summary ? <p>{summary}</p> : <p>No Summary Listed</p>}
