@@ -8,15 +8,9 @@ import SortingFilter from "./SortingFilter";
 
 function Filters(props) {
   const [areFiltersShowing, setAreFiltersShowing] = useState(false);
-  const [resetFilterChange, setResetFilterChange] = useState(false);
 
   function setFilters() {
     setAreFiltersShowing(!areFiltersShowing);
-  }
-
-  function resetLocalFilters() {
-    setResetFilterChange(!resetFilterChange);
-    props.resetFilters(false);
   }
 
   return (
@@ -45,29 +39,45 @@ function Filters(props) {
           </button>
         </div>
       </div>
-
+      {/* not too happy about this workaround, found this to be the
+      least hacky way to reset filters without having to make big
+      changes, this will reset all state of children.
+      using fragments to bypass reacts optimization */}
       <FiltersForm showForm={areFiltersShowing}>
-        {resetFilterChange ? (
-          <div>
-            <SortingFilter updateUsers={props.updateUsers} />
-            <AreaOfWorkFilter updateUsers={props.updateUsers} />
-            <fieldset>
-              <legend>Filter by Locations</legend>
-              <CurrentLocationFilter updateUsers={props.updateUsers} />
-              <RelocateToFilter updateUsers={props.updateUsers} />
-            </fieldset>
-          </div>
-        ) : (
+        {props.resetFilterChange ? (
           <>
             <SortingFilter updateUsers={props.updateUsers} />
-            <AreaOfWorkFilter updateUsers={props.updateUsers} />
-            <fieldset>
-              <legend>Filter by Locations</legend>
-              <CurrentLocationFilter updateUsers={props.updateUsers} />
-              <RelocateToFilter updateUsers={props.updateUsers} />
-            </fieldset>
           </>
+        ) : (
+          <SortingFilter updateUsers={props.updateUsers} />
         )}
+
+        {props.resetFilterChange ? (
+          <>
+            <AreaOfWorkFilter updateUsers={props.updateUsers} />
+          </>
+        ) : (
+          <AreaOfWorkFilter updateUsers={props.updateUsers} />
+        )}
+
+        <fieldset>
+          <legend>Filter by Locations</legend>
+
+          {props.resetFilterChange ? (
+            <>
+              <CurrentLocationFilter updateUsers={props.updateUsers} />
+            </>
+          ) : (
+            <CurrentLocationFilter updateUsers={props.updateUsers} />
+          )}
+          {props.resetFilterChange ? (
+            <>
+              <RelocateToFilter updateUsers={props.updateUsers} />
+            </>
+          ) : (
+            <RelocateToFilter updateUsers={props.updateUsers} />
+          )}
+        </fieldset>
 
         <div className="filters-control bottom">
           <button
@@ -83,7 +93,7 @@ function Filters(props) {
           <button
             type="reset"
             aria-label="reset filters"
-            onClick={resetLocalFilters}
+            onClick={props.resetFilters}
           >
             reset
           </button>

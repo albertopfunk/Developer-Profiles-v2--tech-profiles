@@ -138,7 +138,7 @@ class PublicPage extends Component {
     this.setState(stateUpdate, () => this.getFilteredUsers());
   };
 
-  resetFilters = async (shouldUnmount) => {
+  resetFilters = async () => {
     const [res, err] = await httpClient("GET", "/users");
 
     if (err) {
@@ -165,10 +165,6 @@ class PublicPage extends Component {
       sortChoice: "acending(oldest-newest)",
     });
 
-    if (!shouldUnmount) {
-      return;
-    }
-
     this.setState((state) => {
       return { resetFilterChange: !state.resetFilterChange };
     });
@@ -183,27 +179,13 @@ class PublicPage extends Component {
             signOut={this.props.signOut}
             signIn={this.props.signIn}
           />
-
-          {/* not too happy about this workaround, found this to be the
-          least hacky way to reset filters without having to make big
-          changes, this will reset all state of children */}
-          {this.state.resetFilterChange ? (
-            <>
-              <Filters
-                updateUsers={this.updateUsers}
-                currentUsers={this.state.users.length}
-                totalUsers={this.state.usersLength}
-                resetFilters={this.resetFilters}
-              />
-            </>
-          ) : (
-            <Filters
-              updateUsers={this.updateUsers}
-              currentUsers={this.state.users.length}
-              totalUsers={this.state.usersLength}
-              resetFilters={this.resetFilters}
-            />
-          )}
+          <Filters
+            updateUsers={this.updateUsers}
+            currentUsers={this.state.users.length}
+            totalUsers={this.state.usersLength}
+            resetFilters={this.resetFilters}
+            resetFilterChange={this.state.resetFilterChange}
+          />
         </PageHeader>
 
         <Main aria-labelledby="main-heading">
