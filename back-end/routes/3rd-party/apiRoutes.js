@@ -25,11 +25,8 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_SECRET,
 });
 
-
-
-
 server.post(
-  "/upload-preview-image",
+  "/upload-preview-image/:id",
   fileUpload({
     useTempFiles: true,
   }),
@@ -53,11 +50,9 @@ server.post(
       return;
     }
 
-    if (!req.body.publicId) {
-      // profile-0-image-preview
-
+    if (!req.params.id) {
       res.status(400).json({
-        message: `Expected 'publicId' in body, received '${req.body.publicId}'`,
+        message: `Expected 'id' in params, received '${req.params.id}'`,
       });
       return;
     }
@@ -66,7 +61,7 @@ server.post(
       req.files.image.tempFilePath,
       {
         upload_preset: process.env.CLOUDINARY_UPLOAD_PRESET,
-        public_id: publicId,
+        public_id: `profile-${req.params.id}-image-preview`,
       },
       (err, result) => {
         if (err) {
@@ -89,11 +84,9 @@ server.post("/upload-main-image", (req, res) => {
     return;
   }
 
-  if (!req.body.publicId) {
-    // profile-0-image-main
-
+  if (!req.body.id) {
     res.status(400).json({
-      message: `Expected 'publicId' in body, received '${req.body.publicId}'`,
+      message: `Expected 'id' in body, received '${req.body.id}'`,
     });
     return;
   }
@@ -102,7 +95,7 @@ server.post("/upload-main-image", (req, res) => {
     req.body.imageUrl,
     {
       upload_preset: process.env.CLOUDINARY_UPLOAD_PRESET,
-      public_id: publicId,
+      public_id: `profile-${req.body.id}-image-main`,
     },
     (err, result) => {
       if (err) {
@@ -113,9 +106,6 @@ server.post("/upload-main-image", (req, res) => {
     }
   );
 });
-
-
-
 
 server.post(
   "/upload-image",
