@@ -512,6 +512,7 @@ function PersonalInfo() {
             previewImage={previewImgInput.image}
             previewImageId={previewImgInput.id}
             userImage={user.image}
+            userId={user.id}
             setImageInput={setImageInput}
             removeImageInput={removeImageInput}
             removeUserImage={removeUserImage}

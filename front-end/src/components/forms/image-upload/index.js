@@ -4,7 +4,6 @@ import { ProfileContext } from "../../../global/context/user-profile/ProfileCont
 import { httpClient } from "../../../global/helpers/http-requests";
 import { FORM_STATUS } from "../../../global/helpers/variables";
 
-
 /*
 
 FIRST TIME UPLOAD
@@ -46,24 +45,22 @@ user uploads preview image
 
 */
 
-
-
 function ImageUploadForm({
   previewImage,
   previewImageId,
   userImage,
+  userId,
   setImageInput,
   removeImageInput,
   removeUserImage,
-  submitSuccess
+  submitSuccess,
 }) {
-  const { setPreviewImg } = useContext(ProfileContext)
+  const { setPreviewImg } = useContext(ProfileContext);
   const [imageStatus, setImageStatus] = useState(FORM_STATUS.idle);
 
   const imageInputRef = React.createRef();
   const removeImageInputRef = React.createRef();
   let focusOnImageInputRef = useRef();
-
 
   useEffect(() => {
     return () => {
@@ -71,19 +68,12 @@ function ImageUploadForm({
     };
   }, [setPreviewImg]);
 
-
   useEffect(() => {
-    console.log("!!! SET TO CLEANUP !!!", submitSuccess, previewImageId)
-    return () => {
-      console.log("!!! CLEANUP !!!", submitSuccess, previewImageId)
-      if (!submitSuccess && previewImageId) {
-        httpClient("POST", "/api/delete-image", {
-          id: previewImageId,
-        });
-      }
-    };
-  }, [previewImageId, submitSuccess]);
-
+    if (submitSuccess) {
+      // upload preview img
+      console.log("UPLOAD PREV", previewImageId, previewImage, submitSuccess);
+    }
+  }, [submitSuccess]);
 
   useEffect(() => {
     if (!focusOnImageInputRef.current) {
@@ -105,11 +95,16 @@ function ImageUploadForm({
     imageInputRef.current.value = "";
 
     setImageStatus(FORM_STATUS.loading);
-    const [res, err] = await httpClient("POST", "/api/upload-image", data, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
+    const [res, err] = await httpClient(
+      "POST",
+      `/api/upload-preview-image/${userId}`,
+      data,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
 
     if (err) {
       console.error(`${res.mssg} => ${res.err}`);
