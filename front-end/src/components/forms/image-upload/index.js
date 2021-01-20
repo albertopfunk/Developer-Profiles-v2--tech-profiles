@@ -47,13 +47,11 @@ user uploads preview image
 
 function ImageUploadForm({
   previewImage,
-  previewImageId,
   userImage,
   userId,
   setImageInput,
   removeImageInput,
   removeUserImage,
-  submitSuccess,
 }) {
   const { setPreviewImg } = useContext(ProfileContext);
   const [imageStatus, setImageStatus] = useState(FORM_STATUS.idle);
@@ -67,13 +65,6 @@ function ImageUploadForm({
       setPreviewImg({ image: "", id: "" });
     };
   }, [setPreviewImg]);
-
-  useEffect(() => {
-    if (submitSuccess) {
-      // upload preview img
-      console.log("UPLOAD PREV", previewImageId, previewImage, submitSuccess);
-    }
-  }, [submitSuccess]);
 
   useEffect(() => {
     if (!focusOnImageInputRef.current) {

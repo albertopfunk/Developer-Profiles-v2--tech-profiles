@@ -30,7 +30,7 @@ function PersonalInfo() {
     image: "",
     id: "",
     inputChange: false,
-    shouldRemoveUserImage: false,
+    removeUserImage: false,
   });
   const [areaOfWork, setAreaOfWork] = useState({
     inputValue: "",
@@ -118,7 +118,7 @@ function PersonalInfo() {
       image: "",
       id: "",
       inputChange: false,
-      shouldRemoveUserImage: false,
+      removeUserImage: false,
     });
     setAreaOfWork({
       inputValue: "",
@@ -205,19 +205,11 @@ function PersonalInfo() {
     }
   }
 
-  function removeUserImageFromCloudinary() {
-    if (user.image_id) {
-      httpClient("POST", "/api/delete-image", {
-        id: user.image_id,
-      });
-    }
-  }
-
   function setImageInput(data) {
     setPreviewImgInput({
       ...data,
       inputChange: true,
-      shouldRemoveUserImage: false,
+      removeUserImage: false,
     });
   }
 
@@ -225,7 +217,7 @@ function PersonalInfo() {
     setPreviewImgInput({
       ...data,
       inputChange: false,
-      shouldRemoveUserImage: false,
+      removeUserImage: false,
     });
   }
 
@@ -233,13 +225,13 @@ function PersonalInfo() {
     if (shouldRemove) {
       setPreviewImgInput({
         ...previewImgInput,
-        shouldRemoveUserImage: true,
+        removeUserImage: true,
         inputChange: true,
       });
     } else {
       setPreviewImgInput({
         ...previewImgInput,
-        shouldRemoveUserImage: false,
+        removeUserImage: false,
         inputChange: false,
       });
     }
@@ -305,13 +297,13 @@ function PersonalInfo() {
       !firstName.inputChange &&
       !lastName.inputChange &&
       !previewImgInput.inputChange &&
-      !previewImgInput.shouldRemoveUserImage &&
       !areaOfWork.inputChange &&
       !title.inputChange
     ) {
       return;
     }
 
+    setFormStatus(FORM_STATUS.loading);
     const inputs = {};
 
     if (firstName.inputChange) {
@@ -322,17 +314,6 @@ function PersonalInfo() {
       inputs.last_name = lastName.inputValue;
     }
 
-    if (previewImgInput.inputChange) {
-      removeUserImageFromCloudinary();
-      if (previewImgInput.shouldRemoveUserImage) {
-        inputs.image = "";
-        inputs.image_id = "";
-      } else {
-        inputs.image = previewImgInput.image;
-        inputs.image_id = previewImgInput.id;
-      }
-    }
-
     if (areaOfWork.inputChange) {
       inputs.area_of_work = areaOfWork.inputValue;
     }
@@ -341,7 +322,26 @@ function PersonalInfo() {
       inputs.desired_title = title.inputValue;
     }
 
-    setFormStatus(FORM_STATUS.loading);
+    if (previewImgInput.inputChange) {
+      if (previewImgInput.removeUserImage) {
+        inputs.image = "";
+        inputs.image_id = "";
+      } else {
+        const [res, err] = await httpClient("POST", `/api/upload-main-image`, {
+          imageUrl: previewImgInput.image,
+          id: user.id
+        })
+  
+        if (err) {
+          console.error(`${res.mssg} => ${res.err}`);
+          return;
+        }
+  
+        inputs.image = res.data.image;
+        inputs.image_id = res.data.id;
+      }
+    }
+
     await editProfile(inputs);
     formSuccessWait = setTimeout(() => {
       setFormStatus(FORM_STATUS.idle);
