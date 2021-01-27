@@ -14,7 +14,7 @@ import { Helmet } from "react-helmet";
 
 let formSuccessWait;
 function NewUser() {
-  const { user, setPreviewImg, editProfile } = useContext(ProfileContext);
+  const { user, editProfile } = useContext(ProfileContext);
   const [selectedTab, setSelectedTab] = useState("basic-info");
   const [formStatus, setFormStatus] = useState(FORM_STATUS.idle);
   const [formFocusStatus, setFormFocusStatus] = useState("");
@@ -56,34 +56,17 @@ function NewUser() {
   let billingInfoPanelRef = React.createRef();
 
   useEffect(() => {
-    if (formStatus === FORM_STATUS.error && errorSummaryRef.current) {
-      errorSummaryRef.current.focus();
-    }
-
-    // eslint-disable-next-line
-  }, [formStatus]);
-
-  useEffect(() => {
     return () => {
       clearTimeout(formSuccessWait);
     };
   }, []);
 
   useEffect(() => {
-    return () => {
-      if (previewImgInput.id) {
-        httpClient("POST", "/api/delete-image", {
-          id: previewImgInput.id,
-        });
-      }
-    };
-  }, [previewImgInput]);
+    if (formStatus === FORM_STATUS.error && errorSummaryRef.current) {
+      errorSummaryRef.current.focus();
+    }
 
-  useEffect(() => {
-    return () => {
-      setPreviewImg({ image: "", id: "" });
-    };
-  }, [setPreviewImg]);
+  }, [formStatus]);
 
   useEffect(() => {
     if (formFocusStatus) {
@@ -245,16 +228,7 @@ function NewUser() {
     }
   }
 
-  function removeUserImageFromCloudinary() {
-    if (user.image_id) {
-      httpClient("POST", "/api/delete-image", {
-        id: user.image_id,
-      });
-    }
-  }
-
   function setImageInput(data) {
-    setPreviewImg(data);
     setPreviewImgInput({
       ...data,
       inputChange: true,
@@ -263,7 +237,6 @@ function NewUser() {
   }
 
   function removeImageInput(data) {
-    setPreviewImg({ image: "", id: "" });
     setPreviewImgInput({
       ...data,
       inputChange: false,
@@ -430,7 +403,6 @@ function NewUser() {
     if (
       !firstName.inputChange &&
       !previewImgInput.inputChange &&
-      !previewImgInput.shouldRemoveUserImage &&
       !areaOfWork.inputChange &&
       !title.inputChange &&
       !summary.inputChange &&
@@ -438,37 +410,26 @@ function NewUser() {
     ) {
       return;
     }
-
+    
+    setFormStatus(FORM_STATUS.loading);
     const inputs = {};
 
     if (firstName.inputChange) {
       inputs.first_name = firstName.inputValue;
     }
 
-    if (previewImgInput.inputChange) {
-      removeUserImageFromCloudinary();
-      if (previewImgInput.shouldRemoveUserImage) {
-        inputs.image = "";
-        inputs.image_id = "";
-      } else {
-        inputs.image = previewImgInput.image;
-        inputs.image_id = previewImgInput.id;
-        // setPreviewImg({ image: "", id: "" });
-      }
-    }
-
     if (areaOfWork.inputChange) {
       inputs.area_of_work = areaOfWork.inputValue;
     }
-
+    
     if (title.inputChange) {
       inputs.desired_title = title.inputValue;
     }
-
+    
     if (summary.inputChange) {
       inputs.summary = summary.inputValue;
     }
-
+    
     if (locationChange) {
       if (location.length > 0) {
         const { name, lat, lon } = location[0];
@@ -481,8 +442,27 @@ function NewUser() {
         inputs.current_location_lon = null;
       }
     }
+    
+    if (previewImgInput.inputChange) {
+      if (previewImgInput.shouldRemoveUserImage) {
+        inputs.image = "";
+        inputs.image_id = "";
+      } else {
+        const [res, err] = await httpClient("POST", `/api/upload-main-image`, {
+          imageUrl: previewImgInput.image,
+          id: user.id
+        })
+  
+        if (err) {
+          console.error(`${res.mssg} => ${res.err}`);
+          return;
+        }
+  
+        inputs.image = res.data.image;
+        inputs.image_id = res.data.id;
+      }
+    }
 
-    setFormStatus(FORM_STATUS.loading);
     await editProfile(inputs);
     formSuccessWait = setTimeout(() => {
       history.push("/profile-dashboard");
@@ -616,6 +596,7 @@ function NewUser() {
               <ImageUploadForm
                 previewImage={previewImgInput.image}
                 userImage={user.image}
+                userId={user.id}
                 setImageInput={setImageInput}
                 removeImageInput={removeImageInput}
                 removeUserImage={removeUserImage}
