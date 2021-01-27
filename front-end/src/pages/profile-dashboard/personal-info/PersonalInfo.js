@@ -50,18 +50,7 @@ function PersonalInfo() {
     if (formStatus === FORM_STATUS.error && errorSummaryRef.current) {
       errorSummaryRef.current.focus();
     }
-    // another issue with required dependencies causing bugs.
-    // I am using this since I need to set focus to the
-    // err summary element when user clicks submit with errors.
-    // since state needs to change for the element to appear
-    // and I can only set focus once the element appears, I have
-    // to set focus AFTER state changes and component renders.
-    // so I am using useEffect to handle that
-    // this works, but if I add the required errorSummaryRef
-    // it will shift focus on that Ref on ANY state change/render
-    // when form is in an error state
-    // since refs are re-set each time
-    // eslint-disable-next-line
+
   }, [formStatus]);
 
   useEffect(() => {
@@ -510,13 +499,11 @@ function PersonalInfo() {
 
           <ImageUploadForm
             previewImage={previewImgInput.image}
-            previewImageId={previewImgInput.id}
             userImage={user.image}
             userId={user.id}
             setImageInput={setImageInput}
             removeImageInput={removeImageInput}
             removeUserImage={removeUserImage}
-            submitSuccess={formStatus === FORM_STATUS.success}
           />
 
           <FieldSet>
