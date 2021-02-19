@@ -7,32 +7,18 @@ import React from "react";
 // AI
 
 function AreaOfWorkFilter(props) {
-  function toggleAreaOfWorkCheckbox(areaOfWork) {
-    switch (areaOfWork) {
-      case "Development":
-        props.updateUsers((prevState) => ({
-          isWebDevChecked: !prevState.isWebDevChecked,
-        }));
-        break;
-      case "Design":
-        props.updateUsers((prevState) => ({
-          isUIUXChecked: !prevState.isUIUXChecked,
-        }));
-        break;
-      case "iOS":
-        props.updateUsers((prevState) => ({
-          isIOSChecked: !prevState.isIOSChecked,
-        }));
-        break;
-      case "Android":
-        props.updateUsers((prevState) => ({
-          isAndroidChecked: !prevState.isAndroidChecked,
-        }));
-        break;
-      default:
-        console.error("unable to find area of work");
-        return;
-    }
+  const developmentRef = React.createRef();
+  const designRef = React.createRef();
+  const iosRef = React.createRef();
+  const androidRef = React.createRef();
+
+  function toggleAreaOfWorkCheckbox() {
+    props.updateUsers({
+      isWebDevChecked: developmentRef.current.checked,
+      isUIUXChecked: designRef.current.checked,
+      isIOSChecked: iosRef.current.checked,
+      isAndroidChecked: androidRef.current.checked,
+    });
   }
 
   return (
@@ -40,40 +26,44 @@ function AreaOfWorkFilter(props) {
       <legend>Filter by Area of Work</legend>
       <label htmlFor="web-development">
         <input
+          ref={developmentRef}
           type="checkbox"
           name="area-of-work"
           id="web-development"
-          onChange={() => toggleAreaOfWorkCheckbox("Development")}
+          onChange={toggleAreaOfWorkCheckbox}
         />
         Development
       </label>
       <br />
       <label htmlFor="Design">
         <input
+          ref={designRef}
           type="checkbox"
           name="area-of-work"
           id="Design"
-          onChange={() => toggleAreaOfWorkCheckbox("Design")}
+          onChange={toggleAreaOfWorkCheckbox}
         />
         Design
       </label>
       <br />
       <label htmlFor="iOS">
         <input
+          ref={iosRef}
           type="checkbox"
           name="area-of-work"
           id="iOS"
-          onChange={() => toggleAreaOfWorkCheckbox("iOS")}
+          onChange={toggleAreaOfWorkCheckbox}
         />
         iOS
       </label>
       <br />
       <label htmlFor="Android">
         <input
+          ref={androidRef}
           type="checkbox"
           name="area-of-work"
           id="Android"
-          onChange={() => toggleAreaOfWorkCheckbox("Android")}
+          onChange={toggleAreaOfWorkCheckbox}
         />
         Android
       </label>
