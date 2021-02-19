@@ -87,11 +87,7 @@ function App({ location }) {
         <FocusReset>
           <Switch>
             <Route exact path="/">
-              <PublicPage
-                isValidated={isValidated}
-                signOut={signOut}
-                signIn={signIn}
-              />
+              <PublicPage />
             </Route>
             <Route path="/profile-dashboard">
               {isValidated ? <ProfileDashboard /> : <PageNotAuthorized />}

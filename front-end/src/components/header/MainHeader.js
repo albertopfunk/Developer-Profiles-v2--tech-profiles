@@ -1,11 +1,15 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
+import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import styled from "styled-components";
+
+import { AuthContext } from "../../global/context/auth/AuthContext";
+
 import { ReactComponent as BurgerMenu } from "./menu.svg";
 import { ReactComponent as MenuClose } from "./close.svg";
 
 let closeOnBlurWait;
-function MainHeader({ isValidated, signOut, signIn }) {
+function MainHeader() {
+  const { isValidated, signIn, signOut } = useContext(AuthContext);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [announceMenuToggle, setAnnounceMenuToggle] = useState(false);
 
