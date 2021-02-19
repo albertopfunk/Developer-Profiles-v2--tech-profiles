@@ -1,19 +1,20 @@
 import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import { Route, Switch, withRouter } from "react-router-dom";
-import { GlobalStyles } from "./global/styles/GlobalStyles";
+import styled from "styled-components";
 import { Helmet } from "react-helmet";
+
+import { GlobalStyles } from "./global/styles/GlobalStyles";
+import FocusReset from "./global/helpers/focus-reset";
+import { AuthContext } from "./global/context/auth/AuthContext";
+import auth0Client from "./auth/Auth";
+import Callback from "./auth/Callback";
 
 import PublicPage from "./pages/public-page/PublicPage";
 import ProfileDashboard from "./pages/profile-dashboard/ProfileDashboard";
 import PageNotAuthorized from "./pages/error-pages/not-authorized/PageNotAuthorized";
 import PageNotFound from "./pages/error-pages/404/PageNotFound";
 import PrivatePolicy from "./pages/misc-pages/private-policy/PrivatePolicy";
-import Callback from "./auth/Callback";
-
-import auth0Client from "./auth/Auth";
-import styled from "styled-components";
-import FocusReset from "./global/helpers/focus-reset";
 
 function App({ location }) {
   // callback handles validation when user signs in
@@ -25,6 +26,7 @@ function App({ location }) {
     location.pathname === "/callback" ? true : false
   );
 
+  // session is validated and reset on each mount
   useEffect(() => {
     validateSession();
   }, []);
@@ -81,32 +83,34 @@ function App({ location }) {
   return (
     <>
       <GlobalStyles />
-      <FocusReset>
-        <Switch>
-          <Route exact path="/">
-            <PublicPage
-              isValidated={isValidated}
-              signOut={signOut}
-              signIn={signIn}
-            />
-          </Route>
-          <Route path="/profile-dashboard">
-            {isValidated ? <ProfileDashboard /> : <PageNotAuthorized />}
-          </Route>
-          <Route path="/private-policy">
-            <PrivatePolicy />
-          </Route>
-          <Route path="/callback">
-            <Callback />
-          </Route>
-          <Route path="/authorize">
-            <PageNotAuthorized />
-          </Route>
-          <Route>
-            <PageNotFound />
-          </Route>
-        </Switch>
-      </FocusReset>
+      <AuthContext.Provider value={{ isValidated, signIn, signOut }}>
+        <FocusReset>
+          <Switch>
+            <Route exact path="/">
+              <PublicPage
+                isValidated={isValidated}
+                signOut={signOut}
+                signIn={signIn}
+              />
+            </Route>
+            <Route path="/profile-dashboard">
+              {isValidated ? <ProfileDashboard /> : <PageNotAuthorized />}
+            </Route>
+            <Route path="/private-policy">
+              <PrivatePolicy />
+            </Route>
+            <Route path="/callback">
+              <Callback />
+            </Route>
+            <Route path="/authorize">
+              <PageNotAuthorized />
+            </Route>
+            <Route>
+              <PageNotFound />
+            </Route>
+          </Switch>
+        </FocusReset>
+      </AuthContext.Provider>
     </>
   );
 }
