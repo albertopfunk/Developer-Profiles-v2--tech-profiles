@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Helmet } from "react-helmet";
 
@@ -7,18 +7,26 @@ import UserCards from "../../components/user-cards/UserCards";
 
 import { httpClient } from "../../global/helpers/http-requests";
 import MainHeader from "../../components/header/MainHeader";
+import { PROFILES_STATUS } from "../../global/helpers/variables";
 
-class PublicPage extends Component {
-  state = {
+// refactor to hooks
+// keep filter state on local storage so it can stay that way
+
+// profiles page
+function PublicPage() {
+  const [pageStatus, setPageStatus] = useState(PROFILES_STATUS.idle);
+  const [users, setUsers] = useState({
     users: [],
-    usersLength: 0,
-    resetFilterChange: false,
-    noMoreUsers: false,
-    initialLoading: true,
-    usersLoading: false,
-    filtersLoading: false,
-    nextCardIndex: 0,
-    usersPage: 1,
+    len: 0,
+    page: 1,
+    usersToLoad: false,
+  });
+
+  const [cardFocusIndex, setCardFocusIndex] = useState(0);
+
+  const [resetFilterBool, setResetFilterBool] = useState(false);
+
+  const [filters, setFilters] = useState({
     isWebDevChecked: false,
     isUIUXChecked: false,
     isIOSChecked: false,
@@ -30,128 +38,102 @@ class PublicPage extends Component {
     isUsingRelocateToFilter: false,
     chosenRelocateToObj: {},
     sortChoice: "acending(oldest-newest)",
-  };
+  });
 
-  async componentDidMount() {
+  useEffect(() => {
+    getAllUsers();
+  }, []);
+
+  async function getAllUsers() {
+    setPageStatus(PROFILES_STATUS.initialLoading);
     const [res, err] = await httpClient("GET", "/users");
 
     if (err) {
       console.error(`${res.mssg} => ${res.err}`);
+      setPageStatus(PROFILES_STATUS.initialError);
       return;
     }
 
-    this.setState({
+    setUsers({
       users: res.data.users,
-      usersLength: res.data.len,
-      initialLoading: false,
-      noMoreUsers: res.data.users.length <= 25 ? true : false,
+      len: res.data.len,
+      page: 1,
+      usersToLoad: res.data.users.length <= 25 ? true : false,
     });
+
+    setPageStatus(PROFILES_STATUS.idle);
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    if (this.state.users !== nextState.users) {
-      return true;
-    }
-
-    if (
-      this.state.isWebDevChecked !== nextState.isWebDevChecked ||
-      this.state.isUIUXChecked !== nextState.isUIUXChecked ||
-      this.state.isIOSChecked !== nextState.isIOSChecked ||
-      this.state.isAndroidChecked !== nextState.isAndroidChecked ||
-      this.state.isUsingCurrLocationFilter !==
-        nextState.isUsingCurrLocationFilter ||
-      this.state.selectedWithinMiles !== nextState.selectedWithinMiles ||
-      this.state.chosenLocationLat !== nextState.chosenLocationLat ||
-      this.state.chosenLocationLon !== nextState.chosenLocationLon ||
-      this.state.isUsingRelocateToFilter !==
-        nextState.isUsingRelocateToFilter ||
-      this.state.chosenRelocateToObj !== nextState.chosenRelocateToObj ||
-      this.state.sortChoice !== nextState.sortChoice
-    ) {
-      return false;
-    }
-    return true;
-  }
-
-  getFilteredUsers = async () => {
+  async function getFilteredUsers(filtersUpdate) {
+    setPageStatus(PROFILES_STATUS.filtersLoading);
     const [res, err] = await httpClient("POST", "/users/filtered", {
-      isWebDevChecked: this.state.isWebDevChecked,
-      isUIUXChecked: this.state.isUIUXChecked,
-      isIOSChecked: this.state.isIOSChecked,
-      isAndroidChecked: this.state.isAndroidChecked,
-      isUsingCurrLocationFilter: this.state.isUsingCurrLocationFilter,
-      selectedWithinMiles: this.state.selectedWithinMiles,
-      chosenLocationLat: this.state.chosenLocationLat,
-      chosenLocationLon: this.state.chosenLocationLon,
-      isUsingRelocateToFilter: this.state.isUsingRelocateToFilter,
-      chosenRelocateToObj: this.state.chosenRelocateToObj,
-      sortChoice: this.state.sortChoice,
+      ...filters,
+      ...filtersUpdate,
     });
 
     if (err) {
       console.error(`${res.mssg} => ${res.err}`);
+      setPageStatus(PROFILES_STATUS.filtersError);
       return;
     }
 
-    this.setState({
+    setUsers({
       users: res.data.users,
-      usersLength: res.data.len,
-      filtersLoading: false,
-      noMoreUsers: res.data.users.length <= 25 ? true : false,
+      len: res.data.len,
+      page: 1,
+      usersToLoad: res.data.users.length <= 25 ? true : false,
     });
 
-    window.scrollTo(0, 0);
-  };
+    setPageStatus(PROFILES_STATUS.idle);
 
-  loadMoreUsers = async () => {
-    this.setState({ usersLoading: true });
+    window.scrollTo(0, 0);
+  }
+
+  async function loadMoreUsers() {
+    setPageStatus(PROFILES_STATUS.paginationLoading);
 
     const [res, err] = await httpClient(
       "GET",
-      `/users/load-more/${this.state.usersPage + 1}`
+      `/users/load-more/${users.page + 1}`
     );
 
     if (err) {
       console.error(`${res.mssg} => ${res.err}`);
+      setPageStatus(PROFILES_STATUS.paginationError);
       return;
     }
 
-    this.setState({
-      users: [...this.state.users, ...res.data],
-      usersPage: this.state.usersPage + 1,
-      usersLoading: false,
-      nextCardIndex: this.state.users.length,
+    const users = [...users.users, ...res.data];
+
+    setUsers({
+      ...users,
+      users,
+      page: users.page + 1,
+      usersToLoad: users.length <= users.len ? false : true,
     });
 
-    if (this.state.users.length + res.data.length <= this.state.usersLength) {
-      this.setState({
-        noMoreUsers: false,
-      });
-    } else {
-      this.setState({
-        noMoreUsers: true,
-      });
-    }
-  };
+    setCardFocusIndex(users.users.length);
+    setPageStatus(PROFILES_STATUS.idle);
+  }
 
-  updateUsers = (stateUpdate) => {
-    this.setState(stateUpdate, () => this.getFilteredUsers());
-  };
-
-  resetFilters = async () => {
+  async function resetFilters() {
+    setPageStatus(PROFILES_STATUS.initialLoading);
     const [res, err] = await httpClient("GET", "/users");
 
     if (err) {
       console.error(`${res.mssg} => ${res.err}`);
+      setPageStatus(PROFILES_STATUS.initialError);
       return;
     }
 
-    this.setState({
+    setUsers({
       users: res.data.users,
-      usersLength: res.data.len,
-      noMoreUsers: res.data.users.length <= 25 ? true : false,
-      nextCardIndex: 0,
-      usersPage: 1,
+      len: res.data.len,
+      page: 1,
+      usersToLoad: res.data.users.length <= 25 ? true : false,
+    });
+
+    setFilters({
       isWebDevChecked: false,
       isUIUXChecked: false,
       isIOSChecked: false,
@@ -165,60 +147,52 @@ class PublicPage extends Component {
       sortChoice: "acending(oldest-newest)",
     });
 
-    this.setState((state) => {
-      return { resetFilterChange: !state.resetFilterChange };
-    });
-  };
-
-  render() {
-    return (
-      <>
-        <PageHeader>
-          <MainHeader
-            isValidated={this.props.isValidated}
-            signOut={this.props.signOut}
-            signIn={this.props.signIn}
-          />
-          <Filters
-            updateUsers={this.updateUsers}
-            currentUsers={this.state.users.length}
-            totalUsers={this.state.usersLength}
-            resetFilters={this.resetFilters}
-            resetFilterChange={this.state.resetFilterChange}
-          />
-        </PageHeader>
-
-        <Main aria-labelledby="main-heading">
-          <Helmet>
-            <title>Profiles • Tech Profiles</title>
-          </Helmet>
-          <h1 id="main-heading" className="sr-only">
-            Profiles
-          </h1>
-          {this.state.initialLoading || this.state.filtersLoading ? (
-            <div
-              role="feed"
-              aria-busy="true"
-              aria-labelledby="profiles-heading"
-            >
-              <h2 id="profiles-heading">Loading Profiles</h2>
-            </div>
-          ) : (
-            <UserCards
-              loadMoreUsers={this.loadMoreUsers}
-              noMoreUsers={this.state.noMoreUsers}
-              nextCardIndex={this.state.nextCardIndex}
-              isBusy={this.state.usersLoading}
-              users={this.state.users}
-              currentUsers={this.state.users.length}
-              totalUsers={this.state.usersLength}
-              resetFilters={this.resetFilters}
-            />
-          )}
-        </Main>
-      </>
-    );
+    setCardFocusIndex(0);
+    setResetFilterBool(!resetFilterBool);
+    setPageStatus(PROFILES_STATUS.idle);
   }
+
+  return (
+    <>
+      <PageHeader>
+        <MainHeader />
+
+        <Filters
+          updateUsers={getFilteredUsers}
+          currentUsers={users.users.length}
+          totalUsers={users.len}
+          resetFilters={resetFilters}
+          resetFilterChange={resetFilterBool}
+        />
+      </PageHeader>
+
+      <Main aria-labelledby="main-heading">
+        <Helmet>
+          <title>Profiles • Tech Profiles</title>
+        </Helmet>
+        <h1 id="main-heading" className="sr-only">
+          Profiles
+        </h1>
+        {pageStatus === PROFILES_STATUS.initialLoading ||
+        pageStatus === PROFILES_STATUS.filtersLoading ? (
+          <div role="feed" aria-busy="true" aria-labelledby="profiles-heading">
+            <h2 id="profiles-heading">Loading Profiles</h2>
+          </div>
+        ) : (
+          <UserCards
+            users={users.users}
+            loadMoreUsers={loadMoreUsers}
+            noMoreUsers={users.usersToLoad}
+            nextCardIndex={cardFocusIndex}
+            isBusy={pageStatus === PROFILES_STATUS.paginationLoading}
+            currentUsers={users.users.length}
+            totalUsers={users.len}
+            resetFilters={resetFilters}
+          />
+        )}
+      </Main>
+    </>
+  );
 }
 
 const PageHeader = styled.div`

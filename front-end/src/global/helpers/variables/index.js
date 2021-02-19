@@ -11,3 +11,20 @@ export const COMBOBOX_STATUS = {
   added: "added",
   removed: "removed",
 };
+
+export const PROFILES_STATUS = {
+  idle: "idle",
+  
+  initialLoading: "initialLoading",
+  initialError: "initialError",
+
+  filtersLoading: "filtersLoading",
+  filtersError: "filtersError",
+
+  paginationLoading: "paginationLoading", 
+  paginationError: "paginationError", 
+
+  cardLoading: "cardLoading",
+
+
+}
