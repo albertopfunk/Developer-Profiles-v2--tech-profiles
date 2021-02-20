@@ -8,7 +8,9 @@ function UserCards({
   loadMoreUsers,
   usersToLoad,
   cardFocusIndex,
+  isIdle,
   isBusy,
+  isError,
   currentUsers,
   totalUsers,
   resetFilters,
@@ -73,6 +75,7 @@ function UserCards({
       <h2 id="profiles-heading" className="sr-only">
         Current Profiles
       </h2>
+
       {totalUsers === 0 ? (
         <>
           <p>No Users Here!</p>
@@ -108,30 +111,50 @@ function UserCards({
               />
             );
           })}
-          <div>
-            {!usersToLoad ? (
-              <div>
-                <p>No more profiles to load</p>
-                <button
-                  type="button"
-                  aria-label="no more profiles to load, back to top"
-                  onClick={backToTop}
-                  onKeyDown={(e) => backToTopFocus(e)}
-                >
-                  Back to Top
-                </button>
-              </div>
-            ) : (
+
+          {isIdle && usersToLoad ? (
+            <button
+              type="button"
+              onClick={loadMoreUsers}
+              onKeyDown={(e) => loadMoreFocus(e)}
+            >
+              Load More Profiles
+            </button>
+          ) : null}
+
+          {isIdle && !usersToLoad ? (
+            <div>
+              <p>No more profiles to load</p>
               <button
                 type="button"
-                disabled={isBusy}
+                aria-label="no more profiles to load, back to top"
+                onClick={backToTop}
+                onKeyDown={(e) => backToTopFocus(e)}
+              >
+                Back to Top
+              </button>
+            </div>
+          ) : null}
+
+          {isBusy ? (
+            <button type="button" disabled="true">
+              Loading
+            </button>
+          ) : null}
+
+          {isError ? (
+            <div>
+              <p>Error loading profiles</p>
+              <button
+                type="button"
+                aria-label="error loading profiles, retry"
                 onClick={loadMoreUsers}
                 onKeyDown={(e) => loadMoreFocus(e)}
               >
-                {isBusy ? "Loading" : "Load More Profiles"}
+                Retry
               </button>
-            )}
-          </div>
+            </div>
+          ) : null}
         </>
       )}
     </Feed>
