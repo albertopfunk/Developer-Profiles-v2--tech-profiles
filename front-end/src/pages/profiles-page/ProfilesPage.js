@@ -17,7 +17,7 @@ function ProfilesPage() {
     users: [],
     len: 0,
     page: 1,
-    usersToLoad: false,
+    usersToLoad: true,
   });
 
   const [resetFilterBool, setResetFilterBool] = useState(false);
@@ -53,7 +53,7 @@ function ProfilesPage() {
       users: res.data.users,
       len: res.data.len,
       page: 1,
-      usersToLoad: res.data.users.length <= 25 ? true : false,
+      usersToLoad: res.data.len > 25 ? true : false,
     });
 
     setPageStatus(PROFILES_STATUS.idle);
@@ -84,7 +84,7 @@ function ProfilesPage() {
       users: res.data.users,
       len: res.data.len,
       page: 1,
-      usersToLoad: res.data.users.length <= 25 ? true : false,
+      usersToLoad: res.data.len > 25 ? true : false,
     });
 
     window.scrollTo(0, 0);
@@ -105,13 +105,13 @@ function ProfilesPage() {
       return;
     }
 
-    const users = [...users.users, ...res.data];
+    const updatedUsers = [...users.users, ...res.data];
 
     setUsers({
       ...users,
-      users,
+      users: updatedUsers,
       page: users.page + 1,
-      usersToLoad: users.length <= users.len ? false : true,
+      usersToLoad: users.len > updatedUsers.length ? true : false,
     });
 
     setCardFocusIndex(users.users.length);
@@ -132,7 +132,7 @@ function ProfilesPage() {
       users: res.data.users,
       len: res.data.len,
       page: 1,
-      usersToLoad: res.data.users.length <= 25 ? true : false,
+      usersToLoad: res.data.len > 25 ? true : false,
     });
 
     setFilters({

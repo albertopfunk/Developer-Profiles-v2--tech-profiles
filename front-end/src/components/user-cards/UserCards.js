@@ -109,7 +109,7 @@ function UserCards({
             );
           })}
           <div>
-            {usersToLoad ? (
+            {!usersToLoad ? (
               <div>
                 <p>No more profiles to load</p>
                 <button
