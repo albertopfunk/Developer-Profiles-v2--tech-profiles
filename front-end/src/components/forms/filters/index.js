@@ -6,7 +6,13 @@ import CurrentLocationFilter from "./CurrentLocationFilter";
 import RelocateToFilter from "./RelocateToFilter";
 import SortingFilter from "./SortingFilter";
 
-function Filters(props) {
+function Filters({
+  updateUsers,
+  currentUsers,
+  totalUsers,
+  resetFilters,
+  resetFilterChange,
+}) {
   const [areFiltersShowing, setAreFiltersShowing] = useState(false);
 
   function setFilters() {
@@ -25,7 +31,7 @@ function Filters(props) {
           aria-relevant="additions text"
         >
           {/* if full str isn't dynamic, sr will not announce full str */}
-          <p>{`Showing ${props.currentUsers} of ${props.totalUsers} Profiles`}</p>
+          <p>{`Showing ${currentUsers} of ${totalUsers} Profiles`}</p>
         </div>
         <div className="filters-control top">
           <button
@@ -44,38 +50,38 @@ function Filters(props) {
       changes, this will reset all state of children.
       using fragments to bypass reacts optimization */}
       <FiltersForm showForm={areFiltersShowing}>
-        {props.resetFilterChange ? (
+        {resetFilterChange ? (
           <>
-            <SortingFilter updateUsers={props.updateUsers} />
+            <SortingFilter updateUsers={updateUsers} />
           </>
         ) : (
-          <SortingFilter updateUsers={props.updateUsers} />
+          <SortingFilter updateUsers={updateUsers} />
         )}
 
-        {props.resetFilterChange ? (
+        {resetFilterChange ? (
           <>
-            <AreaOfWorkFilter updateUsers={props.updateUsers} />
+            <AreaOfWorkFilter updateUsers={updateUsers} />
           </>
         ) : (
-          <AreaOfWorkFilter updateUsers={props.updateUsers} />
+          <AreaOfWorkFilter updateUsers={updateUsers} />
         )}
 
         <fieldset>
           <legend>Filter by Locations</legend>
 
-          {props.resetFilterChange ? (
+          {resetFilterChange ? (
             <>
-              <CurrentLocationFilter updateUsers={props.updateUsers} />
+              <CurrentLocationFilter updateUsers={updateUsers} />
             </>
           ) : (
-            <CurrentLocationFilter updateUsers={props.updateUsers} />
+            <CurrentLocationFilter updateUsers={updateUsers} />
           )}
-          {props.resetFilterChange ? (
+          {resetFilterChange ? (
             <>
-              <RelocateToFilter updateUsers={props.updateUsers} />
+              <RelocateToFilter updateUsers={updateUsers} />
             </>
           ) : (
-            <RelocateToFilter updateUsers={props.updateUsers} />
+            <RelocateToFilter updateUsers={updateUsers} />
           )}
         </fieldset>
 
@@ -93,7 +99,7 @@ function Filters(props) {
           <button
             type="reset"
             aria-label="reset filters"
-            onClick={props.resetFilters}
+            onClick={resetFilters}
           >
             reset
           </button>

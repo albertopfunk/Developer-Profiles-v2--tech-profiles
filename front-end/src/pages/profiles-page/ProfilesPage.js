@@ -2,19 +2,17 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Helmet } from "react-helmet";
 
+import { httpClient } from "../../global/helpers/http-requests";
+import { PROFILES_STATUS } from "../../global/helpers/variables";
+
+import MainHeader from "../../components/header/MainHeader";
 import Filters from "../../components/forms/filters";
 import UserCards from "../../components/user-cards/UserCards";
 
-import { httpClient } from "../../global/helpers/http-requests";
-import MainHeader from "../../components/header/MainHeader";
-import { PROFILES_STATUS } from "../../global/helpers/variables";
-
-// refactor to hooks
-// keep filter state on local storage so it can stay that way
-
-// profiles page
-function PublicPage() {
+function ProfilesPage() {
   const [pageStatus, setPageStatus] = useState(PROFILES_STATUS.idle);
+
+  const [cardFocusIndex, setCardFocusIndex] = useState(0);
   const [users, setUsers] = useState({
     users: [],
     len: 0,
@@ -22,10 +20,7 @@ function PublicPage() {
     usersToLoad: false,
   });
 
-  const [cardFocusIndex, setCardFocusIndex] = useState(0);
-
   const [resetFilterBool, setResetFilterBool] = useState(false);
-
   const [filters, setFilters] = useState({
     isWebDevChecked: false,
     isUIUXChecked: false,
@@ -66,10 +61,17 @@ function PublicPage() {
 
   async function getFilteredUsers(filtersUpdate) {
     setPageStatus(PROFILES_STATUS.filtersLoading);
-    const [res, err] = await httpClient("POST", "/users/filtered", {
+
+    const updatedFilters = {
       ...filters,
       ...filtersUpdate,
-    });
+    };
+
+    const [res, err] = await httpClient(
+      "POST",
+      "/users/filtered",
+      updatedFilters
+    );
 
     if (err) {
       console.error(`${res.mssg} => ${res.err}`);
@@ -77,6 +79,7 @@ function PublicPage() {
       return;
     }
 
+    setFilters(updatedFilters);
     setUsers({
       users: res.data.users,
       len: res.data.len,
@@ -84,9 +87,8 @@ function PublicPage() {
       usersToLoad: res.data.users.length <= 25 ? true : false,
     });
 
-    setPageStatus(PROFILES_STATUS.idle);
-
     window.scrollTo(0, 0);
+    setPageStatus(PROFILES_STATUS.idle);
   }
 
   async function loadMoreUsers() {
@@ -182,8 +184,8 @@ function PublicPage() {
           <UserCards
             users={users.users}
             loadMoreUsers={loadMoreUsers}
-            noMoreUsers={users.usersToLoad}
-            nextCardIndex={cardFocusIndex}
+            usersToLoad={users.usersToLoad}
+            cardFocusIndex={cardFocusIndex}
             isBusy={pageStatus === PROFILES_STATUS.paginationLoading}
             currentUsers={users.users.length}
             totalUsers={users.len}
@@ -214,4 +216,4 @@ const Main = styled.main`
   }
 `;
 
-export default PublicPage;
+export default ProfilesPage;

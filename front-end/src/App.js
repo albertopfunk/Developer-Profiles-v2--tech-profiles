@@ -5,12 +5,12 @@ import styled from "styled-components";
 import { Helmet } from "react-helmet";
 
 import { GlobalStyles } from "./global/styles/GlobalStyles";
-import FocusReset from "./global/helpers/focus-reset";
+import FocusReset from "./global/helpers/focus-reset/FocusReset";
 import { AuthContext } from "./global/context/auth/AuthContext";
 import auth0Client from "./auth/Auth";
 import Callback from "./auth/Callback";
 
-import PublicPage from "./pages/public-page/PublicPage";
+import ProfilesPage from "./pages/profiles-page/ProfilesPage";
 import ProfileDashboard from "./pages/profile-dashboard/ProfileDashboard";
 import PageNotAuthorized from "./pages/error-pages/not-authorized/PageNotAuthorized";
 import PageNotFound from "./pages/error-pages/404/PageNotFound";
@@ -87,7 +87,7 @@ function App({ location }) {
         <FocusReset>
           <Switch>
             <Route exact path="/">
-              <PublicPage />
+              <ProfilesPage />
             </Route>
             <Route path="/profile-dashboard">
               {isValidated ? <ProfileDashboard /> : <PageNotAuthorized />}

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import styled from "styled-components";
 import { withRouter } from "react-router-dom";
+import styled from "styled-components";
 import { Helmet } from "react-helmet";
 
 import auth0Client from "./Auth";

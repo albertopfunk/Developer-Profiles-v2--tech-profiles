@@ -3,17 +3,26 @@ import styled from "styled-components";
 
 import UserCard from "./user-card/UserCard";
 
-function UserCards(props) {
-  const profileCardRefs = useRef(props.users.map(() => React.createRef()));
+function UserCards({
+  users,
+  loadMoreUsers,
+  usersToLoad,
+  cardFocusIndex,
+  isBusy,
+  currentUsers,
+  totalUsers,
+  resetFilters,
+}) {
+  const profileCardRefs = useRef(users.map(() => React.createRef()));
   let focusOnNextCardRef = useRef();
 
   useEffect(() => {
     if (!focusOnNextCardRef.current) {
       return;
     }
-    profileCardRefs.current[props.nextCardIndex].current.focus();
+    profileCardRefs.current[cardFocusIndex].current.focus();
     focusOnNextCardRef.current = false;
-  }, [props.nextCardIndex]);
+  }, [cardFocusIndex]);
 
   function backToTopFocus(e) {
     if (e.keyCode !== 13 && e.keyCode !== 32) {
@@ -39,19 +48,19 @@ function UserCards(props) {
     }
 
     if (action === "end") {
-      profileCardRefs.current[props.currentUsers - 1].current.focus();
+      profileCardRefs.current[currentUsers - 1].current.focus();
     }
 
     if (action === "previous") {
       if (index === 0) {
-        profileCardRefs.current[props.currentUsers - 1].current.focus();
+        profileCardRefs.current[currentUsers - 1].current.focus();
         return;
       }
       profileCardRefs.current[index - 1].current.focus();
     }
 
     if (action === "next") {
-      if (index === props.currentUsers - 1) {
+      if (index === currentUsers - 1) {
         profileCardRefs.current[0].current.focus();
         return;
       }
@@ -60,31 +69,27 @@ function UserCards(props) {
   }
 
   return (
-    <Feed
-      role="feed"
-      aria-busy={props.isBusy}
-      aria-labelledby="profiles-heading"
-    >
+    <Feed role="feed" aria-busy={isBusy} aria-labelledby="profiles-heading">
       <h2 id="profiles-heading" className="sr-only">
         Current Profiles
       </h2>
-      {props.totalUsers === 0 ? (
+      {totalUsers === 0 ? (
         <>
           <p>No Users Here!</p>
-          <button type="reset" onClick={props.resetFilters}>
+          <button type="reset" onClick={resetFilters}>
             reset filters
           </button>
         </>
       ) : (
         <>
-          {props.users.map((user, i) => {
+          {users.map((user, i) => {
             return (
               <UserCard
                 ref={profileCardRefs.current[i]}
                 key={user.id}
                 userCardActions={userCardActions}
                 index={i}
-                totalUsers={props.totalUsers}
+                totalUsers={totalUsers}
                 userId={user.id}
                 areaOfWork={user.area_of_work}
                 email={user.public_email}
@@ -104,7 +109,7 @@ function UserCards(props) {
             );
           })}
           <div>
-            {props.noMoreUsers ? (
+            {usersToLoad ? (
               <div>
                 <p>No more profiles to load</p>
                 <button
@@ -119,11 +124,11 @@ function UserCards(props) {
             ) : (
               <button
                 type="button"
-                disabled={props.isBusy}
-                onClick={props.loadMoreUsers}
+                disabled={isBusy}
+                onClick={loadMoreUsers}
                 onKeyDown={(e) => loadMoreFocus(e)}
               >
-                {props.isBusy ? "Loading" : "Load More Profiles"}
+                {isBusy ? "Loading" : "Load More Profiles"}
               </button>
             )}
           </div>

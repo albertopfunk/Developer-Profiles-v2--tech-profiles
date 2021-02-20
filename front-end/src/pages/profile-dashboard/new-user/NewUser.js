@@ -65,7 +65,6 @@ function NewUser() {
     if (formStatus === FORM_STATUS.error && errorSummaryRef.current) {
       errorSummaryRef.current.focus();
     }
-
   }, [formStatus]);
 
   useEffect(() => {
@@ -410,7 +409,7 @@ function NewUser() {
     ) {
       return;
     }
-    
+
     setFormStatus(FORM_STATUS.loading);
     const inputs = {};
 
@@ -421,15 +420,15 @@ function NewUser() {
     if (areaOfWork.inputChange) {
       inputs.area_of_work = areaOfWork.inputValue;
     }
-    
+
     if (title.inputChange) {
       inputs.desired_title = title.inputValue;
     }
-    
+
     if (summary.inputChange) {
       inputs.summary = summary.inputValue;
     }
-    
+
     if (locationChange) {
       if (location.length > 0) {
         const { name, lat, lon } = location[0];
@@ -442,7 +441,7 @@ function NewUser() {
         inputs.current_location_lon = null;
       }
     }
-    
+
     if (previewImgInput.inputChange) {
       if (previewImgInput.shouldRemoveUserImage) {
         inputs.image = "";
@@ -450,14 +449,14 @@ function NewUser() {
       } else {
         const [res, err] = await httpClient("POST", `/api/upload-main-image`, {
           imageUrl: previewImgInput.image,
-          id: user.id
-        })
-  
+          id: user.id,
+        });
+
         if (err) {
           console.error(`${res.mssg} => ${res.err}`);
           return;
         }
-  
+
         inputs.image = res.data.image;
         inputs.image_id = res.data.id;
       }

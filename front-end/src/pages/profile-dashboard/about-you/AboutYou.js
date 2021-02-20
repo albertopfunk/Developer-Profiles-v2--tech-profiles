@@ -54,7 +54,6 @@ function AboutYou() {
     if (formStatus === FORM_STATUS.error && errorSummaryRef.current) {
       errorSummaryRef.current.focus();
     }
-
   }, [formStatus]);
 
   useEffect(() => {

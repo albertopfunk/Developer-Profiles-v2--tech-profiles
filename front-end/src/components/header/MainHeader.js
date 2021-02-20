@@ -1,11 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
+import { ReactComponent as BurgerMenu } from "./menu.svg";
+import { ReactComponent as MenuClose } from "./close.svg";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 import { AuthContext } from "../../global/context/auth/AuthContext";
-
-import { ReactComponent as BurgerMenu } from "./menu.svg";
-import { ReactComponent as MenuClose } from "./close.svg";
 
 let closeOnBlurWait;
 function MainHeader() {

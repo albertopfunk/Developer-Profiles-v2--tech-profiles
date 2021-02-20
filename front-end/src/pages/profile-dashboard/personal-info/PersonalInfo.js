@@ -50,7 +50,6 @@ function PersonalInfo() {
     if (formStatus === FORM_STATUS.error && errorSummaryRef.current) {
       errorSummaryRef.current.focus();
     }
-
   }, [formStatus]);
 
   useEffect(() => {
@@ -318,14 +317,14 @@ function PersonalInfo() {
       } else {
         const [res, err] = await httpClient("POST", `/api/upload-main-image`, {
           imageUrl: previewImgInput.image,
-          id: user.id
-        })
-  
+          id: user.id,
+        });
+
         if (err) {
           console.error(`${res.mssg} => ${res.err}`);
           return;
         }
-  
+
         inputs.image = res.data.image;
         inputs.image_id = res.data.id;
       }
