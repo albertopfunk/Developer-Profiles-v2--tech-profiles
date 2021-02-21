@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
+import styled from "styled-components";
+
+import { httpClient } from "../../../global/helpers/http-requests";
 
 import UserImage from "./UserImage";
 import UserInfo from "./UserInfo";
 import UserSkills from "./UserSkills";
 import UserIcons from "./UserIcons";
 import UserExtras from "../user-extras/UserExtras";
-
-import { httpClient } from "../../../global/helpers/http-requests";
-import styled from "styled-components";
 
 // resume link?
 // codesandbox link?

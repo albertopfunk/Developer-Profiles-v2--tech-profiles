@@ -1,12 +1,12 @@
 import React from "react";
 
-function UserIcons(props) {
+function UserIcons({ github, twitter, linkedin, portfolio }) {
   return (
     <section>
-      <p>{props.github}</p>
-      <p>{props.twitter}</p>
-      <p>{props.linkedin}</p>
-      <p>{props.portfolio}</p>
+      <p>{github}</p>
+      <p>{twitter}</p>
+      <p>{linkedin}</p>
+      <p>{portfolio}</p>
     </section>
   );
 }

@@ -1,13 +1,13 @@
 import React from "react";
 
-function UserSkills(props) {
+function UserSkills({topSkills, additionalSkills}) {
   return (
     <div>
       <div className="top">
         <strong>Top Skills</strong>
-        {props.topSkills ? (
+        {topSkills ? (
           <div>
-            {props.topSkills
+            {topSkills
               .split(",")
               .filter((el, i) => i < 3 && el)
               .map((skill) => (
@@ -22,9 +22,9 @@ function UserSkills(props) {
 
       <div className="additional">
         <strong>Additional Skills</strong>
-        {props.additionalSkills ? (
+        {additionalSkills ? (
           <div>
-            {props.additionalSkills
+            {additionalSkills
               .split(",")
               .filter((el, i) => i < 3 && el)
               .map((skill) => (

@@ -1,10 +1,9 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 
 // Test Ideas
 // renders image or default avatar image
 
-function UserImage(props) {
+function UserImage({image, previewImg}) {
   const [imageErr, setImageErr] = useState(false);
 
   function handleBrokenLink() {
@@ -15,16 +14,16 @@ function UserImage(props) {
     <div>
       {/* add figure/figcation to all images */}
 
-      {(props.previewImg || props.image) && !imageErr ? (
+      {(previewImg || image) && !imageErr ? (
         <img
           style={{
             width: "200px",
             height: "200px",
             borderRadius: "50%",
           }}
-          src={props.previewImg || props.image}
+          src={previewImg || image}
           onError={handleBrokenLink}
-          alt={props.previewImg ? "current profile pic preview" : "profile pic"}
+          alt={previewImg ? "current profile pic preview" : "profile pic"}
         />
       ) : (
         <p>Avatar Image</p>
