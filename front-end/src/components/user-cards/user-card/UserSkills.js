@@ -2,7 +2,7 @@ import React from "react";
 
 function UserSkills({topSkills, additionalSkills}) {
   return (
-    <div>
+    <div className="skills">
       <div className="top">
         <strong>Top Skills</strong>
         {topSkills ? (
