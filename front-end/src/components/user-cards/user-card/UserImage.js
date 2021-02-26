@@ -11,7 +11,7 @@ function UserImage({image, previewImg}) {
   }
 
   return (
-    <div>
+    <div className="image">
       {/* add figure/figcation to all images */}
 
       {(previewImg || image) && !imageErr ? (
