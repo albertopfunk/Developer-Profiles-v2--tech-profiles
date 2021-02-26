@@ -5,10 +5,11 @@ import styled from "styled-components";
 import { httpClient } from "../../../global/helpers/http-requests";
 
 import UserImage from "./UserImage";
-import UserInfo from "./UserInfo";
+import UserBasics from "./UserBasics";
 import UserSkills from "./UserSkills";
 import UserIcons from "./UserIcons";
 import UserExtras from "../user-extras/UserExtras";
+import UserSummary from "./UserSummary";
 
 // resume link?
 // codesandbox link?
@@ -165,32 +166,35 @@ const UserCard = React.forwardRef((props, articleRef) => {
         {announceCardToggle && !isCardExpanded ? "card collapsed" : null}
       </div>
 
-      <section>
+      <UserInfo>
         <UserImage previewImg={props.previewImg} image={props.image} />
 
-        <UserInfo
+        <UserBasics
           userId={props.userId}
           firstName={props.firstName}
           lastName={props.lastName}
-          title={props.title}
           currentLocation={props.currentLocation}
-          summary={props.summary}
+          title={props.title}
         />
-      </section>
 
-      <section>
+        <UserSummary summary={props.summary} />
+
+        <UserIcons
+          github={props.github}
+          twitter={props.twitter}
+          linkedin={props.linkedin}
+          portfolio={props.portfolio}
+        />
+
         <UserSkills
           topSkills={props.topSkills}
           additionalSkills={props.additionalSkills}
         />
-      </section>
+      </UserInfo>
 
-      <UserIcons
-        github={props.github}
-        twitter={props.twitter}
-        linkedin={props.linkedin}
-        portfolio={props.portfolio}
-      />
+      {isCardExpanded ? (
+        <UserExtras userExtras={userExtras} noExtras={noExtras} />
+      ) : null}
 
       <section>
         {!isCardExpanded ? (
@@ -207,16 +211,27 @@ const UserCard = React.forwardRef((props, articleRef) => {
           </button>
         )}
       </section>
-
-      {isCardExpanded ? (
-        <UserExtras userExtras={userExtras} noExtras={noExtras} />
-      ) : null}
     </UserCardContainer>
   );
 });
 
 const UserCardContainer = styled.article`
   border: solid olivedrab;
+
+  /*
+    image
+    name
+    location
+    title
+    summary
+    links
+
+  */
+`;
+
+const UserInfo = styled.section`
+  border: solid olivedrab;
+
 `;
 
 export default UserCard;
