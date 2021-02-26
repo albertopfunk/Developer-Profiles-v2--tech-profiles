@@ -1,16 +1,16 @@
 import React from "react";
 
-function UserInfo({
+function UserBasics({
   userId,
   firstName,
   lastName,
   title,
   currentLocation,
-  summary,
 }) {
   return (
-    <div>
-      <div className="name">
+    <>
+
+      <div id={`profile-${userId}-name`} className="name">
         {firstName || lastName ? (
           <p>
             {firstName} {lastName}
@@ -19,15 +19,17 @@ function UserInfo({
           <p>No Name Listed</p>
         )}
       </div>
-      <div>{title}</div>
+
+
       <div className="location">
         {currentLocation ? <p>{currentLocation}</p> : <p>No Location Listed</p>}
       </div>
-      <div id={`profile-${userId}-summary`} className="summary">
-        {summary ? <p>{summary}</p> : <p>No Summary Listed</p>}
-      </div>
-    </div>
+
+
+      <div className="title">{title}</div>
+
+    </>
   );
 }
 
-export default UserInfo;
+export default UserBasics;
