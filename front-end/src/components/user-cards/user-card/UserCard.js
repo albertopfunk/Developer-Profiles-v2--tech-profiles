@@ -177,7 +177,7 @@ const UserCard = React.forwardRef((props, articleRef) => {
           title={props.title}
         />
 
-        <UserSummary summary={props.summary} />
+        <UserSummary userId={props.userId} summary={props.summary} />
 
         <UserIcons
           github={props.github}
@@ -217,21 +217,53 @@ const UserCard = React.forwardRef((props, articleRef) => {
 
 const UserCardContainer = styled.article`
   border: solid olivedrab;
-
-  /*
-    image
-    name
-    location
-    title
-    summary
-    links
-
-  */
 `;
 
 const UserInfo = styled.section`
-  border: solid olivedrab;
+  border: solid saddlebrown;
 
+  display: grid;
+  grid-gap: 20px;
+  grid-template-areas:
+    "name"
+    "location"
+    "image"
+    "title"
+    "summary"
+    "icons"
+    "skills";
+
+  @media (min-width: 1100px) {
+    grid-gap: 10px;
+    grid-template-areas:
+      "image    name      icons"
+      "image    location  icons"
+      "image    title     icons"
+      "summary  summary   icons"
+      "skills   skills    icons";
+  }
+
+  .image {
+    grid-area: image;
+  }
+  .name {
+    grid-area: name;
+  }
+  .location {
+    grid-area: location;
+  }
+  .title {
+    grid-area: title;
+  }
+  .summary {
+    grid-area: summary;
+  }
+  .icons {
+    grid-area: icons;
+  }
+  .skills {
+    grid-area: skills;
+  }
 `;
 
 export default UserCard;

@@ -10,6 +10,7 @@ function UserImage({image, previewImg}) {
     setImageErr(true);
   }
 
+  // decorative
   return (
     <div className="image">
       {/* add figure/figcation to all images */}
