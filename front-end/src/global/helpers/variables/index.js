@@ -21,3 +21,9 @@ export const PROFILES_STATUS = {
   paginationLoading: "paginationLoading",
   paginationError: "paginationError",
 };
+
+export const CARD_STATUS = {
+  idle: "idle",
+  loading: "loading",
+  error: "error",
+};

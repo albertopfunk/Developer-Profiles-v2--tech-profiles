@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import styled from "styled-components";
 
 import { httpClient } from "../../../global/helpers/http-requests";
+import { CARD_STATUS } from "../../../global/helpers/variables";
 
 import UserImage from "./UserImage";
 import UserBasics from "./UserBasics";
@@ -18,7 +19,7 @@ import UserSummary from "./UserSummary";
 
 const UserCard = React.forwardRef((props, articleRef) => {
   const [userExtras, setUserExtras] = useState({});
-  const [loadingExtras, setLoadingExtras] = useState(false);
+  const [cardStatus, setCardStatus] = useState(CARD_STATUS.idle);
   const [isCardExpanded, setIsCardExpanded] = useState(false);
   const [announceCardToggle, setAnnounceCardToggle] = useState(false);
   const [noExtras, setNoExtras] = useState(false);
@@ -54,14 +55,19 @@ const UserCard = React.forwardRef((props, articleRef) => {
       return;
     }
 
-    setLoadingExtras(true);
+    let loadingTimeout = setTimeout(() => {
+      setCardStatus(CARD_STATUS.loading);
+    }, 300);
+
     const [res, err] = await httpClient(
       "GET",
-      `/users/get-extras/${props.userId}`
+      `/users/get-extrs/${props.userId}`
     );
+    clearTimeout(loadingTimeout);
 
     if (err) {
       console.error(`${res.mssg} => ${res.err}`);
+      setCardStatus(CARD_STATUS.error);
       return;
     }
 
@@ -79,7 +85,7 @@ const UserCard = React.forwardRef((props, articleRef) => {
         setHasRequestedExtras(true);
         setIsCardExpanded(true);
         setAnnounceCardToggle(true);
-        setLoadingExtras(false);
+        setCardStatus(CARD_STATUS.idle);
       });
       return;
     }
@@ -90,7 +96,7 @@ const UserCard = React.forwardRef((props, articleRef) => {
       setHasRequestedExtras(true);
       setIsCardExpanded(true);
       setAnnounceCardToggle(true);
-      setLoadingExtras(false);
+      setCardStatus(CARD_STATUS.idle);
     });
   }
 
@@ -200,10 +206,12 @@ const UserCard = React.forwardRef((props, articleRef) => {
         {!isCardExpanded ? (
           <button
             type="button"
-            disabled={loadingExtras}
+            disabled={cardStatus === CARD_STATUS.loading}
             onClick={expandUserCard}
           >
-            Expand Profile
+            {cardStatus === CARD_STATUS.idle ? "Expand Profile" : null}
+            {cardStatus === CARD_STATUS.loading ? "Loading..." : null}
+            {cardStatus === CARD_STATUS.error ? "Error - Retry" : null}
           </button>
         ) : (
           <button type="button" onClick={closeUserCard}>
