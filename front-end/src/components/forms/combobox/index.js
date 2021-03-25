@@ -160,6 +160,20 @@ class Combobox extends React.Component {
   }
 
   inputFocusActions = (e) => {
+    /*
+    
+    if value && this.state.inputResults.length === 0
+      if esc close combobox
+      if enter return
+      if up/down open combobox and focus on first/last option
+    
+    if this.state.inputResults.length > 0
+      if esc close combobox
+      if enter choose selected
+      if up/down focus on first/last option
+
+    */
+
     if (this.state.inputResults.length === 0) {
       return;
     }
