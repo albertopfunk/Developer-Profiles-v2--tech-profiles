@@ -1,12 +1,17 @@
 import React from "react";
 import styled from "styled-components";
-import { CANCEL_STATUS } from "../../../global/helpers/variables";
+import {
+  CANCEL_STATUS,
+  COMBOBOX_STATUS,
+} from "../../../global/helpers/variables";
 
 class Combobox extends React.Component {
   state = {
     input: "",
     inputTimeout: null,
     isUsingCombobox: false,
+    comboboxStatus: COMBOBOX_STATUS.idle,
+    errorMessage: "",
     hasInputResults: null,
     inputResults: [],
     shouldAnnounceResults: false,
@@ -62,9 +67,21 @@ class Combobox extends React.Component {
       return;
     }
 
+    this.setState({
+      comboboxStatus: COMBOBOX_STATUS.loading,
+    });
+
     let results = await this.props.onInputChange(value);
 
     if (this.asyncCancelRef.current === CANCEL_STATUS.cancel) {
+      return;
+    }
+
+    if (results?.error) {
+      this.closeCombobox(value, COMBOBOX_STATUS.error);
+      this.setState({
+        errorMessage: results.error,
+      });
       return;
     }
 
@@ -74,6 +91,7 @@ class Combobox extends React.Component {
         inputResults: [],
         hasInputResults: false,
         isUsingCombobox: true,
+        comboboxStatus: COMBOBOX_STATUS.active,
         selectedOption: {},
         selectedOptionIndex: null,
         selectedOptionId: "",
@@ -86,6 +104,7 @@ class Combobox extends React.Component {
       inputResults: results,
       hasInputResults: true,
       isUsingCombobox: true,
+      comboboxStatus: COMBOBOX_STATUS.active,
       selectedOption: {},
       selectedOptionIndex: null,
       selectedOptionId: "",
@@ -219,28 +238,54 @@ class Combobox extends React.Component {
     }
   };
 
-  chooseOption = (name, id) => {
+  chooseOption = async (name, id) => {
+    this.setState({
+      comboboxStatus: COMBOBOX_STATUS.loading,
+    });
+
     // replace single option
     if (this.props.single) {
+      const results = await this.props.onChosenOption(name, id);
+
+      if (results?.error) {
+        this.closeCombobox(this.state.input, COMBOBOX_STATUS.error);
+        this.setState({
+          errorMessage: results.error,
+        });
+        return;
+      }
+
+      this.closeCombobox(name, COMBOBOX_STATUS.success);
       this.setState({ chosenOptions: [{ name, id }] });
-      this.closeCombobox(name);
-      this.props.onChosenOption(name, id);
       return;
     }
 
     // add option
+    const results = await this.props.onChosenOption([
+      ...this.state.chosenOptions,
+      { name, id },
+    ]);
+
+    if (results?.error) {
+      this.closeCombobox(this.state.input, COMBOBOX_STATUS.error);
+      this.setState({
+        errorMessage: results.error,
+      });
+      return;
+    }
+
+    this.closeCombobox("", COMBOBOX_STATUS.success);
     this.setState({
       chosenOptions: [...this.state.chosenOptions, { name, id }],
     });
-    this.closeCombobox();
-    this.props.onChosenOption([...this.state.chosenOptions, { name, id }]);
   };
 
-  closeCombobox = (name = "") => {
+  closeCombobox = (name = "", status = COMBOBOX_STATUS.idle) => {
     this.setState({
       input: name,
       inputResults: [],
       isUsingCombobox: false,
+      comboboxStatus: status,
       selectedOption: {},
       selectedOptionIndex: null,
       selectedOptionId: "",
@@ -280,6 +325,8 @@ class Combobox extends React.Component {
       chosenOptions,
     } = this.state;
 
+    console.log("Status", this.state.comboboxStatus);
+
     return (
       <div>
         <label id={`${inputName}-label`} htmlFor={`${inputName}-search-input`}>
@@ -301,7 +348,7 @@ class Combobox extends React.Component {
             autoComplete="off"
             id={`${inputName}-search-input`}
             name={`${inputName}-search-input`}
-            aria-describedby={`${inputName}-combobox-instructions`}
+            aria-describedby={`${inputName}-combobox-instructions ${inputName}-error`}
             aria-autocomplete="list"
             aria-controls="results"
             aria-activedescendant={selectedOptionId}
@@ -314,6 +361,12 @@ class Combobox extends React.Component {
           <span id={`${inputName}-combobox-instructions`} className="sr-only">
             {`chosen ${displayName} will be listed below`}
           </span>
+
+          {this.state.comboboxStatus === COMBOBOX_STATUS.error ? (
+            <span id={`${inputName}-error`}>
+              {`error with combobox. ${this.state.errorMessage}. please try again`}
+            </span>
+          ) : null}
         </InputContainer>
 
         <ResultsContainer
