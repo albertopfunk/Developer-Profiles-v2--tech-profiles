@@ -8,6 +8,10 @@ export const FORM_STATUS = {
 
 export const COMBOBOX_STATUS = {
   idle: "idle",
+  loading: "loading",
+  active: "active",
+  error: "error",
+  success: "success",
   added: "added",
   removed: "removed",
 };
@@ -27,3 +31,8 @@ export const CARD_STATUS = {
   loading: "loading",
   error: "error",
 };
+
+export const CANCEL_STATUS = {
+  cancel: "cancel",
+  ok: "ok"
+}

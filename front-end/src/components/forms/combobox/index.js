@@ -1,32 +1,34 @@
 import React from "react";
 import styled from "styled-components";
+import { CANCEL_STATUS } from "../../../global/helpers/variables";
 
 class Combobox extends React.Component {
   state = {
-    timeOut: null,
     input: "",
+    inputTimeout: null,
     isUsingCombobox: false,
-    resultsInBank: true,
-    autoCompleteResults: [],
+    hasInputResults: null,
+    inputResults: [],
+    shouldAnnounceResults: false,
     selectedOption: {},
     selectedOptionIndex: null,
     selectedOptionId: "",
     chosenOptions: [],
     removedChosenOptionIndex: null,
-    shouldAnnounceResults: false,
   };
 
   chosenOptionBtnRefs = [];
   inputRef = React.createRef();
-  cancelRef = React.createRef();
+  asyncCancelRef = React.createRef();
 
   componentDidMount() {
-    if (this.props.chosenOptions.length > 0) {
+    if (this.props.chosenOptions?.length > 0) {
       this.setState({ chosenOptions: this.props.chosenOptions });
     }
   }
 
   componentDidUpdate(prevProps) {
+    // keyboard list focus management when removing chosen options
     if (this.props.chosenOptions.length < prevProps.chosenOptions.length) {
       if (this.chosenOptionBtnRefs.length === 0) {
         this.inputRef.current.focus();
@@ -55,22 +57,22 @@ class Combobox extends React.Component {
 
   onInputChange = async (value) => {
     if (value.trim() === "") {
-      this.cancelRef.current = "cancel";
+      this.asyncCancelRef.current = CANCEL_STATUS.cancel;
       this.closeCombobox();
       return;
     }
 
     let results = await this.props.onInputChange(value);
 
-    if (this.cancelRef.current === "cancel") {
+    if (this.asyncCancelRef.current === CANCEL_STATUS.cancel) {
       return;
     }
 
+    // keeps combobox open to show 'no results' ui
     if (results.length === 0) {
       this.setState({
-        input: value,
-        autoCompleteResults: [],
-        resultsInBank: false,
+        inputResults: [],
+        hasInputResults: false,
         isUsingCombobox: true,
         selectedOption: {},
         selectedOptionIndex: null,
@@ -81,74 +83,65 @@ class Combobox extends React.Component {
     }
 
     this.setState({
-      resultsInBank: true,
+      inputResults: results,
+      hasInputResults: true,
       isUsingCombobox: true,
       selectedOption: {},
       selectedOptionIndex: null,
       selectedOptionId: "",
-      autoCompleteResults: results,
       shouldAnnounceResults: true,
     });
   };
 
   debounceInput = (e) => {
-    this.cancelRef.current = "ok";
+    const { value } = e.target;
     let currTimeOut;
 
-    const { value } = e.target;
+    this.asyncCancelRef.current = CANCEL_STATUS.ok;
     this.setState({
       input: value,
       shouldAnnounceResults: false,
     });
 
-    if (this.state.timeOut) {
-      clearTimeout(this.state.timeOut);
+    if (this.state.inputTimeout) {
+      clearTimeout(this.state.inputTimeout);
     }
 
     currTimeOut = setTimeout(() => {
-      this.setState({ timeOut: null });
+      this.setState({ inputTimeout: null });
       this.onInputChange(value);
-    }, 350);
+    }, 200);
 
-    this.setState({ timeOut: currTimeOut });
+    this.setState({ inputTimeout: currTimeOut });
   };
 
   getCurrentResults = (e) => {
     const { value } = e.target;
 
-    if (!value) {
+    if (!value) return;
+
+    // shouldn't fetch if single has chosen option
+    if (this.props.single && value === this.state.chosenOptions[0]?.name) {
       return;
-    }
-
-    if (this.props.single) {
-      if (this.state.chosenOptions.length === 0) {
-        this.onInputChange(value);
-        return;
-      }
-
-      // shouldn't fetch if single has chosen option
-      if (value === this.state.chosenOptions[0].name) {
-        return;
-      }
     }
 
     this.onInputChange(value);
   };
 
-  inputBlurAction(e) {
-    if (this.state.selectedOptionIndex === null && this.state.isUsingCombobox) {
+  chooseSelectedOption(e) {
+    if (!this.state.isUsingCombobox) return;
+
+    if (!this.state.selectedOptionId) {
       this.closeCombobox(e.target.value);
       return;
     }
 
-    if (this.state.selectedOptionId && this.state.isUsingCombobox) {
-      const { name, id } = this.state.selectedOption;
-      this.chooseOption(name, id);
-    }
+    const { name, id } = this.state.selectedOption;
+    this.chooseOption(name, id);
   }
 
   inputFocusActions = (e) => {
-    if (this.state.autoCompleteResults.length === 0) {
+    if (this.state.inputResults.length === 0) {
       return;
     }
 
@@ -156,24 +149,24 @@ class Combobox extends React.Component {
     if (e.keyCode === 38) {
       e.preventDefault();
 
+      // focus on last option from input or first option
       if (
         this.state.selectedOptionIndex === null ||
         this.state.selectedOptionIndex === 0
       ) {
         this.setState({
-          selectedOption: this.state.autoCompleteResults[
-            this.state.autoCompleteResults.length - 1
+          selectedOption: this.state.inputResults[
+            this.state.inputResults.length - 1
           ],
-          selectedOptionId: `results-${
-            this.state.autoCompleteResults.length - 1
-          }`,
-          selectedOptionIndex: this.state.autoCompleteResults.length - 1,
+          selectedOptionId: `results-${this.state.inputResults.length - 1}`,
+          selectedOptionIndex: this.state.inputResults.length - 1,
         });
         return;
       }
 
+      // focus on previous
       this.setState({
-        selectedOption: this.state.autoCompleteResults[
+        selectedOption: this.state.inputResults[
           this.state.selectedOptionIndex - 1
         ],
         selectedOptionId: `results-${this.state.selectedOptionIndex - 1}`,
@@ -185,21 +178,22 @@ class Combobox extends React.Component {
     if (e.keyCode === 40) {
       e.preventDefault();
 
+      // focus on first option from input or last option
       if (
         this.state.selectedOptionIndex === null ||
-        this.state.selectedOptionIndex ===
-          this.state.autoCompleteResults.length - 1
+        this.state.selectedOptionIndex === this.state.inputResults.length - 1
       ) {
         this.setState({
-          selectedOption: this.state.autoCompleteResults[0],
+          selectedOption: this.state.inputResults[0],
           selectedOptionId: `results-${0}`,
           selectedOptionIndex: 0,
         });
         return;
       }
 
+      // focus on next
       this.setState({
-        selectedOption: this.state.autoCompleteResults[
+        selectedOption: this.state.inputResults[
           this.state.selectedOptionIndex + 1
         ],
         selectedOptionId: `results-${this.state.selectedOptionIndex + 1}`,
@@ -216,7 +210,7 @@ class Combobox extends React.Component {
     // enter
     if (e.keyCode === 13) {
       e.preventDefault();
-      if (this.state.selectedOptionIndex === null) {
+      if (!this.state.selectedOptionId) {
         return;
       }
 
@@ -226,6 +220,7 @@ class Combobox extends React.Component {
   };
 
   chooseOption = (name, id) => {
+    // replace single option
     if (this.props.single) {
       this.setState({ chosenOptions: [{ name, id }] });
       this.closeCombobox(name);
@@ -233,6 +228,7 @@ class Combobox extends React.Component {
       return;
     }
 
+    // add option
     this.setState({
       chosenOptions: [...this.state.chosenOptions, { name, id }],
     });
@@ -243,20 +239,22 @@ class Combobox extends React.Component {
   closeCombobox = (name = "") => {
     this.setState({
       input: name,
-      autoCompleteResults: [],
+      inputResults: [],
       isUsingCombobox: false,
       selectedOption: {},
       selectedOptionIndex: null,
       selectedOptionId: "",
-      resultsInBank: true,
+      hasInputResults: null,
     });
   };
 
   removeChosenOption = (optionIndex) => {
+    // clear input when removing single
     if (this.props.single && !this.state.isUsingCombobox) {
       this.setState({ input: "" });
     }
 
+    // keeping refs updated when removing option
     let filteredChosenOptions = [...this.state.chosenOptions];
     let filteredChosenOptionBtnRefs = [...this.chosenOptionBtnRefs];
 
@@ -275,8 +273,8 @@ class Combobox extends React.Component {
     const { inputName, displayName } = this.props;
     const {
       input,
-      resultsInBank,
-      autoCompleteResults,
+      hasInputResults,
+      inputResults,
       isUsingCombobox,
       selectedOptionId,
       chosenOptions,
@@ -309,7 +307,7 @@ class Combobox extends React.Component {
             aria-activedescendant={selectedOptionId}
             value={input}
             onFocus={(e) => this.getCurrentResults(e)}
-            onBlur={(e) => this.inputBlurAction(e)}
+            onBlur={(e) => this.chooseSelectedOption(e)}
             onChange={(e) => this.debounceInput(e)}
             onKeyDown={(e) => this.inputFocusActions(e)}
           />
@@ -323,7 +321,7 @@ class Combobox extends React.Component {
           aria-atomic="true"
           aria-relevant="additions"
         >
-          {!resultsInBank && input ? (
+          {hasInputResults === false && input ? (
             <>
               {this.state.shouldAnnounceResults ? (
                 <span className="sr-only">showing zero results</span>
@@ -341,12 +339,12 @@ class Combobox extends React.Component {
             </>
           ) : null}
 
-          {resultsInBank && autoCompleteResults.length > 0 ? (
+          {hasInputResults && inputResults.length > 0 ? (
             <>
               {this.state.shouldAnnounceResults ? (
                 <span className="sr-only">
-                  {`showing ${autoCompleteResults.length} ${
-                    autoCompleteResults.length === 1 ? "result" : "results"
+                  {`showing ${inputResults.length} ${
+                    inputResults.length === 1 ? "result" : "results"
                   }`}
                 </span>
               ) : null}
@@ -357,7 +355,7 @@ class Combobox extends React.Component {
                 role="listbox"
                 aria-labelledby={`${inputName}-label`}
               >
-                {autoCompleteResults.map((option, i) => {
+                {inputResults.map((option, i) => {
                   return (
                     //eslint-disable-next-line
                     <li
