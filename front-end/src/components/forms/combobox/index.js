@@ -9,15 +9,18 @@ class Combobox extends React.Component {
   state = {
     input: "",
     inputTimeout: null,
-    isUsingCombobox: false,
+
     comboboxStatus: COMBOBOX_STATUS.idle,
+    comboboxLoading: COMBOBOX_STATUS.idle,
     errorMessage: "",
-    hasInputResults: null,
+
     inputResults: [],
     shouldAnnounceResults: false,
+
     selectedOption: {},
     selectedOptionIndex: null,
     selectedOptionId: "",
+
     chosenOptions: [],
     removedChosenOptionIndex: null,
   };
@@ -68,7 +71,7 @@ class Combobox extends React.Component {
     }
 
     this.setState({
-      comboboxStatus: COMBOBOX_STATUS.loading,
+      comboboxLoading: COMBOBOX_STATUS.loading,
     });
 
     let results = await this.props.onInputChange(value);
@@ -89,9 +92,8 @@ class Combobox extends React.Component {
     if (results.length === 0) {
       this.setState({
         inputResults: [],
-        hasInputResults: false,
-        isUsingCombobox: true,
-        comboboxStatus: COMBOBOX_STATUS.active,
+        comboboxStatus: COMBOBOX_STATUS.noResults,
+        comboboxLoading: COMBOBOX_STATUS.idle,
         selectedOption: {},
         selectedOptionIndex: null,
         selectedOptionId: "",
@@ -102,9 +104,8 @@ class Combobox extends React.Component {
 
     this.setState({
       inputResults: results,
-      hasInputResults: true,
-      isUsingCombobox: true,
       comboboxStatus: COMBOBOX_STATUS.active,
+      comboboxLoading: COMBOBOX_STATUS.idle,
       selectedOption: {},
       selectedOptionIndex: null,
       selectedOptionId: "",
@@ -143,12 +144,11 @@ class Combobox extends React.Component {
     if (this.props.single && value === this.state.chosenOptions[0]?.name) {
       return;
     }
-
     this.onInputChange(value);
   };
 
   chooseSelectedOption(e) {
-    if (!this.state.isUsingCombobox) return;
+    if (this.state.comboboxStatus !== COMBOBOX_STATUS.active) return;
 
     if (!this.state.selectedOptionId) {
       this.closeCombobox(e.target.value);
@@ -160,79 +160,7 @@ class Combobox extends React.Component {
   }
 
   inputFocusActions = (e) => {
-    /*
-    
-    if value && this.state.inputResults.length === 0
-      if esc close combobox
-      if enter return
-      if up/down open combobox and focus on first/last option
-    
-    if this.state.inputResults.length > 0
-      if esc close combobox
-      if enter choose selected
-      if up/down focus on first/last option
-
-    */
-
-    if (this.state.inputResults.length === 0) {
-      return;
-    }
-
-    // up arrow
-    if (e.keyCode === 38) {
-      e.preventDefault();
-
-      // focus on last option from input or first option
-      if (
-        this.state.selectedOptionIndex === null ||
-        this.state.selectedOptionIndex === 0
-      ) {
-        this.setState({
-          selectedOption: this.state.inputResults[
-            this.state.inputResults.length - 1
-          ],
-          selectedOptionId: `results-${this.state.inputResults.length - 1}`,
-          selectedOptionIndex: this.state.inputResults.length - 1,
-        });
-        return;
-      }
-
-      // focus on previous
-      this.setState({
-        selectedOption: this.state.inputResults[
-          this.state.selectedOptionIndex - 1
-        ],
-        selectedOptionId: `results-${this.state.selectedOptionIndex - 1}`,
-        selectedOptionIndex: this.state.selectedOptionIndex - 1,
-      });
-    }
-
-    // down arrow
-    if (e.keyCode === 40) {
-      e.preventDefault();
-
-      // focus on first option from input or last option
-      if (
-        this.state.selectedOptionIndex === null ||
-        this.state.selectedOptionIndex === this.state.inputResults.length - 1
-      ) {
-        this.setState({
-          selectedOption: this.state.inputResults[0],
-          selectedOptionId: `results-${0}`,
-          selectedOptionIndex: 0,
-        });
-        return;
-      }
-
-      // focus on next
-      this.setState({
-        selectedOption: this.state.inputResults[
-          this.state.selectedOptionIndex + 1
-        ],
-        selectedOptionId: `results-${this.state.selectedOptionIndex + 1}`,
-        selectedOptionIndex: this.state.selectedOptionIndex + 1,
-      });
-    }
+    if (!this.state.input) return;
 
     // escape
     if (e.keyCode === 27) {
@@ -250,11 +178,79 @@ class Combobox extends React.Component {
       const { name, id } = this.state.selectedOption;
       this.chooseOption(name, id);
     }
+
+    // up arrow
+    if (e.keyCode === 38) {
+      e.preventDefault();
+      if (this.state.comboboxStatus === COMBOBOX_STATUS.error) {
+        this.onInputChange(this.state.input);
+        return;
+      }
+
+      if (this.state.comboboxStatus === COMBOBOX_STATUS.active) {
+        // focus on last option from input or first option
+        if (
+          this.state.selectedOptionIndex === null ||
+          this.state.selectedOptionIndex === 0
+        ) {
+          this.setState({
+            selectedOption: this.state.inputResults[
+              this.state.inputResults.length - 1
+            ],
+            selectedOptionId: `results-${this.state.inputResults.length - 1}`,
+            selectedOptionIndex: this.state.inputResults.length - 1,
+          });
+          return;
+        }
+
+        // focus on previous
+        this.setState({
+          selectedOption: this.state.inputResults[
+            this.state.selectedOptionIndex - 1
+          ],
+          selectedOptionId: `results-${this.state.selectedOptionIndex - 1}`,
+          selectedOptionIndex: this.state.selectedOptionIndex - 1,
+        });
+      }
+    }
+
+    // down arrow
+    if (e.keyCode === 40) {
+      e.preventDefault();
+      if (this.state.comboboxStatus === COMBOBOX_STATUS.error) {
+        this.onInputChange(this.state.input);
+        return;
+      }
+
+      if (this.state.comboboxStatus === COMBOBOX_STATUS.active) {
+        // focus on first option from input or last option
+        if (
+          this.state.selectedOptionIndex === null ||
+          this.state.selectedOptionIndex === this.state.inputResults.length - 1
+        ) {
+          this.setState({
+            selectedOption: this.state.inputResults[0],
+            selectedOptionId: `results-${0}`,
+            selectedOptionIndex: 0,
+          });
+          return;
+        }
+
+        // focus on next
+        this.setState({
+          selectedOption: this.state.inputResults[
+            this.state.selectedOptionIndex + 1
+          ],
+          selectedOptionId: `results-${this.state.selectedOptionIndex + 1}`,
+          selectedOptionIndex: this.state.selectedOptionIndex + 1,
+        });
+      }
+    }
   };
 
   chooseOption = async (name, id) => {
     this.setState({
-      comboboxStatus: COMBOBOX_STATUS.loading,
+      comboboxLoading: COMBOBOX_STATUS.loading,
     });
 
     // replace single option
@@ -297,19 +293,21 @@ class Combobox extends React.Component {
   closeCombobox = (name = "", status = COMBOBOX_STATUS.idle) => {
     this.setState({
       input: name,
-      inputResults: [],
-      isUsingCombobox: false,
       comboboxStatus: status,
+      comboboxLoading: COMBOBOX_STATUS.idle,
+      inputResults: [],
       selectedOption: {},
       selectedOptionIndex: null,
       selectedOptionId: "",
-      hasInputResults: null,
     });
   };
 
   removeChosenOption = (optionIndex) => {
     // clear input when removing single
-    if (this.props.single && !this.state.isUsingCombobox) {
+    if (
+      this.props.single &&
+      this.state.comboboxStatus !== COMBOBOX_STATUS.active
+    ) {
       this.setState({ input: "" });
     }
 
@@ -330,16 +328,15 @@ class Combobox extends React.Component {
 
   render() {
     const { inputName, displayName } = this.props;
-    const {
-      input,
-      hasInputResults,
-      inputResults,
-      isUsingCombobox,
-      selectedOptionId,
-      chosenOptions,
-    } = this.state;
+    const { input, inputResults, selectedOptionId, chosenOptions } = this.state;
 
-    console.log("Status", this.state.comboboxStatus);
+    console.log(
+      "Status",
+      this.state.comboboxStatus,
+      "--",
+      "value",
+      this.state.input
+    );
 
     return (
       <div>
@@ -354,7 +351,7 @@ class Combobox extends React.Component {
           role="combobox"
           aria-haspopup="listbox"
           aria-owns="results"
-          aria-expanded={isUsingCombobox}
+          aria-expanded={this.state.comboboxStatus === COMBOBOX_STATUS.active}
         >
           <input
             ref={this.inputRef}
@@ -388,7 +385,7 @@ class Combobox extends React.Component {
           aria-atomic="true"
           aria-relevant="additions"
         >
-          {hasInputResults === false && input ? (
+          {this.state.comboboxStatus === COMBOBOX_STATUS.noResults ? (
             <>
               {this.state.shouldAnnounceResults ? (
                 <span className="sr-only">showing zero results</span>
@@ -406,7 +403,7 @@ class Combobox extends React.Component {
             </>
           ) : null}
 
-          {hasInputResults && inputResults.length > 0 ? (
+          {this.state.comboboxStatus === COMBOBOX_STATUS.active ? (
             <>
               {this.state.shouldAnnounceResults ? (
                 <span className="sr-only">

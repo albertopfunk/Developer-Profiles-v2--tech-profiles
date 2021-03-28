@@ -10,6 +10,7 @@ export const COMBOBOX_STATUS = {
   idle: "idle",
   loading: "loading",
   active: "active",
+  noResults: "noResults",
   error: "error",
   success: "success",
   added: "added",
