@@ -17,8 +17,8 @@ import PageNotFound from "./pages/error-pages/404/PageNotFound";
 import PrivatePolicy from "./pages/misc-pages/private-policy/PrivatePolicy";
 
 function App({ location }) {
-  // callback handles validation when user signs in
-  // i'm presetting state so cb doesn't route with invalidated state
+  // callback validates when user signs in
+  // presetting state so cb doesn't route with invalidated state
   const [checkingSession, setCheckingSession] = useState(() =>
     location.pathname === "/callback" ? false : true
   );
