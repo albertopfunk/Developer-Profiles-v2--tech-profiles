@@ -148,7 +148,7 @@ class Combobox extends React.Component {
   };
 
   chooseSelectedOption(e) {
-    if (this.state.comboboxStatus !== COMBOBOX_STATUS.active) return;
+    if (this.state.comboboxStatus === COMBOBOX_STATUS.idle) return;
 
     if (!this.state.selectedOptionId) {
       this.closeCombobox(e.target.value);
@@ -160,7 +160,7 @@ class Combobox extends React.Component {
   }
 
   inputFocusActions = (e) => {
-    if (!this.state.input) return;
+    if (this.state.comboboxStatus === COMBOBOX_STATUS.idle) return;
 
     // escape
     if (e.keyCode === 27) {
@@ -303,16 +303,15 @@ class Combobox extends React.Component {
   };
 
   removeChosenOption = (optionIndex) => {
+    const { input, chosenOptions } = this.state;
+
     // clear input when removing single
-    if (
-      this.props.single &&
-      this.state.comboboxStatus !== COMBOBOX_STATUS.active
-    ) {
+    if (this.props.single && input === chosenOptions[0]?.name) {
       this.setState({ input: "" });
     }
 
     // keeping refs updated when removing option
-    let filteredChosenOptions = [...this.state.chosenOptions];
+    let filteredChosenOptions = [...chosenOptions];
     let filteredChosenOptionBtnRefs = [...this.chosenOptionBtnRefs];
 
     filteredChosenOptions.splice(optionIndex, 1);
@@ -332,10 +331,7 @@ class Combobox extends React.Component {
 
     console.log(
       "Status",
-      this.state.comboboxStatus,
-      "--",
-      "value",
-      this.state.input
+      this.state.comboboxStatus
     );
 
     return (
