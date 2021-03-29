@@ -57,7 +57,7 @@ const UserCard = React.forwardRef((props, articleRef) => {
 
     let loadingTimeout = setTimeout(() => {
       setCardStatus(CARD_STATUS.loading);
-    }, 300);
+    }, 250);
 
     const [res, err] = await httpClient(
       "GET",
