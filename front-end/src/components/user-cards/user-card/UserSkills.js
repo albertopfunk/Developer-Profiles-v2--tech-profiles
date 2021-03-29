@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-function UserSkills({topSkills, additionalSkills}) {
+function UserSkills({ topSkills, additionalSkills }) {
   return (
     <SkillsContainer className="skills">
       <div className="top">

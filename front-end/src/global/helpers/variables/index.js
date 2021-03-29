@@ -35,5 +35,5 @@ export const CARD_STATUS = {
 
 export const CANCEL_STATUS = {
   cancel: "cancel",
-  ok: "ok"
-}
+  ok: "ok",
+};

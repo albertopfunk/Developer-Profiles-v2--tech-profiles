@@ -20,7 +20,7 @@ class CurrentLocationFilter extends React.Component {
 
     if (err) {
       console.error(`${res.mssg} => ${res.err}`);
-      return {error: "Error getting location results"};
+      return { error: "Error getting location results" };
     }
 
     if (this.state.location.length > 0) {
@@ -68,7 +68,7 @@ class CurrentLocationFilter extends React.Component {
 
     if (err) {
       console.error(`${res.mssg} => ${res.err}`);
-      return {error: "Error getting location information"};
+      return { error: "Error getting location information" };
     }
 
     this.props.updateUsers({

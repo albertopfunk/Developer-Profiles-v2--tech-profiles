@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-function UserProjects({projects}) {
+function UserProjects({ projects }) {
   const [sliderPage, setSliderPage] = useState(0);
 
   function nextExtra(direction) {

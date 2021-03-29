@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-function UserEducation({education}) {
+function UserEducation({ education }) {
   const [sliderPage, setSliderPage] = useState(0);
 
   function nextExtra(direction) {

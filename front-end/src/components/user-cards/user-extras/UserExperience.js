@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-function UserExperience({experience}) {
+function UserExperience({ experience }) {
   const [sliderPage, setSliderPage] = useState(0);
 
   function nextExtra(direction) {

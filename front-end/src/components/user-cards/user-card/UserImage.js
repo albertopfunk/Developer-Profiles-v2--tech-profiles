@@ -3,7 +3,7 @@ import React, { useState } from "react";
 // Test Ideas
 // renders image or default avatar image
 
-function UserImage({image, previewImg}) {
+function UserImage({ image, previewImg }) {
   const [imageErr, setImageErr] = useState(false);
 
   function handleBrokenLink() {
