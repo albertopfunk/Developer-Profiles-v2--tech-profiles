@@ -13,7 +13,7 @@ function RelocateToFilter(props) {
 
     if (err) {
       console.error(`${res.mssg} => ${res.err}`);
-      return [];
+      return {error: "Error getting location results"};
     }
 
     let checkDups = {};
