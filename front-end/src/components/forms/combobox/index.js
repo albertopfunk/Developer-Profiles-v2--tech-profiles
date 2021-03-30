@@ -70,11 +70,15 @@ class Combobox extends React.Component {
       return;
     }
 
-    this.setState({
-      comboboxLoading: COMBOBOX_STATUS.loading,
-    });
+    let loadingTimeout = setTimeout(() => {
+      this.setState({
+        comboboxLoading: COMBOBOX_STATUS.loading,
+      });
+    }, 250);
 
     let results = await this.props.onInputChange(value);
+
+    clearTimeout(loadingTimeout);
 
     if (this.asyncCancelRef.current === CANCEL_STATUS.cancel) {
       return;
@@ -249,13 +253,17 @@ class Combobox extends React.Component {
   };
 
   chooseOption = async (name, id) => {
-    this.setState({
-      comboboxLoading: COMBOBOX_STATUS.loading,
-    });
+    let loadingTimeout = setTimeout(() => {
+      this.setState({
+        comboboxLoading: COMBOBOX_STATUS.loading,
+      });
+    }, 250);
 
     // replace single option
     if (this.props.single) {
       const results = await this.props.onChosenOption(name, id);
+
+      clearTimeout(loadingTimeout);
 
       if (results?.error) {
         this.closeCombobox(this.state.input, COMBOBOX_STATUS.error);
@@ -275,6 +283,8 @@ class Combobox extends React.Component {
       ...this.state.chosenOptions,
       { name, id },
     ]);
+
+    clearTimeout(loadingTimeout);
 
     if (results?.error) {
       this.closeCombobox(this.state.input, COMBOBOX_STATUS.error);
@@ -329,10 +339,7 @@ class Combobox extends React.Component {
     const { inputName, displayName } = this.props;
     const { input, inputResults, selectedOptionId, chosenOptions } = this.state;
 
-    console.log(
-      "Status",
-      this.state.comboboxStatus
-    );
+    console.log("Status", this.state.comboboxStatus);
 
     return (
       <div>
