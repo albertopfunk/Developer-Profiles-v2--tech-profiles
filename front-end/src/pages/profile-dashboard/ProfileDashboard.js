@@ -45,6 +45,7 @@ import { httpClient } from "../../global/helpers/http-requests";
 import { ProfileContext } from "../../global/context/user-profile/ProfileContext";
 import auth0Client from "../../auth/Auth";
 import Announcer from "../../global/helpers/announcer";
+import MainHeader from "../../components/header/MainHeader";
 
 function ProfileDashboard() {
   const [user, setUser] = useState(null);
@@ -76,8 +77,8 @@ function ProfileDashboard() {
 
     if (err) {
       console.error(`${res.mssg} => ${res.err}`);
-      auth0Client.signOut("authorize");
-      return;
+      // auth0Client.signOut("authorize");
+      return {error: "error getting user information"};
     }
 
     ReactDOM.unstable_batchedUpdates(() => {
@@ -91,10 +92,10 @@ function ProfileDashboard() {
 
     if (err) {
       console.error(`${res.mssg} => ${res.err}`);
-      return;
+      return {error: "error updating user information"};
     }
 
-    await getFullUser(user.email);
+    return getFullUser(user.email);
   }
 
   async function addUserExtras(requestsArr) {
@@ -118,10 +119,10 @@ function ProfileDashboard() {
 
     if (err) {
       console.error(`${res.mssg} => ${res.err}`);
-      return;
+      return {error: "error updating user information"};
     }
 
-    await getFullUser(user.email);
+    return getFullUser(user.email);
   }
 
   if (loadingUser) {
@@ -143,48 +144,51 @@ function ProfileDashboard() {
         announcement="information loaded"
         ariaId="info-loaded-announcement"
         ariaLive="polite"
-      />
-      <nav aria-label="page">
-        <ul>
-          <li>
-            <Link id="page-navigation" to={`${url}`}>
-              Home
-            </Link>
-          </li>
+        />
+      <PageHeader>
+        <MainHeader />
+        <nav aria-label="page">
+          <ul>
+            <li>
+              <Link id="page-navigation" to={`${url}`}>
+                Home
+              </Link>
+            </li>
 
-          <li>
-            <Link to={`${url}/new`}>New user</Link>
-          </li>
+            <li>
+              <Link to={`${url}/new`}>New user</Link>
+            </li>
 
-          <li>
-            <Link to={`${url}/personal-info`}>Personal Info</Link>
-          </li>
+            <li>
+              <Link to={`${url}/personal-info`}>Personal Info</Link>
+            </li>
 
-          <li>
-            <Link to={`${url}/about-you`}>About You</Link>
-          </li>
+            <li>
+              <Link to={`${url}/about-you`}>About You</Link>
+            </li>
 
-          <li>
-            <Link to={`${url}/where-to-find-you`}>Where to Find You</Link>
-          </li>
+            <li>
+              <Link to={`${url}/where-to-find-you`}>Where to Find You</Link>
+            </li>
 
-          <li>
-            <Link to={`${url}/projects`}>Projects</Link>
-          </li>
+            <li>
+              <Link to={`${url}/projects`}>Projects</Link>
+            </li>
 
-          <li>
-            <Link to={`${url}/education`}>Education</Link>
-          </li>
+            <li>
+              <Link to={`${url}/education`}>Education</Link>
+            </li>
 
-          <li>
-            <Link to={`${url}/experience`}>Experience</Link>
-          </li>
+            <li>
+              <Link to={`${url}/experience`}>Experience</Link>
+            </li>
 
-          <li>
-            <Link to={`${url}/billing`}>Billing</Link>
-          </li>
-        </ul>
-      </nav>
+            <li>
+              <Link to={`${url}/billing`}>Billing</Link>
+            </li>
+          </ul>
+        </nav>
+      </PageHeader>
 
       <main aria-labelledby="main-heading">
         <Elements stripe={stripePromise}>
@@ -195,7 +199,7 @@ function ProfileDashboard() {
               addUserExtras,
               setPreviewImg,
             }}
-          >
+            >
             <Switch>
               <Route exact path={`${path}`}>
                 <ProfileHome />
@@ -265,7 +269,7 @@ function ProfileDashboard() {
             twitter={user.twitter}
             linkedin={user.linkedin}
             portfolio={user.portfolio}
-          />
+            />
         </section>
       </main>
     </MainContainer>
@@ -274,10 +278,17 @@ function ProfileDashboard() {
 
 const MainContainer = styled.div`
   width: 100%;
-  padding-top: 100px;
   background-color: pink;
-  display: flex;
-  flex-wrap: nowrap;
+`;
+
+const PageHeader = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  width: 100%;
+  background-color: white;
+  border-bottom: solid 0.5px;
 `;
 
 export default ProfileDashboard;
