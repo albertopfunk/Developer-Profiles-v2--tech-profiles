@@ -15,6 +15,7 @@ function PersonalInfo() {
   const { user, editProfile } = useContext(ProfileContext);
   const [formStatus, setFormStatus] = useState(FORM_STATUS.idle);
   const [formFocusStatus, setFormFocusStatus] = useState("");
+  const [hasSubmitError, setHasSubmitError] = useState(null);
 
   const [firstName, setFirstName] = useState({
     inputValue: "",
@@ -330,9 +331,18 @@ function PersonalInfo() {
       }
     }
 
-    await editProfile(inputs);
+    const results = await editProfile(inputs);
+    
+    if (results?.error) {
+      console.log(results)
+      setFormStatus(FORM_STATUS.error);
+      setHasSubmitError(true)
+      return;
+    }
+    
     formSuccessWait = setTimeout(() => {
       setFormStatus(FORM_STATUS.idle);
+      setHasSubmitError(null)
     }, 1000);
     setFormStatus(FORM_STATUS.success);
   }
@@ -399,7 +409,7 @@ function PersonalInfo() {
         {formStatus === FORM_STATUS.error ? (
           <div ref={errorSummaryRef} tabIndex="-1">
             <h3 id="error-heading">Errors in Submission</h3>
-            {firstName.inputStatus === FORM_STATUS.error ||
+            {hasSubmitError || firstName.inputStatus === FORM_STATUS.error ||
             lastName.inputStatus === FORM_STATUS.error ||
             title.inputStatus === FORM_STATUS.error ? (
               <>
@@ -407,6 +417,11 @@ function PersonalInfo() {
                   Please address the following errors and re-submit the form:
                 </strong>
                 <ul aria-label="current errors" id="error-group">
+                  {hasSubmitError ? (
+                    <li>
+                      Error submitting form, please try again
+                    </li>
+                  ) : null}
                   {firstName.inputStatus === FORM_STATUS.error ? (
                     <li>
                       <a href="#first-name">First Name Error</a>
