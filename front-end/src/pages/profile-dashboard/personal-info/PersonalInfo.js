@@ -323,6 +323,8 @@ function PersonalInfo() {
 
         if (err) {
           console.error(`${res.mssg} => ${res.err}`);
+          setFormStatus(FORM_STATUS.error);
+          setHasSubmitError(true)
           return;
         }
 
@@ -334,7 +336,6 @@ function PersonalInfo() {
     const results = await editProfile(inputs);
     
     if (results?.error) {
-      console.log(results)
       setFormStatus(FORM_STATUS.error);
       setHasSubmitError(true)
       return;
@@ -343,7 +344,7 @@ function PersonalInfo() {
     formSuccessWait = setTimeout(() => {
       setFormStatus(FORM_STATUS.idle);
       setHasSubmitError(null)
-    }, 1000);
+    }, 750);
     setFormStatus(FORM_STATUS.success);
   }
 
