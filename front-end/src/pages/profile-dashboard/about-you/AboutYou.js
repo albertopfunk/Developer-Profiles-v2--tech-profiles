@@ -258,7 +258,7 @@ function AboutYou() {
       if (res.err === "Zero results found" && !(value in skillsObj)) {
         return [{ name: value, id: `new-${skillsForReviewIdTracker}` }];
       }
-      return [];
+      return { error: "Error getting skill results" };
     }
 
     const results = res.data.filter(
