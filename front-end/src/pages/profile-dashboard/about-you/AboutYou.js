@@ -177,7 +177,7 @@ function AboutYou() {
 
     if (err) {
       console.error(`${res.mssg} => ${res.err}`);
-      return [];
+      return { error: "Error getting location results" };
     }
 
     if (location.inputValue.length > 0) {
