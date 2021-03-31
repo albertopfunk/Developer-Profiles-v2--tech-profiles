@@ -342,7 +342,7 @@ function WhereToFindYou() {
 
     if (err) {
       console.error(`${res.mssg} => ${res.err}`);
-      return [];
+      return { error: "Error getting location results" };
     }
 
     if (location.length > 0) {
@@ -364,7 +364,7 @@ function WhereToFindYou() {
 
     if (err) {
       console.error(`${res.mssg} => ${res.err}`);
-      return;
+      return { error: "Error getting location information" };
     }
 
     setLocation([
