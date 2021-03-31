@@ -60,7 +60,7 @@ function ProfileDashboard() {
     }
   });
 
-  function initProfile() {
+  async function initProfile() {
     const userProfile = auth0Client.getProfile();
     const { email } = userProfile;
 
@@ -69,7 +69,10 @@ function ProfileDashboard() {
       return;
     }
 
-    getFullUser(email);
+    const results = await getFullUser(email);
+    if (results?.error) {
+      auth0Client.signOut("authorize");
+    }
   }
 
   async function getFullUser(email) {
@@ -77,7 +80,6 @@ function ProfileDashboard() {
 
     if (err) {
       console.error(`${res.mssg} => ${res.err}`);
-      // auth0Client.signOut("authorize");
       return {error: "error getting user information"};
     }
 
