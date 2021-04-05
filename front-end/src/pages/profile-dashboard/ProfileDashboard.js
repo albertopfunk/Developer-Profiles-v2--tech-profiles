@@ -1,27 +1,3 @@
-/*
-
-<div>
-  focus container
-  <header>nav</header>
-  <nav>page nav #page nav</nav>
-  <main>
-    h1 dashboard page
-    <section>
-      h2 form section #user information
-      <div>err summary</div>
-      <form></form>
-    </section>
-    <section>
-      h2 user card section #user card
-      <article>
-        h3 user card
-      </article>
-    </section>
-  <main>
-</div>
-
-*/
-
 import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import { Route, useRouteMatch, Link, Switch } from "react-router-dom";
@@ -30,6 +6,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import { Helmet } from "react-helmet";
 
+import MainHeader from "../../components/header/MainHeader";
 import UserCard from "../../components/user-cards/user-card/UserCard";
 import ProfileHome from "./ProfileHome";
 import NewUser from "./new-user/NewUser";
@@ -45,7 +22,6 @@ import { httpClient } from "../../global/helpers/http-requests";
 import { ProfileContext } from "../../global/context/user-profile/ProfileContext";
 import auth0Client from "../../auth/Auth";
 import Announcer from "../../global/helpers/announcer";
-import MainHeader from "../../components/header/MainHeader";
 
 function ProfileDashboard() {
   const [user, setUser] = useState(null);
@@ -141,7 +117,7 @@ function ProfileDashboard() {
   }
 
   return (
-    <MainContainer>
+    <>
       <Announcer
         announcement="information loaded"
         ariaId="info-loaded-announcement"
@@ -149,7 +125,7 @@ function ProfileDashboard() {
       />
       <PageHeader>
         <MainHeader />
-        <nav aria-label="page">
+        <PageNav aria-label="page">
           <ul>
             <li>
               <Link id="page-navigation" to={`${url}`}>
@@ -189,10 +165,10 @@ function ProfileDashboard() {
               <Link to={`${url}/billing`}>Billing</Link>
             </li>
           </ul>
-        </nav>
+        </PageNav>
       </PageHeader>
 
-      <main aria-labelledby="main-heading">
+      <Main aria-labelledby="main-heading">
         <Elements stripe={stripePromise}>
           <ProfileContext.Provider
             value={{
@@ -273,15 +249,10 @@ function ProfileDashboard() {
             portfolio={user.portfolio}
           />
         </section>
-      </main>
-    </MainContainer>
+      </Main>
+    </>
   );
 }
-
-const MainContainer = styled.div`
-  width: 100%;
-  background-color: pink;
-`;
 
 const PageHeader = styled.div`
   position: fixed;
@@ -291,6 +262,51 @@ const PageHeader = styled.div`
   width: 100%;
   background-color: white;
   border-bottom: solid 0.5px;
+`;
+
+const PageNav = styled.nav`
+width: 100%;
+
+@media (min-width: 1100px) {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 5;
+    padding-top: 100px;
+    width: 300px;
+    height: 100vh;
+    border-right: solid 0.5px;
+  }
+
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    overflow-x: auto;
+
+    @media (min-width: 1100px) {
+      display: block;
+    }
+
+    li {
+      padding: 10px;
+      white-space: nowrap;
+
+      a {
+        text-decoration: none;
+      }
+    }
+  }
+`;
+
+const Main = styled.main`
+  padding-top: 150px;
+
+  @media (min-width: 1100px) {
+    padding-top: 100px;
+    padding-left: 320px;
+  }
 `;
 
 export default ProfileDashboard;
