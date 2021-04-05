@@ -324,7 +324,7 @@ function PersonalInfo() {
         if (err) {
           console.error(`${res.mssg} => ${res.err}`);
           setFormStatus(FORM_STATUS.error);
-          setHasSubmitError(true)
+          setHasSubmitError(true);
           return;
         }
 
@@ -334,16 +334,16 @@ function PersonalInfo() {
     }
 
     const results = await editProfile(inputs);
-    
+
     if (results?.error) {
       setFormStatus(FORM_STATUS.error);
-      setHasSubmitError(true)
+      setHasSubmitError(true);
       return;
     }
-    
+
     formSuccessWait = setTimeout(() => {
       setFormStatus(FORM_STATUS.idle);
-      setHasSubmitError(null)
+      setHasSubmitError(null);
     }, 750);
     setFormStatus(FORM_STATUS.success);
   }
@@ -410,7 +410,8 @@ function PersonalInfo() {
         {formStatus === FORM_STATUS.error ? (
           <div ref={errorSummaryRef} tabIndex="-1">
             <h3 id="error-heading">Errors in Submission</h3>
-            {hasSubmitError || firstName.inputStatus === FORM_STATUS.error ||
+            {hasSubmitError ||
+            firstName.inputStatus === FORM_STATUS.error ||
             lastName.inputStatus === FORM_STATUS.error ||
             title.inputStatus === FORM_STATUS.error ? (
               <>
@@ -419,9 +420,7 @@ function PersonalInfo() {
                 </strong>
                 <ul aria-label="current errors" id="error-group">
                   {hasSubmitError ? (
-                    <li>
-                      Error submitting form, please try again
-                    </li>
+                    <li>Error submitting form, please try again</li>
                   ) : null}
                   {firstName.inputStatus === FORM_STATUS.error ? (
                     <li>

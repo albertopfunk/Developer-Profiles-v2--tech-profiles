@@ -80,7 +80,7 @@ function ProfileDashboard() {
 
     if (err) {
       console.error(`${res.mssg} => ${res.err}`);
-      return {error: "error getting user information"};
+      return { error: "error getting user information" };
     }
 
     ReactDOM.unstable_batchedUpdates(() => {
@@ -94,7 +94,7 @@ function ProfileDashboard() {
 
     if (err) {
       console.error(`${res.mssg} => ${res.err}`);
-      return {error: "error updating user information"};
+      return { error: "error updating user information" };
     }
 
     return getFullUser(user.email);
@@ -121,7 +121,7 @@ function ProfileDashboard() {
 
     if (err) {
       console.error(`${res.mssg} => ${res.err}`);
-      return {error: "error updating user information"};
+      return { error: "error updating user information" };
     }
 
     return getFullUser(user.email);
@@ -146,7 +146,7 @@ function ProfileDashboard() {
         announcement="information loaded"
         ariaId="info-loaded-announcement"
         ariaLive="polite"
-        />
+      />
       <PageHeader>
         <MainHeader />
         <nav aria-label="page">
@@ -201,7 +201,7 @@ function ProfileDashboard() {
               addUserExtras,
               setPreviewImg,
             }}
-            >
+          >
             <Switch>
               <Route exact path={`${path}`}>
                 <ProfileHome />
@@ -271,7 +271,7 @@ function ProfileDashboard() {
             twitter={user.twitter}
             linkedin={user.linkedin}
             portfolio={user.portfolio}
-            />
+          />
         </section>
       </main>
     </MainContainer>
