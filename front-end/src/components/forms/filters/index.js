@@ -20,10 +20,7 @@ function Filters({
   }
 
   return (
-    <FiltersContainer aria-labelledby="filters-heading">
-      <h2 id="filters-heading" className="sr-only">
-        Profile Filters
-      </h2>
+    <FilterNav aria-label="filters">
       <div className="filters-bar">
         <div
           className="filters-info"
@@ -105,11 +102,11 @@ function Filters({
           </button>
         </div>
       </FiltersForm>
-    </FiltersContainer>
+    </FilterNav>
   );
 }
 
-const FiltersContainer = styled.aside`
+const FilterNav = styled.nav`
   width: 100%;
 
   @media (min-width: 1100px) {
