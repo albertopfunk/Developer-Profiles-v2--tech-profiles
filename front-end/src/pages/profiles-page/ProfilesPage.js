@@ -9,32 +9,25 @@ import MainHeader from "../../components/header/MainHeader";
 import Filters from "../../components/forms/filters";
 import UserCards from "../../components/user-cards/UserCards";
 
-function ProfilesPage() {
-  const [pageStatus, setPageStatus] = useState(PROFILES_STATUS.initialLoading);
-  const [cardsStatus, setCardsStatus] = useState(PROFILES_STATUS.idle);
 
-  /*
+/*
 
-  skeleton loader
-    - initial loading
-    - filters loading
-
-  error
-    - initial error
-    - filters error
-
-  cards
-    - if loader and error === idle
-
-    - loading
-      - pagination loading
-    - error
-      - pagination error
-    - load more/back to top
-      - if pagination loader and error === idle
+<focusreset>
+  <mainHeader/>
+  <filtersNav/>
+  <MainContent>
+    <sections>
+      stuff
+    </sections>
+  </MainContent>
+</focusreset>
 
 */
 
+
+function ProfilesPage() {
+  const [pageStatus, setPageStatus] = useState(PROFILES_STATUS.initialLoading);
+  const [cardsStatus, setCardsStatus] = useState(PROFILES_STATUS.idle);
   const [cardFocusIndex, setCardFocusIndex] = useState(0);
   const [users, setUsers] = useState({
     users: [],

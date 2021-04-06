@@ -23,6 +23,22 @@ import { ProfileContext } from "../../global/context/user-profile/ProfileContext
 import auth0Client from "../../auth/Auth";
 import Announcer from "../../global/helpers/announcer";
 
+
+/*
+
+<focusreset>
+  <mainHeader/>
+  <pageNav/>
+  <MainContent>
+    <sections>
+      stuff
+    </sections>
+  </MainContent>
+</focusreset>
+
+*/
+
+
 function ProfileDashboard() {
   const [user, setUser] = useState(null);
   const [loadingUser, setLoadingUser] = useState(true);
