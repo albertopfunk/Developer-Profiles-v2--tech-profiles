@@ -531,6 +531,7 @@ export const GlobalStyles = createGlobalStyle`
   summary,
   textarea,
   [tabindex] {
+    touch-action: manipulation;
     -ms-touch-action: manipulation;
   }
 
