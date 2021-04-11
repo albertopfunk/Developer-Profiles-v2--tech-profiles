@@ -9,7 +9,6 @@ import MainHeader from "../../components/header/MainHeader";
 import Filters from "../../components/forms/filters";
 import UserCards from "../../components/user-cards/UserCards";
 
-
 /*
 
 <focusreset>
@@ -23,7 +22,6 @@ import UserCards from "../../components/user-cards/UserCards";
 </focusreset>
 
 */
-
 
 function ProfilesPage() {
   const [pageStatus, setPageStatus] = useState(PROFILES_STATUS.initialLoading);

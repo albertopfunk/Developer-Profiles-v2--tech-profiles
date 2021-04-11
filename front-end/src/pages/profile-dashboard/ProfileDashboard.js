@@ -23,7 +23,6 @@ import { ProfileContext } from "../../global/context/user-profile/ProfileContext
 import auth0Client from "../../auth/Auth";
 import Announcer from "../../global/helpers/announcer";
 
-
 /*
 
 <focusreset>
@@ -37,7 +36,6 @@ import Announcer from "../../global/helpers/announcer";
 </focusreset>
 
 */
-
 
 function ProfileDashboard() {
   const [user, setUser] = useState(null);
@@ -281,9 +279,9 @@ const PageHeader = styled.div`
 `;
 
 const PageNav = styled.nav`
-width: 100%;
+  width: 100%;
 
-@media (min-width: 1100px) {
+  @media (min-width: 1100px) {
     position: fixed;
     top: 0;
     left: 0;
