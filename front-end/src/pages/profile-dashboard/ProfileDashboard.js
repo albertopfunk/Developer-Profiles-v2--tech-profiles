@@ -41,7 +41,7 @@ function ProfileDashboard() {
   const [user, setUser] = useState(null);
   const [loadingUser, setLoadingUser] = useState(true);
   const [previewImg, setPreviewImg] = useState({ image: "", id: "" });
-  const stripePromise = loadStripe(process.env.REACT_APP_STRIPE);
+  const [stripePromise] = useState(() => loadStripe(process.env.REACT_APP_STRIPE))
   let { path, url } = useRouteMatch();
 
   useEffect(() => {
