@@ -4,7 +4,6 @@ import { Route, useRouteMatch, Link, Switch } from "react-router-dom";
 import styled from "styled-components";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
-import { Helmet } from "react-helmet";
 
 import MainHeader from "../../components/header/MainHeader";
 import UserCard from "../../components/user-cards/user-card/UserCard";
@@ -117,18 +116,7 @@ function ProfileDashboard() {
     return getFullUser(user.email);
   }
 
-  if (loadingUser) {
-    // main skeleton loader
-    // nav should be present here too
-    return (
-      <div>
-        <Helmet>
-          <title>Profile Dashboard • Tech Profiles</title>
-        </Helmet>
-        <h1>Loading Information...</h1>
-      </div>
-    );
-  }
+
 
   return (
     <>
@@ -183,6 +171,13 @@ function ProfileDashboard() {
       </PageHeader>
 
       <Main aria-labelledby="main-heading">
+
+        {loadingUser ?
+        <>
+        <h1>Loading User</h1>
+        </>
+        :
+        <>
         <Elements stripe={stripePromise}>
           <ProfileContext.Provider
             value={{
@@ -263,6 +258,7 @@ function ProfileDashboard() {
             portfolio={user.portfolio}
           />
         </section>
+        </>}
       </Main>
     </>
   );
