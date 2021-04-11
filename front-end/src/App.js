@@ -69,12 +69,28 @@ function App({ location }) {
     return (
       <>
         <GlobalStyles />
-        <HeaderSkeleton />
+        <HeaderSkeleton>
+        <picture>
+            <source
+              srcSet="https://res.cloudinary.com/dy5hgr3ht/image/upload/c_scale,h_40/v1594347155/tech-pros-v1-main/tech-profiles-logo.webp"
+              media="(max-width: 1100px)"
+            />
+            <source
+              srcSet="https://res.cloudinary.com/dy5hgr3ht/image/upload/c_scale,h_40/v1594347155/tech-pros-v1-main/tech-profiles-logo.png"
+              media="(max-width: 1100px)"
+            />
+            <source srcSet="https://res.cloudinary.com/dy5hgr3ht/image/upload/c_scale,h_65/v1594347155/tech-pros-v1-main/tech-profiles-logo.webp" />
+            <img
+              src="https://res.cloudinary.com/dy5hgr3ht/image/upload/c_scale,h_65/v1594347155/tech-pros-v1-main/tech-profiles-logo.png"
+              alt="site logo link to profiles page"
+            />
+          </picture>
+        </HeaderSkeleton>
         <Helmet>
           <title>Validating Session • Tech Profiles</title>
         </Helmet>
         <MainContainerSkeleton aria-labelledby="main-heading">
-          <h1 id="main-heading">Validating Session</h1>
+          <h1 id="main-heading">Validating Session...</h1>
         </MainContainerSkeleton>
       </>
     );
@@ -114,13 +130,12 @@ function App({ location }) {
 const HeaderSkeleton = styled.header`
   background-color: white;
   width: 100%;
-  height: 100px;
-  padding: 0.3em 1em;
+  padding: var(--nav-padding);
+  border-bottom: solid 0.5px;
 `;
 
 const MainContainerSkeleton = styled.main`
   width: 100%;
-  background-color: pink;
 `;
 
 export default withRouter(App);

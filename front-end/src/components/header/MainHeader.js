@@ -157,6 +157,7 @@ const Header = styled.header`
 `;
 
 const Nav = styled.nav`
+  padding: var(--nav-padding);
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: auto;
@@ -166,6 +167,7 @@ const Nav = styled.nav`
   .site-logo {
     grid-column: 1 / 2;
     grid-row: 1 / 2;
+    justify-self: start;
   }
 
   .menu-button {
@@ -174,6 +176,7 @@ const Nav = styled.nav`
     border: none;
     background: white;
     padding: 0.4em;
+    justify-self: end;
 
     @media (min-width: 1100px) {
       display: none;

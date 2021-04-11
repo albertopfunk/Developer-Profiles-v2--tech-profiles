@@ -588,6 +588,8 @@ export const GlobalStyles = createGlobalStyle`
   :root {
     --primary_color:#001940;
     --secondary-color:#EE6C4D;
+
+    --nav-padding: 10px 15px;
   }
 
   .sr-only {
