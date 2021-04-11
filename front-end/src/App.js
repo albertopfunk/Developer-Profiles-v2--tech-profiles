@@ -70,7 +70,7 @@ function App({ location }) {
       <>
         <GlobalStyles />
         <HeaderSkeleton>
-        <picture>
+          <picture>
             <source
               srcSet="https://res.cloudinary.com/dy5hgr3ht/image/upload/c_scale,h_40/v1594347155/tech-pros-v1-main/tech-profiles-logo.webp"
               media="(max-width: 1100px)"

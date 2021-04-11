@@ -40,7 +40,9 @@ function ProfileDashboard() {
   const [user, setUser] = useState(null);
   const [loadingUser, setLoadingUser] = useState(true);
   const [previewImg, setPreviewImg] = useState({ image: "", id: "" });
-  const [stripePromise] = useState(() => loadStripe(process.env.REACT_APP_STRIPE))
+  const [stripePromise] = useState(() =>
+    loadStripe(process.env.REACT_APP_STRIPE)
+  );
   let { path, url } = useRouteMatch();
 
   useEffect(() => {
@@ -116,8 +118,6 @@ function ProfileDashboard() {
     return getFullUser(user.email);
   }
 
-
-
   return (
     <>
       <Announcer
@@ -171,94 +171,94 @@ function ProfileDashboard() {
       </PageHeader>
 
       <Main aria-labelledby="main-heading">
+        {loadingUser ? (
+          <>
+            <h1>Loading User</h1>
+          </>
+        ) : (
+          <>
+            <Elements stripe={stripePromise}>
+              <ProfileContext.Provider
+                value={{
+                  user,
+                  editProfile,
+                  addUserExtras,
+                  setPreviewImg,
+                }}
+              >
+                <Switch>
+                  <Route exact path={`${path}`}>
+                    <ProfileHome />
+                  </Route>
 
-        {loadingUser ?
-        <>
-        <h1>Loading User</h1>
-        </>
-        :
-        <>
-        <Elements stripe={stripePromise}>
-          <ProfileContext.Provider
-            value={{
-              user,
-              editProfile,
-              addUserExtras,
-              setPreviewImg,
-            }}
-          >
-            <Switch>
-              <Route exact path={`${path}`}>
-                <ProfileHome />
-              </Route>
+                  <Route path={`${path}/new`}>
+                    <NewUser />
+                  </Route>
 
-              <Route path={`${path}/new`}>
-                <NewUser />
-              </Route>
+                  <Route path={`${path}/personal-info`}>
+                    <PersonalInfo />
+                  </Route>
 
-              <Route path={`${path}/personal-info`}>
-                <PersonalInfo />
-              </Route>
+                  <Route path={`${path}/about-you`}>
+                    <AboutYou />
+                  </Route>
 
-              <Route path={`${path}/about-you`}>
-                <AboutYou />
-              </Route>
+                  <Route path={`${path}/Where-to-find-you`}>
+                    <WhereToFindYou />
+                  </Route>
 
-              <Route path={`${path}/Where-to-find-you`}>
-                <WhereToFindYou />
-              </Route>
+                  <Route path={`${path}/projects`}>
+                    <DashboardProjects />
+                  </Route>
 
-              <Route path={`${path}/projects`}>
-                <DashboardProjects />
-              </Route>
+                  <Route path={`${path}/education`}>
+                    <DashboardEducation />
+                  </Route>
 
-              <Route path={`${path}/education`}>
-                <DashboardEducation />
-              </Route>
+                  <Route path={`${path}/experience`}>
+                    <DashboardExperience />
+                  </Route>
 
-              <Route path={`${path}/experience`}>
-                <DashboardExperience />
-              </Route>
+                  <Route path={`${path}/billing`}>
+                    <DashboardBilling />
+                  </Route>
+                </Switch>
+              </ProfileContext.Provider>
+            </Elements>
 
-              <Route path={`${path}/billing`}>
-                <DashboardBilling />
-              </Route>
-            </Switch>
-          </ProfileContext.Provider>
-        </Elements>
-
-        <section aria-labelledby="profile-card-heading">
-          <h2 id="profile-card-heading">Current Profile Card Preview</h2>
-          <UserCard
-            previewImg={previewImg.image}
-            userExtras={{
-              locations: user.locations,
-              topSkills: user.topSkills,
-              additionalSkills: user.additionalSkills,
-              education: user.education,
-              experience: user.experience,
-              projects: user.projects,
-            }}
-            index={0}
-            totalUsers={1}
-            userId={user.id}
-            areaOfWork={user.area_of_work}
-            email={user.public_email}
-            image={user.image}
-            firstName={user.first_name}
-            lastName={user.last_name}
-            currentLocation={user.current_location_name}
-            summary={user.summary}
-            title={user.desired_title}
-            topSkills={user.top_skills_prev}
-            additionalSkills={user.additional_skills_prev}
-            github={user.github}
-            twitter={user.twitter}
-            linkedin={user.linkedin}
-            portfolio={user.portfolio}
-          />
-        </section>
-        </>}
+            <section aria-labelledby="profile-card-heading">
+              <h2 id="profile-card-heading">Current Profile Card Preview</h2>
+              <UserCard
+                previewImg={previewImg.image}
+                userExtras={{
+                  locations: user.locations,
+                  topSkills: user.topSkills,
+                  additionalSkills: user.additionalSkills,
+                  education: user.education,
+                  experience: user.experience,
+                  projects: user.projects,
+                }}
+                index={0}
+                totalUsers={1}
+                userId={user.id}
+                areaOfWork={user.area_of_work}
+                email={user.public_email}
+                image={user.image}
+                firstName={user.first_name}
+                lastName={user.last_name}
+                currentLocation={user.current_location_name}
+                summary={user.summary}
+                title={user.desired_title}
+                topSkills={user.top_skills_prev}
+                additionalSkills={user.additional_skills_prev}
+                github={user.github}
+                twitter={user.twitter}
+                linkedin={user.linkedin}
+                portfolio={user.portfolio}
+              />
+            </section>
+          </>
+        )}
       </Main>
     </>
   );
