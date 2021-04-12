@@ -134,7 +134,7 @@ function MainHeader() {
             </ul>
           </>
         ) : (
-          <button type="button" onClick={signIn}>
+          <button type="button" className="signin-button" onClick={signIn}>
             Sign In
           </button>
         )}
@@ -167,6 +167,15 @@ const Nav = styled.nav`
     grid-row: 1 / 2;
     justify-self: start;
     padding: var(--nav-padding);
+  }
+
+  .signin-button {
+    grid-column: 2 / 3;
+    grid-row: 1 / 2;
+    justify-self: end;
+    padding: var(--nav-padding);
+    border: none;
+    background: white;
   }
 
   .menu-button {
