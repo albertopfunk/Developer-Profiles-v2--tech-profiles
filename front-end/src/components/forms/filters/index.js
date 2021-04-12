@@ -107,9 +107,9 @@ function Filters({
 }
 
 const FilterNav = styled.nav`
-  width: 100%;
-
-  @media (min-width: 1100px) {
+  background-color: white;
+  
+  @media (min-width: 950px) {
     position: fixed;
     top: 0;
     left: 0;
@@ -127,7 +127,7 @@ const FilterNav = styled.nav`
     justify-items: center;
     align-items: center;
 
-    @media (min-width: 1100px) {
+    @media (min-width: 950px) {
       display: block;
     }
 
@@ -143,7 +143,7 @@ const FilterNav = styled.nav`
   }
 
   .filters-control {
-    @media (min-width: 1100px) {
+    @media (min-width: 950px) {
       display: none;
     }
   }
@@ -152,7 +152,7 @@ const FilterNav = styled.nav`
 const FiltersForm = styled.form`
   display: ${(props) => (props.showForm ? "block" : "none")};
 
-  @media (min-width: 1100px) {
+  @media (min-width: 950px) {
     display: block;
   }
 `;

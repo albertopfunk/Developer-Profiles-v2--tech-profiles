@@ -228,7 +228,7 @@ const UserCardContainer = styled.article`
 `;
 
 const UserInfo = styled.section`
-  border: solid saddlebrown;
+  /* border: solid saddlebrown; */
 
   display: grid;
   grid-gap: 20px;

@@ -26,21 +26,21 @@ function MainHeader() {
     setAnnounceMenuToggle(true);
   }
 
-  function closeMenuBlur() {
-    function closeOnBlurTimeOut() {
-      if (
-        document.activeElement.id !== "menu-button" &&
-        document.activeElement.className !== "nav-item"
-      ) {
-        setIsMenuOpen(false);
-        setAnnounceMenuToggle(false);
-      }
-    }
+  // function closeMenuBlur() {
+  //   function closeOnBlurTimeOut() {
+  //     if (
+  //       document.activeElement.id !== "menu-button" &&
+  //       document.activeElement.className !== "nav-item"
+  //     ) {
+  //       setIsMenuOpen(false);
+  //       setAnnounceMenuToggle(false);
+  //     }
+  //   }
 
-    closeOnBlurWait = setTimeout(() => {
-      closeOnBlurTimeOut();
-    }, 13);
-  }
+  //   closeOnBlurWait = setTimeout(() => {
+  //     closeOnBlurTimeOut();
+  //   }, 13);
+  // }
 
   return (
     <Header>
@@ -54,11 +54,11 @@ function MainHeader() {
           <picture>
             <source
               srcSet="https://res.cloudinary.com/dy5hgr3ht/image/upload/c_scale,h_40/v1594347155/tech-pros-v1-main/tech-profiles-logo.webp"
-              media="(max-width: 1100px)"
+              media="(max-width: 950px)"
             />
             <source
               srcSet="https://res.cloudinary.com/dy5hgr3ht/image/upload/c_scale,h_40/v1594347155/tech-pros-v1-main/tech-profiles-logo.png"
-              media="(max-width: 1100px)"
+              media="(max-width: 950px)"
             />
             <source srcSet="https://res.cloudinary.com/dy5hgr3ht/image/upload/c_scale,h_65/v1594347155/tech-pros-v1-main/tech-profiles-logo.webp" />
             <img
@@ -77,7 +77,7 @@ function MainHeader() {
                 aria-label="close menu"
                 aria-expanded="true"
                 onClick={closeMenu}
-                onBlur={closeMenuBlur}
+                // onBlur={closeMenuBlur}
               >
                 <span aria-hidden="true">
                   <MenuClose />
@@ -99,14 +99,14 @@ function MainHeader() {
 
             <ul
               aria-label="site navigation menu"
-              className={`menu-group ${isMenuOpen ? "visible" : "hidden"}`}
+              className={`menu-group ${isMenuOpen ? "" : "hidden"}`}
             >
               <li>
                 <Link
                   to="/"
                   className="nav-item"
-                  onClick={closeMenuBlur}
-                  onBlur={closeMenuBlur}
+                  // onClick={closeMenuBlur}
+                  // onBlur={closeMenuBlur}
                 >
                   Profiles
                 </Link>
@@ -115,8 +115,8 @@ function MainHeader() {
                 <Link
                   to="/profile-dashboard"
                   className="nav-item"
-                  onClick={closeMenuBlur}
-                  onBlur={closeMenuBlur}
+                  // onClick={closeMenuBlur}
+                  // onBlur={closeMenuBlur}
                 >
                   Dashboard
                 </Link>
@@ -126,7 +126,7 @@ function MainHeader() {
                   className="nav-item"
                   type="button"
                   onClick={signOut}
-                  onBlur={closeMenuBlur}
+                  // onBlur={closeMenuBlur}
                 >
                   Sign Out
                 </button>
@@ -144,41 +144,39 @@ function MainHeader() {
 }
 
 const Header = styled.header`
-  width: 100%;
-  border-bottom: solid 0.5px;
+  border-bottom: solid .5px;
   background-color: white;
 
-  @media (min-width: 1100px) {
+  @media (min-width: 950px) {
     position: fixed;
     top: 0;
     left: 0;
     z-index: 10;
+    width: 100%;
   }
 `;
 
 const Nav = styled.nav`
-  padding: var(--nav-padding);
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: auto;
-  justify-items: center;
-  align-items: center;
 
   .site-logo {
     grid-column: 1 / 2;
     grid-row: 1 / 2;
     justify-self: start;
+    padding: var(--nav-padding);
   }
 
   .menu-button {
     grid-column: 2 / 3;
     grid-row: 1 / 2;
+    justify-self: end;
+    padding: var(--nav-padding);
     border: none;
     background: white;
-    padding: 0.4em;
-    justify-self: end;
 
-    @media (min-width: 1100px) {
+    @media (min-width: 950px) {
       display: none;
     }
   }
@@ -187,33 +185,25 @@ const Nav = styled.nav`
     grid-column: 1 / 3;
     grid-row: 2 / 3;
     justify-self: stretch;
-    list-style: none;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
     background-color: white;
-    border-top: solid 0.5px;
-    margin: 0;
-    padding: 0;
+    border-top: solid .5px;
+    padding: 15px 0;
 
-    @media (min-width: 1100px) {
+    @media (min-width: 950px) {
       grid-column: 2 / 3;
       grid-row: 1 / 2;
-      border: none;
     }
   }
 
   .menu-group.hidden {
     display: none;
 
-    @media (min-width: 1100px) {
+    @media (min-width: 950px) {
       display: flex;
-      justify-content: space-evenly;
-      align-items: center;
     }
-  }
-
-  .menu-group.visible {
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
   }
 `;
 

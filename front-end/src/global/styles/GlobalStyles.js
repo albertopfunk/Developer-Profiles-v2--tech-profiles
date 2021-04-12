@@ -123,6 +123,7 @@ export const GlobalStyles = createGlobalStyle`
   nav ul {
     list-style: none;
     padding: 0;
+    margin: 0;
   }
 
   /**

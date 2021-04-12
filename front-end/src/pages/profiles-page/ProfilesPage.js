@@ -232,14 +232,18 @@ const PageHeader = styled.div`
   left: 0;
   z-index: 10;
   width: 100%;
-  background-color: white;
   border-bottom: solid 0.5px;
+
+  @media (min-width: 950px) {
+    z-index: 0;
+    border: none;
+  }
 `;
 
 const Main = styled.main`
   padding-top: 150px;
 
-  @media (min-width: 1100px) {
+  @media (min-width: 950px) {
     padding-top: 100px;
     padding-left: 320px;
   }
