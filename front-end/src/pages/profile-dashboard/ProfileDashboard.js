@@ -270,14 +270,18 @@ const PageHeader = styled.div`
   left: 0;
   z-index: 10;
   width: 100%;
-  background-color: white;
-  border-bottom: solid 0.5px;
+  border-bottom: solid 1px rgba(229, 231, 235, .8);
+
+  @media (min-width: 850px) {
+    z-index: 0;
+    border: none;
+  }
 `;
 
 const PageNav = styled.nav`
-  width: 100%;
-
-  @media (min-width: 1100px) {
+  background-color: white;
+  
+  @media (min-width: 850px) {
     position: fixed;
     top: 0;
     left: 0;
@@ -285,17 +289,14 @@ const PageNav = styled.nav`
     padding-top: 100px;
     width: 300px;
     height: 100vh;
-    border-right: solid 0.5px;
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 10%), 0 1px 2px 0 rgb(0 0 0 / 6%);
   }
 
   ul {
-    margin: 0;
-    padding: 0;
-    list-style: none;
     display: flex;
     overflow-x: auto;
 
-    @media (min-width: 1100px) {
+    @media (min-width: 850px) {
       display: block;
     }
 
@@ -311,9 +312,12 @@ const PageNav = styled.nav`
 `;
 
 const Main = styled.main`
+  min-height: 100vh;
+  padding: 0 10px;
   padding-top: 150px;
+  background-color: hsl(240, 10%, 99%);
 
-  @media (min-width: 1100px) {
+  @media (min-width: 850px) {
     padding-top: 100px;
     padding-left: 320px;
   }
