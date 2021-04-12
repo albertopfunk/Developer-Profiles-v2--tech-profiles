@@ -224,7 +224,10 @@ const UserCard = React.forwardRef((props, articleRef) => {
 });
 
 const UserCardContainer = styled.article`
-  border: solid olivedrab;
+  padding: 10px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px 0 hsla(0, 0%, 0%, 0.2);
 `;
 
 const UserInfo = styled.section`

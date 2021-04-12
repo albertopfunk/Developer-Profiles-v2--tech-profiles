@@ -117,7 +117,7 @@ const FilterNav = styled.nav`
     padding-top: 100px;
     width: 300px;
     height: 100vh;
-    border-right: solid 0.5px;
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 10%), 0 1px 2px 0 rgb(0 0 0 / 6%);
   }
 
   .filters-bar {

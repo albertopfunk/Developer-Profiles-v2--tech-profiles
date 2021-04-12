@@ -131,7 +131,7 @@ const HeaderSkeleton = styled.header`
   background-color: white;
   width: 100%;
   padding: var(--nav-padding);
-  border-bottom: solid 0.5px;
+  border-bottom: solid 1px rgba(229, 231, 235, .8);
 `;
 
 const MainContainerSkeleton = styled.main`

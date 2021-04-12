@@ -162,6 +162,8 @@ function UserCards({
 }
 
 const Feed = styled.div`
+  padding: 0 10px;
+
   .back-to-top {
     position: fixed;
     top: 50%;
