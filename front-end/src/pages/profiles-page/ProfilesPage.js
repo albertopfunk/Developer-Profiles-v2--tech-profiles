@@ -242,8 +242,7 @@ const PageHeader = styled.div`
 
 const Main = styled.main`
   min-height: 100vh;
-  padding: 0 10px;
-  padding-top: 150px;
+  padding: 150px 15px 50px 15px;
   background-color: hsl(240, 10%, 99%);
 
   @media (min-width: 850px) {
