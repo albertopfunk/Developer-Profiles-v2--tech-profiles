@@ -242,6 +242,7 @@ const PageHeader = styled.div`
 
 const Main = styled.main`
   min-height: 100vh;
+  padding: 0 10px;
   padding-top: 150px;
   background-color: hsl(240, 10%, 99%);
 

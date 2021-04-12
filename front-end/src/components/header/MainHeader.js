@@ -189,7 +189,6 @@ const Nav = styled.nav`
     display: flex;
     justify-content: space-evenly;
     align-items: center;
-    background-color: white;
     border-top: solid 1px rgba(229, 231, 235, .5);
     padding: 15px 0;
 
