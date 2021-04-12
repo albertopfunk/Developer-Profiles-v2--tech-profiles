@@ -54,11 +54,11 @@ function MainHeader() {
           <picture>
             <source
               srcSet="https://res.cloudinary.com/dy5hgr3ht/image/upload/c_scale,h_40/v1594347155/tech-pros-v1-main/tech-profiles-logo.webp"
-              media="(max-width: 950px)"
+              media="(max-width: 850px)"
             />
             <source
               srcSet="https://res.cloudinary.com/dy5hgr3ht/image/upload/c_scale,h_40/v1594347155/tech-pros-v1-main/tech-profiles-logo.png"
-              media="(max-width: 950px)"
+              media="(max-width: 850px)"
             />
             <source srcSet="https://res.cloudinary.com/dy5hgr3ht/image/upload/c_scale,h_65/v1594347155/tech-pros-v1-main/tech-profiles-logo.webp" />
             <img
@@ -147,7 +147,7 @@ const Header = styled.header`
   border-bottom: solid .5px;
   background-color: white;
 
-  @media (min-width: 950px) {
+  @media (min-width: 850px) {
     position: fixed;
     top: 0;
     left: 0;
@@ -176,7 +176,7 @@ const Nav = styled.nav`
     border: none;
     background: white;
 
-    @media (min-width: 950px) {
+    @media (min-width: 850px) {
       display: none;
     }
   }
@@ -192,7 +192,7 @@ const Nav = styled.nav`
     border-top: solid .5px;
     padding: 15px 0;
 
-    @media (min-width: 950px) {
+    @media (min-width: 850px) {
       grid-column: 2 / 3;
       grid-row: 1 / 2;
     }
@@ -201,7 +201,7 @@ const Nav = styled.nav`
   .menu-group.hidden {
     display: none;
 
-    @media (min-width: 950px) {
+    @media (min-width: 850px) {
       display: flex;
     }
   }

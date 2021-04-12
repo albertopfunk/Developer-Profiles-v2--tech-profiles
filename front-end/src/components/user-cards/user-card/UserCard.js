@@ -228,8 +228,6 @@ const UserCardContainer = styled.article`
 `;
 
 const UserInfo = styled.section`
-  /* border: solid saddlebrown; */
-
   display: grid;
   grid-gap: 20px;
   grid-template-areas:
@@ -241,7 +239,7 @@ const UserInfo = styled.section`
     "icons"
     "skills";
 
-  @media (min-width: 1100px) {
+  @media (min-width: 1050px) {
     grid-gap: 10px;
     grid-template-areas:
       "image    name      icons"

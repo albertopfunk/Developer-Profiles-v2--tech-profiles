@@ -234,7 +234,7 @@ const PageHeader = styled.div`
   width: 100%;
   border-bottom: solid 0.5px;
 
-  @media (min-width: 950px) {
+  @media (min-width: 850px) {
     z-index: 0;
     border: none;
   }
@@ -243,7 +243,7 @@ const PageHeader = styled.div`
 const Main = styled.main`
   padding-top: 150px;
 
-  @media (min-width: 950px) {
+  @media (min-width: 850px) {
     padding-top: 100px;
     padding-left: 320px;
   }
