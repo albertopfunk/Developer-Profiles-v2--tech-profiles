@@ -121,17 +121,19 @@ function UserCards({
 
       <div className="feed-controls">
         {isIdle && usersToLoad ? (
-          <button
-            type="button"
-            onClick={loadMoreUsers}
-            onKeyDown={(e) => loadMoreFocus(e)}
-          >
-            Load More Profiles
-          </button>
+          <div className="control">
+            <button
+              type="button"
+              onClick={loadMoreUsers}
+              onKeyDown={(e) => loadMoreFocus(e)}
+            >
+              Load More Profiles
+            </button>
+          </div>
         ) : null}
 
         {isIdle && !usersToLoad ? (
-          <div>
+          <div className="control">
             <p>No more profiles to load</p>
             <button
               type="button"
@@ -145,13 +147,15 @@ function UserCards({
         ) : null}
 
         {isBusy ? (
-          <button type="button" disabled="true">
-            Loading
-          </button>
+          <div className="control">
+            <button type="button" disabled="true">
+              Loading
+            </button>
+          </div>
         ) : null}
 
         {isError ? (
-          <div>
+          <div className="control">
             <p>Error loading profiles</p>
             <button
               type="button"
@@ -177,8 +181,10 @@ const Feed = styled.div`
     grid-gap: 20px;
   }
 
-  .feed-controls {
-    border: solid red;
+  .feed-controls .control {
+    width: fit-content;
+    margin: 0 auto;
+    text-align: center;
   }
 `;
 
