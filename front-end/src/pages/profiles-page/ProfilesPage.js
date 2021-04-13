@@ -232,7 +232,7 @@ const PageHeader = styled.div`
   left: 0;
   z-index: 10;
   width: 100%;
-  border-bottom: solid 1px rgba(229, 231, 235, .8);
+  border-bottom: solid 1px rgba(229, 231, 235, 0.8);
 
   @media (min-width: 850px) {
     z-index: 0;

@@ -108,7 +108,7 @@ function Filters({
 
 const FilterNav = styled.nav`
   background-color: white;
-  
+
   @media (min-width: 850px) {
     position: fixed;
     top: 0;

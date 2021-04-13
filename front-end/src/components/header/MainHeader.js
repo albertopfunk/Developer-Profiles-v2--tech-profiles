@@ -144,7 +144,7 @@ function MainHeader() {
 }
 
 const Header = styled.header`
-  border-bottom: solid 1px rgba(229, 231, 235, .5);
+  border-bottom: solid 1px rgba(229, 231, 235, 0.5);
   background-color: white;
 
   @media (min-width: 850px) {
@@ -153,7 +153,7 @@ const Header = styled.header`
     left: 0;
     z-index: 10;
     width: 100%;
-    border-bottom: solid 1px rgba(229, 231, 235, .8);
+    border-bottom: solid 1px rgba(229, 231, 235, 0.8);
   }
 `;
 
@@ -198,7 +198,7 @@ const Nav = styled.nav`
     display: flex;
     justify-content: space-evenly;
     align-items: center;
-    border-top: solid 1px rgba(229, 231, 235, .5);
+    border-top: solid 1px rgba(229, 231, 235, 0.5);
     padding: 15px 0;
 
     @media (min-width: 850px) {
