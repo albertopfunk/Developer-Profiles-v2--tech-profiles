@@ -70,93 +70,100 @@ function UserCards({
     }
   }
 
+  if (totalUsers === 0) {
+    return (
+      <Feed role="feed" aria-busy={isBusy} aria-labelledby="profiles-heading">
+        <h2 id="profiles-heading" className="sr-only">
+          Current Profiles
+        </h2>
+        <p>No Users Here!</p>
+        <button type="reset" onClick={resetFilters}>
+          reset filters
+        </button>
+      </Feed>
+    );
+  }
+
   return (
     <Feed role="feed" aria-busy={isBusy} aria-labelledby="profiles-heading">
       <h2 id="profiles-heading" className="sr-only">
         Current Profiles
       </h2>
 
-      {totalUsers === 0 ? (
-        <>
-          <p>No Users Here!</p>
-          <button type="reset" onClick={resetFilters}>
-            reset filters
-          </button>
-        </>
-      ) : (
-        <>
-          {users.map((user, i) => {
-            return (
-              <UserCard
-                ref={profileCardRefs.current[i]}
-                key={user.id}
-                userCardActions={userCardActions}
-                index={i}
-                totalUsers={totalUsers}
-                userId={user.id}
-                areaOfWork={user.area_of_work}
-                email={user.public_email}
-                image={user.image}
-                firstName={user.first_name}
-                lastName={user.last_name}
-                currentLocation={user.current_location_name}
-                summary={user.summary}
-                title={user.desired_title}
-                topSkills={user.top_skills_prev}
-                additionalSkills={user.additional_skills_prev}
-                github={user.github}
-                twitter={user.twitter}
-                linkedin={user.linkedin}
-                portfolio={user.portfolio}
-              />
-            );
-          })}
+      <div>
+        {users.map((user, i) => {
+          return (
+            <UserCard
+              ref={profileCardRefs.current[i]}
+              key={user.id}
+              userCardActions={userCardActions}
+              index={i}
+              totalUsers={totalUsers}
+              userId={user.id}
+              areaOfWork={user.area_of_work}
+              email={user.public_email}
+              image={user.image}
+              firstName={user.first_name}
+              lastName={user.last_name}
+              currentLocation={user.current_location_name}
+              summary={user.summary}
+              title={user.desired_title}
+              topSkills={user.top_skills_prev}
+              additionalSkills={user.additional_skills_prev}
+              github={user.github}
+              twitter={user.twitter}
+              linkedin={user.linkedin}
+              portfolio={user.portfolio}
+            />
+          );
+        })}
+      </div>
 
-          {isIdle && usersToLoad ? (
+      <div>
+        {isIdle && usersToLoad ? (
+          <button
+            type="button"
+            onClick={loadMoreUsers}
+            onKeyDown={(e) => loadMoreFocus(e)}
+          >
+            Load More Profiles
+          </button>
+        ) : null}
+
+        {isIdle && !usersToLoad ? (
+          <div>
+            <p>No more profiles to load</p>
             <button
               type="button"
+              aria-label="no more profiles to load, back to top"
+              onClick={backToTop}
+              onKeyDown={(e) => backToTopFocus(e)}
+            >
+              Back to Top
+            </button>
+          </div>
+        ) : null}
+
+        {isBusy ? (
+          <button type="button" disabled="true">
+            Loading
+          </button>
+        ) : null}
+
+        {isError ? (
+          <div>
+            <p>Error loading profiles</p>
+            <button
+              type="button"
+              aria-label="error loading profiles, retry"
               onClick={loadMoreUsers}
               onKeyDown={(e) => loadMoreFocus(e)}
             >
-              Load More Profiles
+              Retry
             </button>
-          ) : null}
-
-          {isIdle && !usersToLoad ? (
-            <div>
-              <p>No more profiles to load</p>
-              <button
-                type="button"
-                aria-label="no more profiles to load, back to top"
-                onClick={backToTop}
-                onKeyDown={(e) => backToTopFocus(e)}
-              >
-                Back to Top
-              </button>
-            </div>
-          ) : null}
-
-          {isBusy ? (
-            <button type="button" disabled="true">
-              Loading
-            </button>
-          ) : null}
-
-          {isError ? (
-            <div>
-              <p>Error loading profiles</p>
-              <button
-                type="button"
-                aria-label="error loading profiles, retry"
-                onClick={loadMoreUsers}
-                onKeyDown={(e) => loadMoreFocus(e)}
-              >
-                Retry
-              </button>
-            </div>
-          ) : null}
-        </>
-      )}
+          </div>
+        ) : null}
+      </div>
     </Feed>
   );
 }
