@@ -90,14 +90,7 @@ function UserCards({
         Current Profiles
       </h2>
 
-      <div className="profiles-grid">
-        
-        {/* grid
-        automatic columns depending on current cards
-        single column until breakpoint of extra large screen
-        centered cards
-        centered controls with single and double columns */}
-
+      <div className="feed-grid">
         {users.map((user, i) => {
           return (
             <UserCard
@@ -126,7 +119,7 @@ function UserCards({
         })}
       </div>
 
-      <div>
+      <div className="feed-controls">
         {isIdle && usersToLoad ? (
           <button
             type="button"
@@ -176,19 +169,16 @@ function UserCards({
 }
 
 const Feed = styled.div`
-  .profiles-grid {
+  .feed-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(600px, 100%), 1fr));
     justify-items: center;
     align-items: start;
     grid-gap: 20px;
   }
 
-  .back-to-top {
-    position: fixed;
-    top: 50%;
-    right: 5%;
-    transform: translateY(-50%);
+  .feed-controls {
+    border: solid red;
   }
 `;
 
