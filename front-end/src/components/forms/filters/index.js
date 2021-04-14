@@ -11,7 +11,7 @@ function Filters({
   currentUsers,
   totalUsers,
   resetFilters,
-  resetFilterChange,
+  resetFilterToggle,
 }) {
   const [areFiltersShowing, setAreFiltersShowing] = useState(false);
 
@@ -47,7 +47,7 @@ function Filters({
       changes, this will reset all state of children.
       using fragments to bypass reacts optimization */}
       <FiltersForm showForm={areFiltersShowing}>
-        {resetFilterChange ? (
+        {resetFilterToggle ? (
           <>
             <SortingFilter updateUsers={updateUsers} />
           </>
@@ -55,7 +55,7 @@ function Filters({
           <SortingFilter updateUsers={updateUsers} />
         )}
 
-        {resetFilterChange ? (
+        {resetFilterToggle ? (
           <>
             <AreaOfWorkFilter updateUsers={updateUsers} />
           </>
@@ -66,14 +66,14 @@ function Filters({
         <fieldset>
           <legend>Filter by Locations</legend>
 
-          {resetFilterChange ? (
+          {resetFilterToggle ? (
             <>
               <CurrentLocationFilter updateUsers={updateUsers} />
             </>
           ) : (
             <CurrentLocationFilter updateUsers={updateUsers} />
           )}
-          {resetFilterChange ? (
+          {resetFilterToggle ? (
             <>
               <RelocateToFilter updateUsers={updateUsers} />
             </>

@@ -4,6 +4,7 @@ import { Helmet } from "react-helmet";
 
 import { httpClient } from "../../global/helpers/http-requests";
 import { PROFILES_STATUS } from "../../global/helpers/variables";
+import useToggle from "../../global/helpers/hooks/useToggle";
 
 import MainHeader from "../../components/header/MainHeader";
 import Filters from "../../components/forms/filters";
@@ -34,7 +35,7 @@ function ProfilesPage() {
     usersToLoad: true,
   });
 
-  const [resetFilterBool, setResetFilterBool] = useState(false);
+  const [resetToggle, setResetToggle] = useToggle();
   const [filters, setFilters] = useState({
     isWebDevChecked: false,
     isUIUXChecked: false,
@@ -168,10 +169,9 @@ function ProfilesPage() {
       sortChoice: "acending(oldest-newest)",
     });
     setCardFocusIndex(0);
-    setResetFilterBool(!resetFilterBool);
+    setResetToggle();
     setPageStatus(PROFILES_STATUS.idle);
   }
-
   return (
     <>
       <PageHeader>
@@ -181,7 +181,7 @@ function ProfilesPage() {
           currentUsers={users.users.length}
           totalUsers={users.len}
           resetFilters={resetFilters}
-          resetFilterChange={resetFilterBool}
+          resetFilterToggle={resetToggle}
         />
       </PageHeader>
 
