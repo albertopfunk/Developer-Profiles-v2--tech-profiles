@@ -31,6 +31,7 @@ function UserCards({
       return;
     }
     profileCardRefs.current[0].current.focus();
+    window.scrollTo(0, 0);
   }
 
   function backToTop() {
