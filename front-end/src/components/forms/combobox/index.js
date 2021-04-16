@@ -164,7 +164,16 @@ class Combobox extends React.Component {
   }
 
   inputFocusActions = (e) => {
-    if (this.state.comboboxStatus === COMBOBOX_STATUS.idle) return;
+    const {
+      input,
+      inputResults,
+      comboboxStatus,
+      selectedOption,
+      selectedOptionId,
+      selectedOptionIndex,
+    } = this.state;
+
+    if (comboboxStatus === COMBOBOX_STATUS.idle && !input) return;
 
     // escape
     if (e.keyCode === 27) {
@@ -175,45 +184,38 @@ class Combobox extends React.Component {
     // enter
     if (e.keyCode === 13) {
       e.preventDefault();
-      if (!this.state.selectedOptionId) {
+      if (!selectedOptionId) {
         return;
       }
 
-      const { name, id } = this.state.selectedOption;
+      const { name, id } = selectedOption;
       this.chooseOption(name, id);
     }
 
     // up arrow
     if (e.keyCode === 38) {
       e.preventDefault();
-      if (this.state.comboboxStatus === COMBOBOX_STATUS.error) {
-        this.onInputChange(this.state.input);
+      if (comboboxStatus === COMBOBOX_STATUS.error) {
+        this.onInputChange(input);
         return;
       }
 
-      if (this.state.comboboxStatus === COMBOBOX_STATUS.active) {
+      if (comboboxStatus === COMBOBOX_STATUS.active) {
         // focus on last option from input or first option
-        if (
-          this.state.selectedOptionIndex === null ||
-          this.state.selectedOptionIndex === 0
-        ) {
+        if (selectedOptionIndex === null || selectedOptionIndex === 0) {
           this.setState({
-            selectedOption: this.state.inputResults[
-              this.state.inputResults.length - 1
-            ],
-            selectedOptionId: `results-${this.state.inputResults.length - 1}`,
-            selectedOptionIndex: this.state.inputResults.length - 1,
+            selectedOption: inputResults[inputResults.length - 1],
+            selectedOptionId: `results-${inputResults.length - 1}`,
+            selectedOptionIndex: inputResults.length - 1,
           });
           return;
         }
 
         // focus on previous
         this.setState({
-          selectedOption: this.state.inputResults[
-            this.state.selectedOptionIndex - 1
-          ],
-          selectedOptionId: `results-${this.state.selectedOptionIndex - 1}`,
-          selectedOptionIndex: this.state.selectedOptionIndex - 1,
+          selectedOption: inputResults[selectedOptionIndex - 1],
+          selectedOptionId: `results-${selectedOptionIndex - 1}`,
+          selectedOptionIndex: selectedOptionIndex - 1,
         });
       }
     }
@@ -221,19 +223,19 @@ class Combobox extends React.Component {
     // down arrow
     if (e.keyCode === 40) {
       e.preventDefault();
-      if (this.state.comboboxStatus === COMBOBOX_STATUS.error) {
-        this.onInputChange(this.state.input);
+      if (comboboxStatus === COMBOBOX_STATUS.error) {
+        this.onInputChange(input);
         return;
       }
 
-      if (this.state.comboboxStatus === COMBOBOX_STATUS.active) {
+      if (comboboxStatus === COMBOBOX_STATUS.active) {
         // focus on first option from input or last option
         if (
-          this.state.selectedOptionIndex === null ||
-          this.state.selectedOptionIndex === this.state.inputResults.length - 1
+          selectedOptionIndex === null ||
+          selectedOptionIndex === inputResults.length - 1
         ) {
           this.setState({
-            selectedOption: this.state.inputResults[0],
+            selectedOption: inputResults[0],
             selectedOptionId: `results-${0}`,
             selectedOptionIndex: 0,
           });
@@ -242,11 +244,9 @@ class Combobox extends React.Component {
 
         // focus on next
         this.setState({
-          selectedOption: this.state.inputResults[
-            this.state.selectedOptionIndex + 1
-          ],
-          selectedOptionId: `results-${this.state.selectedOptionIndex + 1}`,
-          selectedOptionIndex: this.state.selectedOptionIndex + 1,
+          selectedOption: inputResults[selectedOptionIndex + 1],
+          selectedOptionId: `results-${selectedOptionIndex + 1}`,
+          selectedOptionIndex: selectedOptionIndex + 1,
         });
       }
     }
