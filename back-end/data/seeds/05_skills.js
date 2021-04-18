@@ -44,7 +44,6 @@ exports.seed = function (knex, Promise) {
           { skill: "Security" },
           { skill: "Web Security" },
           { skill: "Cloud Security" },
-          { skill: "Systems Design" },
           { skill: "Web Development" },
           { skill: "React Native" },
           { skill: "Swift" },
