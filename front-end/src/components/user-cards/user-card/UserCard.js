@@ -61,7 +61,7 @@ const UserCard = React.forwardRef((props, articleRef) => {
 
     const [res, err] = await httpClient(
       "GET",
-      `/users/get-extrs/${props.userId}`
+      `/users/get-extras/${props.userId}`
     );
     clearTimeout(loadingTimeout);
 
