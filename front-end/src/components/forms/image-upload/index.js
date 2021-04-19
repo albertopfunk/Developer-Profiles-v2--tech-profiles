@@ -1,6 +1,5 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
 import { httpClient } from "../../../global/helpers/http-requests";
 import { FORM_STATUS } from "../../../global/helpers/variables";
 
@@ -53,18 +52,11 @@ function ImageUploadForm({
   removeImageInput,
   removeUserImage,
 }) {
-  const { setPreviewImg } = useContext(ProfileContext);
   const [imageStatus, setImageStatus] = useState(FORM_STATUS.idle);
 
   const imageInputRef = React.createRef();
   const removeImageInputRef = React.createRef();
   let focusOnImageInputRef = useRef();
-
-  useEffect(() => {
-    return () => {
-      setPreviewImg({ image: "", id: "" });
-    };
-  }, [setPreviewImg]);
 
   useEffect(() => {
     if (!focusOnImageInputRef.current) {
@@ -104,8 +96,7 @@ function ImageUploadForm({
     }
 
     setImageStatus(FORM_STATUS.success);
-    setPreviewImg({ ...res.data });
-    setImageInput({ ...res.data });
+    setImageInput(res.data.image);
   }
 
   function imageInputFocusAction(e) {
@@ -119,11 +110,7 @@ function ImageUploadForm({
 
   function removeImage() {
     setImageStatus(FORM_STATUS.idle);
-    setPreviewImg({ image: "", id: "" });
-    removeImageInput({
-      image: "",
-      id: "",
-    });
+    removeImageInput("");
   }
 
   function setUserImageToRemove() {
