@@ -70,7 +70,7 @@ server.post(
         }
         res
           .status(200)
-          .json({ image: result.secure_url, id: result.public_id });
+          .json({ image: result.secure_url });
       }
     );
   }
@@ -102,7 +102,7 @@ server.post("/upload-main-image", (req, res) => {
         res.status(500).json({ message: "Error uploading image" });
         return;
       }
-      res.status(200).json({ image: result.secure_url, id: result.public_id });
+      res.status(200).json({ image: result.secure_url });
     }
   );
 });
