@@ -1,3 +1,12 @@
+exports.seedAvatarUrls = [
+  "https://res.cloudinary.com/dy5hgr3ht/image/upload/v1618796810/tech-pros-v1-avatars/blue-1.svg",
+  "https://res.cloudinary.com/dy5hgr3ht/image/upload/v1618796810/tech-pros-v1-avatars/redblue-1.svg",
+  "https://res.cloudinary.com/dy5hgr3ht/image/upload/v1618796810/tech-pros-v1-avatars/whitegreen-1.svg",
+  "https://res.cloudinary.com/dy5hgr3ht/image/upload/v1618796810/tech-pros-v1-avatars/greenblack-1.svg",
+  "https://res.cloudinary.com/dy5hgr3ht/image/upload/v1618796810/tech-pros-v1-avatars/white-1.svg",
+  "https://res.cloudinary.com/dy5hgr3ht/image/upload/v1618796810/tech-pros-v1-avatars/greenwhite-1.svg"
+];
+
 exports.seedLocations = [
   { name: "Los Angeles, CA, USA", lat: 34.052235, lon: -118.243683 },
   { name: "Calabasas, CA, USA", lat: 34.138332, lon: -118.660835 },

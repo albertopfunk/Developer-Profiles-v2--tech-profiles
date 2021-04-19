@@ -6,8 +6,8 @@ exports.up = function (knex, Promise) {
     table.string("public_email");
     table.string("first_name");
     table.string("last_name");
-    table.string("image");
-    table.string("image_id");
+    table.string("profile_image");
+    table.string("avatar_image");
     table.string("desired_title");
     table.string("area_of_work");
     table.string("current_location_name");

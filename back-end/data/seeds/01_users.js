@@ -5,11 +5,17 @@ const {
   seedSkills,
   seedUserTopSkills,
   seedUserAdditionalSkills,
+  seedAvatarUrls,
 } = require("../seedData");
 
 // eslint-disable-next-line
 exports.seed = function (knex, Promise) {
   const userArr = [];
+
+  function randomAvatarImage() {
+    let randomAvatar = Math.floor(Math.random() * seedAvatarUrls.length);
+    return seedAvatarUrls[randomAvatar]
+  }
 
   function randomAreaOfWorkValue() {
     let filterOptions = ["Development", "iOS", "Android", "Design"];
@@ -63,6 +69,7 @@ exports.seed = function (knex, Promise) {
       email: `test_email_${i}@gmail.com`,
       first_name: faker.name.firstName(),
       last_name: faker.name.lastName(),
+      avatar_image: randomAvatarImage(),
       desired_title: randomTitleValue(),
       area_of_work: randomAreaOfWorkValue(),
       current_location_name: userLocation.name,
