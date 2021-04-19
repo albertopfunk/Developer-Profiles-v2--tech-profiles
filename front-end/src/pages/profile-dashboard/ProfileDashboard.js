@@ -39,7 +39,8 @@ import Announcer from "../../global/helpers/announcer";
 function ProfileDashboard() {
   const [user, setUser] = useState(null);
   const [loadingUser, setLoadingUser] = useState(true);
-  const [previewImg, setPreviewImg] = useState({ image: "", id: "" });
+  const [previewImg, setPreviewImg] = useState("");
+  const [avatarImg, setAvatarImg] = useState("");
   const [stripePromise] = useState(() =>
     loadStripe(process.env.REACT_APP_STRIPE)
   );
@@ -184,6 +185,7 @@ function ProfileDashboard() {
                   editProfile,
                   addUserExtras,
                   setPreviewImg,
+                  setAvatarImg
                 }}
               >
                 <Switch>
@@ -229,7 +231,8 @@ function ProfileDashboard() {
             <section aria-labelledby="profile-card-heading">
               <h2 id="profile-card-heading">Current Profile Card Preview</h2>
               <UserCard
-                previewImg={previewImg.image}
+                previewImg={previewImg}
+                avatarImg={avatarImg || user.avatar_img}
                 userExtras={{
                   locations: user.locations,
                   topSkills: user.topSkills,
@@ -243,7 +246,7 @@ function ProfileDashboard() {
                 userId={user.id}
                 areaOfWork={user.area_of_work}
                 email={user.public_email}
-                image={user.image}
+                image={user.profile_image}
                 firstName={user.first_name}
                 lastName={user.last_name}
                 currentLocation={user.current_location_name}
