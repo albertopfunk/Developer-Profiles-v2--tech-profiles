@@ -2,17 +2,166 @@ import React, { useState, useContext, useEffect } from "react";
 import { Helmet } from "react-helmet";
 import styled from "styled-components";
 
-import ImageUploadForm from "../../../components/forms/image-upload";
+import ImageUploadForm from "../../../components/forms/images/ImageUpload";
+/*
+
+IMAGE_STATES
+
+
+Starting
+status - idle
+
+new users will start with
+profile_img: null
+avatar_img: null
+userImage default SVG should show
+previewImg, avatarImg = ""
+
+
+
+
+status - active
+
+upload image or select avatar
+any update on this will need to be submitted to be saved
+
+upload image
+select avatar disabled
+uploads preview image
+preview image shows
+previewImg=previewImg
+
+select avatar
+upload image still available
+only select avatar will become disabled automatically when user has a profile_image or preview image
+upload image should stay available for convinience
+avatarImg=avatarImg
+
+
+
+
+
+status - success
+
+image uploaded and saved
+previewImg, avatarImg = ""
+profile_image should show
+
+avatar selected and saved
+previewImg, avatarImg = ""
+avatar_image should show
+
+cancel
+go back to starting
+
+
+
+
+
+
+
+status - idle
+
+profile_img: img
+or
+avatar_img: img
+
+previewImg, avatarImg = ""
+
+
+
+
+
+
+
+
+status - active
+
+upload image or select avatar
+any update on this will need to be submitted to be saved
+
+
+
+hasAvatarImage
+
+select avatar
+avatarImg=avatarImg
+first option should say 'default avatar'
+this will set avatarImg="" and avatar_img="" on submit, leaving default SVG to show
+user can select that or another avatar to save
+
+upload image
+previewImg=previewImg
+previewImg should show since it is priority above avatarImg
+user can remove previewImg -- previewImg="" and avatarImg should show again
+
+
+
+hasProfileImage
+
+select avatar
+avatarImg=avatarImg
+avatar should show
+profile image will be set to remove on submit to be replc by avatar
+
+upload image
+previewImg=previewImg
+preview image should show
+user can remove previewImg -- previewImg="" and profile image should show again
+
+
+
+
+
++
+
+preview image functionality should be moved up
+image upload should only worry about uploading and removing images
+
+
+
+
+
+
+
+
+
+
+------------------------------
+
+grid scroll container
+first item - image upload
+other items - field set with checkboxes(similar to area of work)
+below that can be the image preview
+if user uploads image then preview image shows
+if user removes preview image and checks avatar then avatar will show
+if user has avatar saved in db then that avatar will be automatically selected
+if user has profile image then it will show if no preview image selected
+if remove user image checkbox is checked then user can choose an avatar to replace
+if user unchecks remove on submit then avatars will be disabled
+
+move preview image UI up
+maybe have a imageUpload and imagePreview component like the kent c dodds article
+
+
+
+
+
+
+*/
 
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
 import { httpClient } from "../../../global/helpers/http-requests";
 import { validateInput } from "../../../global/helpers/validation";
 import { FORM_STATUS } from "../../../global/helpers/variables";
 import Announcer from "../../../global/helpers/announcer";
+import ImagePreview from "../../../components/forms/images/ImagePreview";
 
 let formSuccessWait;
 function PersonalInfo() {
-  const { user, editProfile } = useContext(ProfileContext);
+  const { user, editProfile, setPreviewImg, setAvatarImg } = useContext(
+    ProfileContext
+  );
   const [formStatus, setFormStatus] = useState(FORM_STATUS.idle);
   const [formFocusStatus, setFormFocusStatus] = useState("");
   const [hasSubmitError, setHasSubmitError] = useState(null);
@@ -29,7 +178,6 @@ function PersonalInfo() {
   });
   const [previewImgInput, setPreviewImgInput] = useState({
     image: "",
-    id: "",
     inputChange: false,
     removeUserImage: false,
   });
@@ -51,6 +199,18 @@ function PersonalInfo() {
     if (formStatus === FORM_STATUS.error && errorSummaryRef.current) {
       errorSummaryRef.current.focus();
     }
+  }, [formStatus]);
+
+  useEffect(() => {
+    if (formStatus === FORM_STATUS.idle) {
+      setPreviewImg("");
+      setAvatarImg("");
+    }
+
+    return () => {
+      setPreviewImg("");
+      setAvatarImg("");
+    };
   }, [formStatus]);
 
   useEffect(() => {
@@ -105,7 +265,6 @@ function PersonalInfo() {
     });
     setPreviewImgInput({
       image: "",
-      id: "",
       inputChange: false,
       removeUserImage: false,
     });
@@ -194,17 +353,19 @@ function PersonalInfo() {
     }
   }
 
-  function setImageInput(data) {
+  function setImageInput(image) {
+    setPreviewImg(image);
     setPreviewImgInput({
-      ...data,
+      image,
       inputChange: true,
       removeUserImage: false,
     });
   }
 
-  function removeImageInput(data) {
+  function removeImageInput(image) {
+    setPreviewImg("");
     setPreviewImgInput({
-      ...data,
+      image,
       inputChange: false,
       removeUserImage: false,
     });
@@ -511,12 +672,90 @@ function PersonalInfo() {
             ) : null}
           </InputContainer>
 
-          <ImageUploadForm
+          <div>
+            <ImageUploadForm userId={user.id} setImageInput={setImageInput} />
+
+            <fieldset>
+              <legend>Choose an avatar image</legend>
+
+              <div>
+                <label htmlFor="blue-1">
+                  <input
+                    // ref={developmentRef}
+                    type="checkbox"
+                    name="profile-avatar"
+                    id="blue-1"
+                    // onChange={toggleAreaOfWorkCheckbox}
+                  />
+                  Blue female avatar, medium skin tone, pink hair
+                </label>
+              </div>
+              <div>
+                <label htmlFor="redblue-1">
+                  <input
+                    // ref={developmentRef}
+                    type="checkbox"
+                    name="profile-avatar"
+                    id="redblue-1"
+                    // onChange={toggleAreaOfWorkCheckbox}
+                  />
+                  Red and blue female avatar, light skin tone, red hair
+                </label>
+              </div>
+              <div>
+                <label htmlFor="whitegreen-1">
+                  <input
+                    // ref={developmentRef}
+                    type="checkbox"
+                    name="profile-avatar"
+                    id="whitegreen-1"
+                    // onChange={toggleAreaOfWorkCheckbox}
+                  />
+                  White and green male avatar, dark skin tone, black hair
+                </label>
+              </div>
+              <div>
+                <label htmlFor="greenblack-1">
+                  <input
+                    // ref={developmentRef}
+                    type="checkbox"
+                    name="profile-avatar"
+                    id="greenblack-1"
+                    // onChange={toggleAreaOfWorkCheckbox}
+                  />
+                  green and black female avatar, medium skin tone, black hair
+                </label>
+              </div>
+              <div>
+                <label htmlFor="white-1">
+                  <input
+                    // ref={developmentRef}
+                    type="checkbox"
+                    name="profile-avatar"
+                    id="white-1"
+                    // onChange={toggleAreaOfWorkCheckbox}
+                  />
+                  White male avatar, light skin tone, blue hair
+                </label>
+              </div>
+              <div>
+                <label htmlFor="greenwhite-1">
+                  <input
+                    // ref={developmentRef}
+                    type="checkbox"
+                    name="profile-avatar"
+                    id="greenwhite-1"
+                    // onChange={toggleAreaOfWorkCheckbox}
+                  />
+                  Green and white male avatar, light skin tone, black hair
+                </label>
+              </div>
+            </fieldset>
+          </div>
+          <ImagePreview
             previewImage={previewImgInput.image}
-            userImage={user.image}
-            userId={user.id}
-            setImageInput={setImageInput}
-            removeImageInput={removeImageInput}
+            removePreviewImage={removeImageInput}
+            userImage={user.profile_image || user.avatar_image}
             removeUserImage={removeUserImage}
           />
 
