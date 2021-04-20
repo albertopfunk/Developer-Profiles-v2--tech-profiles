@@ -43,7 +43,7 @@ function ImageUploadForm({ userId, setImageInput }) {
   return (
     <div>
       <InputContainer>
-        <label htmlFor="image-upload">Profile Pic:</label>
+        <label htmlFor="image-upload">Upload an image:</label>
         <input
           type="file"
           id="image-upload"
