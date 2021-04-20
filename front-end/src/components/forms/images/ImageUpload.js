@@ -1,76 +1,11 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { httpClient } from "../../../global/helpers/http-requests";
 import { FORM_STATUS } from "../../../global/helpers/variables";
 
-/*
-
-FIRST TIME UPLOAD
-
-user uploads preview image
-  - save preview img to parent state and context(uploadImage())
-  - uploads to cloudinary w name+unique chars(uploadImage())
-
-  user uploads preview image again
-    - save preview img to parent state and context(uploadImage())
-    - delete old preview image(useEffect cleanup)
-    - repeat
-
-  user clicks cancel on form or user leaves page
-    - delete current preview image(useeffect unmount)
-    - remove state and context(useeffect for context unmount)
-
-  user saves information
-    - save info db
-    - remove context(useeffect for context)
-
-
-
-UPLOAD WITH IMAGE SAVED DB
-
-user uploads preview image 
-  - save preview id to state and context
-
-  user uploads preview image again
-    - same
-  
-  user clicks cancel on form or user leaves page
-    - same
-  
-  user saves information
-    - delete current db user image
-    - save new info to db
-    - no need to remove context since they will be the same
-
-*/
-
-function ImageUploadForm({
-
-  previewImage,
-  userImage,
-
-
-  userId,
-  setImageInput,
-
-
-  removeImageInput,
-  removeUserImage,
-}) {
+function ImageUploadForm({ userId,setImageInput }) {
   const [imageStatus, setImageStatus] = useState(FORM_STATUS.idle);
-
   const imageInputRef = React.createRef();
-  const removeImageInputRef = React.createRef();
-  let focusOnImageInputRef = useRef();
-
-  useEffect(() => {
-    if (!focusOnImageInputRef.current) {
-      return;
-    }
-
-    focusOnImageInputRef.current = false;
-    imageInputRef.current.focus();
-  });
 
   async function uploadImage(e) {
     if (e.target.files.length === 0) {
@@ -100,30 +35,9 @@ function ImageUploadForm({
       return;
     }
 
+    // timeout then idle
     setImageStatus(FORM_STATUS.success);
     setImageInput(res.data.image);
-  }
-
-  function imageInputFocusAction(e) {
-    if (e.keyCode !== 13 && e.keyCode !== 32) {
-      return;
-    }
-
-    focusOnImageInputRef.current = true;
-    removeImage();
-  }
-
-  function removeImage() {
-    setImageStatus(FORM_STATUS.idle);
-    removeImageInput("");
-  }
-
-  function setUserImageToRemove() {
-    if (removeImageInputRef.current && removeImageInputRef.current.checked) {
-      removeUserImage(true);
-    } else {
-      removeUserImage(false);
-    }
   }
 
   return (
@@ -159,41 +73,6 @@ function ImageUploadForm({
           </span>
         ) : null}
       </InputContainer>
-
-      {userImage || previewImage ? (
-        <ImageContainer>
-          <div className="img-action">
-            {previewImage ? (
-              <button
-                type="button"
-                aria-label="remove current preview pic"
-                onClick={removeImage}
-                onKeyDown={imageInputFocusAction}
-              >
-                X
-              </button>
-            ) : (
-              <input
-                type="checkbox"
-                id="remove-image"
-                name="remove-image"
-                aria-label="remove saved pic on submit"
-                ref={removeImageInputRef}
-                onChange={setUserImageToRemove}
-              />
-            )}
-          </div>
-
-          <img
-            src={previewImage || userImage}
-            alt={previewImage ? "current preview pic" : "saved pic"}
-            height="200px"
-            width="200px"
-          />
-        </ImageContainer>
-      ) : null}
-
-      
     </div>
   );
 }
@@ -215,16 +94,5 @@ const InputContainer = styled.div`
   }
 `;
 
-const ImageContainer = styled.div`
-  height: 200px;
-  width: 200px;
-  .img-action {
-    position: absolute;
-    top: 5%;
-    right: 5%;
-    border: solid;
-    z-index: 5;
-  }
-`;
 
 export default ImageUploadForm;
