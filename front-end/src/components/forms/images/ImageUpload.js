@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { httpClient } from "../../../global/helpers/http-requests";
 import { FORM_STATUS } from "../../../global/helpers/variables";
 
-function ImageUploadForm({ userId,setImageInput }) {
+function ImageUploadForm({ userId, setImageInput }) {
   const [imageStatus, setImageStatus] = useState(FORM_STATUS.idle);
   const imageInputRef = React.createRef();
 
@@ -93,6 +93,5 @@ const InputContainer = styled.div`
     font-size: 0.7rem;
   }
 `;
-
 
 export default ImageUploadForm;

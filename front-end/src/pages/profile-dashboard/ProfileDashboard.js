@@ -185,7 +185,7 @@ function ProfileDashboard() {
                   editProfile,
                   addUserExtras,
                   setPreviewImg,
-                  setAvatarImg
+                  setAvatarImg,
                 }}
               >
                 <Switch>
