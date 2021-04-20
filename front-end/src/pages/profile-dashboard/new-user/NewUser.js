@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
 import styled from "styled-components";
 
-import ImageUploadForm from "../../../components/forms/image-upload";
+import ImageUploadForm from "../../../components/forms/images/ImageUpload";
 import CheckoutContainer from "../../../components/forms/billing";
 
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";

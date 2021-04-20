@@ -45,10 +45,15 @@ user uploads preview image
 */
 
 function ImageUploadForm({
+
   previewImage,
   userImage,
+
+
   userId,
   setImageInput,
+
+
   removeImageInput,
   removeUserImage,
 }) {
@@ -154,6 +159,7 @@ function ImageUploadForm({
           </span>
         ) : null}
       </InputContainer>
+
       {userImage || previewImage ? (
         <ImageContainer>
           <div className="img-action">
@@ -186,6 +192,8 @@ function ImageUploadForm({
           />
         </ImageContainer>
       ) : null}
+
+      
     </div>
   );
 }
