@@ -672,85 +672,93 @@ function PersonalInfo() {
             ) : null}
           </InputContainer>
 
-          <div>
-            <ImageUploadForm userId={user.id} setImageInput={setImageInput} />
+          <div
+            style={{
+              padding: "15px",
+              borderRadius: "10px",
+              boxShadow: "0 4px 6px 0 hsla(0, 0%, 0%, 0.2)",
+            }}
+          >
+            <div style={{ display: "flex", overflowX: "auto" }}>
+              <ImageUploadForm userId={user.id} setImageInput={setImageInput} />
 
-            <fieldset>
-              <legend>Choose an avatar image</legend>
+              <fieldset style={{ display: "flex", gap: "20px" }}>
+                <legend>Choose an avatar image</legend>
 
-              <div>
-                <label htmlFor="blue-1">
-                  <input
-                    // ref={developmentRef}
-                    type="checkbox"
-                    name="profile-avatar"
-                    id="blue-1"
-                    // onChange={toggleAreaOfWorkCheckbox}
-                  />
-                  Blue female avatar, medium skin tone, pink hair
-                </label>
-              </div>
-              <div>
-                <label htmlFor="redblue-1">
-                  <input
-                    // ref={developmentRef}
-                    type="checkbox"
-                    name="profile-avatar"
-                    id="redblue-1"
-                    // onChange={toggleAreaOfWorkCheckbox}
-                  />
-                  Red and blue female avatar, light skin tone, red hair
-                </label>
-              </div>
-              <div>
-                <label htmlFor="whitegreen-1">
-                  <input
-                    // ref={developmentRef}
-                    type="checkbox"
-                    name="profile-avatar"
-                    id="whitegreen-1"
-                    // onChange={toggleAreaOfWorkCheckbox}
-                  />
-                  White and green male avatar, dark skin tone, black hair
-                </label>
-              </div>
-              <div>
-                <label htmlFor="greenblack-1">
-                  <input
-                    // ref={developmentRef}
-                    type="checkbox"
-                    name="profile-avatar"
-                    id="greenblack-1"
-                    // onChange={toggleAreaOfWorkCheckbox}
-                  />
-                  green and black female avatar, medium skin tone, black hair
-                </label>
-              </div>
-              <div>
-                <label htmlFor="white-1">
-                  <input
-                    // ref={developmentRef}
-                    type="checkbox"
-                    name="profile-avatar"
-                    id="white-1"
-                    // onChange={toggleAreaOfWorkCheckbox}
-                  />
-                  White male avatar, light skin tone, blue hair
-                </label>
-              </div>
-              <div>
-                <label htmlFor="greenwhite-1">
-                  <input
-                    // ref={developmentRef}
-                    type="checkbox"
-                    name="profile-avatar"
-                    id="greenwhite-1"
-                    // onChange={toggleAreaOfWorkCheckbox}
-                  />
-                  Green and white male avatar, light skin tone, black hair
-                </label>
-              </div>
-            </fieldset>
+                <div style={{ height: "auto", width: "100px" }}>
+                  <label htmlFor="blue-1">
+                    <input
+                      // ref={developmentRef}
+                      type="checkbox"
+                      name="profile-avatar"
+                      id="blue-1"
+                      // onChange={toggleAreaOfWorkCheckbox}
+                    />
+                    Blue female avatar, medium skin tone, pink hair
+                  </label>
+                </div>
+                <div style={{ height: "auto", width: "100px" }}>
+                  <label htmlFor="redblue-1">
+                    <input
+                      // ref={developmentRef}
+                      type="checkbox"
+                      name="profile-avatar"
+                      id="redblue-1"
+                      // onChange={toggleAreaOfWorkCheckbox}
+                    />
+                    Red and blue female avatar, light skin tone, red hair
+                  </label>
+                </div>
+                <div style={{ height: "auto", width: "100px" }}>
+                  <label htmlFor="whitegreen-1">
+                    <input
+                      // ref={developmentRef}
+                      type="checkbox"
+                      name="profile-avatar"
+                      id="whitegreen-1"
+                      // onChange={toggleAreaOfWorkCheckbox}
+                    />
+                    White and green male avatar, dark skin tone, black hair
+                  </label>
+                </div>
+                <div style={{ height: "auto", width: "100px" }}>
+                  <label htmlFor="greenblack-1">
+                    <input
+                      // ref={developmentRef}
+                      type="checkbox"
+                      name="profile-avatar"
+                      id="greenblack-1"
+                      // onChange={toggleAreaOfWorkCheckbox}
+                    />
+                    green and black female avatar, medium skin tone, black hair
+                  </label>
+                </div>
+                <div style={{ height: "auto", width: "100px" }}>
+                  <label htmlFor="white-1">
+                    <input
+                      // ref={developmentRef}
+                      type="checkbox"
+                      name="profile-avatar"
+                      id="white-1"
+                      // onChange={toggleAreaOfWorkCheckbox}
+                    />
+                    White male avatar, light skin tone, blue hair
+                  </label>
+                </div>
+                <div style={{ height: "auto", width: "100px" }}>
+                  <label htmlFor="greenwhite-1">
+                    <input
+                      // ref={developmentRef}
+                      type="checkbox"
+                      name="profile-avatar"
+                      id="greenwhite-1"
+                      // onChange={toggleAreaOfWorkCheckbox}
+                    />
+                    Green and white male avatar, light skin tone, black hair
+                  </label>
+                </div>
+              </fieldset>
+            </div>
           </div>
           <ImagePreview
             previewImage={previewImgInput.image}
