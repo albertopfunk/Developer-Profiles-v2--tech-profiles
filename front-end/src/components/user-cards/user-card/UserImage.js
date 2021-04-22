@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ReactComponent as DefaultAvatar } from "./defaultAvatar.svg";
+import { ReactComponent as DefaultAvatar } from "./default-avatar.svg";
 
 // in order
 // render previewImg/previewAvatar if avail
