@@ -1,34 +1,58 @@
 import React, { useState } from "react";
 
-// Test Ideas
-// renders image or default avatar image
+// in order
+// render previewImg/previewAvatar if avail
+// render userImg if avail
+// render avatarImg if avail
+// render default SVG if none avail or if imgErr
 
-function UserImage({ image, previewImg }) {
+function UserImage({ previewImage, userImage, avatarImage }) {
   const [imageErr, setImageErr] = useState(false);
 
   function handleBrokenLink() {
     setImageErr(true);
   }
 
+  if (previewImage && !imageErr) {
+    return (
+      <div className="image">
+        <img
+          src={previewImage}
+          onError={handleBrokenLink}
+          alt="current pic preview"
+        />
+      </div>
+    )
+  }
+
+  if (userImage && !imageErr) {
+    return (
+      <div className="image">
+        <img
+          src={userImage}
+          onError={handleBrokenLink}
+          alt="saved profile pic"
+        />
+      </div>
+    )
+  }
+
+  if (avatarImage && !imageErr) {
+    return (
+      <div className="image">
+        <img
+          src={avatarImage}
+          onError={handleBrokenLink}
+          alt="saved avatar pic"
+        />
+      </div>
+    )
+  }
+
   // decorative
   return (
     <div className="image">
-      {/* add figure/figcation to all images */}
-
-      {(previewImg || image) && !imageErr ? (
-        <img
-          style={{
-            width: "200px",
-            height: "200px",
-            borderRadius: "50%",
-          }}
-          src={previewImg || image}
-          onError={handleBrokenLink}
-          alt={previewImg ? "current profile pic preview" : "profile pic"}
-        />
-      ) : (
-        <p>Avatar Image</p>
-      )}
+      svg
     </div>
   );
 }
