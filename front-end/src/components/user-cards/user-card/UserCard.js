@@ -173,7 +173,11 @@ const UserCard = React.forwardRef((props, articleRef) => {
       </div>
 
       <UserInfo>
-        <UserImage previewImg={props.previewImg} image={props.image} />
+        <UserImage
+          previewImage={props.previewImage}
+          userImage={props.userImage}
+          avatarImage={props.avatarImage}
+        />
 
         <UserBasics
           userId={props.userId}
