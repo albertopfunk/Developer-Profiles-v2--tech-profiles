@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { ReactComponent as DefaultAvatar } from "./defaultAvatar.svg";
 
 // in order
 // render previewImg/previewAvatar if avail
@@ -49,10 +50,9 @@ function UserImage({ previewImage, userImage, avatarImage }) {
     )
   }
 
-  // decorative
   return (
     <div className="image">
-      svg
+      <DefaultAvatar />
     </div>
   );
 }
