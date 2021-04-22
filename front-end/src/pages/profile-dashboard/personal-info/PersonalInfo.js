@@ -176,11 +176,14 @@ function PersonalInfo() {
     inputChange: false,
     inputStatus: FORM_STATUS.idle,
   });
+
   const [previewImgInput, setPreviewImgInput] = useState({
-    image: "",
+    imageUpload: "",
+    imageAvatar: "",
     inputChange: false,
     removeUserImage: false,
   });
+
   const [areaOfWork, setAreaOfWork] = useState({
     inputValue: "",
     inputChange: false,
@@ -263,11 +266,14 @@ function PersonalInfo() {
       inputChange: false,
       inputStatus: FORM_STATUS.idle,
     });
+
     setPreviewImgInput({
-      image: "",
+      imageUpload: "",
+      imageAvatar: "",
       inputChange: false,
       removeUserImage: false,
     });
+
     setAreaOfWork({
       inputValue: "",
       inputChange: false,
@@ -353,19 +359,31 @@ function PersonalInfo() {
     }
   }
 
+  function setAvatarImage(value) {
+    const urlStart =
+      "https://res.cloudinary.com/dy5hgr3ht/image/upload/v1618796810/tech-pros-v1-avatars/";
+    setAvatarImg(`${urlStart}${value}.svg`);
+    setPreviewImgInput({
+      ...previewImgInput,
+      imageAvatar: `${urlStart}${value}.svg`,
+    });
+  }
+
   function setImageInput(image) {
     setPreviewImg(image);
     setPreviewImgInput({
-      image,
+      ...previewImgInput,
+      imageUpload: image,
       inputChange: true,
       removeUserImage: false,
     });
   }
 
-  function removeImageInput(image) {
+  function removeImageInput() {
     setPreviewImg("");
     setPreviewImgInput({
-      image,
+      ...previewImgInput,
+      imageUpload: "",
       inputChange: false,
       removeUserImage: false,
     });
@@ -474,11 +492,11 @@ function PersonalInfo() {
 
     if (previewImgInput.inputChange) {
       if (previewImgInput.removeUserImage) {
-        inputs.image = "";
-        inputs.image_id = "";
+        inputs.profile_image = "";
+        inputs.avatar_image = previewImgInput.imageAvatar;
       } else {
         const [res, err] = await httpClient("POST", `/api/upload-main-image`, {
-          imageUrl: previewImgInput.image,
+          imageUrl: previewImgInput.imageUpload,
           id: user.id,
         });
 
@@ -489,8 +507,8 @@ function PersonalInfo() {
           return;
         }
 
-        inputs.image = res.data.image;
-        inputs.image_id = res.data.id;
+        inputs.profile_image = res.data.image;
+        inputs.avatar_image = previewImgInput.imageAvatar;
       }
     }
 
@@ -535,10 +553,13 @@ function PersonalInfo() {
             <li>First Name: {user.first_name || "None Set"}</li>
             <li>Last Name: {user.last_name || "None Set"}</li>
             <li>
-              {user.image ? (
+              {user.profile_image || user.avatar_image ? (
                 <>
                   <p>Profile Pic:</p>
-                  <img src={user.image} alt="profile pic" />
+                  <img
+                    src={user.profile_image || user.avatar_image}
+                    alt="saved pic"
+                  />
                 </>
               ) : (
                 "Profile Pic: None Set"
@@ -672,110 +693,126 @@ function PersonalInfo() {
             ) : null}
           </InputContainer>
 
-          {/* image box main container */}
-          <div
-            style={{
-              padding: "15px",
-              borderRadius: "10px",
-              boxShadow: "0 4px 6px 0 hsla(0, 0%, 0%, 0.2)",
-            }}
-          >
-            {/* image box grid container */}
-            <div
-              style={{
-                display: "grid",
-                overflowX: "auto",
-                gridTemplateColumns: "1fr auto",
-              }}
-            >
-              {/* image upload container */}
-              <div>
+          <ImageBoxContainer>
+            <div className="grid-container">
+              <div className="image-upload-container">
                 <ImageUploadForm
                   userId={user.id}
                   setImageInput={setImageInput}
                 />
                 <ImagePreview
-                  previewImage={previewImgInput.image}
+                  previewImage={
+                    previewImgInput.imageUpload || previewImgInput.imageAvatar
+                  }
                   removePreviewImage={removeImageInput}
                   userImage={user.profile_image || user.avatar_image}
                   removeUserImage={removeUserImage}
                 />
               </div>
 
-              <fieldset style={{ border: "none" }}>
+              <fieldset
+                disabled={
+                  previewImgInput.imageUpload ||
+                  !previewImgInput.removeUserImage
+                }
+              >
                 <legend>Choose an avatar image:</legend>
 
                 {/* avatars main container */}
-                <div style={{ display: "flex", gap: "20px" }}>
-                  <div style={{ height: "auto", width: "100px" }}>
+                <div className="flex-container">
+                  <div className="flex-item">
                     <label htmlFor="blue-1">
                       <input
-                        // ref={developmentRef}
-                        type="checkbox"
+                        type="radio"
                         name="profile-avatar"
                         id="blue-1"
-                        // onChange={toggleAreaOfWorkCheckbox}
+                        value="blue-1"
+                        defaultChecked={
+                          user.avatar_image ===
+                          "https://res.cloudinary.com/dy5hgr3ht/image/upload/v1618796810/tech-pros-v1-avatars/blue-1.svg"
+                        }
+                        onClick={(e) => setAvatarImage(e.target.value)}
                       />
                       Blue female avatar, medium skin tone, pink hair
                     </label>
                   </div>
-                  <div style={{ height: "auto", width: "100px" }}>
+                  <div className="flex-item">
                     <label htmlFor="redblue-1">
                       <input
-                        // ref={developmentRef}
-                        type="checkbox"
+                        type="radio"
                         name="profile-avatar"
                         id="redblue-1"
-                        // onChange={toggleAreaOfWorkCheckbox}
+                        value="redblue-1"
+                        defaultChecked={
+                          user.avatar_image ===
+                          "https://res.cloudinary.com/dy5hgr3ht/image/upload/v1618796810/tech-pros-v1-avatars/redblue-1.svg"
+                        }
+                        onClick={(e) => setAvatarImage(e.target.value)}
                       />
                       Red and blue female avatar, light skin tone, red hair
                     </label>
                   </div>
-                  <div style={{ height: "auto", width: "100px" }}>
+                  <div className="flex-item">
                     <label htmlFor="whitegreen-1">
                       <input
-                        // ref={developmentRef}
-                        type="checkbox"
+                        type="radio"
                         name="profile-avatar"
                         id="whitegreen-1"
-                        // onChange={toggleAreaOfWorkCheckbox}
+                        value="whitegreen-1"
+                        defaultChecked={
+                          user.avatar_image ===
+                          "https://res.cloudinary.com/dy5hgr3ht/image/upload/v1618796810/tech-pros-v1-avatars/whitegreen-1.svg"
+                        }
+                        onClick={(e) => setAvatarImage(e.target.value)}
                       />
                       White and green male avatar, dark skin tone, black hair
                     </label>
                   </div>
-                  <div style={{ height: "auto", width: "100px" }}>
+                  <div className="flex-item">
                     <label htmlFor="greenblack-1">
                       <input
-                        // ref={developmentRef}
-                        type="checkbox"
+                        type="radio"
                         name="profile-avatar"
                         id="greenblack-1"
-                        // onChange={toggleAreaOfWorkCheckbox}
+                        value="greenblack-1"
+                        defaultChecked={
+                          user.avatar_image ===
+                          "https://res.cloudinary.com/dy5hgr3ht/image/upload/v1618796810/tech-pros-v1-avatars/greenblack-1.svg"
+                        }
+                        onClick={(e) => setAvatarImage(e.target.value)}
                       />
                       green and black female avatar, medium skin tone, black
                       hair
                     </label>
                   </div>
-                  <div style={{ height: "auto", width: "100px" }}>
+                  <div className="flex-item">
                     <label htmlFor="white-1">
                       <input
-                        // ref={developmentRef}
-                        type="checkbox"
+                        type="radio"
                         name="profile-avatar"
                         id="white-1"
-                        // onChange={toggleAreaOfWorkCheckbox}
+                        value="white-1"
+                        defaultChecked={
+                          user.avatar_image ===
+                          "https://res.cloudinary.com/dy5hgr3ht/image/upload/v1618796810/tech-pros-v1-avatars/white-1.svg"
+                        }
+                        onClick={(e) => setAvatarImage(e.target.value)}
                       />
                       White male avatar, light skin tone, blue hair
                     </label>
                   </div>
-                  <div style={{ height: "auto", width: "100px" }}>
+                  <div className="flex-item">
                     <label htmlFor="greenwhite-1">
                       <input
-                        // ref={developmentRef}
-                        type="checkbox"
+                        type="radio"
                         name="profile-avatar"
                         id="greenwhite-1"
-                        // onChange={toggleAreaOfWorkCheckbox}
+                        value="greenwhite-1"
+                        defaultChecked={
+                          user.avatar_image ===
+                          "https://res.cloudinary.com/dy5hgr3ht/image/upload/v1618796810/tech-pros-v1-avatars/greenwhite-1.svg"
+                        }
+                        onClick={(e) => setAvatarImage(e.target.value)}
                       />
                       Green and white male avatar, light skin tone, black hair
                     </label>
@@ -783,7 +820,7 @@ function PersonalInfo() {
                 </div>
               </fieldset>
             </div>
-          </div>
+          </ImageBoxContainer>
 
           <FieldSet>
             <legend>Area of Work</legend>
@@ -913,6 +950,32 @@ const InputContainer = styled.div`
   .success-mssg {
     color: green;
     font-size: 0.7rem;
+  }
+`;
+
+const ImageBoxContainer = styled.div`
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px 0 hsla(0, 0%, 0%, 0.2);
+
+  .grid-container {
+    display: grid;
+    overflow-x: auto;
+    grid-template-columns: 1fr auto;
+  }
+
+  fieldset {
+    border: none;
+
+    .flex-container {
+      display: flex;
+      gap: 20px;
+
+      .flex-item {
+        width: 100px;
+        height: auto;
+      }
+    }
   }
 `;
 
