@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import { Helmet } from "react-helmet";
 import styled from "styled-components";
 
@@ -327,7 +327,15 @@ function PersonalInfo() {
   let errorSummaryRef = React.createRef();
   let editInfoBtnRef = React.createRef();
   let firstNameInputRef = React.createRef();
-  
+  const avatarRadioRefs = useRef({
+    blue1: React.createRef(),
+    redblue1: React.createRef(),
+    whitegreen1: React.createRef(),
+    greenblack1: React.createRef(),
+    white1: React.createRef(),
+    greenwhite1: React.createRef(),
+  });
+
   useEffect(() => {
     if (formStatus === FORM_STATUS.error && errorSummaryRef.current) {
       errorSummaryRef.current.focus();
@@ -899,6 +907,7 @@ function PersonalInfo() {
                   <div className="flex-item">
                     <label htmlFor="blue-1">
                       <input
+                        ref={avatarRadioRefs.current.blue1}
                         type="radio"
                         name="profile-avatar"
                         id="blue-1"
@@ -915,6 +924,7 @@ function PersonalInfo() {
                   <div className="flex-item">
                     <label htmlFor="redblue-1">
                       <input
+                        ref={avatarRadioRefs.current.redblue1}
                         type="radio"
                         name="profile-avatar"
                         id="redblue-1"
@@ -931,6 +941,7 @@ function PersonalInfo() {
                   <div className="flex-item">
                     <label htmlFor="whitegreen-1">
                       <input
+                        ref={avatarRadioRefs.current.whitegreen1}
                         type="radio"
                         name="profile-avatar"
                         id="whitegreen-1"
@@ -947,6 +958,7 @@ function PersonalInfo() {
                   <div className="flex-item">
                     <label htmlFor="greenblack-1">
                       <input
+                        ref={avatarRadioRefs.current.greenblack1}
                         type="radio"
                         name="profile-avatar"
                         id="greenblack-1"
@@ -964,6 +976,7 @@ function PersonalInfo() {
                   <div className="flex-item">
                     <label htmlFor="white-1">
                       <input
+                        ref={avatarRadioRefs.current.white1}
                         type="radio"
                         name="profile-avatar"
                         id="white-1"
@@ -980,6 +993,7 @@ function PersonalInfo() {
                   <div className="flex-item">
                     <label htmlFor="greenwhite-1">
                       <input
+                        ref={avatarRadioRefs.current.greenwhite1}
                         type="radio"
                         name="profile-avatar"
                         id="greenwhite-1"
