@@ -189,19 +189,19 @@ context.previewImage = "IMAGE"
 
 
 
-    REMOVE PREVIEW IMAGE
+      REMOVE PREVIEW IMAGE
 
-    // this will enable avatars(via default state)
-    // no submit
-    previewImgInput.
-      imageUpload: "",
-      imageAvatar: "",
-      inputChange: FALSE,
-      removeUserImage: false,
-    -
+      // this will enable avatars(via default state)
+      // no submit
+      previewImgInput.
+        imageUpload: "",
+        imageAvatar: "",
+        inputChange: FALSE,
+        removeUserImage: false,
+      -
 
-    context.avatarImage = ""
-    context.previewImage = ""
+      context.avatarImage = ""
+      context.previewImage = ""
 
 ---
 
@@ -261,6 +261,175 @@ context.previewImage = ""
 
 ---
 
+
+
+
+
+
+------USER WITH SAVED PROFILE IMAGE------
+
+START
+// avatars should be disabled(user.profile_image && removeUserImage: false)
+
+user.profile_image = "IMAGE"
+user.avatar_image = null
+
+// these states should always start at default
+previewImgInput.
+  imageUpload: "",
+  imageAvatar: "",
+  inputChange: false,
+  removeUserImage: false,
+-
+
+context.avatarImage = ""
+context.previewImage = ""
+
+---
+
+
+
+UPLOAD IMAGE
+
+// this will keep disabled avatars(via imageUpload or previewImage)
+// can submit
+previewImgInput.
+  imageUpload: "IMAGE",
+  //imageAvatar: "",
+  inputChange: TRUE,
+  //removeUserImage: false,
+-
+
+//context.avatarImage = ""
+context.previewImage = "IMAGE"
+
+
+      REMOVE PREVIEW IMAGE
+
+      // avatars should stay disabled(user.profile_image && removeUserImage: false)
+      // no submit
+      previewImgInput.
+        imageUpload: "",
+        //imageAvatar: "",
+        inputChange: FALSE,
+        //removeUserImage: false,
+      -
+
+      //context.avatarImage = ""
+      context.previewImage = ""
+
+
+---
+
+
+
+SET USER IMAGE TO REMOVE
+// this will enable avatars(via removeUserImage: true)
+// checked avatar should be set*
+// might not need checkbox, when user 'removes' user image,
+// replace with checked avatar image
+// if user removes avatar image, just reset back to start
+// if no checked avatar then there will be nothing(maybe undo button?)
+// can submit
+previewImgInput.
+  //imageUpload: "",
+  imageAvatar: "CHECKED IMAGE",
+  inputChange: TRUE,
+  removeUserImage: TRUE,
+-
+
+context.avatarImage = "CHECKED IMAGE"
+//context.previewImage = ""
+
+
+      UNCHECK USER IMAGE TO REMOVE
+      back to start
+      this will no longer be a thing
+      if checked avatar present then that will take over
+      
+
+
+      CHOOSE/CHANGE AVATAR
+      // user can still upload an image
+      // can submit(save avatar+remove user image)
+      previewImgInput.
+        //imageUpload: "",
+        imageAvatar: "IMAGE",
+        //inputChange: TRUE,
+        //removeUserImage: TRUE,
+      -
+
+      context.avatarImage = "IMAGE"
+      //context.previewImage = ""
+          
+      
+
+            REMOVE AVATAR PREVIEW
+
+            // should reset back to start
+            // should remove user image will be unchecked and reset and be shown again
+            previewImgInput.
+              //imageUpload: "",
+              imageAvatar: "",
+              inputChange: false,
+              removeUserImage: false,
+            -
+
+            context.avatarImage = ""
+            //context.previewImage = ""
+            
+
+
+                  SET USER IMAGE TO REMOVE
+                  // this will enable avatars(via removeUserImage: true)
+                  // checked avatar should be set*
+                  // can submit
+                  previewImgInput.
+                    //imageUpload: "",
+                    imageAvatar: "CHECKED AVATAR",
+                    inputChange: TRUE,
+                    removeUserImage: TRUE,
+                  -
+
+                  context.avatarImage = "CHECKED AVATAR"
+                  //context.previewImage = ""
+
+
+
+            UPLOAD IMAGE
+
+            // chosen avatar should stay the same
+            // uploaded prev image will take precedent
+            // this will disable avatars(via imageUpload or previewImage)
+            // submit will submit both uploaded image and chosen avatar
+            previewImgInput.
+              imageUpload: "IMAGE",
+              //imageAvatar: "IMAGE",
+              //inputChange: TRUE,
+              //removeUserImage: TRUE,
+            -
+
+            //context.avatarImage = "IMAGE"
+            context.previewImage = "IMAGE"
+
+
+                  REMOVE PREVIEW IMAGE
+                  // this case should not make inputChange: FALSE
+                  // removeUserImage will not be reset
+                  // user should be able to submit avatar change+remove user image
+                  previewImgInput.
+                    imageUpload: "",
+                    //imageAvatar: "IMAGE",
+                    //inputChange: TRUE,
+                    //removeUserImage: TRUE,
+                  -
+
+                  //context.avatarImage = "IMAGE"
+                  context.previewImage = ""
+
+
+
+---
 
 
 
@@ -328,12 +497,12 @@ function PersonalInfo() {
   let editInfoBtnRef = React.createRef();
   let firstNameInputRef = React.createRef();
   const avatarRadioRefs = useRef({
-    blue1: React.createRef(),
-    redblue1: React.createRef(),
-    whitegreen1: React.createRef(),
-    greenblack1: React.createRef(),
-    white1: React.createRef(),
-    greenwhite1: React.createRef(),
+    "blue-1": React.createRef(),
+    "redblue-1": React.createRef(),
+    "whitegreen-1": React.createRef(),
+    "greenblack-1": React.createRef(),
+    "white-1": React.createRef(),
+    "greenwhite-1": React.createRef(),
   });
 
   useEffect(() => {
@@ -511,12 +680,26 @@ function PersonalInfo() {
 
 
   function setAvatarImage(value) {
+    const urlStart =
+      "https://res.cloudinary.com/dy5hgr3ht/image/upload/v1618796810/tech-pros-v1-avatars/";
 
     // if checked return
     // if checked === user.avatar_image return
 
-    const urlStart =
-      "https://res.cloudinary.com/dy5hgr3ht/image/upload/v1618796810/tech-pros-v1-avatars/";
+    console.log(avatarRadioRefs.current[value].current.checked)
+
+
+    // if (`${urlStart}${value}.svg` === user.avatar_image) {
+    //   console.log("DEFAULT AVATAR")
+    //   return
+    // }
+
+    // if (`${urlStart}${value}.svg` === previewImgInput.imageAvatar) {
+    //   console.log("PREVIEW AVATAR")
+    //   return
+    // }
+    
+    
     setAvatarImg(`${urlStart}${value}.svg`);
     setPreviewImgInput({
       ...previewImgInput,
@@ -545,11 +728,11 @@ function PersonalInfo() {
   function removeImageInput() {
     const {imageAvatar} = previewImgInput;
     setPreviewImg("");
-    setAvatarImg("");
+    // setAvatarImg("");
     setPreviewImgInput({
       ...previewImgInput,
       imageUpload: "",
-      imageAvatar: "",
+      // imageAvatar: "",
       inputChange: imageAvatar ? true : false,
       removeUserImage: false,
     });
@@ -907,7 +1090,7 @@ function PersonalInfo() {
                   <div className="flex-item">
                     <label htmlFor="blue-1">
                       <input
-                        ref={avatarRadioRefs.current.blue1}
+                        ref={avatarRadioRefs.current["blue-1"]}
                         type="radio"
                         name="profile-avatar"
                         id="blue-1"
@@ -924,7 +1107,7 @@ function PersonalInfo() {
                   <div className="flex-item">
                     <label htmlFor="redblue-1">
                       <input
-                        ref={avatarRadioRefs.current.redblue1}
+                        ref={avatarRadioRefs.current["redblue-1"]}
                         type="radio"
                         name="profile-avatar"
                         id="redblue-1"
@@ -941,7 +1124,7 @@ function PersonalInfo() {
                   <div className="flex-item">
                     <label htmlFor="whitegreen-1">
                       <input
-                        ref={avatarRadioRefs.current.whitegreen1}
+                        ref={avatarRadioRefs.current["whitegreen-1"]}
                         type="radio"
                         name="profile-avatar"
                         id="whitegreen-1"
@@ -958,7 +1141,7 @@ function PersonalInfo() {
                   <div className="flex-item">
                     <label htmlFor="greenblack-1">
                       <input
-                        ref={avatarRadioRefs.current.greenblack1}
+                        ref={avatarRadioRefs.current["greenblack-1"]}
                         type="radio"
                         name="profile-avatar"
                         id="greenblack-1"
@@ -976,7 +1159,7 @@ function PersonalInfo() {
                   <div className="flex-item">
                     <label htmlFor="white-1">
                       <input
-                        ref={avatarRadioRefs.current.white1}
+                        ref={avatarRadioRefs.current["white-1"]}
                         type="radio"
                         name="profile-avatar"
                         id="white-1"
@@ -993,7 +1176,7 @@ function PersonalInfo() {
                   <div className="flex-item">
                     <label htmlFor="greenwhite-1">
                       <input
-                        ref={avatarRadioRefs.current.greenwhite1}
+                        ref={avatarRadioRefs.current["greenwhite-1"]}
                         type="radio"
                         name="profile-avatar"
                         id="greenwhite-1"
