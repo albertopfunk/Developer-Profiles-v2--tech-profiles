@@ -148,6 +148,136 @@ maybe have a imageUpload and imagePreview component like the kent c dodds articl
 
 
 
+
+------NEW USER------
+
+START
+
+// can be null or prefilled
+user.profile_image = null
+user.avatar_image = null
+
+// these states should always start at default
+previewImgInput.
+  imageUpload: "",
+  imageAvatar: "",
+  inputChange: false,
+  removeUserImage: false,
+-
+
+context.avatarImage = ""
+context.previewImage = ""
+
+---
+
+
+
+
+UPLOAD IMAGE
+
+// this will disable avatars(via imageUpload or previewImage)
+// can submit
+previewImgInput.
+  imageUpload: "IMAGE",
+  imageAvatar: "",
+  inputChange: TRUE,
+  removeUserImage: false,
+-
+
+context.avatarImage = ""
+context.previewImage = "IMAGE"
+
+
+
+    REMOVE PREVIEW IMAGE
+
+    // this will enable avatars(via default state)
+    // no submit
+    previewImgInput.
+      imageUpload: "",
+      imageAvatar: "",
+      inputChange: FALSE,
+      removeUserImage: false,
+    -
+
+    context.avatarImage = ""
+    context.previewImage = ""
+
+---
+
+
+
+
+CHOOSE AVATAR
+
+// user can still upload an image
+// can submit
+previewImgInput.
+  imageUpload: "",
+  imageAvatar: "IMAGE",
+  inputChange: TRUE,
+  removeUserImage: false,
+-
+
+context.avatarImage = "IMAGE"
+context.previewImage = ""
+
+
+      CHOOSE DIFFERENT AVATAR
+      same
+
+
+
+      UPLOAD IMAGE
+
+      // chosen avatar should stay the same
+      // uploaded prev image will take precedent
+      // this will disable avatars(via imageUpload or previewImage)
+      // submit will submit both uploaded image and chosen avatar
+      previewImgInput.
+        imageUpload: "IMAGE",
+        imageAvatar: "IMAGE",
+        inputChange: TRUE,
+        removeUserImage: false,
+      -
+
+      context.avatarImage = "IMAGE"
+      context.previewImage = "IMAGE"
+
+
+            *REMOVE PREVIEW IMAGE
+            // this case should not make inputChange: FALSE
+            // user should be able to submit avatar change
+            previewImgInput.
+              imageUpload: "",
+              imageAvatar: "IMAGE",
+              inputChange: TRUE,
+              removeUserImage: false,
+            -
+
+            context.avatarImage = "IMAGE"
+            context.previewImage = ""
+
+
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 */
 
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
@@ -197,12 +327,15 @@ function PersonalInfo() {
   let errorSummaryRef = React.createRef();
   let editInfoBtnRef = React.createRef();
   let firstNameInputRef = React.createRef();
-
+  
   useEffect(() => {
     if (formStatus === FORM_STATUS.error && errorSummaryRef.current) {
       errorSummaryRef.current.focus();
     }
   }, [formStatus]);
+
+
+
 
   useEffect(() => {
     if (formStatus === FORM_STATUS.idle) {
@@ -215,6 +348,10 @@ function PersonalInfo() {
       setAvatarImg("");
     };
   }, [formStatus]);
+
+
+
+
 
   useEffect(() => {
     return () => {
@@ -359,15 +496,29 @@ function PersonalInfo() {
     }
   }
 
+
+
+
+
+
+
   function setAvatarImage(value) {
+
+    // if checked return
+    // if checked === user.avatar_image return
+
     const urlStart =
       "https://res.cloudinary.com/dy5hgr3ht/image/upload/v1618796810/tech-pros-v1-avatars/";
     setAvatarImg(`${urlStart}${value}.svg`);
     setPreviewImgInput({
       ...previewImgInput,
       imageAvatar: `${urlStart}${value}.svg`,
+      inputChange: true,
     });
   }
+
+
+
 
   function setImageInput(image) {
     setPreviewImg(image);
@@ -379,17 +530,27 @@ function PersonalInfo() {
     });
   }
 
+
+  // should not remove both
+  // send arguments to differentiate
+  // if removing avatar prev, then defaultChecked should apply
   function removeImageInput() {
+    const {imageAvatar} = previewImgInput;
     setPreviewImg("");
+    setAvatarImg("");
     setPreviewImgInput({
       ...previewImgInput,
       imageUpload: "",
-      inputChange: false,
+      imageAvatar: "",
+      inputChange: imageAvatar ? true : false,
       removeUserImage: false,
     });
   }
 
+
+
   function removeUserImage(shouldRemove) {
+    const {imageAvatar} = previewImgInput;
     if (shouldRemove) {
       setPreviewImgInput({
         ...previewImgInput,
@@ -400,10 +561,15 @@ function PersonalInfo() {
       setPreviewImgInput({
         ...previewImgInput,
         removeUserImage: false,
-        inputChange: false,
+        inputChange: imageAvatar ? true : false,
+
       });
     }
   }
+
+
+
+
 
   function setAreaOfWorkInput(value) {
     if (value === user.area_of_work) {
@@ -490,11 +656,22 @@ function PersonalInfo() {
       inputs.desired_title = title.inputValue;
     }
 
+    // submit avatar image
+    // submit preview image
+    // submit avatar change
+    // remove user image
+    // remove user image + submit preview image
+    // remove user image + submit avatar image
+    // remove user image + submit avatar change
+
     if (previewImgInput.inputChange) {
+      inputs.avatar_image = previewImgInput.imageAvatar;
+
       if (previewImgInput.removeUserImage) {
         inputs.profile_image = "";
-        inputs.avatar_image = previewImgInput.imageAvatar;
-      } else {
+      }
+
+      if (previewImgInput.imageUpload) {
         const [res, err] = await httpClient("POST", `/api/upload-main-image`, {
           imageUrl: previewImgInput.imageUpload,
           id: user.id,
@@ -508,7 +685,6 @@ function PersonalInfo() {
         }
 
         inputs.profile_image = res.data.image;
-        inputs.avatar_image = previewImgInput.imageAvatar;
       }
     }
 
@@ -713,7 +889,7 @@ function PersonalInfo() {
               <fieldset
                 disabled={
                   previewImgInput.imageUpload ||
-                  !previewImgInput.removeUserImage
+                  (user.profile_image && !previewImgInput.removeUserImage)
                 }
               >
                 <legend>Choose an avatar image:</legend>
