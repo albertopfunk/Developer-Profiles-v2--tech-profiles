@@ -149,11 +149,68 @@ maybe have a imageUpload and imagePreview component like the kent c dodds articl
 
 
 
+
+**TODO**
+
+REMOVING
+seperate functions for removing uploaded preview img and avatar prev img
+
+uploaded prev img will check shouldremoveuser and avatarImage preview to
+determine whether inputChange is true/false
+
+avatar prev img will check only shouldremoveuser to 
+determine whether inputChange is true/false
+
+
+
+CHECKED AVATARS
+
+profile image to remove or remove a preview image
+both of these are seperate functions so
+you can just check the refs to see which avatar is checked then 
+prefill and display checked avatar
+
+previewImgInput.
+  imageUpload: "",
+  imageAvatar: "CHECKED IMAGE",
+  inputChange: TRUE,
+  removeUserImage: TRUE,
+-
+
+context.avatarImage = "CHECKED IMAGE"
+//context.previewImage = ""
+
+
+
+SET USER TO REMOVE
+
+replace checkbox with same X button
+when user 'removes' profile image
+  if an avatar is checked
+    set avatar preview and context avatar preview
+    this will show avatar(*if user removes avatar it should reset)
+    all cases of removing avatar image will reset
+  if no avatar is checked
+    u can have UI for that, maybe gray out the img to show it will be removed
+    this can be done with removeUserImage: TRUE
+    if u want to remove remove image from UI that will prob require more state
+
+
+
+
+
+
+
+
+
 ------NEW USER------
 
-START
+START-1
 
 // can be null or prefilled
+// avatars enabled(!user.profile_image && !previewImgInput.imageUpload)
+// UI blank preview image(!savedimages&&!previewimages)
+// user card default svg(!savedimages&&!previewimages)
 user.profile_image = null
 user.avatar_image = null
 
@@ -173,31 +230,37 @@ context.previewImage = ""
 
 
 
-UPLOAD IMAGE
+
+UPLOAD IMAGE-1
 
 // this will disable avatars(via imageUpload or previewImage)
+// UI uploaded preview img(previewImgInput.imageUpload)
+// success ui w timeout back to idle(img upload success)
 // can submit
 previewImgInput.
   imageUpload: "IMAGE",
-  imageAvatar: "",
+  //imageAvatar: "",
   inputChange: TRUE,
-  removeUserImage: false,
+  //removeUserImage: false,
 -
 
-context.avatarImage = ""
+//context.avatarImage = ""
 context.previewImage = "IMAGE"
 
 
 
-      REMOVE PREVIEW IMAGE
+
+      REMOVE PREVIEW IMAGE-1
 
       // this will enable avatars(via default state)
+      // same as START-1
+      // input change FALSE(!imageAvatar && removeUserImage: false)
       // no submit
       previewImgInput.
         imageUpload: "",
         imageAvatar: "",
         inputChange: FALSE,
-        removeUserImage: false,
+        //removeUserImage: false,
       -
 
       context.avatarImage = ""
@@ -208,58 +271,126 @@ context.previewImage = "IMAGE"
 
 
 
-CHOOSE AVATAR
+CHOOSE AVATAR-1
 
 // user can still upload an image
+// UI selected avatar will show on prevImg box and user card(!imageUpload && imageAvatar)
 // can submit
 previewImgInput.
-  imageUpload: "",
+  //imageUpload: "",
   imageAvatar: "IMAGE",
   inputChange: TRUE,
-  removeUserImage: false,
+  //removeUserImage: false,
 -
 
 context.avatarImage = "IMAGE"
 context.previewImage = ""
 
 
-      CHOOSE DIFFERENT AVATAR
+
+
+      CHOOSE DIFFERENT AVATAR-1
       same
 
 
 
-      UPLOAD IMAGE
+
+      *REMOVE AVATAR PREVIEW-1
+
+      // should reset back to start
+      // all cases for remove avatar preview will reset
+      previewImgInput.
+        //imageUpload: "",
+        imageAvatar: "",
+        inputChange: FALSE,
+        //removeUserImage: false,
+      -
+
+      context.avatarImage = ""
+      context.previewImage = ""
+
+
+      
+      UPLOAD IMAGE-2
 
       // chosen avatar should stay the same
+      // UI will be prev image on prevImg box and userCard
       // uploaded prev image will take precedent
       // this will disable avatars(via imageUpload or previewImage)
       // submit will submit both uploaded image and chosen avatar
       previewImgInput.
         imageUpload: "IMAGE",
-        imageAvatar: "IMAGE",
-        inputChange: TRUE,
-        removeUserImage: false,
+        //imageAvatar: "IMAGE",
+        //inputChange: TRUE,
+        //removeUserImage: false,
       -
 
-      context.avatarImage = "IMAGE"
+      //context.avatarImage = "IMAGE"
       context.previewImage = "IMAGE"
 
 
-            *REMOVE PREVIEW IMAGE
+
+
+            *REMOVE PREVIEW IMAGE-2
+
             // this case should not make inputChange: FALSE
+              // stays true when imageAvatar or removeUserImage: true
             // user should be able to submit avatar change
+            // this will be a seperate function
             previewImgInput.
               imageUpload: "",
-              imageAvatar: "IMAGE",
-              inputChange: TRUE,
+              //imageAvatar: "IMAGE",
+              //inputChange: TRUE,
+              //removeUserImage: false,
+            -
+
+            //context.avatarImage = "IMAGE"
+            context.previewImage = ""
+
+
+
+
+            REMOVE AVATAR PREVIEW-2
+
+            // this will be a seperate function
+            // inputChange FALSE via removeUserImage: false
+            //* i think this will always make inputChange FALSE
+            // even if removeUserImage: TRUE
+            // since avatar is below prev upload image
+            // the only thing that will produce a change is setting
+            // profile image to remove
+            // so removing avatar should always reset**
+            previewImgInput.
+              imageUpload: "",
+              imageAvatar: "",
+              inputChange: FALSE,
               removeUserImage: false,
             -
 
-            context.avatarImage = "IMAGE"
+            context.avatarImage = ""
             context.previewImage = ""
 
 
 ---
+
+
+*******
+checked avatar dilema
+the only time this applies is when a user
+checked profile image to remove or removes a preview image
+both of these are seperate functions so
+you can just check the refs to see which is checked then prefill and display checked avatar
+previewImgInput.
+  imageUpload: "",
+  imageAvatar: "CHECKED IMAGE",
+  inputChange: TRUE,
+  removeUserImage: TRUE,
+-
+
+context.avatarImage = "CHECKED IMAGE"
+//context.previewImage = ""
+
+
 
 
 
@@ -268,9 +399,11 @@ context.previewImage = ""
 
 ------USER WITH SAVED PROFILE IMAGE------
 
-START
-// avatars should be disabled(user.profile_image && removeUserImage: false)
+START-2
 
+// avatars should be disabled(user.profile_image && removeUserImage: false)
+// UI will be profile img on imgPrev box and user card
+  // profile_image && !previewImages
 user.profile_image = "IMAGE"
 user.avatar_image = null
 
@@ -289,9 +422,12 @@ context.previewImage = ""
 
 
 
-UPLOAD IMAGE
+UPLOAD IMAGE-3
 
-// this will keep disabled avatars(via imageUpload or previewImage)
+// this will keep disabled avatars
+  // imageUpload or previewImage or user.profile_image && removeUserImage: false
+// UI will be prev image on prevImg box and userCard
+// uploaded prev image will take precedent over user.profile_image
 // can submit
 previewImgInput.
   imageUpload: "IMAGE",
@@ -304,9 +440,13 @@ previewImgInput.
 context.previewImage = "IMAGE"
 
 
-      REMOVE PREVIEW IMAGE
+
+
+      REMOVE PREVIEW IMAGE-3
 
       // avatars should stay disabled(user.profile_image && removeUserImage: false)
+      // inputChange: FALSE via !imageUpload && removeUserImage: false
+      // profile_image will show on prevImg box and user card
       // no submit
       previewImgInput.
         imageUpload: "",
@@ -323,13 +463,13 @@ context.previewImage = "IMAGE"
 
 
 
-SET USER IMAGE TO REMOVE
+
+SET USER IMAGE TO REMOVE-1
+
 // this will enable avatars(via removeUserImage: true)
 // checked avatar should be set*
-// might not need checkbox, when user 'removes' user image,
-// replace with checked avatar image
 // if user removes avatar image, just reset back to start
-// if no checked avatar then there will be nothing(maybe undo button?)
+// if no checked avatar then removeUserImage: TRUE UI
 // can submit
 previewImgInput.
   //imageUpload: "",
@@ -342,14 +482,18 @@ context.avatarImage = "CHECKED IMAGE"
 //context.previewImage = ""
 
 
+
+
       UNCHECK USER IMAGE TO REMOVE
       back to start
-      this will no longer be a thing
-      if checked avatar present then that will take over
+      this will no longer be a thing? unless there is an undo button or something for
+      removeUserImage: TRUE UI
       
 
 
-      CHOOSE/CHANGE AVATAR
+
+      CHOOSE AVATAR/ CHOOSE DIFFERERNT AVATAR-2
+
       // user can still upload an image
       // can submit(save avatar+remove user image)
       previewImgInput.
@@ -364,10 +508,12 @@ context.avatarImage = "CHECKED IMAGE"
           
       
 
-            REMOVE AVATAR PREVIEW
+
+            *REMOVE AVATAR PREVIEW-3
 
             // should reset back to start
             // should remove user image will be unchecked and reset and be shown again
+            // all cases for remove avatar preview will reset
             previewImgInput.
               //imageUpload: "",
               imageAvatar: "",
@@ -380,7 +526,9 @@ context.avatarImage = "CHECKED IMAGE"
             
 
 
-                  SET USER IMAGE TO REMOVE
+
+                  SET USER IMAGE TO REMOVE-2
+
                   // this will enable avatars(via removeUserImage: true)
                   // checked avatar should be set*
                   // can submit
@@ -396,7 +544,8 @@ context.avatarImage = "CHECKED IMAGE"
 
 
 
-            UPLOAD IMAGE
+
+            UPLOAD IMAGE-4
 
             // chosen avatar should stay the same
             // uploaded prev image will take precedent
@@ -413,9 +562,13 @@ context.avatarImage = "CHECKED IMAGE"
             context.previewImage = "IMAGE"
 
 
-                  REMOVE PREVIEW IMAGE
+
+
+                  REMOVE PREVIEW IMAGE-4
+
                   // this case should not make inputChange: FALSE
-                  // removeUserImage will not be reset
+                    // via imageAvatar: "IMAGE" or removeUserImage: TRUE
+                  // removeUserImage will not be reset(only removing avatar resets)
                   // user should be able to submit avatar change+remove user image
                   previewImgInput.
                     imageUpload: "",
@@ -427,6 +580,23 @@ context.avatarImage = "CHECKED IMAGE"
                   //context.avatarImage = "IMAGE"
                   context.previewImage = ""
 
+
+
+
+                  REMOVE AVATAR PREVIEW-4
+                  
+                  // should reset back to start
+                  // should remove user image will be unchecked and reset and be shown again
+                  // all cases for remove avatar preview will reset
+                  previewImgInput.
+                    //imageUpload: "",
+                    imageAvatar: "",
+                    inputChange: false,
+                    removeUserImage: false,
+                  -
+
+                  context.avatarImage = ""
+                  //context.previewImage = ""
 
 
 ---
