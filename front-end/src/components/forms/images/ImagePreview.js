@@ -14,22 +14,11 @@ no image is uploaded and the default image will be used
 function ImagePreview({
   previewImage,
   removePreviewImage,
+  avatarImage,
+  removeAvatarImage,
   userImage,
   removeUserImage,
 }) {
-  const removeImageInputRef = React.createRef();
-
-  function removeImage() {
-    removePreviewImage("");
-  }
-
-  function setUserImageToRemove() {
-    if (removeImageInputRef.current && removeImageInputRef.current.checked) {
-      removeUserImage(true);
-    } else {
-      removeUserImage(false);
-    }
-  }
 
   if (previewImage) {
     return (
@@ -38,7 +27,7 @@ function ImagePreview({
           <button
             type="button"
             aria-label="remove current preview pic"
-            onClick={removeImage}
+            onClick={removePreviewImage}
           >
             X
           </button>
@@ -53,18 +42,39 @@ function ImagePreview({
     );
   }
 
+  if (avatarImage) {
+    return (
+      <ImageContainer>
+        <div className="img-action">
+          <button
+            type="button"
+            aria-label="remove current avatar"
+            onClick={removeAvatarImage}
+          >
+            X
+          </button>
+        </div>
+        <img
+          src={avatarImage}
+          alt="current avatar"
+          height="200px"
+          width="200px"
+        />
+      </ImageContainer>
+    );
+  }
+
   if (userImage) {
     return (
       <ImageContainer>
         <div className="img-action">
-          <input
-            type="checkbox"
-            id="remove-image"
-            name="remove-image"
+          <button
+            type="button"
             aria-label="remove saved pic on submit"
-            ref={removeImageInputRef}
-            onChange={setUserImageToRemove}
-          />
+            onClick={removeUserImage}
+          >
+            X
+          </button>
         </div>
         <img src={userImage} alt="saved pic" height="200px" width="200px" />
       </ImageContainer>
@@ -86,7 +96,7 @@ const ImageContainer = styled.div`
     top: 5%;
     right: 5%;
     border: solid;
-    z-index: 5;
+    z-index: 15;
   }
 `;
 
