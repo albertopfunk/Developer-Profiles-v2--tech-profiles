@@ -246,7 +246,7 @@ function ProfileDashboard() {
                 areaOfWork={user.area_of_work}
                 email={user.public_email}
                 userImage={user.profile_image}
-                avatarImage={user.avatar_img}
+                avatarImage={user.avatar_image}
                 firstName={user.first_name}
                 lastName={user.last_name}
                 currentLocation={user.current_location_name}
