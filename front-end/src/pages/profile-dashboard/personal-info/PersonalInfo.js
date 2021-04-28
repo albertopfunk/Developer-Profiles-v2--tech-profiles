@@ -905,6 +905,17 @@ function PersonalInfo() {
     const hasAvatar = imageAvatar ? true : false
     const shouldRemoveUserImage = hasAvatar && removeUserImage ? true : false
 
+    if (!hasAvatar && user.avatar_image) {
+      console.log("saved avatar")
+      setPreviewImg("");
+      setPreviewImgInput({
+        ...previewImgInput,
+        imageUpload: "",
+        inputChange: false,
+        removeUserImage: false,
+      });
+      return
+    }
 
     if (!hasAvatar && !user.profile_image) {
       console.log(avatarRadioRefs.current)
