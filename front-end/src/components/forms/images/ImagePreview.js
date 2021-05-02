@@ -12,28 +12,29 @@ no image is uploaded and the default image will be used
 */
 
 function ImagePreview({
-  previewImage,
-  removePreviewImage,
-  avatarImage,
-  removeAvatarImage,
-  userImage,
-  removeUserImage,
+  uploadedImage,
+  removeUploadedImage,
+  selectedAvatar,
+  removeSelectedAvatar,
+  savedUserImage,
+  removeSavedUserImage,
+  savedAvatar,
+  removeSavedAvatar,
 }) {
-
-  if (previewImage) {
+  if (uploadedImage) {
     return (
       <ImageContainer>
         <div className="img-action">
           <button
             type="button"
             aria-label="remove current preview pic"
-            onClick={removePreviewImage}
+            onClick={removeUploadedImage}
           >
             X
           </button>
         </div>
         <img
-          src={previewImage}
+          src={uploadedImage}
           alt="current preview pic"
           height="200px"
           width="200px"
@@ -42,20 +43,20 @@ function ImagePreview({
     );
   }
 
-  if (avatarImage) {
+  if (selectedAvatar) {
     return (
       <ImageContainer>
         <div className="img-action">
           <button
             type="button"
             aria-label="remove current avatar"
-            onClick={removeAvatarImage}
+            onClick={removeSelectedAvatar}
           >
             X
           </button>
         </div>
         <img
-          src={avatarImage}
+          src={selectedAvatar}
           alt="current avatar"
           height="200px"
           width="200px"
@@ -64,19 +65,46 @@ function ImagePreview({
     );
   }
 
-  if (userImage) {
+  if (savedUserImage) {
     return (
       <ImageContainer>
         <div className="img-action">
           <button
             type="button"
             aria-label="remove saved pic on submit"
-            onClick={removeUserImage}
+            onClick={removeSavedUserImage}
           >
             X
           </button>
         </div>
-        <img src={userImage} alt="saved pic" height="200px" width="200px" />
+        <img
+          src={savedUserImage}
+          alt="saved pic"
+          height="200px"
+          width="200px"
+        />
+      </ImageContainer>
+    );
+  }
+
+  if (savedAvatar) {
+    return (
+      <ImageContainer>
+        <div className="img-action">
+          <button
+            type="button"
+            aria-label="remove saved avatar on submit"
+            onClick={removeSavedAvatar}
+          >
+            X
+          </button>
+        </div>
+        <img
+          src={savedAvatar}
+          alt="saved avatar"
+          height="200px"
+          width="200px"
+        />
       </ImageContainer>
     );
   }
