@@ -3,668 +3,17 @@ import { Helmet } from "react-helmet";
 import styled from "styled-components";
 
 import ImageUploadForm from "../../../components/forms/images/ImageUpload";
-/*
-
-IMAGE_STATES
-
-
-Starting
-status - idle
-
-new users will start with
-profile_img: null
-avatar_img: null
-userImage default SVG should show
-previewImg, avatarImg = ""
-
-
-
-
-status - active
-
-upload image or select avatar
-any update on this will need to be submitted to be saved
-
-upload image
-select avatar disabled
-uploads preview image
-preview image shows
-previewImg=previewImg
-
-select avatar
-upload image still available
-only select avatar will become disabled automatically when user has a profile_image or preview image
-upload image should stay available for convinience
-avatarImg=avatarImg
-
-
-
-
-
-status - success
-
-image uploaded and saved
-previewImg, avatarImg = ""
-profile_image should show
-
-avatar selected and saved
-previewImg, avatarImg = ""
-avatar_image should show
-
-cancel
-go back to starting
-
-
-
-
-
-
-
-status - idle
-
-profile_img: img
-or
-avatar_img: img
-
-previewImg, avatarImg = ""
-
-
-
-
-
-
-
-
-status - active
-
-upload image or select avatar
-any update on this will need to be submitted to be saved
-
-
-
-hasAvatarImage
-
-select avatar
-avatarImg=avatarImg
-first option should say 'default avatar'
-this will set avatarImg="" and avatar_img="" on submit, leaving default SVG to show
-user can select that or another avatar to save
-
-upload image
-previewImg=previewImg
-previewImg should show since it is priority above avatarImg
-user can remove previewImg -- previewImg="" and avatarImg should show again
-
-
-
-hasProfileImage
-
-select avatar
-avatarImg=avatarImg
-avatar should show
-profile image will be set to remove on submit to be replc by avatar
-
-upload image
-previewImg=previewImg
-preview image should show
-user can remove previewImg -- previewImg="" and profile image should show again
-
-
-
-
-
-+
-
-preview image functionality should be moved up
-image upload should only worry about uploading and removing images
-
-
-
-
-
-
-
-
-
-
-------------------------------
-
-grid scroll container
-first item - image upload
-other items - field set with checkboxes(similar to area of work)
-below that can be the image preview
-if user uploads image then preview image shows
-if user removes preview image and checks avatar then avatar will show
-if user has avatar saved in db then that avatar will be automatically selected
-if user has profile image then it will show if no preview image selected
-if remove user image checkbox is checked then user can choose an avatar to replace
-if user unchecks remove on submit then avatars will be disabled
-
-move preview image UI up
-maybe have a imageUpload and imagePreview component like the kent c dodds article
-
-
-
-
-
-
-
-
-**TODO**
-
-REMOVING
-seperate functions for removing uploaded preview img and avatar prev img
-
-uploaded prev img will check shouldremoveuser and avatarImage preview to
-determine whether inputChange is true/false
-
-avatar prev img will check only shouldremoveuser to 
-determine whether inputChange is true/false
-
-
-
-CHECKED AVATARS
-
-profile image to remove or remove a preview image
-both of these are seperate functions so
-you can just check the refs to see which avatar is checked then 
-prefill and display checked avatar
-
-previewImgInput.
-  imageUpload: "",
-  imageAvatar: "CHECKED IMAGE",
-  inputChange: TRUE,
-  removeUserImage: TRUE,
--
-
-context.avatarImage = "CHECKED IMAGE"
-//context.previewImage = ""
-
-
-
-SET USER TO REMOVE
-
-replace checkbox with same X button
-when user 'removes' profile image
-  if an avatar is checked
-    set avatar preview and context avatar preview
-    this will show avatar(*if user removes avatar it should reset)
-    all cases of removing avatar image will reset
-  if no avatar is checked
-    u can have UI for that, maybe gray out the img to show it will be removed
-    this can be done with removeUserImage: TRUE
-    if u want to remove remove image from UI that will prob require more state
-
-
-
-
-
-
-
-
-
-------NEW USER------
-
-START-1
-
-// can be null or prefilled
-// avatars enabled(!user.profile_image && !previewImgInput.imageUpload)
-// UI blank preview image(!savedimages&&!previewimages)
-// user card default svg(!savedimages&&!previewimages)
-user.profile_image = null
-user.avatar_image = null
-
-// these states should always start at default
-previewImgInput.
-  imageUpload: "",
-  imageAvatar: "",
-  inputChange: false,
-  removeUserImage: false,
--
-
-context.avatarImage = ""
-context.previewImage = ""
-
----
-
-
-
-
-
-UPLOAD IMAGE-1
-
-// this will disable avatars(via imageUpload or previewImage)
-// UI uploaded preview img(previewImgInput.imageUpload)
-// success ui w timeout back to idle(img upload success)
-// can submit
-previewImgInput.
-  imageUpload: "IMAGE",
-  //imageAvatar: "",
-  inputChange: TRUE,
-  //removeUserImage: false,
--
-
-//context.avatarImage = ""
-context.previewImage = "IMAGE"
-
-
-
-
-      REMOVE PREVIEW IMAGE-1
-
-      // this will enable avatars(via default state)
-      // same as START-1
-      // input change FALSE(!imageAvatar && removeUserImage: false)
-      // no submit
-      previewImgInput.
-        imageUpload: "",
-        imageAvatar: "",
-        inputChange: FALSE,
-        //removeUserImage: false,
-      -
-
-      context.avatarImage = ""
-      context.previewImage = ""
-
----
-
-
-
-
-CHOOSE AVATAR-1
-
-// user can still upload an image
-// UI selected avatar will show on prevImg box and user card(!imageUpload && imageAvatar)
-// can submit
-previewImgInput.
-  //imageUpload: "",
-  imageAvatar: "IMAGE",
-  inputChange: TRUE,
-  //removeUserImage: false,
--
-
-context.avatarImage = "IMAGE"
-context.previewImage = ""
-
-
-
-
-      CHOOSE DIFFERENT AVATAR-1
-      same
-
-
-
-
-      *REMOVE AVATAR PREVIEW-1
-
-      // should reset back to start
-      // all cases for remove avatar preview will reset
-      previewImgInput.
-        //imageUpload: "",
-        imageAvatar: "",
-        inputChange: FALSE,
-        //removeUserImage: false,
-      -
-
-      context.avatarImage = ""
-      context.previewImage = ""
-
-
-      
-      UPLOAD IMAGE-2
-
-      // chosen avatar should stay the same
-      // UI will be prev image on prevImg box and userCard
-      // uploaded prev image will take precedent
-      // this will disable avatars(via imageUpload or previewImage)
-      // submit will submit both uploaded image and chosen avatar
-      previewImgInput.
-        imageUpload: "IMAGE",
-        //imageAvatar: "IMAGE",
-        //inputChange: TRUE,
-        //removeUserImage: false,
-      -
-
-      //context.avatarImage = "IMAGE"
-      context.previewImage = "IMAGE"
-
-
-
-
-            *REMOVE PREVIEW IMAGE-2
-
-            // this case should not make inputChange: FALSE
-              // stays true when imageAvatar or removeUserImage: true
-            // user should be able to submit avatar change
-            // this will be a seperate function
-            previewImgInput.
-              imageUpload: "",
-              //imageAvatar: "IMAGE",
-              //inputChange: TRUE,
-              //removeUserImage: false,
-            -
-
-            //context.avatarImage = "IMAGE"
-            context.previewImage = ""
-
-
-
-
-            REMOVE AVATAR PREVIEW-2
-
-            // this will be a seperate function
-            // inputChange FALSE via removeUserImage: false
-            //* i think this will always make inputChange FALSE
-            // even if removeUserImage: TRUE
-            // since avatar is below prev upload image
-            // the only thing that will produce a change is setting
-            // profile image to remove
-            // so removing avatar should always reset**
-            previewImgInput.
-              imageUpload: "",
-              imageAvatar: "",
-              inputChange: FALSE,
-              removeUserImage: false,
-            -
-
-            context.avatarImage = ""
-            context.previewImage = ""
-
-
----
-
-
-*******
-checked avatar dilema
-the only time this applies is when a user
-checked profile image to remove or removes a preview image
-both of these are seperate functions so
-you can just check the refs to see which is checked then prefill and display checked avatar
-previewImgInput.
-  imageUpload: "",
-  imageAvatar: "CHECKED IMAGE",
-  inputChange: TRUE,
-  removeUserImage: TRUE,
--
-
-context.avatarImage = "CHECKED IMAGE"
-//context.previewImage = ""
-
-
-
-
-
-
-
-
-------USER WITH SAVED PROFILE IMAGE------
-
-START-2
-
-// avatars should be disabled(user.profile_image && removeUserImage: false)
-// UI will be profile img on imgPrev box and user card
-  // profile_image && !previewImages
-user.profile_image = "IMAGE"
-user.avatar_image = null
-
-// these states should always start at default
-previewImgInput.
-  imageUpload: "",
-  imageAvatar: "",
-  inputChange: false,
-  removeUserImage: false,
--
-
-context.avatarImage = ""
-context.previewImage = ""
-
----
-
-
-
-UPLOAD IMAGE-3
-
-// this will keep disabled avatars
-  // imageUpload or previewImage or user.profile_image && removeUserImage: false
-// UI will be prev image on prevImg box and userCard
-// uploaded prev image will take precedent over user.profile_image
-// can submit
-previewImgInput.
-  imageUpload: "IMAGE",
-  //imageAvatar: "",
-  inputChange: TRUE,
-  //removeUserImage: false,
--
-
-//context.avatarImage = ""
-context.previewImage = "IMAGE"
-
-
-
-
-      REMOVE PREVIEW IMAGE-3
-
-      // avatars should stay disabled(user.profile_image && removeUserImage: false)
-      // inputChange: FALSE via !imageUpload && removeUserImage: false
-      // profile_image will show on prevImg box and user card
-      // no submit
-      previewImgInput.
-        imageUpload: "",
-        //imageAvatar: "",
-        inputChange: FALSE,
-        //removeUserImage: false,
-      -
-
-      //context.avatarImage = ""
-      context.previewImage = ""
-
-
----
-
-
-
-
-SET USER IMAGE TO REMOVE-1
-
-// this will enable avatars(via removeUserImage: true)
-// checked avatar should be set*
-// if user removes avatar image, just reset back to start
-// if no checked avatar then removeUserImage: TRUE UI
-// can submit
-previewImgInput.
-  //imageUpload: "",
-  imageAvatar: "CHECKED IMAGE",
-  inputChange: TRUE,
-  removeUserImage: TRUE,
--
-
-context.avatarImage = "CHECKED IMAGE"
-//context.previewImage = ""
-
-
-
-
-      UPLOAD IMAGE-4(if no checked image)
-
-      // this will disable avatars(via imageUpload or previewImage)
-      // submit
-      previewImgInput.
-        imageUpload: "IMAGE",
-        //imageAvatar: "",
-        //inputChange: TRUE,
-        //removeUserImage: TRUE,
-      -
-
-      //context.avatarImage = ""
-      context.previewImage = "IMAGE"
-
-
-
-
-            REMOVE PREVIEW IMAGE-4
-
-            // should reset since there is no imageAvatar
-            previewImgInput.
-              imageUpload: "IMAGE",
-              //imageAvatar: "",
-              inputChange: FALSE,
-              removeUserImage: FALSE,
-            -
-
-            //context.avatarImage = ""
-            context.previewImage = "IMAGE"
-
-
-
-
-      UNCHECK USER IMAGE TO REMOVE
-      back to start
-      this will no longer be a thing? unless there is an undo button or something for
-      removeUserImage: TRUE UI
-      
-
-
-
-      CHOOSE AVATAR/ CHOOSE DIFFERERNT AVATAR-2
-
-      // user can still upload an image
-      // can submit(save avatar+remove user image)
-      previewImgInput.
-        //imageUpload: "",
-        imageAvatar: "IMAGE",
-        //inputChange: TRUE,
-        //removeUserImage: TRUE,
-      -
-
-      context.avatarImage = "IMAGE"
-      //context.previewImage = ""
-          
-      
-
-
-            *REMOVE AVATAR PREVIEW-3
-
-            // should reset back to start
-            // should remove user image will be unchecked and reset and be shown again
-            // all cases for remove avatar preview will reset
-            previewImgInput.
-              //imageUpload: "",
-              imageAvatar: "",
-              inputChange: false,
-              removeUserImage: false,
-            -
-
-            context.avatarImage = ""
-            //context.previewImage = ""
-            
-
-
-
-                  SET USER IMAGE TO REMOVE-2
-
-                  // this will enable avatars(via removeUserImage: true)
-                  // checked avatar should be set*
-                  // can submit
-                  previewImgInput.
-                    //imageUpload: "",
-                    imageAvatar: "CHECKED AVATAR",
-                    inputChange: TRUE,
-                    removeUserImage: TRUE,
-                  -
-
-                  context.avatarImage = "CHECKED AVATAR"
-                  //context.previewImage = ""
-
-
-
-
-            UPLOAD IMAGE-5
-
-            // chosen avatar should stay the same
-            // uploaded prev image will take precedent
-            // this will disable avatars(via imageUpload or previewImage)
-            // submit will submit both uploaded image and chosen avatar
-            previewImgInput.
-              imageUpload: "IMAGE",
-              //imageAvatar: "IMAGE",
-              //inputChange: TRUE,
-              //removeUserImage: TRUE,
-            -
-
-            //context.avatarImage = "IMAGE"
-            context.previewImage = "IMAGE"
-
-
-
-
-                  REMOVE PREVIEW IMAGE-5
-
-                  // this case should not make inputChange: FALSE
-                    // via imageAvatar: "IMAGE" or removeUserImage: TRUE
-                  // removeUserImage will not be reset(only removing avatar resets)
-                  // user should be able to submit avatar change+remove user image
-                  previewImgInput.
-                    imageUpload: "",
-                    //imageAvatar: "IMAGE",
-                    //inputChange: TRUE,
-                    //removeUserImage: TRUE,
-                  -
-
-                  //context.avatarImage = "IMAGE"
-                  context.previewImage = ""
-
-
-
-
-                  REMOVE AVATAR PREVIEW-4
-                  
-                  // should reset back to start
-                  // should remove user image will be unchecked and reset and be shown again
-                  // all cases for remove avatar preview will reset
-                  previewImgInput.
-                    //imageUpload: "",
-                    imageAvatar: "",
-                    inputChange: false,
-                    removeUserImage: false,
-                  -
-
-                  context.avatarImage = ""
-                  //context.previewImage = ""
-
-
----
-
-
-
-***additional cases***
-
-
-------USER WITH SAVED AVATAR------
-------USER WITH SAVED AVATAR && SAVED IMAGE------
-
-
-
-
-
-
-
-
-
-
-
-
-*/
+import ImagePreview from "../../../components/forms/images/ImagePreview";
 
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
 import { httpClient } from "../../../global/helpers/http-requests";
 import { validateInput } from "../../../global/helpers/validation";
 import { FORM_STATUS } from "../../../global/helpers/variables";
 import Announcer from "../../../global/helpers/announcer";
-import ImagePreview from "../../../components/forms/images/ImagePreview";
 
 let formSuccessWait;
 function PersonalInfo() {
-  const { user, editProfile, setPreviewImg, setAvatarImg } = useContext(
+  const { user, editProfile, userImage, setUserImage } = useContext(
     ProfileContext
   );
   const [formStatus, setFormStatus] = useState(FORM_STATUS.idle);
@@ -682,11 +31,12 @@ function PersonalInfo() {
     inputStatus: FORM_STATUS.idle,
   });
 
-  const [previewImgInput, setPreviewImgInput] = useState({
+  const [previewImage, setPreviewImage] = useState({
     imageUpload: "",
-    imageAvatar: "",
+    selectedAvatar: "",
     inputChange: false,
     removeUserImage: false,
+    removeSavedAvatar: false,
   });
 
   const [areaOfWork, setAreaOfWork] = useState({
@@ -717,24 +67,25 @@ function PersonalInfo() {
     }
   }, [formStatus]);
 
-
-
-
   useEffect(() => {
     if (formStatus === FORM_STATUS.idle) {
-      setPreviewImg("");
-      setAvatarImg("");
+      setUserImage({
+        previewImage: "",
+        previewAvatar: "",
+        removeUserImage: false,
+        removeSavedAvatar: false,
+      });
     }
 
     return () => {
-      setPreviewImg("");
-      setAvatarImg("");
+      setUserImage({
+        previewImage: "",
+        previewAvatar: "",
+        removeUserImage: false,
+        removeSavedAvatar: false,
+      });
     };
   }, [formStatus]);
-
-
-
-
 
   useEffect(() => {
     return () => {
@@ -787,11 +138,12 @@ function PersonalInfo() {
       inputStatus: FORM_STATUS.idle,
     });
 
-    setPreviewImgInput({
+    setPreviewImage({
       imageUpload: "",
-      imageAvatar: "",
+      selectedAvatar: "",
       inputChange: false,
       removeUserImage: false,
+      removeSavedAvatar: false,
     });
 
     setAreaOfWork({
@@ -879,129 +231,354 @@ function PersonalInfo() {
     }
   }
 
-  function setAvatarImage(value) {
+  function setSelectedAvatar(value) {
     const urlStart =
       "https://res.cloudinary.com/dy5hgr3ht/image/upload/v1618796810/tech-pros-v1-avatars/";
 
-    setAvatarImg(`${urlStart}${value}.svg`);
-    setPreviewImgInput({
-      ...previewImgInput,
-      imageAvatar: `${urlStart}${value}.svg`,
+    // no need to set saved avatar
+    if (`${urlStart}${value}.svg` === user.avatar_image) {
+      setUserImage({
+        previewImage: "",
+        previewAvatar: "",
+        removeUserImage: previewImage.removeUserImage,
+        removeSavedAvatar: false,
+      });
+      setPreviewImage({
+        imageUpload: "",
+        selectedAvatar: "",
+        inputChange: previewImage.removeUserImage,
+        removeUserImage: previewImage.removeUserImage,
+        removeSavedAvatar: false,
+      });
+      return;
+    }
+
+    setUserImage({
+      ...userImage,
+      previewAvatar: `${urlStart}${value}.svg`,
+    });
+    setPreviewImage({
+      ...previewImage,
+      selectedAvatar: `${urlStart}${value}.svg`,
       inputChange: true,
     });
   }
 
-  function setImageInput(image) {
-    setPreviewImg(image);
-    setPreviewImgInput({
-      ...previewImgInput,
+  function setImageUpload(image) {
+    setUserImage({
+      ...userImage,
+      previewImage: image,
+    });
+
+    setPreviewImage({
+      ...previewImage,
       imageUpload: image,
       inputChange: true,
     });
   }
 
-  function removeImageInput() {
-    const {imageAvatar, removeUserImage} = previewImgInput;
-    const hasAvatar = imageAvatar ? true : false
-    const shouldRemoveUserImage = hasAvatar && removeUserImage ? true : false
+  // top most layer, 5
+  function removeUploadedImage() {
+    const { selectedAvatar } = previewImage;
 
-    if (!hasAvatar && user.avatar_image) {
-      console.log("saved avatar")
-      setPreviewImg("");
-      setPreviewImgInput({
-        ...previewImgInput,
-        imageUpload: "",
-        inputChange: false,
-        removeUserImage: false,
+    // layer 4
+    // fallback to selected avatar
+    // remove image upload
+    if (selectedAvatar) {
+      setUserImage({
+        ...userImage,
+        previewImage: "",
       });
-      return
+      setPreviewImage({
+        ...previewImage,
+        inputChange: true,
+        imageUpload: "",
+      });
+
+      return;
     }
 
-    if (!hasAvatar && !user.profile_image) {
-      console.log(avatarRadioRefs.current)
-      let checkedAvatar = null;
+    // layer 3
+    // fallback to user image with reset
+    if (user.profile_image) {
+      setUserImage({
+        previewImage: "",
+        previewAvatar: "",
+        removeUserImage: false,
+        removeSavedAvatar: false,
+      });
+      setPreviewImage({
+        imageUpload: "",
+        selectedAvatar: "",
+        inputChange: false,
+        removeUserImage: false,
+        removeSavedAvatar: false,
+      });
+
+      return;
+    }
+
+    // layer 2
+    // fallback to avatar image and select correct radio with reset
+    if (user.avatar_image) {
+      const urlStart =
+        "https://res.cloudinary.com/dy5hgr3ht/image/upload/v1618796810/tech-pros-v1-avatars/";
+
       for (const avatarRadio in avatarRadioRefs.current) {
-        if (avatarRadioRefs.current[avatarRadio].current.checked) {
-          checkedAvatar = avatarRadioRefs.current[avatarRadio].current.value
+        const { value } = avatarRadioRefs.current[avatarRadio].current;
+        if (user.avatar_image === `${urlStart}${value}.svg`) {
+          avatarRadioRefs.current[avatarRadio].current.checked = true;
+        } else {
+          avatarRadioRefs.current[avatarRadio].current.checked = false;
         }
       }
 
-      if (checkedAvatar) {
-        const urlStart =
-      "https://res.cloudinary.com/dy5hgr3ht/image/upload/v1618796810/tech-pros-v1-avatars/";
-
-      setPreviewImg("");
-      setAvatarImg(`${urlStart}${checkedAvatar}.svg`);
-      setPreviewImgInput({
-        ...previewImgInput,
-        imageAvatar: `${urlStart}${checkedAvatar}.svg`,
-        imageUpload: "",
-        inputChange: true,
+      setUserImage({
+        previewImage: "",
+        previewAvatar: "",
+        removeUserImage: false,
+        removeSavedAvatar: false,
       });
-        return
-      }
+      setPreviewImage({
+        imageUpload: "",
+        selectedAvatar: "",
+        inputChange: false,
+        removeUserImage: false,
+        removeSavedAvatar: false,
+      });
+
+      return;
     }
 
-    setPreviewImg("");
-    setPreviewImgInput({
-      ...previewImgInput,
-      imageUpload: "",
-      inputChange: hasAvatar,
-      removeUserImage: shouldRemoveUserImage,
-    });
-  }
-
-  function removeAvatarInput() {
-    console.log(avatarRadioRefs.current)
-    for (const avatarRadio in avatarRadioRefs.current) {
-      avatarRadioRefs.current[avatarRadio].current.checked = false
-    }
-    setAvatarImg("")
-    setPreviewImgInput({
-      ...previewImgInput,
-      imageAvatar: "",
-      inputChange: false,
-      removeUserImage: false,
-    });
-
-  }
-
-
-  function removeUserImage() {
-
-    console.log(avatarRadioRefs.current)
+    // layer 1
+    // set selected avatar if any radio is selected
+    // remove image upload
     let checkedAvatar = null;
     for (const avatarRadio in avatarRadioRefs.current) {
       if (avatarRadioRefs.current[avatarRadio].current.checked) {
-        checkedAvatar = avatarRadioRefs.current[avatarRadio].current.value
+        checkedAvatar = avatarRadioRefs.current[avatarRadio].current.value;
       }
     }
 
     if (checkedAvatar) {
       const urlStart =
-      "https://res.cloudinary.com/dy5hgr3ht/image/upload/v1618796810/tech-pros-v1-avatars/";
+        "https://res.cloudinary.com/dy5hgr3ht/image/upload/v1618796810/tech-pros-v1-avatars/";
 
-      setAvatarImg(`${urlStart}${checkedAvatar}.svg`);
-      setPreviewImgInput({
-        ...previewImgInput,
-        imageAvatar: `${urlStart}${checkedAvatar}.svg`,
-        inputChange: true,
-        removeUserImage: true,
+      setUserImage({
+        previewImage: "",
+        previewAvatar: `${urlStart}${checkedAvatar}.svg`,
+        removeUserImage: false,
+        removeSavedAvatar: false,
       });
-      return
-    }
-    
-    setPreviewImgInput({
-      ...previewImgInput,
-      removeUserImage: true,
-      inputChange: true,
-    });
+      setPreviewImage({
+        imageUpload: "",
+        selectedAvatar: `${urlStart}${checkedAvatar}.svg`,
+        inputChange: true,
+        removeUserImage: false,
+        removeSavedAvatar: false,
+      });
 
+      return;
+    }
+
+    // layer 0, default reset
+    setUserImage({
+      previewImage: "",
+      previewAvatar: "",
+      removeUserImage: false,
+      removeSavedAvatar: false,
+    });
+    setPreviewImage({
+      imageUpload: "",
+      selectedAvatar: "",
+      inputChange: false,
+      removeUserImage: false,
+      removeSavedAvatar: false,
+    });
   }
 
+  // layer 4
+  function removeSelectedAvatar() {
+    // layer 3
+    // fallback to user image with reset
+    if (user.profile_image) {
+      setUserImage({
+        previewImage: "",
+        previewAvatar: "",
+        removeUserImage: false,
+        removeSavedAvatar: false,
+      });
+      setPreviewImage({
+        imageUpload: "",
+        selectedAvatar: "",
+        inputChange: false,
+        removeUserImage: false,
+        removeSavedAvatar: false,
+      });
 
+      return;
+    }
 
+    // layer 2
+    // fallback to avatar image and select correct radio with reset
+    if (user.avatar_image) {
+      const urlStart =
+        "https://res.cloudinary.com/dy5hgr3ht/image/upload/v1618796810/tech-pros-v1-avatars/";
 
+      console.log(avatarRadioRefs.current);
+      for (const avatarRadio in avatarRadioRefs.current) {
+        const { value } = avatarRadioRefs.current[avatarRadio].current;
+        if (user.avatar_image === `${urlStart}${value}.svg`) {
+          avatarRadioRefs.current[avatarRadio].current.checked = true;
+        } else {
+          avatarRadioRefs.current[avatarRadio].current.checked = false;
+        }
+      }
+
+      setUserImage({
+        previewImage: "",
+        previewAvatar: "",
+        removeUserImage: false,
+        removeSavedAvatar: false,
+      });
+      setPreviewImage({
+        imageUpload: "",
+        selectedAvatar: "",
+        inputChange: false,
+        removeUserImage: false,
+        removeSavedAvatar: false,
+      });
+
+      return;
+    }
+
+    // layer 1 && default
+    // unselect radios with reset
+    for (const avatarRadio in avatarRadioRefs.current) {
+      avatarRadioRefs.current[avatarRadio].current.checked = false;
+    }
+
+    setUserImage({
+      previewImage: "",
+      previewAvatar: "",
+      removeUserImage: false,
+      removeSavedAvatar: false,
+    });
+    setPreviewImage({
+      imageUpload: "",
+      selectedAvatar: "",
+      inputChange: false,
+      removeUserImage: false,
+      removeSavedAvatar: false,
+    });
+  }
+
+  // layer 3
+  function removeUserImage() {
+    // layer 2
+    // fallback to avatar image and select correct radio with reset
+    // set remove user image
+    if (user.avatar_image) {
+      const urlStart =
+        "https://res.cloudinary.com/dy5hgr3ht/image/upload/v1618796810/tech-pros-v1-avatars/";
+
+      for (const avatarRadio in avatarRadioRefs.current) {
+        const { value } = avatarRadioRefs.current[avatarRadio].current;
+        if (user.avatar_image === `${urlStart}${value}.svg`) {
+          avatarRadioRefs.current[avatarRadio].current.checked = true;
+        } else {
+          avatarRadioRefs.current[avatarRadio].current.checked = false;
+        }
+      }
+
+      setUserImage({
+        previewImage: "",
+        previewAvatar: "",
+        removeUserImage: true,
+        removeSavedAvatar: false,
+      });
+      setPreviewImage({
+        imageUpload: "",
+        selectedAvatar: "",
+        inputChange: true,
+        removeUserImage: true,
+        removeSavedAvatar: false,
+      });
+
+      return;
+    }
+
+    // layer 1
+    // set selected avatar if any radio is selected
+    // set remove user image
+    let checkedAvatar = null;
+    for (const avatarRadio in avatarRadioRefs.current) {
+      if (avatarRadioRefs.current[avatarRadio].current.checked) {
+        checkedAvatar = avatarRadioRefs.current[avatarRadio].current.value;
+      }
+    }
+
+    if (checkedAvatar) {
+      const urlStart =
+        "https://res.cloudinary.com/dy5hgr3ht/image/upload/v1618796810/tech-pros-v1-avatars/";
+
+      setUserImage({
+        previewImage: "",
+        previewAvatar: `${urlStart}${checkedAvatar}.svg`,
+        removeUserImage: true,
+        removeSavedAvatar: false,
+      });
+      setPreviewImage({
+        imageUpload: "",
+        selectedAvatar: `${urlStart}${checkedAvatar}.svg`,
+        inputChange: true,
+        removeUserImage: true,
+        removeSavedAvatar: false,
+      });
+
+      return;
+    }
+
+    // layer 0, default reset
+    // set remove user image
+    setUserImage({
+      previewImage: "",
+      previewAvatar: "",
+      removeUserImage: true,
+      removeSavedAvatar: false,
+    });
+    setPreviewImage({
+      imageUpload: "",
+      selectedAvatar: "",
+      inputChange: true,
+      removeUserImage: true,
+      removeSavedAvatar: false,
+    });
+  }
+
+  // layer 2
+  function removeSavedAvatar() {
+    // layer 1 && default
+    // unselect radios with reset
+    // set remove saved avatar
+    for (const avatarRadio in avatarRadioRefs.current) {
+      avatarRadioRefs.current[avatarRadio].current.checked = false;
+    }
+
+    setUserImage({
+      previewImage: "",
+      previewAvatar: "",
+      removeUserImage: previewImage.removeUserImage,
+      removeSavedAvatar: true,
+    });
+    setPreviewImage({
+      imageUpload: "",
+      selectedAvatar: "",
+      inputChange: true,
+      removeUserImage: previewImage.removeUserImage,
+      removeSavedAvatar: true,
+    });
+  }
 
   function setAreaOfWorkInput(value) {
     if (value === user.area_of_work) {
@@ -1062,7 +639,7 @@ function PersonalInfo() {
     if (
       !firstName.inputChange &&
       !lastName.inputChange &&
-      !previewImgInput.inputChange &&
+      !previewImage.inputChange &&
       !areaOfWork.inputChange &&
       !title.inputChange
     ) {
@@ -1088,24 +665,22 @@ function PersonalInfo() {
       inputs.desired_title = title.inputValue;
     }
 
-    // submit avatar image
-    // submit preview image
-    // submit avatar change
-    // remove user image
-    // remove user image + submit preview image
-    // remove user image + submit avatar image
-    // remove user image + submit avatar change
-
-    if (previewImgInput.inputChange) {
-      inputs.avatar_image = previewImgInput.imageAvatar;
-
-      if (previewImgInput.removeUserImage) {
+    if (previewImage.inputChange) {
+      if (previewImage.removeUserImage) {
         inputs.profile_image = "";
       }
 
-      if (previewImgInput.imageUpload) {
+      if (previewImage.removeSavedAvatar) {
+        inputs.avatar_image = "";
+      }
+
+      if (previewImage.selectedAvatar) {
+        inputs.avatar_image = previewImage.selectedAvatar;
+      }
+
+      if (previewImage.imageUpload) {
         const [res, err] = await httpClient("POST", `/api/upload-main-image`, {
-          imageUrl: previewImgInput.imageUpload,
+          imageUrl: previewImage.imageUpload,
           id: user.id,
         });
 
@@ -1180,10 +755,6 @@ function PersonalInfo() {
       </>
     );
   }
-
-
-  console.log("img input", previewImgInput)
-  console.log("user", user)
 
   return (
     <>
@@ -1310,22 +881,28 @@ function PersonalInfo() {
               <div className="image-upload-container">
                 <ImageUploadForm
                   userId={user.id}
-                  setImageInput={setImageInput}
+                  setImageInput={setImageUpload}
                 />
                 <ImagePreview
-                  previewImage={previewImgInput.imageUpload}
-                  removePreviewImage={removeImageInput}
-                  avatarImage={previewImgInput.imageAvatar}
-                  removeAvatarImage={removeAvatarInput}
-                  userImage={user.profile_image || user.avatar_image}
-                  removeUserImage={removeUserImage}
+                  uploadedImage={previewImage.imageUpload}
+                  removeUploadedImage={removeUploadedImage}
+                  selectedAvatar={previewImage.selectedAvatar}
+                  removeSelectedAvatar={removeSelectedAvatar}
+                  savedUserImage={
+                    !previewImage.removeUserImage && user.profile_image
+                  }
+                  removeSavedUserImage={removeUserImage}
+                  savedAvatar={
+                    !previewImage.removeSavedAvatar && user.avatar_image
+                  }
+                  removeSavedAvatar={removeSavedAvatar}
                 />
               </div>
 
               <fieldset
                 disabled={
-                  previewImgInput.imageUpload ||
-                  (user.profile_image && !previewImgInput.removeUserImage)
+                  previewImage.imageUpload ||
+                  (user.profile_image && !previewImage.removeUserImage)
                 }
               >
                 <legend>Choose an avatar image:</legend>
@@ -1344,7 +921,7 @@ function PersonalInfo() {
                           user.avatar_image ===
                           "https://res.cloudinary.com/dy5hgr3ht/image/upload/v1618796810/tech-pros-v1-avatars/blue-1.svg"
                         }
-                        onClick={(e) => setAvatarImage(e.target.value)}
+                        onClick={(e) => setSelectedAvatar(e.target.value)}
                       />
                       Blue female avatar, medium skin tone, pink hair
                     </label>
@@ -1361,7 +938,7 @@ function PersonalInfo() {
                           user.avatar_image ===
                           "https://res.cloudinary.com/dy5hgr3ht/image/upload/v1618796810/tech-pros-v1-avatars/redblue-1.svg"
                         }
-                        onClick={(e) => setAvatarImage(e.target.value)}
+                        onClick={(e) => setSelectedAvatar(e.target.value)}
                       />
                       Red and blue female avatar, light skin tone, red hair
                     </label>
@@ -1378,7 +955,7 @@ function PersonalInfo() {
                           user.avatar_image ===
                           "https://res.cloudinary.com/dy5hgr3ht/image/upload/v1618796810/tech-pros-v1-avatars/whitegreen-1.svg"
                         }
-                        onClick={(e) => setAvatarImage(e.target.value)}
+                        onClick={(e) => setSelectedAvatar(e.target.value)}
                       />
                       White and green male avatar, dark skin tone, black hair
                     </label>
@@ -1395,7 +972,7 @@ function PersonalInfo() {
                           user.avatar_image ===
                           "https://res.cloudinary.com/dy5hgr3ht/image/upload/v1618796810/tech-pros-v1-avatars/greenblack-1.svg"
                         }
-                        onClick={(e) => setAvatarImage(e.target.value)}
+                        onClick={(e) => setSelectedAvatar(e.target.value)}
                       />
                       green and black female avatar, medium skin tone, black
                       hair
@@ -1413,7 +990,7 @@ function PersonalInfo() {
                           user.avatar_image ===
                           "https://res.cloudinary.com/dy5hgr3ht/image/upload/v1618796810/tech-pros-v1-avatars/white-1.svg"
                         }
-                        onClick={(e) => setAvatarImage(e.target.value)}
+                        onClick={(e) => setSelectedAvatar(e.target.value)}
                       />
                       White male avatar, light skin tone, blue hair
                     </label>
@@ -1430,7 +1007,7 @@ function PersonalInfo() {
                           user.avatar_image ===
                           "https://res.cloudinary.com/dy5hgr3ht/image/upload/v1618796810/tech-pros-v1-avatars/greenwhite-1.svg"
                         }
-                        onClick={(e) => setAvatarImage(e.target.value)}
+                        onClick={(e) => setSelectedAvatar(e.target.value)}
                       />
                       Green and white male avatar, light skin tone, black hair
                     </label>
