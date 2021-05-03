@@ -23,7 +23,7 @@ function UserImage({ previewImage, userImage, avatarImage }) {
           alt="current pic preview"
         />
       </div>
-    )
+    );
   }
 
   if (userImage && !imageErr) {
@@ -35,7 +35,7 @@ function UserImage({ previewImage, userImage, avatarImage }) {
           alt="saved profile pic"
         />
       </div>
-    )
+    );
   }
 
   if (avatarImage && !imageErr) {
@@ -47,7 +47,7 @@ function UserImage({ previewImage, userImage, avatarImage }) {
           alt="saved avatar pic"
         />
       </div>
-    )
+    );
   }
 
   return (

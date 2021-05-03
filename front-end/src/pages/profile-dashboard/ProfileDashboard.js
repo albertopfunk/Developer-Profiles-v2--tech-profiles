@@ -43,8 +43,8 @@ function ProfileDashboard() {
     previewImage: "",
     previewAvatar: "",
     removeUserImage: false,
-    removeSavedAvatar: false
-  })
+    removeSavedAvatar: false,
+  });
 
   const [stripePromise] = useState(() =>
     loadStripe(process.env.REACT_APP_STRIPE)
@@ -190,7 +190,7 @@ function ProfileDashboard() {
                   editProfile,
                   addUserExtras,
                   userImage,
-                  setUserImage
+                  setUserImage,
                 }}
               >
                 <Switch>
