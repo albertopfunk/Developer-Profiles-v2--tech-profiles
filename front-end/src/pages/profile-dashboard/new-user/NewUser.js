@@ -1,23 +1,25 @@
 import React, { useState, useContext, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
+import { Helmet } from "react-helmet";
 import styled from "styled-components";
 
-import ImageUploadForm from "../../../components/forms/images/ImageUpload";
+import ImageBox from "../../../components/forms/images/imageBox";
 import CheckoutContainer from "../../../components/forms/billing";
+import Combobox from "../../../components/forms/combobox";
 
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
 import { httpClient } from "../../../global/helpers/http-requests";
 import { validateInput } from "../../../global/helpers/validation";
 import { FORM_STATUS } from "../../../global/helpers/variables";
-import Combobox from "../../../components/forms/combobox";
-import { Helmet } from "react-helmet";
+import Announcer from "../../../global/helpers/announcer";
 
 let formSuccessWait;
 function NewUser() {
-  const { user, editProfile } = useContext(ProfileContext);
+  const { user, editProfile, userImage } = useContext(ProfileContext);
   const [selectedTab, setSelectedTab] = useState("basic-info");
   const [formStatus, setFormStatus] = useState(FORM_STATUS.idle);
   const [formFocusStatus, setFormFocusStatus] = useState("");
+  const [hasSubmitError, setHasSubmitError] = useState(null);
   let history = useHistory();
 
   const [firstName, setFirstName] = useState({
@@ -25,12 +27,9 @@ function NewUser() {
     inputChange: false,
     inputStatus: FORM_STATUS.idle,
   });
-  const [previewImgInput, setPreviewImgInput] = useState({
-    image: "",
-    id: "",
-    inputChange: false,
-    shouldRemoveUserImage: false,
-  });
+
+  const [imageChange, setImageChange] = useState(false);
+
   const [areaOfWork, setAreaOfWork] = useState({
     inputValue: "",
     inputChange: false,
@@ -105,12 +104,6 @@ function NewUser() {
       inputValue: user.first_name || "",
       inputChange: false,
       inputStatus: FORM_STATUS.idle,
-    });
-    setPreviewImgInput({
-      image: "",
-      id: "",
-      inputChange: false,
-      shouldRemoveUserImage: false,
     });
     setAreaOfWork({
       inputValue: "",
@@ -224,38 +217,6 @@ function NewUser() {
       setFirstName({ ...firstName, inputStatus: FORM_STATUS.success });
     } else {
       setFirstName({ ...firstName, inputStatus: FORM_STATUS.error });
-    }
-  }
-
-  function setImageInput(data) {
-    setPreviewImgInput({
-      ...data,
-      inputChange: true,
-      shouldRemoveUserImage: false,
-    });
-  }
-
-  function removeImageInput(data) {
-    setPreviewImgInput({
-      ...data,
-      inputChange: false,
-      shouldRemoveUserImage: false,
-    });
-  }
-
-  function removeUserImage(shouldRemove) {
-    if (shouldRemove) {
-      setPreviewImgInput({
-        ...previewImgInput,
-        shouldRemoveUserImage: true,
-        inputChange: true,
-      });
-    } else {
-      setPreviewImgInput({
-        ...previewImgInput,
-        shouldRemoveUserImage: false,
-        inputChange: false,
-      });
     }
   }
 
@@ -401,7 +362,7 @@ function NewUser() {
 
     if (
       !firstName.inputChange &&
-      !previewImgInput.inputChange &&
+      !imageChange &&
       !areaOfWork.inputChange &&
       !title.inputChange &&
       !summary.inputChange &&
@@ -442,30 +403,47 @@ function NewUser() {
       }
     }
 
-    if (previewImgInput.inputChange) {
-      if (previewImgInput.shouldRemoveUserImage) {
-        inputs.image = "";
-        inputs.image_id = "";
-      } else {
+    if (imageChange) {
+      if (userImage.removeUserImage) {
+        inputs.profile_image = "";
+      }
+
+      if (userImage.removeSavedAvatar) {
+        inputs.avatar_image = "";
+      }
+
+      if (userImage.previewAvatar) {
+        inputs.avatar_image = userImage.previewAvatar;
+      }
+
+      if (userImage.previewImage) {
         const [res, err] = await httpClient("POST", `/api/upload-main-image`, {
-          imageUrl: previewImgInput.image,
+          imageUrl: userImage.previewImage,
           id: user.id,
         });
 
         if (err) {
           console.error(`${res.mssg} => ${res.err}`);
+          setFormStatus(FORM_STATUS.error);
+          setHasSubmitError(true);
           return;
         }
 
-        inputs.image = res.data.image;
-        inputs.image_id = res.data.id;
+        inputs.profile_image = res.data.image;
       }
     }
 
-    await editProfile(inputs);
+    const results = await editProfile(inputs);
+
+    if (results?.error) {
+      setFormStatus(FORM_STATUS.error);
+      setHasSubmitError(true);
+      return;
+    }
+
     formSuccessWait = setTimeout(() => {
       history.push("/profile-dashboard");
-    }, 1000);
+    }, 750);
     setFormStatus(FORM_STATUS.success);
   }
 
@@ -510,7 +488,52 @@ function NewUser() {
         <p id="edit-information-desc">
           inputs are validated but not required to submit
         </p>
-        {/* error summary */}
+
+        {formStatus === FORM_STATUS.error ? (
+          <div ref={errorSummaryRef} tabIndex="-1">
+            <h3 id="error-heading">Errors in Submission</h3>
+            {hasSubmitError ||
+            firstName.inputStatus === FORM_STATUS.error ||
+            title.inputStatus === FORM_STATUS.error ||
+            summary.inputStatus === FORM_STATUS.error ? (
+              <>
+                <strong>
+                  Please address the following errors and re-submit the form:
+                </strong>
+                <ul aria-label="current errors" id="error-group">
+                  {hasSubmitError ? (
+                    <li>Error submitting form, please try again</li>
+                  ) : null}
+                  {firstName.inputStatus === FORM_STATUS.error ? (
+                    <li>
+                      <a href="#first-name">First Name Error</a>
+                    </li>
+                  ) : null}
+                  {title.inputStatus === FORM_STATUS.error ? (
+                    <li>
+                      <a href="#title">Title Error</a>
+                    </li>
+                  ) : null}
+                  {summary.inputStatus === FORM_STATUS.error ? (
+                    <li>
+                      <a href="#summary">Summary Error</a>
+                    </li>
+                  ) : null}
+                </ul>
+              </>
+            ) : (
+              <>
+                <p>No Errors, ready to submit</p>
+                <Announcer
+                  announcement="No Errors, ready to submit"
+                  ariaId="no-errors-announcer"
+                  ariaLive="polite"
+                />
+              </>
+            )}
+          </div>
+        ) : null}
+
         <div className="tabs">
           <ul role="tablist" aria-label="quick start">
             <li role="presentation">
@@ -592,14 +615,7 @@ function NewUser() {
                 ) : null}
               </InputContainer>
 
-              <ImageUploadForm
-                previewImage={previewImgInput.image}
-                userImage={user.image}
-                userId={user.id}
-                setImageInput={setImageInput}
-                removeImageInput={removeImageInput}
-                removeUserImage={removeUserImage}
-              />
+              <ImageBox setImageChange={setImageChange} />
 
               <FieldSet>
                 <legend>Area of Work</legend>
