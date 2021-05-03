@@ -2,10 +2,72 @@ import React, { useState } from "react";
 import styled from "styled-components";
 
 import ImageUploadForm from "../images/ImageUpload";
+import ImagePreview from "../images/ImagePreview";
 
 import { validateInput } from "../../../global/helpers/validation";
 import { FORM_STATUS } from "../../../global/helpers/variables";
-import { httpClient } from "../../../global/helpers/http-requests";
+// import { httpClient } from "../../../global/helpers/http-requests";
+
+
+
+/*
+
+CLOUDINARY IMAGE UPLOADS
+
+Goal:
+1. preview images for new projects(on ImageUpload)
+since all new projects added start with "new-1" as the temp ID
+you can use that to upload, if user cancels or users next interaction
+it will just reset and override
+
+
+2. saved images for new projects(on /new/:user_extra)
+this will have to be done /new/:user_extra
+when user adds the project, it should return the actual project ID
+use that to submit the saved image with correct project ID
+**this will only be for a NEW saved project, since existing projects
+already have saved actual IDs they will be able to be done locally
+
+
+3. preview images for existing projects(on ImageUpload)
+this will be done locally with existing projects actual ID
+this can prob be done in the same fn as new projects
+both just use the current ID, the only difference will be
+the IDs
+
+
+4. saved images for existing projects(on updateUserProjects)
+existing projects already have saved actual IDs
+it will be able to be done locally
+this will still override the saved images for new projects
+
+
+in total each user should have 3 images max for each project
+"profile-5-project-new-1-preview"
+"profile-5-project-2-preview"
+"profile-5-project-2-saved"
+
+
+preview images for new projects
+`profile-${req.params.id}-project-${req.params.projectId}-preview`
+"profile-5-project-new-1-preview"
+
+saved images for new projects
+`profile-${req.params.id}-project-${returned_project_id}-saved`
+"profile-5-project-2-saved"
+
+preview images for existing projects
+`profile-${req.params.id}-project-${req.params.projectId}-preview`
+"profile-5-project-2-preview"
+
+saved images for existing projects
+`profile-${req.params.id}-project-${req.params.projectId}-saved`
+"profile-5-project-2-saved"
+
+
+*/
+
+
 
 const ProjectForm = React.forwardRef(
   (
@@ -27,12 +89,16 @@ const ProjectForm = React.forwardRef(
       projectStatus: FORM_STATUS.idle,
     });
 
+
+
     const [image, setImage] = useState({
       imageInput: "",
       imageInputId: "",
       imageChange: false,
       shouldRemoveUserImage: false,
     });
+
+
 
     const [link, setLink] = useState({
       linkInput: userProjectLink,
@@ -94,31 +160,32 @@ const ProjectForm = React.forwardRef(
       updateProject(projIndex, newState);
     }
 
-    function removeImageFromCloudinary() {
-      if (image.imageInputId) {
-        httpClient("POST", "/api/delete-image", {
-          id: image.imageInputId,
-        });
-      }
-    }
 
-    function setImageInput(data) {
-      removeImageFromCloudinary();
+
+    // function removeImageFromCloudinary() {
+    //   if (image.imageInputId) {
+    //     httpClient("POST", "/api/delete-image", {
+    //       id: image.imageInputId,
+    //     });
+    //   }
+    // }
+
+
+
+    function setImageInput(image) {
       const newState = {
-        imageInput: data.image,
-        imageInputId: data.id,
+        ...image,
+        imageInput: image,
         imageChange: true,
-        shouldRemoveUserImage: false,
       };
       setImage(newState);
       updateProject(projIndex, newState);
     }
 
+
     function removeImageInput() {
-      removeImageFromCloudinary();
       const newState = {
         imageInput: "",
-        imageInputId: "",
         imageChange: false,
         shouldRemoveUserImage: false,
       };
@@ -126,27 +193,22 @@ const ProjectForm = React.forwardRef(
       updateProject(projIndex, newState);
     }
 
-    function removeUserImage(shouldRemove) {
-      let newState;
 
-      if (shouldRemove) {
-        newState = {
-          ...image,
-          shouldRemoveUserImage: true,
-          imageChange: true,
-        };
-        setImage(newState);
-        updateProject(projIndex, newState);
-      } else {
-        newState = {
-          ...image,
-          shouldRemoveUserImage: false,
-          imageChange: false,
-        };
-        setImage(newState);
-        updateProject(projIndex, newState);
-      }
+
+    function removeUserImage() {
+      let newState;
+      newState = {
+        ...image,
+        shouldRemoveUserImage: true,
+        imageChange: true,
+      };
+      setImage(newState);
+      updateProject(projIndex, newState);
     }
+
+
+
+
 
     function setLinkInput(value) {
       setLink({
@@ -289,12 +351,12 @@ const ProjectForm = React.forwardRef(
           ) : null}
         </InputContainer>
 
-        <ImageUploadForm
-          previewImage={image.imageInput}
-          userImage={userProjectImage}
-          setImageInput={setImageInput}
-          removeImageInput={removeImageInput}
-          removeUserImage={removeUserImage}
+        <ImageUploadForm userId={userId} setImageInput={setImageInput} />
+        <ImagePreview
+          uploadedImage={image.imageInput}
+          removeUploadedImage={removeImageInput}
+          savedUserImage={userProjectImage}
+          removeSavedUserImage={removeUserImage}
         />
 
         <InputContainer>
