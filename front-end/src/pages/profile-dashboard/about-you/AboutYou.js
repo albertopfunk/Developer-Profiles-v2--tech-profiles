@@ -15,6 +15,7 @@ function AboutYou() {
   const { user, addUserExtras } = useContext(ProfileContext);
   const [formStatus, setFormStatus] = useState(FORM_STATUS.idle);
   const [formFocusStatus, setFormFocusStatus] = useState("");
+  const [hasSubmitError, setHasSubmitError] = useState(null);
   const [skillsForReviewIdTracker, setSkillsForReviewIdTracker] = useState(1);
 
   const [summary, setSummary] = useState({
@@ -431,6 +432,7 @@ function AboutYou() {
       return;
     }
 
+    setFormStatus(FORM_STATUS.loading);
     let additionalArr = [];
 
     if (summary.inputChange) {
@@ -456,11 +458,19 @@ function AboutYou() {
       additionalArr = [...additionalArr, ...skillRequests];
     }
 
-    setFormStatus(FORM_STATUS.loading);
-    await addUserExtras(additionalArr);
+    const results = await addUserExtras(additionalArr);
+
+    if (results?.error) {
+      setFormStatus(FORM_STATUS.error);
+      setHasSubmitError(true);
+      return;
+    }
+
     formSuccessWait = setTimeout(() => {
       setFormStatus(FORM_STATUS.idle);
-    }, 1000);
+      setHasSubmitError(null);
+    }, 750);
+
     setFormStatus(FORM_STATUS.success);
   }
 
@@ -550,15 +560,21 @@ function AboutYou() {
           <div ref={errorSummaryRef} tabIndex="-1">
             <h3 id="error-heading">Errors in Submission</h3>
 
-            {summary.inputStatus === FORM_STATUS.error ? (
+            {hasSubmitError || summary.inputStatus === FORM_STATUS.error ? (
               <>
                 <strong>
                   Please address the following errors and re-submit the form:
                 </strong>
                 <ul aria-label="current errors" id="error-group">
-                  <li>
-                    <a href="#summary">Summary Error</a>
-                  </li>
+                  {hasSubmitError ? (
+                    <li>Error submitting form, please try again</li>
+                  ) : null}
+
+                  {summary.inputStatus === FORM_STATUS.error ? (
+                    <li>
+                      <a href="#summary">Summary Error</a>
+                    </li>
+                  ) : null}
                 </ul>
               </>
             ) : (
