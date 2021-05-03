@@ -18,15 +18,14 @@ function ImageBox({ setImageChange }) {
 
   useEffect(() => {
     return () => {
-        setUserImage({
-          previewImage: "",
-          previewAvatar: "",
-          removeUserImage: false,
-          removeSavedAvatar: false,
-        });
-      };
-  }, [])
-
+      setUserImage({
+        previewImage: "",
+        previewAvatar: "",
+        removeUserImage: false,
+        removeSavedAvatar: false,
+      });
+    };
+  }, []);
 
   function setSelectedAvatar(value) {
     const urlStart =
