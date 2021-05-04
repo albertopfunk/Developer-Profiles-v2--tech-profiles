@@ -6,7 +6,6 @@ import ImagePreview from "../images/ImagePreview";
 
 import { validateInput } from "../../../global/helpers/validation";
 import { FORM_STATUS } from "../../../global/helpers/variables";
-// import { httpClient } from "../../../global/helpers/http-requests";
 
 /*
 
@@ -71,6 +70,7 @@ const ProjectForm = React.forwardRef(
     {
       projIndex,
       userId,
+      projectId,
       userProjectName,
       userProjectImage,
       userProjectLink,
@@ -88,7 +88,6 @@ const ProjectForm = React.forwardRef(
 
     const [image, setImage] = useState({
       imageInput: "",
-      imageInputId: "",
       imageChange: false,
       shouldRemoveUserImage: false,
     });
@@ -152,14 +151,6 @@ const ProjectForm = React.forwardRef(
       setProject(newState);
       updateProject(projIndex, newState);
     }
-
-    // function removeImageFromCloudinary() {
-    //   if (image.imageInputId) {
-    //     httpClient("POST", "/api/delete-image", {
-    //       id: image.imageInputId,
-    //     });
-    //   }
-    // }
 
     function setImageInput(image) {
       const newState = {
@@ -302,16 +293,16 @@ const ProjectForm = React.forwardRef(
         </button>
 
         <InputContainer>
-          <label htmlFor={`project-${userId}`}>Project:</label>
+          <label htmlFor={`project-${projectId}`}>Project:</label>
           <input
             type="text"
             autoComplete="organization"
-            id={`project-${userId}`}
+            id={`project-${projectId}`}
             name="project"
             className={`input ${
               project.projectStatus === FORM_STATUS.error ? "input-err" : ""
             }`}
-            aria-describedby={`project-${userId}-error project-${userId}-success`}
+            aria-describedby={`project-${projectId}-error project-${projectId}-success`}
             aria-invalid={
               project.projectNameInput.trim() === "" ||
               project.projectStatus === FORM_STATUS.error
@@ -321,13 +312,13 @@ const ProjectForm = React.forwardRef(
             onBlur={(e) => validateProject(e.target.value)}
           />
           {project.projectStatus === FORM_STATUS.error ? (
-            <span id={`project-${userId}-error`} className="err-mssg">
+            <span id={`project-${projectId}-error`} className="err-mssg">
               Input is required. Project can only be alphabelical characters, no
               numbers
             </span>
           ) : null}
           {project.projectStatus === FORM_STATUS.success ? (
-            <span id={`project-${userId}-success`} className="success-mssg">
+            <span id={`project-${projectId}-success`} className="success-mssg">
               Project is Validated
             </span>
           ) : null}
@@ -335,7 +326,7 @@ const ProjectForm = React.forwardRef(
 
         <ImageUploadForm
           userId={userId}
-          imageId={projIndex}
+          imageId={projectId}
           setImageInput={setImageInput}
         />
         <ImagePreview
@@ -346,16 +337,16 @@ const ProjectForm = React.forwardRef(
         />
 
         <InputContainer>
-          <label htmlFor={`link-${userId}`}>Link:</label>
+          <label htmlFor={`link-${projectId}`}>Link:</label>
           <input
             type="text"
             autoComplete="url"
-            id={`link-${userId}`}
+            id={`link-${projectId}`}
             name="link"
             className={`input ${
               link.linkStatus === FORM_STATUS.error ? "input-err" : ""
             }`}
-            aria-describedby={`link-${userId}-error link-${userId}-success`}
+            aria-describedby={`link-${projectId}-error link-${projectId}-success`}
             aria-invalid={
               link.linkInput.trim() === "" ||
               link.linkStatus === FORM_STATUS.error
@@ -365,30 +356,30 @@ const ProjectForm = React.forwardRef(
             onBlur={(e) => validateLink(e.target.value)}
           />
           {link.linkStatus === FORM_STATUS.error ? (
-            <span id={`link-${userId}-error`} className="err-mssg">
+            <span id={`link-${projectId}-error`} className="err-mssg">
               Input is required. Link can only be alphabelical characters, no
               numbers
             </span>
           ) : null}
           {link.linkStatus === FORM_STATUS.success ? (
-            <span id={`link-${userId}-success`} className="success-mssg">
+            <span id={`link-${projectId}-success`} className="success-mssg">
               Link is Validated
             </span>
           ) : null}
         </InputContainer>
 
         <InputContainer>
-          <label htmlFor={`description-${userId}`}>Description:</label>
+          <label htmlFor={`description-${projectId}`}>Description:</label>
           <input
             type="text"
-            id={`description-${userId}`}
+            id={`description-${projectId}`}
             name="description"
             className={`input ${
               description.descriptionStatus === FORM_STATUS.error
                 ? "input-err"
                 : ""
             }`}
-            aria-describedby={`description-${userId}-error description-${userId}-success`}
+            aria-describedby={`description-${projectId}-error description-${projectId}-success`}
             aria-invalid={
               description.descriptionInput.trim() === "" ||
               description.descriptionStatus === FORM_STATUS.error
@@ -398,13 +389,13 @@ const ProjectForm = React.forwardRef(
             onBlur={(e) => validateDescription(e.target.value)}
           />
           {description.descriptionStatus === FORM_STATUS.error ? (
-            <span id={`description-${userId}-error`} className="err-mssg">
+            <span id={`description-${projectId}-error`} className="err-mssg">
               Input is required. description can only be alphabelical
               characters, no numbers
             </span>
           ) : null}
           {description.descriptionStatus === FORM_STATUS.success ? (
-            <span id={`description-${userId}-success`} className="success-mssg">
+            <span id={`description-${projectId}-success`} className="success-mssg">
               description is Validated
             </span>
           ) : null}
