@@ -395,7 +395,10 @@ const ProjectForm = React.forwardRef(
             </span>
           ) : null}
           {description.descriptionStatus === FORM_STATUS.success ? (
-            <span id={`description-${projectId}-success`} className="success-mssg">
+            <span
+              id={`description-${projectId}-success`}
+              className="success-mssg"
+            >
               description is Validated
             </span>
           ) : null}
