@@ -26,7 +26,7 @@ cloudinary.config({
 });
 
 server.post(
-  "/upload-preview-image/:id",
+  "/upload-preview-image/:id/:image_id",
   fileUpload({
     useTempFiles: true,
   }),
@@ -57,11 +57,13 @@ server.post(
       return;
     }
 
+    const imageId = req.params.image_id ? `${req.params.image_id}-` : ""
+
     cloudinary.uploader.upload(
       req.files.image.tempFilePath,
       {
         upload_preset: process.env.CLOUDINARY_UPLOAD_PRESET,
-        public_id: `profile-${req.params.id}-image-preview`,
+        public_id: `profile-${req.params.id}-image-${imageId}preview`,
       },
       (err, result) => {
         if (err) {
@@ -91,11 +93,13 @@ server.post("/upload-main-image", (req, res) => {
     return;
   }
 
+  const imageId = req.body.imageId ? `${req.body.imageId}-` : ""
+
   cloudinary.uploader.upload(
     req.body.imageUrl,
     {
       upload_preset: process.env.CLOUDINARY_UPLOAD_PRESET,
-      public_id: `profile-${req.body.id}-image-main`,
+      public_id: `profile-${req.body.id}-image-${imageId}main`,
     },
     (err, result) => {
       if (err) {
