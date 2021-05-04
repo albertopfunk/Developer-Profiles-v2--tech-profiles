@@ -57,7 +57,7 @@ server.post(
       return;
     }
 
-    const imageId = req.params.image_id ? `${req.params.image_id}-` : ""
+    const imageId = req.params.image_id ? `${req.params.image_id}-` : "";
 
     cloudinary.uploader.upload(
       req.files.image.tempFilePath,
@@ -70,9 +70,7 @@ server.post(
           res.status(500).json({ message: "Error uploading image" });
           return;
         }
-        res
-          .status(200)
-          .json({ image: result.secure_url });
+        res.status(200).json({ image: result.secure_url });
       }
     );
   }
@@ -93,7 +91,7 @@ server.post("/upload-main-image", (req, res) => {
     return;
   }
 
-  const imageId = req.body.imageId ? `${req.body.imageId}-` : ""
+  const imageId = req.body.imageId ? `${req.body.imageId}-` : "";
 
   cloudinary.uploader.upload(
     req.body.imageUrl,

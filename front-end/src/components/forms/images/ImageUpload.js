@@ -12,10 +12,9 @@ function ImageUploadForm({ userId, imageId, setImageInput }) {
       return;
     }
 
-    const url = imageId ?
-    `/api/upload-preview-image/${userId}/${imageId}`
-    :
-    `/api/upload-preview-image/${userId}`
+    const url = imageId
+      ? `/api/upload-preview-image/${userId}/${imageId}`
+      : `/api/upload-preview-image/${userId}`;
 
     const file = e.target.files[0];
     const data = new FormData();
@@ -23,16 +22,11 @@ function ImageUploadForm({ userId, imageId, setImageInput }) {
     imageInputRef.current.value = "";
 
     setImageStatus(FORM_STATUS.loading);
-    const [res, err] = await httpClient(
-      "POST",
-      url,
-      data,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      }
-    );
+    const [res, err] = await httpClient("POST", url, data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
 
     if (err) {
       console.error(`${res.mssg} => ${res.err}`);

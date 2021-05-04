@@ -14,7 +14,7 @@ exports.seed = function (knex, Promise) {
 
   function randomAvatarImage() {
     let randomAvatar = Math.floor(Math.random() * seedAvatarUrls.length);
-    return seedAvatarUrls[randomAvatar]
+    return seedAvatarUrls[randomAvatar];
   }
 
   function randomAreaOfWorkValue() {

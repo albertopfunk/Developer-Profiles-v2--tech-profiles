@@ -8,8 +8,6 @@ import { validateInput } from "../../../global/helpers/validation";
 import { FORM_STATUS } from "../../../global/helpers/variables";
 // import { httpClient } from "../../../global/helpers/http-requests";
 
-
-
 /*
 
 CLOUDINARY IMAGE UPLOADS
@@ -68,8 +66,6 @@ saved images for existing projects
 
 */
 
-
-
 const ProjectForm = React.forwardRef(
   (
     {
@@ -90,16 +86,12 @@ const ProjectForm = React.forwardRef(
       projectStatus: FORM_STATUS.idle,
     });
 
-
-
     const [image, setImage] = useState({
       imageInput: "",
       imageInputId: "",
       imageChange: false,
       shouldRemoveUserImage: false,
     });
-
-
 
     const [link, setLink] = useState({
       linkInput: userProjectLink,
@@ -161,8 +153,6 @@ const ProjectForm = React.forwardRef(
       updateProject(projIndex, newState);
     }
 
-
-
     // function removeImageFromCloudinary() {
     //   if (image.imageInputId) {
     //     httpClient("POST", "/api/delete-image", {
@@ -170,8 +160,6 @@ const ProjectForm = React.forwardRef(
     //     });
     //   }
     // }
-
-
 
     function setImageInput(image) {
       const newState = {
@@ -183,7 +171,6 @@ const ProjectForm = React.forwardRef(
       updateProject(projIndex, newState);
     }
 
-
     function removeImageInput() {
       const newState = {
         imageInput: "",
@@ -193,8 +180,6 @@ const ProjectForm = React.forwardRef(
       setImage(newState);
       updateProject(projIndex, newState);
     }
-
-
 
     function removeUserImage() {
       let newState;
@@ -206,10 +191,6 @@ const ProjectForm = React.forwardRef(
       setImage(newState);
       updateProject(projIndex, newState);
     }
-
-
-
-
 
     function setLinkInput(value) {
       setLink({
@@ -352,7 +333,11 @@ const ProjectForm = React.forwardRef(
           ) : null}
         </InputContainer>
 
-        <ImageUploadForm userId={userId} imageId={projIndex} setImageInput={setImageInput} />
+        <ImageUploadForm
+          userId={userId}
+          imageId={projIndex}
+          setImageInput={setImageInput}
+        />
         <ImagePreview
           uploadedImage={image.imageInput}
           removeUploadedImage={removeImageInput}
