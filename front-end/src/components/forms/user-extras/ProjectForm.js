@@ -46,6 +46,7 @@ in total each user should have 3 images max for each project
 "profile-5-project-new-1-preview"
 "profile-5-project-2-preview"
 "profile-5-project-2-saved"
+"image" instead of "project"
 
 
 preview images for new projects
@@ -351,7 +352,7 @@ const ProjectForm = React.forwardRef(
           ) : null}
         </InputContainer>
 
-        <ImageUploadForm userId={userId} setImageInput={setImageInput} />
+        <ImageUploadForm userId={userId} imageId={projIndex} setImageInput={setImageInput} />
         <ImagePreview
           uploadedImage={image.imageInput}
           removeUploadedImage={removeImageInput}
