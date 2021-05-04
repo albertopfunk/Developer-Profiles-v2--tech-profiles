@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { httpClient } from "../../../global/helpers/http-requests";
 import { FORM_STATUS } from "../../../global/helpers/variables";
 
-function ImageUploadForm({ userId, setImageInput }) {
+function ImageUploadForm({ userId, imageId, setImageInput }) {
   const [imageStatus, setImageStatus] = useState(FORM_STATUS.idle);
   const imageInputRef = React.createRef();
 
@@ -11,6 +11,11 @@ function ImageUploadForm({ userId, setImageInput }) {
     if (e.target.files.length === 0) {
       return;
     }
+
+    const url = imageId ?
+    `/api/upload-preview-image/${userId}/${imageId}`
+    :
+    `/api/upload-preview-image/${userId}`
 
     const file = e.target.files[0];
     const data = new FormData();
@@ -20,7 +25,7 @@ function ImageUploadForm({ userId, setImageInput }) {
     setImageStatus(FORM_STATUS.loading);
     const [res, err] = await httpClient(
       "POST",
-      `/api/upload-preview-image/${userId}`,
+      url,
       data,
       {
         headers: {
