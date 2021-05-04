@@ -102,7 +102,6 @@ function DashboardProjects() {
         projectChange: false,
 
         imageInput: "",
-        imageInputId: "",
         imageChange: false,
         shouldRemoveUserImage: false,
 
@@ -141,7 +140,6 @@ function DashboardProjects() {
         projectChange: false,
 
         imageInput: "",
-        imageInputId: "",
         imageChange: false,
         shouldRemoveUserImage: false,
 
@@ -169,14 +167,6 @@ function DashboardProjects() {
     setRemovedProjIndex(projIndex);
     setRemovedProjUpdate(!removedProjUpdate);
     setProjectsChange(true);
-  }
-
-  function removeUserImageFromCloudinary(id) {
-    if (id) {
-      httpClient("POST", "/api/delete-image", {
-        id,
-      });
-    }
   }
 
   function checkFormErrors() {
@@ -208,7 +198,6 @@ function DashboardProjects() {
           data: {
             project_title: proj.projectNameInput,
             project_img: proj.imageInput,
-            image_id: proj.imageInputId,
             link: proj.linkInput,
             project_description: proj.descriptionInput,
             user_id: user.id,
@@ -242,43 +231,55 @@ function DashboardProjects() {
     return requests;
   }
 
-  function updateUserProjects() {
+  async function updateUserProjects() {
     const requests = [];
 
-    projects.forEach((proj) => {
-      if (Number.isInteger(proj.id)) {
+    for (let i = 0; i < projects.length; i++) {
+      if (Number.isInteger(projects[i].id)) {
         const data = {};
 
-        if (proj.projectChange) {
-          data.project_title = proj.projectNameInput;
+        if (projects[i].projectChange) {
+          data.project_title = projects[i].projectNameInput;
         }
 
-        if (proj.imageChange) {
-          removeUserImageFromCloudinary(proj.image_id);
-          if (proj.shouldRemoveUserImage) {
+        if (projects[i].linkChange) {
+          data.link = projects[i].linkInput;
+        }
+
+        if (projects[i].descriptionChange) {
+          data.project_description = projects[i].descriptionInput;
+        }
+
+        if (projects[i].imageChange) {
+          if (projects[i].shouldRemoveUserImage) {
             data.project_img = "";
-            data.image_id = "";
           } else {
-            data.project_img = proj.imageInput;
-            data.image_id = proj.imageInputId;
+            const [res, err] = await httpClient(
+              "POST",
+              `/api/upload-main-image`,
+              {
+                imageUrl: projects[i].imageInput,
+                id: user.id,
+                imageId: projects[i].id,
+              }
+            );
+
+            if (err) {
+              console.error(`${res.mssg} => ${res.err}`);
+              return { error: "error saving image" };
+            }
+
+            data.project_img = res.data.image;
           }
-        }
-
-        if (proj.linkChange) {
-          data.link = proj.linkInput;
-        }
-
-        if (proj.descriptionChange) {
-          data.project_description = proj.descriptionInput;
         }
 
         requests.push({
           method: "PUT",
-          url: `/extras/projects/${proj.id}`,
+          url: `/extras/projects/${projects[i].id}`,
           data,
         });
       }
-    });
+    }
 
     return requests;
   }
@@ -314,7 +315,14 @@ function DashboardProjects() {
     );
 
     if (userProjChange.length > 0) {
-      const updatedProjRequests = updateUserProjects();
+      const updatedProjRequests = await updateUserProjects();
+
+      if (updatedProjRequests?.error) {
+        setFormStatus(FORM_STATUS.error);
+        setHasSubmitError(true);
+        return;
+      }
+
       requests = [...requests, ...updatedProjRequests];
     }
 
@@ -489,7 +497,8 @@ function DashboardProjects() {
                   <ProjectForm
                     ref={removeBtnRefs.current[index]}
                     projIndex={index}
-                    userId={proj.id}
+                    userId={user.id}
+                    projectId={proj.id}
                     userProjectName={proj.project_title || ""}
                     userProjectImage={proj.project_img || ""}
                     userProjectLink={proj.link || ""}
