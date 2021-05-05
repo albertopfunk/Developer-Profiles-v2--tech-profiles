@@ -343,6 +343,13 @@ function DashboardProjects() {
 
     if (projectsChange) {
       const newProjRequests = await addNewProjects();
+
+      if (newProjRequests?.error) {
+        setFormStatus(FORM_STATUS.error);
+        setHasSubmitError(true);
+        return;
+      }
+
       const removeProjRequests = removeUserProjects();
       requests = [...newProjRequests, ...removeProjRequests];
     }
