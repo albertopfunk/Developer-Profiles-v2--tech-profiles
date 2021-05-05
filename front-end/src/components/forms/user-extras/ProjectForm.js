@@ -7,64 +7,6 @@ import ImagePreview from "../images/ImagePreview";
 import { validateInput } from "../../../global/helpers/validation";
 import { FORM_STATUS } from "../../../global/helpers/variables";
 
-/*
-
-CLOUDINARY IMAGE UPLOADS
-
-Goal:
-1. preview images for new projects(on ImageUpload)
-since all new projects added start with "new-1" as the temp ID
-you can use that to upload, if user cancels or users next interaction
-it will just reset and override
-
-
-2. saved images for new projects(on /new/:user_extra)
-this will have to be done /new/:user_extra
-when user adds the project, it should return the actual project ID
-use that to submit the saved image with correct project ID
-**this will only be for a NEW saved project, since existing projects
-already have saved actual IDs they will be able to be done locally
-
-
-3. preview images for existing projects(on ImageUpload)
-this will be done locally with existing projects actual ID
-this can prob be done in the same fn as new projects
-both just use the current ID, the only difference will be
-the IDs
-
-
-4. saved images for existing projects(on updateUserProjects)
-existing projects already have saved actual IDs
-it will be able to be done locally
-this will still override the saved images for new projects
-
-
-in total each user should have 3 images max for each project
-"profile-5-project-new-1-preview"
-"profile-5-project-2-preview"
-"profile-5-project-2-saved"
-"image" instead of "project"
-
-
-preview images for new projects
-`profile-${req.params.id}-project-${req.params.projectId}-preview`
-"profile-5-project-new-1-preview"
-
-saved images for new projects
-`profile-${req.params.id}-project-${returned_project_id}-saved`
-"profile-5-project-2-saved"
-
-preview images for existing projects
-`profile-${req.params.id}-project-${req.params.projectId}-preview`
-"profile-5-project-2-preview"
-
-saved images for existing projects
-`profile-${req.params.id}-project-${req.params.projectId}-saved`
-"profile-5-project-2-saved"
-
-
-*/
-
 const ProjectForm = React.forwardRef(
   (
     {
