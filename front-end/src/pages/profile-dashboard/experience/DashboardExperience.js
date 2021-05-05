@@ -15,6 +15,7 @@ function DashboardExperience() {
 
   const [formStatus, setFormStatus] = useState(FORM_STATUS.idle);
   const [formFocusStatus, setFormFocusStatus] = useState("");
+  const [hasSubmitError, setHasSubmitError] = useState(null);
   const [experience, setExperience] = useState([]);
   const [experienceChange, setExperienceChange] = useState(false);
   const [removedExpIndex, setRemovedExpIndex] = useState(null);
@@ -327,7 +328,7 @@ function DashboardExperience() {
     let requests = [];
 
     const formErrors = checkFormErrors();
-    if (formErrors.length > 0) {
+    if (formErrors.length > 0 || hasSubmitError) {
       setFormStatus(FORM_STATUS.error);
       if (errorSummaryRef.current) {
         errorSummaryRef.current.focus();
@@ -359,11 +360,19 @@ function DashboardExperience() {
       return;
     }
 
-    setFormStatus(FORM_STATUS.loading);
-    await addUserExtras(requests);
+    const results = await addUserExtras(requests);
+
+    if (results?.error) {
+      setFormStatus(FORM_STATUS.error);
+      setHasSubmitError(true);
+      return;
+    }
+
     formSuccessWait = setTimeout(() => {
       setFormStatus(FORM_STATUS.idle);
-    }, 1000);
+      setHasSubmitError(null);
+    }, 750);
+
     setFormStatus(FORM_STATUS.success);
   }
 
@@ -432,6 +441,13 @@ function DashboardExperience() {
               <strong>
                 Please address the following errors and re-submit the form:
               </strong>
+
+              {hasSubmitError ? (
+                <div>
+                  <h4>Submit Error</h4>
+                  <p>Error submitting form, please try again</p>
+                </div>
+              ) : null}
 
               {formErrors.length > 0 ? (
                 formErrors.map((exp) => (
