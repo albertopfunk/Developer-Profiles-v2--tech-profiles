@@ -73,6 +73,7 @@ const ProjectForm = React.forwardRef(
       projectId,
       userProjectName,
       userProjectImage,
+      shouldRemoveImage,
       userProjectLink,
       userProjectDescription,
       updateProject,
@@ -332,7 +333,7 @@ const ProjectForm = React.forwardRef(
         <ImagePreview
           uploadedImage={image.imageInput}
           removeUploadedImage={removeImageInput}
-          savedUserImage={userProjectImage}
+          savedUserImage={!shouldRemoveImage && userProjectImage}
           removeSavedUserImage={removeUserImage}
         />
 

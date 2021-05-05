@@ -187,21 +187,51 @@ function DashboardProjects() {
     });
   }
 
-  function addNewProjects() {
+  async function addNewProjects() {
     const requests = [];
-
-
 
     for (let i = 0; i < projects.length; i++) {
       if (!Number.isInteger(projects[i].id)) {
-        
-
         if (projects[i].imageInput) {
-          // api to add new extra
-          // get id from returned extra
-          // api to save image with actual id
-          // push to edit extra with new image url
+          const [projectRes, projectErr] = await httpClient(
+            "POST",
+            "/extras/new/projects",
+            {
+              project_title: projects[i].projectNameInput,
+              project_img: projects[i].imageInput,
+              link: projects[i].linkInput,
+              project_description: projects[i].descriptionInput,
+              user_id: user.id,
+            }
+          );
 
+          if (projectErr) {
+            console.error(`${projectRes.mssg} => ${projectRes.projectErr}`);
+            return { error: "error saving new project" };
+          }
+
+          const [imageRes, imageErr] = await httpClient(
+            "POST",
+            `/api/upload-main-image`,
+            {
+              imageUrl: projects[i].imageInput,
+              id: user.id,
+              imageId: projectRes.data.id,
+            }
+          );
+
+          if (imageErr) {
+            console.error(`${imageRes.mssg} => ${imageRes.err}`);
+            return { error: "error saving image" };
+          }
+
+          requests.push({
+            method: "PUT",
+            url: `/extras/projects/${projectRes.data.id}`,
+            data: {
+              project_img: imageRes.data.image,
+            },
+          });
         } else {
           requests.push({
             method: "POST",
@@ -215,11 +245,8 @@ function DashboardProjects() {
             },
           });
         }
-
-
       }
     }
-
 
     return requests;
   }
@@ -315,7 +342,7 @@ function DashboardProjects() {
     let requests = [];
 
     if (projectsChange) {
-      const newProjRequests = addNewProjects();
+      const newProjRequests = await addNewProjects();
       const removeProjRequests = removeUserProjects();
       requests = [...newProjRequests, ...removeProjRequests];
     }
@@ -516,6 +543,7 @@ function DashboardProjects() {
                     projectId={proj.id}
                     userProjectName={proj.project_title || ""}
                     userProjectImage={proj.project_img || ""}
+                    shouldRemoveImage={proj.shouldRemoveUserImage}
                     userProjectLink={proj.link || ""}
                     userProjectDescription={proj.project_description || ""}
                     updateProject={updateProject}
