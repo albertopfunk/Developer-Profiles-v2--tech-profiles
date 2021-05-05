@@ -190,21 +190,36 @@ function DashboardProjects() {
   function addNewProjects() {
     const requests = [];
 
-    projects.forEach((proj) => {
-      if (!Number.isInteger(proj.id)) {
-        requests.push({
-          method: "POST",
-          url: `/extras/new/projects`,
-          data: {
-            project_title: proj.projectNameInput,
-            project_img: proj.imageInput,
-            link: proj.linkInput,
-            project_description: proj.descriptionInput,
-            user_id: user.id,
-          },
-        });
+
+
+    for (let i = 0; i < projects.length; i++) {
+      if (!Number.isInteger(projects[i].id)) {
+        
+
+        if (projects[i].imageInput) {
+          // api to add new extra
+          // get id from returned extra
+          // api to save image with actual id
+          // push to edit extra with new image url
+
+        } else {
+          requests.push({
+            method: "POST",
+            url: `/extras/new/projects`,
+            data: {
+              project_title: projects[i].projectNameInput,
+              project_img: projects[i].imageInput,
+              link: projects[i].linkInput,
+              project_description: projects[i].descriptionInput,
+              user_id: user.id,
+            },
+          });
+        }
+
+
       }
-    });
+    }
+
 
     return requests;
   }
