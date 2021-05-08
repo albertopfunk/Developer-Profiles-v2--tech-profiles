@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ReactComponent as DefaultAvatar } from "./default-avatar.svg";
+import { ReactComponent as FallbackAvatar } from "../../../global/assets/fallback-avatar.svg";
 
 // in order
 // render previewImg/previewAvatar if avail
@@ -52,7 +52,10 @@ function UserImage({ previewImage, userImage, avatarImage }) {
 
   return (
     <div className="image">
-      <DefaultAvatar />
+      <FallbackAvatar
+        viewBox="165 226 670 740"
+        preserveAspectRatio="xMidYMid meet"
+      />
     </div>
   );
 }
