@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { ReactComponent as BurgerMenu } from "./menu.svg";
-import { ReactComponent as MenuClose } from "./close.svg";
+import { ReactComponent as BurgerMenu } from "../../global/assets/header-nav.svg";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
@@ -25,22 +24,6 @@ function MainHeader() {
     setIsMenuOpen(false);
     setAnnounceMenuToggle(true);
   }
-
-  // function closeMenuBlur() {
-  //   function closeOnBlurTimeOut() {
-  //     if (
-  //       document.activeElement.id !== "menu-button" &&
-  //       document.activeElement.className !== "nav-item"
-  //     ) {
-  //       setIsMenuOpen(false);
-  //       setAnnounceMenuToggle(false);
-  //     }
-  //   }
-
-  //   closeOnBlurWait = setTimeout(() => {
-  //     closeOnBlurTimeOut();
-  //   }, 13);
-  // }
 
   return (
     <Header>
@@ -77,10 +60,9 @@ function MainHeader() {
                 aria-label="close menu"
                 aria-expanded="true"
                 onClick={closeMenu}
-                // onBlur={closeMenuBlur}
               >
                 <span aria-hidden="true">
-                  <MenuClose />
+                  <BurgerMenu className="icon rotate" />
                 </span>
               </button>
             ) : (
@@ -92,7 +74,7 @@ function MainHeader() {
                 onClick={openMenu}
               >
                 <span aria-hidden="true">
-                  <BurgerMenu />
+                  <BurgerMenu className="icon" />
                 </span>
               </button>
             )}
@@ -102,32 +84,17 @@ function MainHeader() {
               className={`menu-group ${isMenuOpen ? "" : "hidden"}`}
             >
               <li>
-                <Link
-                  to="/"
-                  className="nav-item"
-                  // onClick={closeMenuBlur}
-                  // onBlur={closeMenuBlur}
-                >
+                <Link to="/" className="nav-item">
                   Profiles
                 </Link>
               </li>
               <li>
-                <Link
-                  to="/profile-dashboard"
-                  className="nav-item"
-                  // onClick={closeMenuBlur}
-                  // onBlur={closeMenuBlur}
-                >
+                <Link to="/profile-dashboard" className="nav-item">
                   Dashboard
                 </Link>
               </li>
               <li>
-                <button
-                  className="nav-item"
-                  type="button"
-                  onClick={signOut}
-                  // onBlur={closeMenuBlur}
-                >
+                <button className="nav-item" type="button" onClick={signOut}>
                   Sign Out
                 </button>
               </li>
@@ -179,12 +146,21 @@ const Nav = styled.nav`
   }
 
   .menu-button {
+    width: 50px;
+    height: auto;
     grid-column: 2 / 3;
     grid-row: 1 / 2;
     justify-self: end;
-    padding: var(--nav-padding);
     border: none;
     background: white;
+
+    .icon {
+      transition: all 0.3s linear;
+    }
+
+    .icon.rotate {
+      transform: rotate(90deg);
+    }
 
     @media (min-width: 850px) {
       display: none;
