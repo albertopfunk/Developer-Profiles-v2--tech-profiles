@@ -66,7 +66,7 @@ const SkillsContainer = styled.div`
   .top-skills {
     grid-column: 1 / 2;
     grid-row: 2 / 3;
-    place-self: center;
+    place-self: start;
     display: flex;
     flex-wrap: wrap;
     gap: 15px;
@@ -81,7 +81,7 @@ const SkillsContainer = styled.div`
   .additional-skills {
     grid-column: 2 / 3;
     grid-row: 2 / 3;
-    place-self: center;
+    place-self: start;
     display: flex;
     flex-wrap: wrap;
     gap: 15px;
