@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 function UserBasics({ userId, firstName, lastName, title, currentLocation }) {
-  if (!firstName || !lastName || !title || !currentLocation) {
+  if (!firstName && !lastName && !title && !currentLocation) {
     return (
       <BasicsContainer>
         <p>No Info Listed</p>
