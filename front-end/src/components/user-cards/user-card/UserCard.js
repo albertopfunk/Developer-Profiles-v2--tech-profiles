@@ -173,18 +173,18 @@ const UserCard = React.forwardRef((props, articleRef) => {
       </div>
 
       <UserInfo>
-        <UserImage
-          previewImage={props.previewImage}
-          userImage={props.userImage}
-          avatarImage={props.avatarImage}
-        />
-
         <UserBasics
           userId={props.userId}
           firstName={props.firstName}
           lastName={props.lastName}
           currentLocation={props.currentLocation}
           title={props.title}
+        />
+
+        <UserImage
+          previewImage={props.previewImage}
+          userImage={props.userImage}
+          avatarImage={props.avatarImage}
         />
 
         <UserSummary userId={props.userId} summary={props.summary} />
@@ -238,45 +238,18 @@ const UserCardContainer = styled.article`
 const UserInfo = styled.section`
   display: grid;
   grid-gap: 20px;
-  grid-template-areas:
-    "name"
-    "location"
-    "image"
-    "title"
-    "summary"
-    "icons"
-    "skills";
+  grid-template-columns: 1fr;
+  grid-template-rows: repeat(5, auto);
 
   @media (min-width: 1050px) {
     grid-gap: 10px;
-    grid-template-areas:
-      "image    name      icons"
-      "image    location  icons"
-      "image    title     icons"
-      "summary  summary   icons"
-      "skills   skills    icons";
-  }
 
-  .image {
-    grid-area: image;
-  }
-  .name {
-    grid-area: name;
-  }
-  .location {
-    grid-area: location;
-  }
-  .title {
-    grid-area: title;
-  }
-  .summary {
-    grid-area: summary;
-  }
-  .icons {
-    grid-area: icons;
-  }
-  .skills {
-    grid-area: skills;
+    grid-template-areas:
+      "image    userBasics  icons"
+      "image    userBasics  icons"
+      "image    userBasics  icons"
+      "summary  summary     icons"
+      "skills   skills      icons";
   }
 `;
 
