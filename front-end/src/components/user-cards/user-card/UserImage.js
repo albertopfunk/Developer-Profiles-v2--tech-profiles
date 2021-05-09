@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import styled from "styled-components";
 import { ReactComponent as FallbackAvatar } from "../../../global/assets/fallback-avatar.svg";
 
 // in order
@@ -16,48 +17,56 @@ function UserImage({ previewImage, userImage, avatarImage }) {
 
   if (previewImage && !imageErr) {
     return (
-      <div className="image">
+      <ImageContainer>
         <img
           src={previewImage}
           onError={handleBrokenLink}
           alt="current pic preview"
         />
-      </div>
+      </ImageContainer>
     );
   }
 
   if (userImage && !imageErr) {
     return (
-      <div className="image">
+      <ImageContainer>
         <img
           src={userImage}
           onError={handleBrokenLink}
           alt="saved profile pic"
         />
-      </div>
+      </ImageContainer>
     );
   }
 
   if (avatarImage && !imageErr) {
     return (
-      <div className="image">
+      <ImageContainer>
         <img
           src={avatarImage}
           onError={handleBrokenLink}
           alt="saved avatar pic"
         />
-      </div>
+      </ImageContainer>
     );
   }
 
   return (
-    <div className="image">
+    <ImageContainer>
       <FallbackAvatar
         viewBox="165 226 670 740"
         preserveAspectRatio="xMidYMid meet"
       />
-    </div>
+    </ImageContainer>
   );
 }
+
+const ImageContainer = styled.div`
+  width: 300px;
+  height: auto;
+  grid-column: 1 / 2;
+  grid-row: 2 / 3;
+  place-self: center;
+`;
 
 export default UserImage;
