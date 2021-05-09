@@ -579,6 +579,16 @@ export const GlobalStyles = createGlobalStyle`
     position: absolute;
   }
 
+  /* Additional Resets
+  * ========================================================================== */
+
+  /*
+  * no margin on text 
+  */
+
+  p {
+    margin: 0;
+  }
 
   /*
   ------------------------------------------------------------------------
