@@ -1,27 +1,38 @@
 import React from "react";
+import styled from "styled-components";
 
 function UserBasics({ userId, firstName, lastName, title, currentLocation }) {
+  if (!firstName || !lastName || !title || !currentLocation) {
+    return (
+      <BasicsContainer>
+        <p>No Info Listed</p>
+      </BasicsContainer>
+    );
+  }
+
   return (
-    <>
-      <div id={`profile-${userId}-name`} className="name">
-        {firstName || lastName ? (
-          <p>
-            {firstName} {lastName}
-          </p>
-        ) : (
-          <p>No Name Listed</p>
-        )}
-      </div>
+    <BasicsContainer>
+      {firstName || lastName ? (
+        <p id={`profile-${userId}-name`} className="name">
+          {firstName} {lastName}
+        </p>
+      ) : null}
 
-      <div className="location">
-        {currentLocation ? <p>{currentLocation}</p> : <p>No Location Listed</p>}
-      </div>
+      {title ? <p className="title">{title}</p> : null}
 
-      <div className="title">
-        <p>{title}</p>
-      </div>
-    </>
+      {currentLocation ? <p className="location">{currentLocation}</p> : null}
+    </BasicsContainer>
   );
 }
+
+const BasicsContainer = styled.div`
+  grid-column: 1 / 2;
+  grid-row: 1 / 2;
+  place-self: center;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-align: center;
+`;
 
 export default UserBasics;
