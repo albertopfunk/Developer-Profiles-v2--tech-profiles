@@ -62,11 +62,17 @@ function UserImage({ previewImage, userImage, avatarImage }) {
 }
 
 const ImageContainer = styled.div`
-  width: 300px;
+  width: 250px;
   height: auto;
   grid-column: 1 / 2;
   grid-row: 2 / 3;
   place-self: center;
+
+  @media (min-width: 1050px) {
+    width: 350px;
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
+  }
 `;
 
 export default UserImage;
