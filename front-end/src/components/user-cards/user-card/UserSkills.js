@@ -17,7 +17,8 @@ function UserSkills({ topSkills, additionalSkills }) {
               .map((skill) => (
                 <p key={skill}>{skill}</p>
               ))}
-            <p>Expand for more skills</p>
+
+            {topSkills.split(",").length > 5 ? <p>Expand for more skills</p> : null}
           </>
         ) : (
           <p>No Top Skills Listed</p>
@@ -37,7 +38,8 @@ function UserSkills({ topSkills, additionalSkills }) {
               .map((skill) => (
                 <p key={skill}>{skill}</p>
               ))}
-            <p>Expand for more skills</p>
+
+            {additionalSkills.split(",").length > 5 ? <p>Expand for more skills</p> : null}
           </>
         ) : (
           <p>No Additional Skills Listed</p>
