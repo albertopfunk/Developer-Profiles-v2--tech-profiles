@@ -242,14 +242,8 @@ const UserInfo = styled.section`
   grid-template-rows: repeat(5, auto);
 
   @media (min-width: 1050px) {
-    grid-gap: 10px;
-
-    grid-template-areas:
-      "image    userBasics  icons"
-      "image    userBasics  icons"
-      "image    userBasics  icons"
-      "summary  summary     icons"
-      "skills   skills      icons";
+    grid-template-columns: repeat(3, auto);
+    grid-template-rows: repeat(3, auto);
   }
 `;
 
