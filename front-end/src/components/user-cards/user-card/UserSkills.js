@@ -3,36 +3,42 @@ import styled from "styled-components";
 
 function UserSkills({ topSkills, additionalSkills }) {
   return (
-    <SkillsContainer className="skills">
-      <div className="top">
-        <strong>Top Skills</strong>
+    <SkillsContainer>
+      <div className="top-title">
+        <strong>Top Skills:</strong>
+      </div>
+
+      <div className="top-skills">
         {topSkills ? (
-          <div>
+          <>
             {topSkills
               .split(",")
-              .filter((el, i) => i < 3 && el)
+              .filter((el, i) => i < 5 && el)
               .map((skill) => (
                 <p key={skill}>{skill}</p>
               ))}
             <p>Expand for more skills</p>
-          </div>
+          </>
         ) : (
           <p>No Top Skills Listed</p>
         )}
       </div>
 
-      <div className="additional">
-        <strong>Additional Skills</strong>
+      <div className="additional-title">
+        <strong>Additional Skills:</strong>
+      </div>
+
+      <div className="additional-skills">
         {additionalSkills ? (
-          <div>
+          <>
             {additionalSkills
               .split(",")
-              .filter((el, i) => i < 3 && el)
+              .filter((el, i) => i < 5 && el)
               .map((skill) => (
                 <p key={skill}>{skill}</p>
               ))}
             <p>Expand for more skills</p>
-          </div>
+          </>
         ) : (
           <p>No Additional Skills Listed</p>
         )}
@@ -42,13 +48,41 @@ function UserSkills({ topSkills, additionalSkills }) {
 }
 
 const SkillsContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  align-items: center;
+  grid-column: 1 / 2;
+  grid-row: 5 / 6;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 20% 1fr;
+  grid-gap: 20px;
 
-  @media (min-width: 1100px) {
-    flex-direction: row;
+  .top-title {
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
+    justify-self: start;
+  }
+
+  .top-skills {
+    grid-column: 1 / 2;
+    grid-row: 2 / 3;
+    place-self: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+
+  .additional-title {
+    grid-column: 2 / 3;
+    grid-row: 1 / 2;
+    justify-self: start;
+  }
+
+  .additional-skills {
+    grid-column: 2 / 3;
+    grid-row: 2 / 3;
+    place-self: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
   }
 `;
 
