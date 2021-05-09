@@ -26,6 +26,7 @@ function UserBasics({ userId, firstName, lastName, title, currentLocation }) {
 }
 
 const BasicsContainer = styled.div`
+  min-width: fit-content;
   grid-column: 1 / 2;
   grid-row: 1 / 2;
   place-self: center;
@@ -33,6 +34,14 @@ const BasicsContainer = styled.div`
   flex-direction: column;
   gap: 10px;
   text-align: center;
+
+  @media (min-width: 1050px) {
+    grid-column: 2 / 3;
+    grid-row: 1 / 2;
+    justify-self: start;
+    align-self: center;
+    text-align: left;
+  }
 `;
 
 export default UserBasics;
