@@ -44,11 +44,22 @@ const IconsContainer = styled.div`
   grid-row: 4 / 5;
   place-self: center;
   display: flex;
-  gap: 15px;
+  gap: 25px;
+
+  @media (min-width: 1050px) {
+    grid-column: 3 / 4;
+    grid-row: 1 / 4;
+    flex-direction: column;
+    gap: 35px;
+  }
 
   .icon {
     width: 30px;
     height: auto;
+
+    @media (min-width: 1050px) {
+      width: 40px;
+    }
   }
 `;
 
