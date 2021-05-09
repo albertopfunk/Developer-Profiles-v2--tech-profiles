@@ -18,7 +18,9 @@ function UserSkills({ topSkills, additionalSkills }) {
                 <p key={skill}>{skill}</p>
               ))}
 
-            {topSkills.split(",").length > 5 ? <p>Expand for more skills</p> : null}
+            {topSkills.split(",").length > 5 ? (
+              <p>Expand for more skills</p>
+            ) : null}
           </>
         ) : (
           <p>No Top Skills Listed</p>
@@ -39,7 +41,9 @@ function UserSkills({ topSkills, additionalSkills }) {
                 <p key={skill}>{skill}</p>
               ))}
 
-            {additionalSkills.split(",").length > 5 ? <p>Expand for more skills</p> : null}
+            {additionalSkills.split(",").length > 5 ? (
+              <p>Expand for more skills</p>
+            ) : null}
           </>
         ) : (
           <p>No Additional Skills Listed</p>
@@ -56,6 +60,11 @@ const SkillsContainer = styled.div`
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 20% 1fr;
   grid-gap: 20px;
+
+  @media (min-width: 1050px) {
+    grid-column: 1 / 3;
+    grid-row: 3 / 4;
+  }
 
   .top-title {
     grid-column: 1 / 2;
