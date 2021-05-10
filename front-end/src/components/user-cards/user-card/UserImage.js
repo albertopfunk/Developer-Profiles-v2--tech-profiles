@@ -2,13 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { ReactComponent as FallbackAvatar } from "../../../global/assets/fallback-avatar.svg";
 
-// in order
-// render previewImg/previewAvatar if avail
-// render userImg if avail
-// render avatarImg if avail
-// render default SVG if none avail or if imgErr
-
-function UserImage({ previewImage, userImage, avatarImage }) {
+function UserImage({ previewImage, userImage, avatarImage, userId }) {
   const [imageErr, setImageErr] = useState(false);
 
   function handleBrokenLink() {
@@ -17,51 +11,63 @@ function UserImage({ previewImage, userImage, avatarImage }) {
 
   if (previewImage && !imageErr) {
     return (
-      <ImageContainer>
+      <ImageSection aria-labelledby={`profile-${userId}-image-header`}>
+        <h4 id={`profile-${userId}-image-header`} className="sr-only">
+          profile pic
+        </h4>
         <img
           src={previewImage}
           onError={handleBrokenLink}
           alt="current pic preview"
         />
-      </ImageContainer>
+      </ImageSection>
     );
   }
 
   if (userImage && !imageErr) {
     return (
-      <ImageContainer>
+      <ImageSection aria-labelledby={`profile-${userId}-image-header`}>
+        <h4 id={`profile-${userId}-image-header`} className="sr-only">
+          profile pic
+        </h4>
         <img
           src={userImage}
           onError={handleBrokenLink}
           alt="saved profile pic"
         />
-      </ImageContainer>
+      </ImageSection>
     );
   }
 
   if (avatarImage && !imageErr) {
     return (
-      <ImageContainer>
+      <ImageSection aria-labelledby={`profile-${userId}-image-header`}>
+        <h4 id={`profile-${userId}-image-header`} className="sr-only">
+          profile pic
+        </h4>
         <img
           src={avatarImage}
           onError={handleBrokenLink}
           alt="saved avatar pic"
         />
-      </ImageContainer>
+      </ImageSection>
     );
   }
 
   return (
-    <ImageContainer>
+    <ImageSection aria-labelledby={`profile-${userId}-image-header`}>
+      <h4 id={`profile-${userId}-image-header`} className="sr-only">
+        profile pic
+      </h4>
       <FallbackAvatar
         viewBox="165 226 670 740"
         preserveAspectRatio="xMidYMid meet"
       />
-    </ImageContainer>
+    </ImageSection>
   );
 }
 
-const ImageContainer = styled.div`
+const ImageSection = styled.section`
   width: 250px;
   height: auto;
   grid-column: 1 / 2;
