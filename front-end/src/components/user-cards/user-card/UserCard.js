@@ -200,29 +200,29 @@ const UserCard = React.forwardRef((props, articleRef) => {
           topSkills={props.topSkills}
           additionalSkills={props.additionalSkills}
         />
+        <section className="top-controls">
+          {!isCardExpanded ? (
+            <button
+              type="button"
+              disabled={cardStatus === CARD_STATUS.loading}
+              onClick={expandUserCard}
+            >
+              {cardStatus === CARD_STATUS.idle ? "Expand Profile" : null}
+              {cardStatus === CARD_STATUS.loading ? "Loading..." : null}
+              {cardStatus === CARD_STATUS.error ? "Error - Retry" : null}
+            </button>
+          ) : (
+            <button type="button" onClick={closeUserCard}>
+              Collapse Profile
+            </button>
+          )}
+        </section>
       </UserInfo>
 
       {isCardExpanded ? (
         <UserExtras userExtras={userExtras} noExtras={noExtras} />
       ) : null}
 
-      <section>
-        {!isCardExpanded ? (
-          <button
-            type="button"
-            disabled={cardStatus === CARD_STATUS.loading}
-            onClick={expandUserCard}
-          >
-            {cardStatus === CARD_STATUS.idle ? "Expand Profile" : null}
-            {cardStatus === CARD_STATUS.loading ? "Loading..." : null}
-            {cardStatus === CARD_STATUS.error ? "Error - Retry" : null}
-          </button>
-        ) : (
-          <button type="button" onClick={closeUserCard}>
-            Collapse Profile
-          </button>
-        )}
-      </section>
     </UserCardContainer>
   );
 });
@@ -239,11 +239,29 @@ const UserInfo = styled.section`
   display: grid;
   grid-gap: 20px;
   grid-template-columns: 1fr;
-  grid-template-rows: repeat(5, auto);
+  grid-template-rows: repeat(6, auto);
 
   @media (min-width: 1050px) {
     grid-template-columns: repeat(3, auto);
-    grid-template-rows: repeat(3, auto);
+    grid-template-rows: repeat(4, auto);
+  }
+
+  .top-controls {
+    grid-column: 1 / 2;
+    grid-row: 6 / 7;
+    place-self: stretch;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    @media (min-width: 1050px) {
+      grid-column: 1 / 3;
+      grid-row: 4 / 5;
+    }
+
+    button {
+      width: 90%;
+    }
   }
 `;
 
