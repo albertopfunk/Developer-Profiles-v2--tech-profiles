@@ -182,6 +182,7 @@ const UserCard = React.forwardRef((props, articleRef) => {
         />
 
         <UserImage
+          userId={props.userId}
           previewImage={props.previewImage}
           userImage={props.userImage}
           avatarImage={props.avatarImage}
@@ -190,6 +191,7 @@ const UserCard = React.forwardRef((props, articleRef) => {
         <UserSummary userId={props.userId} summary={props.summary} />
 
         <UserIcons
+          userId={props.userId}
           github={props.github}
           twitter={props.twitter}
           linkedin={props.linkedin}
@@ -197,10 +199,18 @@ const UserCard = React.forwardRef((props, articleRef) => {
         />
 
         <UserSkills
+          userId={props.userId}
           topSkills={props.topSkills}
           additionalSkills={props.additionalSkills}
         />
-        <section className="top-controls">
+
+        <section
+          aria-labelledby={`profile-${props.userId}-controls`}
+          className="top-controls"
+        >
+          <h4 id={`profile-${props.userId}-controls`} className="sr-only">
+            profile basics
+          </h4>
           {!isCardExpanded ? (
             <button
               type="button"
@@ -222,7 +232,6 @@ const UserCard = React.forwardRef((props, articleRef) => {
       {isCardExpanded ? (
         <UserExtras userExtras={userExtras} noExtras={noExtras} />
       ) : null}
-
     </UserCardContainer>
   );
 });
@@ -235,7 +244,7 @@ const UserCardContainer = styled.article`
   box-shadow: 0 4px 6px 0 hsla(0, 0%, 0%, 0.2);
 `;
 
-const UserInfo = styled.section`
+const UserInfo = styled.div`
   display: grid;
   grid-gap: 20px;
   grid-template-columns: 1fr;
