@@ -19,11 +19,11 @@ function UserSkills({ topSkills, additionalSkills, userId }) {
                 .split(",")
                 .filter((el, i) => i < 5 && el)
                 .map((skill) => (
-                  <li key={skill}>{skill}</li>
+                  <li key={skill} className="skill">{skill}</li>
                 ))}
 
               {topSkills.split(",").length > 5 ? (
-                <li>Expand for more skills</li>
+                <li className="skill">Expand for more skills</li>
               ) : null}
             </>
           ) : (
@@ -47,11 +47,11 @@ function UserSkills({ topSkills, additionalSkills, userId }) {
                 .split(",")
                 .filter((el, i) => i < 5 && el)
                 .map((skill) => (
-                  <li key={skill}>{skill}</li>
+                  <li className="skill" key={skill}>{skill}</li>
                 ))}
 
               {additionalSkills.split(",").length > 5 ? (
-                <li>Expand for more skills</li>
+                <li className="skill">Expand for more skills</li>
               ) : null}
             </>
           ) : (
@@ -80,6 +80,12 @@ const SkillsContainer = styled.div`
     list-style: none;
     padding: 0;
     margin: 0;
+
+    .skill {
+      border-radius: 10px;
+      box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+      padding: 5px;
+    }
   }
 
   .top-skills {
@@ -88,7 +94,7 @@ const SkillsContainer = styled.div`
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: 20% 1fr;
-    grid-gap: 20px;
+    grid-gap: 10px;
 
     .title {
       grid-column: 1 / 2;
@@ -102,7 +108,7 @@ const SkillsContainer = styled.div`
       place-self: start;
       display: flex;
       flex-wrap: wrap;
-      gap: 15px;
+      gap: 10px;
     }
   }
 
@@ -112,7 +118,7 @@ const SkillsContainer = styled.div`
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: 20% 1fr;
-    grid-gap: 20px;
+    grid-gap: 10px;
 
     .title {
       grid-column: 2 / 3;
@@ -126,7 +132,7 @@ const SkillsContainer = styled.div`
       place-self: start;
       display: flex;
       flex-wrap: wrap;
-      gap: 15px;
+      gap: 10px;
     }
   }
 `;
