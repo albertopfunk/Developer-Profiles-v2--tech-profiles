@@ -3,17 +3,24 @@ import styled from "styled-components";
 
 function UserSummary({ userId, summary }) {
   return (
-    <SummaryContainer>
+    <SummarySection aria-labelledby={`profile-${userId}-summary-header`}>
+      <h4 id={`profile-${userId}-summary-header`} className="sr-only">
+        profile summary
+      </h4>
       {summary ? (
         <p id={`profile-${userId}-summary`} className="summary">
           {summary}
         </p>
-      ) : null}
-    </SummaryContainer>
+      ) : (
+        <p id={`profile-${userId}-summary`} className="sr-only">
+          no summary listed
+        </p>
+      )}
+    </SummarySection>
   );
 }
 
-const SummaryContainer = styled.div`
+const SummarySection = styled.div`
   grid-column: 1 / 2;
   grid-row: 3 / 4;
   place-self: center;
