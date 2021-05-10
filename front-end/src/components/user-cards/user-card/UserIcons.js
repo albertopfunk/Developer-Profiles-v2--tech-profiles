@@ -5,9 +5,21 @@ import { ReactComponent as TwitterIcon } from "../../../global/assets/profile-tw
 import { ReactComponent as LinkedinIcon } from "../../../global/assets/profile-linkedin.svg";
 import { ReactComponent as WebsiteIcon } from "../../../global/assets/profile-website.svg";
 
-function UserIcons({ github, twitter, linkedin, portfolio }) {
+function UserIcons({ github, twitter, linkedin, portfolio, userId }) {
+  if (!github && !twitter && !linkedin && !portfolio) {
+    <IconsSection aria-labelledby={`profile-${userId}-links-header`}>
+      <h4 id={`profile-${userId}-links-header`} className="sr-only">
+        profile links
+      </h4>
+      <p className="sr-only">no profile links listed</p>
+    </IconsSection>;
+  }
+
   return (
-    <IconsContainer>
+    <IconsSection aria-labelledby={`profile-${userId}-links-header`}>
+      <h4 id={`profile-${userId}-links-header`} className="sr-only">
+        profile links
+      </h4>
       {github ? (
         <a href={github} target="_blank" rel="noreferrer" className="icon">
           <GithubIcon />
@@ -35,11 +47,11 @@ function UserIcons({ github, twitter, linkedin, portfolio }) {
           <span className="sr-only">website profile(opens in new window)</span>
         </a>
       ) : null}
-    </IconsContainer>
+    </IconsSection>
   );
 }
 
-const IconsContainer = styled.div`
+const IconsSection = styled.section`
   grid-column: 1 / 2;
   grid-row: 4 / 5;
   place-self: center;
