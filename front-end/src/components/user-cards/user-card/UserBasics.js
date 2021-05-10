@@ -4,14 +4,20 @@ import styled from "styled-components";
 function UserBasics({ userId, firstName, lastName, title, currentLocation }) {
   if (!firstName && !lastName && !title && !currentLocation) {
     return (
-      <BasicsContainer>
+      <BasicsSection aria-labelledby={`profile-${userId}-basics-header`}>
+        <h4 id={`profile-${userId}-basics-header`} className="sr-only">
+          profile basics
+        </h4>
         <p>No Info Listed</p>
-      </BasicsContainer>
+      </BasicsSection>
     );
   }
 
   return (
-    <BasicsContainer>
+    <BasicsSection aria-labelledby={`profile-${userId}-basics-header`}>
+      <h4 id={`profile-${userId}-basics-header`} className="sr-only">
+        profile basics
+      </h4>
       {firstName || lastName ? (
         <p id={`profile-${userId}-name`} className="name">
           {firstName} {lastName}
@@ -21,11 +27,11 @@ function UserBasics({ userId, firstName, lastName, title, currentLocation }) {
       {title ? <p className="title">{title}</p> : null}
 
       {currentLocation ? <p className="location">{currentLocation}</p> : null}
-    </BasicsContainer>
+    </BasicsSection>
   );
 }
 
-const BasicsContainer = styled.div`
+const BasicsSection = styled.section`
   min-width: fit-content;
   grid-column: 1 / 2;
   grid-row: 1 / 2;
