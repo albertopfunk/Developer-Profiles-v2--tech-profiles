@@ -595,6 +595,11 @@ export const GlobalStyles = createGlobalStyle`
     padding: 0;
   }
 
+  ul, ol, dl {
+    margin: 0;
+    padding: 0;
+  }
+
   /*
   ------------------------------------------------------------------------
                 General Styles
