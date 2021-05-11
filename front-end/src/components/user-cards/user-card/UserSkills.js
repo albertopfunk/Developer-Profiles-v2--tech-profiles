@@ -5,11 +5,11 @@ function UserSkills({ topSkills, additionalSkills, userId }) {
   return (
     <SkillsContainer>
       <section
-        aria-labelledby={`profile-${userId}-top-skills-header`}
+        aria-labelledby={`profile-${userId}-top-skills-preview-header`}
         className="top-skills"
       >
-        <h4 id={`profile-${userId}-top-skills-header`} className="title">
-          Top Skills:
+        <h4 id={`profile-${userId}-top-skills-preview-header`} className="title">
+          Top Skills Preview:
         </h4>
 
         <ul className="skills">
@@ -33,11 +33,11 @@ function UserSkills({ topSkills, additionalSkills, userId }) {
       </section>
 
       <section
-        aria-labelledby={`profile-${userId}-additional-skills-header`}
+        aria-labelledby={`profile-${userId}-additional-skills-previewheader`}
         className="additional-skills"
       >
-        <h4 id={`profile-${userId}-additional-skills-header`} className="title">
-          Additional Skills:
+        <h4 id={`profile-${userId}-additional-skills-previewheader`} className="title">
+          Additional Skills Preview:
         </h4>
 
         <ul className="skills">
