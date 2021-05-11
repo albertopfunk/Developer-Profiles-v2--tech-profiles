@@ -8,7 +8,10 @@ function UserSkills({ topSkills, additionalSkills, userId }) {
         aria-labelledby={`profile-${userId}-top-skills-preview-header`}
         className="top-skills"
       >
-        <h4 id={`profile-${userId}-top-skills-preview-header`} className="title">
+        <h4
+          id={`profile-${userId}-top-skills-preview-header`}
+          className="title"
+        >
           Top Skills Preview:
         </h4>
 
@@ -19,7 +22,9 @@ function UserSkills({ topSkills, additionalSkills, userId }) {
                 .split(",")
                 .filter((el, i) => i < 5 && el)
                 .map((skill) => (
-                  <li key={skill} className="skill">{skill}</li>
+                  <li key={skill} className="skill">
+                    {skill}
+                  </li>
                 ))}
 
               {topSkills.split(",").length > 5 ? (
@@ -36,7 +41,10 @@ function UserSkills({ topSkills, additionalSkills, userId }) {
         aria-labelledby={`profile-${userId}-additional-skills-previewheader`}
         className="additional-skills"
       >
-        <h4 id={`profile-${userId}-additional-skills-previewheader`} className="title">
+        <h4
+          id={`profile-${userId}-additional-skills-previewheader`}
+          className="title"
+        >
           Additional Skills Preview:
         </h4>
 
@@ -47,7 +55,9 @@ function UserSkills({ topSkills, additionalSkills, userId }) {
                 .split(",")
                 .filter((el, i) => i < 5 && el)
                 .map((skill) => (
-                  <li className="skill" key={skill}>{skill}</li>
+                  <li className="skill" key={skill}>
+                    {skill}
+                  </li>
                 ))}
 
               {additionalSkills.split(",").length > 5 ? (
@@ -83,7 +93,8 @@ const SkillsContainer = styled.div`
 
     .skill {
       border-radius: 10px;
-      box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+      box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+        rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
       padding: 5px;
     }
   }
