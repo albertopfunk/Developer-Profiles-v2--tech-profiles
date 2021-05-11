@@ -230,7 +230,7 @@ const UserCard = React.forwardRef((props, articleRef) => {
       </UserInfo>
 
       {isCardExpanded ? (
-        <UserExtras userExtras={userExtras} noExtras={noExtras} />
+        <UserExtras userExtras={userExtras} noExtras={noExtras} userId={props.userId} />
       ) : null}
     </UserCardContainer>
   );
