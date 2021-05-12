@@ -12,7 +12,7 @@ function UserSkills({ topSkills, additionalSkills, userId }) {
           id={`profile-${userId}-top-skills-preview-header`}
           className="title"
         >
-          Top Skills Preview:
+          Top Skills:
         </h4>
 
         <ul className="skills">
@@ -45,7 +45,7 @@ function UserSkills({ topSkills, additionalSkills, userId }) {
           id={`profile-${userId}-additional-skills-previewheader`}
           className="title"
         >
-          Additional Skills Preview:
+          Additional Skills:
         </h4>
 
         <ul className="skills">
