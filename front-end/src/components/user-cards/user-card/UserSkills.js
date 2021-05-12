@@ -76,10 +76,8 @@ function UserSkills({ topSkills, additionalSkills, userId }) {
 const SkillsContainer = styled.div`
   grid-column: 1 / 2;
   grid-row: 5 / 6;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr;
-  grid-gap: 20px;
+  display: flex;
+  gap: 15px;
 
   @media (min-width: 1050px) {
     grid-column: 1 / 3;
@@ -100,23 +98,12 @@ const SkillsContainer = styled.div`
   }
 
   .top-skills {
-    grid-column: 1 / 2;
-    grid-row: 1 / 2;
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: 20% 1fr;
-    grid-gap: 10px;
-
-    .title {
-      grid-column: 1 / 2;
-      grid-row: 1 / 2;
-      justify-self: start;
-    }
+    flex-basis: 50%;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
 
     .skills {
-      grid-column: 1 / 2;
-      grid-row: 2 / 3;
-      place-self: start;
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
@@ -124,23 +111,12 @@ const SkillsContainer = styled.div`
   }
 
   .additional-skills {
-    grid-column: 2 / 3;
-    grid-row: 1 / 2;
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: 20% 1fr;
-    grid-gap: 10px;
-
-    .title {
-      grid-column: 2 / 3;
-      grid-row: 1 / 2;
-      justify-self: start;
-    }
+    flex-basis: 50%;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
 
     .skills {
-      grid-column: 2 / 3;
-      grid-row: 2 / 3;
-      place-self: start;
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
