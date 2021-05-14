@@ -65,14 +65,14 @@ function UserImage({ previewImage, userImage, avatarImage, userId }) {
 }
 
 const ImageSection = styled.section`
-  width: 250px;
+  width: 200px;
   height: auto;
   grid-column: 1 / 2;
   grid-row: 2 / 3;
   place-self: center;
 
   @media (min-width: 1050px) {
-    /* width: 350px; */
+    width: 250px;
     grid-column: 1 / 2;
     grid-row: 1 / 2;
   }

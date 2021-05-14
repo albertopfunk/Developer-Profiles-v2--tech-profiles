@@ -177,10 +177,10 @@ function UserCards({
 const Feed = styled.div`
   .feed-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(600px, 100%), 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(550px, 100%), 1fr));
     justify-items: center;
     align-items: start;
-    grid-gap: 20px;
+    grid-gap: 50px;
   }
 
   .feed-controls .control {
