@@ -241,7 +241,7 @@ const UserCard = React.forwardRef((props, articleRef) => {
 });
 
 const UserCardContainer = styled.article`
-  max-width: 850px;
+  max-width: 700px;
   padding: 10px;
   background-color: white;
   border-radius: 10px;
@@ -255,7 +255,7 @@ const UserInfo = styled.div`
   grid-template-rows: repeat(6, auto);
 
   @media (min-width: 1050px) {
-    grid-template-columns: repeat(3, auto);
+    grid-template-columns: repeat(2, auto) 60px;
     grid-template-rows: repeat(4, auto);
   }
 
@@ -268,7 +268,7 @@ const UserInfo = styled.div`
     align-items: center;
 
     @media (min-width: 1050px) {
-      grid-column: 1 / 3;
+      grid-column: 1 / 4  ;
       grid-row: 4 / 5;
     }
 

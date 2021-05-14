@@ -59,10 +59,7 @@ function UserImage({ previewImage, userImage, avatarImage, userId }) {
       <h4 id={`profile-${userId}-image-header`} className="sr-only">
         profile pic
       </h4>
-      <FallbackAvatar
-        viewBox="165 226 670 740"
-        preserveAspectRatio="xMidYMid meet"
-      />
+      <FallbackAvatar />
     </ImageSection>
   );
 }
@@ -75,7 +72,7 @@ const ImageSection = styled.section`
   place-self: center;
 
   @media (min-width: 1050px) {
-    width: 350px;
+    /* width: 350px; */
     grid-column: 1 / 2;
     grid-row: 1 / 2;
   }
