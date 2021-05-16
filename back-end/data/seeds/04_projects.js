@@ -6,13 +6,14 @@ exports.seed = function (knex, Promise) {
 
   for (let i = 1; i <= 50; i++) {
     let randomNumber = Math.floor(Math.random() * 4);
+    let randomImageNumber = Math.floor(Math.random() * (14 - 1) + 1);
     for (let j = 0; j < randomNumber; j++) {
       projectArr.push({
         user_id: i,
         project_img:
-          "https://res.cloudinary.com/dy5hgr3ht/image/upload/c_scale,h_500/v1590908926/dev-profiles-v1-profile-dashboard/j9d4p6fw6qzb7gn9fn5x.webp",
+        `https://res.cloudinary.com/dy5hgr3ht/image/upload/c_scale,w_275/v1621132770/tech-pros-v1-main/examples/project-image-${randomImageNumber}.jpg`,
         project_title: faker.internet.domainName(),
-        link: "albertopfunk.dev",
+        link: "https://albertopfunk.dev",
         project_description:
           "245char Lorem Ipsum is dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
       });
