@@ -25,19 +25,22 @@ function UserExtras({ userExtras, noExtras, userId }) {
 
           <dl className="list">
             {projects.map((project) => (
-              <div key={project.id}>
+              <div key={project.id} className="item">
                 <dt>{project.project_title}</dt>
-                <dt>
-                  <a href={project.link}>{project.link}(opens in new window)</a>
-                </dt>
                 <dd>
-                  <img
-                    style={{ width: "100px" }}
-                    src={project.project_img}
-                    alt=""
-                  />
+                  <a
+                    href={project.link}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="image-link"
+                  >
+                    <img src={project.project_img} alt="" width="100%" />
+                    {project.link}
+                    <span className="sr-only">(opens in new window)</span>
+                  </a>
                 </dd>
-                <dd>{project.project_description}</dd>
+                <dd></dd>
+                <dd className="description">{project.project_description}</dd>
               </div>
             ))}
           </dl>
@@ -54,11 +57,13 @@ function UserExtras({ userExtras, noExtras, userId }) {
 
           <dl className="list">
             {education.map((education) => (
-              <div key={education.id}>
+              <div key={education.id} className="item">
                 <dt>{education.school}</dt>
-                <dt>{education.school_dates}</dt>
+                <dd>{education.school_dates}</dd>
                 <dd>{education.field_of_study}</dd>
-                <dd>{education.education_description}</dd>
+                <dd className="description">
+                  {education.education_description}
+                </dd>
               </div>
             ))}
           </dl>
@@ -75,11 +80,11 @@ function UserExtras({ userExtras, noExtras, userId }) {
 
           <dl className="list">
             {experience.map((experience) => (
-              <div key={experience.id}>
+              <div key={experience.id} className="item">
                 <dt>{experience.company_name}</dt>
-                <dt>{experience.job_dates}</dt>
+                <dd>{experience.job_dates}</dd>
                 <dd>{experience.job_title}</dd>
-                <dd>{experience.job_description}</dd>
+                <dd className="description">{experience.job_description}</dd>
               </div>
             ))}
           </dl>
@@ -156,27 +161,12 @@ const ExtrasContainer = styled.div`
   grid-gap: 40px;
 
   section {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: 20% 1fr;
-    grid-gap: 10px;
-
-    .title {
-      grid-column: 1 / 2;
-      grid-row: 1 / 2;
-      justify-self: start;
-    }
-
-    .list {
-      grid-column: 1 / 2;
-      grid-row: 2 / 3;
-    }
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
 
     ul.list {
       list-style: none;
-      padding: 0;
-      margin: 0;
-      place-self: start;
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
@@ -186,6 +176,42 @@ const ExtrasContainer = styled.div`
         box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
           rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
         padding: 5px;
+      }
+    }
+
+    dl.list {
+      overflow-x: auto;
+      display: flex;
+      gap: 20px;
+      padding: 15px;
+
+      .item {
+        flex-shrink: 0;
+        flex-basis: 350px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        border-radius: 10px;
+        box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+          rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+        padding: 5px;
+
+        .image-link {
+          overflow: hidden;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+
+          .sr-only {
+            position: relative;
+          }
+        }
+
+        .description {
+          text-align: center;
+        }
       }
     }
   }
