@@ -68,6 +68,23 @@ export const GlobalStyles = createGlobalStyle`
     font-size: 2em;
     margin: 0.67em 0;
   }
+  
+  /**
+  * Remove all margin/padding on headers
+  */
+
+  h1, h2, h3, h4, h5, h6 {
+    margin: 0;
+    padding: 0;
+  }
+
+  /**
+  * Remove all margin/padding on text
+  */
+  p {
+    margin: 0;
+    padding: 0;
+  }
 
   /* Grouping content
   * ========================================================================== */
@@ -93,6 +110,16 @@ export const GlobalStyles = createGlobalStyle`
   ul ol,
   ul ul {
     margin: 0;
+  }
+
+
+  /**
+  * Remove all margin/padding on lists
+  */
+
+  ul, ol, li, dl, dd, dt {
+    margin: 0;
+    padding: 0;
   }
 
   /**
@@ -579,26 +606,6 @@ export const GlobalStyles = createGlobalStyle`
     position: absolute;
   }
 
-  /* Additional Resets
-  * ========================================================================== */
-
-  /*
-  * no margin on text 
-  */
-
-  p {
-    margin: 0;
-  }
-
-  h1, h2, h3, h4, h5, h6 {
-    margin: 0;
-    padding: 0;
-  }
-
-  ul, ol, dl {
-    margin: 0;
-    padding: 0;
-  }
 
   /*
   ------------------------------------------------------------------------
