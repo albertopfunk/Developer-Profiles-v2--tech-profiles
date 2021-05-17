@@ -20,33 +20,37 @@ function UserIcons({ github, twitter, linkedin, portfolio, userId }) {
       <h4 id={`profile-${userId}-links-header`} className="sr-only">
         profile links
       </h4>
-      {github ? (
-        <a href={github} target="_blank" rel="noreferrer" className="icon">
-          <GithubIcon />
-          <span className="sr-only">github profile(opens in new window)</span>
-        </a>
-      ) : null}
+      <div className="flex-container">
 
-      {twitter ? (
-        <a href={twitter} target="_blank" rel="noreferrer" className="icon">
-          <TwitterIcon />
-          <span className="sr-only">twitter profile(opens in new window)</span>
-        </a>
-      ) : null}
+        {github ? (
+          <a href={github} target="_blank" rel="noreferrer" className="icon">
+            <GithubIcon />
+            <span className="sr-only">github profile(opens in new window)</span>
+          </a>
+        ) : null}
 
-      {linkedin ? (
-        <a href={linkedin} target="_blank" rel="noreferrer" className="icon">
-          <LinkedinIcon />
-          <span className="sr-only">linkedin profile(opens in new window)</span>
-        </a>
-      ) : null}
+        {twitter ? (
+          <a href={twitter} target="_blank" rel="noreferrer" className="icon">
+            <TwitterIcon />
+            <span className="sr-only">twitter profile(opens in new window)</span>
+          </a>
+        ) : null}
 
-      {portfolio ? (
-        <a href={portfolio} target="_blank" rel="noreferrer" className="icon">
-          <WebsiteIcon />
-          <span className="sr-only">website profile(opens in new window)</span>
-        </a>
-      ) : null}
+        {linkedin ? (
+          <a href={linkedin} target="_blank" rel="noreferrer" className="icon">
+            <LinkedinIcon />
+            <span className="sr-only">linkedin profile(opens in new window)</span>
+          </a>
+        ) : null}
+
+        {portfolio ? (
+          <a href={portfolio} target="_blank" rel="noreferrer" className="icon">
+            <WebsiteIcon />
+            <span className="sr-only">website profile(opens in new window)</span>
+          </a>
+        ) : null}
+      </div>
+
     </IconsSection>
   );
 }
@@ -55,14 +59,25 @@ const IconsSection = styled.section`
   grid-column: 1 / 2;
   grid-row: 4 / 5;
   place-self: center;
-  display: flex;
-  gap: 25px;
 
   @media (min-width: 1050px) {
     grid-column: 3 / 4;
     grid-row: 1 / 4;
-    flex-direction: column;
-    gap: 35px;
+
+    
+  }
+
+  .flex-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+
+
+    @media (min-width: 1050px) {
+      flex-direction: column;
+      gap: 35px;
+    }
   }
 
   .icon {
