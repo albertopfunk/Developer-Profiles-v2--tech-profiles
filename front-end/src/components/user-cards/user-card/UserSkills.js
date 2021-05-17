@@ -77,7 +77,13 @@ const SkillsContainer = styled.div`
   grid-column: 1 / 2;
   grid-row: 5 / 6;
   display: flex;
-  gap: 15px;
+  flex-wrap: wrap;
+  gap: 30px;
+
+  @media (min-width: 350px) {
+    flex-wrap: nowrap;
+    gap: 15px;
+  }
 
   @media (min-width: 1050px) {
     grid-column: 1 / 3;
@@ -98,10 +104,14 @@ const SkillsContainer = styled.div`
   }
 
   .top-skills {
-    flex-basis: 50%;
+    flex-basis: 100%;
     display: flex;
     flex-direction: column;
     gap: 15px;
+
+    @media (min-width: 350px) {
+      flex-basis: 50%;
+    }
 
     .skills {
       display: flex;
@@ -111,10 +121,14 @@ const SkillsContainer = styled.div`
   }
 
   .additional-skills {
-    flex-basis: 50%;
+    flex-basis: 100%;
     display: flex;
     flex-direction: column;
     gap: 15px;
+
+    @media (min-width: 350px) {
+      flex-basis: 50%;
+    }
 
     .skills {
       display: flex;
