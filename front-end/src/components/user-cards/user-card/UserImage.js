@@ -15,11 +15,13 @@ function UserImage({ previewImage, userImage, avatarImage, userId }) {
         <h4 id={`profile-${userId}-image-header`} className="sr-only">
           profile pic
         </h4>
-        <img
-          src={previewImage}
-          onError={handleBrokenLink}
-          alt="current pic preview"
-        />
+        <div className="image-container">
+          <img
+            src={previewImage}
+            onError={handleBrokenLink}
+            alt="current pic preview"
+          />
+        </div>
       </ImageSection>
     );
   }
@@ -30,11 +32,13 @@ function UserImage({ previewImage, userImage, avatarImage, userId }) {
         <h4 id={`profile-${userId}-image-header`} className="sr-only">
           profile pic
         </h4>
-        <img
-          src={userImage}
-          onError={handleBrokenLink}
-          alt="saved profile pic"
-        />
+        <div className="image-container">
+          <img
+            src={userImage}
+            onError={handleBrokenLink}
+            alt="saved profile pic"
+          />
+        </div>
       </ImageSection>
     );
   }
@@ -45,11 +49,13 @@ function UserImage({ previewImage, userImage, avatarImage, userId }) {
         <h4 id={`profile-${userId}-image-header`} className="sr-only">
           profile pic
         </h4>
-        <img
-          src={avatarImage}
-          onError={handleBrokenLink}
-          alt="saved avatar pic"
-        />
+        <div className="image-container">
+          <img
+            src={avatarImage}
+            onError={handleBrokenLink}
+            alt="saved avatar pic"
+          />
+        </div>
       </ImageSection>
     );
   }
@@ -59,22 +65,36 @@ function UserImage({ previewImage, userImage, avatarImage, userId }) {
       <h4 id={`profile-${userId}-image-header`} className="sr-only">
         profile pic
       </h4>
-      <FallbackAvatar />
+      <div className="image-container">    
+        <FallbackAvatar />
+      </div>
     </ImageSection>
   );
 }
 
 const ImageSection = styled.section`
-  width: 200px;
-  height: auto;
+  width: 100%;
+  /* width: 200px;
+  height: auto; */
   grid-column: 1 / 2;
   grid-row: 2 / 3;
   place-self: center;
 
   @media (min-width: 1050px) {
-    width: 250px;
+    /* width: 250px; */
     grid-column: 1 / 2;
     grid-row: 1 / 2;
+  }
+
+  .image-container {
+    width: min(200px, 100%);
+    border-radius: 50%;
+    margin: 0 auto;
+
+    img {
+      max-width: 100%;
+      height: auto;
+    }
   }
 `;
 
