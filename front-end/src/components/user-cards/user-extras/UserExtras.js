@@ -155,6 +155,7 @@ function UserExtras({ userExtras, noExtras, userId }) {
 }
 
 const ExtrasContainer = styled.div`
+  padding-top: 40px;
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: repeat(6, auto);
