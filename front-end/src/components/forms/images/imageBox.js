@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
+import { avatarInfo } from "../../../global/static-data";
 import ImagePreview from "./ImagePreview";
 import ImageUploadForm from "./ImageUpload";
 
@@ -8,12 +9,26 @@ function ImageBox({ setImageChange }) {
   const { user, userImage, setUserImage } = useContext(ProfileContext);
 
   const avatarRadioRefs = useRef({
-    "blue-1": React.createRef(),
-    "redblue-1": React.createRef(),
-    "whitegreen-1": React.createRef(),
-    "greenblack-1": React.createRef(),
-    "white-1": React.createRef(),
-    "greenwhite-1": React.createRef(),
+    "whitered": React.createRef(),
+    "whitegreen-2": React.createRef(),
+    "whitegreen": React.createRef(),
+    "white": React.createRef(),
+    "redwhite-3": React.createRef(),
+    "redwhite-2": React.createRef(),
+    "redwhite": React.createRef(),
+    "redgreen": React.createRef(),
+    "redblue": React.createRef(),
+    "greenwhite": React.createRef(),
+    "greenred": React.createRef(),
+    "greenblack": React.createRef(),
+    "bluered": React.createRef(),
+    "blueblack": React.createRef(),
+    "blue-2": React.createRef(),
+    "blue": React.createRef(),
+    "blackwhite": React.createRef(),
+    "blackred-3": React.createRef(),
+    "blackred-2": React.createRef(),
+    "blackred": React.createRef(),
   });
 
   useEffect(() => {
@@ -29,7 +44,7 @@ function ImageBox({ setImageChange }) {
 
   function setSelectedAvatar(value) {
     const urlStart =
-      "https://res.cloudinary.com/dy5hgr3ht/image/upload/v1618796810/tech-pros-v1-avatars/";
+      "https://res.cloudinary.com/dy5hgr3ht/image/upload/tech-pros-v1-avatars/";
 
     // no need to set saved avatar
     if (`${urlStart}${value}.svg` === user.avatar_image) {
@@ -316,111 +331,25 @@ function ImageBox({ setImageChange }) {
           }
         >
           <legend>Choose an avatar image:</legend>
-
           {/* avatars main container */}
           <div className="flex-container">
-            <div className="flex-item">
-              <label htmlFor="blue-1">
+            {avatarInfo.map(avatar => (
+              <div key={avatar.title} className="flex-item">
+                <label htmlFor={avatar.title}>{avatar.title}</label>
                 <input
-                  ref={avatarRadioRefs.current["blue-1"]}
+                  ref={avatarRadioRefs.current[avatar.title]}
                   type="radio"
                   name="profile-avatar"
-                  id="blue-1"
-                  value="blue-1"
+                  id={avatar.title}
+                  value={avatar.title}
                   defaultChecked={
                     user.avatar_image ===
-                    "https://res.cloudinary.com/dy5hgr3ht/image/upload/v1618796810/tech-pros-v1-avatars/blue-1.svg"
+                    `https://res.cloudinary.com/dy5hgr3ht/image/upload/tech-pros-v1-avatars/${avatar.title}.svg`
                   }
                   onClick={(e) => setSelectedAvatar(e.target.value)}
                 />
-                Blue female avatar, medium skin tone, pink hair
-              </label>
-            </div>
-            <div className="flex-item">
-              <label htmlFor="redblue-1">
-                <input
-                  ref={avatarRadioRefs.current["redblue-1"]}
-                  type="radio"
-                  name="profile-avatar"
-                  id="redblue-1"
-                  value="redblue-1"
-                  defaultChecked={
-                    user.avatar_image ===
-                    "https://res.cloudinary.com/dy5hgr3ht/image/upload/v1618796810/tech-pros-v1-avatars/redblue-1.svg"
-                  }
-                  onClick={(e) => setSelectedAvatar(e.target.value)}
-                />
-                Red and blue female avatar, light skin tone, red hair
-              </label>
-            </div>
-            <div className="flex-item">
-              <label htmlFor="whitegreen-1">
-                <input
-                  ref={avatarRadioRefs.current["whitegreen-1"]}
-                  type="radio"
-                  name="profile-avatar"
-                  id="whitegreen-1"
-                  value="whitegreen-1"
-                  defaultChecked={
-                    user.avatar_image ===
-                    "https://res.cloudinary.com/dy5hgr3ht/image/upload/v1618796810/tech-pros-v1-avatars/whitegreen-1.svg"
-                  }
-                  onClick={(e) => setSelectedAvatar(e.target.value)}
-                />
-                White and green male avatar, dark skin tone, black hair
-              </label>
-            </div>
-            <div className="flex-item">
-              <label htmlFor="greenblack-1">
-                <input
-                  ref={avatarRadioRefs.current["greenblack-1"]}
-                  type="radio"
-                  name="profile-avatar"
-                  id="greenblack-1"
-                  value="greenblack-1"
-                  defaultChecked={
-                    user.avatar_image ===
-                    "https://res.cloudinary.com/dy5hgr3ht/image/upload/v1618796810/tech-pros-v1-avatars/greenblack-1.svg"
-                  }
-                  onClick={(e) => setSelectedAvatar(e.target.value)}
-                />
-                green and black female avatar, medium skin tone, black hair
-              </label>
-            </div>
-            <div className="flex-item">
-              <label htmlFor="white-1">
-                <input
-                  ref={avatarRadioRefs.current["white-1"]}
-                  type="radio"
-                  name="profile-avatar"
-                  id="white-1"
-                  value="white-1"
-                  defaultChecked={
-                    user.avatar_image ===
-                    "https://res.cloudinary.com/dy5hgr3ht/image/upload/v1618796810/tech-pros-v1-avatars/white-1.svg"
-                  }
-                  onClick={(e) => setSelectedAvatar(e.target.value)}
-                />
-                White male avatar, light skin tone, blue hair
-              </label>
-            </div>
-            <div className="flex-item">
-              <label htmlFor="greenwhite-1">
-                <input
-                  ref={avatarRadioRefs.current["greenwhite-1"]}
-                  type="radio"
-                  name="profile-avatar"
-                  id="greenwhite-1"
-                  value="greenwhite-1"
-                  defaultChecked={
-                    user.avatar_image ===
-                    "https://res.cloudinary.com/dy5hgr3ht/image/upload/v1618796810/tech-pros-v1-avatars/greenwhite-1.svg"
-                  }
-                  onClick={(e) => setSelectedAvatar(e.target.value)}
-                />
-                Green and white male avatar, light skin tone, black hair
-              </label>
-            </div>
+              </div>
+            ))}
           </div>
         </fieldset>
       </div>
@@ -447,8 +376,14 @@ const ImageBoxContainer = styled.div`
       gap: 20px;
 
       .flex-item {
-        width: 100px;
-        height: auto;
+        width: 150px;
+        height: 100px;
+        border: solid;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 5px;
       }
     }
   }
