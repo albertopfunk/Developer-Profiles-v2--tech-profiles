@@ -476,7 +476,9 @@ class Combobox extends React.Component {
 }
 
 const InputContainer = styled.div`
-  
+  input {
+    width: 100%;
+  }
 `;
 
 const ChosenNamesGroup = styled.ul`
