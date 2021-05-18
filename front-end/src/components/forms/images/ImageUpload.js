@@ -79,6 +79,12 @@ function ImageUploadForm({ userId, imageId, setImageInput }) {
 const InputContainer = styled.div`
   display: flex;
   flex-direction: column;
+
+  input {
+    border: solid;
+    width: 100px;
+  }
+
   .loading-mssg {
     color: green;
     font-size: 0.7rem;
