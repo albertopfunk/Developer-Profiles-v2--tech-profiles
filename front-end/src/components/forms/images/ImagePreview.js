@@ -1,15 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 
-/*
-
-should only accept a preview image and main image
-preview image can be either the avatar preview image or upload preview image
-main image can be the saved profile image or saved avatar image
-if both are not present then return an empty box to show that
-no image is uploaded and the default image will be used
-
-*/
 
 function ImagePreview({
   uploadedImage,
@@ -24,7 +15,6 @@ function ImagePreview({
   if (uploadedImage) {
     return (
       <ImageContainer>
-        <div className="img-action">
           <button
             type="button"
             aria-label="remove current preview pic"
@@ -32,12 +22,9 @@ function ImagePreview({
           >
             X
           </button>
-        </div>
         <img
           src={uploadedImage}
           alt="current preview pic"
-          height="200px"
-          width="200px"
         />
       </ImageContainer>
     );
@@ -46,7 +33,6 @@ function ImagePreview({
   if (selectedAvatar) {
     return (
       <ImageContainer>
-        <div className="img-action">
           <button
             type="button"
             aria-label="remove current avatar"
@@ -54,12 +40,9 @@ function ImagePreview({
           >
             X
           </button>
-        </div>
         <img
           src={selectedAvatar}
           alt="current avatar"
-          height="200px"
-          width="200px"
         />
       </ImageContainer>
     );
@@ -68,7 +51,6 @@ function ImagePreview({
   if (savedUserImage) {
     return (
       <ImageContainer>
-        <div className="img-action">
           <button
             type="button"
             aria-label="remove saved pic on submit"
@@ -76,12 +58,9 @@ function ImagePreview({
           >
             X
           </button>
-        </div>
         <img
           src={savedUserImage}
           alt="saved pic"
-          height="200px"
-          width="200px"
         />
       </ImageContainer>
     );
@@ -90,7 +69,6 @@ function ImagePreview({
   if (savedAvatar) {
     return (
       <ImageContainer>
-        <div className="img-action">
           <button
             type="button"
             aria-label="remove saved avatar on submit"
@@ -98,12 +76,9 @@ function ImagePreview({
           >
             X
           </button>
-        </div>
         <img
           src={savedAvatar}
           alt="saved avatar"
-          height="200px"
-          width="200px"
         />
       </ImageContainer>
     );
@@ -117,14 +92,25 @@ function ImagePreview({
 }
 
 const ImageContainer = styled.div`
-  height: 200px;
-  width: 200px;
-  .img-action {
+  position: relative;
+  width: 120px;
+  height: auto;
+
+  @media (min-width: 350px) {
+    width: 175px;
+  }
+  
+  button {
     position: absolute;
-    top: 5%;
-    right: 5%;
+    top: 0;
+    right: 0;
     border: solid;
     z-index: 15;
+  }
+
+  img {
+    width: 100%;
+    height: auto;
   }
 `;
 
