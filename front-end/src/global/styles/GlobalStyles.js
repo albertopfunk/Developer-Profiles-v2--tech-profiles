@@ -338,6 +338,7 @@ export const GlobalStyles = createGlobalStyle`
     border: none;
     margin: 0;
     padding: 0;
+    min-width: 0;
   }
 
   /**
