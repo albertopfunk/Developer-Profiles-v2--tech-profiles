@@ -183,8 +183,8 @@ const ExtrasContainer = styled.div`
     dl.list {
       overflow-x: auto;
       display: flex;
-      gap: 20px;
-      padding: 15px;
+      gap: min(20px, 100%);
+      padding: 5px;
 
       .item {
         flex-shrink: 0;
