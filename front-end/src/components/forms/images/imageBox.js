@@ -363,14 +363,19 @@ const ImageBoxContainer = styled.div`
   box-shadow: 0 4px 6px 0 hsla(0, 0%, 0%, 0.2);
 
   .grid-container {
-    display: grid;
     overflow-x: auto;
-    grid-template-columns: 1fr auto;
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    grid-gap: 30px;
+  }
+
+  .image-upload-container {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
   }
 
   fieldset {
-    border: none;
-
     .flex-container {
       display: flex;
       gap: 20px;

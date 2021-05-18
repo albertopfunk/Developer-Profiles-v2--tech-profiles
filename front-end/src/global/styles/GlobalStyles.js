@@ -331,13 +331,13 @@ export const GlobalStyles = createGlobalStyle`
   }
 
   /**
-  * 1. Change the inconsistent appearance in all browsers (opinionated).
-  * 2. Correct the padding in Firefox.
+  * 1. resetting fieldset
   */
 
   fieldset {
-    border: 1px solid #a0a0a0; /* 1 */
-    padding: 0.35em 0.75em 0.625em; /* 2 */
+    border: none;
+    margin: 0;
+    padding: 0;
   }
 
   /**
