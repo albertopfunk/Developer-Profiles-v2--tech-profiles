@@ -268,7 +268,7 @@ const UserInfo = styled.div`
     align-items: center;
 
     @media (min-width: 1050px) {
-      grid-column: 1 / 4  ;
+      grid-column: 1 / 4;
       grid-row: 4 / 5;
     }
 

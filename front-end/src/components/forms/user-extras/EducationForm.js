@@ -338,7 +338,7 @@ const EducationForm = React.forwardRef(
     }
 
     return (
-      <fieldset>
+      <Fieldset>
         <legend>Education: {school.schoolNameInput || "New Education"}</legend>
 
         <button
@@ -634,10 +634,14 @@ const EducationForm = React.forwardRef(
             </span>
           ) : null}
         </InputContainer>
-      </fieldset>
+      </Fieldset>
     );
   }
 );
+
+const Fieldset = styled.fieldset`
+  min-width: 0;
+`;
 
 const InputContainer = styled.div`
   display: flex;

@@ -9,26 +9,26 @@ function ImageBox({ setImageChange }) {
   const { user, userImage, setUserImage } = useContext(ProfileContext);
 
   const avatarRadioRefs = useRef({
-    "whitered": React.createRef(),
+    whitered: React.createRef(),
     "whitegreen-2": React.createRef(),
-    "whitegreen": React.createRef(),
-    "white": React.createRef(),
+    whitegreen: React.createRef(),
+    white: React.createRef(),
     "redwhite-3": React.createRef(),
     "redwhite-2": React.createRef(),
-    "redwhite": React.createRef(),
-    "redgreen": React.createRef(),
-    "redblue": React.createRef(),
-    "greenwhite": React.createRef(),
-    "greenred": React.createRef(),
-    "greenblack": React.createRef(),
-    "bluered": React.createRef(),
-    "blueblack": React.createRef(),
+    redwhite: React.createRef(),
+    redgreen: React.createRef(),
+    redblue: React.createRef(),
+    greenwhite: React.createRef(),
+    greenred: React.createRef(),
+    greenblack: React.createRef(),
+    bluered: React.createRef(),
+    blueblack: React.createRef(),
     "blue-2": React.createRef(),
-    "blue": React.createRef(),
-    "blackwhite": React.createRef(),
+    blue: React.createRef(),
+    blackwhite: React.createRef(),
     "blackred-3": React.createRef(),
     "blackred-2": React.createRef(),
-    "blackred": React.createRef(),
+    blackred: React.createRef(),
   });
 
   useEffect(() => {
@@ -333,7 +333,7 @@ function ImageBox({ setImageChange }) {
           <legend>Choose an avatar image:</legend>
           {/* avatars main container */}
           <div className="flex-container">
-            {avatarInfo.map(avatar => (
+            {avatarInfo.map((avatar) => (
               <div key={avatar.title} className="flex-item">
                 <label htmlFor={avatar.title}>{avatar.title}</label>
                 <input

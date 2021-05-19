@@ -335,7 +335,7 @@ const ExperienceForm = React.forwardRef(
     }
 
     return (
-      <fieldset>
+      <Fieldset>
         <legend>Experience: {company.companyNameInput || "New Company"}</legend>
 
         <button
@@ -623,10 +623,14 @@ const ExperienceForm = React.forwardRef(
             </span>
           ) : null}
         </InputContainer>
-      </fieldset>
+      </Fieldset>
     );
   }
 );
+
+const Fieldset = styled.fieldset`
+  min-width: 0;
+`;
 
 const InputContainer = styled.div`
   display: flex;

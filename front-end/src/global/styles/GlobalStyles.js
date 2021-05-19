@@ -317,6 +317,8 @@ export const GlobalStyles = createGlobalStyle`
   button {
     overflow: visible; /* 1 */
     text-transform: none; /* 2 */
+    margin: 0;
+    padding: 0;
   }
 
   /**
@@ -338,7 +340,6 @@ export const GlobalStyles = createGlobalStyle`
     border: none;
     margin: 0;
     padding: 0;
-    min-width: 0;
   }
 
   /**

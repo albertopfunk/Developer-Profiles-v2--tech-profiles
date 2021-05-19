@@ -133,14 +133,14 @@ const Nav = styled.nav`
     grid-column: 1 / 2;
     grid-row: 1 / 2;
     justify-self: start;
-    padding: var(--nav-padding);
+    /* padding: var(--nav-padding); */
   }
 
   .signin-button {
     grid-column: 2 / 3;
     grid-row: 1 / 2;
     justify-self: end;
-    padding: var(--nav-padding);
+    /* padding: var(--nav-padding); */
     border: none;
     background: white;
   }

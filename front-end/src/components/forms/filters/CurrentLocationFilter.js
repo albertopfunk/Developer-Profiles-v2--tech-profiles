@@ -89,9 +89,18 @@ class CurrentLocationFilter extends React.Component {
   render() {
     return (
       <div>
+        <Combobox
+          chosenOptions={this.state.location}
+          onInputChange={this.onLocationInputChange}
+          onChosenOption={this.onChosenLocation}
+          onRemoveChosenOption={this.resetLocationFilter}
+          inputName={"current-location"}
+          displayName={"Current Location"}
+          single
+        />
         <div className="miles">
           <label htmlFor="choose-miles">
-            Distance from Current Location
+            Distance
             <input
               type="range"
               min="5"
@@ -107,15 +116,6 @@ class CurrentLocationFilter extends React.Component {
             {this.state.milesWithinInput}
           </label>
         </div>
-        <Combobox
-          chosenOptions={this.state.location}
-          onInputChange={this.onLocationInputChange}
-          onChosenOption={this.onChosenLocation}
-          onRemoveChosenOption={this.resetLocationFilter}
-          inputName={"current-location"}
-          displayName={"Current Location"}
-          single
-        />
       </div>
     );
   }

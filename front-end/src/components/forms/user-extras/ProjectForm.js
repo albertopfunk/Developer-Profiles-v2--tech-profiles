@@ -223,7 +223,7 @@ const ProjectForm = React.forwardRef(
     }
 
     return (
-      <fieldset>
+      <Fieldset>
         <legend>Project: {project.projectNameInput || "New Project"}</legend>
 
         <button
@@ -346,10 +346,14 @@ const ProjectForm = React.forwardRef(
             </span>
           ) : null}
         </InputContainer>
-      </fieldset>
+      </Fieldset>
     );
   }
 );
+
+const Fieldset = styled.fieldset`
+  min-width: 0;
+`;
 
 const InputContainer = styled.div`
   display: flex;

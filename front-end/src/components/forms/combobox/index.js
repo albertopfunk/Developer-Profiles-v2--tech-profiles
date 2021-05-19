@@ -481,9 +481,7 @@ const InputContainer = styled.div`
   }
 `;
 
-const ChosenNamesGroup = styled.ul`
-  
-`;
+const ChosenNamesGroup = styled.ul``;
 
 const ResultsContainer = styled.div`
   .results-group {

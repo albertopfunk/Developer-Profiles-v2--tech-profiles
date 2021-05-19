@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { Helmet } from "react-helmet";
+import { ReactComponent as WelcomeIntro } from "../../../global/assets/dashboard-intro.svg";
 import styled from "styled-components";
 
 import ImageBox from "../../../components/forms/images/imageBox";
@@ -458,9 +459,11 @@ function NewUser() {
           <title>Profile Dashboard Quickstart • Tech Profiles</title>
         </Helmet>
         <h1 id="main-heading">Quickstart</h1>
-        <section aria-labelledby="welcome-heading">
+        <WelcomeSection aria-labelledby="welcome-heading">
           <h2 id="welcome-heading">Welcome {user.first_name || "Newcomer"}!</h2>
-          {/* welcome image */}
+          <div className="image-container">
+            <WelcomeIntro />
+          </div>
           <button
             ref={editInfoBtnRef}
             id="edit-info-btn"
@@ -471,7 +474,7 @@ function NewUser() {
             Edit Quickstart Information
           </button>
           <Link to="/profile-dashboard">Go Home</Link>
-        </section>
+        </WelcomeSection>
       </>
     );
   }
@@ -783,6 +786,13 @@ function NewUser() {
     </>
   );
 }
+
+const WelcomeSection = styled.section`
+  .image-container {
+    width: min(500px, 100%);
+    height: auto;
+  }
+`;
 
 const InputContainer = styled.div`
   display: flex;

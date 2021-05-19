@@ -21,7 +21,6 @@ function UserIcons({ github, twitter, linkedin, portfolio, userId }) {
         profile links
       </h4>
       <div className="flex-container">
-
         {github ? (
           <a href={github} target="_blank" rel="noreferrer" className="icon">
             <GithubIcon />
@@ -32,25 +31,30 @@ function UserIcons({ github, twitter, linkedin, portfolio, userId }) {
         {twitter ? (
           <a href={twitter} target="_blank" rel="noreferrer" className="icon">
             <TwitterIcon />
-            <span className="sr-only">twitter profile(opens in new window)</span>
+            <span className="sr-only">
+              twitter profile(opens in new window)
+            </span>
           </a>
         ) : null}
 
         {linkedin ? (
           <a href={linkedin} target="_blank" rel="noreferrer" className="icon">
             <LinkedinIcon />
-            <span className="sr-only">linkedin profile(opens in new window)</span>
+            <span className="sr-only">
+              linkedin profile(opens in new window)
+            </span>
           </a>
         ) : null}
 
         {portfolio ? (
           <a href={portfolio} target="_blank" rel="noreferrer" className="icon">
             <WebsiteIcon />
-            <span className="sr-only">website profile(opens in new window)</span>
+            <span className="sr-only">
+              website profile(opens in new window)
+            </span>
           </a>
         ) : null}
       </div>
-
     </IconsSection>
   );
 }
@@ -63,8 +67,6 @@ const IconsSection = styled.section`
   @media (min-width: 1050px) {
     grid-column: 3 / 4;
     grid-row: 1 / 4;
-
-    
   }
 
   .flex-container {
@@ -72,7 +74,6 @@ const IconsSection = styled.section`
     flex-wrap: wrap;
     justify-content: center;
     gap: 15px;
-
 
     @media (min-width: 1050px) {
       flex-direction: column;

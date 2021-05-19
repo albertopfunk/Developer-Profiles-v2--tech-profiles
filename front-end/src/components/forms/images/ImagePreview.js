@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 
-
 function ImagePreview({
   uploadedImage,
   removeUploadedImage,
@@ -15,17 +14,14 @@ function ImagePreview({
   if (uploadedImage) {
     return (
       <ImageContainer>
-          <button
-            type="button"
-            aria-label="remove current preview pic"
-            onClick={removeUploadedImage}
-          >
-            X
-          </button>
-        <img
-          src={uploadedImage}
-          alt="current preview pic"
-        />
+        <button
+          type="button"
+          aria-label="remove current preview pic"
+          onClick={removeUploadedImage}
+        >
+          X
+        </button>
+        <img src={uploadedImage} alt="current preview pic" />
       </ImageContainer>
     );
   }
@@ -33,17 +29,14 @@ function ImagePreview({
   if (selectedAvatar) {
     return (
       <ImageContainer>
-          <button
-            type="button"
-            aria-label="remove current avatar"
-            onClick={removeSelectedAvatar}
-          >
-            X
-          </button>
-        <img
-          src={selectedAvatar}
-          alt="current avatar"
-        />
+        <button
+          type="button"
+          aria-label="remove current avatar"
+          onClick={removeSelectedAvatar}
+        >
+          X
+        </button>
+        <img src={selectedAvatar} alt="current avatar" />
       </ImageContainer>
     );
   }
@@ -51,17 +44,14 @@ function ImagePreview({
   if (savedUserImage) {
     return (
       <ImageContainer>
-          <button
-            type="button"
-            aria-label="remove saved pic on submit"
-            onClick={removeSavedUserImage}
-          >
-            X
-          </button>
-        <img
-          src={savedUserImage}
-          alt="saved pic"
-        />
+        <button
+          type="button"
+          aria-label="remove saved pic on submit"
+          onClick={removeSavedUserImage}
+        >
+          X
+        </button>
+        <img src={savedUserImage} alt="saved pic" />
       </ImageContainer>
     );
   }
@@ -69,17 +59,14 @@ function ImagePreview({
   if (savedAvatar) {
     return (
       <ImageContainer>
-          <button
-            type="button"
-            aria-label="remove saved avatar on submit"
-            onClick={removeSavedAvatar}
-          >
-            X
-          </button>
-        <img
-          src={savedAvatar}
-          alt="saved avatar"
-        />
+        <button
+          type="button"
+          aria-label="remove saved avatar on submit"
+          onClick={removeSavedAvatar}
+        >
+          X
+        </button>
+        <img src={savedAvatar} alt="saved avatar" />
       </ImageContainer>
     );
   }
@@ -99,7 +86,7 @@ const ImageContainer = styled.div`
   @media (min-width: 350px) {
     width: 175px;
   }
-  
+
   button {
     position: absolute;
     top: 0;

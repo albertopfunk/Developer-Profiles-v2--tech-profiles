@@ -65,7 +65,7 @@ function UserImage({ previewImage, userImage, avatarImage, userId }) {
       <h4 id={`profile-${userId}-image-header`} className="sr-only">
         profile pic
       </h4>
-      <div className="image-container">    
+      <div className="image-container">
         <FallbackAvatar />
       </div>
     </ImageSection>
