@@ -6,7 +6,8 @@ import styled from "styled-components";
 import { AuthContext } from "../../global/context/auth/AuthContext";
 
 let closeOnBlurWait;
-function MainHeader() {
+// eslint-disable-next-line
+function MainHeader(_, headerRef) {
   const { isValidated, signIn, signOut } = useContext(AuthContext);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [announceMenuToggle, setAnnounceMenuToggle] = useState(false);
@@ -26,30 +27,32 @@ function MainHeader() {
   }
 
   return (
-    <Header>
+    <Header ref={headerRef}>
       <div className="sr-only" aria-live="polite" aria-relevant="additions">
         {announceMenuToggle && isMenuOpen ? "Opened SubMenu" : null}
         {announceMenuToggle && !isMenuOpen ? "Closed SubMenu" : null}
       </div>
 
       <Nav aria-label="site">
-        <Link to="/" className="site-logo">
-          <picture>
-            <source
-              srcSet="https://res.cloudinary.com/dy5hgr3ht/image/upload/c_scale,h_40/v1594347155/tech-pros-v1-main/tech-profiles-logo.webp"
-              media="(max-width: 850px)"
-            />
-            <source
-              srcSet="https://res.cloudinary.com/dy5hgr3ht/image/upload/c_scale,h_40/v1594347155/tech-pros-v1-main/tech-profiles-logo.png"
-              media="(max-width: 850px)"
-            />
-            <source srcSet="https://res.cloudinary.com/dy5hgr3ht/image/upload/c_scale,h_65/v1594347155/tech-pros-v1-main/tech-profiles-logo.webp" />
-            <img
-              src="https://res.cloudinary.com/dy5hgr3ht/image/upload/c_scale,h_65/v1594347155/tech-pros-v1-main/tech-profiles-logo.png"
-              alt="site logo link to profiles page"
-            />
-          </picture>
-        </Link>
+        <div className="site-logo">
+          <Link to="/">
+            <picture>
+              <source
+                srcSet="https://res.cloudinary.com/dy5hgr3ht/image/upload/c_scale,h_40/v1594347155/tech-pros-v1-main/tech-profiles-logo.webp"
+                media="(max-width: 850px)"
+              />
+              <source
+                srcSet="https://res.cloudinary.com/dy5hgr3ht/image/upload/c_scale,h_40/v1594347155/tech-pros-v1-main/tech-profiles-logo.png"
+                media="(max-width: 850px)"
+              />
+              <source srcSet="https://res.cloudinary.com/dy5hgr3ht/image/upload/c_scale,h_65/v1594347155/tech-pros-v1-main/tech-profiles-logo.webp" />
+              <img
+                src="https://res.cloudinary.com/dy5hgr3ht/image/upload/c_scale,h_65/v1594347155/tech-pros-v1-main/tech-profiles-logo.png"
+                alt="site logo link to profiles page"
+              />
+            </picture>
+          </Link>
+        </div>
 
         {isValidated ? (
           <>
@@ -61,9 +64,7 @@ function MainHeader() {
                 aria-expanded="true"
                 onClick={closeMenu}
               >
-                <span aria-hidden="true">
-                  <BurgerMenu className="icon rotate" />
-                </span>
+                <BurgerMenu className="icon rotate" aria-hidden="true" />
               </button>
             ) : (
               <button
@@ -73,9 +74,7 @@ function MainHeader() {
                 aria-expanded="false"
                 onClick={openMenu}
               >
-                <span aria-hidden="true">
-                  <BurgerMenu className="icon" />
-                </span>
+                <BurgerMenu className="icon" aria-hidden="true" />
               </button>
             )}
 
@@ -113,6 +112,7 @@ function MainHeader() {
 const Header = styled.header`
   border-bottom: solid 1px rgba(229, 231, 235, 0.5);
   background-color: white;
+  padding: 5px;
 
   @media (min-width: 850px) {
     position: fixed;
@@ -125,29 +125,35 @@ const Header = styled.header`
 `;
 
 const Nav = styled.nav`
+  width: 100%;
+  /* height: 10vh; */
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: auto;
 
   .site-logo {
+    width: 120px;
+    height: auto;
     grid-column: 1 / 2;
     grid-row: 1 / 2;
     justify-self: start;
-    /* padding: var(--nav-padding); */
+
+    img {
+      width: 100%;
+      height: auto;
+    }
   }
 
   .signin-button {
     grid-column: 2 / 3;
     grid-row: 1 / 2;
     justify-self: end;
-    /* padding: var(--nav-padding); */
     border: none;
     background: white;
   }
 
   .menu-button {
-    width: 50px;
-    height: auto;
+    width: 40px;
     grid-column: 2 / 3;
     grid-row: 1 / 2;
     justify-self: end;
@@ -192,4 +198,4 @@ const Nav = styled.nav`
   }
 `;
 
-export default MainHeader;
+export default React.forwardRef(MainHeader);

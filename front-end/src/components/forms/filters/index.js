@@ -12,6 +12,7 @@ function Filters({
   totalUsers,
   resetFilters,
   resetFilterToggle,
+  headerHeight
 }) {
   const [areFiltersShowing, setAreFiltersShowing] = useState(false);
 
@@ -20,7 +21,7 @@ function Filters({
   }
 
   return (
-    <FilterNav aria-label="filters">
+    <FilterNav headerHeight={headerHeight} aria-label="filters">
       <div className="filters-bar">
         <div
           className="info"
@@ -114,6 +115,9 @@ function Filters({
 
 const FilterNav = styled.nav`
   background-color: white;
+  max-height: ${(props) => `calc(100vh - ${props.headerHeight}px);`};
+  overflow-y: auto;
+  padding: 5px;
 
   @media (min-width: 850px) {
     position: fixed;
@@ -130,10 +134,9 @@ const FilterNav = styled.nav`
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: 1fr 1fr;
-    grid-gap: 10px;
+    grid-gap: 5px;
     justify-items: center;
     align-items: center;
-    padding-top: 15px;
 
     @media (min-width: 850px) {
       display: block;

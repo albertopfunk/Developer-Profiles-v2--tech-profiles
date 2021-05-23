@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { Helmet } from "react-helmet";
 
@@ -49,6 +49,9 @@ function ProfilesPage() {
     chosenRelocateToObj: {},
     sortChoice: "acending(oldest-newest)",
   });
+
+
+  const headerRef = useRef()
 
   useEffect(() => {
     initUsers();
@@ -175,13 +178,14 @@ function ProfilesPage() {
   return (
     <>
       <PageHeader>
-        <MainHeader />
+        <MainHeader ref={headerRef} />
         <Filters
           updateUsers={getFilteredUsers}
           currentUsers={users.users.length}
           totalUsers={users.len}
           resetFilters={resetFilters}
           resetFilterToggle={resetToggle}
+          headerHeight={headerRef?.current?.offsetHeight ?? 0}
         />
       </PageHeader>
 
@@ -232,7 +236,6 @@ const PageHeader = styled.div`
   left: 0;
   z-index: 10;
   width: 100%;
-  padding: 5px;
   border-bottom: solid 1px rgba(229, 231, 235, 0.8);
 
   @media (min-width: 850px) {
