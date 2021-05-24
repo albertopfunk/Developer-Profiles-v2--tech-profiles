@@ -52,6 +52,7 @@ function ProfilesPage() {
 
 
   const headerRef = useRef()
+  const headerContainerRef = useRef()
 
   useEffect(() => {
     initUsers();
@@ -175,9 +176,12 @@ function ProfilesPage() {
     setResetToggle();
     setPageStatus(PROFILES_STATUS.idle);
   }
+
+  let headerContainerSize = headerContainerRef?.current?.offsetHeight ?? 0;
+  
   return (
     <>
-      <PageHeader>
+      <HeaderContainer ref={headerContainerRef}>
         <MainHeader ref={headerRef} />
         <Filters
           updateUsers={getFilteredUsers}
@@ -187,9 +191,9 @@ function ProfilesPage() {
           resetFilterToggle={resetToggle}
           headerHeight={headerRef?.current?.offsetHeight ?? 0}
         />
-      </PageHeader>
+      </HeaderContainer>
 
-      <Main aria-labelledby="main-heading">
+      <Main headerContainerSize={headerContainerSize} aria-labelledby="main-heading">
         <Helmet>
           <title>Profiles • Tech Profiles</title>
         </Helmet>
@@ -230,7 +234,7 @@ function ProfilesPage() {
   );
 }
 
-const PageHeader = styled.div`
+const HeaderContainer = styled.div`
   position: fixed;
   top: 0;
   left: 0;
@@ -246,7 +250,10 @@ const PageHeader = styled.div`
 
 const Main = styled.main`
   min-height: 100vh;
-  padding: 150px 15px 50px 15px;
+  padding-top: ${(props) => `calc(30px + ${props.headerContainerSize}px);`};
+  padding-right: 5px;
+  padding-bottom: 50px;
+  padding-left: 5px;
   background-color: hsl(240, 10%, 99%);
 
   @media (min-width: 850px) {
