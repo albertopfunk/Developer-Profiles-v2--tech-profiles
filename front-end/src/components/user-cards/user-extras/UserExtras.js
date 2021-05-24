@@ -188,7 +188,7 @@ const ExtrasContainer = styled.div`
 
       .item {
         flex-shrink: 0;
-        flex-basis: 100%;
+        flex-basis: 85%;
         display: flex;
         flex-direction: column;
         justify-content: center;

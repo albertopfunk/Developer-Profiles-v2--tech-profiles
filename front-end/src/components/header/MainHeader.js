@@ -126,17 +126,20 @@ const Header = styled.header`
 
 const Nav = styled.nav`
   width: 100%;
-  /* height: 10vh; */
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: auto;
 
   .site-logo {
-    width: 120px;
+    width: 100px;
     height: auto;
     grid-column: 1 / 2;
     grid-row: 1 / 2;
     justify-self: start;
+    
+    @media (min-width: 300px) {
+      width: 120px;
+    }
 
     img {
       width: 100%;
@@ -153,12 +156,20 @@ const Nav = styled.nav`
   }
 
   .menu-button {
-    width: 40px;
+    width: 30px;
     grid-column: 2 / 3;
     grid-row: 1 / 2;
     justify-self: end;
     border: none;
     background: white;
+
+    @media (min-width: 300px) {
+      width: 40px;
+    }
+
+    @media (min-width: 850px) {
+      display: none;
+    }
 
     .icon {
       transition: all 0.3s linear;
@@ -166,10 +177,6 @@ const Nav = styled.nav`
 
     .icon.rotate {
       transform: rotate(90deg);
-    }
-
-    @media (min-width: 850px) {
-      display: none;
     }
   }
 
@@ -180,6 +187,8 @@ const Nav = styled.nav`
     display: flex;
     justify-content: space-evenly;
     align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
     border-top: solid 1px rgba(229, 231, 235, 0.5);
     padding: 15px 0;
 

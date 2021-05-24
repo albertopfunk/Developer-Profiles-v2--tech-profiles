@@ -145,6 +145,7 @@ const FilterNav = styled.nav`
     .info {
       grid-column: 1 / 2;
       grid-row: 1 / 2;
+      text-align: center;
     }
 
     .control-mobile .top {
