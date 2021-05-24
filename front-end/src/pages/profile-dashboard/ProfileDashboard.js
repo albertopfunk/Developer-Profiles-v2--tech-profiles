@@ -321,7 +321,7 @@ const PageNav = styled.nav`
 
 const Main = styled.main`
   min-height: 100vh;
-  padding: 150px 15px 50px 15px;
+  padding: 130px 15px 50px 15px;
   background-color: hsl(240, 10%, 99%);
 
   @media (min-width: 850px) {

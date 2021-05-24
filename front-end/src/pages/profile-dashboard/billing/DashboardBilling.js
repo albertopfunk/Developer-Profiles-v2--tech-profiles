@@ -6,7 +6,7 @@ import { ProfileContext } from "../../../global/context/user-profile/ProfileCont
 
 function DashboardBilling() {
   const { user, editProfile } = useContext(ProfileContext);
-  console.log(user, user.stripe_customer_id, user.stripe_subscription_name)
+  
   return (
     <>
       <Helmet>

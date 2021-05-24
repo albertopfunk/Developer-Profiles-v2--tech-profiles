@@ -572,7 +572,7 @@ function NewUser() {
                 onClick={(e) => changeTab("billing-info", e)}
                 onKeyDown={(e) => tabActions(e)}
               >
-                Billing
+                Billing info
               </a>
             </li>
           </ul>
