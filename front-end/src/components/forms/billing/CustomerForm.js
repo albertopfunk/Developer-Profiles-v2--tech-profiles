@@ -42,7 +42,9 @@ class CustomerForm extends Component {
     this.setState({ subType: "monthly" });
   };
 
-  onReSubscribe = async () => {
+  onReSubscribe = async (e) => {
+    e.preventDefault();
+    
     if (this.state.subType !== "yearly" && this.state.subType !== "monthly") {
       return;
     }
@@ -63,8 +65,7 @@ class CustomerForm extends Component {
   render() {
     return (
       <CheckoutContainer>
-        <Article>
-          <h2>Renew your package</h2>
+          <h2 id="billing-info">Renew your package</h2>
 
           <p>
             Live profile for anyone to see <br />
@@ -73,57 +74,53 @@ class CustomerForm extends Component {
             Choose any city in the world for relocation
           </p>
 
-          <form>
-            <h3>Choose Sub Type</h3>
+          <FormSection aria-labelledby="form-section">
+            <h3 id="form-section">Choose Sub Type</h3>
 
-            <label htmlFor="yearly">
-              <input
-                ref={this.yearRef}
-                type="checkbox"
-                name="subscription-type"
-                id="yearly"
-                data-main-content={this.props.isMainContent ? "true" : "false"}
-                onChange={this.toggleYearCheckbox}
-              />
-              Yearly
-            </label>
+            <form onSubmit={(e) => this.onReSubscribe(e)}>
+              <label htmlFor="yearly">
+                <input
+                  ref={this.yearRef}
+                  type="checkbox"
+                  name="subscription-type"
+                  id="yearly"
+                  data-main-content={this.props.isMainContent ? "true" : "false"}
+                  onChange={this.toggleYearCheckbox}
+                />
+                Yearly
+              </label>
 
-            <br />
+              <br />
 
-            <label htmlFor="monthly">
-              <input
-                ref={this.monthRef}
-                type="checkbox"
-                name="subscription-type"
-                id="monthly"
-                onChange={this.toggleMonthCheckbox}
-              />
-              Monthly
-            </label>
-          </form>
-          <button
-            onClick={this.onReSubscribe}
-            disabled={this.state.subType ? false : true}
-          >
-            Re-Subscribe
-          </button>
-        </Article>
+              <label htmlFor="monthly">
+                <input
+                  ref={this.monthRef}
+                  type="checkbox"
+                  name="subscription-type"
+                  id="monthly"
+                  onChange={this.toggleMonthCheckbox}
+                />
+                Monthly
+              </label>
+              <button
+                type="submit"
+                disabled={this.state.subType ? false : true}
+              >
+                Re-Subscribe
+              </button>
+            </form>
+          </FormSection>
       </CheckoutContainer>
     );
   }
 }
 
-const CheckoutContainer = styled.section`
+const CheckoutContainer = styled.div`
   width: 100%;
-  height: 100%;
-  background-color: skyblue;
 `;
 
-const Article = styled.article`
-  width: 95%;
-  height: 95%;
-  border: solid;
-  background-color: white;
+const FormSection = styled.section`
+  width: 100%;
 `;
 
 export default CustomerForm;

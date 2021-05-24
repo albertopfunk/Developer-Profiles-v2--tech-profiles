@@ -34,7 +34,9 @@ class SubscriberForm extends Component {
     this.setState(res.data);
   };
 
-  cancelSub = async () => {
+  cancelSub = async (e) => {
+    e.preventDefault();
+
     const [res, err] = await httpClient("POST", "/api/cancel-subscription", {
       sub: this.props.stripeSubId,
     });
@@ -52,7 +54,8 @@ class SubscriberForm extends Component {
   render() {
     return (
       <CheckoutContainer>
-        <h3>Subscription Type</h3>
+        <h2 id="billing-info">Your current subscription information</h2>
+
         <p>{this.state.type}</p>
 
         <h3>Name</h3>
@@ -70,22 +73,31 @@ class SubscriberForm extends Component {
         <h3>Status</h3>
         <p>{this.state.status}</p>
 
-        <button
-          id="cancel-subscribe-btn"
-          data-main-content={this.props.isMainContent ? "true" : "false"}
-          onClick={this.cancelSub}
-        >
-          Cancel Subscription
-        </button>
+        <FormSection aria-labelledby="form-section">
+          <h3 id="form-section">Cancel subscription</h3>
+
+          <form onSubmit={(e) => this.cancelSub(e)}>
+            <button
+              type="submit"
+              id="cancel-subscribe-btn"
+              data-main-content={this.props.isMainContent ? "true" : "false"}
+            >
+              Cancel Subscription
+            </button>
+          </form>  
+        
+        </FormSection>
       </CheckoutContainer>
     );
   }
 }
 
-const CheckoutContainer = styled.section`
+const CheckoutContainer = styled.div`
   width: 100%;
-  height: 100%;
-  background-color: skyblue;
+`;
+
+const FormSection = styled.section`
+  width: 100%;
 `;
 
 export default SubscriberForm;

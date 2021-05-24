@@ -64,62 +64,54 @@ class CheckoutContainer extends Component {
 
     if (this.state.userType === "user") {
       return (
-        <CheckoutSection>
           <UserForm
             isMainContent={this.props.isMainContent}
             editUserProfile={this.editUserProfile}
             email={this.props.email}
           />
-        </CheckoutSection>
       );
     }
 
     if (this.state.userType === "subscriber") {
       return (
-        <CheckoutSection>
           <SubscriberForm
             isMainContent={this.props.isMainContent}
             editUserProfile={this.editUserProfile}
             stripeSubId={this.props.stripeSubId}
             setUserType={this.setUserType}
           />
-        </CheckoutSection>
       );
     }
 
     if (this.state.userType === "customer") {
       return (
-        <CheckoutSection>
           <CustomerForm
             isMainContent={this.props.isMainContent}
             editUserProfile={this.editUserProfile}
             stripeId={this.props.stripeId}
             setUserType={this.setUserType}
           />
-        </CheckoutSection>
       );
     }
 
     if (this.state.userType === "inactiveSubscriber") {
       return (
-        <CheckoutSection>
-          <h1>INACTIVE</h1>
-        </CheckoutSection>
+        <CheckoutFallback>
+          <h2 id="billing-info">INACTIVE</h2>
+        </CheckoutFallback>
       );
     }
 
     return (
-      <CheckoutSection>
-        <h1>UNKNOWN</h1>
-      </CheckoutSection>
+      <CheckoutFallback>
+        <h2 id="billing-info">UNKNOWN</h2>
+      </CheckoutFallback>
     );
   }
 }
 
-const CheckoutSection = styled.section`
-  width: 800px;
-  height: 650px;
-  background-color: skyblue;
+const CheckoutFallback = styled.div`
+  width: 100%;
 `;
 
 export default CheckoutContainer;
