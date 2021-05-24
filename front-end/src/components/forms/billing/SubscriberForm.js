@@ -54,7 +54,6 @@ class SubscriberForm extends Component {
   render() {
     return (
       <CheckoutContainer>
-
         <div>
           <h2 id="billing-info">Your current subscription information</h2>
 
@@ -87,8 +86,7 @@ class SubscriberForm extends Component {
             >
               Cancel Subscription
             </button>
-          </form>  
-        
+          </form>
         </FormSection>
       </CheckoutContainer>
     );

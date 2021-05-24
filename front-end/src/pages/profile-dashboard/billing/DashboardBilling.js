@@ -6,7 +6,7 @@ import { ProfileContext } from "../../../global/context/user-profile/ProfileCont
 
 function DashboardBilling() {
   const { user, editProfile } = useContext(ProfileContext);
-  
+
   return (
     <>
       <Helmet>

@@ -50,9 +50,8 @@ function ProfilesPage() {
     sortChoice: "acending(oldest-newest)",
   });
 
-
-  const headerRef = useRef()
-  const headerContainerRef = useRef()
+  const headerRef = useRef();
+  const headerContainerRef = useRef();
 
   useEffect(() => {
     initUsers();
@@ -178,7 +177,7 @@ function ProfilesPage() {
   }
 
   let headerContainerSize = headerContainerRef?.current?.offsetHeight ?? 0;
-  
+
   return (
     <>
       <HeaderContainer ref={headerContainerRef}>
@@ -193,7 +192,10 @@ function ProfilesPage() {
         />
       </HeaderContainer>
 
-      <Main headerContainerSize={headerContainerSize} aria-labelledby="main-heading">
+      <Main
+        headerContainerSize={headerContainerSize}
+        aria-labelledby="main-heading"
+      >
         <Helmet>
           <title>Profiles • Tech Profiles</title>
         </Helmet>

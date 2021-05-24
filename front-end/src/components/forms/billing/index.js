@@ -64,33 +64,33 @@ class CheckoutContainer extends Component {
 
     if (this.state.userType === "user") {
       return (
-          <UserForm
-            isMainContent={this.props.isMainContent}
-            editUserProfile={this.editUserProfile}
-            email={this.props.email}
-          />
+        <UserForm
+          isMainContent={this.props.isMainContent}
+          editUserProfile={this.editUserProfile}
+          email={this.props.email}
+        />
       );
     }
 
     if (this.state.userType === "subscriber") {
       return (
-          <SubscriberForm
-            isMainContent={this.props.isMainContent}
-            editUserProfile={this.editUserProfile}
-            stripeSubId={this.props.stripeSubId}
-            setUserType={this.setUserType}
-          />
+        <SubscriberForm
+          isMainContent={this.props.isMainContent}
+          editUserProfile={this.editUserProfile}
+          stripeSubId={this.props.stripeSubId}
+          setUserType={this.setUserType}
+        />
       );
     }
 
     if (this.state.userType === "customer") {
       return (
-          <CustomerForm
-            isMainContent={this.props.isMainContent}
-            editUserProfile={this.editUserProfile}
-            stripeId={this.props.stripeId}
-            setUserType={this.setUserType}
-          />
+        <CustomerForm
+          isMainContent={this.props.isMainContent}
+          editUserProfile={this.editUserProfile}
+          stripeId={this.props.stripeId}
+          setUserType={this.setUserType}
+        />
       );
     }
 

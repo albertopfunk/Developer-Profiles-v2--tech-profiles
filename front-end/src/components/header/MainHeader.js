@@ -136,7 +136,7 @@ const Nav = styled.nav`
     grid-column: 1 / 2;
     grid-row: 1 / 2;
     justify-self: start;
-    
+
     @media (min-width: 300px) {
       width: 120px;
     }

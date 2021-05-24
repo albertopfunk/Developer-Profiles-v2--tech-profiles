@@ -12,7 +12,7 @@ function Filters({
   totalUsers,
   resetFilters,
   resetFilterToggle,
-  headerHeight
+  headerHeight,
 }) {
   const [areFiltersShowing, setAreFiltersShowing] = useState(false);
 
