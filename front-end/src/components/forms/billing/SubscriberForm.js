@@ -54,24 +54,27 @@ class SubscriberForm extends Component {
   render() {
     return (
       <CheckoutContainer>
-        <h2 id="billing-info">Your current subscription information</h2>
 
-        <p>{this.state.type}</p>
+        <div>
+          <h2 id="billing-info">Your current subscription information</h2>
 
-        <h3>Name</h3>
-        <p>{this.state.nickName}</p>
+          <p>{this.state.type}</p>
 
-        <h3>Date Created</h3>
-        <p>{this.state.created}</p>
+          <h3>Name</h3>
+          <p>{this.state.nickName}</p>
 
-        <h3>Due Date</h3>
-        <p>{this.state.dueDate}</p>
+          <h3>Date Created</h3>
+          <p>{this.state.created}</p>
 
-        <h3>Start Date</h3>
-        <p>{this.state.startDate}</p>
+          <h3>Due Date</h3>
+          <p>{this.state.dueDate}</p>
 
-        <h3>Status</h3>
-        <p>{this.state.status}</p>
+          <h3>Start Date</h3>
+          <p>{this.state.startDate}</p>
+
+          <h3>Status</h3>
+          <p>{this.state.status}</p>
+        </div>
 
         <FormSection aria-labelledby="form-section">
           <h3 id="form-section">Cancel subscription</h3>

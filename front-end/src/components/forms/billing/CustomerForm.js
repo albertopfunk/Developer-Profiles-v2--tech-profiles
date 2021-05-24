@@ -44,7 +44,7 @@ class CustomerForm extends Component {
 
   onReSubscribe = async (e) => {
     e.preventDefault();
-    
+
     if (this.state.subType !== "yearly" && this.state.subType !== "monthly") {
       return;
     }
@@ -65,19 +65,24 @@ class CustomerForm extends Component {
   render() {
     return (
       <CheckoutContainer>
-          <h2 id="billing-info">Renew your package</h2>
 
-          <p>
-            Live profile for anyone to see <br />
-            Be found quickly with advanced filtering <br />
-            Simple and live profile customization <br />
-            Choose any city in the world for relocation
-          </p>
+          <div>
+            <h2 id="billing-info">Renew your package</h2>
+
+            <p>
+              Live profile for anyone to see <br />
+              Be found quickly with advanced filtering <br />
+              Simple and live profile customization <br />
+              Choose any city in the world for relocation
+            </p>
+          </div>
 
           <FormSection aria-labelledby="form-section">
             <h3 id="form-section">Choose Sub Type</h3>
 
             <form onSubmit={(e) => this.onReSubscribe(e)}>
+
+
               <label htmlFor="yearly">
                 <input
                   ref={this.yearRef}
@@ -102,12 +107,16 @@ class CustomerForm extends Component {
                 />
                 Monthly
               </label>
+
+
               <button
                 type="submit"
                 disabled={this.state.subType ? false : true}
               >
                 Re-Subscribe
               </button>
+
+              
             </form>
           </FormSection>
       </CheckoutContainer>
