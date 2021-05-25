@@ -176,8 +176,6 @@ function ProfilesPage() {
     setPageStatus(PROFILES_STATUS.idle);
   }
 
-  let headerContainerSize = headerContainerRef?.current?.offsetHeight ?? 0;
-
   return (
     <>
       <HeaderContainer ref={headerContainerRef}>
@@ -193,7 +191,6 @@ function ProfilesPage() {
       </HeaderContainer>
 
       <Main
-        headerContainerSize={headerContainerSize}
         aria-labelledby="main-heading"
       >
         <Helmet>
@@ -252,10 +249,7 @@ const HeaderContainer = styled.div`
 
 const Main = styled.main`
   min-height: 100vh;
-  padding-top: ${(props) => `calc(30px + ${props.headerContainerSize}px);`};
-  padding-right: 5px;
-  padding-bottom: 50px;
-  padding-left: 5px;
+  padding: 150px 5px 50px;
   background-color: hsl(240, 10%, 99%);
 
   @media (min-width: 850px) {
