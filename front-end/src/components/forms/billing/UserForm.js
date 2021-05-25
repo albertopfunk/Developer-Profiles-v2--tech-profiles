@@ -74,7 +74,6 @@ class UserForm extends Component {
           <h3 id="form-section">Choose Subscription</h3>
 
           <form className="subscriptions-form">
-
             <div className="subscriptions-container">
               <div className="subscription">
                 <div className="input">
@@ -179,7 +178,7 @@ const FormSection = styled.section`
     box-shadow: 0 4px 6px 0 hsla(0, 0%, 0%, 0.2);
 
     display: grid;
-    grid-template-columns: .2fr 1fr 1fr;
+    grid-template-columns: 0.2fr 1fr 1fr;
     grid-template-rows: 1fr 1fr;
     column-gap: 5px;
     row-gap: 10px;
@@ -209,7 +208,7 @@ const FormSection = styled.section`
     .price {
       grid-column: 3 / 4;
       grid-row: 1 / 2;
-      
+
       justify-self: end;
       align-self: center;
 

@@ -39,8 +39,8 @@ function StripeCardInput(props) {
                 color: "#424770",
                 "::placeholder": {
                   color: "#aab7c4",
-                  fontSize: "14px"
-                }
+                  fontSize: "14px",
+                },
               },
               invalid: {
                 color: "#9e2146",

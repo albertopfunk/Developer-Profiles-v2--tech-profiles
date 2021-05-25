@@ -9,7 +9,7 @@ import { USER_TYPE } from "../../../global/helpers/variables";
 
 class CheckoutContainer extends Component {
   state = {
-    userType: ""
+    userType: "",
   };
 
   componentDidMount() {

@@ -79,8 +79,10 @@ class CustomerForm extends Component {
         <FormSection aria-labelledby="form-section">
           <h3 id="form-section">Choose Sub Type</h3>
 
-          <form className="subscriptions-form" onSubmit={(e) => this.onReSubscribe(e)}>
-
+          <form
+            className="subscriptions-form"
+            onSubmit={(e) => this.onReSubscribe(e)}
+          >
             <div className="subscriptions-container">
               <div className="subscription">
                 <div className="input">
@@ -136,14 +138,15 @@ class CustomerForm extends Component {
                 </div>
               </div>
             </div>
-            
+
             <div className="subscription-control">
-              <button type="submit" disabled={this.state.subType ? false : true}>
+              <button
+                type="submit"
+                disabled={this.state.subType ? false : true}
+              >
                 Re-Subscribe
               </button>
             </div>
-
-
           </form>
         </FormSection>
       </CheckoutContainer>
@@ -188,7 +191,7 @@ const FormSection = styled.section`
     box-shadow: 0 4px 6px 0 hsla(0, 0%, 0%, 0.2);
 
     display: grid;
-    grid-template-columns: .2fr 1fr 1fr;
+    grid-template-columns: 0.2fr 1fr 1fr;
     grid-template-rows: 1fr 1fr;
     column-gap: 5px;
     row-gap: 10px;
@@ -218,7 +221,7 @@ const FormSection = styled.section`
     .price {
       grid-column: 3 / 4;
       grid-row: 1 / 2;
-      
+
       justify-self: end;
       align-self: center;
 
