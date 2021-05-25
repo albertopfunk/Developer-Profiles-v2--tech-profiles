@@ -54,7 +54,7 @@ class SubscriberForm extends Component {
   render() {
     return (
       <CheckoutContainer>
-        <div>
+        <div className="info-container">
           <h2 id="billing-info">Your current subscription information</h2>
 
           <p>{this.state.type}</p>
@@ -95,6 +95,14 @@ class SubscriberForm extends Component {
 
 const CheckoutContainer = styled.div`
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  .info-container {
+    width: 100%;
+    text-align: center;
+  }
 `;
 
 const FormSection = styled.section`

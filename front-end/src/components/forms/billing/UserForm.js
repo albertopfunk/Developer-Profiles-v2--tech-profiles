@@ -59,7 +59,7 @@ class UserForm extends Component {
   render() {
     return (
       <CheckoutContainer>
-        <div>
+        <div className="info-container">
           <h2 id="billing-info">Choose your first package</h2>
 
           <p>
@@ -74,69 +74,67 @@ class UserForm extends Component {
           <h3 id="form-section">Choose Subscription</h3>
 
           <form className="subscriptions-form">
+
             <div className="subscriptions-container">
               <div className="subscription">
-                <div className="input-container">
-                  <div>
-                    <input
-                      ref={this.yearRef}
-                      type="checkbox"
-                      name="subscription-type"
-                      id="yearly"
-                      aria-describedby="year-info year-price"
-                      data-main-content={
-                        this.props.isMainContent ? "true" : "false"
-                      }
-                      onChange={this.toggleYearCheckbox}
-                    />
-                  </div>
-
-                  <div>
-                    <label htmlFor="yearly">Yearly</label>
-                    <p id="year-info" className="info">
-                      Pay less for a full year, cancel anytime
-                    </p>
-                  </div>
+                <div className="input">
+                  <input
+                    ref={this.yearRef}
+                    type="checkbox"
+                    name="subscription-type"
+                    id="yearly"
+                    aria-describedby="year-info year-price"
+                    data-main-content={
+                      this.props.isMainContent ? "true" : "false"
+                    }
+                    onChange={this.toggleYearCheckbox}
+                  />
                 </div>
 
-                <div>
+                <div className="label">
+                  <label htmlFor="yearly">Yearly</label>
+                </div>
+
+                <div className="info">
+                  <p id="year-info">Pay less for a full year, cancel anytime</p>
+                </div>
+
+                <div className="price">
                   <p id="year-price">$9.99</p>
                   <span>save 15%</span>
                 </div>
               </div>
 
               <div className="subscription">
-                <div className="input-container">
-                  <div>
-                    <input
-                      ref={this.monthRef}
-                      type="checkbox"
-                      name="subscription-type"
-                      id="monthly"
-                      aria-describedby="month-info month-price"
-                      onChange={this.toggleMonthCheckbox}
-                    />
-                  </div>
-
-                  <div>
-                    <label htmlFor="monthly">Monthly</label>
-                    <p id="month-info" className="info">
-                      Pay monthly, cancel anytime
-                    </p>
-                  </div>
+                <div className="input">
+                  <input
+                    ref={this.monthRef}
+                    type="checkbox"
+                    name="subscription-type"
+                    id="monthly"
+                    aria-describedby="month-info month-price"
+                    onChange={this.toggleMonthCheckbox}
+                  />
                 </div>
 
-                <div>
+                <div className="label">
+                  <label htmlFor="monthly">Monthly</label>
+                </div>
+
+                <div className="info">
+                  <p id="month-info">Pay monthly, cancel anytime</p>
+                </div>
+
+                <div className="price">
                   <p id="month-price">.99c</p>
                 </div>
               </div>
             </div>
-            <div className="subscription-control">
-              <StripeCardInput
-                subUser={this.onSubscribe}
-                subType={this.state.subType}
-              />
-            </div>
+
+            <StripeCardInput
+              subUser={this.onSubscribe}
+              subType={this.state.subType}
+            />
           </form>
         </FormSection>
       </CheckoutContainer>
@@ -146,6 +144,14 @@ class UserForm extends Component {
 
 const CheckoutContainer = styled.div`
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  .info-container {
+    width: 100%;
+    text-align: center;
+  }
 `;
 
 const FormSection = styled.section`
@@ -166,23 +172,52 @@ const FormSection = styled.section`
   }
 
   .subscription {
-    padding: 15px;
+    width: 100%;
+    padding: 5px;
     background-color: white;
     border-radius: 10px;
     box-shadow: 0 4px 6px 0 hsla(0, 0%, 0%, 0.2);
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: center;
-    align-items: center;
 
-    .input-container {
-      display: flex;
-      gap: 5px;
+    display: grid;
+    grid-template-columns: .2fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    column-gap: 5px;
+    row-gap: 10px;
+
+    .input {
+      grid-column: 1 / 2;
+      grid-row: 1 / 2;
+      justify-self: center;
+      align-self: center;
+    }
+
+    .label {
+      grid-column: 2 / 3;
+      grid-row: 1 / 2;
+      justify-self: start;
+      align-self: center;
     }
 
     .info {
-      max-width: 20ch;
+      grid-column: 1 / 4;
+      grid-row: 2 / 3;
+      justify-self: stretch;
+      align-self: center;
+      text-align: center;
+    }
+
+    .price {
+      grid-column: 3 / 4;
+      grid-row: 1 / 2;
+      
+      justify-self: end;
+      align-self: center;
+
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
     }
   }
 `;

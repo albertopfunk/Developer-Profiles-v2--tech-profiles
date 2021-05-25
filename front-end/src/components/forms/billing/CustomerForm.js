@@ -65,7 +65,7 @@ class CustomerForm extends Component {
   render() {
     return (
       <CheckoutContainer>
-        <div>
+        <div className="info-container">
           <h2 id="billing-info">Renew your package</h2>
 
           <p>
@@ -79,35 +79,71 @@ class CustomerForm extends Component {
         <FormSection aria-labelledby="form-section">
           <h3 id="form-section">Choose Sub Type</h3>
 
-          <form onSubmit={(e) => this.onReSubscribe(e)}>
-            <label htmlFor="yearly">
-              <input
-                ref={this.yearRef}
-                type="checkbox"
-                name="subscription-type"
-                id="yearly"
-                data-main-content={this.props.isMainContent ? "true" : "false"}
-                onChange={this.toggleYearCheckbox}
-              />
-              Yearly
-            </label>
+          <form className="subscriptions-form" onSubmit={(e) => this.onReSubscribe(e)}>
 
-            <br />
+            <div className="subscriptions-container">
+              <div className="subscription">
+                <div className="input">
+                  <input
+                    ref={this.yearRef}
+                    type="checkbox"
+                    name="subscription-type"
+                    id="yearly"
+                    aria-describedby="year-info year-price"
+                    data-main-content={
+                      this.props.isMainContent ? "true" : "false"
+                    }
+                    onChange={this.toggleYearCheckbox}
+                  />
+                </div>
 
-            <label htmlFor="monthly">
-              <input
-                ref={this.monthRef}
-                type="checkbox"
-                name="subscription-type"
-                id="monthly"
-                onChange={this.toggleMonthCheckbox}
-              />
-              Monthly
-            </label>
+                <div className="label">
+                  <label htmlFor="yearly">Yearly</label>
+                </div>
 
-            <button type="submit" disabled={this.state.subType ? false : true}>
-              Re-Subscribe
-            </button>
+                <div className="info">
+                  <p id="year-info">Pay less for a full year, cancel anytime</p>
+                </div>
+
+                <div className="price">
+                  <p id="year-price">$9.99</p>
+                  <span>save 15%</span>
+                </div>
+              </div>
+
+              <div className="subscription">
+                <div className="input">
+                  <input
+                    ref={this.monthRef}
+                    type="checkbox"
+                    name="subscription-type"
+                    id="monthly"
+                    aria-describedby="month-info month-price"
+                    onChange={this.toggleMonthCheckbox}
+                  />
+                </div>
+
+                <div className="label">
+                  <label htmlFor="monthly">Monthly</label>
+                </div>
+
+                <div className="info">
+                  <p id="month-info">Pay monthly, cancel anytime</p>
+                </div>
+
+                <div className="price">
+                  <p id="month-price">.99c</p>
+                </div>
+              </div>
+            </div>
+            
+            <div className="subscription-control">
+              <button type="submit" disabled={this.state.subType ? false : true}>
+                Re-Subscribe
+              </button>
+            </div>
+
+
           </form>
         </FormSection>
       </CheckoutContainer>
@@ -117,10 +153,94 @@ class CustomerForm extends Component {
 
 const CheckoutContainer = styled.div`
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  .info-container {
+    width: 100%;
+    text-align: center;
+  }
 `;
 
 const FormSection = styled.section`
   width: 100%;
+
+  .subscriptions-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .subscriptions-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  .subscription {
+    width: 100%;
+    padding: 5px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px 0 hsla(0, 0%, 0%, 0.2);
+
+    display: grid;
+    grid-template-columns: .2fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    column-gap: 5px;
+    row-gap: 10px;
+
+    .input {
+      grid-column: 1 / 2;
+      grid-row: 1 / 2;
+      justify-self: center;
+      align-self: center;
+    }
+
+    .label {
+      grid-column: 2 / 3;
+      grid-row: 1 / 2;
+      justify-self: start;
+      align-self: center;
+    }
+
+    .info {
+      grid-column: 1 / 4;
+      grid-row: 2 / 3;
+      justify-self: stretch;
+      align-self: center;
+      text-align: center;
+    }
+
+    .price {
+      grid-column: 3 / 4;
+      grid-row: 1 / 2;
+      
+      justify-self: end;
+      align-self: center;
+
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+  }
+
+  .subscription-control {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    button {
+      width: 80%;
+      margin: 0 auto;
+    }
+  }
 `;
 
 export default CustomerForm;

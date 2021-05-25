@@ -1,5 +1,6 @@
 import React from "react";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
+import styled from "styled-components";
 
 function StripeCardInput(props) {
   const stripe = useStripe();
@@ -28,23 +29,26 @@ function StripeCardInput(props) {
   }
 
   return (
-    <>
-      <CardElement
-        options={{
-          style: {
-            base: {
-              fontSize: "16px",
-              color: "#424770",
-              "::placeholder": {
-                color: "#aab7c4",
+    <ControlsContainer>
+      <div>
+        <CardElement
+          options={{
+            style: {
+              base: {
+                fontSize: "14px",
+                color: "#424770",
+                "::placeholder": {
+                  color: "#aab7c4",
+                  fontSize: "14px"
+                }
+              },
+              invalid: {
+                color: "#9e2146",
               },
             },
-            invalid: {
-              color: "#9e2146",
-            },
-          },
-        }}
-      />
+          }}
+        />
+      </div>
 
       <button
         type="submit"
@@ -53,8 +57,20 @@ function StripeCardInput(props) {
       >
         Purchase
       </button>
-    </>
+    </ControlsContainer>
   );
 }
+
+const ControlsContainer = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  button {
+    width: 80%;
+    margin: 0 auto;
+  }
+`;
 
 export default StripeCardInput;
