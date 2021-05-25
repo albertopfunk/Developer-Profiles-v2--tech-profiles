@@ -5,17 +5,18 @@ import { httpClient } from "../../../global/helpers/http-requests";
 import UserForm from "./UserForm";
 import SubscriberForm from "./SubscriberForm";
 import CustomerForm from "./CustomerForm";
+import { USER_TYPE } from "../../../global/helpers/variables";
 
 class CheckoutContainer extends Component {
   state = {
-    userType: "",
+    userType: ""
   };
 
   componentDidMount() {
     if (!this.props.stripeId) {
-      this.setUserType("user");
+      this.setUserType(USER_TYPE.user);
     } else if (this.props.stripeId && !this.props.stripeSubId) {
-      this.setUserType("customer");
+      this.setUserType(USER_TYPE.customer);
     } else {
       this.checkSubStatus();
     }
@@ -26,7 +27,7 @@ class CheckoutContainer extends Component {
       if (this.props.stripeSubId) {
         this.checkSubStatus();
       } else {
-        this.setUserType("customer");
+        this.setUserType(USER_TYPE.customer);
       }
     }
   }
@@ -38,15 +39,16 @@ class CheckoutContainer extends Component {
 
     if (err) {
       console.error(`${res.mssg} => ${res.err}`);
+      this.setUserType(USER_TYPE.checkoutError);
       return;
     }
 
     if (res.data.status !== "active") {
-      this.setUserType("inactiveSubscriber");
+      this.setUserType(USER_TYPE.inactiveSubscriber);
       return;
     }
 
-    this.setUserType("subscriber");
+    this.setUserType(USER_TYPE.subscriber);
   };
 
   setUserType = (type) => {
@@ -62,7 +64,7 @@ class CheckoutContainer extends Component {
       return <h1>Skeleton Loader...</h1>;
     }
 
-    if (this.state.userType === "user") {
+    if (this.state.userType === USER_TYPE.user) {
       return (
         <UserForm
           isMainContent={this.props.isMainContent}
@@ -72,7 +74,7 @@ class CheckoutContainer extends Component {
       );
     }
 
-    if (this.state.userType === "subscriber") {
+    if (this.state.userType === USER_TYPE.subscriber) {
       return (
         <SubscriberForm
           isMainContent={this.props.isMainContent}
@@ -83,7 +85,7 @@ class CheckoutContainer extends Component {
       );
     }
 
-    if (this.state.userType === "customer") {
+    if (this.state.userType === USER_TYPE.customer) {
       return (
         <CustomerForm
           isMainContent={this.props.isMainContent}
@@ -94,7 +96,7 @@ class CheckoutContainer extends Component {
       );
     }
 
-    if (this.state.userType === "inactiveSubscriber") {
+    if (this.state.userType === USER_TYPE.inactiveSubscriber) {
       return (
         <CheckoutFallback>
           <h2 id="billing-info">INACTIVE</h2>
@@ -104,7 +106,7 @@ class CheckoutContainer extends Component {
 
     return (
       <CheckoutFallback>
-        <h2 id="billing-info">UNKNOWN</h2>
+        <h2 id="billing-info">UNKNOWN ERROR</h2>
       </CheckoutFallback>
     );
   }

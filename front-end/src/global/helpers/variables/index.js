@@ -37,3 +37,11 @@ export const CANCEL_STATUS = {
   cancel: "cancel",
   ok: "ok",
 };
+
+export const USER_TYPE = {
+  user: "user",
+  customer: "customer", 
+  subscriber: "subscriber",
+  inactiveSubscriber: "inactiveSubscriber",
+  checkoutError: "checkoutError"
+}
