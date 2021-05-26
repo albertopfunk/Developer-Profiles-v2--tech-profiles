@@ -55,10 +55,6 @@ class CheckoutContainer extends Component {
     this.setState({ userType: type });
   };
 
-  editUserProfile = (items) => {
-    this.props.editProfile(items);
-  };
-
   render() {
     if (!this.state.userType) {
       return <h1>Skeleton Loader...</h1>;
@@ -68,7 +64,7 @@ class CheckoutContainer extends Component {
       return (
         <UserForm
           isMainContent={this.props.isMainContent}
-          editUserProfile={this.editUserProfile}
+          editProfile={this.props.editProfile}
           email={this.props.email}
         />
       );
@@ -78,7 +74,7 @@ class CheckoutContainer extends Component {
       return (
         <SubscriberForm
           isMainContent={this.props.isMainContent}
-          editUserProfile={this.editUserProfile}
+          editProfile={this.props.editProfile}
           stripeSubId={this.props.stripeSubId}
           setUserType={this.setUserType}
         />
@@ -89,7 +85,7 @@ class CheckoutContainer extends Component {
       return (
         <CustomerForm
           isMainContent={this.props.isMainContent}
-          editUserProfile={this.editUserProfile}
+          editProfile={this.props.editProfile}
           stripeId={this.props.stripeId}
           setUserType={this.setUserType}
         />

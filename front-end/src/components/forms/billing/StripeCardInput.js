@@ -2,7 +2,19 @@ import React from "react";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import styled from "styled-components";
 
-function StripeCardInput(props) {
+import { SUBSCRIPTION_STATUS } from "../../../global/helpers/variables";
+
+function StripeCardInput({
+  email,
+  subUser,
+  subType,
+  stripeAwait,
+  stripeReady,
+  subIdle,
+  subLoading,
+  subError,
+  setSubscriptionStatus,
+}) {
   const stripe = useStripe();
   const elements = useElements();
 
@@ -12,20 +24,27 @@ function StripeCardInput(props) {
     if (!stripe || !elements) {
       // Stripe.js has not loaded yet. Make sure to disable
       // form submission until Stripe.js has loaded.
+      setSubscriptionStatus(SUBSCRIPTION_STATUS.stripeAwait);
+      setTimeout(() => {
+        setSubscriptionStatus(SUBSCRIPTION_STATUS.stripeReady);
+      }, 1500);
       return;
     }
 
+    setSubscriptionStatus(SUBSCRIPTION_STATUS.loading);
+
     const { error, paymentMethod } = await stripe.createPaymentMethod({
       type: "card",
-      name: props.email,
+      name: email,
       card: elements.getElement(CardElement),
     });
 
     if (error || !paymentMethod) {
       console.error(error);
+      setSubscriptionStatus(SUBSCRIPTION_STATUS.error);
       return;
     }
-    props.subUser(paymentMethod.id);
+    subUser(paymentMethod.id);
   }
 
   return (
@@ -50,12 +69,12 @@ function StripeCardInput(props) {
         />
       </div>
 
-      <button
-        type="submit"
-        onClick={createToken}
-        disabled={!stripe || !props.subType}
-      >
-        Purchase
+      <button type="submit" onClick={createToken} disabled={!subType}>
+        {subIdle ? "Purchase" : null}
+        {stripeAwait ? "Stripe was not ready!" : null}
+        {stripeReady ? "Stripe is ready! retry" : null}
+        {subError ? "Error submitting payment, retry" : null}
+        {subLoading ? "loading..." : null}
       </button>
     </ControlsContainer>
   );

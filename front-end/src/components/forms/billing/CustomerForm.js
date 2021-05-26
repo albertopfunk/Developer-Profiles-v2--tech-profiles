@@ -1,10 +1,13 @@
 import React, { Component } from "react";
 import styled from "styled-components";
+
 import { httpClient } from "../../../global/helpers/http-requests";
+import { SUBSCRIPTION_STATUS } from "../../../global/helpers/variables";
 
 class CustomerForm extends Component {
   state = {
     subType: "",
+    subStatus: SUBSCRIPTION_STATUS.idle,
   };
 
   yearRef = React.createRef();
@@ -49,6 +52,8 @@ class CustomerForm extends Component {
       return;
     }
 
+    this.setState({ subStatus: SUBSCRIPTION_STATUS.loading });
+
     const [res, err] = await httpClient("POST", "/api/subscribe-existing", {
       stripeId: this.props.stripeId,
       subType: this.state.subType,
@@ -56,13 +61,25 @@ class CustomerForm extends Component {
 
     if (err) {
       console.error(`${res.mssg} => ${res.err}`);
+      this.setState({ subStatus: SUBSCRIPTION_STATUS.error });
       return;
     }
 
-    this.props.editUserProfile(res.data);
+    const results = await this.props.editProfile(res.data);
+
+    if (results?.error) {
+      this.setState({ subStatus: SUBSCRIPTION_STATUS.error });
+      return;
+    }
+
+    this.setState({ subStatus: SUBSCRIPTION_STATUS.idle });
   };
 
   render() {
+    const subIdle = this.state.subStatus === SUBSCRIPTION_STATUS.idle;
+    const subLoading = this.state.subStatus === SUBSCRIPTION_STATUS.loading;
+    const subError = this.state.subStatus === SUBSCRIPTION_STATUS.error;
+
     return (
       <CheckoutContainer>
         <div className="info-container">
@@ -144,7 +161,9 @@ class CustomerForm extends Component {
                 type="submit"
                 disabled={this.state.subType ? false : true}
               >
-                Re-Subscribe
+                {subIdle ? "Re-Subscribe" : null}
+                {subLoading ? "loading..." : null}
+                {subError ? "Error re-subscribing, retry" : null}
               </button>
             </div>
           </form>

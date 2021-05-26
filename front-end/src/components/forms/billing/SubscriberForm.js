@@ -1,9 +1,15 @@
 import React, { Component } from "react";
 import styled from "styled-components";
+
 import { httpClient } from "../../../global/helpers/http-requests";
+import {
+  SUBSCRIPTION_STATUS,
+  USER_TYPE,
+} from "../../../global/helpers/variables";
 
 class SubscriberForm extends Component {
   state = {
+    subStatus: SUBSCRIPTION_STATUS.idle,
     status: "",
     nickName: "",
     type: "",
@@ -23,11 +29,12 @@ class SubscriberForm extends Component {
 
     if (err) {
       console.error(`${res.mssg} => ${res.err}`);
+      this.props.setUserType(USER_TYPE.checkoutError);
       return;
     }
 
     if (res.data.status !== "active") {
-      this.props.setUserType("inactiveSubscriber");
+      this.props.setUserType(USER_TYPE.inactiveSubscriber);
       return;
     }
 
@@ -37,21 +44,35 @@ class SubscriberForm extends Component {
   cancelSub = async (e) => {
     e.preventDefault();
 
+    this.setState({ subStatus: SUBSCRIPTION_STATUS.loading });
+
     const [res, err] = await httpClient("POST", "/api/cancel-subscription", {
       sub: this.props.stripeSubId,
     });
 
     if (err) {
       console.error(`${res.mssg} => ${res.err}`);
+      this.setState({ subStatus: SUBSCRIPTION_STATUS.error });
       return;
     }
 
-    this.props.editUserProfile({
+    const results = await this.props.editProfile({
       stripe_subscription_name: null,
     });
+
+    if (results?.error) {
+      this.setState({ subStatus: SUBSCRIPTION_STATUS.error });
+      return;
+    }
+
+    this.setState({ subStatus: SUBSCRIPTION_STATUS.idle });
   };
 
   render() {
+    const subIdle = this.state.subStatus === SUBSCRIPTION_STATUS.idle;
+    const subLoading = this.state.subStatus === SUBSCRIPTION_STATUS.loading;
+    const subError = this.state.subStatus === SUBSCRIPTION_STATUS.error;
+
     return (
       <CheckoutContainer>
         <div className="info-container">
@@ -84,7 +105,9 @@ class SubscriberForm extends Component {
               id="cancel-subscribe-btn"
               data-main-content={this.props.isMainContent ? "true" : "false"}
             >
-              Cancel Subscription
+              {subIdle ? "Cancel Subscription" : null}
+              {subLoading ? "loading..." : null}
+              {subError ? "Error canceling subscription, retry" : null}
             </button>
           </form>
         </FormSection>

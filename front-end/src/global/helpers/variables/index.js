@@ -33,6 +33,14 @@ export const CARD_STATUS = {
   error: "error",
 };
 
+export const SUBSCRIPTION_STATUS = {
+  idle: "idle",
+  loading: "loading",
+  error: "error",
+  stripeAwait: "stripeAwait",
+  stripeReady: "stripeReady",
+};
+
 export const CANCEL_STATUS = {
   cancel: "cancel",
   ok: "ok",

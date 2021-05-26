@@ -4,10 +4,12 @@ import StripeCardInput from "./StripeCardInput";
 
 import styled from "styled-components";
 import { httpClient } from "../../../global/helpers/http-requests";
+import { SUBSCRIPTION_STATUS } from "../../../global/helpers/variables";
 
 class UserForm extends Component {
   state = {
     subType: "",
+    subStatus: SUBSCRIPTION_STATUS.idle,
   };
 
   yearRef = React.createRef();
@@ -50,10 +52,22 @@ class UserForm extends Component {
 
     if (err) {
       console.error(`${res.mssg} => ${res.err}`);
+      this.setState({ subStatus: SUBSCRIPTION_STATUS.error });
       return;
     }
 
-    this.props.editUserProfile(res.data);
+    const results = await this.props.editProfile(res.data);
+
+    if (results?.error) {
+      this.setState({ subStatus: SUBSCRIPTION_STATUS.error });
+      return;
+    }
+
+    this.setState({ subStatus: SUBSCRIPTION_STATUS.idle });
+  };
+
+  setSubscriptionStatus = (status) => {
+    this.setState({ subStatus: status });
   };
 
   render() {
@@ -131,8 +145,19 @@ class UserForm extends Component {
             </div>
 
             <StripeCardInput
+              email={this.props.email}
               subUser={this.onSubscribe}
               subType={this.state.subType}
+              stripeAwait={
+                this.state.subStatus === SUBSCRIPTION_STATUS.stripeAwait
+              }
+              stripeReady={
+                this.state.subStatus === SUBSCRIPTION_STATUS.stripeReady
+              }
+              subIdle={this.state.subStatus === SUBSCRIPTION_STATUS.idle}
+              subLoading={this.state.subStatus === SUBSCRIPTION_STATUS.loading}
+              subError={this.state.subStatus === SUBSCRIPTION_STATUS.error}
+              setSubscriptionStatus={this.setSubscriptionStatus}
             />
           </form>
         </FormSection>
