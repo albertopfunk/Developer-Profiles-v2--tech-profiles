@@ -31,84 +31,87 @@ function Filters({
           {/* if full str isn't dynamic, sr will not announce full str */}
           <p>{`Showing ${currentUsers} of ${totalUsers} Profiles`}</p>
         </div>
-        <button
-          type="button"
-          className="control-mobile top"
-          aria-label={`${areFiltersShowing ? "hide" : "show"} filters`}
-          aria-expanded={areFiltersShowing}
-          data-filter-content={!areFiltersShowing}
-          onClick={setFilters}
-        >
-          filters
-        </button>
+        <div>
+          <button
+            type="button"
+            className="control-mobile top"
+            aria-label={`${areFiltersShowing ? "hide" : "show"} filters`}
+            aria-expanded={areFiltersShowing}
+            data-filter-content={!areFiltersShowing}
+            onClick={setFilters}
+          >
+            filters
+          </button>
+        </div>
       </div>
 
       {/* not too happy about this workaround, found this to be the
       least hacky way to reset filters without having to make big
       changes, this will reset all state of children.
       using fragments to bypass reacts optimization */}
-
-      <FiltersForm showForm={areFiltersShowing}>
-        <div className="grid-container">
-          <div className="sorting">
-            {resetFilterToggle ? (
-              <>
+      <FiltersContainer showForm={areFiltersShowing}>
+        <form>
+          <div className="grid-container">
+            <div className="sorting">
+              {resetFilterToggle ? (
+                <>
+                  <SortingFilter updateUsers={updateUsers} />
+                </>
+              ) : (
                 <SortingFilter updateUsers={updateUsers} />
-              </>
-            ) : (
-              <SortingFilter updateUsers={updateUsers} />
-            )}
-          </div>
-          <div className="area-of-work">
-            {resetFilterToggle ? (
-              <>
-                <AreaOfWorkFilter updateUsers={updateUsers} />
-              </>
-            ) : (
-              <AreaOfWorkFilter updateUsers={updateUsers} />
-            )}
-          </div>
-
-          <fieldset className="locations">
-            <legend>Filter by Locations</legend>
-            <div className="flex-container">
-              {resetFilterToggle ? (
-                <>
-                  <CurrentLocationFilter updateUsers={updateUsers} />
-                </>
-              ) : (
-                <CurrentLocationFilter updateUsers={updateUsers} />
-              )}
-              {resetFilterToggle ? (
-                <>
-                  <RelocateToFilter updateUsers={updateUsers} />
-                </>
-              ) : (
-                <RelocateToFilter updateUsers={updateUsers} />
               )}
             </div>
-          </fieldset>
+            <div className="area-of-work">
+              {resetFilterToggle ? (
+                <>
+                  <AreaOfWorkFilter updateUsers={updateUsers} />
+                </>
+              ) : (
+                <AreaOfWorkFilter updateUsers={updateUsers} />
+              )}
+            </div>
 
-          <div className="controls-container">
-            <button
-              type="button"
-              className="control-mobile"
-              aria-label="done filtering"
-              aria-expanded="true"
-              onClick={setFilters}
-            >
-              done
-            </button>
-            <button
-              type="reset"
-              aria-label="reset filters"
-              onClick={resetFilters}
-            >
-              reset
-            </button>
+            <fieldset className="locations">
+              <legend>Filter by Locations</legend>
+              <div className="flex-container">
+                {resetFilterToggle ? (
+                  <>
+                    <CurrentLocationFilter updateUsers={updateUsers} />
+                  </>
+                ) : (
+                  <CurrentLocationFilter updateUsers={updateUsers} />
+                )}
+                {resetFilterToggle ? (
+                  <>
+                    <RelocateToFilter updateUsers={updateUsers} />
+                  </>
+                ) : (
+                  <RelocateToFilter updateUsers={updateUsers} />
+                )}
+              </div>
+            </fieldset>
+
+            <div className="controls-container">
+              <button
+                type="button"
+                className="control-mobile"
+                aria-label="done filtering"
+                aria-expanded="true"
+                onClick={setFilters}
+              >
+                done
+              </button>
+              <button
+                type="reset"
+                aria-label="reset filters"
+                onClick={resetFilters}
+              >
+                reset
+              </button>
+            </div>
           </div>
-        </div>
-      </FiltersForm>
+        </form>
+      </FiltersContainer>
     </FilterNav>
   );
 }
@@ -117,7 +120,6 @@ const FilterNav = styled.nav`
   background-color: white;
   max-height: ${(props) => `calc(100vh - ${props.headerHeight}px);`};
   overflow-y: auto;
-  padding: 5px;
 
   @media (min-width: 850px) {
     position: fixed;
@@ -131,26 +133,22 @@ const FilterNav = styled.nav`
   }
 
   .filters-bar {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: 1fr 1fr;
-    grid-gap: 5px;
-    justify-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     align-items: center;
+    padding: 5px;
 
     @media (min-width: 850px) {
       display: block;
     }
 
     .info {
-      grid-column: 1 / 2;
-      grid-row: 1 / 2;
-      text-align: center;
+      flex-basis: 100%;
     }
 
     .control-mobile .top {
-      grid-column: 1 / 2;
-      grid-row: 2 / 3;
+      flex-basis: 100%;
     }
   }
 
@@ -161,15 +159,16 @@ const FilterNav = styled.nav`
   }
 `;
 
-const FiltersForm = styled.form`
+const FiltersContainer = styled.div`
   display: ${(props) => (props.showForm ? "block" : "none")};
-  padding-top: 10px;
+  border-top: solid 1px rgba(229, 231, 235, 0.5);
+  padding: 5px;
 
   @media (min-width: 850px) {
     display: block;
   }
 
-  & > .grid-container {
+  .grid-container {
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: repeat(4, auto);
