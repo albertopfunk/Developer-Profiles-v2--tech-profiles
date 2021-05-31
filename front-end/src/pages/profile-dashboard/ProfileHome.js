@@ -1,7 +1,10 @@
 import React, { useContext, useState } from "react";
-import { Helmet } from "react-helmet";
 import { Link, useRouteMatch } from "react-router-dom";
+import { Helmet } from "react-helmet";
 import styled from "styled-components";
+import { ReactComponent as Expand } from "../../global/assets/dashboard-add.svg";
+import { ReactComponent as Collapse } from "../../global/assets/dashboard-subtract.svg";
+import { ReactComponent as Checkmark } from "../../global/assets/dashboard-checkmark.svg";
 
 import { ProfileContext } from "../../global/context/user-profile/ProfileContext";
 import useProfileProgress from "../../global/helpers/hooks/useProfileProgress";
@@ -141,88 +144,146 @@ function ProfileHome() {
       <h1 id="main-heading">Home</h1>
 
       <ChecklistSection aria-labelledby="profile-checklist">
-        <h2 id="profile-checklist">Checklist{totalProgress}</h2>
+        <h2 id="profile-checklist">Profile Checklist</h2>
+        <div>{totalProgress}%</div>
 
-        <section aria-labelledby="personal-info-checklist">
-          <h3>
-            <button type="button" aria-expanded="false">
-              <span>Personal Info</span>
-              <span>progress bar && progress text</span>
-              <span>SVG</span>
-            </button>{" "}
-          </h3>
+        <div className="main-container">
+          <section aria-labelledby="personal-info-checklist">
+            <h3 id="personal-info-checklist">
+              <button
+                type="button"
+                className="section-button"
+                aria-expanded={isExpanded.personalInfo}
+                onClick={() => setIsExpanded({...isExpanded, personalInfo: !isExpanded.personalInfo})}
+              >
+                <div className="title-container">
+                  <span className="title">Personal Info</span>
+                  <span className="progress-bar">
+                    progress bar && {personalInfo.progress}%
+                  </span>
+                </div>
+                <div className="icon-container">
+                  {isExpanded.personalInfo ? (
+                    <Collapse className="icon" />
+                    ) : (
+                    <Expand className="icon" />
+                  )}
+                </div>
+              </button>
+            </h3>
+            <div
+              className={`section-info ${
+                isExpanded.personalInfo ? "" : "hidden"
+              }`}
+            >
+              <div className="info-container">
+                <h4 className="title">First Name:</h4>
 
-          <div className="flex-container">
-            <div>
-              <h4>First Name</h4>
-              {user.first_name ? (
-                user.first_name
-              ) : (
-                <Link to={`${url}/personal-info`}>edit first name</Link>
-              )}
+                {user.first_name ? (
+                  <p className="info">
+                    {user.first_name}
+                    <span className="icon">
+                      <Checkmark />
+                    </span>
+                  </p>
+                ) : (
+                  <Link to={`${url}/personal-info`} className="info">
+                    edit first name
+                  </Link>
+                )}
+              </div>
+
+              <div className="info-container">
+                <h4 className="title">Last Name:</h4>
+                {user.last_name ? (
+                  <p className="info">
+                    {user.last_name}
+                    <span className="icon">
+                      <Checkmark />
+                    </span>
+                  </p>
+                ) : (
+                  <Link to={`${url}/personal-info`} className="info">
+                    edit last name
+                  </Link>
+                )}
+              </div>
+
+              <div className="info-container">
+                <h4 className="title">Profile Image:</h4>
+                {user.profile_image || user.avatar_image ? (
+                  <p className="info">
+                    profile image set
+                    <span className="icon">
+                      <Checkmark />
+                    </span>
+                  </p>
+                ) : (
+                  <Link to={`${url}/personal-info`} className="info">
+                    edit image
+                  </Link>
+                )}
+              </div>
+
+              <div className="info-container">
+                <h4 className="title">Area of Work:</h4>
+                {user.area_of_work ? (
+                  <p className="info">
+                    {user.area_of_work}
+                    <span className="icon">
+                      <Checkmark />
+                    </span>
+                  </p>
+                ) : (
+                  <Link to={`${url}/personal-info`} className="info">
+                    edit area of work
+                  </Link>
+                )}
+              </div>
+
+              <div className="info-container">
+                <h4 className="title">Title:</h4>
+                {user.desired_title ? (
+                  <p className="info">
+                    {user.desired_title}
+                    <span className="icon">
+                      <Checkmark />
+                    </span>
+                  </p>
+                ) : (
+                  <Link to={`${url}/personal-info`} className="info">
+                    edit title
+                  </Link>
+                )}
+              </div>
             </div>
+          </section>
 
-            <div>
-              <h4>Last Name</h4>
-              {user.last_name ? (
-                user.last_name
-              ) : (
-                <Link to={`${url}/personal-info`}>edit last name</Link>
-              )}
-            </div>
-
-            <div>
-              <h4>Profile Image</h4>
-              {user.profile_image || user.avatar_image ? (
-                "profile image set"
-              ) : (
-                <Link to={`${url}/personal-info`}>edit image</Link>
-              )}
-            </div>
-
-            <div>
-              <h4>Area of Work</h4>
-              {user.area_of_work ? (
-                user.area_of_work
-              ) : (
-                <Link to={`${url}/personal-info`}>edit area of work</Link>
-              )}
-            </div>
-
-            <div>
-              <h4>Title</h4>
-              {user.desired_title ? (
-                user.desired_title
-              ) : (
-                <Link to={`${url}/personal-info`}>edit title</Link>
-              )}
-            </div>
-          </div>
-        </section>
-        <section>
-          <h3>About You</h3>
-          summary interested locations top skills additional skills
-        </section>
-        <section>
-          <h3>Where to Find You</h3>
-          github twitter linkedin portfolio current location
-        </section>
-        <section>
-          <h3>Projects</h3>
-          either no projects or list out project names
-        </section>
-        <section>
-          <h3>Education</h3>
-          either no education or list out education names
-        </section>
-        <section>
-          <h3>Experience</h3>
-          either no experience or list out experience names
-        </section>
-        <section>
-          <h3>Billing</h3>
-          no billing or current status
-        </section>
+          <section>
+            <h3>About You</h3>
+            summary interested locations top skills additional skills
+          </section>
+          <section>
+            <h3>Where to Find You</h3>
+            github twitter linkedin portfolio current location
+          </section>
+          <section>
+            <h3>Projects</h3>
+            either no projects or list out project names
+          </section>
+          <section>
+            <h3>Education</h3>
+            either no education or list out education names
+          </section>
+          <section>
+            <h3>Experience</h3>
+            either no experience or list out experience names
+          </section>
+          <section>
+            <h3>Billing</h3>
+            no billing or current status
+          </section>
+        </div>
       </ChecklistSection>
     </>
   );
@@ -230,7 +291,53 @@ function ProfileHome() {
 
 const ChecklistSection = styled.section`
   width: 100%;
-  border: solid;
+  background-color: blue;
+
+  .main-container {
+    padding-top: 30px;
+    background-color: white;
+
+    section {
+      border-top: solid;
+    }
+  }
+
+  .section-button {
+    border: none;
+    background-color: white;
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: space-between;
+
+    .title-container {
+      flex-basis: 90%;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .icon-container {
+      flex-basis: 10%;
+      height: 100%;
+      max-width: 25px;
+      
+      .icon {
+        height: 100%;
+        width: 100%;
+        
+      }
+    }
+  }
+
+  .section-info {
+
+  }
+  
+  .section-info.hidden {
+    display: none;
+  }
+
 `;
 
 export default ProfileHome;
