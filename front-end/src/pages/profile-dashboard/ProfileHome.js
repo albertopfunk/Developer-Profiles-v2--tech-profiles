@@ -124,16 +124,11 @@ function ProfileHome() {
   });
 
   console.log(
-    totalProgress,
-    personalInfo,
-    aboutYou,
     whereToFindYou,
     projects,
     education,
     experience,
     billing,
-    isExpanded,
-    typeof setIsExpanded
   );
 
   return (
@@ -145,7 +140,7 @@ function ProfileHome() {
 
       <ChecklistSection aria-labelledby="profile-checklist">
         <h2 id="profile-checklist">Profile Checklist</h2>
-        <div>{totalProgress}%</div>
+        <div>main progress bar && {totalProgress}%</div>
 
         <div className="main-container">
           <section aria-labelledby="personal-info-checklist">
@@ -176,6 +171,7 @@ function ProfileHome() {
                 </div>
               </button>
             </h3>
+
             <div
               className={`section-info ${
                 isExpanded.personalInfo ? "" : "hidden"
@@ -185,7 +181,6 @@ function ProfileHome() {
                 <div className="flex-col">
                   <div className="info-container">
                     <h4 className="title">First Name:</h4>
-
                     {user.first_name ? (
                       <p className="info">
                         <span className="icon-container">
@@ -209,9 +204,7 @@ function ProfileHome() {
                         <span className="icon-container">
                           <Checkmark className="icon" />
                         </span>
-                        <span className="text-container">
-                          {user.last_name}
-                        </span>
+                        <span className="text-container">{user.last_name}</span>
                       </p>
                     ) : (
                       <Link to={`${url}/personal-info`} className="info">
@@ -238,8 +231,6 @@ function ProfileHome() {
                     )}
                   </div>
                 </div>
-
-
 
                 <div className="flex-col">
                   <div className="info-container">
@@ -278,31 +269,152 @@ function ProfileHome() {
                     )}
                   </div>
                 </div>
+              </div>
+            </div>
+          </section>
 
+          <section aria-labelledby="about-you-checklist">
+            <h3 id="about-you-checklist">
+              <button
+                type="button"
+                className="section-button"
+                aria-expanded={isExpanded.aboutYou}
+                onClick={() =>
+                  setIsExpanded({
+                    ...isExpanded,
+                    aboutYou: !isExpanded.aboutYou,
+                  })
+                }
+              >
+                <div className="title-container">
+                  <span className="title">About You</span>
+                  <span className="progress-bar">
+                    progress bar && {aboutYou.progress}%
+                  </span>
+                </div>
+                <div className="icon-container">
+                  {isExpanded.aboutYou ? (
+                    <Collapse className="icon" />
+                  ) : (
+                    <Expand className="icon" />
+                  )}
+                </div>
+              </button>
+            </h3>
+
+            <div
+              className={`section-info ${isExpanded.aboutYou ? "" : "hidden"}`}
+            >
+              <div className="flex-row">
+                <div className="flex-col">
+                  <div className="info-container">
+                    <h4 className="title">Summary:</h4>
+                    {user.summary ? (
+                      <p className="info">
+                        <span className="icon-container">
+                          <Checkmark className="icon" />
+                        </span>
+                        <span className="text-container">summary set</span>
+                      </p>
+                    ) : (
+                      <Link to={`${url}/about-you`} className="info">
+                        edit summary
+                      </Link>
+                    )}
+                  </div>
+
+                  <div className="info-container">
+                    <h4 className="title">Interested Locations:</h4>
+                    {user.locations?.length > 0 ? (
+                      <p className="info">
+                        <span className="icon-container">
+                          <Checkmark className="icon" />
+                        </span>
+                        <span className="text-container">
+                          {user.locations.length}{" "}
+                          {user.locations.length === 1
+                            ? "location"
+                            : "locations"}{" "}
+                          set
+                        </span>
+                      </p>
+                    ) : (
+                      <Link to={`${url}/about-you`} className="info">
+                        edit interested locations
+                      </Link>
+                    )}
+                  </div>
+                </div>
+
+                <div className="flex-col">
+                  <div className="info-container">
+                    <h4 className="title">Top Skills:</h4>
+                    {user.topSkills?.length > 0 ? (
+                      <p className="info">
+                        <span className="icon-container">
+                          <Checkmark className="icon" />
+                        </span>
+                        <span className="text-container">
+                          {user.topSkills.length}{" "}
+                          {user.topSkills.length === 1
+                            ? "top skill"
+                            : "top skills"}{" "}
+                          set
+                        </span>
+                      </p>
+                    ) : (
+                      <Link to={`${url}/about-you`} className="info">
+                        edit top skills
+                      </Link>
+                    )}
+                  </div>
+
+                  <div className="info-container">
+                    <h4 className="title">Additional Skills:</h4>
+                    {user.additionalSkills?.length > 0 ? (
+                      <p className="info">
+                        <span className="icon-container">
+                          <Checkmark className="icon" />
+                        </span>
+                        <span className="text-container">
+                          {user.additionalSkills.length}{" "}
+                          {user.additionalSkills.length === 1
+                            ? "additional skill"
+                            : "additional skills"}{" "}
+                          set
+                        </span>
+                      </p>
+                    ) : (
+                      <Link to={`${url}/about-you`} className="info">
+                        edit additional skills
+                      </Link>
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
           </section>
 
           <section>
-            <h3>About You</h3>
-            summary interested locations top skills additional skills
-          </section>
-          <section>
             <h3>Where to Find You</h3>
             github twitter linkedin portfolio current location
           </section>
+
           <section>
             <h3>Projects</h3>
             either no projects or list out project names
           </section>
+
           <section>
             <h3>Education</h3>
             either no education or list out education names
           </section>
+
           <section>
             <h3>Experience</h3>
             either no experience or list out experience names
           </section>
+
           <section>
             <h3>Billing</h3>
             no billing or current status
@@ -315,12 +427,10 @@ function ProfileHome() {
 
 const ChecklistSection = styled.section`
   width: 100%;
-  background-color: blue;
+  background-color: ghostwhite;
 
   .main-container {
-    padding-top: 30px;
-    background-color: white;
-
+    padding-top: 5px;
     section {
       border-top: solid;
     }
@@ -370,7 +480,6 @@ const ChecklistSection = styled.section`
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
-    
 
     @media (min-width: 280px) {
       flex-direction: row;
@@ -407,12 +516,11 @@ const ChecklistSection = styled.section`
         display: inline-block;
 
         .icon {
-          height: .8rem;
+          height: 0.8rem;
         }
       }
     }
   }
-
 `;
 
 export default ProfileHome;
