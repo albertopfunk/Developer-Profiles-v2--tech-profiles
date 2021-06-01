@@ -192,7 +192,7 @@ function ProfileHome() {
                       </p>
                     ) : (
                       <Link to={`${url}/personal-info`} className="info">
-                        edit first name
+                        add your first name
                       </Link>
                     )}
                   </div>
@@ -208,7 +208,7 @@ function ProfileHome() {
                       </p>
                     ) : (
                       <Link to={`${url}/personal-info`} className="info">
-                        edit last name
+                        add your last name
                       </Link>
                     )}
                   </div>
@@ -226,7 +226,7 @@ function ProfileHome() {
                       </p>
                     ) : (
                       <Link to={`${url}/personal-info`} className="info">
-                        edit image
+                        add an image
                       </Link>
                     )}
                   </div>
@@ -246,7 +246,7 @@ function ProfileHome() {
                       </p>
                     ) : (
                       <Link to={`${url}/personal-info`} className="info">
-                        edit area of work
+                        add your area of work
                       </Link>
                     )}
                   </div>
@@ -264,7 +264,7 @@ function ProfileHome() {
                       </p>
                     ) : (
                       <Link to={`${url}/personal-info`} className="info">
-                        edit title
+                        add a title
                       </Link>
                     )}
                   </div>
@@ -318,7 +318,7 @@ function ProfileHome() {
                       </p>
                     ) : (
                       <Link to={`${url}/about-you`} className="info">
-                        edit summary
+                        add a summary
                       </Link>
                     )}
                   </div>
@@ -340,7 +340,7 @@ function ProfileHome() {
                       </p>
                     ) : (
                       <Link to={`${url}/about-you`} className="info">
-                        edit interested locations
+                        add your interested locations
                       </Link>
                     )}
                   </div>
@@ -364,7 +364,7 @@ function ProfileHome() {
                       </p>
                     ) : (
                       <Link to={`${url}/about-you`} className="info">
-                        edit top skills
+                        add some top skills
                       </Link>
                     )}
                   </div>
@@ -386,7 +386,7 @@ function ProfileHome() {
                       </p>
                     ) : (
                       <Link to={`${url}/about-you`} className="info">
-                        edit additional skills
+                        add some additional skills
                       </Link>
                     )}
                   </div>
@@ -395,9 +395,148 @@ function ProfileHome() {
             </div>
           </section>
 
-          <section>
-            <h3>Where to Find You</h3>
-            github twitter linkedin portfolio current location
+          <section aria-labelledby="where-to-find-you-checklist">
+            <h3 id="where-to-find-you-checklist">
+              <button
+                type="button"
+                className="section-button"
+                aria-expanded={isExpanded.whereToFindYou}
+                onClick={() =>
+                  setIsExpanded({
+                    ...isExpanded,
+                    whereToFindYou: !isExpanded.whereToFindYou,
+                  })
+                }
+              >
+                <div className="title-container">
+                  <span className="title">Where to Find You</span>
+                  <span className="progress-bar">
+                    progress bar && {whereToFindYou.progress}%
+                  </span>
+                </div>
+                <div className="icon-container">
+                  {isExpanded.whereToFindYou ? (
+                    <Collapse className="icon" />
+                  ) : (
+                    <Expand className="icon" />
+                  )}
+                </div>
+              </button>
+            </h3>
+
+            <div
+              className={`section-info ${
+                isExpanded.whereToFindYou ? "" : "hidden"
+              }`}
+            >
+              <div className="flex-row">
+                <div className="flex-col">
+                  <div className="info-container">
+                    <h4 className="title">Github:</h4>
+                    {user.github ? (
+                      <p className="info">
+                        <span className="icon-container">
+                          <Checkmark className="icon" />
+                        </span>
+                        <span className="text-container">
+                          github link set
+                        </span>
+                      </p>
+                    ) : (
+                      <Link to={`${url}/where-to-find-you`} className="info">
+                        add your github link
+                      </Link>
+                    )}
+                  </div>
+
+                  <div className="info-container">
+                    <h4 className="title">Twitter:</h4>
+                    {user.twitter ? (
+                      <p className="info">
+                        <span className="icon-container">
+                          <Checkmark className="icon" />
+                        </span>
+                        <span className="text-container">twitter link set</span>
+                      </p>
+                    ) : (
+                      <Link to={`${url}/where-to-find-you`} className="info">
+                        add your twitter link
+                      </Link>
+                    )}
+                  </div>
+
+                  <div className="info-container">
+                    <h4 className="title">Linkedin:</h4>
+                    {user.linkedin ? (
+                      <p className="info">
+                        <span className="icon-container">
+                          <Checkmark className="icon" />
+                        </span>
+                        <span className="text-container">linkedin link set</span>
+                      </p>
+                    ) : (
+                      <Link to={`${url}/where-to-find-you`} className="info">
+                        add your linkedin link
+                      </Link>
+                    )}
+                  </div>
+                </div>
+
+                <div className="flex-col">
+                  <div className="info-container">
+                    <h4 className="title">Portfolio:</h4>
+                    {user.portfolio ? (
+                      <p className="info">
+                        <span className="icon-container">
+                          <Checkmark className="icon" />
+                        </span>
+                        <span className="text-container">
+                          portfolio link set
+                        </span>
+                      </p>
+                    ) : (
+                      <Link to={`${url}/where-to-find-you`} className="info">
+                        add your portfolio link
+                      </Link>
+                    )}
+                  </div>
+
+                  <div className="info-container">
+                    <h4 className="title">Public Email:</h4>
+                    {user.public_email ? (
+                      <p className="info">
+                        <span className="icon-container">
+                          <Checkmark className="icon" />
+                        </span>
+                        <span className="text-container">
+                          {user.public_email}
+                        </span>
+                      </p>
+                    ) : (
+                      <Link to={`${url}/where-to-find-you`} className="info">
+                        add your public email
+                      </Link>
+                    )}
+                  </div>
+
+                  <div className="info-container">
+                    <h4 className="title">Current Location:</h4>
+                    {user.current_location_name ? (
+                      <p className="info">
+                        <span className="icon-container">
+                          <Checkmark className="icon" />
+                        </span>
+                        <span className="text-container">{user.current_location_name}</span>
+                      </p>
+                    ) : (
+                      <Link to={`${url}/where-to-find-you`} className="info">
+                        add your current location
+                      </Link>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
           </section>
 
           <section>
@@ -480,12 +619,13 @@ const ChecklistSection = styled.section`
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
+    gap: 10px;
 
     @media (min-width: 280px) {
       flex-direction: row;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 10px;
+      gap: 20px;
     }
 
     .flex-col {
