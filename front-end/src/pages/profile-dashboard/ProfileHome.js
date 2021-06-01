@@ -154,7 +154,12 @@ function ProfileHome() {
                 type="button"
                 className="section-button"
                 aria-expanded={isExpanded.personalInfo}
-                onClick={() => setIsExpanded({...isExpanded, personalInfo: !isExpanded.personalInfo})}
+                onClick={() =>
+                  setIsExpanded({
+                    ...isExpanded,
+                    personalInfo: !isExpanded.personalInfo,
+                  })
+                }
               >
                 <div className="title-container">
                   <span className="title">Personal Info</span>
@@ -165,7 +170,7 @@ function ProfileHome() {
                 <div className="icon-container">
                   {isExpanded.personalInfo ? (
                     <Collapse className="icon" />
-                    ) : (
+                  ) : (
                     <Expand className="icon" />
                   )}
                 </div>
@@ -176,85 +181,96 @@ function ProfileHome() {
                 isExpanded.personalInfo ? "" : "hidden"
               }`}
             >
-              <div className="info-container">
-                <h4 className="title">First Name:</h4>
+              <div className="flex-row">
 
-                {user.first_name ? (
-                  <p className="info">
-                    {user.first_name}
-                    <span className="icon">
-                      <Checkmark />
-                    </span>
-                  </p>
-                ) : (
-                  <Link to={`${url}/personal-info`} className="info">
-                    edit first name
-                  </Link>
-                )}
-              </div>
 
-              <div className="info-container">
-                <h4 className="title">Last Name:</h4>
-                {user.last_name ? (
-                  <p className="info">
-                    {user.last_name}
-                    <span className="icon">
-                      <Checkmark />
-                    </span>
-                  </p>
-                ) : (
-                  <Link to={`${url}/personal-info`} className="info">
-                    edit last name
-                  </Link>
-                )}
-              </div>
+                <div className="flex-col">
+                  <div className="info-container">
+                    <h4 className="title">First Name:</h4>
 
-              <div className="info-container">
-                <h4 className="title">Profile Image:</h4>
-                {user.profile_image || user.avatar_image ? (
-                  <p className="info">
-                    profile image set
-                    <span className="icon">
-                      <Checkmark />
-                    </span>
-                  </p>
-                ) : (
-                  <Link to={`${url}/personal-info`} className="info">
-                    edit image
-                  </Link>
-                )}
-              </div>
+                    {user.first_name ? (
+                      <p className="info">
+                        {user.first_name}
+                        <span className="icon">
+                          <Checkmark />
+                        </span>
+                      </p>
+                    ) : (
+                      <Link to={`${url}/personal-info`} className="info">
+                        edit first name
+                      </Link>
+                    )}
+                  </div>
 
-              <div className="info-container">
-                <h4 className="title">Area of Work:</h4>
-                {user.area_of_work ? (
-                  <p className="info">
-                    {user.area_of_work}
-                    <span className="icon">
-                      <Checkmark />
-                    </span>
-                  </p>
-                ) : (
-                  <Link to={`${url}/personal-info`} className="info">
-                    edit area of work
-                  </Link>
-                )}
-              </div>
+                  <div className="info-container">
+                    <h4 className="title">Last Name:</h4>
+                    {user.last_name ? (
+                      <p className="info">
+                        {user.last_name}
+                        <span className="icon">
+                          <Checkmark />
+                        </span>
+                      </p>
+                    ) : (
+                      <Link to={`${url}/personal-info`} className="info">
+                        edit last name
+                      </Link>
+                    )}
+                  </div>
 
-              <div className="info-container">
-                <h4 className="title">Title:</h4>
-                {user.desired_title ? (
-                  <p className="info">
-                    {user.desired_title}
-                    <span className="icon">
-                      <Checkmark />
-                    </span>
-                  </p>
-                ) : (
-                  <Link to={`${url}/personal-info`} className="info">
-                    edit title
-                  </Link>
-                )}
+                  <div className="info-container">
+                    <h4 className="title">Profile Image:</h4>
+                    {user.profile_image || user.avatar_image ? (
+                      <p className="info">
+                        profile image set
+                        <span className="icon">
+                          <Checkmark />
+                        </span>
+                      </p>
+                    ) : (
+                      <Link to={`${url}/personal-info`} className="info">
+                        edit image
+                      </Link>
+                    )}
+                  </div>
+                </div>
+
+
+
+                <div className="flex-col">
+                  <div className="info-container">
+                    <h4 className="title">Area of Work:</h4>
+                    {user.area_of_work ? (
+                      <p className="info">
+                        {user.area_of_work}
+                        <span className="icon">
+                          <Checkmark />
+                        </span>
+                      </p>
+                    ) : (
+                      <Link to={`${url}/personal-info`} className="info">
+                        edit area of work
+                      </Link>
+                    )}
+                  </div>
+
+                  <div className="info-container">
+                    <h4 className="title">Title:</h4>
+                    {user.desired_title ? (
+                      <p className="info">
+                        {user.desired_title}
+                        <span className="icon">
+                          <Checkmark />
+                        </span>
+                      </p>
+                    ) : (
+                      <Link to={`${url}/personal-info`} className="info">
+                        edit title
+                      </Link>
+                    )}
+                  </div>
+                </div>
+
               </div>
             </div>
           </section>
@@ -305,38 +321,71 @@ const ChecklistSection = styled.section`
   .section-button {
     border: none;
     background-color: white;
+    padding: 5px;
     width: 100%;
     height: auto;
     display: flex;
     justify-content: space-between;
+    align-items: center;
 
     .title-container {
       flex-basis: 90%;
       display: flex;
       flex-direction: column;
       align-items: flex-start;
+      gap: 10px;
     }
 
     .icon-container {
       flex-basis: 10%;
       height: 100%;
-      max-width: 25px;
-      
+
       .icon {
         height: 100%;
         width: 100%;
-        
+        max-width: 25px;
       }
     }
   }
 
   .section-info {
-
+    border-top: solid;
+    padding: 5px;
   }
-  
+
   .section-info.hidden {
     display: none;
   }
+
+  .flex-row {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    
+
+    @media (min-width: 280px) {
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .flex-col {
+      flex-basis: 0;
+      flex-shrink: 0;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: flex-start;
+      gap: 10px;
+    }
+  }
+
+  // .info-container {
+  //   min-width: 50px;
+  // }
 
 `;
 
