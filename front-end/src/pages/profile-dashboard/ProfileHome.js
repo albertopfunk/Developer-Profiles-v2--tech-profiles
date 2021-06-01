@@ -182,17 +182,17 @@ function ProfileHome() {
               }`}
             >
               <div className="flex-row">
-
-
                 <div className="flex-col">
                   <div className="info-container">
                     <h4 className="title">First Name:</h4>
 
                     {user.first_name ? (
                       <p className="info">
-                        {user.first_name}
-                        <span className="icon">
-                          <Checkmark />
+                        <span className="icon-container">
+                          <Checkmark className="icon" />
+                        </span>
+                        <span className="text-container">
+                          {user.first_name}
                         </span>
                       </p>
                     ) : (
@@ -206,9 +206,11 @@ function ProfileHome() {
                     <h4 className="title">Last Name:</h4>
                     {user.last_name ? (
                       <p className="info">
-                        {user.last_name}
-                        <span className="icon">
-                          <Checkmark />
+                        <span className="icon-container">
+                          <Checkmark className="icon" />
+                        </span>
+                        <span className="text-container">
+                          {user.last_name}
                         </span>
                       </p>
                     ) : (
@@ -222,9 +224,11 @@ function ProfileHome() {
                     <h4 className="title">Profile Image:</h4>
                     {user.profile_image || user.avatar_image ? (
                       <p className="info">
-                        profile image set
-                        <span className="icon">
-                          <Checkmark />
+                        <span className="icon-container">
+                          <Checkmark className="icon" />
+                        </span>
+                        <span className="text-container">
+                          profile image set
                         </span>
                       </p>
                     ) : (
@@ -242,9 +246,11 @@ function ProfileHome() {
                     <h4 className="title">Area of Work:</h4>
                     {user.area_of_work ? (
                       <p className="info">
-                        {user.area_of_work}
-                        <span className="icon">
-                          <Checkmark />
+                        <span className="icon-container">
+                          <Checkmark className="icon" />
+                        </span>
+                        <span className="text-container">
+                          {user.area_of_work}
                         </span>
                       </p>
                     ) : (
@@ -258,9 +264,11 @@ function ProfileHome() {
                     <h4 className="title">Title:</h4>
                     {user.desired_title ? (
                       <p className="info">
-                        {user.desired_title}
-                        <span className="icon">
-                          <Checkmark />
+                        <span className="icon-container">
+                          <Checkmark className="icon" />
+                        </span>
+                        <span className="text-container">
+                          {user.desired_title}
                         </span>
                       </p>
                     ) : (
@@ -383,9 +391,27 @@ const ChecklistSection = styled.section`
     }
   }
 
-  // .info-container {
-  //   min-width: 50px;
-  // }
+  .info-container {
+    .info {
+      font-size: 1rem;
+      display: flex;
+      gap: 5px;
+      align-items: baseline;
+      justify-content: flex-start;
+
+      .text-container {
+        display: inline-block;
+      }
+
+      .icon-container {
+        display: inline-block;
+
+        .icon {
+          height: .8rem;
+        }
+      }
+    }
+  }
 
 `;
 
