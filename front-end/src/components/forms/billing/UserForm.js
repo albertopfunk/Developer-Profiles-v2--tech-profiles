@@ -60,10 +60,7 @@ class UserForm extends Component {
 
     if (results?.error) {
       this.setState({ subStatus: SUBSCRIPTION_STATUS.error });
-      return;
     }
-
-    this.setState({ subStatus: SUBSCRIPTION_STATUS.idle });
   };
 
   setSubscriptionStatus = (status) => {

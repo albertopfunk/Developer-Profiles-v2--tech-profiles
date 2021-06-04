@@ -62,10 +62,7 @@ class SubscriberForm extends Component {
 
     if (results?.error) {
       this.setState({ subStatus: SUBSCRIPTION_STATUS.error });
-      return;
     }
-
-    this.setState({ subStatus: SUBSCRIPTION_STATUS.idle });
   };
 
   render() {
