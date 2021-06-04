@@ -134,7 +134,9 @@ function ProfileHome() {
 
       <ChecklistSection aria-labelledby="profile-checklist">
         <h2 id="profile-checklist">Profile Checklist</h2>
-        <div>main progress bar && {totalProgress}%</div>
+        <div className="progress-bar">
+          <span className="bar" style={{ width: `${totalProgress}%` }}></span>
+        </div>
 
         <div className="main-container">
           <section aria-labelledby="personal-info-checklist">
@@ -152,9 +154,12 @@ function ProfileHome() {
               >
                 <div className="title-container">
                   <span className="title">Personal Info</span>
-                  <span className="progress-bar">
-                    progress bar && {personalInfo.progress}%
-                  </span>
+                  <div className="progress-bar">
+                    <span
+                      className="bar"
+                      style={{ width: `${personalInfo.progress}%` }}
+                    ></span>
+                  </div>
                 </div>
                 <div className="icon-container">
                   {isExpanded.personalInfo ? (
@@ -282,9 +287,12 @@ function ProfileHome() {
               >
                 <div className="title-container">
                   <span className="title">About You</span>
-                  <span className="progress-bar">
-                    progress bar && {aboutYou.progress}%
-                  </span>
+                  <div className="progress-bar">
+                    <span
+                      className="bar"
+                      style={{ width: `${aboutYou.progress}%` }}
+                    ></span>
+                  </div>
                 </div>
                 <div className="icon-container">
                   {isExpanded.aboutYou ? (
@@ -404,9 +412,12 @@ function ProfileHome() {
               >
                 <div className="title-container">
                   <span className="title">Where to Find You</span>
-                  <span className="progress-bar">
-                    progress bar && {whereToFindYou.progress}%
-                  </span>
+                  <div className="progress-bar">
+                    <span
+                      className="bar"
+                      style={{ width: `${whereToFindYou.progress}%` }}
+                    ></span>
+                  </div>
                 </div>
                 <div className="icon-container">
                   {isExpanded.whereToFindYou ? (
@@ -550,9 +561,12 @@ function ProfileHome() {
               >
                 <div className="title-container">
                   <span className="title">Projects</span>
-                  <span className="progress-bar">
-                    progress bar && {projects.progress}%
-                  </span>
+                  <div className="progress-bar">
+                    <span
+                      className="bar"
+                      style={{ width: `${projects.progress}%` }}
+                    ></span>
+                  </div>
                 </div>
                 <div className="icon-container">
                   {isExpanded.projects ? (
@@ -606,9 +620,12 @@ function ProfileHome() {
               >
                 <div className="title-container">
                   <span className="title">Education</span>
-                  <span className="progress-bar">
-                    progress bar && {education.progress}%
-                  </span>
+                  <div className="progress-bar">
+                    <span
+                      className="bar"
+                      style={{ width: `${education.progress}%` }}
+                    ></span>
+                  </div>
                 </div>
                 <div className="icon-container">
                   {isExpanded.education ? (
@@ -661,10 +678,13 @@ function ProfileHome() {
                 }
               >
                 <div className="title-container">
-                  <span className="title">experience</span>
-                  <span className="progress-bar">
-                    progress bar && {experience.progress}%
-                  </span>
+                  <span className="title">Experience</span>
+                  <div className="progress-bar">
+                    <span
+                      className="bar"
+                      style={{ width: `${experience.progress}%` }}
+                    ></span>
+                  </div>
                 </div>
                 <div className="icon-container">
                   {isExpanded.experience ? (
@@ -720,9 +740,12 @@ function ProfileHome() {
               >
                 <div className="title-container">
                   <span className="title">Billing</span>
-                  <span className="progress-bar">
-                    progress bar && {billing.progress}%
-                  </span>
+                  <div className="progress-bar">
+                    <span
+                      className="bar"
+                      style={{ width: `${billing.progress}%` }}
+                    ></span>
+                  </div>
                 </div>
                 <div className="icon-container">
                   {isExpanded.billing ? (
@@ -764,6 +787,27 @@ const ChecklistSection = styled.section`
   width: 100%;
   background-color: ghostwhite;
   box-shadow: 0 4px 6px 0 hsla(0, 0%, 0%, 0.2);
+
+  .progress-bar {
+    width: 90%;
+    height: 10px;
+    padding: 3px;
+    background-color: #555;
+    border-radius: 25px;
+    box-shadow: inset 0 -1px 1px rgba(255, 255, 255, 0.3);
+
+    .bar {
+      display: block;
+      height: 100%;
+      border-top-right-radius: 8px;
+      border-bottom-right-radius: 8px;
+      border-top-left-radius: 20px;
+      border-bottom-left-radius: 20px;
+      background-color: rgb(43, 194, 83);
+      box-shadow: inset 0 2px 9px rgba(255, 255, 255, 0.3),
+        inset 0 -2px 6px rgba(0, 0, 0, 0.4);
+    }
+  }
 
   .main-container {
     padding-top: 5px;
