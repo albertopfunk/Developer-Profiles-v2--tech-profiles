@@ -158,7 +158,7 @@ const ExtrasContainer = styled.div`
   padding-top: 40px;
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: repeat(6, auto);
+  grid-template-rows: auto;
   grid-gap: 40px;
 
   section {
