@@ -53,7 +53,7 @@ import useProfileProgress from "../../global/helpers/hooks/useProfileProgress";
   billing 1/1
   - quick info or none
 
-  
+
 
   profileProgress = useState(() => {
     const total = 19
@@ -72,18 +72,18 @@ import useProfileProgress from "../../global/helpers/hooks/useProfileProgress";
     user.interested_locations?.length > 0 ? progress++ : null
     user.top_skills?.length > 0 ? progress++ : null
     user.additional_skills?.length > 0 ? progress++ : null
-    
+
     user.github ? progress++ : null
     user.twitter ? progress++ : null
     user.linkedin ? progress++ : null
     user.portfolio ? progress++ : null
     user.public_email ? progress++ : null
     user.current_location_name ? progress++ : null
-    
+
     user.projects?.length > 0 ? progress++ : null
     user.education?.length > 0 ? progress++ : null
     user.experience?.length > 0 ? progress++ : null
-    
+
     user.stripe_subscription_name ? progress++ : null
 
   })
@@ -123,13 +123,7 @@ function ProfileHome() {
     billing: false,
   });
 
-  console.log(
-    whereToFindYou,
-    projects,
-    education,
-    experience,
-    billing,
-  );
+  console.log(projects, education, experience, billing);
 
   return (
     <>
@@ -438,9 +432,7 @@ function ProfileHome() {
                         <span className="icon-container">
                           <Checkmark className="icon" />
                         </span>
-                        <span className="text-container">
-                          github link set
-                        </span>
+                        <span className="text-container">github link set</span>
                       </p>
                     ) : (
                       <Link to={`${url}/where-to-find-you`} className="info">
@@ -472,7 +464,9 @@ function ProfileHome() {
                         <span className="icon-container">
                           <Checkmark className="icon" />
                         </span>
-                        <span className="text-container">linkedin link set</span>
+                        <span className="text-container">
+                          linkedin link set
+                        </span>
                       </p>
                     ) : (
                       <Link to={`${url}/where-to-find-you`} className="info">
@@ -526,7 +520,9 @@ function ProfileHome() {
                         <span className="icon-container">
                           <Checkmark className="icon" />
                         </span>
-                        <span className="text-container">{user.current_location_name}</span>
+                        <span className="text-container">
+                          {user.current_location_name}
+                        </span>
                       </p>
                     ) : (
                       <Link to={`${url}/where-to-find-you`} className="info">
@@ -539,24 +535,224 @@ function ProfileHome() {
             </div>
           </section>
 
-          <section>
-            <h3>Projects</h3>
-            either no projects or list out project names
+          <section aria-labelledby="projects-checklist">
+            <h3 id="projects-checklist">
+              <button
+                type="button"
+                className="section-button"
+                aria-expanded={isExpanded.projects}
+                onClick={() =>
+                  setIsExpanded({
+                    ...isExpanded,
+                    projects: !isExpanded.projects,
+                  })
+                }
+              >
+                <div className="title-container">
+                  <span className="title">Projects</span>
+                  <span className="progress-bar">
+                    progress bar && {projects.progress}%
+                  </span>
+                </div>
+                <div className="icon-container">
+                  {isExpanded.projects ? (
+                    <Collapse className="icon" />
+                  ) : (
+                    <Expand className="icon" />
+                  )}
+                </div>
+              </button>
+            </h3>
+
+            <div
+              className={`section-info ${isExpanded.projects ? "" : "hidden"}`}
+            >
+              <div className="info-container">
+                <h4 className="title">Project list:</h4>
+                {user.projects?.length > 0 ? (
+                  <ul className="info-group" aria-label="saved projects">
+                    {user.projects.map((project) => (
+                      <li key={project.id} className="info">
+                        <span className="icon-container">
+                          <Checkmark className="icon" />
+                        </span>
+                        <span className="text-container">
+                          {project.project_title}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <Link to={`${url}/projects`} className="info">
+                    add a project
+                  </Link>
+                )}
+              </div>
+            </div>
           </section>
 
-          <section>
-            <h3>Education</h3>
-            either no education or list out education names
+          <section aria-labelledby="education-checklist">
+            <h3 id="education-checklist">
+              <button
+                type="button"
+                className="section-button"
+                aria-expanded={isExpanded.education}
+                onClick={() =>
+                  setIsExpanded({
+                    ...isExpanded,
+                    education: !isExpanded.education,
+                  })
+                }
+              >
+                <div className="title-container">
+                  <span className="title">Education</span>
+                  <span className="progress-bar">
+                    progress bar && {education.progress}%
+                  </span>
+                </div>
+                <div className="icon-container">
+                  {isExpanded.education ? (
+                    <Collapse className="icon" />
+                  ) : (
+                    <Expand className="icon" />
+                  )}
+                </div>
+              </button>
+            </h3>
+
+            <div
+              className={`section-info ${isExpanded.education ? "" : "hidden"}`}
+            >
+              <div className="info-container">
+                <h4 className="title">Education list:</h4>
+                {user.education?.length > 0 ? (
+                  <ul className="info-group" aria-label="saved education">
+                    {user.education.map((education) => (
+                      <li key={education.id} className="info">
+                        <span className="icon-container">
+                          <Checkmark className="icon" />
+                        </span>
+                        <span className="text-container">
+                          {education.school}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <Link to={`${url}/education`} className="info">
+                    add education
+                  </Link>
+                )}
+              </div>
+            </div>
           </section>
 
-          <section>
-            <h3>Experience</h3>
-            either no experience or list out experience names
+          <section aria-labelledby="experience-checklist">
+            <h3 id="experience-checklist">
+              <button
+                type="button"
+                className="section-button"
+                aria-expanded={isExpanded.experience}
+                onClick={() =>
+                  setIsExpanded({
+                    ...isExpanded,
+                    experience: !isExpanded.experience,
+                  })
+                }
+              >
+                <div className="title-container">
+                  <span className="title">experience</span>
+                  <span className="progress-bar">
+                    progress bar && {experience.progress}%
+                  </span>
+                </div>
+                <div className="icon-container">
+                  {isExpanded.experience ? (
+                    <Collapse className="icon" />
+                  ) : (
+                    <Expand className="icon" />
+                  )}
+                </div>
+              </button>
+            </h3>
+
+            <div
+              className={`section-info ${
+                isExpanded.experience ? "" : "hidden"
+              }`}
+            >
+              <div className="info-container">
+                <h4 className="title">experience list:</h4>
+                {user.experience?.length > 0 ? (
+                  <ul className="info-group" aria-label="saved experience">
+                    {user.experience.map((experience) => (
+                      <li key={experience.id} className="info">
+                        <span className="icon-container">
+                          <Checkmark className="icon" />
+                        </span>
+                        <span className="text-container">
+                          {experience.company_name}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <Link to={`${url}/experience`} className="info">
+                    add experience
+                  </Link>
+                )}
+              </div>
+            </div>
           </section>
 
-          <section>
-            <h3>Billing</h3>
-            no billing or current status
+          <section aria-labelledby="billing-checklist">
+            <h3 id="billing-checklist">
+              <button
+                type="button"
+                className="section-button"
+                aria-expanded={isExpanded.billing}
+                onClick={() =>
+                  setIsExpanded({
+                    ...isExpanded,
+                    billing: !isExpanded.billing,
+                  })
+                }
+              >
+                <div className="title-container">
+                  <span className="title">Billing</span>
+                  <span className="progress-bar">
+                    progress bar && {billing.progress}%
+                  </span>
+                </div>
+                <div className="icon-container">
+                  {isExpanded.billing ? (
+                    <Collapse className="icon" />
+                  ) : (
+                    <Expand className="icon" />
+                  )}
+                </div>
+              </button>
+            </h3>
+
+            <div
+              className={`section-info ${isExpanded.billing ? "" : "hidden"}`}
+            >
+              <div className="info-container">
+                <h4 className="title">Billing:</h4>
+                {user.stripe_subscription_name ? (
+                  <p className="info">
+                    <span className="icon-container">
+                      <Checkmark className="icon" />
+                    </span>
+                    <span className="text-container">subscribed</span>
+                  </p>
+                ) : (
+                  <Link to={`${url}/billing`} className="info">
+                    subscribe to go live
+                  </Link>
+                )}
+              </div>
+            </div>
           </section>
         </div>
       </ChecklistSection>
@@ -567,11 +763,15 @@ function ProfileHome() {
 const ChecklistSection = styled.section`
   width: 100%;
   background-color: ghostwhite;
+  box-shadow: 0 4px 6px 0 hsla(0, 0%, 0%, 0.2);
 
   .main-container {
     padding-top: 5px;
     section {
       border-top: solid;
+      &:last-child {
+        border-bottom: solid;
+      }
     }
   }
 
@@ -641,6 +841,10 @@ const ChecklistSection = styled.section`
   }
 
   .info-container {
+    .info-group {
+      list-style: none;
+    }
+
     .info {
       font-size: 1rem;
       display: flex;
