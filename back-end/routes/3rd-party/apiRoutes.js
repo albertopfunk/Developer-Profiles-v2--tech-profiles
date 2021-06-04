@@ -26,7 +26,7 @@ cloudinary.config({
 });
 
 server.post(
-  "/upload-preview-image/:id/:image_id",
+  "/upload-preview-image/:id/:image_id?",
   fileUpload({
     useTempFiles: true,
   }),
