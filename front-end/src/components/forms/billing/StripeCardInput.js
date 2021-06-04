@@ -35,8 +35,10 @@ function StripeCardInput({
 
     const { error, paymentMethod } = await stripe.createPaymentMethod({
       type: "card",
-      name: email,
       card: elements.getElement(CardElement),
+      billing_details: {
+        name: email,
+      },
     });
 
     if (error || !paymentMethod) {
