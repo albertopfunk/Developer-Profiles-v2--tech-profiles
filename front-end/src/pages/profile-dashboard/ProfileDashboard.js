@@ -37,6 +37,8 @@ import Announcer from "../../global/helpers/announcer";
 */
 
 function ProfileDashboard() {
+  let { path, url } = useRouteMatch();
+  const [headerHeight, setHeaderHeight] = useState(0);
   const [user, setUser] = useState(null);
   const [loadingUser, setLoadingUser] = useState(true);
   const [userImage, setUserImage] = useState({
@@ -45,11 +47,9 @@ function ProfileDashboard() {
     removeUserImage: false,
     removeSavedAvatar: false,
   });
-
   const [stripePromise] = useState(() =>
     loadStripe(process.env.REACT_APP_STRIPE)
   );
-  let { path, url } = useRouteMatch();
 
   useEffect(() => {
     if (!user) {
@@ -132,7 +132,7 @@ function ProfileDashboard() {
         ariaLive="polite"
       />
       <PageHeader>
-        <MainHeader />
+        <MainHeader setHeaderHeight={setHeaderHeight} />
         <PageNav aria-label="page">
           <ul>
             <li>
@@ -176,7 +176,7 @@ function ProfileDashboard() {
         </PageNav>
       </PageHeader>
 
-      <Main aria-labelledby="main-heading">
+      <Main aria-labelledby="main-heading" headerHeight={headerHeight}>
         {loadingUser ? (
           <>
             <h1>Loading User</h1>
@@ -321,7 +321,10 @@ const PageNav = styled.nav`
 
 const Main = styled.main`
   min-height: 100vh;
-  padding: 110px 5px 50px;
+  padding-top: ${(props) => `calc(60px + 20px + ${props.headerHeight}px);`};
+  padding-right: 5px;
+  padding-left: 5px;
+  padding-bottom: 50px;
   background-color: hsl(240, 10%, 99%);
 
   @media (min-width: 850px) {
