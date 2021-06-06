@@ -224,32 +224,32 @@ const ExtrasContainer = styled.div`
 
 const ProjectsSection = styled.section`
   grid-column: 1 / 2;
-  grid-row: 1 / 2;
+  grid-row: auto;
 `;
 
 const EducationSection = styled.section`
   grid-column: 1 / 2;
-  grid-row: 2 / 3;
+  grid-row: auto;
 `;
 
 const ExperienceSection = styled.section`
   grid-column: 1 / 2;
-  grid-row: 3 / 4;
+  grid-row: auto;
 `;
 
 const TopSkillsSection = styled.section`
   grid-column: 1 / 2;
-  grid-row: 4 / 5;
+  grid-row: auto;
 `;
 
 const AdditionalSkillsSection = styled.section`
   grid-column: 1 / 2;
-  grid-row: 5 / 6;
+  grid-row: auto;
 `;
 
 const InterestedLocationsSection = styled.section`
   grid-column: 1 / 2;
-  grid-row: 6 / 7;
+  grid-row: auto;
 `;
 
 export default UserExtras;

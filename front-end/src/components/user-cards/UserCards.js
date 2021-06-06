@@ -183,11 +183,16 @@ const Feed = styled.div`
     grid-gap: 50px;
   }
 
-  .feed-controls .control {
-    width: fit-content;
-    margin: 0 auto;
-    text-align: center;
+  .feed-controls {
+    margin-top: 30px;
+  
+    .control {
+      width: fit-content;
+      margin: 0 auto;
+      text-align: center;
+    }
   }
+
 `;
 
 const MemoUserCards = React.memo(UserCards);

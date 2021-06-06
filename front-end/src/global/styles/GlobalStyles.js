@@ -46,6 +46,7 @@ export const GlobalStyles = createGlobalStyle`
     -ms-text-size-adjust: 100%; /* 5 */
     -webkit-text-size-adjust: 100%; /* 5 */
     word-break: break-word; /* 6 */
+    font-family: Arial, Helvetica, sans-serif;
   }
 
   /* Sections
@@ -66,6 +67,7 @@ export const GlobalStyles = createGlobalStyle`
   h1, h2, h3, h4, h5, h6 {
     margin: 0;
     padding: 0;
+    font-family: Georgia, 'Times New Roman', Times, serif;
   }
 
   /**
@@ -151,7 +153,10 @@ export const GlobalStyles = createGlobalStyle`
   */
 
   b,
-  strong {
+  strong,
+  dt,
+  legend {
+    font-size: .9rem;
     font-weight: bolder;
   }
 
@@ -596,4 +601,42 @@ export const GlobalStyles = createGlobalStyle`
   .hidden {
     display: none;
   }
+
+  h4 {
+    font-size: 1.1rem;
+  }
+  h3 {
+    font-size: 1.3rem;
+  }
+  h2 {
+    font-size: 1.5rem;
+  }
+  h1 {
+    font-size: 1.7rem;
+    text-transform: uppercase;
+  }
+  p, li, dd, label, a {
+    font-size: .9rem;
+  }
+  button {
+    font-size: .8rem;
+    text-transform: uppercase;
+  }
+  a {
+    text-decoration: none;
+  }
+  legend {
+    text-decoration: underline;
+    margin-bottom: 5px;
+  }
+  input[type=text],
+  input[type=textarea],
+  select {
+    width: 100%;
+    max-width: 350px;
+  }
+  label {
+    display: block;
+  }
+
 `;

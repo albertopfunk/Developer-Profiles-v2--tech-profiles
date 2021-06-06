@@ -52,14 +52,17 @@ function RelocateToFilter(props) {
   }
 
   return (
-    <Combobox
-      chosenOptions={interestedLocations}
-      onInputChange={onInputChange}
-      onChosenOption={onLocationChange}
-      onRemoveChosenOption={onLocationChange}
-      inputName={"interested-locations"}
-      displayName={"Interested Locations"}
-    />
+    <fieldset>
+      <legend>Filter by Interested Locations</legend>
+      <Combobox
+        chosenOptions={interestedLocations}
+        onInputChange={onInputChange}
+        onChosenOption={onLocationChange}
+        onRemoveChosenOption={onLocationChange}
+        inputName={"interested-locations"}
+        displayName={"Interested Locations"}
+      />
+    </fieldset>
   );
 }
 

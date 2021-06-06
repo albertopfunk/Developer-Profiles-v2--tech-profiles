@@ -71,25 +71,29 @@ function Filters({
               )}
             </div>
 
-            <fieldset className="locations">
-              <legend>Filter by Locations</legend>
-              <div className="flex-container">
-                {resetFilterToggle ? (
-                  <>
-                    <CurrentLocationFilter updateUsers={updateUsers} />
-                  </>
-                ) : (
+
+            <div className="current-location">
+              {resetFilterToggle ? (
+                <>
                   <CurrentLocationFilter updateUsers={updateUsers} />
-                )}
-                {resetFilterToggle ? (
-                  <>
-                    <RelocateToFilter updateUsers={updateUsers} />
-                  </>
-                ) : (
+                </>
+              ) : (
+                <CurrentLocationFilter updateUsers={updateUsers} />
+              )}
+            </div>
+            
+            <div className="relocate-locations">
+              {resetFilterToggle ? (
+                <>
                   <RelocateToFilter updateUsers={updateUsers} />
-                )}
-              </div>
-            </fieldset>
+                </>
+              ) : (
+                <RelocateToFilter updateUsers={updateUsers} />
+              )}
+            </div>
+
+
+
 
             <div className="controls-container">
               <button
@@ -121,14 +125,14 @@ const FilterNav = styled.nav`
   max-height: ${(props) => `calc(100vh - ${props.headerHeight}px);`};
   overflow-y: auto;
 
-  @media (min-width: 850px) {
+  @media (min-width: 600px) {
     position: fixed;
     top: 0;
     left: 0;
     z-index: 5;
-    padding-top: 100px;
-    width: 300px;
-    height: 100vh;
+    padding-top: 75px;
+    width: 200px;
+    min-height: 100vh;
     box-shadow: 0 1px 3px 0 rgb(0 0 0 / 10%), 0 1px 2px 0 rgb(0 0 0 / 6%);
   }
 
@@ -137,14 +141,16 @@ const FilterNav = styled.nav`
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
+    gap: 10px;
     padding: 5px;
 
-    @media (min-width: 850px) {
+    @media (min-width: 600px) {
       display: block;
     }
 
     .info {
       flex-basis: 100%;
+      text-align: center;
     }
 
     .control-mobile .top {
@@ -153,7 +159,7 @@ const FilterNav = styled.nav`
   }
 
   .control-mobile {
-    @media (min-width: 850px) {
+    @media (min-width: 600px) {
       display: none;
     }
   }
@@ -164,15 +170,27 @@ const FiltersContainer = styled.div`
   border-top: solid 1px rgba(229, 231, 235, 0.5);
   padding: 5px;
 
-  @media (min-width: 850px) {
+  @media (min-width: 600px) {
     display: block;
+    border: none;
+    padding-top: 20px;
   }
 
   .grid-container {
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: repeat(4, auto);
-    grid-gap: 30px;
+    grid-template-rows: repeat(5, auto);
+    grid-gap: 40px;
+
+    @media (min-width: 400px) {
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto auto auto;
+    }
+
+    @media (min-width: 600px) {
+      grid-template-columns: 1fr;
+      grid-template-rows: repeat(5, auto);
+    }
   }
 
   .sorting {
@@ -183,28 +201,71 @@ const FiltersContainer = styled.div`
   .area-of-work {
     grid-column: 1 / 2;
     grid-row: 2 / 3;
+
+    @media (min-width: 400px) {
+      grid-column: 2 / 3;
+      grid-row: 1 / 2;
+    }
+
+    @media (min-width: 600px) {
+      grid-column: 1 / 2;
+      grid-row: 2 / 3;
+    }
   }
 
-  .locations {
+  .current-location {
     grid-column: 1 / 2;
     grid-row: 3 / 4;
 
-    & > .flex-container {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
+    @media (min-width: 400px) {
+      grid-column: 1 / 2;
+      grid-row: 2 / 3;
+    }
+
+    @media (min-width: 600px) {
+      grid-column: 1 / 2;
+      grid-row: 3 / 4;
+    }
+  }
+
+  .relocate-locations {
+    grid-column: 1 / 2;
+    grid-row: 4 / 5;
+
+    @media (min-width: 400px) {
+      grid-column: 2 / 3;
+      grid-row: 2 / 3;
+    }
+
+    @media (min-width: 600px) {
+      grid-column: 1 / 2;
+      grid-row: 4 / 5;
     }
   }
 
   .controls-container {
     grid-column: 1 / 2;
-    grid-row: 4 / 5;
-    width: 100%;
+    grid-row: 5 / 6;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: stretch;
+    align-items: center;
     gap: 10px;
+
+    @media (min-width: 400px) {
+      grid-column: 1 / -1;
+      grid-row: 3 / 4;
+    }
+
+    @media (min-width: 600px) {
+      grid-column: 1 / 2;
+      grid-row: 5 / 6;
+    }
+
+    button {
+      width: 100%;
+      max-width: 350px;
+    }
   }
 `;
 

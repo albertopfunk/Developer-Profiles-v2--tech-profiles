@@ -240,7 +240,7 @@ const HeaderContainer = styled.div`
   width: 100%;
   border-bottom: solid 1px rgba(229, 231, 235, 0.8);
 
-  @media (min-width: 850px) {
+  @media (min-width: 600px) {
     z-index: 0;
     border: none;
   }
@@ -254,9 +254,10 @@ const Main = styled.main`
   padding-bottom: 50px;
   background-color: hsl(240, 10%, 99%);
 
-  @media (min-width: 850px) {
-    padding-top: 100px;
-    padding-left: 320px;
+  @media (min-width: 600px) {
+    padding-top: ${(props) => `calc(30px + ${props.headerHeight}px);`};
+    padding-left: 215px;
+    padding-right: 15px;
   }
 `;
 

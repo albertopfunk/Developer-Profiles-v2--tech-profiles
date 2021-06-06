@@ -280,7 +280,7 @@ const PageHeader = styled.div`
   width: 100%;
   border-bottom: solid 1px rgba(229, 231, 235, 0.8);
 
-  @media (min-width: 850px) {
+  @media (min-width: 600px) {
     z-index: 0;
     border: none;
   }
@@ -289,7 +289,7 @@ const PageHeader = styled.div`
 const PageNav = styled.nav`
   background-color: white;
 
-  @media (min-width: 850px) {
+  @media (min-width: 600px) {
     position: fixed;
     top: 0;
     left: 0;
@@ -304,7 +304,7 @@ const PageNav = styled.nav`
     display: flex;
     overflow-x: auto;
 
-    @media (min-width: 850px) {
+    @media (min-width: 600px) {
       display: block;
     }
 
@@ -321,13 +321,13 @@ const PageNav = styled.nav`
 
 const Main = styled.main`
   min-height: 100vh;
-  padding-top: ${(props) => `calc(60px + 20px + ${props.headerHeight}px);`};
+  padding-top: ${(props) => `calc(40px + 20px + ${props.headerHeight}px);`};
   padding-right: 5px;
   padding-left: 5px;
   padding-bottom: 50px;
   background-color: hsl(240, 10%, 99%);
 
-  @media (min-width: 850px) {
+  @media (min-width: 600px) {
     padding-top: 100px;
     padding-left: 320px;
   }

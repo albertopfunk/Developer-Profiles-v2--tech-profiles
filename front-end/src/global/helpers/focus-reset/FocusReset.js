@@ -148,24 +148,18 @@ function FocusReset({ location, children }) {
 }
 
 const FocusContainer = styled.div`
-  ul.skip-links {
-    margin: 0;
-    list-style: none;
+  .skip-link {
+    position: absolute;
+    top: 2%;
+    left: -999px;
+    z-index: 100;
+    border: solid 0.5px;
+    background-color: white;
+    padding: 5px;
+    text-decoration: none;
 
-    .skip-link {
-      position: absolute;
-      top: 2%;
-      left: -999px;
-      z-index: 100;
-      border: solid 0.5px;
-      color: black;
-      background-color: white;
-      padding: 0.7em;
-      text-decoration: none;
-
-      &:focus {
-        left: 2%;
-      }
+    &:focus {
+      left: 2%;
     }
   }
 `;

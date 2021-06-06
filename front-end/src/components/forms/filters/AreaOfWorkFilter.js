@@ -26,7 +26,8 @@ function AreaOfWorkFilter(props) {
     <AreaOfWorkFieldset>
       <legend>Filter by Area of Work</legend>
       <div className="flex-container">
-        <label htmlFor="web-development">
+
+        <div className="flex-item">
           <input
             ref={developmentRef}
             type="checkbox"
@@ -34,10 +35,12 @@ function AreaOfWorkFilter(props) {
             id="web-development"
             onChange={toggleAreaOfWorkCheckbox}
           />
-          Development
-        </label>
-        <br />
-        <label htmlFor="Design">
+          <label htmlFor="web-development">
+            Development
+          </label>
+        </div>
+
+        <div className="flex-item">
           <input
             ref={designRef}
             type="checkbox"
@@ -45,10 +48,12 @@ function AreaOfWorkFilter(props) {
             id="Design"
             onChange={toggleAreaOfWorkCheckbox}
           />
-          Design
-        </label>
-        <br />
-        <label htmlFor="iOS">
+          <label htmlFor="Design">
+            Design
+          </label>
+        </div>
+
+        <div className="flex-item">
           <input
             ref={iosRef}
             type="checkbox"
@@ -56,10 +61,12 @@ function AreaOfWorkFilter(props) {
             id="iOS"
             onChange={toggleAreaOfWorkCheckbox}
           />
-          iOS
-        </label>
-        <br />
-        <label htmlFor="Android">
+          <label htmlFor="iOS">
+            iOS
+          </label>
+        </div>
+
+        <div className="flex-item">
           <input
             ref={androidRef}
             type="checkbox"
@@ -67,18 +74,28 @@ function AreaOfWorkFilter(props) {
             id="Android"
             onChange={toggleAreaOfWorkCheckbox}
           />
-          Android
-        </label>
+          <label htmlFor="Android">
+            Android
+          </label>
+        </div>
+
       </div>
     </AreaOfWorkFieldset>
   );
 }
 
 const AreaOfWorkFieldset = styled.fieldset`
-  & > .flex-container {
+  .flex-container {
     display: flex;
     flex-wrap: wrap;
-    gap: 5px;
+    gap: 10px;
+
+    .flex-item {
+      display: flex;
+      gap: 2px;
+      align-items: center;
+      justify-content: flex-start;
+    }
   }
 `;
 

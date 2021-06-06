@@ -1,4 +1,5 @@
 import React from "react";
+import styled from "styled-components";
 import { httpClient } from "../../../global/helpers/http-requests";
 
 import Combobox from "../combobox";
@@ -88,7 +89,26 @@ class CurrentLocationFilter extends React.Component {
 
   render() {
     return (
-      <div>
+      <fieldset>
+        <legend>Filter by Current Location with Distance</legend>
+        <FlexContainer>
+        <div className="miles">
+          <label htmlFor="choose-miles">
+            {this.state.milesWithinInput} miles
+          </label>
+          <input
+            type="range"
+            min="5"
+            max="2000"
+            step="5"
+            id="choose-miles"
+            name="milesWithinInput"
+            value={this.state.milesWithinInput}
+            onChange={this.onInputChange}
+            onMouseUp={this.onDistanceChange}
+            onKeyUp={this.chooseDistanceOnKeyUp}
+            />
+        </div>
         <Combobox
           chosenOptions={this.state.location}
           onInputChange={this.onLocationInputChange}
@@ -97,28 +117,17 @@ class CurrentLocationFilter extends React.Component {
           inputName={"current-location"}
           displayName={"Current Location"}
           single
-        />
-        <div className="miles">
-          <label htmlFor="choose-miles">
-            Distance
-            <input
-              type="range"
-              min="5"
-              max="2000"
-              step="5"
-              id="choose-miles"
-              name="milesWithinInput"
-              value={this.state.milesWithinInput}
-              onChange={this.onInputChange}
-              onMouseUp={this.onDistanceChange}
-              onKeyUp={this.chooseDistanceOnKeyUp}
-            />
-            {this.state.milesWithinInput}
-          </label>
-        </div>
-      </div>
+          />
+        </FlexContainer>
+      </fieldset>
     );
   }
 }
+
+const FlexContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+`;
 
 export default CurrentLocationFilter;

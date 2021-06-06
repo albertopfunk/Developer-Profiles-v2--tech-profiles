@@ -49,6 +49,26 @@ function MainHeader(props) {
     </picture>
   );
 
+  const siteNav = (
+    <ul aria-label="site navigation menu" className="menu-group">
+      <li>
+        <Link to="/" className="nav-item">
+          Profiles
+        </Link>
+      </li>
+      <li>
+        <Link to="/profile-dashboard" className="nav-item">
+          Dashboard
+        </Link>
+      </li>
+      <li>
+        <button className="nav-item" type="button" onClick={signOut}>
+          Sign Out
+        </button>
+      </li>
+    </ul>
+  );
+
   let menuButton;
   if (isMenuOpen) {
     menuButton = (
@@ -92,26 +112,13 @@ function MainHeader(props) {
                   {siteLogo}
                 </Link>
               </div>
-              <div className="button-container">{menuButton}</div>
+              <div className="button-container mobile">{menuButton}</div>
+              <div className="menu-container desktop">
+              {siteNav}
+              </div>
             </div>
-            <div className={`menu-container ${isMenuOpen ? "" : "hidden"}`}>
-              <ul aria-label="site navigation menu" className="menu-group">
-                <li>
-                  <Link to="/" className="nav-item">
-                    Profiles
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/profile-dashboard" className="nav-item">
-                    Dashboard
-                  </Link>
-                </li>
-                <li>
-                  <button className="nav-item" type="button" onClick={signOut}>
-                    Sign Out
-                  </button>
-                </li>
-              </ul>
+            <div className={`menu-container mobile ${isMenuOpen ? "" : "hidden"}`}>
+              {siteNav}
             </div>
           </>
         ) : (
@@ -141,7 +148,7 @@ const Header = styled.header`
   border-bottom: solid 1px rgba(229, 231, 235, 0.5);
   background-color: white;
 
-  @media (min-width: 850px) {
+  @media (min-width: 600px) {
     position: fixed;
     top: 0;
     left: 0;
@@ -157,8 +164,17 @@ const Nav = styled.nav`
     padding: 5px;
     display: flex;
 
+    @media (min-width: 450px) {
+      justify-content: space-between;
+      align-items: center;
+    }
+
     .logo-container {
       flex-basis: 75%;
+
+      @media (min-width: 450px) {
+        flex-basis: 40%;
+      }
 
       .site-logo {
         picture {
@@ -188,10 +204,6 @@ const Nav = styled.nav`
         max-width: 60px;
         overflow: hidden;
 
-        @media (min-width: 850px) {
-          display: none;
-        }
-
         .icon {
           transition: all 0.3s linear;
           height: 100%;
@@ -200,6 +212,12 @@ const Nav = styled.nav`
         .icon.rotate {
           transform: rotate(90deg);
         }
+      }
+    }
+
+    .button-container.mobile {
+      @media (min-width: 450px) {
+        display: none;
       }
     }
   }
@@ -219,9 +237,21 @@ const Nav = styled.nav`
 
   .menu-container.hidden {
     display: none;
+  }
 
-    @media (min-width: 850px) {
-      display: flex;
+  .menu-container.desktop {
+    display: none;
+
+    @media (min-width: 450px) {
+      display: block;
+      flex-basis: 60%;
+      border: none;
+    }
+  }
+
+  .menu-container.mobile {
+    @media (min-width: 450px) {
+      display: none;
     }
   }
 `;
