@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Helmet } from "react-helmet";
 
@@ -26,6 +26,7 @@ import UserCards from "../../components/user-cards/UserCards";
 
 function ProfilesPage() {
   const [pageStatus, setPageStatus] = useState(PROFILES_STATUS.initialLoading);
+  const [headerHeight, setHeaderHeight] = useState(0);
   const [cardsStatus, setCardsStatus] = useState(PROFILES_STATUS.idle);
   const [cardFocusIndex, setCardFocusIndex] = useState(0);
   const [users, setUsers] = useState({
@@ -49,9 +50,6 @@ function ProfilesPage() {
     chosenRelocateToObj: {},
     sortChoice: "acending(oldest-newest)",
   });
-
-  const headerRef = useRef();
-  const headerContainerRef = useRef();
 
   useEffect(() => {
     initUsers();
@@ -178,20 +176,21 @@ function ProfilesPage() {
 
   return (
     <>
-      <HeaderContainer ref={headerContainerRef}>
-        <MainHeader ref={headerRef} />
+      <HeaderContainer>
+        <MainHeader setHeaderHeight={setHeaderHeight} />
         <Filters
           updateUsers={getFilteredUsers}
           currentUsers={users.users.length}
           totalUsers={users.len}
           resetFilters={resetFilters}
           resetFilterToggle={resetToggle}
-          headerHeight={headerRef?.current?.offsetHeight ?? 0}
+          headerHeight={headerHeight}
         />
       </HeaderContainer>
 
       <Main
         aria-labelledby="main-heading"
+        headerHeight={headerHeight}
       >
         <Helmet>
           <title>Profiles • Tech Profiles</title>
@@ -249,7 +248,10 @@ const HeaderContainer = styled.div`
 
 const Main = styled.main`
   min-height: 100vh;
-  padding: 150px 5px 50px;
+  padding-top: ${(props) => `calc(60px + 30px + ${props.headerHeight}px);`};
+  padding-right: 5px;
+  padding-left: 5px;
+  padding-bottom: 50px;
   background-color: hsl(240, 10%, 99%);
 
   @media (min-width: 850px) {

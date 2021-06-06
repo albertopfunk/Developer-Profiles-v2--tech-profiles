@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { ReactComponent as BurgerMenu } from "../../global/assets/header-nav.svg";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
@@ -6,11 +6,16 @@ import styled from "styled-components";
 import { AuthContext } from "../../global/context/auth/AuthContext";
 
 let closeOnBlurWait;
-// eslint-disable-next-line
-function MainHeader(_, headerRef) {
+function MainHeader(props) {
   const { isValidated, signIn, signOut } = useContext(AuthContext);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [announceMenuToggle, setAnnounceMenuToggle] = useState(false);
+
+  const headerRef = useRef();
+
+  useEffect(() => {
+    props.setHeaderHeight(headerRef?.current?.offsetHeight ?? 60)
+  }, [isMenuOpen])
 
   useEffect(() => {
     return () => clearTimeout(closeOnBlurWait);
@@ -221,4 +226,4 @@ const Nav = styled.nav`
   }
 `;
 
-export default React.forwardRef(MainHeader);
+export default MainHeader;
