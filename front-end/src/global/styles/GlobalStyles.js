@@ -58,16 +58,6 @@ export const GlobalStyles = createGlobalStyle`
   body {
     margin: 0;
   }
-
-  /**
-  * Correct the font size and margin on h1 elements within section and
-  * article contexts in Chrome, Edge, Firefox, and Safari.
-  */
-
-  h1 {
-    font-size: 2em;
-    margin: 0.67em 0;
-  }
   
   /**
   * Remove all margin/padding on headers
@@ -90,36 +80,17 @@ export const GlobalStyles = createGlobalStyle`
   * ========================================================================== */
 
   /**
-  * Remove the margin on nested lists in Chrome, Edge, IE, and Safari.
-  */
-
-  dl dl,
-  dl ol,
-  dl ul,
-  ol dl,
-  ul dl {
-    margin: 0;
-  }
-
-  /**
-  * Remove the margin on nested lists in Edge 18- and IE.
-  */
-
-  ol ol,
-  ol ul,
-  ul ol,
-  ul ul {
-    margin: 0;
-  }
-
-
-  /**
   * Remove all margin/padding on lists
+  * as well as default list styles
   */
 
   ul, ol, li, dl, dd, dt {
     margin: 0;
     padding: 0;
+  }
+
+  ul, ol {
+    list-style: none;
   }
 
   /**
@@ -140,17 +111,6 @@ export const GlobalStyles = createGlobalStyle`
 
   main {
     display: block;
-  }
-
-  /**
-  * Remove the list style on navigation lists in all browsers (opinionated).
-  */
-
-  nav ol,
-  nav ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
   }
 
   /**
