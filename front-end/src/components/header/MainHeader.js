@@ -35,11 +35,11 @@ function MainHeader(props) {
     <picture>
       <source
         srcSet="https://res.cloudinary.com/dy5hgr3ht/image/upload/c_scale,h_45/v1594347155/tech-pros-v1-main/tech-profiles-logo.webp"
-        media="(max-width: 850px)"
+        media="(max-width: 750px)"
       />
       <source
         srcSet="https://res.cloudinary.com/dy5hgr3ht/image/upload/c_scale,h_45/v1594347155/tech-pros-v1-main/tech-profiles-logo.png"
-        media="(max-width: 850px)"
+        media="(max-width: 750px)"
       />
       <source srcSet="https://res.cloudinary.com/dy5hgr3ht/image/upload/c_scale,h_65/v1594347155/tech-pros-v1-main/tech-profiles-logo.webp" />
       <img
@@ -167,6 +167,10 @@ const Nav = styled.nav`
     @media (min-width: 450px) {
       justify-content: space-between;
       align-items: center;
+    }
+
+    @media (min-width: 750px) {
+      height: 75px;
     }
 
     .logo-container {

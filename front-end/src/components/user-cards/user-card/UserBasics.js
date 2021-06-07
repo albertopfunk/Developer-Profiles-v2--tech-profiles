@@ -41,7 +41,7 @@ const BasicsSection = styled.section`
   gap: 10px;
   text-align: center;
 
-  @media (min-width: 1050px) {
+  @media (min-width: 950px) {
     grid-column: 2 / 3;
     grid-row: 1 / 2;
     justify-self: start;

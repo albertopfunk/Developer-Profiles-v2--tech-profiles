@@ -259,6 +259,11 @@ const Main = styled.main`
     padding-left: 215px;
     padding-right: 15px;
   }
+  
+  @media (min-width: 800px) {
+    padding-left: 290px;
+    padding-right: 15px;
+  }
 `;
 
 export default ProfilesPage;

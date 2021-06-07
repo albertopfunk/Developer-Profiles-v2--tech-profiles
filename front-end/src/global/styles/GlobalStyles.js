@@ -633,7 +633,7 @@ export const GlobalStyles = createGlobalStyle`
   input[type=textarea],
   select {
     width: 100%;
-    max-width: 350px;
+    max-width: 300px;
   }
   label {
     display: block;

@@ -64,7 +64,7 @@ const IconsSection = styled.section`
   grid-row: 4 / 5;
   place-self: center;
 
-  @media (min-width: 1050px) {
+  @media (min-width: 950px) {
     grid-column: 3 / 4;
     grid-row: 1 / 4;
   }
@@ -75,7 +75,7 @@ const IconsSection = styled.section`
     justify-content: center;
     gap: 15px;
 
-    @media (min-width: 1050px) {
+    @media (min-width: 950px) {
       flex-direction: column;
       gap: 35px;
     }
@@ -85,7 +85,7 @@ const IconsSection = styled.section`
     width: 30px;
     height: auto;
 
-    @media (min-width: 1050px) {
+    @media (min-width: 950px) {
       width: 40px;
     }
   }

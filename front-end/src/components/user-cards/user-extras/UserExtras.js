@@ -200,7 +200,7 @@ const ExtrasContainer = styled.div`
         padding: 5px;
 
         @media (min-width: 350px) {
-          flex-basis: 350px;
+          flex-basis: 300px;
         }
 
         .image-link {

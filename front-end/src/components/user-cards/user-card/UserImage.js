@@ -80,7 +80,7 @@ const ImageSection = styled.section`
   grid-row: 2 / 3;
   place-self: center;
 
-  @media (min-width: 1050px) {
+  @media (min-width: 950px) {
     /* width: 250px; */
     grid-column: 1 / 2;
     grid-row: 1 / 2;

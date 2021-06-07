@@ -136,6 +136,14 @@ const FilterNav = styled.nav`
     box-shadow: 0 1px 3px 0 rgb(0 0 0 / 10%), 0 1px 2px 0 rgb(0 0 0 / 6%);
   }
 
+  @media (min-width: 750px) {
+    padding-top: 95px;
+  }
+
+  @media (min-width: 800px) {
+    width: 275px;
+  }
+
   .filters-bar {
     display: flex;
     flex-wrap: wrap;

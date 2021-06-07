@@ -26,7 +26,7 @@ const SummarySection = styled.div`
   place-self: center;
   text-align: center;
 
-  @media (min-width: 1050px) {
+  @media (min-width: 950px) {
     grid-column: 1 / 3;
     grid-row: 2 / 3;
   }
