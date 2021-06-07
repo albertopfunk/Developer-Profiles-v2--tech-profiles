@@ -825,6 +825,8 @@ function ProfileHome() {
 
 const ChecklistSection = styled.section`
   width: 100%;
+  max-width: 475px;
+  margin: 0 auto;
   background-color: ghostwhite;
   box-shadow: 0 4px 6px 0 hsla(0, 0%, 0%, 0.2);
 
@@ -946,7 +948,6 @@ const ChecklistSection = styled.section`
     }
 
     .info {
-      font-size: 1rem;
       display: flex;
       gap: 5px;
       align-items: baseline;

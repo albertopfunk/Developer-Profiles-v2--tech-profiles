@@ -5,6 +5,15 @@ import styled from "styled-components";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 
+import { ReactComponent as Home } from "../../global/assets/dashboard-home.svg";
+import { ReactComponent as IdCard } from "../../global/assets/dashboard-id-card.svg";
+import { ReactComponent as User } from "../../global/assets/dashboard-user.svg";
+import { ReactComponent as Location } from "../../global/assets/dashboard-location.svg";
+import { ReactComponent as Projects } from "../../global/assets/dashboard-projects.svg";
+import { ReactComponent as Education } from "../../global/assets/dashboard-education.svg";
+import { ReactComponent as Experience } from "../../global/assets/dashboard-experience.svg";
+import { ReactComponent as CreditCard } from "../../global/assets/dashboard-credit-card.svg";
+
 import MainHeader from "../../components/header/MainHeader";
 import UserCard from "../../components/user-cards/user-card/UserCard";
 import ProfileHome from "./ProfileHome";
@@ -134,43 +143,85 @@ function ProfileDashboard() {
       <PageHeader>
         <MainHeader setHeaderHeight={setHeaderHeight} />
         <PageNav aria-label="page">
-          <ul>
-            <li>
-              <Link id="page-navigation" to={`${url}`}>
-                Home
+          <ul className="nav-group">
+            <li className="nav-item">
+              <Link className="link" id="page-navigation" to={`${url}`}>
+                <span className="link-text-sr-only">Home</span>
+                <span className="link-text">Home</span>
+                <span className="link-icon">
+                  <Home className="icon" />
+                </span>
               </Link>
             </li>
 
-            <li>
-              <Link to={`${url}/new`}>New user</Link>
+            <li className="nav-item">
+              <Link className="link" to={`${url}/personal-info`}>
+                <span className="link-text-sr-only">Personal Info</span>
+                <span className="link-text">Personal Info</span>
+                <span className="link-icon">
+                  <IdCard className="icon" />
+                </span>
+              </Link>
             </li>
 
-            <li>
-              <Link to={`${url}/personal-info`}>Personal Info</Link>
+            <li className="nav-item">
+              <Link className="link" to={`${url}/about-you`}>
+                <span className="link-text-sr-only">About You</span>
+                <span className="link-text">About You</span>
+                <span className="link-icon">
+                  <User className="icon" />
+                </span>
+              </Link>
             </li>
 
-            <li>
-              <Link to={`${url}/about-you`}>About You</Link>
+            <li className="nav-item">
+              <Link className="link" to={`${url}/where-to-find-you`}>
+                <span className="link-text-sr-only">Where to Find You</span>
+                <span className="link-text">Where to Find You</span>
+                <span className="link-icon">
+                  <Location className="icon" />
+                </span>
+              </Link>
             </li>
 
-            <li>
-              <Link to={`${url}/where-to-find-you`}>Where to Find You</Link>
+            <li className="nav-item">
+              <Link className="link" to={`${url}/projects`}>
+                <span className="link-text-sr-only">Projects</span>
+                <span className="link-text">Projects</span>
+                <span className="link-icon">
+                  <Projects className="icon" />
+                </span>
+              </Link>
             </li>
 
-            <li>
-              <Link to={`${url}/projects`}>Projects</Link>
+            <li className="nav-item">
+              <Link className="link" to={`${url}/education`}>
+                <span className="link-text-sr-only">Education</span>
+                <span className="link-text">Education</span>
+                <span className="link-icon">
+                  <Education className="icon" />
+                </span>
+              </Link>
             </li>
 
-            <li>
-              <Link to={`${url}/education`}>Education</Link>
+            <li className="nav-item">
+              <Link className="link" to={`${url}/experience`}>
+                <span className="link-text-sr-only">Experience</span>
+                <span className="link-text">Experience</span>
+                <span className="link-icon">
+                  <Experience className="icon" />
+                </span>
+              </Link>
             </li>
 
-            <li>
-              <Link to={`${url}/experience`}>Experience</Link>
-            </li>
-
-            <li>
-              <Link to={`${url}/billing`}>Billing</Link>
+            <li className="nav-item">
+              <Link className="link" to={`${url}/billing`}>
+                <span className="link-text-sr-only">Billing</span>
+                <span className="link-text">Billing</span>
+                <span className="link-icon">
+                  <CreditCard className="icon" />
+                </span>
+              </Link>
             </li>
           </ul>
         </PageNav>
@@ -280,7 +331,7 @@ const PageHeader = styled.div`
   width: 100%;
   border-bottom: solid 1px rgba(229, 231, 235, 0.8);
 
-  @media (min-width: 600px) {
+  @media (min-width: 500px) {
     z-index: 0;
     border: none;
   }
@@ -289,31 +340,103 @@ const PageHeader = styled.div`
 const PageNav = styled.nav`
   background-color: white;
 
-  @media (min-width: 600px) {
+  @media (min-width: 500px) {
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 5;
-    padding-top: 100px;
-    width: 300px;
+    z-index: -1;
+    padding-top: 75px;
+    width: 50px;
     height: 100vh;
     box-shadow: 0 1px 3px 0 rgb(0 0 0 / 10%), 0 1px 2px 0 rgb(0 0 0 / 6%);
   }
 
-  ul {
+  @media (min-width: 600px) {
+    z-index: 5;
+  }
+
+  @media (min-width: 750px) {
+    width: 200px;
+    padding-top: 95px;
+  }
+
+  .nav-group {
     display: flex;
     overflow-x: auto;
 
-    @media (min-width: 600px) {
-      display: block;
+    @media (min-width: 500px) {
+      overflow: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
     }
 
-    li {
+    @media (min-width: 750px) {
+      align-items: flex-start;
+    }
+
+    .nav-item {
       padding: 10px;
       white-space: nowrap;
+    }
+  }
 
-      a {
-        text-decoration: none;
+  .link {
+    display: flex;
+    gap: 5px;
+    align-items: flex-start;
+    justify-content: center;
+
+    @media (min-width: 750px) {
+      gap: 7px;
+    }
+
+    .link-text {
+      display: inline-block;
+      font-size: 1rem;
+
+      @media (min-width: 500px) {
+        display: none;
+      }
+
+      @media (min-width: 750px) {
+        display: inline-block;
+      }
+    }
+
+    .link-text-sr-only {
+      display: none;
+
+      @media (min-width: 500px) {
+        position: absolute;
+        clip: rect(0, 0, 0, 0);
+        height: 1px;
+        width: 1px;
+        margin: -1px;
+        padding: 0;
+        border: 0;
+        overflow: hidden;
+      }
+
+      @media (min-width: 750px) {
+        display: none;
+      }
+    }
+
+    .link-icon {
+      display: none;
+
+      @media (min-width: 500px) {
+        display: inline-block;
+      }
+
+      .icon {
+        height: 1.2rem;
+
+        @media (min-width: 750px) {
+          height: 1.1rem;
+        }
       }
     }
   }
@@ -327,9 +450,16 @@ const Main = styled.main`
   padding-bottom: 50px;
   background-color: hsl(240, 10%, 99%);
 
-  @media (min-width: 600px) {
-    padding-top: 100px;
-    padding-left: 320px;
+  @media (min-width: 500px) {
+    padding-top: 75px;
+    padding-left: 60px;
+    padding-right: 10px;
+  }
+
+  @media (min-width: 750px) {
+    padding-top: 95px;
+    padding-left: 210px;
+    padding-right: 10px;
   }
 `;
 
