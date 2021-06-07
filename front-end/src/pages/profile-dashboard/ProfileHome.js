@@ -123,8 +123,6 @@ function ProfileHome() {
     billing: false,
   });
 
-  console.log(projects, education, experience, billing);
-
   return (
     <>
       <Helmet>
@@ -133,14 +131,19 @@ function ProfileHome() {
       <h1 id="main-heading">Home</h1>
 
       <ChecklistSection aria-labelledby="profile-checklist">
-        <h2 id="profile-checklist">Profile Checklist</h2>
-        <div className="progress-bar-container">
-          <div className="progress-bar">
-            <span className="bar" style={{ width: `${totalProgress}%` }}></span>
+        <div className="top-container">
+          <h2 id="profile-checklist">Profile Checklist</h2>
+
+          <div className="progress-bar-container">
+            <div className="progress-bar">
+              <span className="bar" style={{ width: `${totalProgress}%` }}></span>
+            </div>
+            <div className="progress-info">
+              <p>{`${totalProgress}%`}</p>
+            </div>
           </div>
-          <div className="progress-info">
-            <p>{`${totalProgress}%`}</p>
-          </div>
+
+
         </div>
 
         <div className="main-container">
@@ -159,7 +162,7 @@ function ProfileHome() {
               >
                 <div className="title-container">
                   <span className="title">Personal Info</span>
-                  <div className="progress-bar-container">
+                  <div className="progress-bar-container main">
                     <div className="progress-bar">
                       <span
                         className="bar"
@@ -297,7 +300,7 @@ function ProfileHome() {
               >
                 <div className="title-container">
                   <span className="title">About You</span>
-                  <div className="progress-bar-container">
+                  <div className="progress-bar-container main">
                     <div className="progress-bar">
                       <span
                         className="bar"
@@ -427,7 +430,7 @@ function ProfileHome() {
               >
                 <div className="title-container">
                   <span className="title">Where to Find You</span>
-                  <div className="progress-bar-container">
+                  <div className="progress-bar-container main">
                     <div className="progress-bar">
                       <span
                         className="bar"
@@ -581,7 +584,7 @@ function ProfileHome() {
               >
                 <div className="title-container">
                   <span className="title">Projects</span>
-                  <div className="progress-bar-container">
+                  <div className="progress-bar-container main">
                     <div className="progress-bar">
                       <span
                         className="bar"
@@ -645,7 +648,7 @@ function ProfileHome() {
               >
                 <div className="title-container">
                   <span className="title">Education</span>
-                  <div className="progress-bar-container">
+                  <div className="progress-bar-container main">
                     <div className="progress-bar">
                       <span
                         className="bar"
@@ -709,7 +712,7 @@ function ProfileHome() {
               >
                 <div className="title-container">
                   <span className="title">Experience</span>
-                  <div className="progress-bar-container">
+                  <div className="progress-bar-container main">
                     <div className="progress-bar">
                       <span
                         className="bar"
@@ -775,7 +778,7 @@ function ProfileHome() {
               >
                 <div className="title-container">
                   <span className="title">Billing</span>
-                  <div className="progress-bar-container">
+                  <div className="progress-bar-container main">
                     <div className="progress-bar">
                       <span
                         className="bar"
@@ -826,20 +829,16 @@ function ProfileHome() {
 const ChecklistSection = styled.section`
   width: 100%;
   max-width: 475px;
-  margin: 0 auto;
-  background-color: ghostwhite;
   box-shadow: 0 4px 6px 0 hsla(0, 0%, 0%, 0.2);
 
   .progress-bar-container {
-    width: 90%;
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: center;
     gap: 5px;
 
     .progress-bar {
-      flex-basis: 80%;
-      width: 100%;
+      width: 75%;
       height: 10px;
       padding: 3px;
       background-color: #555;
@@ -860,15 +859,31 @@ const ChecklistSection = styled.section`
     }
 
     .progress-info {
-      flex-basis: 20%;
       text-align: start;
       font-size: 0.6rem;
       line-height: 1;
     }
   }
 
+  .top-container {
+    padding: 0 5px 10px 5px;
+    text-align: center;
+  }
+
+  .progress-bar-container.main {
+    width: 90%;
+
+    .progress-bar {
+      flex-basis: 80%;
+      width: 100%;
+    }
+
+    .progress-info {
+      flex-basis: 20%;
+    }
+  }
+
   .main-container {
-    padding-top: 5px;
     section {
       border-top: solid;
       &:last-child {
@@ -880,7 +895,7 @@ const ChecklistSection = styled.section`
   .section-button {
     border: none;
     background-color: white;
-    padding: 5px;
+    padding: 10px 5px;
     width: 100%;
     height: auto;
     display: flex;
@@ -938,7 +953,7 @@ const ChecklistSection = styled.section`
       flex-direction: column;
       justify-content: flex-start;
       align-items: flex-start;
-      gap: 10px;
+      gap: 20px;
     }
   }
 

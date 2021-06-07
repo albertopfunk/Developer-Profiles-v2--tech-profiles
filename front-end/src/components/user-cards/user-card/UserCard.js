@@ -241,7 +241,7 @@ const UserCard = React.forwardRef((props, articleRef) => {
 });
 
 const UserCardContainer = styled.article`
-  max-width: 775px;
+  max-width: 700px;
   padding: 15px;
   background-color: white;
   border-radius: 10px;

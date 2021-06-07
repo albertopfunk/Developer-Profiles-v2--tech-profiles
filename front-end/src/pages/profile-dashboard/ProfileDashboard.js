@@ -394,7 +394,6 @@ const PageNav = styled.nav`
 
     .link-text {
       display: inline-block;
-      font-size: 1rem;
 
       @media (min-width: 500px) {
         display: none;

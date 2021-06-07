@@ -615,7 +615,7 @@ export const GlobalStyles = createGlobalStyle`
     font-size: 1.7rem;
     text-transform: uppercase;
   }
-  p, li, dd, label, a {
+  p, li, dd, label {
     font-size: .9rem;
   }
   button {
@@ -623,6 +623,7 @@ export const GlobalStyles = createGlobalStyle`
     text-transform: uppercase;
   }
   a {
+    font-size: 1rem;
     text-decoration: none;
   }
   legend {

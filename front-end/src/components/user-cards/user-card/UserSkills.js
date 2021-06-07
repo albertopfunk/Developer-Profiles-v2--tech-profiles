@@ -82,7 +82,7 @@ const SkillsContainer = styled.div`
 
   @media (min-width: 350px) {
     flex-wrap: nowrap;
-    gap: 15px;
+    gap: 25px;
   }
 
   @media (min-width: 950px) {
