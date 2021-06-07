@@ -75,6 +75,10 @@ const IconsSection = styled.section`
     justify-content: center;
     gap: 15px;
 
+    @media (min-width: 500px) {
+      gap: 20px;
+    }
+
     @media (min-width: 950px) {
       flex-direction: column;
       gap: 35px;
@@ -84,6 +88,10 @@ const IconsSection = styled.section`
   .icon {
     width: 30px;
     height: auto;
+
+    @media (min-width: 500px) {
+      width: 35px;
+    }
 
     @media (min-width: 950px) {
       width: 40px;

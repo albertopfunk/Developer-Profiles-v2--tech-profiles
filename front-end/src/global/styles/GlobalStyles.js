@@ -605,39 +605,42 @@ export const GlobalStyles = createGlobalStyle`
   h4 {
     font-size: 1.1rem;
   }
+
   h3 {
     font-size: 1.3rem;
   }
+
   h2 {
     font-size: 1.5rem;
   }
+
   h1 {
     font-size: 1.7rem;
     text-transform: uppercase;
   }
+
   p, li, dd, label {
     font-size: .9rem;
   }
+
   button {
     font-size: .8rem;
     text-transform: uppercase;
   }
+
   a {
     font-size: 1rem;
     text-decoration: none;
   }
-  legend {
-    text-decoration: underline;
-    margin-bottom: 5px;
-  }
+
   input[type=text],
   input[type=textarea],
   select {
     width: 100%;
     max-width: 300px;
   }
+
   label {
     display: block;
   }
-
 `;
