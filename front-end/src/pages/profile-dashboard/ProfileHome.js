@@ -958,10 +958,6 @@ const ChecklistSection = styled.section`
   }
 
   .info-container {
-    .info-group {
-      list-style: none;
-    }
-
     .info {
       display: flex;
       gap: 5px;

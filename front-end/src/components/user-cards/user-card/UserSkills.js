@@ -91,7 +91,6 @@ const SkillsContainer = styled.div`
   }
 
   .skills {
-    list-style: none;
     padding: 0;
     margin: 0;
 

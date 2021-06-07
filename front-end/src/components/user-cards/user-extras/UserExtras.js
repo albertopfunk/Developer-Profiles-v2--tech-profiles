@@ -167,7 +167,6 @@ const ExtrasContainer = styled.div`
     gap: 5px;
 
     ul.list {
-      list-style: none;
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
