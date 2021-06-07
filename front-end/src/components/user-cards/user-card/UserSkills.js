@@ -91,9 +91,6 @@ const SkillsContainer = styled.div`
   }
 
   .skills {
-    padding: 0;
-    margin: 0;
-
     .skill {
       border-radius: 10px;
       box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,

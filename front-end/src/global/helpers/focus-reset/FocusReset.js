@@ -156,7 +156,6 @@ const FocusContainer = styled.div`
     border: solid 0.5px;
     background-color: white;
     padding: 5px;
-    text-decoration: none;
 
     &:focus {
       left: 2%;
