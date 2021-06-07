@@ -14,8 +14,8 @@ function MainHeader(props) {
   const headerRef = useRef();
 
   useEffect(() => {
-    props.setHeaderHeight(headerRef?.current?.offsetHeight ?? 60)
-  }, [isMenuOpen])
+    props.setHeaderHeight(headerRef?.current?.offsetHeight ?? 60);
+  }, [isMenuOpen]);
 
   useEffect(() => {
     return () => clearTimeout(closeOnBlurWait);
@@ -113,11 +113,11 @@ function MainHeader(props) {
                 </Link>
               </div>
               <div className="button-container mobile">{menuButton}</div>
-              <div className="menu-container desktop">
-              {siteNav}
-              </div>
+              <div className="menu-container desktop">{siteNav}</div>
             </div>
-            <div className={`menu-container mobile ${isMenuOpen ? "" : "hidden"}`}>
+            <div
+              className={`menu-container mobile ${isMenuOpen ? "" : "hidden"}`}
+            >
               {siteNav}
             </div>
           </>

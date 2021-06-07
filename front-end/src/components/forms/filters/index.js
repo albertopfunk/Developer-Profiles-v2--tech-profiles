@@ -71,7 +71,6 @@ function Filters({
               )}
             </div>
 
-
             <div className="current-location">
               {resetFilterToggle ? (
                 <>
@@ -81,7 +80,7 @@ function Filters({
                 <CurrentLocationFilter updateUsers={updateUsers} />
               )}
             </div>
-            
+
             <div className="relocate-locations">
               {resetFilterToggle ? (
                 <>
@@ -91,9 +90,6 @@ function Filters({
                 <RelocateToFilter updateUsers={updateUsers} />
               )}
             </div>
-
-
-
 
             <div className="controls-container">
               <button

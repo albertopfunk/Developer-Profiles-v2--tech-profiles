@@ -26,7 +26,6 @@ function AreaOfWorkFilter(props) {
     <AreaOfWorkFieldset>
       <legend>Filter by Area of Work</legend>
       <div className="flex-container">
-
         <div className="flex-item">
           <input
             ref={developmentRef}
@@ -35,9 +34,7 @@ function AreaOfWorkFilter(props) {
             id="web-development"
             onChange={toggleAreaOfWorkCheckbox}
           />
-          <label htmlFor="web-development">
-            Development
-          </label>
+          <label htmlFor="web-development">Development</label>
         </div>
 
         <div className="flex-item">
@@ -48,9 +45,7 @@ function AreaOfWorkFilter(props) {
             id="Design"
             onChange={toggleAreaOfWorkCheckbox}
           />
-          <label htmlFor="Design">
-            Design
-          </label>
+          <label htmlFor="Design">Design</label>
         </div>
 
         <div className="flex-item">
@@ -61,9 +56,7 @@ function AreaOfWorkFilter(props) {
             id="iOS"
             onChange={toggleAreaOfWorkCheckbox}
           />
-          <label htmlFor="iOS">
-            iOS
-          </label>
+          <label htmlFor="iOS">iOS</label>
         </div>
 
         <div className="flex-item">
@@ -74,11 +67,8 @@ function AreaOfWorkFilter(props) {
             id="Android"
             onChange={toggleAreaOfWorkCheckbox}
           />
-          <label htmlFor="Android">
-            Android
-          </label>
+          <label htmlFor="Android">Android</label>
         </div>
-
       </div>
     </AreaOfWorkFieldset>
   );

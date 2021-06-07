@@ -92,31 +92,31 @@ class CurrentLocationFilter extends React.Component {
       <fieldset>
         <legend>Filter by Current Location with Distance</legend>
         <FlexContainer>
-        <div className="miles">
-          <label htmlFor="choose-miles">
-            {this.state.milesWithinInput} miles
-          </label>
-          <input
-            type="range"
-            min="5"
-            max="2000"
-            step="5"
-            id="choose-miles"
-            name="milesWithinInput"
-            value={this.state.milesWithinInput}
-            onChange={this.onInputChange}
-            onMouseUp={this.onDistanceChange}
-            onKeyUp={this.chooseDistanceOnKeyUp}
+          <div className="miles">
+            <label htmlFor="choose-miles">
+              {this.state.milesWithinInput} miles
+            </label>
+            <input
+              type="range"
+              min="5"
+              max="2000"
+              step="5"
+              id="choose-miles"
+              name="milesWithinInput"
+              value={this.state.milesWithinInput}
+              onChange={this.onInputChange}
+              onMouseUp={this.onDistanceChange}
+              onKeyUp={this.chooseDistanceOnKeyUp}
             />
-        </div>
-        <Combobox
-          chosenOptions={this.state.location}
-          onInputChange={this.onLocationInputChange}
-          onChosenOption={this.onChosenLocation}
-          onRemoveChosenOption={this.resetLocationFilter}
-          inputName={"current-location"}
-          displayName={"Current Location"}
-          single
+          </div>
+          <Combobox
+            chosenOptions={this.state.location}
+            onInputChange={this.onLocationInputChange}
+            onChosenOption={this.onChosenLocation}
+            onRemoveChosenOption={this.resetLocationFilter}
+            inputName={"current-location"}
+            displayName={"Current Location"}
+            single
           />
         </FlexContainer>
       </fieldset>

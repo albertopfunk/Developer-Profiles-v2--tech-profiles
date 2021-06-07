@@ -185,14 +185,13 @@ const Feed = styled.div`
 
   .feed-controls {
     margin-top: 30px;
-  
+
     .control {
       width: fit-content;
       margin: 0 auto;
       text-align: center;
     }
   }
-
 `;
 
 const MemoUserCards = React.memo(UserCards);

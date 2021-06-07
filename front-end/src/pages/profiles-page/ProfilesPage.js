@@ -188,10 +188,7 @@ function ProfilesPage() {
         />
       </HeaderContainer>
 
-      <Main
-        aria-labelledby="main-heading"
-        headerHeight={headerHeight}
-      >
+      <Main aria-labelledby="main-heading" headerHeight={headerHeight}>
         <Helmet>
           <title>Profiles • Tech Profiles</title>
         </Helmet>
@@ -259,7 +256,7 @@ const Main = styled.main`
     padding-left: 215px;
     padding-right: 15px;
   }
-  
+
   @media (min-width: 800px) {
     padding-left: 290px;
     padding-right: 15px;

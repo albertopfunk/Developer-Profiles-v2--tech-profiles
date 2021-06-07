@@ -786,7 +786,7 @@ function ProfileHome() {
                       <p>{`${billing.progress}%`}</p>
                     </div>
                   </div>
-                  </div>
+                </div>
                 <div className="icon-container">
                   {isExpanded.billing ? (
                     <Collapse className="icon" />
