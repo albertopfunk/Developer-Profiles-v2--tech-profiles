@@ -1,6 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
 import styled from "styled-components";
-import { Helmet } from "react-helmet";
 
 import Combobox from "../../../components/forms/combobox";
 
@@ -468,42 +467,30 @@ function WhereToFindYou() {
 
   if (formStatus === FORM_STATUS.idle) {
     return (
-      <>
-        <Helmet>
-          <title>Profile Dashboard Where to Find You • Tech Profiles</title>
-        </Helmet>
-        <h1 id="main-heading">Where to Find You</h1>
-        <section aria-labelledby="current-information-heading">
-          <h2 id="current-information-heading">Current Information</h2>
-          <button
-            ref={editInfoBtnRef}
-            id="edit-info-btn"
-            data-main-content="true"
-            onClick={setFormInputs}
-            onKeyDown={(e) => formFocusAction(e, FORM_STATUS.active)}
-          >
-            Edit Information
-          </button>
-          <ul aria-label="current information">
-            <li>Github: {user.github || "None Set"}</li>
-            <li>Twitter: {user.twitter || "None Set"}</li>
-            <li>Linkedin: {user.linkedin || "None Set"}</li>
-            <li>Portfolio: {user.portfolio || "None Set"}</li>
-            <li>
-              Current Location: {user.current_location_name || "None Set"}
-            </li>
-          </ul>
-        </section>
-      </>
+      <section aria-labelledby="current-information-heading">
+        <h2 id="current-information-heading">Current Information</h2>
+        <button
+          ref={editInfoBtnRef}
+          id="edit-info-btn"
+          data-main-content="true"
+          onClick={setFormInputs}
+          onKeyDown={(e) => formFocusAction(e, FORM_STATUS.active)}
+        >
+          Edit Information
+        </button>
+        <ul aria-label="current information">
+          <li>Github: {user.github || "None Set"}</li>
+          <li>Twitter: {user.twitter || "None Set"}</li>
+          <li>Linkedin: {user.linkedin || "None Set"}</li>
+          <li>Portfolio: {user.portfolio || "None Set"}</li>
+          <li>Current Location: {user.current_location_name || "None Set"}</li>
+        </ul>
+      </section>
     );
   }
 
   return (
     <>
-      <Helmet>
-        <title>Dashboard Where to Find You • Tech Profiles</title>
-      </Helmet>
-      <h1 id="main-heading">Where to Find You</h1>
       {formStatus === FORM_STATUS.success ? (
         <Announcer
           announcement="information updated"

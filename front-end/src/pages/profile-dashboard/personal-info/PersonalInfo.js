@@ -1,5 +1,4 @@
 import React, { useState, useContext, useEffect } from "react";
-import { Helmet } from "react-helmet";
 import styled from "styled-components";
 
 import ImageBox from "../../../components/forms/images/imageBox";
@@ -322,52 +321,42 @@ function PersonalInfo() {
 
   if (formStatus === FORM_STATUS.idle) {
     return (
-      <>
-        <Helmet>
-          <title>Profile Dashboard Personal Info • Tech Profiles</title>
-        </Helmet>
-        <h1 id="main-heading">Personal Info</h1>
-        <section aria-labelledby="current-information-heading">
-          <h2 id="current-information-heading">Current Information</h2>
-          <button
-            ref={editInfoBtnRef}
-            id="edit-info-btn"
-            data-main-content="true"
-            onClick={setFormInputs}
-            onKeyDown={(e) => formFocusAction(e, FORM_STATUS.active)}
-          >
-            Edit Information
-          </button>
-          <ul aria-label="current information">
-            <li>First Name: {user.first_name || "None Set"}</li>
-            <li>Last Name: {user.last_name || "None Set"}</li>
-            <li>
-              {user.profile_image || user.avatar_image ? (
-                <>
-                  <p>Profile Pic:</p>
-                  <img
-                    src={user.profile_image || user.avatar_image}
-                    alt="saved pic"
-                  />
-                </>
-              ) : (
-                "Profile Pic: None Set"
-              )}
-            </li>
-            <li>Area of Work: {user.area_of_work || "None Set"}</li>
-            <li>Title: {user.desired_title || "None Set"}</li>
-          </ul>
-        </section>
-      </>
+      <section aria-labelledby="current-information-heading">
+        <h2 id="current-information-heading">Current Information</h2>
+        <button
+          ref={editInfoBtnRef}
+          id="edit-info-btn"
+          data-main-content="true"
+          onClick={setFormInputs}
+          onKeyDown={(e) => formFocusAction(e, FORM_STATUS.active)}
+        >
+          Edit Information
+        </button>
+        <ul aria-label="current information">
+          <li>First Name: {user.first_name || "None Set"}</li>
+          <li>Last Name: {user.last_name || "None Set"}</li>
+          <li>
+            {user.profile_image || user.avatar_image ? (
+              <>
+                <p>Profile Pic:</p>
+                <img
+                  src={user.profile_image || user.avatar_image}
+                  alt="saved pic"
+                />
+              </>
+            ) : (
+              "Profile Pic: None Set"
+            )}
+          </li>
+          <li>Area of Work: {user.area_of_work || "None Set"}</li>
+          <li>Title: {user.desired_title || "None Set"}</li>
+        </ul>
+      </section>
     );
   }
 
   return (
     <>
-      <Helmet>
-        <title>Dashboard Personal Info • Tech Profiles</title>
-      </Helmet>
-      <h1 id="main-heading">Personal Info</h1>
       {formStatus === FORM_STATUS.success ? (
         <Announcer
           announcement="Successfully submitted information"

@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
-import { Helmet } from "react-helmet";
 
 import Combobox from "../../../components/forms/combobox";
 
@@ -480,72 +479,62 @@ function AboutYou() {
 
   if (formStatus === FORM_STATUS.idle) {
     return (
-      <>
-        <Helmet>
-          <title>Profile Dashboard About You • Tech Profiles</title>
-        </Helmet>
-        <h1 id="main-heading">About You</h1>
-        <section aria-labelledby="current-information-heading">
-          <h2 id="current-information-heading">Current Information</h2>
-          <button
-            ref={editInfoBtnRef}
-            id="edit-info-btn"
-            data-main-content="true"
-            onClick={setFormInputs}
-            onKeyDown={(e) => formFocusAction(e, FORM_STATUS.active)}
-          >
-            Edit Information
-          </button>
-          <ul aria-label="current information">
-            <li>Summary: {user.summary || "None Set"}</li>
-            <li>
-              Interested Locations:
-              {user.locations.length > 0 ? (
-                <ul aria-label="interested locations">
-                  {user.locations.map((location) => (
-                    <li key={location.id}>{location.name}</li>
-                  ))}
-                </ul>
-              ) : (
-                "None Set"
-              )}
-            </li>
-            <li>
-              Top Skills:
-              {user.topSkills.length > 0 ? (
-                <ul aria-label="top skills">
-                  {user.topSkills.map((skill) => (
-                    <li key={skill.id}>{skill.name}</li>
-                  ))}
-                </ul>
-              ) : (
-                "None Set"
-              )}
-            </li>
-            <li>
-              Additional Skills:
-              {user.additionalSkills.length > 0 ? (
-                <ul aria-label="additional skills">
-                  {user.additionalSkills.map((skill) => (
-                    <li key={skill.id}>{skill.name}</li>
-                  ))}
-                </ul>
-              ) : (
-                "None Set"
-              )}
-            </li>
-          </ul>
-        </section>
-      </>
+      <section aria-labelledby="current-information-heading">
+        <h2 id="current-information-heading">Current Information</h2>
+        <button
+          ref={editInfoBtnRef}
+          id="edit-info-btn"
+          data-main-content="true"
+          onClick={setFormInputs}
+          onKeyDown={(e) => formFocusAction(e, FORM_STATUS.active)}
+        >
+          Edit Information
+        </button>
+        <ul aria-label="current information">
+          <li>Summary: {user.summary || "None Set"}</li>
+          <li>
+            Interested Locations:
+            {user.locations.length > 0 ? (
+              <ul aria-label="interested locations">
+                {user.locations.map((location) => (
+                  <li key={location.id}>{location.name}</li>
+                ))}
+              </ul>
+            ) : (
+              "None Set"
+            )}
+          </li>
+          <li>
+            Top Skills:
+            {user.topSkills.length > 0 ? (
+              <ul aria-label="top skills">
+                {user.topSkills.map((skill) => (
+                  <li key={skill.id}>{skill.name}</li>
+                ))}
+              </ul>
+            ) : (
+              "None Set"
+            )}
+          </li>
+          <li>
+            Additional Skills:
+            {user.additionalSkills.length > 0 ? (
+              <ul aria-label="additional skills">
+                {user.additionalSkills.map((skill) => (
+                  <li key={skill.id}>{skill.name}</li>
+                ))}
+              </ul>
+            ) : (
+              "None Set"
+            )}
+          </li>
+        </ul>
+      </section>
     );
   }
 
   return (
     <>
-      <Helmet>
-        <title>Dashboard About You • Tech Profiles</title>
-      </Helmet>
-      <h1 id="main-heading">About You</h1>
       {formStatus === FORM_STATUS.success ? (
         <Announcer
           announcement="information updated"

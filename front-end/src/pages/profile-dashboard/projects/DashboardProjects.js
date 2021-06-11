@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { Helmet } from "react-helmet";
 
 import ProjectForm from "../../../components/forms/user-extras/ProjectForm";
 
@@ -401,49 +400,42 @@ function DashboardProjects() {
 
   if (formStatus === FORM_STATUS.idle) {
     return (
-      <>
-        <Helmet>
-          <title>Profile Dashboard Projects • Tech Profiles</title>
-        </Helmet>
-        <h1 id="main-heading">Projects</h1>
-
-        <section aria-labelledby="current-information-heading">
-          <h2 id="current-information-heading">Current Information</h2>
-          <button
-            ref={editInfoBtnRef}
-            id="edit-info-btn"
-            data-main-content="true"
-            onClick={setFormInputs}
-            onKeyDown={(e) => formFocusAction(e, FORM_STATUS.active)}
-          >
-            Edit Information
-          </button>
-          {user.projects.length > 0 ? (
-            user.projects.map((proj) => (
-              <div key={proj.id}>
-                <h3>{`Current "${proj.project_title}" Project`}</h3>
-                <ul aria-label={`${proj.project_title} Project`}>
-                  <li>Project Name: {proj.project_title}</li>
-                  <li>
-                    {proj.project_img ? (
-                      <>
-                        <p>Project Pic:</p>
-                        <img src={proj.project_img} alt="project pic" />
-                      </>
-                    ) : (
-                      "Project Pic: None Set"
-                    )}
-                  </li>
-                  <li>Project Link: {proj.link}</li>
-                  <li>Description: {proj.project_description}</li>
-                </ul>
-              </div>
-            ))
-          ) : (
-            <p>No Projects</p>
-          )}
-        </section>
-      </>
+      <section aria-labelledby="current-information-heading">
+        <h2 id="current-information-heading">Current Information</h2>
+        <button
+          ref={editInfoBtnRef}
+          id="edit-info-btn"
+          data-main-content="true"
+          onClick={setFormInputs}
+          onKeyDown={(e) => formFocusAction(e, FORM_STATUS.active)}
+        >
+          Edit Information
+        </button>
+        {user.projects.length > 0 ? (
+          user.projects.map((proj) => (
+            <div key={proj.id}>
+              <h3>{`Current "${proj.project_title}" Project`}</h3>
+              <ul aria-label={`${proj.project_title} Project`}>
+                <li>Project Name: {proj.project_title}</li>
+                <li>
+                  {proj.project_img ? (
+                    <>
+                      <p>Project Pic:</p>
+                      <img src={proj.project_img} alt="project pic" />
+                    </>
+                  ) : (
+                    "Project Pic: None Set"
+                  )}
+                </li>
+                <li>Project Link: {proj.link}</li>
+                <li>Description: {proj.project_description}</li>
+              </ul>
+            </div>
+          ))
+        ) : (
+          <p>No Projects</p>
+        )}
+      </section>
     );
   }
 
@@ -453,140 +445,133 @@ function DashboardProjects() {
   }
 
   return (
-    <>
-      <Helmet>
-        <title>Profile Dashboard Projects • Tech Profiles</title>
-      </Helmet>
-      <h1 id="main-heading">Projects</h1>
+    <section aria-labelledby="edit-information-heading">
+      <h2 id="edit-information-heading">Edit Information</h2>
 
-      <section aria-labelledby="edit-information-heading">
-        <h2 id="edit-information-heading">Edit Information</h2>
-
-        {formStatus === FORM_STATUS.error ? (
-          <div ref={errorSummaryRef} tabIndex="-1">
-            <h3 id="error-heading">Errors in Submission</h3>
-            <>
-              <strong>
-                Please address the following errors and re-submit the form:
-              </strong>
-              {hasSubmitError ? (
-                <div>
-                  <h4>Submit Error</h4>
-                  <p>Error submitting form, please try again</p>
-                </div>
-              ) : null}
-              {formErrors.length > 0 ? (
-                formErrors.map((proj) => (
-                  <div key={proj.id}>
-                    <h4>{`Current "${
-                      proj.projectNameInput || "New Project"
-                    }" Errors`}</h4>
-
-                    <ul
-                      aria-label={`current ${
-                        proj.projectNameInput || "new project"
-                      } errors`}
-                    >
-                      {proj.projectNameInput.trim() === "" ||
-                      proj.projectStatus === FORM_STATUS.error ? (
-                        <li>
-                          <a href={`#project-${proj.id}`}>project Name Error</a>
-                        </li>
-                      ) : null}
-
-                      {proj.linkInput.trim() === "" ||
-                      proj.linkStatus === FORM_STATUS.error ? (
-                        <li>
-                          <a href={`#link-${proj.id}`}>Link Error</a>
-                        </li>
-                      ) : null}
-
-                      {proj.descriptionInput.trim() === "" ||
-                      proj.descriptionStatus === FORM_STATUS.error ? (
-                        <li>
-                          <a href={`#description-${proj.id}`}>
-                            Description Error
-                          </a>
-                        </li>
-                      ) : null}
-                    </ul>
-                  </div>
-                ))
-              ) : (
-                <>
-                  <p>No Errors, ready to submit</p>
-                  <Announcer
-                    announcement="No Errors, ready to submit"
-                    ariaId="no-errors-announcer"
-                    ariaLive="polite"
-                  />
-                </>
-              )}
-            </>
-          </div>
-        ) : null}
-
-        <div>
-          <button
-            ref={addNewBtnRef}
-            id="add-new-btn"
-            data-main-content="true"
-            form="projects-form"
-            type="button"
-            aria-label="add new project"
-            onClick={(e) => addProject(e)}
-          >
-            + New Project
-          </button>
-
-          <form id="projects-form" onSubmit={(e) => submitEdit(e)}>
-            {projects.map((proj, index) => {
-              return (
+      {formStatus === FORM_STATUS.error ? (
+        <div ref={errorSummaryRef} tabIndex="-1">
+          <h3 id="error-heading">Errors in Submission</h3>
+          <>
+            <strong>
+              Please address the following errors and re-submit the form:
+            </strong>
+            {hasSubmitError ? (
+              <div>
+                <h4>Submit Error</h4>
+                <p>Error submitting form, please try again</p>
+              </div>
+            ) : null}
+            {formErrors.length > 0 ? (
+              formErrors.map((proj) => (
                 <div key={proj.id}>
-                  <ProjectForm
-                    ref={removeBtnRefs.current[index]}
-                    projIndex={index}
-                    userId={user.id}
-                    projectId={proj.id}
-                    userProjectName={proj.project_title || ""}
-                    userProjectImage={proj.project_img || ""}
-                    shouldRemoveImage={proj.shouldRemoveUserImage}
-                    userProjectLink={proj.link || ""}
-                    userProjectDescription={proj.project_description || ""}
-                    updateProject={updateProject}
-                    removeProject={removeProject}
-                  />
-                </div>
-              );
-            })}
+                  <h4>{`Current "${
+                    proj.projectNameInput || "New Project"
+                  }" Errors`}</h4>
 
-            <button
-              disabled={
-                formStatus === FORM_STATUS.loading ||
-                formStatus === FORM_STATUS.success
-              }
-              type="submit"
-            >
-              {formStatus === FORM_STATUS.active ? "Submit" : null}
-              {formStatus === FORM_STATUS.loading ? "loading..." : null}
-              {formStatus === FORM_STATUS.success ? "Success!" : null}
-              {formStatus === FORM_STATUS.error ? "Re-Submit" : null}
-            </button>
-            <button
-              disabled={
-                formStatus === FORM_STATUS.loading ||
-                formStatus === FORM_STATUS.success
-              }
-              type="reset"
-              onClick={resetForm}
-              onKeyDown={(e) => formFocusAction(e, FORM_STATUS.idle)}
-            >
-              Cancel
-            </button>
-          </form>
+                  <ul
+                    aria-label={`current ${
+                      proj.projectNameInput || "new project"
+                    } errors`}
+                  >
+                    {proj.projectNameInput.trim() === "" ||
+                    proj.projectStatus === FORM_STATUS.error ? (
+                      <li>
+                        <a href={`#project-${proj.id}`}>project Name Error</a>
+                      </li>
+                    ) : null}
+
+                    {proj.linkInput.trim() === "" ||
+                    proj.linkStatus === FORM_STATUS.error ? (
+                      <li>
+                        <a href={`#link-${proj.id}`}>Link Error</a>
+                      </li>
+                    ) : null}
+
+                    {proj.descriptionInput.trim() === "" ||
+                    proj.descriptionStatus === FORM_STATUS.error ? (
+                      <li>
+                        <a href={`#description-${proj.id}`}>
+                          Description Error
+                        </a>
+                      </li>
+                    ) : null}
+                  </ul>
+                </div>
+              ))
+            ) : (
+              <>
+                <p>No Errors, ready to submit</p>
+                <Announcer
+                  announcement="No Errors, ready to submit"
+                  ariaId="no-errors-announcer"
+                  ariaLive="polite"
+                />
+              </>
+            )}
+          </>
         </div>
-      </section>
-    </>
+      ) : null}
+
+      <div>
+        <button
+          ref={addNewBtnRef}
+          id="add-new-btn"
+          data-main-content="true"
+          form="projects-form"
+          type="button"
+          aria-label="add new project"
+          onClick={(e) => addProject(e)}
+        >
+          + New Project
+        </button>
+
+        <form id="projects-form" onSubmit={(e) => submitEdit(e)}>
+          {projects.map((proj, index) => {
+            return (
+              <div key={proj.id}>
+                <ProjectForm
+                  ref={removeBtnRefs.current[index]}
+                  projIndex={index}
+                  userId={user.id}
+                  projectId={proj.id}
+                  userProjectName={proj.project_title || ""}
+                  userProjectImage={proj.project_img || ""}
+                  shouldRemoveImage={proj.shouldRemoveUserImage}
+                  userProjectLink={proj.link || ""}
+                  userProjectDescription={proj.project_description || ""}
+                  updateProject={updateProject}
+                  removeProject={removeProject}
+                />
+              </div>
+            );
+          })}
+
+          <button
+            disabled={
+              formStatus === FORM_STATUS.loading ||
+              formStatus === FORM_STATUS.success
+            }
+            type="submit"
+          >
+            {formStatus === FORM_STATUS.active ? "Submit" : null}
+            {formStatus === FORM_STATUS.loading ? "loading..." : null}
+            {formStatus === FORM_STATUS.success ? "Success!" : null}
+            {formStatus === FORM_STATUS.error ? "Re-Submit" : null}
+          </button>
+          <button
+            disabled={
+              formStatus === FORM_STATUS.loading ||
+              formStatus === FORM_STATUS.success
+            }
+            type="reset"
+            onClick={resetForm}
+            onKeyDown={(e) => formFocusAction(e, FORM_STATUS.idle)}
+          >
+            Cancel
+          </button>
+        </form>
+      </div>
+    </section>
   );
 }
 

@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
-import { Route, useRouteMatch, Link, Switch } from "react-router-dom";
+import { Helmet } from "react-helmet";
+import {
+  Route,
+  useRouteMatch,
+  Link,
+  Switch,
+  useLocation,
+} from "react-router-dom";
 import styled from "styled-components";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
@@ -47,6 +54,7 @@ import Announcer from "../../global/helpers/announcer";
 
 function ProfileDashboard() {
   let { path, url } = useRouteMatch();
+  let location = useLocation();
   const [headerHeight, setHeaderHeight] = useState(0);
   const [user, setUser] = useState(null);
   const [loadingUser, setLoadingUser] = useState(true);
@@ -133,8 +141,44 @@ function ProfileDashboard() {
     return getFullUser(user.email);
   }
 
+  function getMainHeading() {
+    const trimmedPathname = location.pathname
+      .split(/[/-]/)
+      .splice(3)
+      .join(" ")
+      .trim();
+
+    switch (trimmedPathname) {
+      case "":
+        return "Home";
+      case "new":
+        return "Quickstart";
+      case "personal info":
+        return "Personal Info";
+      case "about you":
+        return "About You";
+      case "where to find you":
+        return "Where to Find You";
+      case "projects":
+        return "Projects";
+      case "education":
+        return "Education";
+      case "experience":
+        return "Experience";
+      case "billing":
+        return "Billing";
+      default:
+        return "";
+    }
+  }
+
+  const mainHeading = getMainHeading();
+
   return (
     <>
+      <Helmet>
+        <title>Profile Dashboard {mainHeading} • Tech Profiles</title>
+      </Helmet>
       <Announcer
         announcement="information loaded"
         ariaId="info-loaded-announcement"
@@ -233,95 +277,97 @@ function ProfileDashboard() {
             <h1>Loading User</h1>
           </>
         ) : (
-          // flex container
-          // stick with column only until screen is very large, use breakpoint instead of wrap
           <>
-            {/* flex item */}
-            {/* all of these flex items will be mains with h1s
-            you can flex and gap h1s */}
-            <Elements stripe={stripePromise}>
-              <ProfileContext.Provider
-                value={{
-                  user,
-                  editProfile,
-                  addUserExtras,
-                  userImage,
-                  setUserImage,
-                }}
-              >
-                <Switch>
-                  <Route exact path={`${path}`}>
-                    <ProfileHome />
-                  </Route>
+            <h1 id="main-heading">{mainHeading}</h1>
+            <div className="flex-container">
+              <Elements stripe={stripePromise}>
+                <ProfileContext.Provider
+                  value={{
+                    user,
+                    editProfile,
+                    addUserExtras,
+                    userImage,
+                    setUserImage,
+                  }}
+                >
+                  <Switch>
+                    <Route exact path={`${path}`}>
+                      <ProfileHome />
+                    </Route>
 
-                  <Route path={`${path}/new`}>
-                    <NewUser />
-                  </Route>
+                    <Route path={`${path}/new`}>
+                      <NewUser />
+                    </Route>
 
-                  <Route path={`${path}/personal-info`}>
-                    <PersonalInfo />
-                  </Route>
+                    <Route path={`${path}/personal-info`}>
+                      <PersonalInfo />
+                    </Route>
 
-                  <Route path={`${path}/about-you`}>
-                    <AboutYou />
-                  </Route>
+                    <Route path={`${path}/about-you`}>
+                      <AboutYou />
+                    </Route>
 
-                  <Route path={`${path}/Where-to-find-you`}>
-                    <WhereToFindYou />
-                  </Route>
+                    <Route path={`${path}/Where-to-find-you`}>
+                      <WhereToFindYou />
+                    </Route>
 
-                  <Route path={`${path}/projects`}>
-                    <DashboardProjects />
-                  </Route>
+                    <Route path={`${path}/projects`}>
+                      <DashboardProjects />
+                    </Route>
 
-                  <Route path={`${path}/education`}>
-                    <DashboardEducation />
-                  </Route>
+                    <Route path={`${path}/education`}>
+                      <DashboardEducation />
+                    </Route>
 
-                  <Route path={`${path}/experience`}>
-                    <DashboardExperience />
-                  </Route>
+                    <Route path={`${path}/experience`}>
+                      <DashboardExperience />
+                    </Route>
 
-                  <Route path={`${path}/billing`}>
-                    <DashboardBilling />
-                  </Route>
-                </Switch>
-              </ProfileContext.Provider>
-            </Elements>
+                    <Route path={`${path}/billing`}>
+                      <DashboardBilling />
+                    </Route>
+                  </Switch>
+                </ProfileContext.Provider>
+              </Elements>
 
-            {/* ~30px gap + flex item */}
-            <section aria-labelledby="profile-card-heading">
-              <h2 id="profile-card-heading">Profile Card Preview</h2>
-              <UserCard
-                previewImage={userImage.previewImage || userImage.previewAvatar}
-                userExtras={{
-                  locations: user.locations,
-                  topSkills: user.topSkills,
-                  additionalSkills: user.additionalSkills,
-                  education: user.education,
-                  experience: user.experience,
-                  projects: user.projects,
-                }}
-                index={0}
-                totalUsers={1}
-                userId={user.id}
-                areaOfWork={user.area_of_work}
-                email={user.public_email}
-                userImage={!userImage.removeUserImage && user.profile_image}
-                avatarImage={!userImage.removeSavedAvatar && user.avatar_image}
-                firstName={user.first_name}
-                lastName={user.last_name}
-                currentLocation={user.current_location_name}
-                summary={user.summary}
-                title={user.desired_title}
-                topSkills={user.top_skills_prev}
-                additionalSkills={user.additional_skills_prev}
-                github={user.github}
-                twitter={user.twitter}
-                linkedin={user.linkedin}
-                portfolio={user.portfolio}
-              />
-            </section>
+              {/* ~30px gap + flex item */}
+              <section aria-labelledby="profile-card-heading">
+                <h2 id="profile-card-heading">Profile Card Preview</h2>
+                <UserCard
+                  previewImage={
+                    userImage.previewImage || userImage.previewAvatar
+                  }
+                  userExtras={{
+                    locations: user.locations,
+                    topSkills: user.topSkills,
+                    additionalSkills: user.additionalSkills,
+                    education: user.education,
+                    experience: user.experience,
+                    projects: user.projects,
+                  }}
+                  index={0}
+                  totalUsers={1}
+                  userId={user.id}
+                  areaOfWork={user.area_of_work}
+                  email={user.public_email}
+                  userImage={!userImage.removeUserImage && user.profile_image}
+                  avatarImage={
+                    !userImage.removeSavedAvatar && user.avatar_image
+                  }
+                  firstName={user.first_name}
+                  lastName={user.last_name}
+                  currentLocation={user.current_location_name}
+                  summary={user.summary}
+                  title={user.desired_title}
+                  topSkills={user.top_skills_prev}
+                  additionalSkills={user.additional_skills_prev}
+                  github={user.github}
+                  twitter={user.twitter}
+                  linkedin={user.linkedin}
+                  portfolio={user.portfolio}
+                />
+              </section>
+            </div>
           </>
         )}
       </Main>
@@ -457,8 +503,13 @@ const Main = styled.main`
     justify-content: flex-start;
     gap: 30px;
 
-    @media (min-width: 1200px) {
+    @media (min-width: 1350px) {
       flex-direction: row;
+      justify-content: space-evenly;
+    }
+
+    & > section {
+      flex-basis: 100%;
     }
   }
 

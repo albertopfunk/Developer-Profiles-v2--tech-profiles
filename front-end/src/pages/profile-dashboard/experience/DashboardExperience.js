@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { Helmet } from "react-helmet";
 
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
 import useCurrentYear from "../../../global/helpers/hooks/useCurrentYear";
@@ -382,40 +381,33 @@ function DashboardExperience() {
 
   if (formStatus === FORM_STATUS.idle) {
     return (
-      <>
-        <Helmet>
-          <title>Profile Dashboard Experience • Tech Profiles</title>
-        </Helmet>
-        <h1 id="main-heading">Experience</h1>
-
-        <section aria-labelledby="current-information-heading">
-          <h2 id="current-information-heading">Current Information</h2>
-          <button
-            ref={editInfoBtnRef}
-            id="edit-info-btn"
-            data-main-content="true"
-            onClick={setFormInputs}
-            onKeyDown={(e) => formFocusAction(e, FORM_STATUS.active)}
-          >
-            Edit Information
-          </button>
-          {user.experience.length > 0 ? (
-            user.experience.map((exp) => (
-              <div key={exp.id}>
-                <h3>{`Current "${exp.company_name}" Experience`}</h3>
-                <ul aria-label={`${exp.company_name} Experience`}>
-                  <li>Company: {exp.company_name}</li>
-                  <li>Job Title: {exp.job_title}</li>
-                  <li>Dates: {exp.job_dates}</li>
-                  <li>Description: {exp.job_description}</li>
-                </ul>
-              </div>
-            ))
-          ) : (
-            <p>No Experience</p>
-          )}
-        </section>
-      </>
+      <section aria-labelledby="current-information-heading">
+        <h2 id="current-information-heading">Current Information</h2>
+        <button
+          ref={editInfoBtnRef}
+          id="edit-info-btn"
+          data-main-content="true"
+          onClick={setFormInputs}
+          onKeyDown={(e) => formFocusAction(e, FORM_STATUS.active)}
+        >
+          Edit Information
+        </button>
+        {user.experience.length > 0 ? (
+          user.experience.map((exp) => (
+            <div key={exp.id}>
+              <h3>{`Current "${exp.company_name}" Experience`}</h3>
+              <ul aria-label={`${exp.company_name} Experience`}>
+                <li>Company: {exp.company_name}</li>
+                <li>Job Title: {exp.job_title}</li>
+                <li>Dates: {exp.job_dates}</li>
+                <li>Description: {exp.job_description}</li>
+              </ul>
+            </div>
+          ))
+        ) : (
+          <p>No Experience</p>
+        )}
+      </section>
     );
   }
 
@@ -425,169 +417,160 @@ function DashboardExperience() {
   }
 
   return (
-    <>
-      <Helmet>
-        <title>Profile Dashboard Experience • Tech Profiles</title>
-      </Helmet>
-      <h1 id="main-heading">Experience</h1>
+    <section aria-labelledby="edit-information-heading">
+      <h2 id="edit-information-heading">Edit Information</h2>
 
-      <section aria-labelledby="edit-information-heading">
-        <h2 id="edit-information-heading">Edit Information</h2>
+      {formStatus === FORM_STATUS.error ? (
+        <div ref={errorSummaryRef} tabIndex="-1">
+          <h3 id="error-heading">Errors in Submission</h3>
+          <>
+            <strong>
+              Please address the following errors and re-submit the form:
+            </strong>
 
-        {formStatus === FORM_STATUS.error ? (
-          <div ref={errorSummaryRef} tabIndex="-1">
-            <h3 id="error-heading">Errors in Submission</h3>
-            <>
-              <strong>
-                Please address the following errors and re-submit the form:
-              </strong>
+            {hasSubmitError ? (
+              <div>
+                <h4>Submit Error</h4>
+                <p>Error submitting form, please try again</p>
+              </div>
+            ) : null}
 
-              {hasSubmitError ? (
-                <div>
-                  <h4>Submit Error</h4>
-                  <p>Error submitting form, please try again</p>
-                </div>
-              ) : null}
-
-              {formErrors.length > 0 ? (
-                formErrors.map((exp) => (
-                  <div key={exp.id}>
-                    <h4>{`Current "${
-                      exp.companyNameInput || "New Experience"
-                    }" Errors`}</h4>
-
-                    <ul
-                      aria-label={`current ${
-                        exp.companyNameInput || "new experience"
-                      } errors`}
-                    >
-                      {exp.companyNameInput.trim() === "" ||
-                      exp.companyStatus === FORM_STATUS.error ? (
-                        <li>
-                          <a href={`#company-${exp.id}`}>Company Name Error</a>
-                        </li>
-                      ) : null}
-
-                      {exp.titleInput.trim() === "" ||
-                      exp.titleStatus === FORM_STATUS.error ? (
-                        <li>
-                          <a href={`#title-${exp.id}`}>Title Error</a>
-                        </li>
-                      ) : null}
-
-                      {exp.fromMonth === "" ? (
-                        <li>
-                          <a href={`#from-month-${exp.id}`}>From Month Error</a>
-                        </li>
-                      ) : null}
-
-                      {exp.fromYear === "" ? (
-                        <li>
-                          <a href={`#from-year-${exp.id}`}>From Year Error</a>
-                        </li>
-                      ) : null}
-
-                      {exp.toMonth === "" ? (
-                        <li>
-                          <a href={`#to-month-${exp.id}`}>To Month Error</a>
-                        </li>
-                      ) : null}
-
-                      {exp.toYear === "" ? (
-                        <li>
-                          <a href={`#to-year-${exp.id}`}>To Year Error</a>
-                        </li>
-                      ) : null}
-
-                      {exp.descriptionInput.trim() === "" ||
-                      exp.descriptionStatus === FORM_STATUS.error ? (
-                        <li>
-                          <a href={`#description-${exp.id}`}>
-                            Description Error
-                          </a>
-                        </li>
-                      ) : null}
-                    </ul>
-                  </div>
-                ))
-              ) : (
-                <>
-                  <p>No Errors, ready to submit</p>
-                  <Announcer
-                    announcement="No Errors, ready to submit"
-                    ariaId="no-errors-announcer"
-                    ariaLive="polite"
-                  />
-                </>
-              )}
-            </>
-          </div>
-        ) : null}
-
-        <div>
-          <button
-            ref={addNewBtnRef}
-            id="add-new-btn"
-            data-main-content="true"
-            form="experience-form"
-            type="button"
-            aria-label="add new experience"
-            onClick={(e) => addExperience(e)}
-          >
-            + New Experience
-          </button>
-
-          <form id="experience-form" onSubmit={(e) => submitEdit(e)}>
-            {experience.map((exp, index) => {
-              return (
+            {formErrors.length > 0 ? (
+              formErrors.map((exp) => (
                 <div key={exp.id}>
-                  <ExperienceForm
-                    ref={removeBtnRefs.current[index]}
-                    expIndex={index}
-                    userId={exp.id}
-                    currentYear={currentYear}
-                    userCompanyName={exp.company_name || ""}
-                    userJobTitle={exp.job_title || ""}
-                    userFromMonth={exp.fromMonth}
-                    userFromYear={exp.fromYear}
-                    userToMonth={exp.toMonth}
-                    userToYear={exp.toYear}
-                    userToPresent={exp.toPresent}
-                    userDescription={exp.job_description || ""}
-                    updateExperience={updateExperience}
-                    removeExperience={removeExperience}
-                  />
-                </div>
-              );
-            })}
+                  <h4>{`Current "${
+                    exp.companyNameInput || "New Experience"
+                  }" Errors`}</h4>
 
-            <button
-              disabled={
-                formStatus === FORM_STATUS.loading ||
-                formStatus === FORM_STATUS.success
-              }
-              type="submit"
-            >
-              {formStatus === FORM_STATUS.active ? "Submit" : null}
-              {formStatus === FORM_STATUS.loading ? "loading..." : null}
-              {formStatus === FORM_STATUS.success ? "Success!" : null}
-              {formStatus === FORM_STATUS.error ? "Re-Submit" : null}
-            </button>
-            <button
-              disabled={
-                formStatus === FORM_STATUS.loading ||
-                formStatus === FORM_STATUS.success
-              }
-              type="reset"
-              onClick={resetForm}
-              onKeyDown={(e) => formFocusAction(e, FORM_STATUS.idle)}
-            >
-              Cancel
-            </button>
-          </form>
+                  <ul
+                    aria-label={`current ${
+                      exp.companyNameInput || "new experience"
+                    } errors`}
+                  >
+                    {exp.companyNameInput.trim() === "" ||
+                    exp.companyStatus === FORM_STATUS.error ? (
+                      <li>
+                        <a href={`#company-${exp.id}`}>Company Name Error</a>
+                      </li>
+                    ) : null}
+
+                    {exp.titleInput.trim() === "" ||
+                    exp.titleStatus === FORM_STATUS.error ? (
+                      <li>
+                        <a href={`#title-${exp.id}`}>Title Error</a>
+                      </li>
+                    ) : null}
+
+                    {exp.fromMonth === "" ? (
+                      <li>
+                        <a href={`#from-month-${exp.id}`}>From Month Error</a>
+                      </li>
+                    ) : null}
+
+                    {exp.fromYear === "" ? (
+                      <li>
+                        <a href={`#from-year-${exp.id}`}>From Year Error</a>
+                      </li>
+                    ) : null}
+
+                    {exp.toMonth === "" ? (
+                      <li>
+                        <a href={`#to-month-${exp.id}`}>To Month Error</a>
+                      </li>
+                    ) : null}
+
+                    {exp.toYear === "" ? (
+                      <li>
+                        <a href={`#to-year-${exp.id}`}>To Year Error</a>
+                      </li>
+                    ) : null}
+
+                    {exp.descriptionInput.trim() === "" ||
+                    exp.descriptionStatus === FORM_STATUS.error ? (
+                      <li>
+                        <a href={`#description-${exp.id}`}>Description Error</a>
+                      </li>
+                    ) : null}
+                  </ul>
+                </div>
+              ))
+            ) : (
+              <>
+                <p>No Errors, ready to submit</p>
+                <Announcer
+                  announcement="No Errors, ready to submit"
+                  ariaId="no-errors-announcer"
+                  ariaLive="polite"
+                />
+              </>
+            )}
+          </>
         </div>
-      </section>
-    </>
+      ) : null}
+
+      <div>
+        <button
+          ref={addNewBtnRef}
+          id="add-new-btn"
+          data-main-content="true"
+          form="experience-form"
+          type="button"
+          aria-label="add new experience"
+          onClick={(e) => addExperience(e)}
+        >
+          + New Experience
+        </button>
+
+        <form id="experience-form" onSubmit={(e) => submitEdit(e)}>
+          {experience.map((exp, index) => {
+            return (
+              <div key={exp.id}>
+                <ExperienceForm
+                  ref={removeBtnRefs.current[index]}
+                  expIndex={index}
+                  userId={exp.id}
+                  currentYear={currentYear}
+                  userCompanyName={exp.company_name || ""}
+                  userJobTitle={exp.job_title || ""}
+                  userFromMonth={exp.fromMonth}
+                  userFromYear={exp.fromYear}
+                  userToMonth={exp.toMonth}
+                  userToYear={exp.toYear}
+                  userToPresent={exp.toPresent}
+                  userDescription={exp.job_description || ""}
+                  updateExperience={updateExperience}
+                  removeExperience={removeExperience}
+                />
+              </div>
+            );
+          })}
+
+          <button
+            disabled={
+              formStatus === FORM_STATUS.loading ||
+              formStatus === FORM_STATUS.success
+            }
+            type="submit"
+          >
+            {formStatus === FORM_STATUS.active ? "Submit" : null}
+            {formStatus === FORM_STATUS.loading ? "loading..." : null}
+            {formStatus === FORM_STATUS.success ? "Success!" : null}
+            {formStatus === FORM_STATUS.error ? "Re-Submit" : null}
+          </button>
+          <button
+            disabled={
+              formStatus === FORM_STATUS.loading ||
+              formStatus === FORM_STATUS.success
+            }
+            type="reset"
+            onClick={resetForm}
+            onKeyDown={(e) => formFocusAction(e, FORM_STATUS.idle)}
+          >
+            Cancel
+          </button>
+        </form>
+      </div>
+    </section>
   );
 }
 

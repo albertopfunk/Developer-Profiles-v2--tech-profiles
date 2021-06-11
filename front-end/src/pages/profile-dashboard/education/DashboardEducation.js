@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { Helmet } from "react-helmet";
 
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
 import useCurrentYear from "../../../global/helpers/hooks/useCurrentYear";
@@ -383,40 +382,33 @@ function DashboardEducation() {
 
   if (formStatus === FORM_STATUS.idle) {
     return (
-      <>
-        <Helmet>
-          <title>Profile Dashboard Education • Tech Profiles</title>
-        </Helmet>
-        <h1 id="main-heading">Education</h1>
-
-        <section aria-labelledby="current-information-heading">
-          <h2 id="current-information-heading">Current Information</h2>
-          <button
-            ref={editInfoBtnRef}
-            id="edit-info-btn"
-            data-main-content="true"
-            onClick={setFormInputs}
-            onKeyDown={(e) => formFocusAction(e, FORM_STATUS.active)}
-          >
-            Edit Information
-          </button>
-          {user.education.length > 0 ? (
-            user.education.map((edu) => (
-              <div key={edu.id}>
-                <h3>{`Current "${edu.school}" Education`}</h3>
-                <ul aria-label={`${edu.school} Education`}>
-                  <li>School: {edu.school}</li>
-                  <li>Field of Study: {edu.field_of_study}</li>
-                  <li>Dates: {edu.school_dates}</li>
-                  <li>Description: {edu.education_description}</li>
-                </ul>
-              </div>
-            ))
-          ) : (
-            <p>No Education</p>
-          )}
-        </section>
-      </>
+      <section aria-labelledby="current-information-heading">
+        <h2 id="current-information-heading">Current Information</h2>
+        <button
+          ref={editInfoBtnRef}
+          id="edit-info-btn"
+          data-main-content="true"
+          onClick={setFormInputs}
+          onKeyDown={(e) => formFocusAction(e, FORM_STATUS.active)}
+        >
+          Edit Information
+        </button>
+        {user.education.length > 0 ? (
+          user.education.map((edu) => (
+            <div key={edu.id}>
+              <h3>{`Current "${edu.school}" Education`}</h3>
+              <ul aria-label={`${edu.school} Education`}>
+                <li>School: {edu.school}</li>
+                <li>Field of Study: {edu.field_of_study}</li>
+                <li>Dates: {edu.school_dates}</li>
+                <li>Description: {edu.education_description}</li>
+              </ul>
+            </div>
+          ))
+        ) : (
+          <p>No Education</p>
+        )}
+      </section>
     );
   }
 
@@ -426,168 +418,159 @@ function DashboardEducation() {
   }
 
   return (
-    <>
-      <Helmet>
-        <title>Profile Dashboard Education • Tech Profiles</title>
-      </Helmet>
-      <h1 id="main-heading">Education</h1>
+    <section aria-labelledby="edit-information-heading">
+      <h2 id="edit-information-heading">Edit Information</h2>
 
-      <section aria-labelledby="edit-information-heading">
-        <h2 id="edit-information-heading">Edit Information</h2>
+      {formStatus === FORM_STATUS.error ? (
+        <div ref={errorSummaryRef} tabIndex="-1">
+          <h3 id="error-heading">Errors in Submission</h3>
+          <>
+            <strong>
+              Please address the following errors and re-submit the form:
+            </strong>
 
-        {formStatus === FORM_STATUS.error ? (
-          <div ref={errorSummaryRef} tabIndex="-1">
-            <h3 id="error-heading">Errors in Submission</h3>
-            <>
-              <strong>
-                Please address the following errors and re-submit the form:
-              </strong>
+            {hasSubmitError ? (
+              <div>
+                <h4>Submit Error</h4>
+                <p>Error submitting form, please try again</p>
+              </div>
+            ) : null}
 
-              {hasSubmitError ? (
-                <div>
-                  <h4>Submit Error</h4>
-                  <p>Error submitting form, please try again</p>
-                </div>
-              ) : null}
-
-              {formErrors.length > 0 ? (
-                formErrors.map((edu) => (
-                  <div key={edu.id}>
-                    <h4>{`Current "${
-                      edu.schoolNameInput || "New Education"
-                    }" Errors`}</h4>
-                    <ul
-                      aria-label={`current ${
-                        edu.schoolNameInput || "new education"
-                      } errors`}
-                    >
-                      {edu.schoolNameInput.trim() === "" ||
-                      edu.schoolStatus === FORM_STATUS.error ? (
-                        <li>
-                          <a href={`#school-${edu.id}`}>School Error</a>
-                        </li>
-                      ) : null}
-
-                      {edu.fieldOfStudyInput.trim() === "" ||
-                      edu.fieldOfStudyStatus === FORM_STATUS.error ? (
-                        <li>
-                          <a href={`#field-of-study-${edu.id}`}>
-                            Field of Study Error
-                          </a>
-                        </li>
-                      ) : null}
-
-                      {edu.schoolFromMonth === "" ? (
-                        <li>
-                          <a href={`#from-month-${edu.id}`}>From Month Error</a>
-                        </li>
-                      ) : null}
-
-                      {edu.schoolFromYear === "" ? (
-                        <li>
-                          <a href={`#from-year-${edu.id}`}>From Year Error</a>
-                        </li>
-                      ) : null}
-
-                      {edu.schoolToMonth === "" ? (
-                        <li>
-                          <a href={`#to-month-${edu.id}`}>To Month Error</a>
-                        </li>
-                      ) : null}
-
-                      {edu.schoolToYear === "" ? (
-                        <li>
-                          <a href={`#to-year-${edu.id}`}>To Year Error</a>
-                        </li>
-                      ) : null}
-
-                      {edu.descriptionInput.trim() === "" ||
-                      edu.descriptionStatus === FORM_STATUS.error ? (
-                        <li>
-                          <a href={`#description-${edu.id}`}>
-                            Description Error
-                          </a>
-                        </li>
-                      ) : null}
-                    </ul>
-                  </div>
-                ))
-              ) : (
-                <>
-                  <p>No Errors, ready to submit</p>
-                  <Announcer
-                    announcement="No Errors, ready to submit"
-                    ariaId="no-errors-announcer"
-                    ariaLive="polite"
-                  />
-                </>
-              )}
-            </>
-          </div>
-        ) : null}
-
-        <div>
-          <button
-            ref={addNewBtnRef}
-            id="add-new-btn"
-            data-main-content="true"
-            form="education-form"
-            type="button"
-            aria-label="add new education"
-            onClick={(e) => addEducation(e)}
-          >
-            + New Education
-          </button>
-          <form id="education-form" onSubmit={(e) => submitEdit(e)}>
-            {education.map((edu, index) => {
-              return (
+            {formErrors.length > 0 ? (
+              formErrors.map((edu) => (
                 <div key={edu.id}>
-                  <EducationForm
-                    ref={removeBtnRefs.current[index]}
-                    eduIndex={index}
-                    userId={edu.id}
-                    currentYear={currentYear}
-                    userSchool={edu.school || ""}
-                    userFieldOfStudy={edu.field_of_study || ""}
-                    userFromMonth={edu.schoolFromMonth}
-                    userFromYear={edu.schoolFromYear}
-                    userToMonth={edu.schoolToMonth}
-                    userToYear={edu.schoolToYear}
-                    userToPresent={edu.schoolToPresent}
-                    userDescription={edu.education_description || ""}
-                    updateEducation={updateEducation}
-                    removeEducation={removeEducation}
-                  />
+                  <h4>{`Current "${
+                    edu.schoolNameInput || "New Education"
+                  }" Errors`}</h4>
+                  <ul
+                    aria-label={`current ${
+                      edu.schoolNameInput || "new education"
+                    } errors`}
+                  >
+                    {edu.schoolNameInput.trim() === "" ||
+                    edu.schoolStatus === FORM_STATUS.error ? (
+                      <li>
+                        <a href={`#school-${edu.id}`}>School Error</a>
+                      </li>
+                    ) : null}
+
+                    {edu.fieldOfStudyInput.trim() === "" ||
+                    edu.fieldOfStudyStatus === FORM_STATUS.error ? (
+                      <li>
+                        <a href={`#field-of-study-${edu.id}`}>
+                          Field of Study Error
+                        </a>
+                      </li>
+                    ) : null}
+
+                    {edu.schoolFromMonth === "" ? (
+                      <li>
+                        <a href={`#from-month-${edu.id}`}>From Month Error</a>
+                      </li>
+                    ) : null}
+
+                    {edu.schoolFromYear === "" ? (
+                      <li>
+                        <a href={`#from-year-${edu.id}`}>From Year Error</a>
+                      </li>
+                    ) : null}
+
+                    {edu.schoolToMonth === "" ? (
+                      <li>
+                        <a href={`#to-month-${edu.id}`}>To Month Error</a>
+                      </li>
+                    ) : null}
+
+                    {edu.schoolToYear === "" ? (
+                      <li>
+                        <a href={`#to-year-${edu.id}`}>To Year Error</a>
+                      </li>
+                    ) : null}
+
+                    {edu.descriptionInput.trim() === "" ||
+                    edu.descriptionStatus === FORM_STATUS.error ? (
+                      <li>
+                        <a href={`#description-${edu.id}`}>Description Error</a>
+                      </li>
+                    ) : null}
+                  </ul>
                 </div>
-              );
-            })}
-            <button
-              disabled={
-                formStatus === FORM_STATUS.loading ||
-                formStatus === FORM_STATUS.success
-              }
-              type="submit"
-            >
-              {formStatus === FORM_STATUS.active ? "Submit" : null}
-              {formStatus === FORM_STATUS.loading ? "loading..." : null}
-              {formStatus === FORM_STATUS.success ? "Success!" : null}
-              {formStatus === FORM_STATUS.error ? "Re-Submit" : null}
-            </button>
-            <button
-              disabled={
-                formStatus === FORM_STATUS.loading ||
-                formStatus === FORM_STATUS.success
-              }
-              type="reset"
-              onClick={resetForm}
-              onKeyDown={(e) => formFocusAction(e, FORM_STATUS.idle)}
-            >
-              Cancel
-            </button>
-          </form>
+              ))
+            ) : (
+              <>
+                <p>No Errors, ready to submit</p>
+                <Announcer
+                  announcement="No Errors, ready to submit"
+                  ariaId="no-errors-announcer"
+                  ariaLive="polite"
+                />
+              </>
+            )}
+          </>
         </div>
-      </section>
-    </>
+      ) : null}
+
+      <div>
+        <button
+          ref={addNewBtnRef}
+          id="add-new-btn"
+          data-main-content="true"
+          form="education-form"
+          type="button"
+          aria-label="add new education"
+          onClick={(e) => addEducation(e)}
+        >
+          + New Education
+        </button>
+        <form id="education-form" onSubmit={(e) => submitEdit(e)}>
+          {education.map((edu, index) => {
+            return (
+              <div key={edu.id}>
+                <EducationForm
+                  ref={removeBtnRefs.current[index]}
+                  eduIndex={index}
+                  userId={edu.id}
+                  currentYear={currentYear}
+                  userSchool={edu.school || ""}
+                  userFieldOfStudy={edu.field_of_study || ""}
+                  userFromMonth={edu.schoolFromMonth}
+                  userFromYear={edu.schoolFromYear}
+                  userToMonth={edu.schoolToMonth}
+                  userToYear={edu.schoolToYear}
+                  userToPresent={edu.schoolToPresent}
+                  userDescription={edu.education_description || ""}
+                  updateEducation={updateEducation}
+                  removeEducation={removeEducation}
+                />
+              </div>
+            );
+          })}
+          <button
+            disabled={
+              formStatus === FORM_STATUS.loading ||
+              formStatus === FORM_STATUS.success
+            }
+            type="submit"
+          >
+            {formStatus === FORM_STATUS.active ? "Submit" : null}
+            {formStatus === FORM_STATUS.loading ? "loading..." : null}
+            {formStatus === FORM_STATUS.success ? "Success!" : null}
+            {formStatus === FORM_STATUS.error ? "Re-Submit" : null}
+          </button>
+          <button
+            disabled={
+              formStatus === FORM_STATUS.loading ||
+              formStatus === FORM_STATUS.success
+            }
+            type="reset"
+            onClick={resetForm}
+            onKeyDown={(e) => formFocusAction(e, FORM_STATUS.idle)}
+          >
+            Cancel
+          </button>
+        </form>
+      </div>
+    </section>
   );
 }
 
