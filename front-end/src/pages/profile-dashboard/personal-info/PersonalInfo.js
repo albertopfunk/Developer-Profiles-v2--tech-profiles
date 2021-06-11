@@ -581,6 +581,8 @@ function PersonalInfo() {
 }
 
 const FormSection = styled.section`
+  min-width: 0;
+
   .hidden {
     display: none;
   }

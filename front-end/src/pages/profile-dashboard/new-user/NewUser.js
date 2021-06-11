@@ -473,7 +473,7 @@ function NewUser() {
   }
 
   return (
-    <section aria-labelledby="edit-information-heading edit-information-desc">
+    <FormSection aria-labelledby="edit-information-heading edit-information-desc">
       <h2 id="edit-information-heading">Edit Information</h2>
       <p id="edit-information-desc">
         inputs are validated but not required to submit
@@ -767,7 +767,7 @@ function NewUser() {
           />
         </section>
       </div>
-    </section>
+    </FormSection>
   );
 }
 
@@ -776,6 +776,10 @@ const WelcomeSection = styled.section`
     width: min(500px, 100%);
     height: auto;
   }
+`;
+
+const FormSection = styled.section`
+  min-width: 0;
 `;
 
 const InputContainer = styled.div`
