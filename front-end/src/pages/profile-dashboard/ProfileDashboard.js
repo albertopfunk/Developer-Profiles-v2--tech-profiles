@@ -4,9 +4,9 @@ import { Helmet } from "react-helmet";
 import {
   Route,
   useRouteMatch,
-  Link,
   Switch,
   useLocation,
+  NavLink,
 } from "react-router-dom";
 import styled from "styled-components";
 import { loadStripe } from "@stripe/stripe-js";
@@ -189,83 +189,117 @@ function ProfileDashboard() {
         <PageNav headerHeight={headerHeight} aria-label="page">
           <ul className="nav-group">
             <li className="nav-item">
-              <Link className="link" id="page-navigation" to={`${url}`}>
+              <NavLink
+                exact
+                to={`${url}`}
+                className="link"
+                activeClassName="selected"
+                id="page-navigation"
+              >
                 <span className="link-icon">
                   <Home className="icon" />
                 </span>
                 <span className="link-text">Home</span>
                 <span className="link-text-sr-only">Home</span>
-              </Link>
+              </NavLink>
             </li>
 
             <li className="nav-item">
-              <Link className="link" to={`${url}/personal-info`}>
+              <NavLink
+                to={`${url}/personal-info`}
+                className="link"
+                activeClassName="selected"
+              >
                 <span className="link-icon">
                   <IdCard className="icon" />
                 </span>
                 <span className="link-text">Personal Info</span>
                 <span className="link-text-sr-only">Personal Info</span>
-              </Link>
+              </NavLink>
             </li>
 
             <li className="nav-item">
-              <Link className="link" to={`${url}/about-you`}>
+              <NavLink
+                to={`${url}/about-you`}
+                className="link"
+                activeClassName="selected"
+              >
                 <span className="link-icon">
                   <User className="icon" />
                 </span>
                 <span className="link-text">About You</span>
                 <span className="link-text-sr-only">About You</span>
-              </Link>
+              </NavLink>
             </li>
 
             <li className="nav-item">
-              <Link className="link" to={`${url}/where-to-find-you`}>
+              <NavLink
+                to={`${url}/where-to-find-you`}
+                className="link"
+                activeClassName="selected"
+              >
                 <span className="link-icon">
                   <Location className="icon" />
                 </span>
                 <span className="link-text">Where to Find You</span>
                 <span className="link-text-sr-only">Where to Find You</span>
-              </Link>
+              </NavLink>
             </li>
 
             <li className="nav-item">
-              <Link className="link" to={`${url}/projects`}>
+              <NavLink
+                to={`${url}/projects`}
+                className="link"
+                activeClassName="selected"
+              >
                 <span className="link-icon">
                   <Projects className="icon" />
                 </span>
                 <span className="link-text">Projects</span>
                 <span className="link-text-sr-only">Projects</span>
-              </Link>
+              </NavLink>
             </li>
 
             <li className="nav-item">
-              <Link className="link" to={`${url}/education`}>
+              <NavLink
+                to={`${url}/education`}
+                className="link"
+                activeClassName="selected"
+              >
                 <span className="link-icon">
                   <Education className="icon" />
                 </span>
                 <span className="link-text">Education</span>
                 <span className="link-text-sr-only">Education</span>
-              </Link>
+              </NavLink>
             </li>
 
             <li className="nav-item">
-              <Link className="link" to={`${url}/experience`}>
+              <NavLink
+                to={`${url}/experience`}
+                className="link"
+                activeClassName="selected"
+              >
                 <span className="link-icon">
                   <Experience className="icon" />
                 </span>
                 <span className="link-text">Experience</span>
                 <span className="link-text-sr-only">Experience</span>
-              </Link>
+              </NavLink>
             </li>
 
             <li className="nav-item">
-              <Link className="link" to={`${url}/billing`}>
+              <NavLink
+                to={`${url}/billing`}
+                className="link"
+                activeClassName="selected"
+              >
                 <span className="link-icon">
                   <CreditCard className="icon" />
                 </span>
                 <span className="link-text">Billing</span>
                 <span className="link-text-sr-only">Billing</span>
-              </Link>
+              </NavLink>
             </li>
           </ul>
         </PageNav>
@@ -397,7 +431,7 @@ const PageNav = styled.nav`
     top: 0;
     left: 0;
     z-index: -1;
-    padding-top: ${(props) => `calc(20px + ${props.headerHeight}px);`};
+    padding-top: 56px;
     width: 50px;
     height: 100vh;
     box-shadow: 0 1px 3px 0 rgb(0 0 0 / 10%), 0 1px 2px 0 rgb(0 0 0 / 6%);
@@ -409,7 +443,7 @@ const PageNav = styled.nav`
 
   @media (min-width: 750px) {
     width: 200px;
-    padding-top: ${(props) => `calc(20px + ${props.headerHeight}px);`};
+    padding-top: 76px;
   }
 
   .nav-group {
@@ -420,25 +454,29 @@ const PageNav = styled.nav`
       overflow: none;
       flex-direction: column;
       justify-content: center;
-      align-items: center;
-      gap: 10px;
-    }
-
-    @media (min-width: 750px) {
-      align-items: flex-start;
-    }
-
-    .nav-item {
-      padding: 10px;
-      white-space: nowrap;
+      align-items: stretch;
     }
   }
 
   .link {
+    padding: 10px;
+    white-space: nowrap;
+    border-right: solid 1px rgba(229, 231, 235, 0.8);
+    border-bottom: solid transparent;
     display: flex;
     gap: 10px;
     align-items: center;
     justify-content: center;
+
+    @media (min-width: 500px) {
+      padding: 20px 10px;
+      border-right: none;
+      border-bottom: solid 1px rgba(229, 231, 235, 0.8);
+    }
+
+    @media (min-width: 750px) {
+      justify-content: flex-start;
+    }
 
     .link-text {
       display: inline-block;
@@ -485,6 +523,15 @@ const PageNav = styled.nav`
           height: 1.1rem;
         }
       }
+    }
+  }
+
+  .link.selected {
+    border-bottom: solid;
+
+    @media (min-width: 500px) {
+      border-bottom: solid 1px rgba(229, 231, 235, 0.8);
+      border-right: solid;
     }
   }
 `;
