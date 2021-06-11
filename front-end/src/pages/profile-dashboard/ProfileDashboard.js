@@ -550,13 +550,22 @@ const Main = styled.main`
     justify-content: flex-start;
     gap: 30px;
 
-    @media (min-width: 1350px) {
+    @media (min-width: 500px) {
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+
+    @media (min-width: 1150px) {
       flex-direction: row;
+      gap: 50px;
+    }
+
+    @media (min-width: 1600px) {
       justify-content: space-evenly;
     }
 
     & > section {
-      flex-basis: 100%;
+      flex-basis: 50%;
     }
   }
 
@@ -573,7 +582,7 @@ const Main = styled.main`
   }
 
   h1 {
-    padding-bottom: 15px;
+    padding-bottom: 25px;
   }
   h2 {
     margin-bottom: 10px;
