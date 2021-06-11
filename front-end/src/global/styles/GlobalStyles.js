@@ -615,7 +615,7 @@ export const GlobalStyles = createGlobalStyle`
   }
 
   h1 {
-    font-size: 1.7rem;
+    font-size: 1.6rem;
     text-transform: uppercase;
   }
 
@@ -637,7 +637,6 @@ export const GlobalStyles = createGlobalStyle`
   input[type=textarea],
   select {
     width: 100%;
-    max-width: 300px;
   }
 
   label {
