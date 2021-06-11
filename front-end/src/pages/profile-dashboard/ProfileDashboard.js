@@ -142,85 +142,85 @@ function ProfileDashboard() {
       />
       <PageHeader>
         <MainHeader setHeaderHeight={setHeaderHeight} />
-        <PageNav aria-label="page">
+        <PageNav headerHeight={headerHeight} aria-label="page">
           <ul className="nav-group">
             <li className="nav-item">
               <Link className="link" id="page-navigation" to={`${url}`}>
-                <span className="link-text-sr-only">Home</span>
-                <span className="link-text">Home</span>
                 <span className="link-icon">
                   <Home className="icon" />
                 </span>
+                <span className="link-text">Home</span>
+                <span className="link-text-sr-only">Home</span>
               </Link>
             </li>
 
             <li className="nav-item">
               <Link className="link" to={`${url}/personal-info`}>
-                <span className="link-text-sr-only">Personal Info</span>
-                <span className="link-text">Personal Info</span>
                 <span className="link-icon">
                   <IdCard className="icon" />
                 </span>
+                <span className="link-text">Personal Info</span>
+                <span className="link-text-sr-only">Personal Info</span>
               </Link>
             </li>
 
             <li className="nav-item">
               <Link className="link" to={`${url}/about-you`}>
-                <span className="link-text-sr-only">About You</span>
-                <span className="link-text">About You</span>
                 <span className="link-icon">
                   <User className="icon" />
                 </span>
+                <span className="link-text">About You</span>
+                <span className="link-text-sr-only">About You</span>
               </Link>
             </li>
 
             <li className="nav-item">
               <Link className="link" to={`${url}/where-to-find-you`}>
-                <span className="link-text-sr-only">Where to Find You</span>
-                <span className="link-text">Where to Find You</span>
                 <span className="link-icon">
                   <Location className="icon" />
                 </span>
+                <span className="link-text">Where to Find You</span>
+                <span className="link-text-sr-only">Where to Find You</span>
               </Link>
             </li>
 
             <li className="nav-item">
               <Link className="link" to={`${url}/projects`}>
-                <span className="link-text-sr-only">Projects</span>
-                <span className="link-text">Projects</span>
                 <span className="link-icon">
                   <Projects className="icon" />
                 </span>
+                <span className="link-text">Projects</span>
+                <span className="link-text-sr-only">Projects</span>
               </Link>
             </li>
 
             <li className="nav-item">
               <Link className="link" to={`${url}/education`}>
-                <span className="link-text-sr-only">Education</span>
-                <span className="link-text">Education</span>
                 <span className="link-icon">
                   <Education className="icon" />
                 </span>
+                <span className="link-text">Education</span>
+                <span className="link-text-sr-only">Education</span>
               </Link>
             </li>
 
             <li className="nav-item">
               <Link className="link" to={`${url}/experience`}>
-                <span className="link-text-sr-only">Experience</span>
-                <span className="link-text">Experience</span>
                 <span className="link-icon">
                   <Experience className="icon" />
                 </span>
+                <span className="link-text">Experience</span>
+                <span className="link-text-sr-only">Experience</span>
               </Link>
             </li>
 
             <li className="nav-item">
               <Link className="link" to={`${url}/billing`}>
-                <span className="link-text-sr-only">Billing</span>
-                <span className="link-text">Billing</span>
                 <span className="link-icon">
                   <CreditCard className="icon" />
                 </span>
+                <span className="link-text">Billing</span>
+                <span className="link-text-sr-only">Billing</span>
               </Link>
             </li>
           </ul>
@@ -233,7 +233,12 @@ function ProfileDashboard() {
             <h1>Loading User</h1>
           </>
         ) : (
+          // flex container
+          // stick with column only until screen is very large, use breakpoint instead of wrap
           <>
+            {/* flex item */}
+            {/* all of these flex items will be mains with h1s
+            you can flex and gap h1s */}
             <Elements stripe={stripePromise}>
               <ProfileContext.Provider
                 value={{
@@ -284,8 +289,9 @@ function ProfileDashboard() {
               </ProfileContext.Provider>
             </Elements>
 
+            {/* ~30px gap + flex item */}
             <section aria-labelledby="profile-card-heading">
-              <h2 id="profile-card-heading">Current Profile Card Preview</h2>
+              <h2 id="profile-card-heading">Profile Card Preview</h2>
               <UserCard
                 previewImage={userImage.previewImage || userImage.previewAvatar}
                 userExtras={{
@@ -345,7 +351,7 @@ const PageNav = styled.nav`
     top: 0;
     left: 0;
     z-index: -1;
-    padding-top: 75px;
+    padding-top: ${(props) => `calc(20px + ${props.headerHeight}px);`};
     width: 50px;
     height: 100vh;
     box-shadow: 0 1px 3px 0 rgb(0 0 0 / 10%), 0 1px 2px 0 rgb(0 0 0 / 6%);
@@ -357,7 +363,7 @@ const PageNav = styled.nav`
 
   @media (min-width: 750px) {
     width: 200px;
-    padding-top: 95px;
+    padding-top: ${(props) => `calc(20px + ${props.headerHeight}px);`};
   }
 
   .nav-group {
@@ -384,13 +390,9 @@ const PageNav = styled.nav`
 
   .link {
     display: flex;
-    gap: 5px;
-    align-items: flex-start;
+    gap: 10px;
+    align-items: center;
     justify-content: center;
-
-    @media (min-width: 750px) {
-      gap: 7px;
-    }
 
     .link-text {
       display: inline-block;
@@ -427,7 +429,7 @@ const PageNav = styled.nav`
       display: none;
 
       @media (min-width: 500px) {
-        display: inline-block;
+        display: flex;
       }
 
       .icon {
@@ -443,22 +445,40 @@ const PageNav = styled.nav`
 
 const Main = styled.main`
   min-height: 100vh;
-  padding-top: ${(props) => `calc(40px + 20px + ${props.headerHeight}px);`};
+  padding-top: ${(props) => `calc(15px + 50px + ${props.headerHeight}px);`};
   padding-right: 5px;
   padding-left: 5px;
   padding-bottom: 50px;
   background-color: hsl(240, 10%, 99%);
 
+  & > .flex-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 30px;
+
+    @media (min-width: 1200px) {
+      flex-direction: row;
+    }
+  }
+
   @media (min-width: 500px) {
-    padding-top: 75px;
+    padding-top: 65px;
     padding-left: 60px;
     padding-right: 10px;
   }
 
   @media (min-width: 750px) {
-    padding-top: 95px;
+    padding-top: 85px;
     padding-left: 210px;
     padding-right: 10px;
+  }
+
+  h1 {
+    padding-bottom: 15px;
+  }
+  h2 {
+    margin-bottom: 10px;
   }
 `;
 
