@@ -495,6 +495,9 @@ const PageNav = styled.nav`
       outline: none;
       border: solid 1px;
     }
+    &.selected .link-text {
+      border-bottom: solid 1px transparent;
+    }
 
 
 
