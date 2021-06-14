@@ -894,8 +894,6 @@ const ChecklistSection = styled.section`
   }
 
   .section-button {
-    border: none;
-    background-color: white;
     padding: 10px 5px;
     width: 100%;
     height: auto;

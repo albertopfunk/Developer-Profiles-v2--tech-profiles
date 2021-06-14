@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { ReactComponent as BurgerMenu } from "../../global/assets/header-nav.svg";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 
 import { AuthContext } from "../../global/context/auth/AuthContext";
@@ -51,18 +51,24 @@ function MainHeader(props) {
 
   const siteNav = (
     <ul aria-label="site navigation menu" className="menu-group">
-      <li>
-        <Link to="/" className="nav-item">
-          Profiles
-        </Link>
+      <li className="menu-item">
+        <NavLink exact to="/" className="link" activeClassName="selected">
+
+          <span className="link-text">
+            Profiles
+          </span>
+
+        </NavLink>
       </li>
-      <li>
-        <Link to="/profile-dashboard" className="nav-item">
+      <li className="menu-item">
+        <NavLink to="/profile-dashboard" className="link" activeClassName="selected">
+        <span className="link-text">
           Dashboard
-        </Link>
+        </span>
+        </NavLink>
       </li>
-      <li>
-        <button className="nav-item" type="button" onClick={signOut}>
+      <li className="menu-item">
+        <button className="button signout-button" type="button" onClick={signOut}>
           Sign Out
         </button>
       </li>
@@ -108,9 +114,9 @@ function MainHeader(props) {
           <>
             <div className="fixed-container">
               <div className="logo-container">
-                <Link to="/" className="site-logo">
+                <NavLink exact to="/" className="site-logo" activeClassName="selected">
                   {siteLogo}
-                </Link>
+                </NavLink>
               </div>
               <div className="button-container mobile">{menuButton}</div>
               <div className="menu-container desktop">{siteNav}</div>
@@ -124,9 +130,9 @@ function MainHeader(props) {
         ) : (
           <div className="fixed-container">
             <div className="logo-container">
-              <Link to="/" className="site-logo">
+              <NavLink exact to="/" className="site-logo" activeClassName="selected">
                 {siteLogo}
-              </Link>
+              </NavLink>
             </div>
             <div className="button-container">
               <button
@@ -164,7 +170,7 @@ const Nav = styled.nav`
     padding: 5px;
     display: flex;
 
-    @media (min-width: 450px) {
+    @media (min-width: 500px) {
       justify-content: space-between;
       align-items: center;
     }
@@ -176,7 +182,7 @@ const Nav = styled.nav`
     .logo-container {
       flex-basis: 75%;
 
-      @media (min-width: 450px) {
+      @media (min-width: 500px) {
         flex-basis: 40%;
       }
 
@@ -197,11 +203,6 @@ const Nav = styled.nav`
       display: flex;
       justify-content: flex-end;
 
-      .button {
-        border: none;
-        background-color: white;
-      }
-
       .menu-button {
         height: 100%;
         width: 100%;
@@ -220,7 +221,7 @@ const Nav = styled.nav`
     }
 
     .button-container.mobile {
-      @media (min-width: 450px) {
+      @media (min-width: 500px) {
         display: none;
       }
     }
@@ -228,14 +229,49 @@ const Nav = styled.nav`
 
   .menu-container {
     border-top: solid 1px rgba(229, 231, 235, 0.5);
-    padding: 5px;
 
     .menu-group {
       display: flex;
-      justify-content: space-evenly;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 15px;
+      /* align-items: center; */
+      overflow-x: auto;
+
+
+      
+      .menu-item {
+        flex-grow: 1;
+        display: flex;
+        white-space: nowrap;
+        /* justify-content: center; */
+        /* padding: 10px;
+
+        &:not(:last-child) {
+          border-right: solid 1px rgba(229, 231, 235, 0.8);
+      
+          @media (min-width: 500px) {
+            border: none;
+          }
+        } */
+
+        .link {
+          flex-grow: 1;
+          border-right: solid 1px rgba(229, 231, 235, 0.8);
+          padding: 10px;
+          text-align: center;
+
+          /* &:hover {
+            border-bottom: solid;
+          } */
+        }
+
+        .link:hover .link-text {
+          border-bottom: solid 1px;
+        }
+
+        .signout-button {
+          padding: 10px;
+          flex-grow: 1;
+        }
+      }
     }
   }
 
@@ -246,7 +282,7 @@ const Nav = styled.nav`
   .menu-container.desktop {
     display: none;
 
-    @media (min-width: 450px) {
+    @media (min-width: 500px) {
       display: block;
       flex-basis: 60%;
       border: none;
@@ -254,7 +290,7 @@ const Nav = styled.nav`
   }
 
   .menu-container.mobile {
-    @media (min-width: 450px) {
+    @media (min-width: 500px) {
       display: none;
     }
   }

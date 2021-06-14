@@ -459,27 +459,75 @@ const PageNav = styled.nav`
   }
 
   .link {
-    padding: 10px;
+    display: inline-block;
     white-space: nowrap;
+    padding: 13px 15px 10px; // 13px for bottom borders
     border-right: solid 1px rgba(229, 231, 235, 0.8);
-    border-bottom: solid transparent;
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    justify-content: center;
+    border-bottom: solid 2px transparent;
+
+
 
     @media (min-width: 500px) {
       padding: 20px 10px;
+      padding-top: 21px;
       border-right: none;
       border-bottom: solid 1px rgba(229, 231, 235, 0.8);
     }
+
+
+
+
 
     @media (min-width: 750px) {
       justify-content: flex-start;
     }
 
+
+
+    &:hover .link-text {
+      border-bottom: solid 1px;
+    }
+    &:focus .link-text {
+      outline: none;
+      border-bottom: solid 1px;
+    }
+    &:focus {
+      outline: none;
+      border: solid 1px;
+    }
+
+
+
+
+    &:hover .link-icon {
+      @media (min-width: 500px) {
+        border-bottom: solid 1px;
+      }
+
+      @media (min-width: 750px) {
+        border-bottom: solid 1px transparent;
+      }
+    }
+
+
+
+    &.selected {
+      border-bottom: solid 2px;
+
+
+    @media (min-width: 500px) {
+      border-bottom: solid 1px rgba(229, 231, 235, 0.8);
+      border-right: solid;
+    }
+  }
+
+
+
+
     .link-text {
-      display: inline-block;
+      border-bottom: solid 1px transparent;
+
+
 
       @media (min-width: 500px) {
         display: none;
@@ -490,8 +538,12 @@ const PageNav = styled.nav`
       }
     }
 
+
+
     .link-text-sr-only {
       display: none;
+
+
 
       @media (min-width: 500px) {
         position: absolute;
@@ -509,12 +561,20 @@ const PageNav = styled.nav`
       }
     }
 
+
+
     .link-icon {
       display: none;
 
+
+
+
       @media (min-width: 500px) {
         display: flex;
+        border-bottom: solid 1px transparent;
       }
+
+
 
       .icon {
         height: 1.2rem;
@@ -526,14 +586,7 @@ const PageNav = styled.nav`
     }
   }
 
-  .link.selected {
-    border-bottom: solid;
-
-    @media (min-width: 500px) {
-      border-bottom: solid 1px rgba(229, 231, 235, 0.8);
-      border-right: solid;
-    }
-  }
+  
 `;
 
 const Main = styled.main`

@@ -587,6 +587,82 @@ export const GlobalStyles = createGlobalStyle`
     --nav-padding: 10px 15px;
   }
 
+
+  //
+
+  h4 {
+    font-size: 1.1rem;
+
+    @media (min-width: 750px) {
+      font-size: 1.1rem;
+    }
+  }
+
+  h3 {
+    font-size: 1.3rem;
+
+    @media (min-width: 750px) {
+      font-size: 1.3rem;
+    }
+  }
+
+  h2 {
+    font-size: 1.5rem;
+
+    @media (min-width: 750px) {
+      font-size: 1.5rem;
+    }
+  }
+
+  h1 {
+    font-size: 1.6rem;
+    text-transform: uppercase;
+
+    @media (min-width: 750px) {
+      font-size: 1.6rem;
+    }
+  }
+
+  p, li, dd, label {
+    font-size: .9rem;
+
+    @media (min-width: 750px) {
+      font-size: .9rem;
+    }
+  }
+
+  button {
+    font-size: .8rem;
+    text-transform: uppercase;
+
+
+    @media (min-width: 750px) {
+      font-size: .8rem;
+    }
+  }
+
+  a {
+    font-size: .8rem;
+    text-decoration: none;
+
+    @media (min-width: 750px) {
+      font-size: 1rem;
+    }
+  }
+
+
+
+
+  input[type=text],
+  input[type=textarea],
+  select {
+    width: 100%;
+  }
+
+  label {
+    display: block;
+  }
+
   .sr-only {
     position: absolute;
     clip: rect(0, 0, 0, 0);
@@ -602,44 +678,9 @@ export const GlobalStyles = createGlobalStyle`
     display: none;
   }
 
-  h4 {
-    font-size: 1.1rem;
+  .button {
+    border: none;
+    background-color: white;
   }
-
-  h3 {
-    font-size: 1.3rem;
-  }
-
-  h2 {
-    font-size: 1.5rem;
-  }
-
-  h1 {
-    font-size: 1.6rem;
-    text-transform: uppercase;
-  }
-
-  p, li, dd, label {
-    font-size: .9rem;
-  }
-
-  button {
-    font-size: .8rem;
-    text-transform: uppercase;
-  }
-
-  a {
-    font-size: 1rem;
-    text-decoration: none;
-  }
-
-  input[type=text],
-  input[type=textarea],
-  select {
-    width: 100%;
-  }
-
-  label {
-    display: block;
-  }
+  
 `;
