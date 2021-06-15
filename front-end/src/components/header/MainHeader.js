@@ -69,7 +69,7 @@ function MainHeader(props) {
       </li>
       <li className="menu-item">
         <button className="button signout-button" type="button" onClick={signOut}>
-          Sign Out
+          <span className="button-text">Sign Out</span>
         </button>
       </li>
     </ul>
@@ -261,15 +261,68 @@ const Nav = styled.nav`
           /* &:hover {
             border-bottom: solid;
           } */
+
+          &.selected {
+      border-bottom: solid 2px;
+
+
+
+    }
+
+          &:hover .link-text {
+            border-bottom: solid 1px;
+          }
+          &:focus .link-text {
+            outline: 0.25rem solid transparent;
+            border-bottom: solid 1px;
+          }
+          &:focus {
+            outline: 0.25rem solid transparent;
+            border: solid 1px;
+          }
+          &.selected .link-text {
+            border-bottom: solid 1px transparent;
+          }
         }
 
-        .link:hover .link-text {
-          border-bottom: solid 1px;
-        }
 
         .signout-button {
-          padding: 10px;
           flex-grow: 1;
+
+          background: hsl(340deg 100% 32%);
+          /* border-radius: 12px; */
+          border: none;
+          padding: 0;
+          cursor: pointer;
+
+            &:focus {
+            outline: 0.25rem solid transparent;
+
+          }
+            &:focus .button-text {
+              box-shadow: inset 0 0 5px 2px rgb(0,0,0);
+          }
+          &:focus:not(:focus-visible) .button-text  {
+            box-shadow: none;
+          }
+            &:hover .button-text {
+              transform: translateY(-4px);
+          }
+            &:active .button-text {
+              transform: translateY(-1px);
+          }
+
+
+          .button-text {
+            display: block;
+            padding: 10px 5px;
+            /* border-radius: 12px; */
+            background: hsl(345deg 100% 47%);
+            color: white;
+            transform: translateY(-3px);
+
+
+          }
         }
       }
     }
