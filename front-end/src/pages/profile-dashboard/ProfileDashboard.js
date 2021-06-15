@@ -488,11 +488,11 @@ const PageNav = styled.nav`
       border-bottom: solid 1px;
     }
     &:focus .link-text {
-      outline: none;
+      outline: 0.25rem solid transparent;
       border-bottom: solid 1px;
     }
     &:focus {
-      outline: none;
+      outline: 0.25rem solid transparent;
       border: solid 1px;
     }
     &.selected .link-text {
