@@ -108,14 +108,6 @@ export const GlobalStyles = createGlobalStyle`
   }
 
   /**
-  * Add the correct display in IE.
-  */
-
-  main {
-    display: block;
-  }
-
-  /**
   * 1. Correct the inheritance and scaling of font size in all browsers.
   * 2. Correct the odd em font sizing in all browsers.
   * 3. Prevent overflow of the container in all browsers (opinionated).
@@ -132,14 +124,6 @@ export const GlobalStyles = createGlobalStyle`
   * ========================================================================== */
 
   /**
-  * Remove the gray background on active links in IE 10.
-  */
-
-  a {
-    background-color: transparent;
-  }
-
-  /**
   * Add the correct text decoration in Edge 18-, IE, and Safari.
   */
 
@@ -149,7 +133,7 @@ export const GlobalStyles = createGlobalStyle`
   }
 
   /**
-  * Add the correct font weight in Chrome, Edge, and Safari.
+  * bolder font weight for titles/important text
   */
 
   b,
@@ -197,15 +181,6 @@ export const GlobalStyles = createGlobalStyle`
   }
 
   /**
-  * Add the correct display in IE 9-.
-  */
-
-  audio,
-  video {
-    display: inline-block;
-  }
-
-  /**
   * Add the correct display in iOS 4-7.
   */
 
@@ -223,14 +198,6 @@ export const GlobalStyles = createGlobalStyle`
   }
 
   /**
-  * Remove the border on images within links in IE 10-.
-  */
-
-  img {
-    border-style: none;
-  }
-
-  /**
   * Change the fill color to match the text color in all browsers (opinionated).
   */
 
@@ -238,13 +205,6 @@ export const GlobalStyles = createGlobalStyle`
     fill: currentColor;
   }
 
-  /**
-  * Hide the overflow in IE.
-  */
-
-  svg:not(:root) {
-    overflow: hidden;
-  }
 
   /* Tabular data
   * ========================================================================== */
@@ -265,26 +225,16 @@ export const GlobalStyles = createGlobalStyle`
   * ========================================================================== */
 
   /**
-  * Remove the margin on controls in Safari.
+  * Remove the margin and padding on controls.
   */
 
   button,
   input,
   select {
     margin: 0;
-  }
-
-  /**
-  * 1. Show the overflow in IE.
-  * 2. Remove the inheritance of text transform in Edge 18-, Firefox, and IE.
-  */
-
-  button {
-    overflow: visible; /* 1 */
-    text-transform: none; /* 2 */
-    margin: 0;
     padding: 0;
   }
+
 
   /**
   * Correct the inability to style buttons in iOS and Safari.
@@ -308,36 +258,6 @@ export const GlobalStyles = createGlobalStyle`
   }
 
   /**
-  * Show the overflow in Edge 18- and IE.
-  */
-
-  input {
-    overflow: visible;
-  }
-
-  /**
-  * 1. Correct the text wrapping in Edge 18- and IE.
-  * 2. Correct the color inheritance from fieldset elements in IE.
-  */
-
-  legend {
-    color: inherit; /* 2 */
-    display: table; /* 1 */
-    max-width: 100%; /* 1 */
-    white-space: normal; /* 1 */
-  }
-
-  /**
-  * 1. Add the correct display in Edge 18- and IE.
-  * 2. Add the correct vertical alignment in Chrome, Edge, and Firefox.
-  */
-
-  progress {
-    display: inline-block; /* 1 */
-    vertical-align: baseline; /* 2 */
-  }
-
-  /**
   * Remove the inheritance of text transform in Firefox.
   */
 
@@ -356,15 +276,6 @@ export const GlobalStyles = createGlobalStyle`
     overflow: auto; /* 2 */
     resize: vertical; /* 3 */
     resize: block; /* 3 */
-  }
-
-  /**
-  * Remove the padding in IE 10-.
-  */
-
-  [type="checkbox"],
-  [type="radio"] {
-    padding: 0;
   }
 
   /**
@@ -442,14 +353,6 @@ export const GlobalStyles = createGlobalStyle`
   * ========================================================================== */
 
   /*
-  * Add the correct display in Edge 18- and IE.
-  */
-
-  details {
-    display: block;
-  }
-
-  /*
   * Add the correct styles in Edge 18-, IE, and Safari.
   */
 
@@ -483,25 +386,6 @@ export const GlobalStyles = createGlobalStyle`
     display: list-item;
   }
 
-  /* Scripting
-  * ========================================================================== */
-
-  /**
-  * Add the correct display in IE 9-.
-  */
-
-  canvas {
-    display: inline-block;
-  }
-
-  /**
-  * Add the correct display in IE.
-  */
-
-  template {
-    display: none;
-  }
-
   /* User interaction
   * ========================================================================== */
 
@@ -522,13 +406,6 @@ export const GlobalStyles = createGlobalStyle`
     -ms-touch-action: manipulation;
   }
 
-  /**
-  * Add the correct display in IE 10-.
-  */
-
-  [hidden] {
-    display: none;
-  }
 
   /* Accessibility
   * ========================================================================== */
@@ -566,11 +443,6 @@ export const GlobalStyles = createGlobalStyle`
 
   [aria-hidden="false"][hidden] {
     display: initial;
-  }
-
-  [aria-hidden="false"][hidden]:not(:focus) {
-    clip: rect(0, 0, 0, 0);
-    position: absolute;
   }
 
 
@@ -681,6 +553,41 @@ export const GlobalStyles = createGlobalStyle`
   .button {
     border: none;
     background-color: white;
+  }
+
+  .button.control {
+    
+
+          background: hsl(340deg 100% 32%);
+          /* border-radius: 12px; */
+          border: none;
+          padding: 0;
+          cursor: pointer;
+
+          &:focus {
+            outline: 0.25rem solid transparent;
+          }
+          &:focus .button-text {
+            box-shadow: inset 0 0 5px 2px rgb(0, 0, 0);
+          }
+          &:focus:not(:focus-visible) .button-text {
+            box-shadow: none;
+          }
+          &:hover .button-text {
+            transform: translateY(-4px);
+          }
+          &:active .button-text {
+            transform: translateY(-1px);
+          }
+
+          .button-text {
+            display: block;
+            padding: 10px 5px;
+            /* border-radius: 12px; */
+            background: hsl(345deg 100% 47%);
+            color: white;
+            transform: translateY(-3px);
+          }
   }
   
 `;
