@@ -53,22 +53,24 @@ function MainHeader(props) {
     <ul aria-label="site navigation menu" className="menu-group">
       <li className="menu-item">
         <NavLink exact to="/" className="link" activeClassName="selected">
-
-          <span className="link-text">
-            Profiles
-          </span>
-
+          <span className="link-text">Profiles</span>
         </NavLink>
       </li>
       <li className="menu-item">
-        <NavLink to="/profile-dashboard" className="link" activeClassName="selected">
-        <span className="link-text">
-          Dashboard
-        </span>
+        <NavLink
+          to="/profile-dashboard"
+          className="link"
+          activeClassName="selected"
+        >
+          <span className="link-text">Dashboard</span>
         </NavLink>
       </li>
       <li className="menu-item">
-        <button className="button signout-button" type="button" onClick={signOut}>
+        <button
+          className="button control signout"
+          type="button"
+          onClick={signOut}
+        >
           <span className="button-text">Sign Out</span>
         </button>
       </li>
@@ -114,7 +116,12 @@ function MainHeader(props) {
           <>
             <div className="fixed-container">
               <div className="logo-container">
-                <NavLink exact to="/" className="site-logo" activeClassName="selected">
+                <NavLink
+                  exact
+                  to="/"
+                  className="site-logo"
+                  activeClassName="selected"
+                >
                   {siteLogo}
                 </NavLink>
               </div>
@@ -130,17 +137,22 @@ function MainHeader(props) {
         ) : (
           <div className="fixed-container">
             <div className="logo-container">
-              <NavLink exact to="/" className="site-logo" activeClassName="selected">
+              <NavLink
+                exact
+                to="/"
+                className="site-logo"
+                activeClassName="selected"
+              >
                 {siteLogo}
               </NavLink>
             </div>
             <div className="button-container">
               <button
                 type="button"
-                className="button signin-button"
+                className="button control signin"
                 onClick={signIn}
               >
-                Sign In
+                <span className="button-text">Sign In</span>
               </button>
             </div>
           </div>
@@ -167,24 +179,26 @@ const Header = styled.header`
 const Nav = styled.nav`
   .fixed-container {
     height: 55px;
-    padding: 5px;
     display: flex;
-
-    @media (min-width: 500px) {
-      justify-content: space-between;
-      align-items: center;
-    }
+    padding: 0 5px;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
 
     @media (min-width: 750px) {
       height: 75px;
     }
 
-    .logo-container {
-      flex-basis: 75%;
 
-      @media (min-width: 500px) {
-        flex-basis: 40%;
-      }
+
+
+    .logo-container {
+      min-width: 115px;
+      width: 100%;
+      /* flex-basis: 75%; */
+      /* @media (min-width: 500px) {
+        flex-basis: auto;
+      } */
 
       .site-logo {
         picture {
@@ -199,30 +213,37 @@ const Nav = styled.nav`
     }
 
     .button-container {
-      flex-basis: 25%;
+      /* flex-basis: 25%; */
+      width: 100%;
       display: flex;
       justify-content: flex-end;
 
-      .menu-button {
+      &.mobile {
         height: 100%;
+        overflow: hidden;
+
+        @media (min-width: 500px) {
+          display: none;
+        }
+      }
+
+      .menu-button {
         width: 100%;
         max-width: 60px;
-        overflow: hidden;
 
         .icon {
           transition: all 0.3s linear;
-          height: 100%;
+          height: 45px;
         }
 
         .icon.rotate {
           transform: rotate(90deg);
         }
       }
-    }
 
-    .button-container.mobile {
-      @media (min-width: 500px) {
-        display: none;
+      .button.signin {
+        width: 100%;
+        max-width: 120px;
       }
     }
   }
@@ -235,8 +256,6 @@ const Nav = styled.nav`
       /* align-items: center; */
       overflow-x: auto;
 
-
-      
       .menu-item {
         flex-grow: 1;
         display: flex;
@@ -263,11 +282,8 @@ const Nav = styled.nav`
           } */
 
           &.selected {
-      border-bottom: solid 2px;
-
-
-
-    }
+            border-bottom: solid 2px;
+          }
 
           &:hover .link-text {
             border-bottom: solid 1px;
@@ -285,44 +301,8 @@ const Nav = styled.nav`
           }
         }
 
-
-        .signout-button {
+        .button.signout {
           flex-grow: 1;
-
-          background: hsl(340deg 100% 32%);
-          /* border-radius: 12px; */
-          border: none;
-          padding: 0;
-          cursor: pointer;
-
-            &:focus {
-            outline: 0.25rem solid transparent;
-
-          }
-            &:focus .button-text {
-              box-shadow: inset 0 0 5px 2px rgb(0,0,0);
-          }
-          &:focus:not(:focus-visible) .button-text  {
-            box-shadow: none;
-          }
-            &:hover .button-text {
-              transform: translateY(-4px);
-          }
-            &:active .button-text {
-              transform: translateY(-1px);
-          }
-
-
-          .button-text {
-            display: block;
-            padding: 10px 5px;
-            /* border-radius: 12px; */
-            background: hsl(345deg 100% 47%);
-            color: white;
-            transform: translateY(-3px);
-
-
-          }
         }
       }
     }
