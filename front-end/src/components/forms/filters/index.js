@@ -31,18 +31,18 @@ function Filters({
           {/* if full str isn't dynamic, sr will not announce full str */}
           <p>{`Showing ${currentUsers} of ${totalUsers} Profiles`}</p>
         </div>
-        <div>
-          <button
-            type="button"
-            className="control-mobile top"
-            aria-label={`${areFiltersShowing ? "hide" : "show"} filters`}
-            aria-expanded={areFiltersShowing}
-            data-filter-content={!areFiltersShowing}
-            onClick={setFilters}
-          >
+        <button
+          type="button"
+          className="button button-control control-mobile top"
+          aria-label={`${areFiltersShowing ? "hide" : "show"} filters`}
+          aria-expanded={areFiltersShowing}
+          data-filter-content={!areFiltersShowing}
+          onClick={setFilters}
+        >
+          <span className="button-text">
             filters
-          </button>
-        </div>
+          </span>
+        </button>
       </div>
 
       {/* not too happy about this workaround, found this to be the
@@ -94,19 +94,24 @@ function Filters({
             <div className="controls-container">
               <button
                 type="button"
-                className="control-mobile"
+                className="button button-control control-mobile"
                 aria-label="done filtering"
                 aria-expanded="true"
                 onClick={setFilters}
-              >
-                done
+                >
+                <span className="button-text">
+                  done
+                </span>
               </button>
               <button
                 type="reset"
+                className="button button-control"
                 aria-label="reset filters"
                 onClick={resetFilters}
               >
-                reset
+                <span className="button-text">
+                  reset
+                </span>
               </button>
             </div>
           </div>
@@ -157,12 +162,19 @@ const FilterNav = styled.nav`
       text-align: center;
     }
 
-    .control-mobile .top {
+    .control-mobile.top {
       flex-basis: 100%;
+      max-width: 350px;
     }
   }
 
   .control-mobile {
+    font-size: .8em;
+
+    .button-text {
+      padding: 5px 0;
+    }
+
     @media (min-width: 600px) {
       display: none;
     }
@@ -269,6 +281,11 @@ const FiltersContainer = styled.div`
     button {
       width: 100%;
       max-width: 350px;
+      font-size: .8em;
+    
+      .button-text {
+        padding: 5px 0;
+      }
     }
   }
 `;

@@ -207,6 +207,13 @@ const ExtrasContainer = styled.div`
           display: flex;
           flex-direction: column;
           align-items: center;
+          padding: 5px;
+
+          &:focus-visible {
+            outline-width: 3px;
+            outline-color: transparent;
+            box-shadow: inset 0 0 0 2.5px #2727ad;
+          }
 
           .sr-only {
             position: relative;

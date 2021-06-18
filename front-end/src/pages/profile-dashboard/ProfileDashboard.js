@@ -465,6 +465,12 @@ const PageNav = styled.nav`
     border-right: solid 1px rgba(229, 231, 235, 0.8);
     border-bottom: solid 2px transparent;
 
+    &:focus-visible {
+      outline-width: 3px;
+      outline-color: transparent;
+      box-shadow: inset 0 0 0 2.5px #2727ad;
+    }
+
 
 
     @media (min-width: 500px) {
@@ -491,10 +497,7 @@ const PageNav = styled.nav`
       outline: 0.25rem solid transparent;
       border-bottom: solid 1px;
     }
-    &:focus {
-      outline: 0.25rem solid transparent;
-      border: solid 1px;
-    }
+
     &.selected .link-text {
       border-bottom: solid 1px transparent;
     }

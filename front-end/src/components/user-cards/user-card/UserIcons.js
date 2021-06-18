@@ -73,7 +73,7 @@ const IconsSection = styled.section`
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 15px;
+    gap: 10px;
 
     @media (min-width: 500px) {
       gap: 20px;
@@ -81,20 +81,27 @@ const IconsSection = styled.section`
 
     @media (min-width: 950px) {
       flex-direction: column;
-      gap: 35px;
+      gap: 30px;
     }
   }
 
   .icon {
-    width: 30px;
+    width: 45px;
     height: auto;
+    padding: 4px;
+
+    &:focus-visible {
+      outline-width: 3px;
+      outline-color: transparent;
+      box-shadow: inset 0 0 0 2.5px #2727ad;
+    }
 
     @media (min-width: 500px) {
-      width: 35px;
+      width: 50px;
     }
 
     @media (min-width: 950px) {
-      width: 40px;
+      width: 55px;
     }
   }
 `;

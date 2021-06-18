@@ -65,9 +65,9 @@ function MainHeader(props) {
           <span className="link-text">Dashboard</span>
         </NavLink>
       </li>
-      <li className="menu-item">
+      <li className="menu-item button">
         <button
-          className="button control signout"
+          className="button button-control signout"
           type="button"
           onClick={signOut}
         >
@@ -120,7 +120,6 @@ function MainHeader(props) {
                   exact
                   to="/"
                   className="site-logo"
-                  activeClassName="selected"
                 >
                   {siteLogo}
                 </NavLink>
@@ -141,7 +140,6 @@ function MainHeader(props) {
                 exact
                 to="/"
                 className="site-logo"
-                activeClassName="selected"
               >
                 {siteLogo}
               </NavLink>
@@ -189,9 +187,6 @@ const Nav = styled.nav`
       height: 75px;
     }
 
-
-
-
     .logo-container {
       min-width: 115px;
       width: 100%;
@@ -201,13 +196,25 @@ const Nav = styled.nav`
       } */
 
       .site-logo {
+        display: inline-block;
+        height: 55px;
+        padding: 5px;
+
+        &:focus-visible {
+          outline-width: 3px;
+          outline-color: transparent;
+          box-shadow: inset 0 0 0 2.5px #2727ad;
+        }
+
         picture {
           display: inline-block;
+          width: 100%;
+          height: 100%;
         }
 
         img {
           width: 100%;
-          height: auto;
+          height: 100%;
         }
       }
     }
@@ -230,10 +237,19 @@ const Nav = styled.nav`
       .menu-button {
         width: 100%;
         max-width: 60px;
+        border-radius: 10px;
+        height: 55px;
+        padding: 5px;
+
+        &:focus-visible {
+          outline-width: 3px;
+          outline-color: transparent;
+          box-shadow: inset 0 0 2px 2.5px #2727ad;
+        }
 
         .icon {
           transition: all 0.3s linear;
-          height: 45px;
+          height: 100%;
         }
 
         .icon.rotate {
@@ -244,6 +260,10 @@ const Nav = styled.nav`
       .button.signin {
         width: 100%;
         max-width: 120px;
+
+        @media (min-width: 750px) {
+          max-width: 180px;
+        }
       }
     }
   }
@@ -259,7 +279,11 @@ const Nav = styled.nav`
       .menu-item {
         flex-grow: 1;
         display: flex;
+
         white-space: nowrap;
+        &.button {
+          padding: 7px 4px;
+        }
         /* justify-content: center; */
         /* padding: 10px;
 
@@ -277,6 +301,12 @@ const Nav = styled.nav`
           padding: 10px;
           text-align: center;
 
+          &:focus-visible {
+          outline-width: 3px;
+          outline-color: transparent;
+          box-shadow: inset 0 0 0 2.5px #2727ad;
+        }
+
           /* &:hover {
             border-bottom: solid;
           } */
@@ -292,10 +322,7 @@ const Nav = styled.nav`
             outline: 0.25rem solid transparent;
             border-bottom: solid 1px;
           }
-          &:focus {
-            outline: 0.25rem solid transparent;
-            border: solid 1px;
-          }
+
           &.selected .link-text {
             border-bottom: solid 1px transparent;
           }
@@ -303,6 +330,11 @@ const Nav = styled.nav`
 
         .button.signout {
           flex-grow: 1;
+          border-radius: 10px;
+
+          .button-text {
+            border-radius: 10px;
+          }
         }
       }
     }

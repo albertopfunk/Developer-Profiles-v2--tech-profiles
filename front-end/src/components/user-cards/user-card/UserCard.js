@@ -214,16 +214,21 @@ const UserCard = React.forwardRef((props, articleRef) => {
           {!isCardExpanded ? (
             <button
               type="button"
+              className="button button-control"
               disabled={cardStatus === CARD_STATUS.loading}
               onClick={expandUserCard}
             >
-              {cardStatus === CARD_STATUS.idle ? "Expand Profile" : null}
-              {cardStatus === CARD_STATUS.loading ? "Loading..." : null}
-              {cardStatus === CARD_STATUS.error ? "Error - Retry" : null}
+              <span className="button-text">
+                {cardStatus === CARD_STATUS.idle ? "Expand Profile" : null}
+                {cardStatus === CARD_STATUS.loading ? "Loading..." : null}
+                {cardStatus === CARD_STATUS.error ? "Error - Retry" : null}
+              </span>
             </button>
           ) : (
-            <button type="button" onClick={closeUserCard}>
-              Collapse Profile
+            <button type="button" className="button button-control" onClick={closeUserCard}>
+              <span className="button-text">
+                Collapse Profile
+              </span>
             </button>
           )}
         </section>
@@ -246,6 +251,12 @@ const UserCardContainer = styled.article`
   background-color: white;
   border-radius: 10px;
   box-shadow: 0 4px 6px 0 hsla(0, 0%, 0%, 0.2);
+
+  &:focus-visible {
+    outline-width: 3px;
+    outline-color: transparent;
+    box-shadow: inset 0 0 2px 2.5px #2727ad, 0 4px 6px 0 #2727ad;
+  }
 `;
 
 const UserInfo = styled.div`
@@ -274,6 +285,15 @@ const UserInfo = styled.div`
 
     button {
       width: 90%;
+      font-size: .8em;
+
+      @media (min-width: 950px) {
+        width: 90%;
+      }
+    
+      .button-text {
+        padding: 5px 0;
+      }
     }
   }
 `;

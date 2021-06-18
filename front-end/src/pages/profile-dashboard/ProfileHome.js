@@ -147,7 +147,7 @@ function ProfileHome() {
             <h3 id="personal-info-checklist">
               <button
                 type="button"
-                className="section-button"
+                className="button section-button"
                 aria-expanded={isExpanded.personalInfo}
                 onClick={() =>
                   setIsExpanded({
@@ -285,7 +285,7 @@ function ProfileHome() {
             <h3 id="about-you-checklist">
               <button
                 type="button"
-                className="section-button"
+                className="button section-button"
                 aria-expanded={isExpanded.aboutYou}
                 onClick={() =>
                   setIsExpanded({
@@ -415,7 +415,7 @@ function ProfileHome() {
             <h3 id="where-to-find-you-checklist">
               <button
                 type="button"
-                className="section-button"
+                className="button section-button"
                 aria-expanded={isExpanded.whereToFindYou}
                 onClick={() =>
                   setIsExpanded({
@@ -569,7 +569,7 @@ function ProfileHome() {
             <h3 id="projects-checklist">
               <button
                 type="button"
-                className="section-button"
+                className="button section-button"
                 aria-expanded={isExpanded.projects}
                 onClick={() =>
                   setIsExpanded({
@@ -633,7 +633,7 @@ function ProfileHome() {
             <h3 id="education-checklist">
               <button
                 type="button"
-                className="section-button"
+                className="button section-button"
                 aria-expanded={isExpanded.education}
                 onClick={() =>
                   setIsExpanded({
@@ -697,7 +697,7 @@ function ProfileHome() {
             <h3 id="experience-checklist">
               <button
                 type="button"
-                className="section-button"
+                className="button section-button"
                 aria-expanded={isExpanded.experience}
                 onClick={() =>
                   setIsExpanded({
@@ -763,7 +763,7 @@ function ProfileHome() {
             <h3 id="billing-checklist">
               <button
                 type="button"
-                className="section-button"
+                className="button section-button"
                 aria-expanded={isExpanded.billing}
                 onClick={() =>
                   setIsExpanded({

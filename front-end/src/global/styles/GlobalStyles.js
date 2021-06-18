@@ -553,41 +553,69 @@ export const GlobalStyles = createGlobalStyle`
   .button {
     border: none;
     background-color: white;
+    cursor: pointer;
+    user-select: none;
   }
 
-  .button.control {
+  .button-control {
+    background: hsl(340deg 100% 32%);
+    border-radius: 10px;
+    transition: filter 50ms ease-in;
+    -webkit-tap-highlight-color: transparent;
+    outline-offset: 1px;
+
+    &:focus {
+      outline: 2.5px solid transparent;
+    }
+
+    &:focus .button-text {
+      filter: brightness(110%);
+      transition: filter 50ms ease-in;
+    }
+
+    &:focus:not(:focus-visible) .button-text {
+      filter: none;
+    }
+    
+    &:focus-visible .button-text {
+      box-shadow: inset 0 0 4px 2.5px #2727ad;
+      transform: translateY(-5px);
+      transition: transform 75ms ease-out;
+    }
+
     
 
-          background: hsl(340deg 100% 32%);
-          /* border-radius: 12px; */
-          border: none;
-          padding: 0;
-          cursor: pointer;
+    &:hover {
+      transition: filter 50ms ease-in;
+      filter: brightness(110%);
+    }
 
-          &:focus {
-            outline: 0.25rem solid transparent;
-          }
-          &:focus .button-text {
-            box-shadow: inset 0 0 5px 2px rgb(0, 0, 0);
-          }
-          &:focus:not(:focus-visible) .button-text {
-            box-shadow: none;
-          }
-          &:hover .button-text {
-            transform: translateY(-4px);
-          }
-          &:active .button-text {
-            transform: translateY(-1px);
-          }
+    &:hover .button-text {
+      transform: translateY(-5px);
+      transition: transform 75ms ease-out;
+    }
 
-          .button-text {
-            display: block;
-            padding: 10px 5px;
-            /* border-radius: 12px; */
-            background: hsl(345deg 100% 47%);
-            color: white;
-            transform: translateY(-3px);
-          }
+    &:active .button-text {
+      transform: translateY(-2px);
+      transition: transform ease-out;
+    }
+
+
+    .button-text {
+      display: block;
+      padding: 10px 0;
+      border-radius: 10px;
+      background: hsl(345deg 100% 47%);
+      color: white;
+      transform: translateY(-4px);
+      will-change: transform;
+      transition: transform 75ms ease-out;
+
+
+      @media (min-width: 750px) {
+      padding: 15px 0;
+
+      }
+    }
   }
-  
 `;
