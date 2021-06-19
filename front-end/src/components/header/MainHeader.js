@@ -65,9 +65,9 @@ function MainHeader(props) {
           <span className="link-text">Dashboard</span>
         </NavLink>
       </li>
-      <li className="menu-item button">
+      <li className="menu-item menu-item__button">
         <button
-          className="button button-control signout"
+          className="button button-control signout-button"
           type="button"
           onClick={signOut}
         >
@@ -147,7 +147,7 @@ function MainHeader(props) {
             <div className="button-container">
               <button
                 type="button"
-                className="button control signin"
+                className="button button-control signin"
                 onClick={signIn}
               >
                 <span className="button-text">Sign In</span>
@@ -178,10 +178,12 @@ const Nav = styled.nav`
   .fixed-container {
     height: 55px;
     display: flex;
-    padding: 0 5px;
     justify-content: space-between;
     align-items: center;
     gap: 20px;
+
+
+    
 
     @media (min-width: 750px) {
       height: 75px;
@@ -190,15 +192,19 @@ const Nav = styled.nav`
     .logo-container {
       min-width: 115px;
       width: 100%;
-      /* flex-basis: 75%; */
-      /* @media (min-width: 500px) {
-        flex-basis: auto;
-      } */
+
+      @media (min-width: 500px) {
+        flex-basis: 40%;
+      }
 
       .site-logo {
         display: inline-block;
         height: 55px;
         padding: 5px;
+
+        @media (min-width: 750px) {
+          height: 75px;
+        }
 
         &:focus-visible {
           outline-width: 3px;
@@ -220,7 +226,6 @@ const Nav = styled.nav`
     }
 
     .button-container {
-      /* flex-basis: 25%; */
       width: 100%;
       display: flex;
       justify-content: flex-end;
@@ -264,52 +269,103 @@ const Nav = styled.nav`
         @media (min-width: 750px) {
           max-width: 180px;
         }
+
+        @media (min-width: 1000px) {
+          max-width: 250px;
+        }
       }
     }
   }
 
   .menu-container {
-    border-top: solid 1px rgba(229, 231, 235, 0.5);
-
     .menu-group {
       display: flex;
-      /* align-items: center; */
-      overflow-x: auto;
 
       .menu-item {
         flex-grow: 1;
         display: flex;
-
         white-space: nowrap;
-        &.button {
-          padding: 7px 4px;
-        }
-        /* justify-content: center; */
-        /* padding: 10px;
-
-        &:not(:last-child) {
-          border-right: solid 1px rgba(229, 231, 235, 0.8);
-      
-          @media (min-width: 500px) {
-            border: none;
-          }
-        } */
 
         .link {
           flex-grow: 1;
-          border-right: solid 1px rgba(229, 231, 235, 0.8);
-          padding: 10px;
-          text-align: center;
-
-          &:focus-visible {
-          outline-width: 3px;
-          outline-color: transparent;
-          box-shadow: inset 0 0 0 2.5px #2727ad;
+          display: flex;
+          justify-content: center;
+          align-items: center;
         }
 
-          /* &:hover {
-            border-bottom: solid;
-          } */
+        .signout-button {
+          flex-grow: 1;
+        }
+      }
+    }
+
+
+    &.mobile {
+      border-top: solid 1px rgba(229, 231, 235, 0.5);
+      overflow-x: auto;
+
+      @media (min-width: 500px) {
+        display: none;
+      }
+
+      .menu-group {
+        .menu-item {
+          &.menu-item__button {
+            padding: 10px 5px;
+          }
+          .link {
+            padding: 10px;
+          }
+        }
+      }
+    }
+
+    &.desktop {
+      display: none;
+
+      @media (min-width: 500px) {
+        display: block;
+        flex-basis: 60%;
+        height: 100%;
+      }
+
+      .menu-group {
+        height: 100%;
+
+        .menu-item {
+          align-items: stretch;
+
+          &.menu-item__button {
+            padding: 0 5px;
+            justify-content: center;
+            align-items: center;
+          }
+
+          .signout-button {
+            max-width: 250px;
+          }
+        }
+      }
+
+      
+    }
+
+    &.hidden {
+      display: none;
+    }
+
+
+
+    .menu-group {
+      .menu-item {
+        .link {
+          border-right: solid 1px rgba(229, 231, 235, 0.8);
+          
+          &:focus-visible {
+            outline-width: 3px;
+            outline-color: transparent;
+            box-shadow: inset 0 0 0 2.5px #2727ad;
+          }
 
           &.selected {
             border-bottom: solid 2px;
@@ -327,36 +383,7 @@ const Nav = styled.nav`
             border-bottom: solid 1px transparent;
           }
         }
-
-        .button.signout {
-          flex-grow: 1;
-          border-radius: 10px;
-
-          .button-text {
-            border-radius: 10px;
-          }
-        }
       }
-    }
-  }
-
-  .menu-container.hidden {
-    display: none;
-  }
-
-  .menu-container.desktop {
-    display: none;
-
-    @media (min-width: 500px) {
-      display: block;
-      flex-basis: 60%;
-      border: none;
-    }
-  }
-
-  .menu-container.mobile {
-    @media (min-width: 500px) {
-      display: none;
     }
   }
 `;

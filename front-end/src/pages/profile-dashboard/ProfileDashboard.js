@@ -474,6 +474,9 @@ const PageNav = styled.nav`
 
 
     @media (min-width: 500px) {
+      display: flex;
+      align-items: center;
+      justify-content: center;
       padding: 20px 10px;
       padding-top: 21px;
       border-right: none;
@@ -485,6 +488,7 @@ const PageNav = styled.nav`
 
 
     @media (min-width: 750px) {
+      gap: 10px;
       justify-content: flex-start;
     }
 
@@ -577,6 +581,7 @@ const PageNav = styled.nav`
 
       @media (min-width: 500px) {
         display: flex;
+        justify-content: center;
         border-bottom: solid 1px transparent;
       }
 

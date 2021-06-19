@@ -126,10 +126,13 @@ function UserCards({
           <div className="control">
             <button
               type="button"
+              className="button button-control"
               onClick={loadMoreUsers}
               onKeyDown={(e) => loadMoreFocus(e)}
             >
-              Load More Profiles
+              <span className="button-text">
+                Load More Profiles
+              </span>
             </button>
           </div>
         ) : null}
@@ -139,19 +142,24 @@ function UserCards({
             <p>No more profiles to load</p>
             <button
               type="button"
+              className="button button-control"
               aria-label="no more profiles to load, back to top"
               onClick={backToTop}
               onKeyDown={(e) => backToTopFocus(e)}
             >
-              Back to Top
+              <span className="button-text">
+                Back to Top
+              </span>
             </button>
           </div>
         ) : null}
 
         {isBusy ? (
           <div className="control">
-            <button type="button" disabled="true">
-              Loading
+            <button type="button" className="button button-control" disabled="true">
+              <span className="button-text">
+                Loading
+              </span>
             </button>
           </div>
         ) : null}
@@ -161,11 +169,14 @@ function UserCards({
             <p>Error loading profiles</p>
             <button
               type="button"
+              className="button button-control"
               aria-label="error loading profiles, retry"
               onClick={loadMoreUsers}
               onKeyDown={(e) => loadMoreFocus(e)}
             >
-              Retry
+              <span className="button-text">
+                Retry
+              </span>
             </button>
           </div>
         ) : null}
@@ -187,9 +198,13 @@ const Feed = styled.div`
     margin-top: 30px;
 
     .control {
-      width: fit-content;
+      width: 90%;
       margin: 0 auto;
       text-align: center;
+
+      button {
+        width: 90%;
+      }
     }
   }
 `;
