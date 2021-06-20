@@ -1,5 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
 import styled from "styled-components";
+import {ReactComponent as EditIcon} from "../../../global/assets/dashboard-edit.svg";
 
 import Combobox from "../../../components/forms/combobox";
 
@@ -467,17 +468,24 @@ function WhereToFindYou() {
 
   if (formStatus === FORM_STATUS.idle) {
     return (
-      <section aria-labelledby="current-information-heading">
-        <h2 id="current-information-heading">Current Information</h2>
-        <button
-          ref={editInfoBtnRef}
-          id="edit-info-btn"
-          data-main-content="true"
-          onClick={setFormInputs}
-          onKeyDown={(e) => formFocusAction(e, FORM_STATUS.active)}
-        >
-          Edit Information
-        </button>
+      <InfoSection aria-labelledby="current-information-heading">
+        <div className="info-heading">
+          <h2 id="current-information-heading">Current Info</h2>
+          <button
+            ref={editInfoBtnRef}
+            id="edit-info-btn"
+            className="button edit-button"
+            data-main-content="true"
+            onClick={setFormInputs}
+            onKeyDown={(e) => formFocusAction(e, FORM_STATUS.active)}
+          >
+            <span className="sr-only">Edit Information</span>
+            <span className="button-icon">
+              <EditIcon className="icon" />
+            </span>
+          </button>
+        </div>
+
         <ul aria-label="current information">
           <li>Github: {user.github || "None Set"}</li>
           <li>Twitter: {user.twitter || "None Set"}</li>
@@ -485,7 +493,7 @@ function WhereToFindYou() {
           <li>Portfolio: {user.portfolio || "None Set"}</li>
           <li>Current Location: {user.current_location_name || "None Set"}</li>
         </ul>
-      </section>
+      </InfoSection>
     );
   }
 
@@ -499,7 +507,7 @@ function WhereToFindYou() {
       ) : null}
 
       <FormSection aria-labelledby="edit-information-heading">
-        <h2 id="edit-information-heading">Edit Information</h2>
+        <h2 id="edit-information-heading">Edit Info</h2>
 
         {formStatus === FORM_STATUS.error ? (
           <div ref={errorSummaryRef} tabIndex="-1">
@@ -721,41 +729,91 @@ function WhereToFindYou() {
             displayName={"Current Location"}
             single
           />
-
-          <button
-            disabled={
-              formStatus === FORM_STATUS.loading ||
-              formStatus === FORM_STATUS.success
-            }
-            type="submit"
-          >
-            {formStatus === FORM_STATUS.active ? "Submit" : null}
-            {formStatus === FORM_STATUS.loading ? "loading..." : null}
-            {formStatus === FORM_STATUS.success ? "Success!" : null}
-            {formStatus === FORM_STATUS.error ? "Re-Submit" : null}
-          </button>
-          <button
-            disabled={
-              formStatus === FORM_STATUS.loading ||
-              formStatus === FORM_STATUS.success
-            }
-            type="reset"
-            onClick={resetForm}
-            onKeyDown={(e) => formFocusAction(e, FORM_STATUS.idle)}
-          >
-            Cancel
-          </button>
+          
+          <div className="button-container">
+            <button
+              disabled={
+                formStatus === FORM_STATUS.loading ||
+                formStatus === FORM_STATUS.success
+              }
+              type="submit"
+              className="button button-control"
+            >
+              <span className="button-text">
+                {formStatus === FORM_STATUS.active ? "Submit" : null}
+                {formStatus === FORM_STATUS.loading ? "loading..." : null}
+                {formStatus === FORM_STATUS.success ? "Success!" : null}
+                {formStatus === FORM_STATUS.error ? "Re-Submit" : null}
+              </span>
+            </button>
+            <button
+              disabled={
+                formStatus === FORM_STATUS.loading ||
+                formStatus === FORM_STATUS.success
+              }
+              type="reset"
+              className="button button-control"
+              onClick={resetForm}
+              onKeyDown={(e) => formFocusAction(e, FORM_STATUS.idle)}
+            >
+              <span className="button-text">
+                Cancel
+              </span>
+            </button>
+          </div>
         </form>
       </FormSection>
     </>
   );
 }
 
-const FormSection = styled.section`
-  .hidden {
-    display: none;
+const InfoSection = styled.section`
+  .info-heading {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 7px;
+
+    .edit-button {
+      width: 100%;
+      max-width: 40px;
+      border-radius: 10px;
+      height: 40px;
+      padding: 8px;
+
+      &:focus-visible {
+        outline-width: 3px;
+        outline-color: transparent;
+        box-shadow: inset 0 0 1px 2.5px #2727ad;
+      }
+
+      &:hover .icon {
+        fill: #2727ad;
+      }
+
+      .icon {
+        height: 100%;
+      }
+    }
   }
-  .error-summary {
+`;
+
+const FormSection = styled.section`
+  .button-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+
+    button {
+      width: 100%;
+      max-width: 350px;
+    
+      .button-text {
+        padding: 7px 0;
+      }
+    }
   }
 `;
 
