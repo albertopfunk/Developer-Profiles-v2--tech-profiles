@@ -426,21 +426,22 @@ function DashboardProjects() {
           user.projects.map((proj) => (
             <div key={proj.id}>
               <h3>{`Current "${proj.project_title}" Project`}</h3>
-              <ul aria-label={`${proj.project_title} Project`}>
-                <li>Project Name: {proj.project_title}</li>
-                <li>
+              <dl aria-label={`${proj.project_title} Project`}>
+                <dt>Project Name:</dt>
+                <dd>{proj.project_title}</dd>
+                <dt>Project Pic:</dt>
+                <dd>
                   {proj.project_img ? (
-                    <>
-                      <p>Project Pic:</p>
-                      <img src={proj.project_img} alt="project pic" />
-                    </>
+                    <img src={proj.project_img} alt="project pic" />
                   ) : (
-                    "Project Pic: None Set"
+                    "None Set"
                   )}
-                </li>
-                <li>Project Link: {proj.link}</li>
-                <li>Description: {proj.project_description}</li>
-              </ul>
+                </dd>
+                <dt>Project Link:</dt>
+                <dd>{proj.link}</dd>
+                <dt>Description:</dt>
+                <dd>{proj.project_description}</dd>
+              </dl>
             </div>
           ))
         ) : (

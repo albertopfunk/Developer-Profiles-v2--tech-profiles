@@ -406,12 +406,16 @@ function DashboardExperience() {
           user.experience.map((exp) => (
             <div key={exp.id}>
               <h3>{`Current "${exp.company_name}" Experience`}</h3>
-              <ul aria-label={`${exp.company_name} Experience`}>
-                <li>Company: {exp.company_name}</li>
-                <li>Job Title: {exp.job_title}</li>
-                <li>Dates: {exp.job_dates}</li>
-                <li>Description: {exp.job_description}</li>
-              </ul>
+              <dl aria-label={`${exp.company_name} Experience`}>
+                <dt>Company:</dt>
+                <dd>{exp.company_name}</dd>
+                <dt>Job Title:</dt>
+                <dd>{exp.job_title}</dd>
+                <dt>Dates:</dt>
+                <dd>{exp.job_dates}</dd>
+                <dt>Description:</dt>
+                <dd>{exp.job_description}</dd>
+              </dl>
             </div>
           ))
         ) : (

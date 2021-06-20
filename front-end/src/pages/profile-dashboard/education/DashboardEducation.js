@@ -406,12 +406,16 @@ function DashboardEducation() {
           user.education.map((edu) => (
             <div key={edu.id}>
               <h3>{`Current "${edu.school}" Education`}</h3>
-              <ul aria-label={`${edu.school} Education`}>
-                <li>School: {edu.school}</li>
-                <li>Field of Study: {edu.field_of_study}</li>
-                <li>Dates: {edu.school_dates}</li>
-                <li>Description: {edu.education_description}</li>
-              </ul>
+              <dl aria-label={`${edu.school} Education`}>
+                <dt>School:</dt>
+                <dd>{edu.school}</dd>
+                <dt>Field of Study:</dt>
+                <dd>{edu.field_of_study}</dd>
+                <dt>Dates:</dt>
+                <dd>{edu.school_dates}</dd>
+                <dt>Description:</dt>
+                <dd>{edu.education_description}</dd>
+              </dl>
             </div>
           ))
         ) : (
