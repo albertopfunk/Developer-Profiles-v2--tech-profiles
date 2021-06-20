@@ -235,6 +235,14 @@ export const GlobalStyles = createGlobalStyle`
     padding: 0;
   }
 
+  /**
+  * 1rem default for inputs to avoid zoom on ios
+  */
+
+  input, select {
+    font-size: 1rem;
+  }
+
 
   /**
   * Correct the inability to style buttons in iOS and Safari.
@@ -463,7 +471,7 @@ export const GlobalStyles = createGlobalStyle`
   //
 
   h4 {
-    font-size: 1.1rem;
+    font-size: 1rem;
 
     @media (min-width: 750px) {
       font-size: 1.1rem;
@@ -471,7 +479,7 @@ export const GlobalStyles = createGlobalStyle`
   }
 
   h3 {
-    font-size: 1.3rem;
+    font-size: 1.1rem;
 
     @media (min-width: 750px) {
       font-size: 1.3rem;
@@ -479,7 +487,7 @@ export const GlobalStyles = createGlobalStyle`
   }
 
   h2 {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
 
     @media (min-width: 750px) {
       font-size: 1.5rem;
@@ -487,7 +495,7 @@ export const GlobalStyles = createGlobalStyle`
   }
 
   h1 {
-    font-size: 1.6rem;
+    font-size: 1.3rem;
     text-transform: uppercase;
 
     @media (min-width: 750px) {
