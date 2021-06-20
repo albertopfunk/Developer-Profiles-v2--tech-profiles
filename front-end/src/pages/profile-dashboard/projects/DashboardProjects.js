@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import {ReactComponent as EditIcon} from "../../../global/assets/dashboard-edit.svg";
+import {ReactComponent as AddIcon} from "../../../global/assets/dashboard-add.svg";
 
 import ProjectForm from "../../../components/forms/user-extras/ProjectForm";
 
@@ -339,7 +340,9 @@ function DashboardProjects() {
       return;
     }
 
+    // check for changes first
     setFormStatus(FORM_STATUS.loading);
+    
     let requests = [];
 
     if (projectsChange) {
@@ -520,17 +523,25 @@ function DashboardProjects() {
         </div>
       ) : null}
 
-      <div>
+      <div className="form-container">
         <button
           ref={addNewBtnRef}
           id="add-new-btn"
+          className="button button-control add-button"
           data-main-content="true"
           form="projects-form"
           type="button"
           aria-label="add new project"
           onClick={(e) => addProject(e)}
         >
-          + New Project
+          <div className="button-text">
+            <span className="text">
+              New Project
+            </span>
+            <span className="icon-container">
+              <AddIcon className="icon" />
+            </span>
+          </div>
         </button>
 
         <form id="projects-form" onSubmit={(e) => submitEdit(e)}>
@@ -623,6 +634,26 @@ const InfoSection = styled.section`
 `;
 
 const FormSection = styled.section`
+  .form-container {
+    .add-button {
+      width: 100%;
+      max-width: 350px;
+      margin-bottom: 30px;
+      font-size: .9rem;
+      
+      .button-text {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 7px;
+
+        .icon {
+          height: 1rem;
+        }
+      }
+    }
+  }
+
   .button-container {
     display: flex;
     flex-direction: column;
