@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import {ReactComponent as EditIcon} from "../../../global/assets/dashboard-edit.svg";
+import {ReactComponent as AddIcon} from "../../../global/assets/dashboard-add.svg";
 
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
 import useCurrentYear from "../../../global/helpers/hooks/useCurrentYear";
@@ -518,18 +519,31 @@ function DashboardEducation() {
         </div>
       ) : null}
 
-      <div>
+
+
+      <div className="form-container">
+
         <button
           ref={addNewBtnRef}
           id="add-new-btn"
+          className="button button-control add-button"
           data-main-content="true"
           form="education-form"
           type="button"
           aria-label="add new education"
           onClick={(e) => addEducation(e)}
         >
-          + New Education
+          <div className="button-text">
+            <span className="text">
+              New Education
+            </span>
+            <span className="icon-container">
+              <AddIcon className="icon" />
+            </span>
+          </div>
         </button>
+
+
         <form id="education-form" onSubmit={(e) => submitEdit(e)}>
           {education.map((edu, index) => {
             return (
@@ -623,6 +637,26 @@ const InfoSection = styled.section`
 `;
 
 const FormSection = styled.section`
+  .form-container {
+    .add-button {
+      width: 100%;
+      max-width: 350px;
+      margin-bottom: 30px;
+      font-size: .9rem;
+      
+      .button-text {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 7px;
+
+        .icon {
+          height: 1rem;
+        }
+      }
+    }
+  }
+  
   .button-container {
     display: flex;
     flex-direction: column;

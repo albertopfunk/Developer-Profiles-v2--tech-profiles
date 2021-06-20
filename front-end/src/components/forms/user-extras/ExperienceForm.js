@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import {ReactComponent as RemoveIcon} from "../../../global/assets/dashboard-remove.svg";
 
 import { validateInput } from "../../../global/helpers/validation";
 import { FORM_STATUS } from "../../../global/helpers/variables";
@@ -336,16 +337,25 @@ const ExperienceForm = React.forwardRef(
 
     return (
       <Fieldset>
-        <legend>Experience: {company.companyNameInput || "New Company"}</legend>
 
-        <button
-          ref={removeBtnRef}
-          type="button"
-          aria-label={`Remove ${company.companyNameInput || "New"} Company`}
-          onClick={() => removeExperience(expIndex)}
-        >
-          X
-        </button>
+        <div className="info-heading">
+          <legend>Experience: {company.companyNameInput || "New Company"}</legend>
+
+          <button
+            ref={removeBtnRef}
+            type="button"
+            className="button remove-button"
+            aria-label={`Remove ${company.companyNameInput || "New"} Company`}
+            onClick={() => removeExperience(expIndex)}
+          >
+            <span className="sr-only">Remove Project</span>
+            <span className="button-icon">
+              <RemoveIcon className="icon" />
+            </span>
+          </button>
+        </div>
+
+
 
         <InputContainer>
           <label htmlFor={`company-${userId}`}>Company:</label>
@@ -630,6 +640,34 @@ const ExperienceForm = React.forwardRef(
 
 const Fieldset = styled.fieldset`
   min-width: 0;
+
+  .info-heading {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+
+    .remove-button {
+      width: 100%;
+      max-width: 32px;
+      border-radius: 10px;
+      height: 32px;
+      padding: 8px;
+
+      &:focus-visible {
+        outline-width: 3px;
+        outline-color: transparent;
+        box-shadow: inset 0 0 1px 2.5px #2727ad;
+      }
+
+      &:hover .icon {
+        fill: #2727ad;
+      }
+
+      .icon {
+        height: 100%;
+      }
+    }
+  }
 `;
 
 const InputContainer = styled.div`
