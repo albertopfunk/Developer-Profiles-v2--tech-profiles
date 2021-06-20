@@ -244,12 +244,12 @@ const Nav = styled.nav`
         max-width: 60px;
         border-radius: 10px;
         height: 55px;
-        padding: 5px;
+        padding: 8px;
 
         &:focus-visible {
           outline-width: 3px;
           outline-color: transparent;
-          box-shadow: inset 0 0 2px 2.5px #2727ad;
+          box-shadow: inset 0 0 1px 2.5px #2727ad;
         }
 
         .icon {
