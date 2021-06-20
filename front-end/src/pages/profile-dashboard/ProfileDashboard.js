@@ -366,7 +366,7 @@ function ProfileDashboard() {
 
               {/* ~30px gap + flex item */}
               <section aria-labelledby="profile-card-heading">
-                <h2 id="profile-card-heading">Profile Card Preview</h2>
+                <h2 id="profile-card-heading">Profile Preview</h2>
                 <UserCard
                   previewImage={
                     userImage.previewImage || userImage.previewAvatar
@@ -645,10 +645,10 @@ const Main = styled.main`
     padding-right: 10px;
   }
 
-  h1 {
+  & > h1 {
     padding-bottom: 25px;
   }
-  h2 {
+  & > h2 {
     margin-bottom: 10px;
   }
 `;
