@@ -426,8 +426,8 @@ function DashboardExperience() {
   }
 
   return (
-    <section aria-labelledby="edit-information-heading">
-      <h2 id="edit-information-heading">Edit Information</h2>
+    <FormSection aria-labelledby="edit-information-heading">
+      <h2 id="edit-information-heading">Edit Info</h2>
 
       {formStatus === FORM_STATUS.error ? (
         <div ref={errorSummaryRef} tabIndex="-1">
@@ -554,32 +554,40 @@ function DashboardExperience() {
             );
           })}
 
-          <button
-            disabled={
-              formStatus === FORM_STATUS.loading ||
-              formStatus === FORM_STATUS.success
-            }
-            type="submit"
-          >
-            {formStatus === FORM_STATUS.active ? "Submit" : null}
-            {formStatus === FORM_STATUS.loading ? "loading..." : null}
-            {formStatus === FORM_STATUS.success ? "Success!" : null}
-            {formStatus === FORM_STATUS.error ? "Re-Submit" : null}
-          </button>
-          <button
-            disabled={
-              formStatus === FORM_STATUS.loading ||
-              formStatus === FORM_STATUS.success
-            }
-            type="reset"
-            onClick={resetForm}
-            onKeyDown={(e) => formFocusAction(e, FORM_STATUS.idle)}
-          >
-            Cancel
-          </button>
+          <div className="button-container">
+            <button
+              disabled={
+                formStatus === FORM_STATUS.loading ||
+                formStatus === FORM_STATUS.success
+              }
+              type="submit"
+              className="button button-control"
+            >
+              <span className="button-text">
+                {formStatus === FORM_STATUS.active ? "Submit" : null}
+                {formStatus === FORM_STATUS.loading ? "loading..." : null}
+                {formStatus === FORM_STATUS.success ? "Success!" : null}
+                {formStatus === FORM_STATUS.error ? "Re-Submit" : null}
+              </span>
+            </button>
+            <button
+              disabled={
+                formStatus === FORM_STATUS.loading ||
+                formStatus === FORM_STATUS.success
+              }
+              type="reset"
+              className="button button-control"
+              onClick={resetForm}
+              onKeyDown={(e) => formFocusAction(e, FORM_STATUS.idle)}
+            >
+              <span className="button-text">
+                Cancel
+              </span>
+            </button>
+          </div>
         </form>
       </div>
-    </section>
+    </FormSection>
   );
 }
 
@@ -609,6 +617,25 @@ const InfoSection = styled.section`
 
       .icon {
         height: 100%;
+      }
+    }
+  }
+`;
+
+const FormSection = styled.section`
+  .button-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+
+    button {
+      width: 100%;
+      max-width: 350px;
+    
+      .button-text {
+        padding: 7px 0;
       }
     }
   }
