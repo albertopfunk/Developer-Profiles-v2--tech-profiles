@@ -239,7 +239,7 @@ export const GlobalStyles = createGlobalStyle`
   * 1rem default for inputs to avoid zoom on ios
   */
 
-  input, select {
+  input, select, textarea {
     font-size: 1rem;
   }
 
