@@ -169,8 +169,6 @@ const FilterNav = styled.nav`
   }
 
   .control-mobile {
-    font-size: .8em;
-
     .button-text {
       padding: 5px 0;
     }
@@ -281,10 +279,9 @@ const FiltersContainer = styled.div`
     button {
       width: 100%;
       max-width: 350px;
-      font-size: .8em;
     
       .button-text {
-        padding: 5px 0;
+        padding: 7px 0;
       }
     }
   }

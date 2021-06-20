@@ -252,6 +252,14 @@ const Nav = styled.nav`
           box-shadow: inset 0 0 1px 2.5px #2727ad;
         }
 
+        &:focus-visible .icon {
+          fill: #2727ad;
+        }
+
+        &:hover .icon {
+          fill: #2727ad;
+        }
+
         .icon {
           transition: all 0.3s linear;
           height: 100%;
