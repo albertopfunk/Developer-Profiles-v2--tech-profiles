@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import {ReactComponent as RemoveIcon} from "../../../global/assets/dashboard-remove.svg";
 
 import ImageUploadForm from "../images/ImageUpload";
 import ImagePreview from "../images/ImagePreview";
@@ -224,16 +225,23 @@ const ProjectForm = React.forwardRef(
 
     return (
       <Fieldset>
-        <legend>Project: {project.projectNameInput || "New Project"}</legend>
 
-        <button
-          ref={removeBtnRef}
-          type="button"
-          aria-label={`Remove ${project.projectNameInput || "New"} Project`}
-          onClick={() => removeProject(projIndex)}
-        >
-          X
-        </button>
+        <div className="info-heading">
+          <legend>Project: {project.projectNameInput || "New Project"}</legend>
+
+          <button
+            ref={removeBtnRef}
+            type="button"
+            className="button remove-button"
+            aria-label={`Remove ${project.projectNameInput || "New"} Project`}
+            onClick={() => removeProject(projIndex)}
+          >
+            <span className="sr-only">Remove Project</span>
+            <span className="button-icon">
+              <RemoveIcon className="icon" />
+            </span>
+          </button>
+        </div>
 
         <InputContainer>
           <label htmlFor={`project-${projectId}`}>Project:</label>
@@ -353,6 +361,34 @@ const ProjectForm = React.forwardRef(
 
 const Fieldset = styled.fieldset`
   min-width: 0;
+
+  .info-heading {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+
+    .remove-button {
+      width: 100%;
+      max-width: 32px;
+      border-radius: 10px;
+      height: 32px;
+      padding: 8px;
+
+      &:focus-visible {
+        outline-width: 3px;
+        outline-color: transparent;
+        box-shadow: inset 0 0 1px 2.5px #2727ad;
+      }
+
+      &:hover .icon {
+        fill: #2727ad;
+      }
+
+      .icon {
+        height: 100%;
+      }
+    }
+  }
 `;
 
 const InputContainer = styled.div`
