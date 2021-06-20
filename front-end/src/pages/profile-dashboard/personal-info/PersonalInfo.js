@@ -340,25 +340,27 @@ function PersonalInfo() {
           </button>
         </div>
 
-        <ul aria-label="current information">
-          <li>First Name: {user.first_name || "None Set"}</li>
-          <li>Last Name: {user.last_name || "None Set"}</li>
-          <li>
-            {user.profile_image || user.avatar_image ? (
-              <>
-                <p>Profile Pic:</p>
-                <img
-                  src={user.profile_image || user.avatar_image}
-                  alt="saved pic"
-                />
-              </>
-            ) : (
-              "Profile Pic: None Set"
-            )}
-          </li>
-          <li>Area of Work: {user.area_of_work || "None Set"}</li>
-          <li>Title: {user.desired_title || "None Set"}</li>
-        </ul>
+        <dl aria-label="current information">
+          <dt>First Name:</dt>
+          <dd>{user.first_name || "None Set"}</dd>
+          <dt>Last Name:</dt>
+          <dd>{user.last_name || "None Set"}</dd>
+          <dt>Profile Pic:</dt>
+          <dd>
+            {user.profile_image || user.avatar_image ?
+              <img
+                src={user.profile_image || user.avatar_image}
+                alt="saved pic"
+              />
+              :
+              "None Set"
+            }
+          </dd>
+          <dt>Area of Work:</dt>
+          <dd>{user.area_of_work || "None Set"}</dd>
+          <dt>Title</dt>
+          <dd>{user.desired_title || "None Set"}</dd>
+        </dl>
       </InfoSection>
     );
   }

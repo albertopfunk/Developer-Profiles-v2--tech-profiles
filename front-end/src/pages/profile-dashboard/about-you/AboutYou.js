@@ -499,45 +499,34 @@ function AboutYou() {
           </button>
         </div>
 
-        <ul aria-label="current information">
-          <li>Summary: {user.summary || "None Set"}</li>
-          <li>
-            Interested Locations:
-            {user.locations.length > 0 ? (
-              <ul aria-label="interested locations">
-                {user.locations.map((location) => (
-                  <li key={location.id}>{location.name}</li>
-                ))}
-              </ul>
-            ) : (
-              "None Set"
-            )}
-          </li>
-          <li>
-            Top Skills:
-            {user.topSkills.length > 0 ? (
-              <ul aria-label="top skills">
-                {user.topSkills.map((skill) => (
-                  <li key={skill.id}>{skill.name}</li>
-                ))}
-              </ul>
-            ) : (
-              "None Set"
-            )}
-          </li>
-          <li>
-            Additional Skills:
-            {user.additionalSkills.length > 0 ? (
-              <ul aria-label="additional skills">
-                {user.additionalSkills.map((skill) => (
-                  <li key={skill.id}>{skill.name}</li>
-                ))}
-              </ul>
-            ) : (
-              "None Set"
-            )}
-          </li>
-        </ul>
+        <dl aria-label="current information">
+          <dt>Summary:</dt>
+          <dd>{user.summary || "None Set"}</dd>
+          <dt>Interested Locations:</dt>
+          {user.locations.length > 0 ? (
+            user.locations.map((location) => (
+              <dd key={location.id}>{location.name}</dd>
+            ))
+          ) : (
+            <dd>None Set</dd>
+          )}
+          <dt>Top Skills:</dt>
+          {user.topSkills.length > 0 ? (
+            user.topSkills.map((skill) => (
+              <dd key={skill.id}>{skill.name}</dd>
+            ))
+          ) : (
+            <dd>None Set</dd>
+          )}
+          <dt>Additional Skills:</dt>
+          {user.additionalSkills.length > 0 ? (
+            user.additionalSkills.map((skill) => (
+              <dd key={skill.id}>{skill.name}</dd>
+            ))
+          ) : (
+            <dd>None Set</dd>
+          )}
+        </dl>
       </InfoSection>
     );
   }

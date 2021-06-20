@@ -486,13 +486,18 @@ function WhereToFindYou() {
           </button>
         </div>
 
-        <ul aria-label="current information">
-          <li>Github: {user.github || "None Set"}</li>
-          <li>Twitter: {user.twitter || "None Set"}</li>
-          <li>Linkedin: {user.linkedin || "None Set"}</li>
-          <li>Portfolio: {user.portfolio || "None Set"}</li>
-          <li>Current Location: {user.current_location_name || "None Set"}</li>
-        </ul>
+        <dl aria-label="current information">
+          <dt>Github:</dt>
+          <dd>{user.github || "None Set"}</dd>
+          <dt>Twitter:</dt>
+          <dd>{user.twitter || "None Set"}</dd>
+          <dt>Linkedin:</dt>
+          <dd>{user.linkedin || "None Set"}</dd>
+          <dt>Portfolio:</dt>
+          <dd>{user.portfolio || "None Set"}</dd>
+          <dt>Current Location:</dt>
+          <dd>{user.current_location_name || "None Set"}</dd>
+        </dl>
       </InfoSection>
     );
   }
