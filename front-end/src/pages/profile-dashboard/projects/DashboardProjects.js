@@ -1,4 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
+import styled from "styled-components";
+import {ReactComponent as EditIcon} from "../../../global/assets/dashboard-edit.svg";
 
 import ProjectForm from "../../../components/forms/user-extras/ProjectForm";
 
@@ -400,17 +402,23 @@ function DashboardProjects() {
 
   if (formStatus === FORM_STATUS.idle) {
     return (
-      <section aria-labelledby="current-information-heading">
-        <h2 id="current-information-heading">Current Information</h2>
-        <button
-          ref={editInfoBtnRef}
-          id="edit-info-btn"
-          data-main-content="true"
-          onClick={setFormInputs}
-          onKeyDown={(e) => formFocusAction(e, FORM_STATUS.active)}
-        >
-          Edit Information
-        </button>
+      <InfoSection aria-labelledby="current-information-heading">
+        <div className="info-heading">
+          <h2 id="current-information-heading">Current Info</h2>
+          <button
+            ref={editInfoBtnRef}
+            id="edit-info-btn"
+            className="button edit-button"
+            data-main-content="true"
+            onClick={setFormInputs}
+            onKeyDown={(e) => formFocusAction(e, FORM_STATUS.active)}
+          >
+            <span className="sr-only">Edit Information</span>
+            <span className="button-icon">
+              <EditIcon className="icon" />
+            </span>
+          </button>
+        </div>
         {user.projects.length > 0 ? (
           user.projects.map((proj) => (
             <div key={proj.id}>
@@ -435,7 +443,7 @@ function DashboardProjects() {
         ) : (
           <p>No Projects</p>
         )}
-      </section>
+      </InfoSection>
     );
   }
 
@@ -574,5 +582,36 @@ function DashboardProjects() {
     </section>
   );
 }
+
+const InfoSection = styled.section`
+  .info-heading {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 7px;
+
+    .edit-button {
+      width: 100%;
+      max-width: 40px;
+      border-radius: 10px;
+      height: 40px;
+      padding: 8px;
+
+      &:focus-visible {
+        outline-width: 3px;
+        outline-color: transparent;
+        box-shadow: inset 0 0 1px 2.5px #2727ad;
+      }
+
+      &:hover .icon {
+        fill: #2727ad;
+      }
+
+      .icon {
+        height: 100%;
+      }
+    }
+  }
+`;
 
 export default DashboardProjects;
