@@ -486,17 +486,33 @@ function WhereToFindYou() {
           </button>
         </div>
 
-        <dl aria-label="current information">
-          <dt>Github:</dt>
-          <dd>{user.github || "None Set"}</dd>
-          <dt>Twitter:</dt>
-          <dd>{user.twitter || "None Set"}</dd>
-          <dt>Linkedin:</dt>
-          <dd>{user.linkedin || "None Set"}</dd>
-          <dt>Portfolio:</dt>
-          <dd>{user.portfolio || "None Set"}</dd>
-          <dt>Current Location:</dt>
-          <dd>{user.current_location_name || "None Set"}</dd>
+        <dl className="info-group" aria-label="current information">
+          <div className="flex-row">
+            <div className="flex-col">
+              <div>
+                <dt>Github:</dt>
+                <dd>{user.github || "None Set"}</dd>
+              </div>
+              <div>
+                <dt>Twitter:</dt>
+                <dd>{user.twitter || "None Set"}</dd>
+              </div>
+              <div>
+                <dt>Linkedin:</dt>
+                <dd>{user.linkedin || "None Set"}</dd>
+              </div>
+            </div>
+            <div className="flex-col">
+              <div>
+                <dt>Portfolio:</dt>
+                <dd>{user.portfolio || "None Set"}</dd>
+              </div>
+              <div>
+                <dt>Current Location:</dt>
+                <dd>{user.current_location_name || "None Set"}</dd>
+              </div>
+            </div>
+          </div>
         </dl>
       </InfoSection>
     );
@@ -798,6 +814,34 @@ const InfoSection = styled.section`
 
       .icon {
         height: 100%;
+      }
+    }
+  }
+
+  .info-group {
+    .flex-row {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: flex-start;
+      gap: 20px;
+
+      @media (min-width: 300px) {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+      }
+
+      .flex-col {
+        flex-basis: 0;
+        flex-shrink: 0;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        gap: 20px;
       }
     }
   }

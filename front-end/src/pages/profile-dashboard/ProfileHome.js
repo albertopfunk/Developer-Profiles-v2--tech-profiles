@@ -930,9 +930,9 @@ const ChecklistSection = styled.section`
       flex-direction: column;
       justify-content: flex-start;
       align-items: flex-start;
-      gap: 10px;
+      gap: 20px;
 
-      @media (min-width: 280px) {
+      @media (min-width: 300px) {
         flex-direction: row;
         flex-wrap: wrap;
         justify-content: center;

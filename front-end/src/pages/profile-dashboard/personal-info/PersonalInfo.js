@@ -339,27 +339,44 @@ function PersonalInfo() {
             </span>
           </button>
         </div>
+        <dl className="info-group" aria-label="current information">
+          <div className="flex-row">
+            <div className="flex-col">
 
-        <dl aria-label="current information">
-          <dt>First Name:</dt>
-          <dd>{user.first_name || "None Set"}</dd>
-          <dt>Last Name:</dt>
-          <dd>{user.last_name || "None Set"}</dd>
-          <dt>Profile Pic:</dt>
-          <dd>
-            {user.profile_image || user.avatar_image ?
-              <img
-                src={user.profile_image || user.avatar_image}
-                alt="saved pic"
-              />
-              :
-              "None Set"
-            }
-          </dd>
-          <dt>Area of Work:</dt>
-          <dd>{user.area_of_work || "None Set"}</dd>
-          <dt>Title</dt>
-          <dd>{user.desired_title || "None Set"}</dd>
+              <div>
+                <dt>First Name:</dt>
+                <dd>{user.first_name || "None Set"}</dd>
+              </div>
+              <div>
+                <dt>Last Name:</dt>
+                <dd>{user.last_name || "None Set"}</dd>
+              </div>
+              <div>
+                <dt>Profile Pic:</dt>
+                <dd>
+                  {user.profile_image || user.avatar_image ?
+                    <img
+                      src={user.profile_image || user.avatar_image}
+                      alt="saved pic"
+                    />
+                    :
+                    "None Set"
+                  }
+                </dd>
+              </div>
+            </div>
+
+            <div className="flex-col">
+              <div>
+                <dt>Area of Work:</dt>
+                <dd>{user.area_of_work || "None Set"}</dd>
+              </div>
+              <div>
+                <dt>Title</dt>
+                <dd>{user.desired_title || "None Set"}</dd>
+              </div>
+            </div>
+          </div>
         </dl>
       </InfoSection>
     );
@@ -625,6 +642,34 @@ const InfoSection = styled.section`
 
       .icon {
         height: 100%;
+      }
+    }
+  }
+
+  .info-group {
+    .flex-row {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: flex-start;
+      gap: 20px;
+
+      @media (min-width: 300px) {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+      }
+
+      .flex-col {
+        flex-basis: 0;
+        flex-shrink: 0;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        gap: 20px;
       }
     }
   }

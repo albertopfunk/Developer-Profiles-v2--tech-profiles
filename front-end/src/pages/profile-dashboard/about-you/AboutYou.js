@@ -499,33 +499,48 @@ function AboutYou() {
           </button>
         </div>
 
-        <dl aria-label="current information">
-          <dt>Summary:</dt>
-          <dd>{user.summary || "None Set"}</dd>
-          <dt>Interested Locations:</dt>
-          {user.locations.length > 0 ? (
-            user.locations.map((location) => (
-              <dd key={location.id}>{location.name}</dd>
-            ))
-          ) : (
-            <dd>None Set</dd>
-          )}
-          <dt>Top Skills:</dt>
-          {user.topSkills.length > 0 ? (
-            user.topSkills.map((skill) => (
-              <dd key={skill.id}>{skill.name}</dd>
-            ))
-          ) : (
-            <dd>None Set</dd>
-          )}
-          <dt>Additional Skills:</dt>
-          {user.additionalSkills.length > 0 ? (
-            user.additionalSkills.map((skill) => (
-              <dd key={skill.id}>{skill.name}</dd>
-            ))
-          ) : (
-            <dd>None Set</dd>
-          )}
+        <dl className="info-group" aria-label="current information">
+          <div className="flex-row">
+            <div className="flex-col">
+              <div>
+                <dt>Summary:</dt>
+                <dd>{user.summary || "None Set"}</dd>
+              </div>
+              <div>
+                <dt>Interested Locations:</dt>
+                {user.locations.length > 0 ? (
+                  user.locations.map((location) => (
+                    <dd key={location.id}>{location.name}</dd>
+                  ))
+                ) : (
+                  <dd>None Set</dd>
+                )}
+              </div>
+            </div>
+            <div className="flex-col">
+              <div>
+                <dt>Top Skills:</dt>
+                {user.topSkills.length > 0 ? (
+                  user.topSkills.map((skill) => (
+                    <dd key={skill.id}>{skill.name}</dd>
+                  ))
+                ) : (
+                  <dd>None Set</dd>
+                )}
+              </div>
+              <div>
+                <dt>Additional Skills:</dt>
+                {user.additionalSkills.length > 0 ? (
+                  user.additionalSkills.map((skill) => (
+                    <dd key={skill.id}>{skill.name}</dd>
+                  ))
+                ) : (
+                  <dd>None Set</dd>
+                )}
+              </div>
+            </div>
+          </div>
+
         </dl>
       </InfoSection>
     );
@@ -701,6 +716,34 @@ const InfoSection = styled.section`
 
       .icon {
         height: 100%;
+      }
+    }
+  }
+
+  .info-group {
+    .flex-row {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: flex-start;
+      gap: 20px;
+
+      @media (min-width: 300px) {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+      }
+
+      .flex-col {
+        flex-basis: 0;
+        flex-shrink: 0;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        gap: 20px;
       }
     }
   }
