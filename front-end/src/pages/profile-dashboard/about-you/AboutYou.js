@@ -721,6 +721,9 @@ const InfoSection = styled.section`
   }
 
   .info-group {
+    width: 95%;
+    max-width: 500px;
+    
     .flex-row {
       display: flex;
       flex-direction: column;

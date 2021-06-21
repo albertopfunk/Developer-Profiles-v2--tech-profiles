@@ -351,7 +351,7 @@ function PersonalInfo() {
                 <dt>Last Name:</dt>
                 <dd>{user.last_name || "None Set"}</dd>
               </div>
-              <div>
+              <div className="image-container">
                 <dt>Profile Pic:</dt>
                 <dd>
                   {user.profile_image || user.avatar_image ?
@@ -647,6 +647,22 @@ const InfoSection = styled.section`
   }
 
   .info-group {
+    width: 95%;
+    max-width: 500px;
+
+    .image-container {
+      width: 95%;
+      max-width: 175px;
+
+      @media (min-width: 400px) {
+        width: 200px;
+      }
+
+      img {
+        width: 100%;
+      }
+    }
+
     .flex-row {
       display: flex;
       flex-direction: column;
