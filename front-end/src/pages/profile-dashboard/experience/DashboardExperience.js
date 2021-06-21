@@ -401,26 +401,46 @@ function DashboardExperience() {
             </span>
           </button>
         </div>
+        
+        <div className="grid-container">
+          {user.experience.length > 0 ? (
+            user.experience.map((exp) => (
+              <div key={exp.id}>
+                <h3>{exp.company_name}</h3>
+                <dl className="info-group" aria-label={`${exp.company_name} Experience`}>
+                  
+                  <div className="flex-row">
 
-        {user.experience.length > 0 ? (
-          user.experience.map((exp) => (
-            <div key={exp.id}>
-              <h3>{`Current "${exp.company_name}" Experience`}</h3>
-              <dl aria-label={`${exp.company_name} Experience`}>
-                <dt>Company:</dt>
-                <dd>{exp.company_name}</dd>
-                <dt>Job Title:</dt>
-                <dd>{exp.job_title}</dd>
-                <dt>Dates:</dt>
-                <dd>{exp.job_dates}</dd>
-                <dt>Description:</dt>
-                <dd>{exp.job_description}</dd>
-              </dl>
-            </div>
-          ))
-        ) : (
-          <p>No Experience</p>
-        )}
+                    <div className="flex-col">
+                      <div>
+                        <dt>Company:</dt>
+                        <dd>{exp.company_name}</dd>
+                      </div>
+                      <div>
+                        <dt>Job Title:</dt>
+                        <dd>{exp.job_title}</dd>
+                      </div>
+                    </div>
+                    
+                    <div className="flex-col">
+                      <div>
+                        <dt>Dates:</dt>
+                        <dd>{exp.job_dates}</dd>
+                      </div>
+                      <div>
+                        <dt>Description:</dt>
+                        <dd>{exp.job_description}</dd>
+                      </div>
+                    </div>
+                  </div>  
+                
+                </dl>
+              </div>
+            ))
+          ) : (
+            <p>No Experience</p>
+          )}
+        </div>
       </InfoSection>
     );
   }
@@ -635,6 +655,58 @@ const InfoSection = styled.section`
 
       .icon {
         height: 100%;
+      }
+    }
+  }
+
+  .grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(350px, 100%), 1fr));
+    justify-items: stretch;
+    align-items: start;
+    grid-gap: 35px;
+  }
+
+  .info-group {
+    width: 95%;
+    max-width: 500px;
+
+    .image-container {
+      width: 95%;
+      max-width: 175px;
+
+      @media (min-width: 400px) {
+        width: 200px;
+      }
+
+      img {
+        width: 100%;
+      }
+    }
+
+    .flex-row {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: flex-start;
+      gap: 20px;
+
+      @media (min-width: 300px) {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+      }
+
+      .flex-col {
+        flex-basis: 0;
+        flex-shrink: 0;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        gap: 20px;
       }
     }
   }

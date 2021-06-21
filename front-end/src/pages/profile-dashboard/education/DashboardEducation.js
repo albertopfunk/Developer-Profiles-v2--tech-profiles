@@ -402,25 +402,42 @@ function DashboardEducation() {
             </span>
           </button>
         </div>
-        {user.education.length > 0 ? (
-          user.education.map((edu) => (
-            <div key={edu.id}>
-              <h3>{`Current "${edu.school}" Education`}</h3>
-              <dl aria-label={`${edu.school} Education`}>
-                <dt>School:</dt>
-                <dd>{edu.school}</dd>
-                <dt>Field of Study:</dt>
-                <dd>{edu.field_of_study}</dd>
-                <dt>Dates:</dt>
-                <dd>{edu.school_dates}</dd>
-                <dt>Description:</dt>
-                <dd>{edu.education_description}</dd>
-              </dl>
-            </div>
-          ))
-        ) : (
-          <p>No Education</p>
-        )}
+
+        <div className="grid-container">
+          {user.education.length > 0 ? (
+            user.education.map((edu) => (
+              <div key={edu.id}>
+                <h3>{edu.school}</h3>
+                <dl className="info-group" aria-label={`${edu.school} Education`}>
+                  <div className="flex-row">
+                    <div className="flex-col">
+                      <div>
+                        <dt>School:</dt>
+                        <dd>{edu.school}</dd>
+                      </div>
+                      <div>
+                        <dt>Field of Study:</dt>
+                        <dd>{edu.field_of_study}</dd>
+                      </div>
+                    </div>
+                    <div className="flex-col">
+                      <div>
+                        <dt>Dates:</dt>
+                        <dd>{edu.school_dates}</dd>
+                      </div>
+                      <div>
+                        <dt>Description:</dt>
+                        <dd>{edu.education_description}</dd>
+                      </div>
+                    </div>
+                  </div>
+                </dl>
+              </div>
+            ))
+          ) : (
+            <p>No Education</p>
+          )}
+        </div>
       </InfoSection>
     );
   }
@@ -635,6 +652,58 @@ const InfoSection = styled.section`
 
       .icon {
         height: 100%;
+      }
+    }
+  }
+
+  .grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(350px, 100%), 1fr));
+    justify-items: stretch;
+    align-items: start;
+    grid-gap: 35px;
+  }
+
+  .info-group {
+    width: 95%;
+    max-width: 500px;
+
+    .image-container {
+      width: 95%;
+      max-width: 175px;
+
+      @media (min-width: 400px) {
+        width: 200px;
+      }
+
+      img {
+        width: 100%;
+      }
+    }
+
+    .flex-row {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: flex-start;
+      gap: 20px;
+
+      @media (min-width: 300px) {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+      }
+
+      .flex-col {
+        flex-basis: 0;
+        flex-shrink: 0;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        gap: 20px;
       }
     }
   }

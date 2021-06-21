@@ -422,31 +422,54 @@ function DashboardProjects() {
             </span>
           </button>
         </div>
-        {user.projects.length > 0 ? (
-          user.projects.map((proj) => (
-            <div key={proj.id}>
-              <h3>{`Current "${proj.project_title}" Project`}</h3>
-              <dl aria-label={`${proj.project_title} Project`}>
-                <dt>Project Name:</dt>
-                <dd>{proj.project_title}</dd>
-                <dt>Project Pic:</dt>
-                <dd>
-                  {proj.project_img ? (
-                    <img src={proj.project_img} alt="project pic" />
-                  ) : (
-                    "None Set"
-                  )}
-                </dd>
-                <dt>Project Link:</dt>
-                <dd>{proj.link}</dd>
-                <dt>Description:</dt>
-                <dd>{proj.project_description}</dd>
-              </dl>
-            </div>
-          ))
-        ) : (
-          <p>No Projects</p>
-        )}
+
+        <div className="grid-container">
+
+          {user.projects.length > 0 ? (
+            user.projects.map((proj) => (
+              
+              <div key={proj.id}>
+                <h3>{proj.project_title}</h3>
+                <dl className="info-group" aria-label={`${proj.project_title} Project`}>
+                  
+                  <div className="flex-row">
+                    <div className="flex-col">
+                      <div>
+                        <dt>Project Name:</dt>
+                        <dd>{proj.project_title}</dd>
+                      </div>
+                      <div className="image-container">
+                        <dt>Project Pic:</dt>
+                        <dd>
+                          {proj.project_img ? (
+                            <img src={proj.project_img} alt="project pic" />
+                          ) : (
+                            "None Set"
+                          )}
+                        </dd>
+                      </div>
+                    </div>
+                    
+                    <div className="flex-col">
+                      <div>
+                        <dt>Project Link:</dt>
+                        <dd>{proj.link}</dd>
+                      </div>
+                      <div>
+                        <dt>Description:</dt>
+                        <dd>{proj.project_description}</dd>
+                      </div>
+                    </div>
+                  </div>
+                </dl>
+              </div>
+            ))
+          ) : (
+            <p>No Projects</p>
+          )}
+        </div>
+
+
       </InfoSection>
     );
   }
@@ -629,6 +652,58 @@ const InfoSection = styled.section`
 
       .icon {
         height: 100%;
+      }
+    }
+  }
+
+  .grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(350px, 100%), 1fr));
+    justify-items: stretch;
+    align-items: start;
+    grid-gap: 35px;
+  }
+
+  .info-group {
+    width: 95%;
+    max-width: 500px;
+
+    .image-container {
+      width: 95%;
+      max-width: 175px;
+
+      @media (min-width: 400px) {
+        width: 200px;
+      }
+
+      img {
+        width: 100%;
+      }
+    }
+
+    .flex-row {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: flex-start;
+      gap: 20px;
+
+      @media (min-width: 300px) {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+      }
+
+      .flex-col {
+        flex-basis: 0;
+        flex-shrink: 0;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        gap: 20px;
       }
     }
   }
