@@ -372,7 +372,7 @@ function PersonalInfo() {
                 <dd>{user.area_of_work || "None Set"}</dd>
               </div>
               <div>
-                <dt>Title</dt>
+                <dt>Title:</dt>
                 <dd>{user.desired_title || "None Set"}</dd>
               </div>
             </div>
@@ -622,6 +622,7 @@ const InfoSection = styled.section`
     justify-content: flex-start;
     align-items: center;
     gap: 7px;
+    margin-bottom: 15px;
 
     .edit-button {
       width: 100%;
@@ -652,11 +653,7 @@ const InfoSection = styled.section`
 
     .image-container {
       width: 95%;
-      max-width: 175px;
-
-      @media (min-width: 400px) {
-        width: 200px;
-      }
+      max-width: 125px;
 
       img {
         width: 100%;
@@ -693,6 +690,10 @@ const InfoSection = styled.section`
 
 const FormSection = styled.section`
   min-width: 0;
+
+  #edit-information-heading {
+    margin-bottom: 15px;
+  }
 
   .button-container {
     display: flex;
