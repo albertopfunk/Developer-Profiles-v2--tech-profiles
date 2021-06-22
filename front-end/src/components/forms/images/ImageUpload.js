@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { httpClient } from "../../../global/helpers/http-requests";
 import { FORM_STATUS } from "../../../global/helpers/variables";
+import Spacer from "../../../global/helpers/spacer";
 
 function ImageUploadForm({ userId, imageId, setImageInput }) {
   const [imageStatus, setImageStatus] = useState(FORM_STATUS.idle);
@@ -43,6 +44,7 @@ function ImageUploadForm({ userId, imageId, setImageInput }) {
     <div>
       <InputContainer>
         <label htmlFor="image-upload">Upload an image:</label>
+        <Spacer axis="vertical" size="5" />
         <input
           type="file"
           id="image-upload"

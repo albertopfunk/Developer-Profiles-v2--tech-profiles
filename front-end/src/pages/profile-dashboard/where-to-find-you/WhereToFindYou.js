@@ -9,6 +9,7 @@ import { httpClient } from "../../../global/helpers/http-requests";
 import { validateInput } from "../../../global/helpers/validation";
 import { FORM_STATUS } from "../../../global/helpers/variables";
 import Announcer from "../../../global/helpers/announcer";
+import Spacer from "../../../global/helpers/spacer";
 
 let formSuccessWait;
 function WhereToFindYou() {
@@ -485,30 +486,35 @@ function WhereToFindYou() {
             </span>
           </button>
         </div>
-
+        <Spacer axis="vertical" size="10" />
         <dl className="info-group" aria-label="current information">
           <div className="flex-row">
             <div className="flex-col">
               <div>
                 <dt>Github:</dt>
+                <Spacer axis="vertical" size="5" />
                 <dd>{user.github || "None Set"}</dd>
               </div>
               <div>
                 <dt>Twitter:</dt>
+                <Spacer axis="vertical" size="5" />
                 <dd>{user.twitter || "None Set"}</dd>
               </div>
               <div>
                 <dt>Linkedin:</dt>
+                <Spacer axis="vertical" size="5" />
                 <dd>{user.linkedin || "None Set"}</dd>
               </div>
             </div>
             <div className="flex-col">
               <div>
                 <dt>Portfolio:</dt>
+                <Spacer axis="vertical" size="5" />
                 <dd>{user.portfolio || "None Set"}</dd>
               </div>
               <div>
                 <dt>Current Location:</dt>
+                <Spacer axis="vertical" size="5" />
                 <dd>{user.current_location_name || "None Set"}</dd>
               </div>
             </div>
@@ -529,7 +535,7 @@ function WhereToFindYou() {
 
       <FormSection aria-labelledby="edit-information-heading">
         <h2 id="edit-information-heading">Edit Info</h2>
-
+        <Spacer axis="vertical" size="15" />
         {formStatus === FORM_STATUS.error ? (
           <div ref={errorSummaryRef} tabIndex="-1">
             <h3 id="error-heading">Errors in Submission</h3>
@@ -590,6 +596,7 @@ function WhereToFindYou() {
         <form onSubmit={(e) => submitEdit(e)} noValidate>
           <InputContainer>
             <label htmlFor="github">Github:</label>
+            <Spacer axis="vertical" size="5" />
             <input
               ref={githubInputRef}
               type="text"
@@ -623,6 +630,7 @@ function WhereToFindYou() {
 
           <InputContainer>
             <label htmlFor="twitter">Twitter:</label>
+            <Spacer axis="vertical" size="5" />
             <input
               type="text"
               autoComplete="username"
@@ -654,6 +662,7 @@ function WhereToFindYou() {
 
           <InputContainer>
             <label htmlFor="linkedin">Linkedin:</label>
+            <Spacer axis="vertical" size="5" />
             <input
               type="text"
               autoComplete="username"
@@ -685,6 +694,7 @@ function WhereToFindYou() {
 
           <InputContainer>
             <label htmlFor="portfolio">Portfolio:</label>
+            <Spacer axis="vertical" size="5" />
             <input
               type="url"
               autoComplete="url"
@@ -714,6 +724,7 @@ function WhereToFindYou() {
 
           <InputContainer>
             <label htmlFor="email">Public Email:</label>
+            <Spacer axis="vertical" size="5" />
             <input
               type="email"
               autoComplete="email"

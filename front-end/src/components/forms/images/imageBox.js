@@ -4,6 +4,7 @@ import { ProfileContext } from "../../../global/context/user-profile/ProfileCont
 import { avatarInfo } from "../../../global/static-data";
 import ImagePreview from "./ImagePreview";
 import ImageUploadForm from "./ImageUpload";
+import Spacer from "../../../global/helpers/spacer";
 
 function ImageBox({ setImageChange }) {
   const { user, userImage, setUserImage } = useContext(ProfileContext);
@@ -331,6 +332,7 @@ function ImageBox({ setImageChange }) {
           }
         >
           <legend>Choose an avatar image:</legend>
+          <Spacer axis="vertical" size="5" />
           {/* avatars main container */}
           <div className="flex-container">
             {avatarInfo.map((avatar) => (

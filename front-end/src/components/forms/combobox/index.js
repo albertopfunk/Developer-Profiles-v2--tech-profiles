@@ -4,6 +4,7 @@ import {
   CANCEL_STATUS,
   COMBOBOX_STATUS,
 } from "../../../global/helpers/variables";
+import Spacer from "../../../global/helpers/spacer";
 
 class Combobox extends React.Component {
   state = {
@@ -344,9 +345,9 @@ class Combobox extends React.Component {
     return (
       <div>
         <label id={`${inputName}-label`} htmlFor={`${inputName}-search-input`}>
-          {displayName}
+          {displayName}:
         </label>
-
+        <Spacer axis="vertical" size="5" />
         <InputContainer
           id={`${inputName}-search-combobox`}
           // combobox on parent is recommended by ARIA 1.1

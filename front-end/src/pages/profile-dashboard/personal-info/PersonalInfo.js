@@ -9,6 +9,7 @@ import { httpClient } from "../../../global/helpers/http-requests";
 import { validateInput } from "../../../global/helpers/validation";
 import { FORM_STATUS } from "../../../global/helpers/variables";
 import Announcer from "../../../global/helpers/announcer";
+import Spacer from "../../../global/helpers/spacer";
 
 let formSuccessWait;
 function PersonalInfo() {
@@ -339,20 +340,24 @@ function PersonalInfo() {
             </span>
           </button>
         </div>
+        <Spacer axis="vertical" size="10" />
         <dl className="info-group" aria-label="current information">
           <div className="flex-row">
             <div className="flex-col">
 
               <div>
                 <dt>First Name:</dt>
+                <Spacer axis="vertical" size="5" />
                 <dd>{user.first_name || "None Set"}</dd>
               </div>
               <div>
                 <dt>Last Name:</dt>
+                <Spacer axis="vertical" size="5" />
                 <dd>{user.last_name || "None Set"}</dd>
               </div>
               <div className="image-container">
                 <dt>Profile Pic:</dt>
+                <Spacer axis="vertical" size="5" />
                 <dd>
                   {user.profile_image || user.avatar_image ?
                     <img
@@ -369,10 +374,12 @@ function PersonalInfo() {
             <div className="flex-col">
               <div>
                 <dt>Area of Work:</dt>
+                <Spacer axis="vertical" size="5" />
                 <dd>{user.area_of_work || "None Set"}</dd>
               </div>
               <div>
                 <dt>Title</dt>
+                <Spacer axis="vertical" size="5" />
                 <dd>{user.desired_title || "None Set"}</dd>
               </div>
             </div>
@@ -393,7 +400,7 @@ function PersonalInfo() {
 
       <FormSection aria-labelledby="edit-information-heading">
         <h2 id="edit-information-heading">Edit Info</h2>
-
+        <Spacer axis="vertical" size="15" />
         {formStatus === FORM_STATUS.error ? (
           <div ref={errorSummaryRef} tabIndex="-1">
             <h3 id="error-heading">Errors in Submission</h3>
@@ -442,6 +449,7 @@ function PersonalInfo() {
         <form onSubmit={(e) => submitEdit(e)}>
           <InputContainer>
             <label htmlFor="first-name">First Name:</label>
+            <Spacer axis="vertical" size="5" />
             <input
               ref={firstNameInputRef}
               type="text"
@@ -472,6 +480,7 @@ function PersonalInfo() {
 
           <InputContainer>
             <label htmlFor="last-name">Last Name:</label>
+            <Spacer axis="vertical" size="5" />
             <input
               type="text"
               autoComplete="family-name"
@@ -502,6 +511,7 @@ function PersonalInfo() {
 
           <FieldSet>
             <legend>Area of Work</legend>
+            <Spacer axis="vertical" size="5" />
             <div className="radio-buttons-container">
               <span className="radio-wrapper">
                 <input
@@ -552,6 +562,7 @@ function PersonalInfo() {
 
           <InputContainer>
             <label htmlFor="title">Title:</label>
+            <Spacer axis="vertical" size="5" />
             <input
               type="text"
               autoComplete="organization-title"

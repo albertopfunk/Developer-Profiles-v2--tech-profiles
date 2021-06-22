@@ -9,6 +9,7 @@ import { httpClient } from "../../../global/helpers/http-requests";
 import { validateInput } from "../../../global/helpers/validation";
 import { FORM_STATUS } from "../../../global/helpers/variables";
 import Announcer from "../../../global/helpers/announcer";
+import Spacer from "../../../global/helpers/spacer";
 
 let formSuccessWait;
 function AboutYou() {
@@ -498,16 +499,18 @@ function AboutYou() {
             </span>
           </button>
         </div>
-
+        <Spacer axis="vertical" size="10" />
         <dl className="info-group" aria-label="current information">
           <div className="flex-row">
             <div className="flex-col">
               <div>
                 <dt>Summary:</dt>
+                <Spacer axis="vertical" size="5" />
                 <dd>{user.summary || "None Set"}</dd>
               </div>
               <div>
                 <dt>Interested Locations:</dt>
+                <Spacer axis="vertical" size="5" />
                 {user.locations.length > 0 ? (
                   user.locations.map((location) => (
                     <dd key={location.id}>{location.name}</dd>
@@ -520,6 +523,7 @@ function AboutYou() {
             <div className="flex-col">
               <div>
                 <dt>Top Skills:</dt>
+                <Spacer axis="vertical" size="5" />
                 {user.topSkills.length > 0 ? (
                   user.topSkills.map((skill) => (
                     <dd key={skill.id}>{skill.name}</dd>
@@ -530,6 +534,7 @@ function AboutYou() {
               </div>
               <div>
                 <dt>Additional Skills:</dt>
+                <Spacer axis="vertical" size="5" />
                 {user.additionalSkills.length > 0 ? (
                   user.additionalSkills.map((skill) => (
                     <dd key={skill.id}>{skill.name}</dd>
@@ -540,7 +545,6 @@ function AboutYou() {
               </div>
             </div>
           </div>
-
         </dl>
       </InfoSection>
     );
@@ -557,7 +561,7 @@ function AboutYou() {
 
       <FormSection aria-labelledby="edit-information-heading">
         <h2 id="edit-information-heading">Edit Info</h2>
-
+        <Spacer axis="vertical" size="15" />
         {formStatus === FORM_STATUS.error ? (
           <div ref={errorSummaryRef} tabIndex="-1">
             <h3 id="error-heading">Errors in Submission</h3>
@@ -595,6 +599,7 @@ function AboutYou() {
         <form onSubmit={(e) => submitEdit(e)}>
           <InputContainer>
             <label htmlFor="summary">Profile Summary:</label>
+            <Spacer axis="vertical" size="5" />
             <textarea
               ref={summaryInputRef}
               id="summary"
