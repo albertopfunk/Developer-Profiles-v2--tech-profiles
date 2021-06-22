@@ -192,6 +192,7 @@ function ProfileHome() {
                 <div className="flex-col">
                   <div className="info-container">
                     <h4 className="title">First Name:</h4>
+                    <Spacer axis="vertical" size="5" />
                     {user.first_name ? (
                       <p className="info">
                         <span className="icon-container">
@@ -210,6 +211,7 @@ function ProfileHome() {
 
                   <div className="info-container">
                     <h4 className="title">Last Name:</h4>
+                    <Spacer axis="vertical" size="5" />
                     {user.last_name ? (
                       <p className="info">
                         <span className="icon-container">
@@ -226,6 +228,7 @@ function ProfileHome() {
 
                   <div className="info-container">
                     <h4 className="title">Profile Image:</h4>
+                    <Spacer axis="vertical" size="5" />
                     {user.profile_image || user.avatar_image ? (
                       <p className="info">
                         <span className="icon-container">
@@ -246,6 +249,7 @@ function ProfileHome() {
                 <div className="flex-col">
                   <div className="info-container">
                     <h4 className="title">Area of Work:</h4>
+                    <Spacer axis="vertical" size="5" />
                     {user.area_of_work ? (
                       <p className="info">
                         <span className="icon-container">
@@ -264,6 +268,7 @@ function ProfileHome() {
 
                   <div className="info-container">
                     <h4 className="title">Title:</h4>
+                    <Spacer axis="vertical" size="5" />
                     {user.desired_title ? (
                       <p className="info">
                         <span className="icon-container">
@@ -328,6 +333,7 @@ function ProfileHome() {
                 <div className="flex-col">
                   <div className="info-container">
                     <h4 className="title">Summary:</h4>
+                    <Spacer axis="vertical" size="5" />
                     {user.summary ? (
                       <p className="info">
                         <span className="icon-container">
@@ -344,6 +350,7 @@ function ProfileHome() {
 
                   <div className="info-container">
                     <h4 className="title">Interested Locations:</h4>
+                    <Spacer axis="vertical" size="5" />
                     {user.locations?.length > 0 ? (
                       <p className="info">
                         <span className="icon-container">
@@ -368,6 +375,7 @@ function ProfileHome() {
                 <div className="flex-col">
                   <div className="info-container">
                     <h4 className="title">Top Skills:</h4>
+                    <Spacer axis="vertical" size="5" />
                     {user.topSkills?.length > 0 ? (
                       <p className="info">
                         <span className="icon-container">
@@ -390,6 +398,7 @@ function ProfileHome() {
 
                   <div className="info-container">
                     <h4 className="title">Additional Skills:</h4>
+                    <Spacer axis="vertical" size="5" />
                     {user.additionalSkills?.length > 0 ? (
                       <p className="info">
                         <span className="icon-container">
@@ -460,6 +469,7 @@ function ProfileHome() {
                 <div className="flex-col">
                   <div className="info-container">
                     <h4 className="title">Github:</h4>
+                    <Spacer axis="vertical" size="5" />
                     {user.github ? (
                       <p className="info">
                         <span className="icon-container">
@@ -476,6 +486,7 @@ function ProfileHome() {
 
                   <div className="info-container">
                     <h4 className="title">Twitter:</h4>
+                    <Spacer axis="vertical" size="5" />
                     {user.twitter ? (
                       <p className="info">
                         <span className="icon-container">
@@ -492,6 +503,7 @@ function ProfileHome() {
 
                   <div className="info-container">
                     <h4 className="title">Linkedin:</h4>
+                    <Spacer axis="vertical" size="5" />
                     {user.linkedin ? (
                       <p className="info">
                         <span className="icon-container">
@@ -512,6 +524,7 @@ function ProfileHome() {
                 <div className="flex-col">
                   <div className="info-container">
                     <h4 className="title">Portfolio:</h4>
+                    <Spacer axis="vertical" size="5" />
                     {user.portfolio ? (
                       <p className="info">
                         <span className="icon-container">
@@ -530,6 +543,7 @@ function ProfileHome() {
 
                   <div className="info-container">
                     <h4 className="title">Public Email:</h4>
+                    <Spacer axis="vertical" size="5" />
                     {user.public_email ? (
                       <p className="info">
                         <span className="icon-container">
@@ -548,6 +562,7 @@ function ProfileHome() {
 
                   <div className="info-container">
                     <h4 className="title">Current Location:</h4>
+                    <Spacer axis="vertical" size="5" />
                     {user.current_location_name ? (
                       <p className="info">
                         <span className="icon-container">
@@ -610,6 +625,7 @@ function ProfileHome() {
             >
               <div className="info-container">
                 <h4 className="title">Project list:</h4>
+                <Spacer axis="vertical" size="5" />
                 {user.projects?.length > 0 ? (
                   <ul className="info-group" aria-label="saved projects">
                     {user.projects.map((project) => (
@@ -674,6 +690,7 @@ function ProfileHome() {
             >
               <div className="info-container">
                 <h4 className="title">Education list:</h4>
+                <Spacer axis="vertical" size="5" />
                 {user.education?.length > 0 ? (
                   <ul className="info-group" aria-label="saved education">
                     {user.education.map((education) => (
@@ -740,6 +757,7 @@ function ProfileHome() {
             >
               <div className="info-container">
                 <h4 className="title">experience list:</h4>
+                <Spacer axis="vertical" size="5" />
                 {user.experience?.length > 0 ? (
                   <ul className="info-group" aria-label="saved experience">
                     {user.experience.map((experience) => (
@@ -804,6 +822,7 @@ function ProfileHome() {
             >
               <div className="info-container">
                 <h4 className="title">Billing:</h4>
+                <Spacer axis="vertical" size="5" />
                 {user.stripe_subscription_name ? (
                   <p className="info">
                     <span className="icon-container">
