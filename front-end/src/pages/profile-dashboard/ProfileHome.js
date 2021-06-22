@@ -7,6 +7,7 @@ import { ReactComponent as Checkmark } from "../../global/assets/dashboard-check
 
 import { ProfileContext } from "../../global/context/user-profile/ProfileContext";
 import useProfileProgress from "../../global/helpers/hooks/useProfileProgress";
+import Spacer from "../../global/helpers/spacer";
 
 /*
   - profile progress percent(all user)
@@ -125,6 +126,7 @@ function ProfileHome() {
   return (
     <ChecklistSection aria-labelledby="profile-checklist">
       <h2 id="profile-checklist">Profile Checklist</h2>
+      <Spacer axis="vertical" size="15" />
 
       <div className="checklist-container">
         <section className="top-container">

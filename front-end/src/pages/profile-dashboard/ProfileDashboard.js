@@ -37,6 +37,7 @@ import { httpClient } from "../../global/helpers/http-requests";
 import { ProfileContext } from "../../global/context/user-profile/ProfileContext";
 import auth0Client from "../../auth/Auth";
 import Announcer from "../../global/helpers/announcer";
+import Spacer from "../../global/helpers/spacer";
 
 /*
 
@@ -313,6 +314,7 @@ function ProfileDashboard() {
         ) : (
           <>
             <h1 id="main-heading">{mainHeading}</h1>
+            <Spacer axis="vertical" size="30" />
             <div className="flex-container">
               <Elements stripe={stripePromise}>
                 <ProfileContext.Provider
@@ -367,6 +369,7 @@ function ProfileDashboard() {
               {/* ~30px gap + flex item */}
               <section aria-labelledby="profile-card-heading">
                 <h2 id="profile-card-heading">Profile Preview</h2>
+                <Spacer axis="vertical" size="15" />
                 <UserCard
                   previewImage={
                     userImage.previewImage || userImage.previewAvatar
@@ -643,13 +646,6 @@ const Main = styled.main`
     padding-top: 85px;
     padding-left: 210px;
     padding-right: 10px;
-  }
-
-  & > h1 {
-    padding-bottom: 25px;
-  }
-  & > h2 {
-    margin-bottom: 10px;
   }
 `;
 
