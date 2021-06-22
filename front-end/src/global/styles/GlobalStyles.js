@@ -534,6 +534,8 @@ export const GlobalStyles = createGlobalStyle`
 
 
   input[type=text],
+  input[type=url],
+  input[type=email],
   input[type=textarea],
   select {
     width: 100%;

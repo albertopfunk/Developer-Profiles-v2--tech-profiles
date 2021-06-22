@@ -477,6 +477,8 @@ class Combobox extends React.Component {
 }
 
 const InputContainer = styled.div`
+  max-width: 450px;
+  
   input {
     width: 100%;
   }

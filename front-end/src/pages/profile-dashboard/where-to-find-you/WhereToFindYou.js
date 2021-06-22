@@ -627,7 +627,7 @@ function WhereToFindYou() {
               </span>
             ) : null}
           </InputContainer>
-
+          <Spacer axis="vertical" size="20" />
           <InputContainer>
             <label htmlFor="twitter">Twitter:</label>
             <Spacer axis="vertical" size="5" />
@@ -659,7 +659,7 @@ function WhereToFindYou() {
               </span>
             ) : null}
           </InputContainer>
-
+          <Spacer axis="vertical" size="20" />
           <InputContainer>
             <label htmlFor="linkedin">Linkedin:</label>
             <Spacer axis="vertical" size="5" />
@@ -691,7 +691,7 @@ function WhereToFindYou() {
               </span>
             ) : null}
           </InputContainer>
-
+          <Spacer axis="vertical" size="20" />
           <InputContainer>
             <label htmlFor="portfolio">Portfolio:</label>
             <Spacer axis="vertical" size="5" />
@@ -721,7 +721,7 @@ function WhereToFindYou() {
               </span>
             ) : null}
           </InputContainer>
-
+          <Spacer axis="vertical" size="20" />
           <InputContainer>
             <label htmlFor="email">Public Email:</label>
             <Spacer axis="vertical" size="5" />
@@ -751,7 +751,7 @@ function WhereToFindYou() {
               </span>
             ) : null}
           </InputContainer>
-
+          <Spacer axis="vertical" size="20" />
           <Combobox
             chosenOptions={location}
             onInputChange={getLocationsByValue}
@@ -761,7 +761,7 @@ function WhereToFindYou() {
             displayName={"Current Location"}
             single
           />
-          
+          <Spacer axis="vertical" size="20" />
           <div className="button-container">
             <button
               disabled={
@@ -866,7 +866,7 @@ const FormSection = styled.section`
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     gap: 10px;
 
     button {
@@ -883,6 +883,8 @@ const FormSection = styled.section`
 const InputContainer = styled.div`
   display: flex;
   flex-direction: column;
+  max-width: 450px;
+
   .input-err {
     border: solid red;
   }

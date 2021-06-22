@@ -628,7 +628,7 @@ function AboutYou() {
               </span>
             ) : null}
           </InputContainer>
-
+          <Spacer axis="vertical" size="20" />
           <Combobox
             chosenOptions={location.inputValue}
             onInputChange={getLocationsByValue}
@@ -637,7 +637,7 @@ function AboutYou() {
             inputName={"interested-locations"}
             displayName={"Interested Locations"}
           />
-
+          <Spacer axis="vertical" size="20" />
           <Combobox
             chosenOptions={topSkills.inputValue}
             onInputChange={getSkillsByValue}
@@ -646,7 +646,7 @@ function AboutYou() {
             inputName={"top-skills"}
             displayName={"Top Skills"}
           />
-
+          <Spacer axis="vertical" size="20" />
           <Combobox
             chosenOptions={additionalSkills.inputValue}
             onInputChange={getSkillsByValue}
@@ -655,7 +655,7 @@ function AboutYou() {
             inputName={"additional-skills"}
             displayName={"Additional Skills"}
           />
-
+        <Spacer axis="vertical" size="20" />
         <div className="button-container">
           <button
             disabled={
@@ -762,7 +762,7 @@ const FormSection = styled.section`
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     gap: 10px;
 
     button {
@@ -779,6 +779,8 @@ const FormSection = styled.section`
 const InputContainer = styled.div`
   display: flex;
   flex-direction: column;
+  max-width: 450px;
+
   .input-err {
     border: solid red;
   }
