@@ -537,6 +537,7 @@ export const GlobalStyles = createGlobalStyle`
   input[type=textarea],
   select {
     width: 100%;
+    min-height: 30px;
   }
 
   label {

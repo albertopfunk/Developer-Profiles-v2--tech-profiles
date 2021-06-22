@@ -477,7 +477,7 @@ function PersonalInfo() {
               </span>
             ) : null}
           </InputContainer>
-
+          <Spacer axis="vertical" size="20" />
           <InputContainer>
             <label htmlFor="last-name">Last Name:</label>
             <Spacer axis="vertical" size="5" />
@@ -507,7 +507,9 @@ function PersonalInfo() {
             ) : null}
           </InputContainer>
 
+          <Spacer axis="vertical" size="30" />
           <ImageBox setImageChange={setImageChange} />
+          <Spacer axis="vertical" size="30" />
 
           <FieldSet>
             <legend>Area of Work</legend>
@@ -559,7 +561,7 @@ function PersonalInfo() {
               </span>
             </div>
           </FieldSet>
-
+          <Spacer axis="vertical" size="20" />
           <InputContainer>
             <label htmlFor="title">Title:</label>
             <Spacer axis="vertical" size="5" />
@@ -588,6 +590,7 @@ function PersonalInfo() {
               </span>
             ) : null}
           </InputContainer>
+          <Spacer axis="vertical" size="20" />
           <div className="button-container">
             <button
               disabled={
@@ -709,7 +712,7 @@ const FormSection = styled.section`
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     gap: 10px;
 
     button {
@@ -726,6 +729,8 @@ const FormSection = styled.section`
 const InputContainer = styled.div`
   display: flex;
   flex-direction: column;
+  max-width: 450px;
+
   .input-err {
     border: solid red;
   }
@@ -740,6 +745,7 @@ const InputContainer = styled.div`
 `;
 
 const FieldSet = styled.fieldset`
+  max-width: 450px;
   .radio-buttons-container {
     display: flex;
     justify-content: space-evenly;

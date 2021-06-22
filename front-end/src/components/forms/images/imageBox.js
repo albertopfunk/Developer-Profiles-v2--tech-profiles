@@ -363,6 +363,7 @@ const ImageBoxContainer = styled.div`
   padding: 15px;
   border-radius: 10px;
   box-shadow: 0 4px 6px 0 hsla(0, 0%, 0%, 0.2);
+  max-width: 650px;
 
   .grid-container {
     overflow-x: auto;
