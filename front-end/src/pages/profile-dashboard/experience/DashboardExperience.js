@@ -575,6 +575,7 @@ function DashboardExperience() {
 
 
         <form id="experience-form" onSubmit={(e) => submitEdit(e)}>
+        <div className="flex-container">
           {experience.map((exp, index) => {
             return (
               <div key={exp.id}>
@@ -597,7 +598,8 @@ function DashboardExperience() {
               </div>
             );
           })}
-
+        </div>
+        <Spacer axis="vertical" size="25" />
           <div className="button-container">
             <button
               disabled={
@@ -720,6 +722,12 @@ const InfoSection = styled.section`
 
 const FormSection = styled.section`
   .form-container {
+    .flex-container {
+      display: flex;
+      flex-direction: column;
+      gap: 50px;
+    }
+
     .add-button {
       width: 100%;
       max-width: 350px;
@@ -743,7 +751,7 @@ const FormSection = styled.section`
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     gap: 10px;
 
     button {

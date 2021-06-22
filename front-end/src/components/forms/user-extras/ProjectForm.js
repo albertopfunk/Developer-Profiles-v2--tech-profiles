@@ -242,7 +242,7 @@ const ProjectForm = React.forwardRef(
             </span>
           </button>
         </div>
-
+        <Spacer axis="vertical" size="5" />
         <InputContainer>
           <label htmlFor={`project-${projectId}`}>Project:</label>
           <Spacer axis="vertical" size="5" />
@@ -275,19 +275,20 @@ const ProjectForm = React.forwardRef(
             </span>
           ) : null}
         </InputContainer>
-
+        <Spacer axis="vertical" size="20" />
         <ImageUploadForm
           userId={userId}
           imageId={projectId}
           setImageInput={setImageInput}
         />
+        <Spacer axis="vertical" size="5" />
         <ImagePreview
           uploadedImage={image.imageInput}
           removeUploadedImage={removeImageInput}
           savedUserImage={!shouldRemoveImage && userProjectImage}
           removeSavedUserImage={removeUserImage}
         />
-
+        <Spacer axis="vertical" size="20" />
         <InputContainer>
           <label htmlFor={`link-${projectId}`}>Link:</label>
           <Spacer axis="vertical" size="5" />
@@ -320,7 +321,7 @@ const ProjectForm = React.forwardRef(
             </span>
           ) : null}
         </InputContainer>
-
+        <Spacer axis="vertical" size="20" />
         <InputContainer>
           <label htmlFor={`description-${projectId}`}>Description:</label>
           <Spacer axis="vertical" size="5" />
@@ -397,6 +398,8 @@ const Fieldset = styled.fieldset`
 const InputContainer = styled.div`
   display: flex;
   flex-direction: column;
+  max-width: 450px;
+  
   .input-err {
     border: solid red;
   }

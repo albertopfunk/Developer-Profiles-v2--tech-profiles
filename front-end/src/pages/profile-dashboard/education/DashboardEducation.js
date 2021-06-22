@@ -572,29 +572,33 @@ function DashboardEducation() {
 
 
         <form id="education-form" onSubmit={(e) => submitEdit(e)}>
-          {education.map((edu, index) => {
-            return (
-              <div key={edu.id}>
-                <EducationForm
-                  ref={removeBtnRefs.current[index]}
-                  eduIndex={index}
-                  userId={edu.id}
-                  currentYear={currentYear}
-                  userSchool={edu.school || ""}
-                  userFieldOfStudy={edu.field_of_study || ""}
-                  userFromMonth={edu.schoolFromMonth}
-                  userFromYear={edu.schoolFromYear}
-                  userToMonth={edu.schoolToMonth}
-                  userToYear={edu.schoolToYear}
-                  userToPresent={edu.schoolToPresent}
-                  userDescription={edu.education_description || ""}
-                  updateEducation={updateEducation}
-                  removeEducation={removeEducation}
-                />
-              </div>
-            );
-          })}
 
+        <div className="flex-container">
+      
+            {education.map((edu, index) => {
+              return (
+                <div key={edu.id}>
+                  <EducationForm
+                    ref={removeBtnRefs.current[index]}
+                    eduIndex={index}
+                    userId={edu.id}
+                    currentYear={currentYear}
+                    userSchool={edu.school || ""}
+                    userFieldOfStudy={edu.field_of_study || ""}
+                    userFromMonth={edu.schoolFromMonth}
+                    userFromYear={edu.schoolFromYear}
+                    userToMonth={edu.schoolToMonth}
+                    userToYear={edu.schoolToYear}
+                    userToPresent={edu.schoolToPresent}
+                    userDescription={edu.education_description || ""}
+                    updateEducation={updateEducation}
+                    removeEducation={removeEducation}
+                  />
+                </div>
+              );
+            })}
+        </div>
+        <Spacer axis="vertical" size="25" />
           <div className="button-container">
             <button
               disabled={
@@ -717,6 +721,12 @@ const InfoSection = styled.section`
 
 const FormSection = styled.section`
   .form-container {
+    .flex-container {
+      display: flex;
+      flex-direction: column;
+      gap: 50px;
+    }
+
     .add-button {
       width: 100%;
       max-width: 350px;
@@ -740,7 +750,7 @@ const FormSection = styled.section`
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     gap: 10px;
 
     button {

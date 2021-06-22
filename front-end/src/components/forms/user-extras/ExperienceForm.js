@@ -356,7 +356,7 @@ const ExperienceForm = React.forwardRef(
           </button>
         </div>
 
-
+        <Spacer axis="vertical" size="5" />
 
         <InputContainer>
           <label htmlFor={`company-${userId}`}>Company:</label>
@@ -390,7 +390,7 @@ const ExperienceForm = React.forwardRef(
             </span>
           ) : null}
         </InputContainer>
-
+        <Spacer axis="vertical" size="20" />
         <InputContainer>
           <label htmlFor={`title-${userId}`}>Title:</label>
           <Spacer axis="vertical" size="5" />
@@ -423,7 +423,7 @@ const ExperienceForm = React.forwardRef(
             </span>
           ) : null}
         </InputContainer>
-
+        <Spacer axis="vertical" size="20" />
         <div>
           <InputContainer>
             <label htmlFor={`from-month-${userId}`}>From Month:</label>
@@ -471,7 +471,7 @@ const ExperienceForm = React.forwardRef(
               </span>
             ) : null}
           </InputContainer>
-
+          <Spacer axis="vertical" size="20" />
           <InputContainer>
             <label htmlFor={`from-year-${userId}`}>From Year:</label>
             <Spacer axis="vertical" size="5" />
@@ -509,7 +509,7 @@ const ExperienceForm = React.forwardRef(
             ) : null}
           </InputContainer>
         </div>
-
+        <Spacer axis="vertical" size="20" />
         {userToPresent !== "Present" ? (
           <div>
             <InputContainer>
@@ -558,7 +558,7 @@ const ExperienceForm = React.forwardRef(
                 </span>
               ) : null}
             </InputContainer>
-
+            <Spacer axis="vertical" size="20" />
             <InputContainer>
               <label htmlFor={`to-year-${userId}`}>To Year:</label>
               <Spacer axis="vertical" size="5" />
@@ -608,6 +608,7 @@ const ExperienceForm = React.forwardRef(
         />
         <label htmlFor={`present-${userId}`}>Present</label>
 
+        <Spacer axis="vertical" size="20" />
         <InputContainer>
           <label htmlFor={`description-${userId}`}>Description:</label>
           <Spacer axis="vertical" size="5" />
@@ -681,6 +682,8 @@ const Fieldset = styled.fieldset`
 const InputContainer = styled.div`
   display: flex;
   flex-direction: column;
+  max-width: 450px;
+
   .input-err {
     border: solid red;
   }

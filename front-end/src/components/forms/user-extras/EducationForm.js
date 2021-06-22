@@ -358,7 +358,7 @@ const EducationForm = React.forwardRef(
             </span>
           </button>
         </div>
-
+        <Spacer axis="vertical" size="5" />
         <InputContainer>
           <label htmlFor={`school-${userId}`}>School:</label>
           <Spacer axis="vertical" size="5" />
@@ -390,7 +390,7 @@ const EducationForm = React.forwardRef(
             </span>
           ) : null}
         </InputContainer>
-
+        <Spacer axis="vertical" size="20" />
         <InputContainer>
           <label htmlFor={`field-of-study-${userId}`}>Field of Study:</label>
           <Spacer axis="vertical" size="5" />
@@ -427,7 +427,7 @@ const EducationForm = React.forwardRef(
             </span>
           ) : null}
         </InputContainer>
-
+        <Spacer axis="vertical" size="20" />
         <div>
           <InputContainer>
             <label htmlFor={`from-month-${userId}`}>From Month:</label>
@@ -477,6 +477,7 @@ const EducationForm = React.forwardRef(
               </span>
             ) : null}
           </InputContainer>
+          <Spacer axis="vertical" size="20" />
           <InputContainer>
             <label htmlFor={`from-year-${userId}`}>From Year:</label>
             <Spacer axis="vertical" size="5" />
@@ -516,7 +517,7 @@ const EducationForm = React.forwardRef(
             ) : null}
           </InputContainer>
         </div>
-
+        <Spacer axis="vertical" size="20" />
         {userToPresent !== "Present" ? (
           <div>
             <InputContainer>
@@ -567,6 +568,7 @@ const EducationForm = React.forwardRef(
                 </span>
               ) : null}
             </InputContainer>
+            <Spacer axis="vertical" size="20" />
             <InputContainer>
               <label htmlFor={`to-year-${userId}`}>To Year:</label>
               <Spacer axis="vertical" size="5" />
@@ -607,6 +609,7 @@ const EducationForm = React.forwardRef(
             </InputContainer>
           </div>
         ) : null}
+
         <input
           ref={presentRef}
           type="checkbox"
@@ -616,7 +619,8 @@ const EducationForm = React.forwardRef(
           checked={userToPresent === "Present"}
         />
         <label htmlFor={`present-${userId}`}>Present</label>
-
+        
+        <Spacer axis="vertical" size="20" />
         <InputContainer>
           <label htmlFor={`description-${userId}`}>Description:</label>
           <Spacer axis="vertical" size="5" />
@@ -690,6 +694,8 @@ const Fieldset = styled.fieldset`
 const InputContainer = styled.div`
   display: flex;
   flex-direction: column;
+  max-width: 450px;
+
   .input-err {
     border: solid red;
   }

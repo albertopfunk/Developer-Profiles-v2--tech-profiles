@@ -575,26 +575,28 @@ function DashboardProjects() {
         </button>
         <Spacer axis="vertical" size="20" />
         <form id="projects-form" onSubmit={(e) => submitEdit(e)}>
-          {projects.map((proj, index) => {
-            return (
-              <div key={proj.id}>
-                <ProjectForm
-                  ref={removeBtnRefs.current[index]}
-                  projIndex={index}
-                  userId={user.id}
-                  projectId={proj.id}
-                  userProjectName={proj.project_title || ""}
-                  userProjectImage={proj.project_img || ""}
-                  shouldRemoveImage={proj.shouldRemoveUserImage}
-                  userProjectLink={proj.link || ""}
-                  userProjectDescription={proj.project_description || ""}
-                  updateProject={updateProject}
-                  removeProject={removeProject}
-                />
-              </div>
-            );
-          })}
-
+          <div className="flex-container">
+            {projects.map((proj, index) => {
+              return (
+                <div key={proj.id}>
+                  <ProjectForm
+                    ref={removeBtnRefs.current[index]}
+                    projIndex={index}
+                    userId={user.id}
+                    projectId={proj.id}
+                    userProjectName={proj.project_title || ""}
+                    userProjectImage={proj.project_img || ""}
+                    shouldRemoveImage={proj.shouldRemoveUserImage}
+                    userProjectLink={proj.link || ""}
+                    userProjectDescription={proj.project_description || ""}
+                    updateProject={updateProject}
+                    removeProject={removeProject}
+                    />
+                </div>
+              );
+            })}
+          </div>
+          <Spacer axis="vertical" size="25" />
           <div className="button-container">
             <button
               disabled={
@@ -717,6 +719,12 @@ const InfoSection = styled.section`
 
 const FormSection = styled.section`
   .form-container {
+    .flex-container {
+      display: flex;
+      flex-direction: column;
+      gap: 50px;
+    }
+
     .add-button {
       width: 100%;
       max-width: 350px;
@@ -739,7 +747,7 @@ const FormSection = styled.section`
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     gap: 10px;
 
     button {
