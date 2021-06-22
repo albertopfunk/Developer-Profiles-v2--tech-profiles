@@ -696,7 +696,6 @@ const InfoSection = styled.section`
     justify-content: flex-start;
     align-items: center;
     gap: 7px;
-    margin-bottom: 15px;
 
     .edit-button {
       width: 100%;
@@ -754,10 +753,6 @@ const InfoSection = styled.section`
 `;
 
 const FormSection = styled.section`
-  #edit-information-heading {
-    margin-bottom: 15px;
-  }
-  
   .button-container {
     display: flex;
     flex-direction: column;

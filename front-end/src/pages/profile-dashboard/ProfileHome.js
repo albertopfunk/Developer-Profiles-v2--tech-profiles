@@ -826,10 +826,6 @@ const ChecklistSection = styled.section`
   width: 100%;
   max-width: 475px;
 
-  #profile-checklist {
-    margin-bottom: 15px;
-  }
-
   .checklist-container {
     border-radius: 10px;
     padding-bottom: 30px;

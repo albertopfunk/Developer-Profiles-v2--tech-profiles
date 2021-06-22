@@ -364,6 +364,7 @@ function ProfileDashboard() {
                 </ProfileContext.Provider>
               </Elements>
 
+              {/* ~30px gap + flex item */}
               <section aria-labelledby="profile-card-heading">
                 <h2 id="profile-card-heading">Profile Preview</h2>
                 <UserCard
@@ -607,14 +608,6 @@ const Main = styled.main`
   padding-bottom: 50px;
   background-color: hsl(240, 10%, 99%);
 
-  #main-heading {
-    margin-bottom: 30px;
-  }
-
-  #profile-card-heading {
-    margin-bottom: 15px;
-  }
-
   & > .flex-container {
     display: flex;
     flex-direction: column;
@@ -650,6 +643,13 @@ const Main = styled.main`
     padding-top: 85px;
     padding-left: 210px;
     padding-right: 10px;
+  }
+
+  & > h1 {
+    padding-bottom: 25px;
+  }
+  & > h2 {
+    margin-bottom: 10px;
   }
 `;
 
