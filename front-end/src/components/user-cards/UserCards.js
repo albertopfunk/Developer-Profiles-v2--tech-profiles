@@ -130,9 +130,7 @@ function UserCards({
               onClick={loadMoreUsers}
               onKeyDown={(e) => loadMoreFocus(e)}
             >
-              <span className="button-text">
-                Load More Profiles
-              </span>
+              <span className="button-text">Load More Profiles</span>
             </button>
           </div>
         ) : null}
@@ -147,19 +145,19 @@ function UserCards({
               onClick={backToTop}
               onKeyDown={(e) => backToTopFocus(e)}
             >
-              <span className="button-text">
-                Back to Top
-              </span>
+              <span className="button-text">Back to Top</span>
             </button>
           </div>
         ) : null}
 
         {isBusy ? (
           <div className="control">
-            <button type="button" className="button button-control" disabled="true">
-              <span className="button-text">
-                Loading
-              </span>
+            <button
+              type="button"
+              className="button button-control"
+              disabled="true"
+            >
+              <span className="button-text">Loading</span>
             </button>
           </div>
         ) : null}
@@ -174,9 +172,7 @@ function UserCards({
               onClick={loadMoreUsers}
               onKeyDown={(e) => loadMoreFocus(e)}
             >
-              <span className="button-text">
-                Retry
-              </span>
+              <span className="button-text">Retry</span>
             </button>
           </div>
         ) : null}

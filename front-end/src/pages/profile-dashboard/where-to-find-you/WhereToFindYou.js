@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
 import styled from "styled-components";
-import {ReactComponent as EditIcon} from "../../../global/assets/dashboard-edit.svg";
+import { ReactComponent as EditIcon } from "../../../global/assets/dashboard-edit.svg";
 
 import Combobox from "../../../components/forms/combobox";
 
@@ -788,9 +788,7 @@ function WhereToFindYou() {
               onClick={resetForm}
               onKeyDown={(e) => formFocusAction(e, FORM_STATUS.idle)}
             >
-              <span className="button-text">
-                Cancel
-              </span>
+              <span className="button-text">Cancel</span>
             </button>
           </div>
         </form>
@@ -832,7 +830,7 @@ const InfoSection = styled.section`
   .info-group {
     width: 95%;
     max-width: 500px;
-    
+
     .flex-row {
       display: flex;
       flex-direction: column;
@@ -872,7 +870,7 @@ const FormSection = styled.section`
     button {
       width: 100%;
       max-width: 350px;
-    
+
       .button-text {
         padding: 7px 0;
       }

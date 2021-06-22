@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import {ReactComponent as RemoveIcon} from "../../../global/assets/dashboard-remove.svg";
+import { ReactComponent as RemoveIcon } from "../../../global/assets/dashboard-remove.svg";
 
 import { validateInput } from "../../../global/helpers/validation";
 import { FORM_STATUS } from "../../../global/helpers/variables";
@@ -338,9 +338,10 @@ const ExperienceForm = React.forwardRef(
 
     return (
       <Fieldset>
-
         <div className="info-heading">
-          <legend>Experience: {company.companyNameInput || "New Company"}</legend>
+          <legend>
+            Experience: {company.companyNameInput || "New Company"}
+          </legend>
 
           <button
             ref={removeBtnRef}

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
-import {ReactComponent as EditIcon} from "../../../global/assets/dashboard-edit.svg";
+import { ReactComponent as EditIcon } from "../../../global/assets/dashboard-edit.svg";
 
 import Combobox from "../../../components/forms/combobox";
 
@@ -492,7 +492,6 @@ function AboutYou() {
             onClick={setFormInputs}
             onKeyDown={(e) => formFocusAction(e, FORM_STATUS.active)}
           >
-            
             <span className="sr-only">Edit Information</span>
             <span className="button-icon">
               <EditIcon className="icon" />
@@ -655,40 +654,37 @@ function AboutYou() {
             inputName={"additional-skills"}
             displayName={"Additional Skills"}
           />
-        <Spacer axis="vertical" size="20" />
-        <div className="button-container">
-          <button
-            disabled={
-              formStatus === FORM_STATUS.loading ||
-              formStatus === FORM_STATUS.success
-            }
-            type="submit"
-            className="button button-control"
-          >
-            <span className="button-text">
-              {formStatus === FORM_STATUS.active ? "Submit" : null}
-              {formStatus === FORM_STATUS.loading ? "loading..." : null}
-              {formStatus === FORM_STATUS.success ? "Success!" : null}
-              {formStatus === FORM_STATUS.error ? "Re-Submit" : null}
-            </span>
+          <Spacer axis="vertical" size="20" />
+          <div className="button-container">
+            <button
+              disabled={
+                formStatus === FORM_STATUS.loading ||
+                formStatus === FORM_STATUS.success
+              }
+              type="submit"
+              className="button button-control"
+            >
+              <span className="button-text">
+                {formStatus === FORM_STATUS.active ? "Submit" : null}
+                {formStatus === FORM_STATUS.loading ? "loading..." : null}
+                {formStatus === FORM_STATUS.success ? "Success!" : null}
+                {formStatus === FORM_STATUS.error ? "Re-Submit" : null}
+              </span>
+            </button>
 
-          </button>
-
-          <button
-            disabled={
-              formStatus === FORM_STATUS.loading ||
-              formStatus === FORM_STATUS.success
-            }
-            type="reset"
-            className="button button-control"
-            onClick={resetForm}
-            onKeyDown={(e) => formFocusAction(e, FORM_STATUS.idle)}
-          >
-            <span className="button-text">
-              Cancel
-            </span>
-          </button>
-        </div>
+            <button
+              disabled={
+                formStatus === FORM_STATUS.loading ||
+                formStatus === FORM_STATUS.success
+              }
+              type="reset"
+              className="button button-control"
+              onClick={resetForm}
+              onKeyDown={(e) => formFocusAction(e, FORM_STATUS.idle)}
+            >
+              <span className="button-text">Cancel</span>
+            </button>
+          </div>
         </form>
       </FormSection>
     </>
@@ -728,7 +724,7 @@ const InfoSection = styled.section`
   .info-group {
     width: 95%;
     max-width: 500px;
-    
+
     .flex-row {
       display: flex;
       flex-direction: column;
@@ -768,7 +764,7 @@ const FormSection = styled.section`
     button {
       width: 100%;
       max-width: 350px;
-    
+
       .button-text {
         padding: 7px 0;
       }

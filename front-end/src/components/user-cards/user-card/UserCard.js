@@ -225,10 +225,12 @@ const UserCard = React.forwardRef((props, articleRef) => {
               </span>
             </button>
           ) : (
-            <button type="button" className="button button-control" onClick={closeUserCard}>
-              <span className="button-text">
-                Collapse Profile
-              </span>
+            <button
+              type="button"
+              className="button button-control"
+              onClick={closeUserCard}
+            >
+              <span className="button-text">Collapse Profile</span>
             </button>
           )}
         </section>
@@ -285,12 +287,12 @@ const UserInfo = styled.div`
 
     button {
       width: 90%;
-      font-size: .8em;
+      font-size: 0.8em;
 
       @media (min-width: 950px) {
         width: 90%;
       }
-    
+
       .button-text {
         padding: 5px 0;
       }

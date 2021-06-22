@@ -474,8 +474,6 @@ const PageNav = styled.nav`
       box-shadow: inset 0 0 0 2.5px #2727ad;
     }
 
-
-
     @media (min-width: 500px) {
       display: flex;
       align-items: center;
@@ -486,16 +484,10 @@ const PageNav = styled.nav`
       border-bottom: solid 1px rgba(229, 231, 235, 0.8);
     }
 
-
-
-
-
     @media (min-width: 750px) {
       gap: 10px;
       justify-content: flex-start;
     }
-
-
 
     &:hover .link-text {
       border-bottom: solid 1px;
@@ -509,9 +501,6 @@ const PageNav = styled.nav`
       border-bottom: solid 1px transparent;
     }
 
-
-
-
     &:hover .link-icon {
       @media (min-width: 500px) {
         border-bottom: solid 1px;
@@ -522,25 +511,17 @@ const PageNav = styled.nav`
       }
     }
 
-
-
     &.selected {
       border-bottom: solid 2px;
 
-
-    @media (min-width: 500px) {
-      border-bottom: solid 1px rgba(229, 231, 235, 0.8);
-      border-right: solid;
+      @media (min-width: 500px) {
+        border-bottom: solid 1px rgba(229, 231, 235, 0.8);
+        border-right: solid;
+      }
     }
-  }
-
-
-
 
     .link-text {
       border-bottom: solid 1px transparent;
-
-
 
       @media (min-width: 500px) {
         display: none;
@@ -551,12 +532,8 @@ const PageNav = styled.nav`
       }
     }
 
-
-
     .link-text-sr-only {
       display: none;
-
-
 
       @media (min-width: 500px) {
         position: absolute;
@@ -574,21 +551,14 @@ const PageNav = styled.nav`
       }
     }
 
-
-
     .link-icon {
       display: none;
-
-
-
 
       @media (min-width: 500px) {
         display: flex;
         justify-content: center;
         border-bottom: solid 1px transparent;
       }
-
-
 
       .icon {
         height: 1.2rem;
@@ -599,8 +569,6 @@ const PageNav = styled.nav`
       }
     }
   }
-
-  
 `;
 
 const Main = styled.main`

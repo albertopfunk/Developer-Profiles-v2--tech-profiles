@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import {ReactComponent as EditIcon} from "../../../global/assets/dashboard-edit.svg";
-import {ReactComponent as AddIcon} from "../../../global/assets/dashboard-add.svg";
+import { ReactComponent as EditIcon } from "../../../global/assets/dashboard-edit.svg";
+import { ReactComponent as AddIcon } from "../../../global/assets/dashboard-add.svg";
 
 import ProjectForm from "../../../components/forms/user-extras/ProjectForm";
 
@@ -343,7 +343,7 @@ function DashboardProjects() {
 
     // check for changes first
     setFormStatus(FORM_STATUS.loading);
-    
+
     let requests = [];
 
     if (projectsChange) {
@@ -425,15 +425,15 @@ function DashboardProjects() {
         </div>
         <Spacer axis="vertical" size="10" />
         <div className="grid-container">
-
           {user.projects.length > 0 ? (
             user.projects.map((proj) => (
-              
               <div key={proj.id}>
                 <h3>{proj.project_title}</h3>
                 <Spacer axis="vertical" size="10" />
-                <dl className="info-group" aria-label={`${proj.project_title} Project`}>
-                  
+                <dl
+                  className="info-group"
+                  aria-label={`${proj.project_title} Project`}
+                >
                   <div className="flex-row">
                     <div className="flex-col">
                       <div>
@@ -453,7 +453,7 @@ function DashboardProjects() {
                         </dd>
                       </div>
                     </div>
-                    
+
                     <div className="flex-col">
                       <div>
                         <dt>Project Link:</dt>
@@ -474,8 +474,6 @@ function DashboardProjects() {
             <p>No Projects</p>
           )}
         </div>
-
-
       </InfoSection>
     );
   }
@@ -565,9 +563,7 @@ function DashboardProjects() {
           onClick={(e) => addProject(e)}
         >
           <div className="button-text">
-            <span className="text">
-              New Project
-            </span>
+            <span className="text">New Project</span>
             <span className="icon-container">
               <AddIcon className="icon" />
             </span>
@@ -591,7 +587,7 @@ function DashboardProjects() {
                     userProjectDescription={proj.project_description || ""}
                     updateProject={updateProject}
                     removeProject={removeProject}
-                    />
+                  />
                 </div>
               );
             })}
@@ -623,9 +619,7 @@ function DashboardProjects() {
               onClick={resetForm}
               onKeyDown={(e) => formFocusAction(e, FORM_STATUS.idle)}
             >
-              <span className="button-text">
-                Cancel
-              </span>
+              <span className="button-text">Cancel</span>
             </button>
           </div>
         </form>
@@ -728,8 +722,8 @@ const FormSection = styled.section`
     .add-button {
       width: 100%;
       max-width: 350px;
-      font-size: .9rem;
-      
+      font-size: 0.9rem;
+
       .button-text {
         display: flex;
         justify-content: center;
@@ -753,7 +747,7 @@ const FormSection = styled.section`
     button {
       width: 100%;
       max-width: 350px;
-    
+
       .button-text {
         padding: 7px 0;
       }

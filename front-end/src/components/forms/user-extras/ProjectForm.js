@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import {ReactComponent as RemoveIcon} from "../../../global/assets/dashboard-remove.svg";
+import { ReactComponent as RemoveIcon } from "../../../global/assets/dashboard-remove.svg";
 
 import ImageUploadForm from "../images/ImageUpload";
 import ImagePreview from "../images/ImagePreview";
@@ -226,7 +226,6 @@ const ProjectForm = React.forwardRef(
 
     return (
       <Fieldset>
-
         <div className="info-heading">
           <legend>Project: {project.projectNameInput || "New Project"}</legend>
           <button
@@ -399,7 +398,7 @@ const InputContainer = styled.div`
   display: flex;
   flex-direction: column;
   max-width: 450px;
-  
+
   .input-err {
     border: solid red;
   }

@@ -116,11 +116,7 @@ function MainHeader(props) {
           <>
             <div className="fixed-container">
               <div className="logo-container">
-                <NavLink
-                  exact
-                  to="/"
-                  className="site-logo"
-                >
+                <NavLink exact to="/" className="site-logo">
                   {siteLogo}
                 </NavLink>
               </div>
@@ -136,11 +132,7 @@ function MainHeader(props) {
         ) : (
           <div className="fixed-container">
             <div className="logo-container">
-              <NavLink
-                exact
-                to="/"
-                className="site-logo"
-              >
+              <NavLink exact to="/" className="site-logo">
                 {siteLogo}
               </NavLink>
             </div>
@@ -181,9 +173,6 @@ const Nav = styled.nav`
     justify-content: space-between;
     align-items: center;
     gap: 20px;
-
-
-    
 
     @media (min-width: 750px) {
       height: 75px;
@@ -307,7 +296,6 @@ const Nav = styled.nav`
       }
     }
 
-
     &.mobile {
       border-top: solid 1px rgba(229, 231, 235, 0.5);
       overflow-x: auto;
@@ -354,21 +342,17 @@ const Nav = styled.nav`
           }
         }
       }
-
-      
     }
 
     &.hidden {
       display: none;
     }
 
-
-
     .menu-group {
       .menu-item {
         .link {
           border-right: solid 1px rgba(229, 231, 235, 0.8);
-          
+
           &:focus-visible {
             outline-width: 3px;
             outline-color: transparent;

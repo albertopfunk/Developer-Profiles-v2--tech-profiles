@@ -39,9 +39,7 @@ function Filters({
           data-filter-content={!areFiltersShowing}
           onClick={setFilters}
         >
-          <span className="button-text">
-            filters
-          </span>
+          <span className="button-text">filters</span>
         </button>
       </div>
 
@@ -98,10 +96,8 @@ function Filters({
                 aria-label="done filtering"
                 aria-expanded="true"
                 onClick={setFilters}
-                >
-                <span className="button-text">
-                  done
-                </span>
+              >
+                <span className="button-text">done</span>
               </button>
               <button
                 type="reset"
@@ -109,9 +105,7 @@ function Filters({
                 aria-label="reset filters"
                 onClick={resetFilters}
               >
-                <span className="button-text">
-                  reset
-                </span>
+                <span className="button-text">reset</span>
               </button>
             </div>
           </div>
@@ -279,7 +273,7 @@ const FiltersContainer = styled.div`
     button {
       width: 100%;
       max-width: 350px;
-    
+
       .button-text {
         padding: 7px 0;
       }

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import {ReactComponent as RemoveIcon} from "../../../global/assets/dashboard-remove.svg";
+import { ReactComponent as RemoveIcon } from "../../../global/assets/dashboard-remove.svg";
 
 import { validateInput } from "../../../global/helpers/validation";
 import { FORM_STATUS } from "../../../global/helpers/variables";
@@ -341,9 +341,10 @@ const EducationForm = React.forwardRef(
 
     return (
       <Fieldset>
-
         <div className="info-heading">
-          <legend>Education: {school.schoolNameInput || "New Education"}</legend>
+          <legend>
+            Education: {school.schoolNameInput || "New Education"}
+          </legend>
 
           <button
             ref={removeBtnRef}
@@ -619,7 +620,7 @@ const EducationForm = React.forwardRef(
           checked={userToPresent === "Present"}
         />
         <label htmlFor={`present-${userId}`}>Present</label>
-        
+
         <Spacer axis="vertical" size="20" />
         <InputContainer>
           <label htmlFor={`description-${userId}`}>Description:</label>

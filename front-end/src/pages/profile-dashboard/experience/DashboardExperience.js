@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import {ReactComponent as EditIcon} from "../../../global/assets/dashboard-edit.svg";
-import {ReactComponent as AddIcon} from "../../../global/assets/dashboard-add.svg";
+import { ReactComponent as EditIcon } from "../../../global/assets/dashboard-edit.svg";
+import { ReactComponent as AddIcon } from "../../../global/assets/dashboard-add.svg";
 
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
 import useCurrentYear from "../../../global/helpers/hooks/useCurrentYear";
@@ -409,10 +409,11 @@ function DashboardExperience() {
               <div key={exp.id}>
                 <h3>{exp.company_name}</h3>
                 <Spacer axis="vertical" size="10" />
-                <dl className="info-group" aria-label={`${exp.company_name} Experience`}>
-                  
+                <dl
+                  className="info-group"
+                  aria-label={`${exp.company_name} Experience`}
+                >
                   <div className="flex-row">
-
                     <div className="flex-col">
                       <div>
                         <dt>Company:</dt>
@@ -425,7 +426,7 @@ function DashboardExperience() {
                         <dd>{exp.job_title}</dd>
                       </div>
                     </div>
-                    
+
                     <div className="flex-col">
                       <div>
                         <dt>Dates:</dt>
@@ -438,8 +439,7 @@ function DashboardExperience() {
                         <dd>{exp.job_description}</dd>
                       </div>
                     </div>
-                  </div>  
-                
+                  </div>
                 </dl>
               </div>
             ))
@@ -548,11 +548,7 @@ function DashboardExperience() {
         </div>
       ) : null}
 
-
-
-      <div className="form-container"
-      
-      >
+      <div className="form-container">
         <button
           ref={addNewBtnRef}
           id="add-new-btn"
@@ -564,42 +560,39 @@ function DashboardExperience() {
           onClick={(e) => addExperience(e)}
         >
           <div className="button-text">
-            <span className="text">
-              New Experience
-            </span>
+            <span className="text">New Experience</span>
             <span className="icon-container">
               <AddIcon className="icon" />
             </span>
           </div>
         </button>
 
-
         <form id="experience-form" onSubmit={(e) => submitEdit(e)}>
-        <div className="flex-container">
-          {experience.map((exp, index) => {
-            return (
-              <div key={exp.id}>
-                <ExperienceForm
-                  ref={removeBtnRefs.current[index]}
-                  expIndex={index}
-                  userId={exp.id}
-                  currentYear={currentYear}
-                  userCompanyName={exp.company_name || ""}
-                  userJobTitle={exp.job_title || ""}
-                  userFromMonth={exp.fromMonth}
-                  userFromYear={exp.fromYear}
-                  userToMonth={exp.toMonth}
-                  userToYear={exp.toYear}
-                  userToPresent={exp.toPresent}
-                  userDescription={exp.job_description || ""}
-                  updateExperience={updateExperience}
-                  removeExperience={removeExperience}
-                />
-              </div>
-            );
-          })}
-        </div>
-        <Spacer axis="vertical" size="25" />
+          <div className="flex-container">
+            {experience.map((exp, index) => {
+              return (
+                <div key={exp.id}>
+                  <ExperienceForm
+                    ref={removeBtnRefs.current[index]}
+                    expIndex={index}
+                    userId={exp.id}
+                    currentYear={currentYear}
+                    userCompanyName={exp.company_name || ""}
+                    userJobTitle={exp.job_title || ""}
+                    userFromMonth={exp.fromMonth}
+                    userFromYear={exp.fromYear}
+                    userToMonth={exp.toMonth}
+                    userToYear={exp.toYear}
+                    userToPresent={exp.toPresent}
+                    userDescription={exp.job_description || ""}
+                    updateExperience={updateExperience}
+                    removeExperience={removeExperience}
+                  />
+                </div>
+              );
+            })}
+          </div>
+          <Spacer axis="vertical" size="25" />
           <div className="button-container">
             <button
               disabled={
@@ -626,9 +619,7 @@ function DashboardExperience() {
               onClick={resetForm}
               onKeyDown={(e) => formFocusAction(e, FORM_STATUS.idle)}
             >
-              <span className="button-text">
-                Cancel
-              </span>
+              <span className="button-text">Cancel</span>
             </button>
           </div>
         </form>
@@ -732,8 +723,8 @@ const FormSection = styled.section`
       width: 100%;
       max-width: 350px;
       margin-bottom: 30px;
-      font-size: .9rem;
-      
+      font-size: 0.9rem;
+
       .button-text {
         display: flex;
         justify-content: center;
@@ -746,7 +737,7 @@ const FormSection = styled.section`
       }
     }
   }
-  
+
   .button-container {
     display: flex;
     flex-direction: column;
@@ -757,7 +748,7 @@ const FormSection = styled.section`
     button {
       width: 100%;
       max-width: 350px;
-    
+
       .button-text {
         padding: 7px 0;
       }

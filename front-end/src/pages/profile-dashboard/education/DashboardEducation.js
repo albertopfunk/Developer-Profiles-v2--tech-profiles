@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import {ReactComponent as EditIcon} from "../../../global/assets/dashboard-edit.svg";
-import {ReactComponent as AddIcon} from "../../../global/assets/dashboard-add.svg";
+import { ReactComponent as EditIcon } from "../../../global/assets/dashboard-edit.svg";
+import { ReactComponent as AddIcon } from "../../../global/assets/dashboard-add.svg";
 
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
 import useCurrentYear from "../../../global/helpers/hooks/useCurrentYear";
@@ -410,7 +410,10 @@ function DashboardEducation() {
               <div key={edu.id}>
                 <h3>{edu.school}</h3>
                 <Spacer axis="vertical" size="10" />
-                <dl className="info-group" aria-label={`${edu.school} Education`}>
+                <dl
+                  className="info-group"
+                  aria-label={`${edu.school} Education`}
+                >
                   <div className="flex-row">
                     <div className="flex-col">
                       <div>
@@ -546,10 +549,7 @@ function DashboardEducation() {
         </div>
       ) : null}
 
-
-
       <div className="form-container">
-
         <button
           ref={addNewBtnRef}
           id="add-new-btn"
@@ -561,20 +561,15 @@ function DashboardEducation() {
           onClick={(e) => addEducation(e)}
         >
           <div className="button-text">
-            <span className="text">
-              New Education
-            </span>
+            <span className="text">New Education</span>
             <span className="icon-container">
               <AddIcon className="icon" />
             </span>
           </div>
         </button>
 
-
         <form id="education-form" onSubmit={(e) => submitEdit(e)}>
-
-        <div className="flex-container">
-      
+          <div className="flex-container">
             {education.map((edu, index) => {
               return (
                 <div key={edu.id}>
@@ -597,8 +592,8 @@ function DashboardEducation() {
                 </div>
               );
             })}
-        </div>
-        <Spacer axis="vertical" size="25" />
+          </div>
+          <Spacer axis="vertical" size="25" />
           <div className="button-container">
             <button
               disabled={
@@ -625,9 +620,7 @@ function DashboardEducation() {
               onClick={resetForm}
               onKeyDown={(e) => formFocusAction(e, FORM_STATUS.idle)}
             >
-              <span className="button-text">
-                Cancel
-              </span>
+              <span className="button-text">Cancel</span>
             </button>
           </div>
         </form>
@@ -731,8 +724,8 @@ const FormSection = styled.section`
       width: 100%;
       max-width: 350px;
       margin-bottom: 30px;
-      font-size: .9rem;
-      
+      font-size: 0.9rem;
+
       .button-text {
         display: flex;
         justify-content: center;
@@ -745,7 +738,7 @@ const FormSection = styled.section`
       }
     }
   }
-  
+
   .button-container {
     display: flex;
     flex-direction: column;
@@ -756,7 +749,7 @@ const FormSection = styled.section`
     button {
       width: 100%;
       max-width: 350px;
-    
+
       .button-text {
         padding: 7px 0;
       }

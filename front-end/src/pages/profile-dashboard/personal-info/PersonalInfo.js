@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import styled from "styled-components";
-import {ReactComponent as EditIcon} from "../../../global/assets/dashboard-edit.svg";
+import { ReactComponent as EditIcon } from "../../../global/assets/dashboard-edit.svg";
 
 import ImageBox from "../../../components/forms/images/imageBox";
 
@@ -344,7 +344,6 @@ function PersonalInfo() {
         <dl className="info-group" aria-label="current information">
           <div className="flex-row">
             <div className="flex-col">
-
               <div>
                 <dt>First Name:</dt>
                 <Spacer axis="vertical" size="5" />
@@ -359,14 +358,14 @@ function PersonalInfo() {
                 <dt>Profile Pic:</dt>
                 <Spacer axis="vertical" size="5" />
                 <dd>
-                  {user.profile_image || user.avatar_image ?
+                  {user.profile_image || user.avatar_image ? (
                     <img
                       src={user.profile_image || user.avatar_image}
                       alt="saved pic"
                     />
-                    :
+                  ) : (
                     "None Set"
-                  }
+                  )}
                 </dd>
               </div>
             </div>
@@ -606,7 +605,6 @@ function PersonalInfo() {
                 {formStatus === FORM_STATUS.success ? "Success!" : null}
                 {formStatus === FORM_STATUS.error ? "Re-Submit" : null}
               </span>
-
             </button>
             <button
               disabled={
@@ -618,9 +616,7 @@ function PersonalInfo() {
               onClick={resetForm}
               onKeyDown={(e) => formFocusAction(e, FORM_STATUS.idle)}
             >
-              <span className="button-text">
-                Cancel
-              </span>
+              <span className="button-text">Cancel</span>
             </button>
           </div>
         </form>
@@ -628,7 +624,6 @@ function PersonalInfo() {
     </>
   );
 }
-
 
 const InfoSection = styled.section`
   .info-heading {
@@ -718,7 +713,7 @@ const FormSection = styled.section`
     button {
       width: 100%;
       max-width: 350px;
-    
+
       .button-text {
         padding: 7px 0;
       }
