@@ -4,6 +4,7 @@ import {ReactComponent as RemoveIcon} from "../../../global/assets/dashboard-rem
 
 import { validateInput } from "../../../global/helpers/validation";
 import { FORM_STATUS } from "../../../global/helpers/variables";
+import Spacer from "../../../global/helpers/spacer";
 
 const EducationForm = React.forwardRef(
   (
@@ -360,6 +361,7 @@ const EducationForm = React.forwardRef(
 
         <InputContainer>
           <label htmlFor={`school-${userId}`}>School:</label>
+          <Spacer axis="vertical" size="5" />
           <input
             type="text"
             id={`school-${userId}`}
@@ -391,6 +393,7 @@ const EducationForm = React.forwardRef(
 
         <InputContainer>
           <label htmlFor={`field-of-study-${userId}`}>Field of Study:</label>
+          <Spacer axis="vertical" size="5" />
           <input
             type="text"
             id={`field-of-study-${userId}`}
@@ -428,6 +431,7 @@ const EducationForm = React.forwardRef(
         <div>
           <InputContainer>
             <label htmlFor={`from-month-${userId}`}>From Month:</label>
+            <Spacer axis="vertical" size="5" />
             <select
               name="from-month"
               id={`from-month-${userId}`}
@@ -475,6 +479,7 @@ const EducationForm = React.forwardRef(
           </InputContainer>
           <InputContainer>
             <label htmlFor={`from-year-${userId}`}>From Year:</label>
+            <Spacer axis="vertical" size="5" />
             <select
               name="from-year"
               id={`from-year-${userId}`}
@@ -516,6 +521,7 @@ const EducationForm = React.forwardRef(
           <div>
             <InputContainer>
               <label htmlFor={`to-month-${userId}`}>To Month:</label>
+              <Spacer axis="vertical" size="5" />
               <select
                 name="to-month"
                 id={`to-month-${userId}`}
@@ -563,6 +569,7 @@ const EducationForm = React.forwardRef(
             </InputContainer>
             <InputContainer>
               <label htmlFor={`to-year-${userId}`}>To Year:</label>
+              <Spacer axis="vertical" size="5" />
               <select
                 name="to-year"
                 id={`to-year-${userId}`}
@@ -612,6 +619,7 @@ const EducationForm = React.forwardRef(
 
         <InputContainer>
           <label htmlFor={`description-${userId}`}>Description:</label>
+          <Spacer axis="vertical" size="5" />
           <input
             type="text"
             id={`description-${userId}`}

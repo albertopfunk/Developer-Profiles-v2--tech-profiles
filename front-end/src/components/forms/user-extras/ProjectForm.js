@@ -7,6 +7,7 @@ import ImagePreview from "../images/ImagePreview";
 
 import { validateInput } from "../../../global/helpers/validation";
 import { FORM_STATUS } from "../../../global/helpers/variables";
+import Spacer from "../../../global/helpers/spacer";
 
 const ProjectForm = React.forwardRef(
   (
@@ -228,7 +229,6 @@ const ProjectForm = React.forwardRef(
 
         <div className="info-heading">
           <legend>Project: {project.projectNameInput || "New Project"}</legend>
-
           <button
             ref={removeBtnRef}
             type="button"
@@ -245,6 +245,7 @@ const ProjectForm = React.forwardRef(
 
         <InputContainer>
           <label htmlFor={`project-${projectId}`}>Project:</label>
+          <Spacer axis="vertical" size="5" />
           <input
             type="text"
             autoComplete="organization"
@@ -289,6 +290,7 @@ const ProjectForm = React.forwardRef(
 
         <InputContainer>
           <label htmlFor={`link-${projectId}`}>Link:</label>
+          <Spacer axis="vertical" size="5" />
           <input
             type="text"
             autoComplete="url"
@@ -321,6 +323,7 @@ const ProjectForm = React.forwardRef(
 
         <InputContainer>
           <label htmlFor={`description-${projectId}`}>Description:</label>
+          <Spacer axis="vertical" size="5" />
           <input
             type="text"
             id={`description-${projectId}`}

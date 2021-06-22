@@ -7,6 +7,7 @@ import { ProfileContext } from "../../../global/context/user-profile/ProfileCont
 import useCurrentYear from "../../../global/helpers/hooks/useCurrentYear";
 import { FORM_STATUS } from "../../../global/helpers/variables";
 import Announcer from "../../../global/helpers/announcer";
+import Spacer from "../../../global/helpers/spacer";
 
 import ExperienceForm from "../../../components/forms/user-extras/ExperienceForm";
 
@@ -401,12 +402,13 @@ function DashboardExperience() {
             </span>
           </button>
         </div>
-        
+        <Spacer axis="vertical" size="10" />
         <div className="grid-container">
           {user.experience.length > 0 ? (
             user.experience.map((exp) => (
               <div key={exp.id}>
                 <h3>{exp.company_name}</h3>
+                <Spacer axis="vertical" size="10" />
                 <dl className="info-group" aria-label={`${exp.company_name} Experience`}>
                   
                   <div className="flex-row">
@@ -414,10 +416,12 @@ function DashboardExperience() {
                     <div className="flex-col">
                       <div>
                         <dt>Company:</dt>
+                        <Spacer axis="vertical" size="5" />
                         <dd>{exp.company_name}</dd>
                       </div>
                       <div>
                         <dt>Job Title:</dt>
+                        <Spacer axis="vertical" size="5" />
                         <dd>{exp.job_title}</dd>
                       </div>
                     </div>
@@ -425,10 +429,12 @@ function DashboardExperience() {
                     <div className="flex-col">
                       <div>
                         <dt>Dates:</dt>
+                        <Spacer axis="vertical" size="5" />
                         <dd>{exp.job_dates}</dd>
                       </div>
                       <div>
                         <dt>Description:</dt>
+                        <Spacer axis="vertical" size="5" />
                         <dd>{exp.job_description}</dd>
                       </div>
                     </div>
@@ -453,7 +459,7 @@ function DashboardExperience() {
   return (
     <FormSection aria-labelledby="edit-information-heading">
       <h2 id="edit-information-heading">Edit Info</h2>
-
+      <Spacer axis="vertical" size="15" />
       {formStatus === FORM_STATUS.error ? (
         <div ref={errorSummaryRef} tabIndex="-1">
           <h3 id="error-heading">Errors in Submission</h3>

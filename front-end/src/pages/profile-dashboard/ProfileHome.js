@@ -131,6 +131,7 @@ function ProfileHome() {
       <div className="checklist-container">
         <section className="top-container">
           <h3>Total Progress</h3>
+          <Spacer axis="vertical" size="5" />
           <div className="progress-bar-container">
             <div className="progress-bar">
               <span

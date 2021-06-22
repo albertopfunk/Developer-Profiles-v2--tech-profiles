@@ -7,6 +7,7 @@ import { ProfileContext } from "../../../global/context/user-profile/ProfileCont
 import useCurrentYear from "../../../global/helpers/hooks/useCurrentYear";
 import { FORM_STATUS } from "../../../global/helpers/variables";
 import Announcer from "../../../global/helpers/announcer";
+import Spacer from "../../../global/helpers/spacer";
 
 import EducationForm from "../../../components/forms/user-extras/EducationForm";
 
@@ -402,31 +403,36 @@ function DashboardEducation() {
             </span>
           </button>
         </div>
-
+        <Spacer axis="vertical" size="10" />
         <div className="grid-container">
           {user.education.length > 0 ? (
             user.education.map((edu) => (
               <div key={edu.id}>
                 <h3>{edu.school}</h3>
+                <Spacer axis="vertical" size="10" />
                 <dl className="info-group" aria-label={`${edu.school} Education`}>
                   <div className="flex-row">
                     <div className="flex-col">
                       <div>
                         <dt>School:</dt>
+                        <Spacer axis="vertical" size="5" />
                         <dd>{edu.school}</dd>
                       </div>
                       <div>
                         <dt>Field of Study:</dt>
+                        <Spacer axis="vertical" size="5" />
                         <dd>{edu.field_of_study}</dd>
                       </div>
                     </div>
                     <div className="flex-col">
                       <div>
                         <dt>Dates:</dt>
+                        <Spacer axis="vertical" size="5" />
                         <dd>{edu.school_dates}</dd>
                       </div>
                       <div>
                         <dt>Description:</dt>
+                        <Spacer axis="vertical" size="5" />
                         <dd>{edu.education_description}</dd>
                       </div>
                     </div>
@@ -450,7 +456,7 @@ function DashboardEducation() {
   return (
     <FormSection aria-labelledby="edit-information-heading">
       <h2 id="edit-information-heading">Edit Info</h2>
-
+      <Spacer axis="vertical" size="15" />
       {formStatus === FORM_STATUS.error ? (
         <div ref={errorSummaryRef} tabIndex="-1">
           <h3 id="error-heading">Errors in Submission</h3>

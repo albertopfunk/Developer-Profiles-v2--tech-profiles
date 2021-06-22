@@ -9,6 +9,7 @@ import { ProfileContext } from "../../../global/context/user-profile/ProfileCont
 import { FORM_STATUS } from "../../../global/helpers/variables";
 import { httpClient } from "../../../global/helpers/http-requests";
 import Announcer from "../../../global/helpers/announcer";
+import Spacer from "../../../global/helpers/spacer";
 
 let formSuccessWait;
 function DashboardProjects() {
@@ -422,7 +423,7 @@ function DashboardProjects() {
             </span>
           </button>
         </div>
-
+        <Spacer axis="vertical" size="10" />
         <div className="grid-container">
 
           {user.projects.length > 0 ? (
@@ -430,16 +431,19 @@ function DashboardProjects() {
               
               <div key={proj.id}>
                 <h3>{proj.project_title}</h3>
+                <Spacer axis="vertical" size="10" />
                 <dl className="info-group" aria-label={`${proj.project_title} Project`}>
                   
                   <div className="flex-row">
                     <div className="flex-col">
                       <div>
                         <dt>Project Name:</dt>
+                        <Spacer axis="vertical" size="5" />
                         <dd>{proj.project_title}</dd>
                       </div>
                       <div className="image-container">
                         <dt>Project Pic:</dt>
+                        <Spacer axis="vertical" size="5" />
                         <dd>
                           {proj.project_img ? (
                             <img src={proj.project_img} alt="project pic" />
@@ -453,10 +457,12 @@ function DashboardProjects() {
                     <div className="flex-col">
                       <div>
                         <dt>Project Link:</dt>
+                        <Spacer axis="vertical" size="5" />
                         <dd>{proj.link}</dd>
                       </div>
                       <div>
                         <dt>Description:</dt>
+                        <Spacer axis="vertical" size="5" />
                         <dd>{proj.project_description}</dd>
                       </div>
                     </div>
@@ -482,7 +488,7 @@ function DashboardProjects() {
   return (
     <FormSection aria-labelledby="edit-information-heading">
       <h2 id="edit-information-heading">Edit Info</h2>
-
+      <Spacer axis="vertical" size="15" />
       {formStatus === FORM_STATUS.error ? (
         <div ref={errorSummaryRef} tabIndex="-1">
           <h3 id="error-heading">Errors in Submission</h3>
@@ -567,7 +573,7 @@ function DashboardProjects() {
             </span>
           </div>
         </button>
-
+        <Spacer axis="vertical" size="20" />
         <form id="projects-form" onSubmit={(e) => submitEdit(e)}>
           {projects.map((proj, index) => {
             return (
@@ -714,7 +720,6 @@ const FormSection = styled.section`
     .add-button {
       width: 100%;
       max-width: 350px;
-      margin-bottom: 30px;
       font-size: .9rem;
       
       .button-text {

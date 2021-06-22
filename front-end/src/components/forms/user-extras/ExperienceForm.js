@@ -4,6 +4,7 @@ import {ReactComponent as RemoveIcon} from "../../../global/assets/dashboard-rem
 
 import { validateInput } from "../../../global/helpers/validation";
 import { FORM_STATUS } from "../../../global/helpers/variables";
+import Spacer from "../../../global/helpers/spacer";
 
 const ExperienceForm = React.forwardRef(
   (
@@ -359,6 +360,7 @@ const ExperienceForm = React.forwardRef(
 
         <InputContainer>
           <label htmlFor={`company-${userId}`}>Company:</label>
+          <Spacer axis="vertical" size="5" />
           <input
             type="text"
             autoComplete="organization"
@@ -391,6 +393,7 @@ const ExperienceForm = React.forwardRef(
 
         <InputContainer>
           <label htmlFor={`title-${userId}`}>Title:</label>
+          <Spacer axis="vertical" size="5" />
           <input
             type="text"
             autoComplete="organization-title"
@@ -424,6 +427,7 @@ const ExperienceForm = React.forwardRef(
         <div>
           <InputContainer>
             <label htmlFor={`from-month-${userId}`}>From Month:</label>
+            <Spacer axis="vertical" size="5" />
             <select
               name="from-month"
               id={`from-month-${userId}`}
@@ -470,6 +474,7 @@ const ExperienceForm = React.forwardRef(
 
           <InputContainer>
             <label htmlFor={`from-year-${userId}`}>From Year:</label>
+            <Spacer axis="vertical" size="5" />
             <select
               name="from-year"
               id={`from-year-${userId}`}
@@ -509,6 +514,7 @@ const ExperienceForm = React.forwardRef(
           <div>
             <InputContainer>
               <label htmlFor={`to-month-${userId}`}>To Month:</label>
+              <Spacer axis="vertical" size="5" />
               <select
                 name="to-month"
                 id={`to-month-${userId}`}
@@ -555,6 +561,7 @@ const ExperienceForm = React.forwardRef(
 
             <InputContainer>
               <label htmlFor={`to-year-${userId}`}>To Year:</label>
+              <Spacer axis="vertical" size="5" />
               <select
                 name="to-year"
                 id={`to-year-${userId}`}
@@ -603,6 +610,7 @@ const ExperienceForm = React.forwardRef(
 
         <InputContainer>
           <label htmlFor={`description-${userId}`}>Description:</label>
+          <Spacer axis="vertical" size="5" />
           <input
             type="text"
             id={`description-${userId}`}
