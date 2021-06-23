@@ -201,9 +201,9 @@ export const GlobalStyles = createGlobalStyle`
   * Change the fill color to match the text color in all browsers (opinionated).
   */
 
-  svg:not([fill]) {
+  /* svg:not([fill]) {
     fill: currentColor;
-  }
+  } */
 
 
   /* Tabular data
@@ -559,6 +559,10 @@ export const GlobalStyles = createGlobalStyle`
 
   .hidden {
     display: none;
+  }
+
+  .icon {
+    fill: black;
   }
 
   .button {

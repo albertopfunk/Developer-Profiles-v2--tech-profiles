@@ -479,12 +479,12 @@ const PageNav = styled.nav`
       align-items: center;
       justify-content: center;
       padding: 20px 10px;
-      padding-top: 21px;
       border-right: none;
       border-bottom: solid 1px rgba(229, 231, 235, 0.8);
     }
-
+    
     @media (min-width: 750px) {
+      padding-top: 21px;
       gap: 10px;
       justify-content: flex-start;
     }
@@ -502,12 +502,14 @@ const PageNav = styled.nav`
     }
 
     &:hover .link-icon {
-      @media (min-width: 500px) {
-        border-bottom: solid 1px;
-      }
-
       @media (min-width: 750px) {
         border-bottom: solid 1px transparent;
+      }
+    }
+
+    &:hover .icon {
+      @media (min-width: 500px) {
+        fill: #2727ad;
       }
     }
 
