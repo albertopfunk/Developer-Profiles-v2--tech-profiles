@@ -281,48 +281,55 @@ function DashboardProjects() {
 
     for (let i = 0; i < projects.length; i++) {
       if (Number.isInteger(projects[i].id)) {
-        const data = {};
+        if (
+          projects[i].projectChange ||
+          projects[i].linkChange ||
+          projects[i].descriptionChange ||
+          projects[i].imageChange
+        ) {
 
-        if (projects[i].projectChange) {
-          data.project_title = projects[i].projectNameInput;
-        }
-
-        if (projects[i].linkChange) {
-          data.link = projects[i].linkInput;
-        }
-
-        if (projects[i].descriptionChange) {
-          data.project_description = projects[i].descriptionInput;
-        }
-
-        if (projects[i].imageChange) {
-          if (projects[i].shouldRemoveUserImage) {
-            data.project_img = "";
-          } else {
-            const [res, err] = await httpClient(
-              "POST",
-              `/api/upload-main-image`,
-              {
-                imageUrl: projects[i].imageInput,
-                id: user.id,
-                imageId: projects[i].id,
-              }
-            );
-
-            if (err) {
-              console.error(`${res.mssg} => ${res.err}`);
-              return { error: "error saving image" };
-            }
-
-            data.project_img = res.data.image;
+          const data = {};
+  
+          if (projects[i].projectChange) {
+            data.project_title = projects[i].projectNameInput;
           }
+  
+          if (projects[i].linkChange) {
+            data.link = projects[i].linkInput;
+          }
+  
+          if (projects[i].descriptionChange) {
+            data.project_description = projects[i].descriptionInput;
+          }
+  
+          if (projects[i].imageChange) {
+            if (projects[i].shouldRemoveUserImage) {
+              data.project_img = "";
+            } else {
+              const [res, err] = await httpClient(
+                "POST",
+                `/api/upload-main-image`,
+                {
+                  imageUrl: projects[i].imageInput,
+                  id: user.id,
+                  imageId: projects[i].id,
+                }
+              );
+  
+              if (err) {
+                console.error(`${res.mssg} => ${res.err}`);
+                return { error: "error saving image" };
+              }
+  
+              data.project_img = res.data.image;
+            }
+          }
+          requests.push({
+            method: "PUT",
+            url: `/extras/projects/${projects[i].id}`,
+            data,
+          });
         }
-
-        requests.push({
-          method: "PUT",
-          url: `/extras/projects/${projects[i].id}`,
-          data,
-        });
       }
     }
 
