@@ -429,7 +429,7 @@ const EducationForm = React.forwardRef(
           ) : null}
         </InputContainer>
         <Spacer axis="vertical" size="20" />
-        <div>
+        <DatesContainer>
           <InputContainer>
             <label htmlFor={`from-month-${userId}`}>From Month:</label>
             <Spacer axis="vertical" size="5" />
@@ -478,7 +478,6 @@ const EducationForm = React.forwardRef(
               </span>
             ) : null}
           </InputContainer>
-          <Spacer axis="vertical" size="20" />
           <InputContainer>
             <label htmlFor={`from-year-${userId}`}>From Year:</label>
             <Spacer axis="vertical" size="5" />
@@ -517,9 +516,9 @@ const EducationForm = React.forwardRef(
               </span>
             ) : null}
           </InputContainer>
-        </div>
+        </DatesContainer>
         <Spacer axis="vertical" size="20" />
-        <div>
+        <DatesContainer>
           <InputContainer>
             <label htmlFor={`to-month-${userId}`}>To Month:</label>
             <Spacer axis="vertical" size="5" />
@@ -569,7 +568,6 @@ const EducationForm = React.forwardRef(
               </span>
             ) : null}
           </InputContainer>
-          <Spacer axis="vertical" size="20" />
           <InputContainer>
             <label htmlFor={`to-year-${userId}`}>To Year:</label>
             <Spacer axis="vertical" size="5" />
@@ -609,19 +607,18 @@ const EducationForm = React.forwardRef(
               </span>
             ) : null}
           </InputContainer>
-        </div>
-        <div>
-          <input
-            ref={presentRef}
-            type="checkbox"
-            id={`to-present-${userId}`}
-            name="to-present"
-            onChange={setToPresentDate}
-            checked={userToPresent === "Present"}
-          />
-          <label htmlFor={`present-${userId}`}>Present</label>
-        </div>
-
+          <div className="present-container">
+            <input
+              ref={presentRef}
+              type="checkbox"
+              id={`to-present-${userId}`}
+              name="to-present"
+              onChange={setToPresentDate}
+              checked={userToPresent === "Present"}
+            />
+            <label htmlFor={`present-${userId}`}>Present</label>
+          </div>
+        </DatesContainer>
         <Spacer axis="vertical" size="20" />
         <InputContainer>
           <label htmlFor={`description-${userId}`}>Description:</label>
@@ -690,6 +687,27 @@ const Fieldset = styled.fieldset`
         height: 100%;
       }
     }
+  }
+`;
+
+const DatesContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+
+  @media (min-width: 400px) {
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .present-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 5px;
   }
 `;
 
