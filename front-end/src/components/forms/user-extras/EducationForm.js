@@ -519,107 +519,108 @@ const EducationForm = React.forwardRef(
           </InputContainer>
         </div>
         <Spacer axis="vertical" size="20" />
-        {userToPresent !== "Present" ? (
-          <div>
-            <InputContainer>
-              <label htmlFor={`to-month-${userId}`}>To Month:</label>
-              <Spacer axis="vertical" size="5" />
-              <select
-                name="to-month"
-                id={`to-month-${userId}`}
-                defaultValue={userToMonth}
-                className={`input ${
-                  dates.schoolToMonthStatus === FORM_STATUS.error
-                    ? "input-err"
-                    : ""
-                }`}
-                aria-describedby={`to-month-${userId}-error to-month-${userId}-success`}
-                aria-invalid={
-                  dates.schoolToMonth === "" ||
-                  dates.schoolToMonthStatus === FORM_STATUS.error
-                }
-                onChange={(e) => setToMonthDate(e.target.value)}
-                onBlur={(e) => validateToMonthDate(e.target.value)}
+        <div>
+          <InputContainer>
+            <label htmlFor={`to-month-${userId}`}>To Month:</label>
+            <Spacer axis="vertical" size="5" />
+            <select
+              disabled={userToPresent === "Present"}
+              name="to-month"
+              id={`to-month-${userId}`}
+              defaultValue={userToMonth}
+              className={`input ${
+                dates.schoolToMonthStatus === FORM_STATUS.error
+                  ? "input-err"
+                  : ""
+              }`}
+              aria-describedby={`to-month-${userId}-error to-month-${userId}-success`}
+              aria-invalid={
+                dates.schoolToMonth === "" ||
+                dates.schoolToMonthStatus === FORM_STATUS.error
+              }
+              onChange={(e) => setToMonthDate(e.target.value)}
+              onBlur={(e) => validateToMonthDate(e.target.value)}
+            >
+              <option value="">--Select Month--</option>
+              <option value="January">01 | January</option>
+              <option value="February">02 | February</option>
+              <option value="March">03 | March</option>
+              <option value="April">04 | April</option>
+              <option value="May">05 | May</option>
+              <option value="June">06 | June</option>
+              <option value="July">07 | July</option>
+              <option value="August">08 | August</option>
+              <option value="September">09 | September</option>
+              <option value="October">10 | October</option>
+              <option value="November">11 | November</option>
+              <option value="December">12 | December</option>
+            </select>
+            {dates.schoolToMonthStatus === FORM_STATUS.error ? (
+              <span id={`to-month-${userId}-error`} className="err-mssg">
+                month is required
+              </span>
+            ) : null}
+            {dates.schoolToMonthStatus === FORM_STATUS.success ? (
+              <span
+                id={`to-month-${userId}-success`}
+                className="success-mssg"
               >
-                <option value="">--Select Month--</option>
-                <option value="January">01 | January</option>
-                <option value="February">02 | February</option>
-                <option value="March">03 | March</option>
-                <option value="April">04 | April</option>
-                <option value="May">05 | May</option>
-                <option value="June">06 | June</option>
-                <option value="July">07 | July</option>
-                <option value="August">08 | August</option>
-                <option value="September">09 | September</option>
-                <option value="October">10 | October</option>
-                <option value="November">11 | November</option>
-                <option value="December">12 | December</option>
-              </select>
-              {dates.schoolToMonthStatus === FORM_STATUS.error ? (
-                <span id={`to-month-${userId}-error`} className="err-mssg">
-                  month is required
-                </span>
-              ) : null}
-              {dates.schoolToMonthStatus === FORM_STATUS.success ? (
-                <span
-                  id={`to-month-${userId}-success`}
-                  className="success-mssg"
-                >
-                  month is Validated
-                </span>
-              ) : null}
-            </InputContainer>
-            <Spacer axis="vertical" size="20" />
-            <InputContainer>
-              <label htmlFor={`to-year-${userId}`}>To Year:</label>
-              <Spacer axis="vertical" size="5" />
-              <select
-                name="to-year"
-                id={`to-year-${userId}`}
-                defaultValue={userToYear}
-                className={`input ${
-                  dates.schoolToYearStatus === FORM_STATUS.error
-                    ? "input-err"
-                    : ""
-                }`}
-                aria-describedby={`to-year-${userId}-error to-year-${userId}-success`}
-                aria-invalid={
-                  dates.schoolToYear === "" ||
-                  dates.schoolToYearStatus === FORM_STATUS.error
-                }
-                onChange={(e) => setToYearDate(e.target.value)}
-                onBlur={(e) => validateToYearDate(e.target.value)}
-              >
-                <option value="">--Select Year--</option>
-                {Array.from(Array(50)).map((_, i) => (
-                  <option key={`${i}-${userId}`} value={currentYear - i}>
-                    {currentYear - i}
-                  </option>
-                ))}
-              </select>
-              {dates.schoolToYearStatus === FORM_STATUS.error ? (
-                <span id={`to-year-${userId}-error`} className="err-mssg">
-                  year is required
-                </span>
-              ) : null}
-              {dates.schoolToYearStatus === FORM_STATUS.success ? (
-                <span id={`to-year-${userId}-success`} className="success-mssg">
-                  year is Validated
-                </span>
-              ) : null}
-            </InputContainer>
-          </div>
-        ) : null}
-
-        <input
-          ref={presentRef}
-          type="checkbox"
-          id={`to-present-${userId}`}
-          name="to-present"
-          onChange={setToPresentDate}
-          checked={userToPresent === "Present"}
-        />
-        <label htmlFor={`present-${userId}`}>Present</label>
+                month is Validated
+              </span>
+            ) : null}
+          </InputContainer>
+          <Spacer axis="vertical" size="20" />
+          <InputContainer>
+            <label htmlFor={`to-year-${userId}`}>To Year:</label>
+            <Spacer axis="vertical" size="5" />
+            <select
+              disabled={userToPresent === "Present"}
+              name="to-year"
+              id={`to-year-${userId}`}
+              defaultValue={userToYear}
+              className={`input ${
+                dates.schoolToYearStatus === FORM_STATUS.error
+                  ? "input-err"
+                  : ""
+              }`}
+              aria-describedby={`to-year-${userId}-error to-year-${userId}-success`}
+              aria-invalid={
+                dates.schoolToYear === "" ||
+                dates.schoolToYearStatus === FORM_STATUS.error
+              }
+              onChange={(e) => setToYearDate(e.target.value)}
+              onBlur={(e) => validateToYearDate(e.target.value)}
+            >
+              <option value="">--Select Year--</option>
+              {Array.from(Array(50)).map((_, i) => (
+                <option key={`${i}-${userId}`} value={currentYear - i}>
+                  {currentYear - i}
+                </option>
+              ))}
+            </select>
+            {dates.schoolToYearStatus === FORM_STATUS.error ? (
+              <span id={`to-year-${userId}-error`} className="err-mssg">
+                year is required
+              </span>
+            ) : null}
+            {dates.schoolToYearStatus === FORM_STATUS.success ? (
+              <span id={`to-year-${userId}-success`} className="success-mssg">
+                year is Validated
+              </span>
+            ) : null}
+          </InputContainer>
+        </div>
+        <div>
+          <input
+            ref={presentRef}
+            type="checkbox"
+            id={`to-present-${userId}`}
+            name="to-present"
+            onChange={setToPresentDate}
+            checked={userToPresent === "Present"}
+          />
+          <label htmlFor={`present-${userId}`}>Present</label>
+        </div>
 
         <Spacer axis="vertical" size="20" />
         <InputContainer>
