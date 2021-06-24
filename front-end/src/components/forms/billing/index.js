@@ -110,6 +110,7 @@ class CheckoutContainer extends Component {
 
 const CheckoutFallback = styled.div`
   width: 100%;
+  max-width: 500px;
 `;
 
 export default CheckoutContainer;

@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 import { httpClient } from "../../../global/helpers/http-requests";
 import { SUBSCRIPTION_STATUS } from "../../../global/helpers/variables";
+import Spacer from "../../../global/helpers/spacer";
 
 class CustomerForm extends Component {
   state = {
@@ -81,7 +82,7 @@ class CustomerForm extends Component {
       <CheckoutContainer>
         <div className="info-container">
           <h2 id="billing-info">Renew your package</h2>
-
+          <Spacer axis="vertical" size="10" />
           <p>
             Live profile for anyone to see <br />
             Be found quickly with advanced filtering <br />
@@ -90,9 +91,9 @@ class CustomerForm extends Component {
           </p>
         </div>
 
-        <FormSection aria-labelledby="form-section">
+        <FormContainer aria-labelledby="form-section">
           <h3 id="form-section">Choose Sub Type</h3>
-
+          <Spacer axis="vertical" size="10" />
           <form
             className="subscriptions-form"
             onSubmit={(e) => this.onReSubscribe(e)}
@@ -156,15 +157,18 @@ class CustomerForm extends Component {
             <div className="subscription-control">
               <button
                 type="submit"
+                className="button button-control"
                 disabled={this.state.subType ? false : true}
               >
-                {subIdle ? "Re-Subscribe" : null}
-                {subLoading ? "loading..." : null}
-                {subError ? "Error re-subscribing, retry" : null}
+                <span className="button-text">
+                  {subIdle ? "Re-Subscribe" : null}
+                  {subLoading ? "loading..." : null}
+                  {subError ? "Error re-subscribing, retry" : null}
+                </span>
               </button>
             </div>
           </form>
-        </FormSection>
+        </FormContainer>
       </CheckoutContainer>
     );
   }
@@ -172,31 +176,27 @@ class CustomerForm extends Component {
 
 const CheckoutContainer = styled.div`
   width: 100%;
+  max-width: 500px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
-
-  .info-container {
-    width: 100%;
-    text-align: center;
-  }
+  gap: 25px;
 `;
 
-const FormSection = styled.section`
+const FormContainer = styled.div`
   width: 100%;
 
   .subscriptions-form {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
-    gap: 20px;
+    align-items: stretch;
+    gap: 35px;
   }
 
   .subscriptions-container {
     display: flex;
     flex-wrap: wrap;
-    gap: 20px;
+    gap: 25px;
   }
 
   .subscription {
@@ -237,6 +237,17 @@ const FormSection = styled.section`
     .price {
       grid-column: 3 / 4;
       grid-row: 1 / 2;
+      width: 100%;
+      max-width: 120px;
+      padding: 1.5px 2.5px;
+
+      @media (min-width: 400px) {
+        padding: 2.5px 0;
+      }
+
+      @media (min-width: 750px) {
+        padding: 5px 0;
+      }
 
       justify-self: end;
       align-self: center;
@@ -246,18 +257,19 @@ const FormSection = styled.section`
       justify-content: center;
       align-items: center;
       text-align: center;
+     
+      box-shadow: inset 0 0 2px 2px hsl(240,10%,96%);
+      background-color: hsl(240,10%,99%);
+      border-radius: 10px;
     }
   }
 
   .subscription-control {
     width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
 
     button {
-      width: 80%;
-      margin: 0 auto;
+      width: 90%;
+      max-width: 350px;
     }
   }
 `;

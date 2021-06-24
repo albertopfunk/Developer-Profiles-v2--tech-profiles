@@ -5,6 +5,7 @@ import StripeCardInput from "./StripeCardInput";
 import styled from "styled-components";
 import { httpClient } from "../../../global/helpers/http-requests";
 import { SUBSCRIPTION_STATUS } from "../../../global/helpers/variables";
+import Spacer from "../../../global/helpers/spacer";
 
 class UserForm extends Component {
   state = {
@@ -72,7 +73,7 @@ class UserForm extends Component {
       <CheckoutContainer>
         <div className="info-container">
           <h2 id="billing-info">Choose your first package</h2>
-
+          <Spacer axis="vertical" size="10" />
           <p>
             Live profile for anyone to see <br />
             Be found quickly with advanced filtering <br />
@@ -80,10 +81,9 @@ class UserForm extends Component {
             Choose any city in the world for relocation
           </p>
         </div>
-
-        <FormSection aria-labelledby="form-section">
+        <FormContainer aria-labelledby="form-section">
           <h3 id="form-section">Choose Subscription</h3>
-
+          <Spacer axis="vertical" size="15" />
           <form className="subscriptions-form">
             <div className="subscriptions-container">
               <div className="subscription">
@@ -157,7 +157,7 @@ class UserForm extends Component {
               setSubscriptionStatus={this.setSubscriptionStatus}
             />
           </form>
-        </FormSection>
+        </FormContainer>
       </CheckoutContainer>
     );
   }
@@ -165,36 +165,33 @@ class UserForm extends Component {
 
 const CheckoutContainer = styled.div`
   width: 100%;
+  max-width: 500px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 25px;
 
-  .info-container {
-    width: 100%;
-    text-align: center;
-  }
 `;
 
-const FormSection = styled.section`
+const FormContainer = styled.div`
   width: 100%;
 
   .subscriptions-form {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
-    gap: 20px;
+    align-items: stretch;
+    gap: 35px;
   }
 
   .subscriptions-container {
     display: flex;
     flex-wrap: wrap;
-    gap: 20px;
+    gap: 25px;
   }
 
   .subscription {
     width: 100%;
-    padding: 5px;
+    padding: 10px 15px;
     background-color: white;
     border-radius: 10px;
     box-shadow: 0 4px 6px 0 hsla(0, 0%, 0%, 0.2);
@@ -230,6 +227,17 @@ const FormSection = styled.section`
     .price {
       grid-column: 3 / 4;
       grid-row: 1 / 2;
+      width: 100%;
+      max-width: 120px;
+      padding: 1.5px 2.5px;
+
+      @media (min-width: 400px) {
+        padding: 2.5px 0;
+      }
+
+      @media (min-width: 750px) {
+        padding: 5px 0;
+      }
 
       justify-self: end;
       align-self: center;
@@ -239,6 +247,10 @@ const FormSection = styled.section`
       justify-content: center;
       align-items: center;
       text-align: center;
+
+      box-shadow: inset 0 0 2px 2px hsl(240,10%,96%);
+      background-color: hsl(240,10%,99%);
+      border-radius: 10px;
     }
   }
 `;

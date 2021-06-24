@@ -56,11 +56,11 @@ function StripeCardInput({
           options={{
             style: {
               base: {
-                fontSize: "14px",
-                color: "#424770",
+                fontSize: "16px",
+                color: "#000",
                 "::placeholder": {
                   color: "#aab7c4",
-                  fontSize: "14px",
+                  fontSize: "16px",
                 },
               },
               invalid: {
@@ -71,12 +71,14 @@ function StripeCardInput({
         />
       </div>
 
-      <button type="submit" onClick={createToken} disabled={!subType}>
-        {subIdle ? "Purchase" : null}
-        {stripeAwait ? "Stripe was not ready!" : null}
-        {stripeReady ? "Stripe is ready! retry" : null}
-        {subError ? "Error submitting payment, retry" : null}
-        {subLoading ? "loading..." : null}
+      <button type="submit" className="button button-control" onClick={createToken} disabled={!subType}>
+        <span className="button-text">
+          {subIdle ? "Purchase" : null}
+          {stripeAwait ? "Stripe was not ready!" : null}
+          {stripeReady ? "Stripe is ready! retry" : null}
+          {subError ? "Error submitting payment, retry" : null}
+          {subLoading ? "loading..." : null}
+        </span>
       </button>
     </ControlsContainer>
   );
@@ -86,11 +88,11 @@ const ControlsContainer = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 30px;
 
   button {
-    width: 80%;
-    margin: 0 auto;
+    width: 90%;
+    max-width: 350px;
   }
 `;
 

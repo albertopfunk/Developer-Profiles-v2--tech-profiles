@@ -6,6 +6,7 @@ import {
   SUBSCRIPTION_STATUS,
   USER_TYPE,
 } from "../../../global/helpers/variables";
+import Spacer from "../../../global/helpers/spacer";
 
 class SubscriberForm extends Component {
   state = {
@@ -73,41 +74,58 @@ class SubscriberForm extends Component {
     return (
       <CheckoutContainer>
         <div className="info-container">
-          <h2 id="billing-info">Your current subscription information</h2>
+          <h2 id="billing-info">Subscription Info</h2>
+          <Spacer axis="vertical" size="15" />
+          <dl className="info-group" aria-label="current information">
+            <div className="flex-row">
+              <div className="flex-col">
+                <div>
+                  <dt>Name</dt>
+                  <dd>{this.state.nickName}</dd>
+                </div>
+                <div>
+                  <dt>Type</dt>
+                  <dd>{this.state.type}</dd>
+                </div>
+                <div>
+                  <dt>Date Created</dt>
+                  <dd>{this.state.created}</dd>
+                </div>
+              </div>
 
-          <p>{this.state.type}</p>
-
-          <h3>Name</h3>
-          <p>{this.state.nickName}</p>
-
-          <h3>Date Created</h3>
-          <p>{this.state.created}</p>
-
-          <h3>Due Date</h3>
-          <p>{this.state.dueDate}</p>
-
-          <h3>Start Date</h3>
-          <p>{this.state.startDate}</p>
-
-          <h3>Status</h3>
-          <p>{this.state.status}</p>
-        </div>
-
-        <FormSection aria-labelledby="form-section">
-          <h3 id="form-section">Cancel subscription</h3>
-
+              <div className="flex-col">
+                <div>
+                  <dt>Due Date</dt>
+                  <dd>{this.state.dueDate}</dd>
+                </div>
+                <div>
+                  <dt>Start Date</dt>
+                  <dd>{this.state.startDate}</dd>
+                </div>
+                <div>
+                  <dt>Status</dt>
+                  <dd>{this.state.status}</dd>
+                </div>
+              </div>
+            </div>
+          </dl>
+          <Spacer axis="vertical" size="20" />
           <form onSubmit={(e) => this.cancelSub(e)}>
             <button
               type="submit"
               id="cancel-subscribe-btn"
+              className="button button-control"
               data-main-content={this.props.isMainContent ? "true" : "false"}
             >
-              {subIdle ? "Cancel Subscription" : null}
-              {subLoading ? "loading..." : null}
-              {subError ? "Error canceling subscription, retry" : null}
+              <span className="button-text">
+                {subIdle ? "Cancel Subscription" : null}
+                {subLoading ? "loading..." : null}
+                {subError ? "Error canceling subscription, retry" : null}
+              </span>
+
             </button>
           </form>
-        </FormSection>
+      </div>
       </CheckoutContainer>
     );
   }
@@ -117,16 +135,47 @@ const CheckoutContainer = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 25px;
+  
+  .info-group {
+    width: 95%;
+    max-width: 500px;
 
-  .info-container {
-    width: 100%;
-    text-align: center;
+    .flex-row {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: flex-start;
+      gap: 20px;
+
+      @media (min-width: 300px) {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+      }
+
+      .flex-col {
+        flex-basis: 0;
+        flex-shrink: 0;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        gap: 20px;
+
+        & > div {
+          max-width: 150px;
+        }
+      }
+    }
   }
-`;
 
-const FormSection = styled.section`
-  width: 100%;
+  button {
+    width: 90%;
+    max-width: 350px;
+  }
 `;
 
 export default SubscriberForm;
