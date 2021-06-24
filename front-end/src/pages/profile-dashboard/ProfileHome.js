@@ -846,7 +846,7 @@ function ProfileHome() {
 
 const ChecklistSection = styled.section`
   width: 100%;
-  max-width: 475px;
+  max-width: 500px;
 
   .checklist-container {
     border-radius: 10px;

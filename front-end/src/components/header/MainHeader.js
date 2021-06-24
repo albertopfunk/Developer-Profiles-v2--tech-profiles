@@ -142,7 +142,7 @@ function MainHeader(props) {
                 className="button button-control signin"
                 onClick={signIn}
               >
-                <span className="button-text">Sign In</span>
+                <span className="button-text">Sign In / Sign Up</span>
               </button>
             </div>
           </div>
@@ -261,10 +261,10 @@ const Nav = styled.nav`
 
       .button.signin {
         width: 100%;
-        max-width: 120px;
+        max-width: 150px;
 
         @media (min-width: 750px) {
-          max-width: 180px;
+          max-width: 200px;
         }
 
         @media (min-width: 1000px) {
