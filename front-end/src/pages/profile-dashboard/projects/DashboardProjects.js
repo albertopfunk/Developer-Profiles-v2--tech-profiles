@@ -674,45 +674,16 @@ const InfoSection = styled.section`
   }
 
   .info-group {
-    width: 95%;
-    max-width: 500px;
-
     .image-container {
       width: 95%;
       max-width: 175px;
 
       @media (min-width: 400px) {
-        width: 200px;
+        max-width: 200px;
       }
 
       img {
         width: 100%;
-      }
-    }
-
-    .flex-row {
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      align-items: flex-start;
-      gap: 20px;
-
-      @media (min-width: 300px) {
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 20px;
-      }
-
-      .flex-col {
-        flex-basis: 0;
-        flex-shrink: 0;
-        flex-grow: 1;
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-        align-items: flex-start;
-        gap: 20px;
       }
     }
   }

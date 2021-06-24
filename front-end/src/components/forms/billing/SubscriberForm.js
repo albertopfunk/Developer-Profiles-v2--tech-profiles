@@ -73,7 +73,6 @@ class SubscriberForm extends Component {
 
     return (
       <CheckoutContainer>
-        <div className="info-container">
           <h2 id="billing-info">Subscription Info</h2>
           <Spacer axis="vertical" size="15" />
           <dl className="info-group" aria-label="current information">
@@ -122,56 +121,14 @@ class SubscriberForm extends Component {
                 {subLoading ? "loading..." : null}
                 {subError ? "Error canceling subscription, retry" : null}
               </span>
-
             </button>
           </form>
-      </div>
       </CheckoutContainer>
     );
   }
 }
 
 const CheckoutContainer = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 25px;
-  
-  .info-group {
-    width: 95%;
-    max-width: 500px;
-
-    .flex-row {
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      align-items: flex-start;
-      gap: 20px;
-
-      @media (min-width: 300px) {
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 20px;
-      }
-
-      .flex-col {
-        flex-basis: 0;
-        flex-shrink: 0;
-        flex-grow: 1;
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-        align-items: flex-start;
-        gap: 20px;
-
-        & > div {
-          max-width: 150px;
-        }
-      }
-    }
-  }
-
   button {
     width: 90%;
     max-width: 350px;

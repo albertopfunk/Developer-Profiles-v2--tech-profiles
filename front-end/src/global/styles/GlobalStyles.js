@@ -633,4 +633,43 @@ export const GlobalStyles = createGlobalStyle`
       }
     }
   }
+
+  .info-group {
+    width: 95%;
+    max-width: 600px;
+
+    @media (min-width: 350px) {
+      width: 100%;
+    }
+
+    .flex-row {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: flex-start;
+      gap: 20px;
+
+      @media (min-width: 350px) {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 30px;
+      }
+
+      @media (min-width: 500px) {
+        gap: 50px;
+      }
+
+      .flex-col {
+        flex-basis: 0;
+        flex-shrink: 0;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        gap: 20px;
+      }
+    }
+  }
 `;
