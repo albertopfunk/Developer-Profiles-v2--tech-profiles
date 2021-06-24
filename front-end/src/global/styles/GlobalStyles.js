@@ -496,7 +496,7 @@ export const GlobalStyles = createGlobalStyle`
 
   h1 {
     font-size: 1.3rem;
-    text-transform: uppercase;
+    /* text-transform: uppercase; */
 
     @media (min-width: 750px) {
       font-size: 1.6rem;
@@ -513,7 +513,7 @@ export const GlobalStyles = createGlobalStyle`
 
   button {
     font-size: .8rem;
-    text-transform: uppercase;
+    /* text-transform: uppercase; */
 
 
     @media (min-width: 750px) {
