@@ -33,7 +33,7 @@ import Spacer from "../../global/helpers/spacer";
   - top skills ul
   - additional skills ul
 
-  where to find you 6/6
+  your whereabouts 6/6
   - github
   - twitter
   - linkedin
@@ -106,7 +106,7 @@ function ProfileHome() {
     totalProgress,
     personalInfo,
     aboutYou,
-    whereToFindYou,
+    yourWhereabouts,
     projects,
     education,
     experience,
@@ -116,7 +116,7 @@ function ProfileHome() {
   const [isExpanded, setIsExpanded] = useState({
     personalInfo: false,
     aboutYou: false,
-    whereToFindYou: false,
+    yourWhereabouts: false,
     projects: false,
     education: false,
     experience: false,
@@ -423,35 +423,35 @@ function ProfileHome() {
             </div>
           </section>
 
-          <section aria-labelledby="where-to-find-you-checklist">
-            <h3 id="where-to-find-you-checklist">
+          <section aria-labelledby="your-whereabouts-checklist">
+            <h3 id="your-whereabouts-checklist">
               <button
                 type="button"
                 className="button section-button"
-                aria-expanded={isExpanded.whereToFindYou}
+                aria-expanded={isExpanded.yourWhereabouts}
                 onClick={() =>
                   setIsExpanded({
                     ...isExpanded,
-                    whereToFindYou: !isExpanded.whereToFindYou,
+                    yourWhereabouts: !isExpanded.yourWhereabouts,
                   })
                 }
               >
                 <div className="title-container">
-                  <span className="title">Where to Find You</span>
+                  <span className="title">Your Whereabouts</span>
                   <div className="progress-bar-container main">
                     <div className="progress-bar">
                       <span
                         className="bar"
-                        style={{ width: `${whereToFindYou.progress}%` }}
+                        style={{ width: `${yourWhereabouts.progress}%` }}
                       ></span>
                     </div>
                     <div className="progress-info">
-                      <p>{`${whereToFindYou.progress}%`}</p>
+                      <p>{`${yourWhereabouts.progress}%`}</p>
                     </div>
                   </div>
                 </div>
                 <div className="icon-container">
-                  {isExpanded.whereToFindYou ? (
+                  {isExpanded.yourWhereabouts ? (
                     <Collapse className="icon" />
                   ) : (
                     <Expand className="icon" />
@@ -462,7 +462,7 @@ function ProfileHome() {
 
             <div
               className={`section-info ${
-                isExpanded.whereToFindYou ? "" : "hidden"
+                isExpanded.yourWhereabouts ? "" : "hidden"
               }`}
             >
               <div className="flex-row">
@@ -478,7 +478,7 @@ function ProfileHome() {
                         <span className="text-container">github link set</span>
                       </p>
                     ) : (
-                      <Link to={`${url}/where-to-find-you`} className="info">
+                      <Link to={`${url}/your-whereabouts`} className="info">
                         add your github link
                       </Link>
                     )}
@@ -495,7 +495,7 @@ function ProfileHome() {
                         <span className="text-container">twitter link set</span>
                       </p>
                     ) : (
-                      <Link to={`${url}/where-to-find-you`} className="info">
+                      <Link to={`${url}/your-whereabouts`} className="info">
                         add your twitter link
                       </Link>
                     )}
@@ -514,7 +514,7 @@ function ProfileHome() {
                         </span>
                       </p>
                     ) : (
-                      <Link to={`${url}/where-to-find-you`} className="info">
+                      <Link to={`${url}/your-whereabouts`} className="info">
                         add your linkedin link
                       </Link>
                     )}
@@ -535,7 +535,7 @@ function ProfileHome() {
                         </span>
                       </p>
                     ) : (
-                      <Link to={`${url}/where-to-find-you`} className="info">
+                      <Link to={`${url}/your-whereabouts`} className="info">
                         add your portfolio link
                       </Link>
                     )}
@@ -554,7 +554,7 @@ function ProfileHome() {
                         </span>
                       </p>
                     ) : (
-                      <Link to={`${url}/where-to-find-you`} className="info">
+                      <Link to={`${url}/your-whereabouts`} className="info">
                         add your public email
                       </Link>
                     )}
@@ -573,7 +573,7 @@ function ProfileHome() {
                         </span>
                       </p>
                     ) : (
-                      <Link to={`${url}/where-to-find-you`} className="info">
+                      <Link to={`${url}/your-whereabouts`} className="info">
                         add your current location
                       </Link>
                     )}

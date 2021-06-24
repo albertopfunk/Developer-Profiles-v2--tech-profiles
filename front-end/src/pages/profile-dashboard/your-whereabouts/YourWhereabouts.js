@@ -12,7 +12,7 @@ import Announcer from "../../../global/helpers/announcer";
 import Spacer from "../../../global/helpers/spacer";
 
 let formSuccessWait;
-function WhereToFindYou() {
+function YourWhereabouts() {
   const { user, editProfile } = useContext(ProfileContext);
   const [formStatus, setFormStatus] = useState(FORM_STATUS.idle);
   const [formFocusStatus, setFormFocusStatus] = useState("");
@@ -896,4 +896,4 @@ const InputContainer = styled.div`
   }
 `;
 
-export default WhereToFindYou;
+export default YourWhereabouts;

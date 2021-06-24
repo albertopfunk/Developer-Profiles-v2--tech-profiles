@@ -73,46 +73,46 @@ function useProfileProgress() {
       additionalSkills = true;
     }
 
-    let whereToFindYouProgress = 0;
+    let yourWhereaboutsProgress = 0;
     let github = false;
     if (user.github) {
       totalProgress++;
-      whereToFindYouProgress++;
+      yourWhereaboutsProgress++;
       github = true;
     }
 
     let twitter = false;
     if (user.twitter) {
       totalProgress++;
-      whereToFindYouProgress++;
+      yourWhereaboutsProgress++;
       twitter = true;
     }
 
     let linkedin = false;
     if (user.linkedin) {
       totalProgress++;
-      whereToFindYouProgress++;
+      yourWhereaboutsProgress++;
       linkedin = true;
     }
 
     let portfolio = false;
     if (user.portfolio) {
       totalProgress++;
-      whereToFindYouProgress++;
+      yourWhereaboutsProgress++;
       portfolio = true;
     }
 
     let publicEmail = false;
     if (user.public_email) {
       totalProgress++;
-      whereToFindYouProgress++;
+      yourWhereaboutsProgress++;
       publicEmail = true;
     }
 
     let currentLocation = false;
     if (user.current_location_name) {
       totalProgress++;
-      whereToFindYouProgress++;
+      yourWhereaboutsProgress++;
       currentLocation = true;
     }
 
@@ -167,8 +167,8 @@ function useProfileProgress() {
         topSkills,
         additionalSkills,
       },
-      whereToFindYou: {
-        progress: Math.ceil((whereToFindYouProgress / 6) * 100),
+      yourWhereabouts: {
+        progress: Math.ceil((yourWhereaboutsProgress / 6) * 100),
         github,
         twitter,
         linkedin,

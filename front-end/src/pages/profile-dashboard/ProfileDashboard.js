@@ -27,7 +27,7 @@ import ProfileHome from "./ProfileHome";
 import NewUser from "./new-user/NewUser";
 import PersonalInfo from "./personal-info/PersonalInfo";
 import AboutYou from "./about-you/AboutYou";
-import WhereToFindYou from "./where-to-find-you/WhereToFindYou";
+import YourWhereabouts from "./your-whereabouts/YourWhereabouts";
 import DashboardProjects from "./projects/DashboardProjects";
 import DashboardEducation from "./education/DashboardEducation";
 import DashboardExperience from "./experience/DashboardExperience";
@@ -158,8 +158,8 @@ function ProfileDashboard() {
         return "Personal Info";
       case "about you":
         return "About You";
-      case "where to find you":
-        return "Where to Find You";
+      case "your whereabouts":
+        return "Your Whereabouts";
       case "projects":
         return "Projects";
       case "education":
@@ -235,15 +235,15 @@ function ProfileDashboard() {
 
             <li className="nav-item">
               <NavLink
-                to={`${url}/where-to-find-you`}
+                to={`${url}/your-whereabouts`}
                 className="link"
                 activeClassName="selected"
               >
                 <span className="link-icon">
                   <Location className="icon" />
                 </span>
-                <span className="link-text">Where to Find You</span>
-                <span className="link-text-sr-only">Where to Find You</span>
+                <span className="link-text">Your Whereabouts</span>
+                <span className="link-text-sr-only">Your Whereabouts</span>
               </NavLink>
             </li>
 
@@ -343,8 +343,8 @@ function ProfileDashboard() {
                       <AboutYou />
                     </Route>
 
-                    <Route path={`${path}/Where-to-find-you`}>
-                      <WhereToFindYou />
+                    <Route path={`${path}/your-whereabouts`}>
+                      <YourWhereabouts />
                     </Route>
 
                     <Route path={`${path}/projects`}>
