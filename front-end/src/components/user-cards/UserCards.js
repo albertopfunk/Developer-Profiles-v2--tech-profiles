@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
+import ControlButton from "../forms/buttons/ControlButton";
 
 import UserCard from "./user-card/UserCard";
 
@@ -124,56 +125,44 @@ function UserCards({
       <div className="feed-controls">
         {isIdle && usersToLoad ? (
           <div className="control">
-            <button
+            <ControlButton
               type="button"
-              className="button button-control"
               onClick={loadMoreUsers}
               onKeyDown={(e) => loadMoreFocus(e)}
-            >
-              <span className="button-text">Load More Profiles</span>
-            </button>
+              buttonText="load more profiles"
+            />
           </div>
         ) : null}
 
         {isIdle && !usersToLoad ? (
           <div className="control">
             <p>No more profiles to load</p>
-            <button
+            <ControlButton
               type="button"
-              className="button button-control"
-              aria-label="no more profiles to load, back to top"
               onClick={backToTop}
               onKeyDown={(e) => backToTopFocus(e)}
-            >
-              <span className="button-text">Back to Top</span>
-            </button>
+              buttonText="back to top"
+              ariaLabel="no more profiles to load, back to top"
+            />
           </div>
         ) : null}
 
         {isBusy ? (
           <div className="control">
-            <button
-              type="button"
-              className="button button-control"
-              disabled="true"
-            >
-              <span className="button-text">Loading</span>
-            </button>
+            <ControlButton type="button" disabled="true" buttonText="loading" />
           </div>
         ) : null}
 
         {isError ? (
           <div className="control">
             <p>Error loading profiles</p>
-            <button
+            <ControlButton
               type="button"
-              className="button button-control"
-              aria-label="error loading profiles, retry"
               onClick={loadMoreUsers}
               onKeyDown={(e) => loadMoreFocus(e)}
-            >
-              <span className="button-text">Retry</span>
-            </button>
+              buttonText="retry"
+              ariaLabel="error loading profiles, retry"
+            />
           </div>
         ) : null}
       </div>

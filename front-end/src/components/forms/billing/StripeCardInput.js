@@ -2,6 +2,8 @@ import React from "react";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import styled from "styled-components";
 
+import ControlButton from "../buttons/ControlButton";
+
 import { SUBSCRIPTION_STATUS } from "../../../global/helpers/variables";
 
 function StripeCardInput({
@@ -70,16 +72,12 @@ function StripeCardInput({
           }}
         />
       </div>
-
-      <button type="submit" className="button button-control" onClick={createToken} disabled={!subType}>
-        <span className="button-text">
-          {subIdle ? "Purchase" : null}
-          {stripeAwait ? "Stripe was not ready!" : null}
-          {stripeReady ? "Stripe is ready! retry" : null}
-          {subError ? "Error submitting payment, retry" : null}
-          {subLoading ? "loading..." : null}
-        </span>
-      </button>
+      <ControlButton
+        type="submit"
+        onClick={createToken}
+        disabled={!subType}
+        buttonText={`${subIdle ? "Purchase" : ""}${stripeAwait ? "Stripe was not ready!" : ""}${stripeReady ? "Stripe is ready! retry" : ""}${subError ? "Error submitting payment, retry" : ""}${subLoading ? "loading..." : ""}`}
+      />
     </ControlsContainer>
   );
 }

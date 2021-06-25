@@ -3,6 +3,7 @@ import { ReactComponent as BurgerMenu } from "../../global/assets/header-nav.svg
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 
+import ControlButton from "../forms/buttons/ControlButton";
 import { AuthContext } from "../../global/context/auth/AuthContext";
 
 let closeOnBlurWait;
@@ -66,13 +67,12 @@ function MainHeader(props) {
         </NavLink>
       </li>
       <li className="menu-item menu-item__button">
-        <button
-          className="button button-control signout-button"
+        <ControlButton
           type="button"
           onClick={signOut}
-        >
-          <span className="button-text">Sign Out</span>
-        </button>
+          buttonText={"sign out"}
+          classNames="signout-button"
+        />
       </li>
     </ul>
   );
@@ -137,13 +137,12 @@ function MainHeader(props) {
               </NavLink>
             </div>
             <div className="button-container">
-              <button
+              <ControlButton
                 type="button"
-                className="button button-control signin"
                 onClick={signIn}
-              >
-                <span className="button-text">Sign In / Sign Up</span>
-              </button>
+                buttonText={"sign in / sign up"}
+                classNames="signin-button"
+              />
             </div>
           </div>
         )}
@@ -259,7 +258,7 @@ const Nav = styled.nav`
         }
       }
 
-      .button.signin {
+      .signin-button {
         width: 100%;
         max-width: 150px;
 

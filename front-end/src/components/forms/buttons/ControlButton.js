@@ -1,33 +1,45 @@
 import React from "react";
 import styled from "styled-components";
 
-function ControlButton({
-  children,
-  type,
-  buttonText,
-  ariaLabel,
-  onClick,
-  attributes,
-  classNames = "",
-}) {
-  function preventFocus(e) {
-    e.preventDefault();
-  }
+const ControlButton = React.forwardRef(
+  (
+    {
+      children,
+      type,
+      classNames = "",
+      disabled,
+      buttonText,
+      ariaLabel = "",
+      onClick,
+      onKeyDown,
+      attributes,
+    },
+    buttonRef
+  ) => {
+    function preventFocus(e) {
+      e.preventDefault();
+    }
 
-  return (
-    <Button
-      type={type}
-      className={`button button-control ${classNames}`}
-      aria-label={ariaLabel}
-      {...attributes}
-      onClick={onClick}
-      onMouseDown={preventFocus}
-    >
-      <span className="button-text">{buttonText}</span>
-      {children}
-    </Button>
-  );
-}
+    return (
+      <Button
+        ref={buttonRef}
+        type={type}
+        className={`button-control ${classNames}`}
+        disabled={disabled === true || disabled === "true" ? true : false}
+        {...attributes}
+        onClick={onClick}
+        onMouseDown={preventFocus}
+        onKeyDown={onKeyDown}
+      >
+        <span className="button-text">
+          <span className="text">{buttonText}</span>
+          {children}
+        </span>
+        {ariaLabel ? <span className="sr-only">{ariaLabel}</span> : null}
+      </Button>
+    );
+  }
+);
 
 const Button = styled.button`
   background: hsl(340deg 100% 32%);
@@ -70,8 +82,11 @@ const Button = styled.button`
   }
 
   .button-text {
-    display: block;
-    padding: 10px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 7px;
+    padding: 12px 5px;
     border-radius: 10px;
     background: hsl(345deg 100% 47%);
     color: white;
@@ -84,5 +99,7 @@ const Button = styled.button`
     }
   }
 `;
+
+ControlButton.displayName = "ControlButton";
 
 export default ControlButton;

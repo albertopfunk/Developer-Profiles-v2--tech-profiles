@@ -3,6 +3,8 @@ import styled from "styled-components";
 import { ReactComponent as EditIcon } from "../../../global/assets/dashboard-edit.svg";
 import { ReactComponent as AddIcon } from "../../../global/assets/dashboard-add.svg";
 
+import ControlButton from "../../../components/forms/buttons/ControlButton";
+
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
 import useCurrentYear from "../../../global/helpers/hooks/useCurrentYear";
 import { FORM_STATUS } from "../../../global/helpers/variables";
@@ -549,24 +551,24 @@ function DashboardExperience() {
       ) : null}
 
       <div className="form-container">
-        <button
+        <ControlButton
           ref={addNewBtnRef}
-          id="add-new-btn"
-          className="button button-control add-button"
-          data-main-content="true"
-          form="experience-form"
           type="button"
-          aria-label="add new experience"
           onClick={(e) => addExperience(e)}
+          classNames="add-button"
+          buttonText="new experience"
+          ariaLabel="add"
+          attributes={{
+            id: "add-new-btn",
+            "data-main-content": "true",
+            form: "experience-form",
+          }}
         >
-          <div className="button-text">
-            <span className="text">New Experience</span>
-            <span className="icon-container">
-              <AddIcon className="icon" />
-            </span>
-          </div>
-        </button>
-
+          <span className="icon-container">
+            <AddIcon className="icon" />
+          </span>
+        </ControlButton>
+        <Spacer axis="vertical" size="20" />
         <form id="experience-form" onSubmit={(e) => submitEdit(e)}>
           <div className="flex-container">
             {experience.map((exp, index) => {
@@ -594,33 +596,29 @@ function DashboardExperience() {
           </div>
           <Spacer axis="vertical" size="25" />
           <div className="button-container">
-            <button
-              disabled={
-                formStatus === FORM_STATUS.loading ||
-                formStatus === FORM_STATUS.success
-              }
+            <ControlButton
               type="submit"
-              className="button button-control"
-            >
-              <span className="button-text">
-                {formStatus === FORM_STATUS.active ? "Submit" : null}
-                {formStatus === FORM_STATUS.loading ? "loading..." : null}
-                {formStatus === FORM_STATUS.success ? "Success!" : null}
-                {formStatus === FORM_STATUS.error ? "Re-Submit" : null}
-              </span>
-            </button>
-            <button
               disabled={
                 formStatus === FORM_STATUS.loading ||
                 formStatus === FORM_STATUS.success
               }
+              buttonText={`${
+                formStatus === FORM_STATUS.active ? "Submit" : ""
+              }${formStatus === FORM_STATUS.loading ? "loading..." : ""}${
+                formStatus === FORM_STATUS.success ? "Success!" : ""
+              }${formStatus === FORM_STATUS.error ? "Re-Submit" : ""}`}
+            />
+
+            <ControlButton
               type="reset"
-              className="button button-control"
+              disabled={
+                formStatus === FORM_STATUS.loading ||
+                formStatus === FORM_STATUS.success
+              }
               onClick={resetForm}
               onKeyDown={(e) => formFocusAction(e, FORM_STATUS.idle)}
-            >
-              <span className="button-text">Cancel</span>
-            </button>
+              buttonText="cancel"
+            />
           </div>
         </form>
       </div>
@@ -678,18 +676,8 @@ const FormSection = styled.section`
     .add-button {
       width: 100%;
       max-width: 350px;
-      margin-bottom: 30px;
-      font-size: 0.9rem;
-
-      .button-text {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 7px;
-
-        .icon {
-          height: 1rem;
-        }
+      .icon {
+        height: 1rem;
       }
     }
   }

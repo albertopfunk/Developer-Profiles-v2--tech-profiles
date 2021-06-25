@@ -11,6 +11,7 @@ import UserSkills from "./UserSkills";
 import UserIcons from "./UserIcons";
 import UserExtras from "../user-extras/UserExtras";
 import UserSummary from "./UserSummary";
+import ControlButton from "../../forms/buttons/ControlButton";
 
 // resume link?
 // codesandbox link?
@@ -212,30 +213,25 @@ const UserCard = React.forwardRef((props, articleRef) => {
             profile basics
           </h4>
           {!isCardExpanded ? (
-            <button
+            <ControlButton
               type="button"
-              className="button button-control"
               disabled={cardStatus === CARD_STATUS.loading}
               onClick={expandUserCard}
-            >
-              <span className="button-text">
-                {cardStatus === CARD_STATUS.idle ? "Expand Profile" : null}
-                {cardStatus === CARD_STATUS.loading ? "Loading..." : null}
-                {cardStatus === CARD_STATUS.error ? "Error - Retry" : null}
-              </span>
-            </button>
+              buttonText={`${
+                cardStatus === CARD_STATUS.idle ? "expand profile" : ""
+              }${cardStatus === CARD_STATUS.loading ? "Loading..." : ""}${
+                cardStatus === CARD_STATUS.error ? "Error - Retry" : ""
+              }`}
+            />
           ) : (
-            <button
+            <ControlButton
               type="button"
-              className="button button-control"
               onClick={closeUserCard}
-            >
-              <span className="button-text">Collapse Profile</span>
-            </button>
+              buttonText="collapse profile"
+            />
           )}
         </section>
       </UserInfo>
-
       {isCardExpanded ? (
         <UserExtras
           userExtras={userExtras}

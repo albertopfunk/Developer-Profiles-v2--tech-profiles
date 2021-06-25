@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 
+import ControlButton from "../buttons/ControlButton";
+
 import { httpClient } from "../../../global/helpers/http-requests";
 import {
   SUBSCRIPTION_STATUS,
@@ -73,56 +75,55 @@ class SubscriberForm extends Component {
 
     return (
       <CheckoutContainer>
-          <h2 id="billing-info">Subscription Info</h2>
-          <Spacer axis="vertical" size="15" />
-          <dl className="info-group" aria-label="current information">
-            <div className="flex-row">
-              <div className="flex-col">
-                <div>
-                  <dt>Name</dt>
-                  <dd>{this.state.nickName}</dd>
-                </div>
-                <div>
-                  <dt>Type</dt>
-                  <dd>{this.state.type}</dd>
-                </div>
-                <div>
-                  <dt>Date Created</dt>
-                  <dd>{this.state.created}</dd>
-                </div>
+        <h2 id="billing-info">Subscription Info</h2>
+        <Spacer axis="vertical" size="15" />
+        <dl className="info-group" aria-label="current information">
+          <div className="flex-row">
+            <div className="flex-col">
+              <div>
+                <dt>Name</dt>
+                <dd>{this.state.nickName}</dd>
               </div>
-
-              <div className="flex-col">
-                <div>
-                  <dt>Due Date</dt>
-                  <dd>{this.state.dueDate}</dd>
-                </div>
-                <div>
-                  <dt>Start Date</dt>
-                  <dd>{this.state.startDate}</dd>
-                </div>
-                <div>
-                  <dt>Status</dt>
-                  <dd>{this.state.status}</dd>
-                </div>
+              <div>
+                <dt>Type</dt>
+                <dd>{this.state.type}</dd>
+              </div>
+              <div>
+                <dt>Date Created</dt>
+                <dd>{this.state.created}</dd>
               </div>
             </div>
-          </dl>
-          <Spacer axis="vertical" size="20" />
-          <form onSubmit={(e) => this.cancelSub(e)}>
-            <button
-              type="submit"
-              id="cancel-subscribe-btn"
-              className="button button-control"
-              data-main-content={this.props.isMainContent ? "true" : "false"}
-            >
-              <span className="button-text">
-                {subIdle ? "Cancel Subscription" : null}
-                {subLoading ? "loading..." : null}
-                {subError ? "Error canceling subscription, retry" : null}
-              </span>
-            </button>
-          </form>
+
+            <div className="flex-col">
+              <div>
+                <dt>Due Date</dt>
+                <dd>{this.state.dueDate}</dd>
+              </div>
+              <div>
+                <dt>Start Date</dt>
+                <dd>{this.state.startDate}</dd>
+              </div>
+              <div>
+                <dt>Status</dt>
+                <dd>{this.state.status}</dd>
+              </div>
+            </div>
+          </div>
+        </dl>
+        <Spacer axis="vertical" size="20" />
+        <form onSubmit={(e) => this.cancelSub(e)}>
+          <ControlButton
+            type="submit"
+            buttonText={`
+              ${subIdle ? "Cancel Subscription" : ""}${
+              subLoading ? "loading..." : ""
+            }${subError ? "Error canceling subscription, retry" : ""}`}
+            attributes={{
+              id: "cancel-subscribe-btn",
+              "data-main-content": this.props.isMainContent ? "true" : "false",
+            }}
+          />
+        </form>
       </CheckoutContainer>
     );
   }

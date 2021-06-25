@@ -4,6 +4,7 @@ import { ReactComponent as EditIcon } from "../../../global/assets/dashboard-edi
 import { ReactComponent as AddIcon } from "../../../global/assets/dashboard-add.svg";
 
 import ProjectForm from "../../../components/forms/user-extras/ProjectForm";
+import ControlButton from "../../../components/forms/buttons/ControlButton";
 
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
 import { FORM_STATUS } from "../../../global/helpers/variables";
@@ -287,21 +288,20 @@ function DashboardProjects() {
           projects[i].descriptionChange ||
           projects[i].imageChange
         ) {
-
           const data = {};
-  
+
           if (projects[i].projectChange) {
             data.project_title = projects[i].projectNameInput;
           }
-  
+
           if (projects[i].linkChange) {
             data.link = projects[i].linkInput;
           }
-  
+
           if (projects[i].descriptionChange) {
             data.project_description = projects[i].descriptionInput;
           }
-  
+
           if (projects[i].imageChange) {
             if (projects[i].shouldRemoveUserImage) {
               data.project_img = "";
@@ -315,12 +315,12 @@ function DashboardProjects() {
                   imageId: projects[i].id,
                 }
               );
-  
+
               if (err) {
                 console.error(`${res.mssg} => ${res.err}`);
                 return { error: "error saving image" };
               }
-  
+
               data.project_img = res.data.image;
             }
           }
@@ -559,23 +559,23 @@ function DashboardProjects() {
       ) : null}
 
       <div className="form-container">
-        <button
+        <ControlButton
           ref={addNewBtnRef}
-          id="add-new-btn"
-          className="button button-control add-button"
-          data-main-content="true"
-          form="projects-form"
           type="button"
-          aria-label="add new project"
           onClick={(e) => addProject(e)}
+          classNames="add-button"
+          buttonText="new project"
+          ariaLabel="add"
+          attributes={{
+            id: "add-new-btn",
+            "data-main-content": "true",
+            form: "projects-form",
+          }}
         >
-          <div className="button-text">
-            <span className="text">New Project</span>
-            <span className="icon-container">
-              <AddIcon className="icon" />
-            </span>
-          </div>
-        </button>
+          <span className="icon-container">
+            <AddIcon className="icon" />
+          </span>
+        </ControlButton>
         <Spacer axis="vertical" size="20" />
         <form id="projects-form" onSubmit={(e) => submitEdit(e)}>
           <div className="flex-container">
@@ -601,33 +601,29 @@ function DashboardProjects() {
           </div>
           <Spacer axis="vertical" size="25" />
           <div className="button-container">
-            <button
-              disabled={
-                formStatus === FORM_STATUS.loading ||
-                formStatus === FORM_STATUS.success
-              }
+            <ControlButton
               type="submit"
-              className="button button-control"
-            >
-              <span className="button-text">
-                {formStatus === FORM_STATUS.active ? "Submit" : null}
-                {formStatus === FORM_STATUS.loading ? "loading..." : null}
-                {formStatus === FORM_STATUS.success ? "Success!" : null}
-                {formStatus === FORM_STATUS.error ? "Re-Submit" : null}
-              </span>
-            </button>
-            <button
               disabled={
                 formStatus === FORM_STATUS.loading ||
                 formStatus === FORM_STATUS.success
               }
+              buttonText={`${
+                formStatus === FORM_STATUS.active ? "Submit" : ""
+              }${formStatus === FORM_STATUS.loading ? "loading..." : ""}${
+                formStatus === FORM_STATUS.success ? "Success!" : ""
+              }${formStatus === FORM_STATUS.error ? "Re-Submit" : ""}`}
+            />
+
+            <ControlButton
               type="reset"
-              className="button button-control"
+              disabled={
+                formStatus === FORM_STATUS.loading ||
+                formStatus === FORM_STATUS.success
+              }
               onClick={resetForm}
               onKeyDown={(e) => formFocusAction(e, FORM_STATUS.idle)}
-            >
-              <span className="button-text">Cancel</span>
-            </button>
+              buttonText="cancel"
+            />
           </div>
         </form>
       </div>
@@ -700,17 +696,8 @@ const FormSection = styled.section`
     .add-button {
       width: 100%;
       max-width: 350px;
-      font-size: 0.9rem;
-
-      .button-text {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 7px;
-
-        .icon {
-          height: 1rem;
-        }
+      .icon {
+        height: 1rem;
       }
     }
   }

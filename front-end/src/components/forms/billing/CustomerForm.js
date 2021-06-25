@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 
+import ControlButton from "../buttons/ControlButton";
+
 import { httpClient } from "../../../global/helpers/http-requests";
 import { SUBSCRIPTION_STATUS } from "../../../global/helpers/variables";
 import Spacer from "../../../global/helpers/spacer";
@@ -155,17 +157,14 @@ class CustomerForm extends Component {
             </div>
 
             <div className="subscription-control">
-              <button
+              <ControlButton
                 type="submit"
-                className="button button-control"
                 disabled={this.state.subType ? false : true}
-              >
-                <span className="button-text">
-                  {subIdle ? "Re-Subscribe" : null}
-                  {subLoading ? "loading..." : null}
-                  {subError ? "Error re-subscribing, retry" : null}
-                </span>
-              </button>
+                buttonText={`${subIdle ? "Re-Subscribe" : ""}${
+                  subLoading ? "loading..." : ""
+                }${subError ? "Error re-subscribing, retry" : ""}
+                `}
+              />
             </div>
           </form>
         </FormContainer>
@@ -257,9 +256,9 @@ const FormContainer = styled.div`
       justify-content: center;
       align-items: center;
       text-align: center;
-     
-      box-shadow: inset 0 0 2px 2px hsl(240,10%,96%);
-      background-color: hsl(240,10%,99%);
+
+      box-shadow: inset 0 0 2px 2px hsl(240, 10%, 96%);
+      background-color: hsl(240, 10%, 99%);
       border-radius: 10px;
     }
   }

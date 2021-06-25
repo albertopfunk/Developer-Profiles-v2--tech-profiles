@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { ReactComponent as EditIcon } from "../../../global/assets/dashboard-edit.svg";
 
 import Combobox from "../../../components/forms/combobox";
+import ControlButton from "../../../components/forms/buttons/ControlButton";
 
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
 import { httpClient } from "../../../global/helpers/http-requests";
@@ -656,34 +657,29 @@ function AboutYou() {
           />
           <Spacer axis="vertical" size="20" />
           <div className="button-container">
-            <button
-              disabled={
-                formStatus === FORM_STATUS.loading ||
-                formStatus === FORM_STATUS.success
-              }
+            <ControlButton
               type="submit"
-              className="button button-control"
-            >
-              <span className="button-text">
-                {formStatus === FORM_STATUS.active ? "Submit" : null}
-                {formStatus === FORM_STATUS.loading ? "loading..." : null}
-                {formStatus === FORM_STATUS.success ? "Success!" : null}
-                {formStatus === FORM_STATUS.error ? "Re-Submit" : null}
-              </span>
-            </button>
-
-            <button
               disabled={
                 formStatus === FORM_STATUS.loading ||
                 formStatus === FORM_STATUS.success
               }
+              buttonText={`${
+                formStatus === FORM_STATUS.active ? "Submit" : ""
+              }${formStatus === FORM_STATUS.loading ? "loading..." : ""}${
+                formStatus === FORM_STATUS.success ? "Success!" : ""
+              }${formStatus === FORM_STATUS.error ? "Re-Submit" : ""}`}
+            />
+
+            <ControlButton
               type="reset"
-              className="button button-control"
+              disabled={
+                formStatus === FORM_STATUS.loading ||
+                formStatus === FORM_STATUS.success
+              }
               onClick={resetForm}
               onKeyDown={(e) => formFocusAction(e, FORM_STATUS.idle)}
-            >
-              <span className="button-text">Cancel</span>
-            </button>
+              buttonText="cancel"
+            />
           </div>
         </form>
       </FormSection>
