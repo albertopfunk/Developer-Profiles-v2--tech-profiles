@@ -5,6 +5,7 @@ import AreaOfWorkFilter from "./AreaOfWorkFilter";
 import CurrentLocationFilter from "./CurrentLocationFilter";
 import RelocateToFilter from "./RelocateToFilter";
 import SortingFilter from "./SortingFilter";
+import ControlButton from "../buttons/ControlButton";
 
 function Filters({
   updateUsers,
@@ -31,16 +32,17 @@ function Filters({
           {/* if full str isn't dynamic, sr will not announce full str */}
           <p>{`Showing ${currentUsers} of ${totalUsers} Profiles`}</p>
         </div>
-        <button
+        <ControlButton
           type="button"
-          className="button button-control control-mobile top"
-          aria-label={`${areFiltersShowing ? "hide" : "show"} filters`}
-          aria-expanded={areFiltersShowing}
-          data-filter-content={!areFiltersShowing}
+          buttonText="filters"
+          ariaLabel={`${areFiltersShowing ? "close" : "open"} filters`}
           onClick={setFilters}
-        >
-          <span className="button-text">filters</span>
-        </button>
+          classNames="control-mobile top"
+          attributes={{
+            "aria-expanded": `${areFiltersShowing}`,
+            "data-filter-content": `${!areFiltersShowing}`,
+          }}
+        />
       </div>
 
       {/* not too happy about this workaround, found this to be the
@@ -90,23 +92,20 @@ function Filters({
             </div>
 
             <div className="controls-container">
-              <button
+              <ControlButton
                 type="button"
-                className="button button-control control-mobile"
-                aria-label="done filtering"
-                aria-expanded="true"
+                buttonText="close"
+                ariaLabel="close filters"
                 onClick={setFilters}
-              >
-                <span className="button-text">done</span>
-              </button>
-              <button
+                classNames="control-mobile"
+                attributes={{ "aria-expanded": "true" }}
+              />
+              <ControlButton
                 type="reset"
-                className="button button-control"
-                aria-label="reset filters"
+                buttonText="reset"
+                ariaLabel="reset filters"
                 onClick={resetFilters}
-              >
-                <span className="button-text">reset</span>
-              </button>
+              />
             </div>
           </div>
         </form>
