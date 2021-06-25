@@ -850,7 +850,6 @@ const FormSection = styled.section`
 const InputContainer = styled.div`
   display: flex;
   flex-direction: column;
-  max-width: 450px;
 
   .input-err {
     border: solid red;

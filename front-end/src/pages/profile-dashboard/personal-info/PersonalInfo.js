@@ -695,7 +695,6 @@ const FormSection = styled.section`
 const InputContainer = styled.div`
   display: flex;
   flex-direction: column;
-  max-width: 450px;
 
   .input-err {
     border: solid red;
@@ -712,6 +711,7 @@ const InputContainer = styled.div`
 
 const FieldSet = styled.fieldset`
   max-width: 450px;
+
   .radio-buttons-container {
     display: flex;
     justify-content: space-evenly;

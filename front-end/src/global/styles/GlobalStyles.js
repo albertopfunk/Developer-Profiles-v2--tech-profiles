@@ -225,6 +225,14 @@ export const GlobalStyles = createGlobalStyle`
   * ========================================================================== */
 
   /**
+  * block labels to stay above inputs
+  */
+  
+  label {
+    display: block;
+  }
+ 
+  /**
   * Remove the margin and padding on controls.
   */
 
@@ -254,6 +262,34 @@ export const GlobalStyles = createGlobalStyle`
   [type="submit"] {
     -webkit-appearance: button;
   }
+
+
+  /**
+  * button defaults
+  */
+
+  button {
+    border: none;
+    background-color: white;
+    cursor: pointer;
+    user-select: none;
+  }
+
+
+  /**
+  * input defaults
+  */
+  input[type=text],
+  input[type=url],
+  input[type=email],
+  input[type=textarea],
+  select, textarea {
+    width: 100%;
+    max-width: 450px;
+    min-height: 35px;
+    padding: 5px 0;
+  }
+
 
   /**
   * 1. resetting fieldset
@@ -397,22 +433,7 @@ export const GlobalStyles = createGlobalStyle`
   /* User interaction
   * ========================================================================== */
 
-  /*
-  * Remove the tapping delay in IE 10.
-  */
 
-  a,
-  area,
-  button,
-  input,
-  label,
-  select,
-  summary,
-  textarea,
-  [tabindex] {
-    touch-action: manipulation;
-    -ms-touch-action: manipulation;
-  }
 
 
   /* Accessibility
@@ -426,13 +447,6 @@ export const GlobalStyles = createGlobalStyle`
     cursor: progress;
   }
 
-  /*
-  * Change the cursor on control elements in all browsers (opinionated).
-  */
-
-  [aria-controls] {
-    cursor: pointer;
-  }
 
   /*
   * Change the cursor on disabled, not-editable, or otherwise
@@ -533,18 +547,9 @@ export const GlobalStyles = createGlobalStyle`
 
 
 
-  input[type=text],
-  input[type=url],
-  input[type=email],
-  input[type=textarea],
-  select {
-    width: 100%;
-    min-height: 30px;
-  }
+  
 
-  label {
-    display: block;
-  }
+  
 
   .sr-only {
     position: absolute;
@@ -563,75 +568,6 @@ export const GlobalStyles = createGlobalStyle`
 
   .icon {
     fill: black;
-  }
-
-  .button {
-    border: none;
-    background-color: white;
-    cursor: pointer;
-    user-select: none;
-  }
-
-  .button-control {
-    background: hsl(340deg 100% 32%);
-    border-radius: 10px;
-    transition: filter 50ms ease-in;
-    -webkit-tap-highlight-color: transparent;
-    outline-offset: 1px;
-
-    &:focus {
-      outline: 2.5px solid transparent;
-    }
-
-    &:focus .button-text {
-      filter: brightness(110%);
-      transition: filter 50ms ease-in;
-    }
-
-    &:focus:not(:focus-visible) .button-text {
-      filter: none;
-    }
-    
-    &:focus-visible .button-text {
-      box-shadow: inset 0 0 4px 2.5px #2727ad;
-      transform: translateY(-5px);
-      transition: transform 75ms ease-out;
-    }
-
-    
-
-    &:hover {
-      transition: filter 50ms ease-in;
-      filter: brightness(110%);
-    }
-
-    &:hover .button-text {
-      transform: translateY(-5px);
-      transition: transform 75ms ease-out;
-    }
-
-    &:active .button-text {
-      transform: translateY(-2px);
-      transition: transform ease-out;
-    }
-
-
-    .button-text {
-      display: block;
-      padding: 10px 0;
-      border-radius: 10px;
-      background: hsl(345deg 100% 47%);
-      color: white;
-      transform: translateY(-4px);
-      will-change: transform;
-      transition: transform 75ms ease-out;
-
-
-      @media (min-width: 750px) {
-      padding: 15px 0;
-
-      }
-    }
   }
 
   .info-group {
