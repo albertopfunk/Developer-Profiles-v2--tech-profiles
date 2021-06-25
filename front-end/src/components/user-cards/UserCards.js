@@ -15,14 +15,14 @@ function UserCards({
   totalUsers,
   resetFilters,
 }) {
-  const profileCardRefs = useRef(users.map(() => React.createRef()));
+  const profileCardRefs = users.map(() => React.createRef());
   let focusOnNextCardRef = useRef();
 
   useEffect(() => {
     if (!focusOnNextCardRef.current) {
       return;
     }
-    profileCardRefs.current[cardFocusIndex].current.focus();
+    profileCardRefs[cardFocusIndex].current.focus();
     focusOnNextCardRef.current = false;
   }, [cardFocusIndex]);
 
@@ -30,7 +30,7 @@ function UserCards({
     if (e.keyCode !== 13 && e.keyCode !== 32) {
       return;
     }
-    profileCardRefs.current[0].current.focus();
+    profileCardRefs[0].current.focus();
     window.scrollTo(0, 0);
   }
 
@@ -47,27 +47,27 @@ function UserCards({
 
   function userCardActions(action, index) {
     if (action === "start") {
-      profileCardRefs.current[0].current.focus();
+      profileCardRefs[0].current.focus();
     }
 
     if (action === "end") {
-      profileCardRefs.current[currentUsers - 1].current.focus();
+      profileCardRefs[currentUsers - 1].current.focus();
     }
 
     if (action === "previous") {
       if (index === 0) {
-        profileCardRefs.current[currentUsers - 1].current.focus();
+        profileCardRefs[currentUsers - 1].current.focus();
         return;
       }
-      profileCardRefs.current[index - 1].current.focus();
+      profileCardRefs[index - 1].current.focus();
     }
 
     if (action === "next") {
       if (index === currentUsers - 1) {
-        profileCardRefs.current[0].current.focus();
+        profileCardRefs[0].current.focus();
         return;
       }
-      profileCardRefs.current[index + 1].current.focus();
+      profileCardRefs[index + 1].current.focus();
     }
   }
 
@@ -95,7 +95,7 @@ function UserCards({
         {users.map((user, i) => {
           return (
             <UserCard
-              ref={profileCardRefs.current[i]}
+              ref={profileCardRefs[i]}
               key={user.id}
               userCardActions={userCardActions}
               index={i}
