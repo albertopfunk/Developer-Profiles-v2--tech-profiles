@@ -1,17 +1,20 @@
 import React, { useState, useContext, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { ReactComponent as WelcomeIntro } from "../../../global/assets/dashboard-intro.svg";
+import { ReactComponent as CloseIcon } from "../../../global/assets/dashboard-remove.svg";
 import styled from "styled-components";
 
 import ImageBox from "../../../components/forms/images/imageBox";
 import CheckoutContainer from "../../../components/forms/billing";
 import Combobox from "../../../components/forms/combobox";
+import ControlButton from "../../../components/forms/buttons/ControlButton";
 
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
 import { httpClient } from "../../../global/helpers/http-requests";
 import { validateInput } from "../../../global/helpers/validation";
 import { FORM_STATUS } from "../../../global/helpers/variables";
 import Announcer from "../../../global/helpers/announcer";
+import Spacer from "../../../global/helpers/spacer";
 
 let formSuccessWait;
 function NewUser() {
@@ -454,19 +457,24 @@ function NewUser() {
   if (formStatus === FORM_STATUS.idle) {
     return (
       <WelcomeSection aria-labelledby="welcome-heading">
-        <h2 id="welcome-heading">Welcome {user.first_name || "Newcomer"}!</h2>
+        <h2 id="welcome-heading">Welcome, {user.first_name || "Newcomer"}!</h2>
+
         <div className="image-container">
           <WelcomeIntro />
         </div>
-        <button
+
+        <ControlButton
           ref={editInfoBtnRef}
-          id="edit-info-btn"
-          data-main-content="true"
+          buttonText="quickstart"
+          ariaLabel="form"
           onClick={setFormInputs}
           onKeyDown={(e) => formFocusAction(e, FORM_STATUS.active)}
-        >
-          Edit Quickstart Information
-        </button>
+          attributes={{
+            id: "edit-info-btn",
+            "data-main-content": "true",
+          }}
+        />
+
         <Link to="/profile-dashboard">Go Home</Link>
       </WelcomeSection>
     );
@@ -474,8 +482,25 @@ function NewUser() {
 
   return (
     <FormSection aria-labelledby="edit-information-heading edit-information-desc">
-      <h2 id="edit-information-heading">Edit Information</h2>
-      <p id="edit-information-desc">
+      <div className="edit-info-header">
+        <h2 id="edit-information-heading">Edit Info</h2>
+        <button
+          disabled={
+            formStatus === FORM_STATUS.loading ||
+            formStatus === FORM_STATUS.success
+          }
+          type="reset"
+          className="button edit-button"
+          onClick={resetForm}
+          onKeyDown={(e) => formFocusAction(e, FORM_STATUS.idle)}
+        >
+          <span className="sr-only">close</span>
+          <span className="button-icon">
+            <CloseIcon className="icon" />
+          </span>
+        </button>
+      </div>
+      <p id="edit-information-desc" className="sr-only">
         inputs are validated but not required to submit
       </p>
 
@@ -523,13 +548,16 @@ function NewUser() {
           )}
         </div>
       ) : null}
-
-      <div className="tabs">
-        <ul role="tablist" aria-label="quick start">
-          <li role="presentation">
+      <Spacer axis="vertical" size="15" />
+      <div className="tabs-container">
+        <ul className="tablist" role="tablist" aria-label="quick start">
+          <li role="presentation" className="tab">
             <a
               ref={basicInfoTabRef}
               href="#basic-info-panel"
+              className={`tab-link ${
+                selectedTab === "basic-info" ? "selected" : ""
+              }`}
               id="basic-info"
               data-main-content={
                 selectedTab === "basic-info" ? "true" : "false"
@@ -541,13 +569,16 @@ function NewUser() {
               onClick={(e) => changeTab("basic-info", e)}
               onKeyDown={(e) => tabActions(e)}
             >
-              Basic Info
+              <span className="link-text">basic info</span>
             </a>
           </li>
-          <li role="presentation">
+          <li role="presentation" className="tab">
             <a
               ref={billingInfoTabRef}
               href="#billing-info-panel"
+              className={`tab-link ${
+                selectedTab === "billing-info" ? "selected" : ""
+              }`}
               id="billing-info"
               data-main-content={
                 selectedTab === "billing-info" ? "true" : "false"
@@ -559,11 +590,11 @@ function NewUser() {
               onClick={(e) => changeTab("billing-info", e)}
               onKeyDown={(e) => tabActions(e)}
             >
-              Billing info
+              <span className="link-text">billing info</span>
             </a>
           </li>
         </ul>
-
+        <Spacer axis="vertical" size="20" />
         <section
           ref={basicInfoPanelRef}
           id="basic-info-panel"
@@ -602,9 +633,9 @@ function NewUser() {
                 </span>
               ) : null}
             </InputContainer>
-
+            <Spacer axis="vertical" size="30" />
             <ImageBox setImageChange={setImageChange} />
-
+            <Spacer axis="vertical" size="30" />
             <FieldSet>
               <legend>Area of Work</legend>
               <div className="radio-buttons-container">
@@ -654,7 +685,7 @@ function NewUser() {
                 </span>
               </div>
             </FieldSet>
-
+            <Spacer axis="vertical" size="20" />
             <InputContainer>
               <label htmlFor="title">Title:</label>
               <input
@@ -682,7 +713,7 @@ function NewUser() {
                 </span>
               ) : null}
             </InputContainer>
-
+            <Spacer axis="vertical" size="20" />
             <InputContainer>
               <label htmlFor="summary">Profile Summary:</label>
               <textarea
@@ -711,7 +742,7 @@ function NewUser() {
                 </span>
               ) : null}
             </InputContainer>
-
+            <Spacer axis="vertical" size="20" />
             <Combobox
               chosenOptions={location}
               onInputChange={getLocationsByValue}
@@ -721,30 +752,20 @@ function NewUser() {
               displayName={"Current Location"}
               single
             />
-
-            <button
-              disabled={
-                formStatus === FORM_STATUS.loading ||
-                formStatus === FORM_STATUS.success
-              }
+            <Spacer axis="vertical" size="20" />
+            <ControlButton
               type="submit"
-            >
-              {formStatus === FORM_STATUS.active ? "Submit" : null}
-              {formStatus === FORM_STATUS.loading ? "loading..." : null}
-              {formStatus === FORM_STATUS.success ? "Success!" : null}
-              {formStatus === FORM_STATUS.error ? "Re-Submit" : null}
-            </button>
-            <button
+              classNames="submit-button"
               disabled={
                 formStatus === FORM_STATUS.loading ||
                 formStatus === FORM_STATUS.success
               }
-              type="reset"
-              onClick={resetForm}
-              onKeyDown={(e) => formFocusAction(e, FORM_STATUS.idle)}
-            >
-              Cancel
-            </button>
+              buttonText={`${
+                formStatus === FORM_STATUS.active ? "Submit" : ""
+              }${formStatus === FORM_STATUS.loading ? "loading..." : ""}${
+                formStatus === FORM_STATUS.success ? "Success!" : ""
+              }${formStatus === FORM_STATUS.error ? "Re-Submit" : ""}`}
+            />
           </form>
         </section>
         <section
@@ -780,11 +801,88 @@ const WelcomeSection = styled.section`
 
 const FormSection = styled.section`
   min-width: 0;
+
+  .edit-info-header {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 7px;
+
+    .edit-button {
+      width: 100%;
+      max-width: 35px;
+      border-radius: 10px;
+      height: 35px;
+      padding: 8px;
+
+      &:focus-visible {
+        outline-width: 3px;
+        outline-color: transparent;
+        box-shadow: inset 0 0 1px 2.5px #2727ad;
+      }
+
+      &:hover .icon {
+        fill: #2727ad;
+      }
+
+      .icon {
+        height: 100%;
+      }
+    }
+  }
+
+  .tablist {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 5px;
+
+    .tab-link {
+      display: inline-block;
+      white-space: nowrap;
+      padding: 13px 15px 10px; // 13px for bottom borders
+      border: solid 1px rgba(229, 231, 235, 0.8);
+      border-bottom: solid 2px transparent;
+
+      &:focus-visible {
+        outline-width: 3px;
+        outline-color: transparent;
+        box-shadow: inset 0 0 0 2.5px #2727ad;
+      }
+
+      &:hover .link-text {
+        border-bottom: solid 1px;
+      }
+      &:focus .link-text {
+        outline: 0.25rem solid transparent;
+        border-bottom: solid 1px;
+      }
+
+      &.selected .link-text {
+        border-bottom: solid 1px transparent;
+      }
+
+      &.selected {
+        border-bottom: solid 2px;
+      }
+
+      .link-text {
+        border-bottom: solid 1px transparent;
+      }
+    }
+  }
+
+  .submit-button {
+    width: 90%;
+    max-width: 350px;
+  }
 `;
 
 const InputContainer = styled.div`
   display: flex;
   flex-direction: column;
+  /* max-width: 450px; */
+
   .input-err {
     border: solid red;
   }
@@ -799,6 +897,8 @@ const InputContainer = styled.div`
 `;
 
 const FieldSet = styled.fieldset`
+  max-width: 450px;
+
   .radio-buttons-container {
     display: flex;
     justify-content: space-evenly;
