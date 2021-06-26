@@ -310,88 +310,107 @@ function ImageBox({ setImageChange }) {
 
   return (
     <ImageBoxContainer>
-      <div className="grid-container">
-        <div className="image-upload-container">
-          <ImageUploadForm userId={user.id} setImageInput={setImageUpload} />
-          <ImagePreview
-            uploadedImage={userImage.previewImage}
-            removeUploadedImage={removeUploadedImage}
-            selectedAvatar={userImage.previewAvatar}
-            removeSelectedAvatar={removeSelectedAvatar}
-            savedUserImage={!userImage.removeUserImage && user.profile_image}
-            removeSavedUserImage={removeUserImage}
-            savedAvatar={!userImage.removeSavedAvatar && user.avatar_image}
-            removeSavedAvatar={removeSavedAvatar}
-          />
-        </div>
-
-        <fieldset
-          disabled={
-            userImage.previewImage ||
-            (user.profile_image && !userImage.removeUserImage)
-          }
-        >
-          <legend>Choose an avatar image:</legend>
-          <Spacer axis="vertical" size="5" />
-          {/* avatars main container */}
-          <div className="flex-container">
-            {avatarInfo.map((avatar) => (
-              <div key={avatar.title} className="flex-item">
-                <label htmlFor={avatar.title}>{avatar.title}</label>
-                <input
-                  ref={avatarRadioRefs.current[avatar.title]}
-                  type="radio"
-                  name="profile-avatar"
-                  id={avatar.title}
-                  value={avatar.title}
-                  defaultChecked={
-                    user.avatar_image ===
-                    `https://res.cloudinary.com/dy5hgr3ht/image/upload/tech-pros-v1-avatars/${avatar.title}.svg`
-                  }
-                  onClick={(e) => setSelectedAvatar(e.target.value)}
-                />
-              </div>
-            ))}
-          </div>
-        </fieldset>
+      <div className="image-upload-container">
+        <ImageUploadForm userId={user.id} setImageInput={setImageUpload} />
+        <ImagePreview
+          uploadedImage={userImage.previewImage}
+          removeUploadedImage={removeUploadedImage}
+          selectedAvatar={userImage.previewAvatar}
+          removeSelectedAvatar={removeSelectedAvatar}
+          savedUserImage={!userImage.removeUserImage && user.profile_image}
+          removeSavedUserImage={removeUserImage}
+          savedAvatar={!userImage.removeSavedAvatar && user.avatar_image}
+          removeSavedAvatar={removeSavedAvatar}
+        />
       </div>
+
+      <fieldset
+        disabled={
+          userImage.previewImage ||
+          (user.profile_image && !userImage.removeUserImage)
+        }
+      >
+        <legend>Choose an avatar image:</legend>
+        <Spacer axis="vertical" size="5" />
+        {/* avatars main container */}
+        <div className="avatars-container">
+          {avatarInfo.map((avatar) => (
+            <div key={avatar.title} className="avatar">
+              <label htmlFor={avatar.title}>
+                <span className="sr-only">{avatar.description}</span>
+                <img
+                  src={`https://res.cloudinary.com/dy5hgr3ht/image/upload/tech-pros-v1-avatars/${avatar.title}.svg`}
+                  alt=""
+                  aria-hidden="true"
+                />
+              </label>
+
+              <input
+                ref={avatarRadioRefs.current[avatar.title]}
+                type="radio"
+                name="profile-avatar"
+                id={avatar.title}
+                value={avatar.title}
+                defaultChecked={
+                  user.avatar_image ===
+                  `https://res.cloudinary.com/dy5hgr3ht/image/upload/tech-pros-v1-avatars/${avatar.title}.svg`
+                }
+                onClick={(e) => setSelectedAvatar(e.target.value)}
+              />
+            </div>
+          ))}
+        </div>
+      </fieldset>
     </ImageBoxContainer>
   );
 }
 
 const ImageBoxContainer = styled.div`
+  max-width: 650px;
+  overflow-x: auto;
+  display: flex;
+  gap: 30px;
   padding: 15px;
   border-radius: 10px;
   box-shadow: 0 4px 6px 0 hsla(0, 0%, 0%, 0.2);
-  max-width: 650px;
-
-  .grid-container {
-    overflow-x: auto;
-    display: grid;
-    grid-template-columns: repeat(2, auto);
-    grid-gap: 30px;
-  }
 
   .image-upload-container {
     display: flex;
     flex-direction: column;
-    gap: 40px;
+    gap: 30px;
   }
 
-  fieldset {
-    .flex-container {
-      display: flex;
-      gap: 20px;
+  & > fieldset {
+    .avatars-container {
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      grid-gap: 5px;
 
-      .flex-item {
-        width: 150px;
-        height: 100px;
-        border: solid;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        gap: 5px;
+      .avatar {
+        width: 100px;
+        height: 130px;
+        border: solid 1px rgba(229, 231, 235, 0.8);
+
+        label {
+          height: 80%;
+          width: 100%;
+          &:hover {
+            cursor: pointer;
+          }
+        }
+
+        input {
+          height: 20%;
+          width: 100%;
+          &:hover {
+            cursor: pointer;
+          }
+        }
+
+        img {
+          height: 95%;
+          width: 100%;
+        }
       }
     }
   }

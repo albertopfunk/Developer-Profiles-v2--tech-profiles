@@ -21,7 +21,12 @@ function ImagePreview({
         >
           X
         </button>
-        <img src={uploadedImage} alt="current preview pic" />
+        <img
+          src={uploadedImage}
+          alt="current preview pic"
+          height="130px"
+          width="130px"
+        />
       </ImageContainer>
     );
   }
@@ -36,7 +41,12 @@ function ImagePreview({
         >
           X
         </button>
-        <img src={selectedAvatar} alt="current avatar" />
+        <img
+          src={selectedAvatar}
+          alt="current avatar"
+          height="130px"
+          width="130px"
+        />
       </ImageContainer>
     );
   }
@@ -51,7 +61,12 @@ function ImagePreview({
         >
           X
         </button>
-        <img src={savedUserImage} alt="saved pic" />
+        <img
+          src={savedUserImage}
+          alt="saved pic"
+          height="130px"
+          width="130px"
+        />
       </ImageContainer>
     );
   }
@@ -66,7 +81,12 @@ function ImagePreview({
         >
           X
         </button>
-        <img src={savedAvatar} alt="saved avatar" />
+        <img
+          src={savedAvatar}
+          alt="saved avatar"
+          height="130px"
+          width="130px"
+        />
       </ImageContainer>
     );
   }
@@ -79,25 +99,14 @@ function ImagePreview({
 }
 
 const ImageContainer = styled.div`
-  position: relative;
-  width: 120px;
-  height: auto;
-
-  @media (min-width: 350px) {
-    width: 175px;
-  }
+  width: 130px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 
   button {
-    position: absolute;
-    top: 0;
-    right: 0;
     border: solid;
-    z-index: 15;
-  }
-
-  img {
-    width: 100%;
-    height: auto;
+    align-self: flex-end;
   }
 `;
 
