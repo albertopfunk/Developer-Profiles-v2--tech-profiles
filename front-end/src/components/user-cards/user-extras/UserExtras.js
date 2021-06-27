@@ -36,7 +36,7 @@ function UserExtras({ userExtras, noExtras, userId }) {
                   >
                     <img src={project.project_img} alt="" width="100%" />
                     {project.link}
-                    <span className="sr-only">(opens in new window)</span>
+                    <span className="visually-hidden-relative">(opens in new window)</span>
                   </a>
                 </dd>
                 <dd></dd>
@@ -213,10 +213,6 @@ const ExtrasContainer = styled.div`
             outline-width: 3px;
             outline-color: transparent;
             box-shadow: inset 0 0 0 2.5px #2727ad;
-          }
-
-          .sr-only {
-            position: relative;
           }
         }
 

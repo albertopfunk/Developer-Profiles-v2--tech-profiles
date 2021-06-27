@@ -287,7 +287,10 @@ export const GlobalStyles = createGlobalStyle`
     width: 100%;
     max-width: 450px;
     min-height: 35px;
-    padding: 5px 0;
+    padding: 5px;
+    border: solid 1px #dbdbdb;
+    border-radius: 2.5px;
+    box-shadow: inset 0 0.0625em 0.125em rgb(10 10 10 / 5%);
   }
 
 
@@ -361,11 +364,13 @@ export const GlobalStyles = createGlobalStyle`
   /**
   * 1. Correct the inability to style upload buttons in iOS and Safari.
   * 2. Change font properties to inherit in Safari.
+  * 3. pointer for button appearance
   */
 
   ::-webkit-file-upload-button {
     -webkit-appearance: button; /* 1 */
     font: inherit; /* 2 */
+    cursor: pointer; /* 3 */
   }
 
   /**
@@ -526,7 +531,7 @@ export const GlobalStyles = createGlobalStyle`
   }
 
   button {
-    font-size: .8rem;
+    font-size: .9rem;
     /* text-transform: uppercase; */
 
 
@@ -553,6 +558,18 @@ export const GlobalStyles = createGlobalStyle`
 
   .sr-only {
     position: absolute;
+    clip: rect(0, 0, 0, 0);
+    height: 1px;
+    width: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+  }
+  
+  .visually-hidden-relative {
+    display: inline-block;
+    position: relative;
     clip: rect(0, 0, 0, 0);
     height: 1px;
     width: 1px;
