@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { ReactComponent as WelcomeIntro } from "../../../global/assets/dashboard-intro.svg";
-import { ReactComponent as CloseIcon } from "../../../global/assets/dashboard-remove.svg";
+import { ReactComponent as CloseIcon } from "../../../global/assets/dashboard-close.svg";
 import styled from "styled-components";
 
 import ImageBox from "../../../components/forms/images/imageBox";
@@ -458,24 +458,26 @@ function NewUser() {
     return (
       <WelcomeSection aria-labelledby="welcome-heading">
         <h2 id="welcome-heading">Welcome, {user.first_name || "Newcomer"}!</h2>
-
+        <Spacer axis="vertical" size="5" />
         <div className="image-container">
           <WelcomeIntro />
         </div>
+        <Spacer axis="vertical" size="15" />
+        <div className="controls-container">
+          <ControlButton
+            ref={editInfoBtnRef}
+            buttonText="quickstart"
+            ariaLabel="form"
+            onClick={setFormInputs}
+            onKeyDown={(e) => formFocusAction(e, FORM_STATUS.active)}
+            attributes={{
+              id: "edit-info-btn",
+              "data-main-content": "true",
+            }}
+          />
 
-        <ControlButton
-          ref={editInfoBtnRef}
-          buttonText="quickstart"
-          ariaLabel="form"
-          onClick={setFormInputs}
-          onKeyDown={(e) => formFocusAction(e, FORM_STATUS.active)}
-          attributes={{
-            id: "edit-info-btn",
-            "data-main-content": "true",
-          }}
-        />
-
-        <Link to="/profile-dashboard">Go Home</Link>
+          <Link to="/profile-dashboard"><span className="link-text">Go Home</span></Link>
+        </div>
       </WelcomeSection>
     );
   }
@@ -608,6 +610,7 @@ function NewUser() {
           <form onSubmit={(e) => submitEdit(e)}>
             <InputContainer>
               <label htmlFor="first-name">First Name:</label>
+              <Spacer axis="vertical" size="5" />
               <input
                 type="text"
                 autoComplete="given-name"
@@ -638,6 +641,7 @@ function NewUser() {
             <Spacer axis="vertical" size="30" />
             <FieldSet>
               <legend>Area of Work</legend>
+              <Spacer axis="vertical" size="5" />
               <div className="radio-buttons-container">
                 <span className="radio-wrapper">
                   <input
@@ -688,6 +692,7 @@ function NewUser() {
             <Spacer axis="vertical" size="20" />
             <InputContainer>
               <label htmlFor="title">Title:</label>
+              <Spacer axis="vertical" size="5" />
               <input
                 type="text"
                 autoComplete="organization-title"
@@ -716,6 +721,7 @@ function NewUser() {
             <Spacer axis="vertical" size="20" />
             <InputContainer>
               <label htmlFor="summary">Profile Summary:</label>
+              <Spacer axis="vertical" size="5" />
               <textarea
                 id="summary"
                 name="profile-summary"
@@ -793,9 +799,44 @@ function NewUser() {
 }
 
 const WelcomeSection = styled.section`
-  .image-container {
-    width: min(500px, 100%);
-    height: auto;
+  width: 100%;
+  text-align: center;
+
+  .controls-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+
+    button {
+      flex-basis: 40%;
+    }
+    a {
+      flex-basis: 40%;
+      display: inline-block;
+      white-space: nowrap;
+      padding: 13px 15px 10px; // 13px for bottom borders
+      border: solid 1px rgba(229, 231, 235, 0.8);
+
+      &:focus-visible {
+        outline-width: 3px;
+        outline-color: transparent;
+        box-shadow: inset 0 0 0 2.5px #2727ad;
+      }
+
+      &:hover .link-text {
+        border-bottom: solid 1px;
+      }
+      &:focus .link-text {
+        outline: 0.25rem solid transparent;
+        border-bottom: solid 1px;
+      }
+
+      .link-text {
+        border-bottom: solid 1px transparent;
+      }
+    }
   }
 `;
 
@@ -901,10 +942,14 @@ const FieldSet = styled.fieldset`
 
   .radio-buttons-container {
     display: flex;
-    justify-content: space-evenly;
     flex-wrap: wrap;
+    gap: 20px;
+
     .radio-wrapper {
-      margin: 0.7em;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      gap: 3px;
     }
   }
 `;
