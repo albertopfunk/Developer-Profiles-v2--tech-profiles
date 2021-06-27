@@ -551,10 +551,7 @@ const ExperienceForm = React.forwardRef(
               </span>
             ) : null}
             {dates.toMonthStatus === FORM_STATUS.success ? (
-              <span
-                id={`to-month-${userId}-success`}
-                className="success-mssg"
-              >
+              <span id={`to-month-${userId}-success`} className="success-mssg">
                 month is Validated
               </span>
             ) : null}
@@ -572,8 +569,7 @@ const ExperienceForm = React.forwardRef(
               }`}
               aria-describedby={`to-year-${userId}-error to-year-${userId}-success`}
               aria-invalid={
-                dates.toYear === "" ||
-                dates.toYearStatus === FORM_STATUS.error
+                dates.toYear === "" || dates.toYearStatus === FORM_STATUS.error
               }
               onChange={(e) => setToYearDate(e.target.value)}
               onBlur={(e) => validateToYearDate(e.target.value)}
@@ -656,11 +652,12 @@ const Fieldset = styled.fieldset`
     align-items: center;
 
     .remove-button {
-      width: 100%;
-      max-width: 32px;
+      width: 30px;
+      height: 30px;
       border-radius: 10px;
-      height: 32px;
-      padding: 8px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
 
       &:focus-visible {
         outline-width: 3px;
@@ -672,8 +669,13 @@ const Fieldset = styled.fieldset`
         fill: #2727ad;
       }
 
-      .icon {
-        height: 100%;
+      .button-icon {
+        display: inline-block;
+
+        .icon {
+          height: 20px;
+          width: 20px;
+        }
       }
     }
   }

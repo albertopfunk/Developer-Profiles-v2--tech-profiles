@@ -140,8 +140,12 @@ export const GlobalStyles = createGlobalStyle`
   strong,
   dt,
   legend {
-    font-size: .9rem;
+    font-size: .95rem;
     font-weight: bolder;
+
+    @media (min-width: 750px) {
+      font-size: 1rem;
+    }
   }
 
   /**
@@ -270,7 +274,7 @@ export const GlobalStyles = createGlobalStyle`
 
   button {
     border: none;
-    background-color: white;
+    background-color: transparent;
     cursor: pointer;
     user-select: none;
   }
@@ -549,13 +553,6 @@ export const GlobalStyles = createGlobalStyle`
     }
   }
 
-
-
-
-  
-
-  
-
   .sr-only {
     position: absolute;
     clip: rect(0, 0, 0, 0);
@@ -566,7 +563,7 @@ export const GlobalStyles = createGlobalStyle`
     border: 0;
     overflow: hidden;
   }
-  
+
   .visually-hidden-relative {
     display: inline-block;
     position: relative;
