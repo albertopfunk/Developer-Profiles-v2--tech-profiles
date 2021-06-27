@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { ReactComponent as RemoveIcon } from "../../../global/assets/dashboard-remove.svg";
 
 function ImagePreview({
   uploadedImage,
@@ -16,10 +17,14 @@ function ImagePreview({
       <ImageContainer>
         <button
           type="button"
+          className="button close-button"
           aria-label="remove current preview pic"
           onClick={removeUploadedImage}
         >
-          X
+          <span className="visually-hidden-relative">remove image</span>
+          <span className="button-icon">
+            <RemoveIcon className="icon" />
+          </span>
         </button>
         <img
           src={uploadedImage}
@@ -36,10 +41,14 @@ function ImagePreview({
       <ImageContainer>
         <button
           type="button"
+          className="button close-button"
           aria-label="remove current avatar"
           onClick={removeSelectedAvatar}
         >
-          X
+          <span className="visually-hidden-relative">remove image</span>
+          <span className="button-icon">
+            <RemoveIcon className="icon" />
+          </span>
         </button>
         <img
           src={selectedAvatar}
@@ -56,10 +65,14 @@ function ImagePreview({
       <ImageContainer>
         <button
           type="button"
+          className="button close-button"
           aria-label="remove saved pic on submit"
           onClick={removeSavedUserImage}
         >
-          X
+          <span className="visually-hidden-relative">remove image</span>
+          <span className="button-icon">
+            <RemoveIcon className="icon" />
+          </span>
         </button>
         <img
           src={savedUserImage}
@@ -76,10 +89,14 @@ function ImagePreview({
       <ImageContainer>
         <button
           type="button"
+          className="button close-button"
           aria-label="remove saved avatar on submit"
           onClick={removeSavedAvatar}
         >
-          X
+          <span className="visually-hidden-relative">remove image</span>
+          <span className="button-icon">
+            <RemoveIcon className="icon" />
+          </span>
         </button>
         <img
           src={savedAvatar}
@@ -104,9 +121,33 @@ const ImageContainer = styled.div`
   flex-direction: column;
   gap: 2px;
 
-  button {
-    border: solid;
+  .close-button {
     align-self: flex-end;
+    width: 30px;
+    height: 30px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &:focus-visible {
+      outline-width: 3px;
+      outline-color: transparent;
+      box-shadow: inset 0 0 1px 2.5px #2727ad;
+    }
+
+    &:hover .icon {
+      fill: #2727ad;
+    }
+
+    .button-icon {
+      display: inline-block;
+
+      .icon {
+        height: 20px;
+        width: 20px;
+      }
+    }
   }
 `;
 
