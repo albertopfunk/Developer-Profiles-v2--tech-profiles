@@ -421,7 +421,6 @@ const PageHeader = styled.div`
   border-bottom: solid 1px rgba(229, 231, 235, 0.8);
 
   @media (min-width: 500px) {
-    z-index: 0;
     border: none;
   }
 `;

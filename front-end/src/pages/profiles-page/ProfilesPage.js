@@ -238,7 +238,6 @@ const HeaderContainer = styled.div`
   border-bottom: solid 1px rgba(229, 231, 235, 0.8);
 
   @media (min-width: 600px) {
-    z-index: 0;
     border: none;
   }
 `;
