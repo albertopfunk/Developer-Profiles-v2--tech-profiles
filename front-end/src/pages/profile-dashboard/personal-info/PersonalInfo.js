@@ -711,10 +711,14 @@ const FieldSet = styled.fieldset`
 
   .radio-buttons-container {
     display: flex;
-    justify-content: space-evenly;
     flex-wrap: wrap;
+    gap: 20px;
+
     .radio-wrapper {
-      margin: 0.7em;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      gap: 3px;
     }
   }
 `;

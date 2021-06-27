@@ -78,11 +78,11 @@ const AreaOfWorkFieldset = styled.fieldset`
   .flex-container {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 20px;
 
     .flex-item {
       display: flex;
-      gap: 2px;
+      gap: 3px;
       align-items: center;
       justify-content: flex-start;
     }
