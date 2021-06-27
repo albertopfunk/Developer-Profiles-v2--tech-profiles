@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { httpClient } from "../../../global/helpers/http-requests";
 import { FORM_STATUS } from "../../../global/helpers/variables";
 import Spacer from "../../../global/helpers/spacer";
+import { ReactComponent as UploadIcon } from "../../../global/assets/dashboard-upload.svg";
 
 function ImageUploadForm({ userId, imageId, setImageInput }) {
   const [imageStatus, setImageStatus] = useState(FORM_STATUS.idle);
@@ -45,17 +46,22 @@ function ImageUploadForm({ userId, imageId, setImageInput }) {
       <InputContainer>
         <label htmlFor="image-upload">Upload an image:</label>
         <Spacer axis="vertical" size="5" />
-        <input
-          type="file"
-          id="image-upload"
-          ref={imageInputRef}
-          name="image-upload"
-          aria-label="profile pic upload"
-          aria-describedby="image-loading image-error image-success"
-          aria-invalid={imageStatus === FORM_STATUS.error}
-          onChange={(e) => uploadImage(e)}
-        />
-
+        <div className="input-container">
+          <span className="upload-icon">
+            <UploadIcon className="icon" />
+          </span>
+          <input
+            type="file"
+            id="image-upload"
+            ref={imageInputRef}
+            name="image-upload"
+            aria-label="profile pic upload"
+            aria-describedby="image-loading image-error image-success"
+            aria-invalid={imageStatus === FORM_STATUS.error}
+            onChange={(e) => uploadImage(e)}
+          />
+        </div>
+        <Spacer axis="vertical" size="2" />
         {imageStatus === FORM_STATUS.loading ? (
           <span id="image-loading" className="loading-mssg">
             Loading...
@@ -79,12 +85,59 @@ function ImageUploadForm({ userId, imageId, setImageInput }) {
 }
 
 const InputContainer = styled.div`
-  display: flex;
-  flex-direction: column;
+  .input-container {
+    width: 100%;
+    max-width: 225px;
+    position: relative;
+    border: solid 1px #dbdbdb;
+    border-radius: 2.5px;
+    box-shadow: inset 0 0.0625em 0.125em rgb(10 10 10 / 5%);
+    background-color: white;
 
-  input {
-    border: solid;
-    width: 100px;
+    &:focus-within {
+      outline: solid 2px;
+      outline-offset: -1px;
+    }
+    &:focus-within .icon {
+      fill: #2727ad;
+    }
+    &:hover .icon {
+      fill: #2727ad;
+    }
+
+    .upload-icon {
+      display: inline-block;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+
+      .icon {
+        width: 25px;
+        height: 25px;
+      }
+    }
+
+    input {
+      width: 100%;
+      min-height: 35px;
+      padding: 5px;
+      opacity: 0;
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+
+  label {
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  span {
+    display: block;
   }
 
   .loading-mssg {
