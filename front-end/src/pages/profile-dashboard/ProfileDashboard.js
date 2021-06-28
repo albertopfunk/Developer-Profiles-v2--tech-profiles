@@ -485,7 +485,7 @@ const PageNav = styled.nav`
       border-right: none;
       border-bottom: solid 1px rgba(229, 231, 235, 0.8);
     }
-    
+
     @media (min-width: 750px) {
       padding-top: 21px;
       gap: 10px;

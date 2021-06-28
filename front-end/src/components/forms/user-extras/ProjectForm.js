@@ -276,7 +276,7 @@ const ProjectForm = React.forwardRef(
         </InputContainer>
 
         <Spacer axis="vertical" size="20" />
-        
+
         <div className="image-upload-container">
           <ImageUploadForm
             userId={userId}

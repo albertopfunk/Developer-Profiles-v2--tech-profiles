@@ -169,7 +169,6 @@ const CheckoutContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 25px;
-
 `;
 
 const FormContainer = styled.div`
@@ -248,8 +247,8 @@ const FormContainer = styled.div`
       align-items: center;
       text-align: center;
 
-      box-shadow: inset 0 0 2px 2px hsl(240,10%,96%);
-      background-color: hsl(240,10%,99%);
+      box-shadow: inset 0 0 2px 2px hsl(240, 10%, 96%);
+      background-color: hsl(240, 10%, 99%);
       border-radius: 10px;
     }
   }

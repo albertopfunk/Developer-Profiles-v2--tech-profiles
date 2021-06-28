@@ -36,7 +36,9 @@ function UserExtras({ userExtras, noExtras, userId }) {
                   >
                     <img className="image" src={project.project_img} alt="" />
                     {project.link}
-                    <span className="visually-hidden-relative">(opens in new window)</span>
+                    <span className="visually-hidden-relative">
+                      (opens in new window)
+                    </span>
                   </a>
                 </dd>
                 <dd className="description">{project.project_description}</dd>
@@ -213,7 +215,7 @@ const ExtrasContainer = styled.div`
             outline-color: transparent;
             box-shadow: inset 0 0 0 2.5px #2727ad;
           }
-          
+
           .image {
             width: 100%;
             aspect-ratio: 1 / 1;
@@ -232,7 +234,6 @@ const ExtrasContainer = styled.div`
               clear: both;
             }
           }
-
         }
 
         .description {

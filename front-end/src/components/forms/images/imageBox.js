@@ -337,7 +337,9 @@ function ImageBox({ setImageChange }) {
           {avatarInfo.map((avatar) => (
             <div key={avatar.title} className="avatar">
               <label htmlFor={avatar.title}>
-                <span className="visually-hidden-relative">{avatar.description}</span>
+                <span className="visually-hidden-relative">
+                  {avatar.description}
+                </span>
                 <img
                   src={`https://res.cloudinary.com/dy5hgr3ht/image/upload/tech-pros-v1-avatars/${avatar.title}.svg`}
                   alt=""

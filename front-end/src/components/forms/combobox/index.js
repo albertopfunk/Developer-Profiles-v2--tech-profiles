@@ -375,7 +375,7 @@ class Combobox extends React.Component {
             onChange={(e) => this.debounceInput(e)}
             onKeyDown={(e) => this.inputFocusActions(e)}
           />
-          
+
           <span id={`${inputName}-combobox-instructions`} className="sr-only">
             {`chosen ${displayName} will be listed below`}
           </span>
@@ -436,7 +436,8 @@ class Combobox extends React.Component {
                       role="option"
                       aria-selected={selectedOptionId === `results-${i}`}
                       className={`result ${
-                        selectedOptionId === `results-${i}` ? "selected" : ""}`}
+                        selectedOptionId === `results-${i}` ? "selected" : ""
+                      }`}
                       // prevent onblur input event so onclick can run
                       onMouseDown={(e) => e.preventDefault()}
                       onClick={() => this.chooseOption(option.name, option.id)}
@@ -453,7 +454,10 @@ class Combobox extends React.Component {
         <ChosenOptionsContainer>
           {chosenOptions.length > 0 ? (
             <>
-              <ul className="chosen-options-group" aria-label={`chosen ${displayName}`}>
+              <ul
+                className="chosen-options-group"
+                aria-label={`chosen ${displayName}`}
+              >
                 {chosenOptions.map((chosenOption, i) => {
                   return (
                     <li key={chosenOption.id} className="chosen-option">
@@ -466,7 +470,9 @@ class Combobox extends React.Component {
                         }}
                         onClick={() => this.removeChosenOption(i)}
                       >
-                        <span className="sr-only">remove {chosenOption.name}</span>
+                        <span className="sr-only">
+                          remove {chosenOption.name}
+                        </span>
                         <RemoveIcon className="button-icon" />
                       </button>
                     </li>
@@ -481,9 +487,7 @@ class Combobox extends React.Component {
   }
 }
 
-const InputContainer = styled.div`
-  
-`;
+const InputContainer = styled.div``;
 
 const ResultsContainer = styled.div`
   position: relative;
@@ -503,7 +507,7 @@ const ResultsContainer = styled.div`
 
     .result {
       padding: 2px;
-      
+
       &.selected {
         outline-style: solid;
         outline-width: 2px;
@@ -524,7 +528,6 @@ const ChosenOptionsContainer = styled.div`
       box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
         rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
       padding: 5px;
-
 
       display: flex;
       justify-content: flex-start;
@@ -555,8 +558,6 @@ const ChosenOptionsContainer = styled.div`
         }
       }
     }
-
-
   }
 `;
 

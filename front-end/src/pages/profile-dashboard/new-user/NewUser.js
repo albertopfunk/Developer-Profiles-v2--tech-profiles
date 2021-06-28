@@ -476,7 +476,9 @@ function NewUser() {
             }}
           />
 
-          <Link to="/profile-dashboard"><span className="link-text">Go Home</span></Link>
+          <Link to="/profile-dashboard">
+            <span className="link-text">Go Home</span>
+          </Link>
         </div>
       </WelcomeSection>
     );

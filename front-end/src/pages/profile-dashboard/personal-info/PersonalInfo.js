@@ -657,7 +657,7 @@ const InfoSection = styled.section`
       img {
         width: 125px;
         height: 125px;
-        
+
         @media (min-width: 500px) {
           width: 150px;
           height: 150px;

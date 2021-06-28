@@ -273,14 +273,14 @@ const EducationForm = React.forwardRef(
     }
 
     function setToPresentDate() {
-      let schoolToMonthStatus = FORM_STATUS.success
-      let schoolToYearStatus = FORM_STATUS.success
+      let schoolToMonthStatus = FORM_STATUS.success;
+      let schoolToYearStatus = FORM_STATUS.success;
 
       if (!dates.schoolToMonth) {
-        schoolToMonthStatus = FORM_STATUS.error
+        schoolToMonthStatus = FORM_STATUS.error;
       }
       if (!dates.schoolToYear) {
-        schoolToYearStatus = FORM_STATUS.error
+        schoolToYearStatus = FORM_STATUS.error;
       }
 
       if (presentRef.current.checked) {
@@ -292,7 +292,7 @@ const EducationForm = React.forwardRef(
           ...dates,
           schoolDateChange: true,
           schoolToMonthStatus: FORM_STATUS.success,
-          schoolToYearStatus: FORM_STATUS.success
+          schoolToYearStatus: FORM_STATUS.success,
         });
       } else {
         updateEducation(eduIndex, {
@@ -303,7 +303,7 @@ const EducationForm = React.forwardRef(
           ...dates,
           schoolDateChange: true,
           schoolToMonthStatus,
-          schoolToYearStatus
+          schoolToYearStatus,
         });
       }
     }

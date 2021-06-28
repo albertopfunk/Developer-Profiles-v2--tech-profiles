@@ -76,7 +76,11 @@ function StripeCardInput({
         type="submit"
         onClick={createToken}
         disabled={!subType}
-        buttonText={`${subIdle ? "Purchase" : ""}${stripeAwait ? "Stripe was not ready!" : ""}${stripeReady ? "Stripe is ready! retry" : ""}${subError ? "Error submitting payment, retry" : ""}${subLoading ? "loading..." : ""}`}
+        buttonText={`${subIdle ? "Purchase" : ""}${
+          stripeAwait ? "Stripe was not ready!" : ""
+        }${stripeReady ? "Stripe is ready! retry" : ""}${
+          subError ? "Error submitting payment, retry" : ""
+        }${subLoading ? "loading..." : ""}`}
       />
     </ControlsContainer>
   );
