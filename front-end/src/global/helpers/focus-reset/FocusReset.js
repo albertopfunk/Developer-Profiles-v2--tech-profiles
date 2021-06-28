@@ -152,7 +152,8 @@ const FocusContainer = styled.div`
     position: absolute;
     top: 2%;
     left: -999px;
-    z-index: 100;
+    /* fourth */
+    z-index: 40;
     border: solid 0.5px;
     background-color: white;
     padding: 5px;

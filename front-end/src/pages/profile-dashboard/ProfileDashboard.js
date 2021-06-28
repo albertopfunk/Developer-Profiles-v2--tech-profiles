@@ -416,7 +416,8 @@ const PageHeader = styled.div`
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 10;
+  /* second mobile */
+  z-index: 20;
   width: 100%;
   border-bottom: solid 1px rgba(229, 231, 235, 0.8);
 
@@ -427,6 +428,8 @@ const PageHeader = styled.div`
 
 const PageNav = styled.nav`
   background-color: white;
+  max-height: ${(props) => `calc(100vh - ${props.headerHeight}px);`};
+  overflow-y: auto;
 
   @media (min-width: 500px) {
     position: fixed;
@@ -435,12 +438,13 @@ const PageNav = styled.nav`
     z-index: -1;
     padding-top: 56px;
     width: 50px;
-    height: 100vh;
+    min-height: 100vh;
     box-shadow: 0 1px 3px 0 rgb(0 0 0 / 10%), 0 1px 2px 0 rgb(0 0 0 / 6%);
   }
 
   @media (min-width: 600px) {
-    z-index: 5;
+    /* third desktop */
+    z-index: 20;
   }
 
   @media (min-width: 750px) {

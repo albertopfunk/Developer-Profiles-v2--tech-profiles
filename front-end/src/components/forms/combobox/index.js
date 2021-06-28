@@ -489,7 +489,8 @@ const ChosenNamesGroup = styled.ul``;
 const ResultsContainer = styled.div`
   .results-group {
     position: absolute;
-    z-index: 100;
+    /* first */
+    z-index: 10;
     background-color: white;
   }
   .selected {

@@ -233,7 +233,8 @@ const HeaderContainer = styled.div`
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 10;
+  /* second mobile */
+  z-index: 20;
   width: 100%;
   border-bottom: solid 1px rgba(229, 231, 235, 0.8);
 

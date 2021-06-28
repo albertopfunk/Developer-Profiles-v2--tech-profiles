@@ -123,7 +123,8 @@ const FilterNav = styled.nav`
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 5;
+    /* third desktop */
+    z-index: 20;
     padding-top: 75px;
     width: 200px;
     min-height: 100vh;
