@@ -54,41 +54,37 @@ function Filters({
           <div className="grid-container">
             <div className="sorting">
               {resetFilterToggle ? (
-                <>
-                  <SortingFilter updateUsers={updateUsers} />
-                </>
-              ) : (
                 <SortingFilter updateUsers={updateUsers} />
-              )}
+              ) : null}
+              {!resetFilterToggle ? (
+                <SortingFilter updateUsers={updateUsers} />
+              ) : null}
             </div>
             <div className="area-of-work">
               {resetFilterToggle ? (
-                <>
-                  <AreaOfWorkFilter updateUsers={updateUsers} />
-                </>
-              ) : (
                 <AreaOfWorkFilter updateUsers={updateUsers} />
-              )}
+              ) : null}
+              {!resetFilterToggle ? (
+                <AreaOfWorkFilter updateUsers={updateUsers} />
+              ) : null}
             </div>
 
             <div className="current-location">
               {resetFilterToggle ? (
-                <>
-                  <CurrentLocationFilter updateUsers={updateUsers} />
-                </>
-              ) : (
                 <CurrentLocationFilter updateUsers={updateUsers} />
-              )}
+              ) : null}
+              {!resetFilterToggle ? (
+                <CurrentLocationFilter updateUsers={updateUsers} />
+              ) : null}
             </div>
 
             <div className="relocate-locations">
               {resetFilterToggle ? (
-                <>
-                  <RelocateToFilter updateUsers={updateUsers} />
-                </>
-              ) : (
                 <RelocateToFilter updateUsers={updateUsers} />
-              )}
+              ) : null}
+              {!resetFilterToggle ? (
+                <RelocateToFilter updateUsers={updateUsers} />
+              ) : null}
             </div>
 
             <div className="controls-container">
