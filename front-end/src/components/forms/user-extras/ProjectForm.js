@@ -274,19 +274,23 @@ const ProjectForm = React.forwardRef(
             </span>
           ) : null}
         </InputContainer>
+
         <Spacer axis="vertical" size="20" />
-        <ImageUploadForm
-          userId={userId}
-          imageId={projectId}
-          setImageInput={setImageInput}
-        />
-        <Spacer axis="vertical" size="5" />
-        <ImagePreview
-          uploadedImage={image.imageInput}
-          removeUploadedImage={removeImageInput}
-          savedUserImage={!shouldRemoveImage && userProjectImage}
-          removeSavedUserImage={removeUserImage}
-        />
+        
+        <div className="image-upload-container">
+          <ImageUploadForm
+            userId={userId}
+            imageId={projectId}
+            setImageInput={setImageInput}
+          />
+          <ImagePreview
+            uploadedImage={image.imageInput}
+            removeUploadedImage={removeImageInput}
+            savedUserImage={!shouldRemoveImage && userProjectImage}
+            removeSavedUserImage={removeUserImage}
+          />
+        </div>
+
         <Spacer axis="vertical" size="20" />
         <InputContainer>
           <label htmlFor={`link-${projectId}`}>Link:</label>
@@ -396,6 +400,17 @@ const Fieldset = styled.fieldset`
           width: 20px;
         }
       }
+    }
+  }
+
+  .image-upload-container {
+    max-width: 225px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    & > div:last-child {
+      align-self: center;
     }
   }
 `;
