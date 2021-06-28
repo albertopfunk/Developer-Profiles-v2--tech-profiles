@@ -6,6 +6,8 @@ import {
 } from "../../../global/helpers/variables";
 import Spacer from "../../../global/helpers/spacer";
 
+import { ReactComponent as RemoveIcon } from "../../../global/assets/dashboard-remove.svg";
+
 class Combobox extends React.Component {
   state = {
     input: "",
@@ -373,6 +375,7 @@ class Combobox extends React.Component {
             onChange={(e) => this.debounceInput(e)}
             onKeyDown={(e) => this.inputFocusActions(e)}
           />
+          
           <span id={`${inputName}-combobox-instructions`} className="sr-only">
             {`chosen ${displayName} will be listed below`}
           </span>
@@ -397,6 +400,7 @@ class Combobox extends React.Component {
 
               <ul
                 id="results"
+                className="results-group"
                 role="listbox"
                 aria-labelledby={`${inputName}-label`}
               >
@@ -431,9 +435,8 @@ class Combobox extends React.Component {
                       key={option.id}
                       role="option"
                       aria-selected={selectedOptionId === `results-${i}`}
-                      className={
-                        selectedOptionId === `results-${i}` ? "selected" : ""
-                      }
+                      className={`result ${
+                        selectedOptionId === `results-${i}` ? "selected" : ""}`}
                       // prevent onblur input event so onclick can run
                       onMouseDown={(e) => e.preventDefault()}
                       onClick={() => this.chooseOption(option.name, option.id)}
@@ -446,56 +449,114 @@ class Combobox extends React.Component {
             </>
           ) : null}
         </ResultsContainer>
-        <div>
+        <Spacer axis="vertical" size="10" />
+        <ChosenOptionsContainer>
           {chosenOptions.length > 0 ? (
             <>
-              <ChosenNamesGroup aria-label={`chosen ${displayName}`}>
+              <ul className="chosen-options-group" aria-label={`chosen ${displayName}`}>
                 {chosenOptions.map((chosenOption, i) => {
                   return (
-                    <li key={chosenOption.id}>
+                    <li key={chosenOption.id} className="chosen-option">
                       <span>{chosenOption.name}</span>
                       <button
                         type="button"
+                        className="button remove-button"
                         ref={(ref) => {
                           this.setChosenOptionBtnRefs(ref, i);
                         }}
-                        aria-label={`remove ${chosenOption.name}`}
                         onClick={() => this.removeChosenOption(i)}
                       >
-                        <span>X</span>
+                        <span className="sr-only">remove {chosenOption.name}</span>
+                        <RemoveIcon className="button-icon" />
                       </button>
                     </li>
                   );
                 })}
-              </ChosenNamesGroup>
+              </ul>
             </>
           ) : null}
-        </div>
+        </ChosenOptionsContainer>
       </div>
     );
   }
 }
 
 const InputContainer = styled.div`
+  
+`;
+
+const ResultsContainer = styled.div`
+  position: relative;
+  width: 100%;
   max-width: 450px;
 
-  input {
+  .results-group {
+    position: absolute;
     width: 100%;
+    border: solid 2px rgba(229, 231, 235, 0.8);
+    border-top: none;
+    background-color: white;
+    padding: 5px;
+
+    /* first */
+    z-index: 10;
+
+    .result {
+      padding: 2px;
+      
+      &.selected {
+        outline-style: solid;
+        outline-width: 2px;
+        outline-color: #2727ad;
+      }
+    }
   }
 `;
 
-const ChosenNamesGroup = styled.ul``;
+const ChosenOptionsContainer = styled.div`
+  .chosen-options-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
 
-const ResultsContainer = styled.div`
-  .results-group {
-    position: absolute;
-    /* first */
-    z-index: 10;
-    background-color: white;
-  }
-  .selected {
-    border: solid;
-    background-color: green;
+    .chosen-option {
+      border-radius: 10px;
+      box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+        rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+      padding: 5px;
+
+
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      gap: 3px;
+
+      .remove-button {
+        width: 25px;
+        height: 25px;
+        border-radius: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        &:focus-visible {
+          outline-width: 3px;
+          outline-color: transparent;
+          box-shadow: inset 0 0 1px 2.5px #2727ad;
+        }
+
+        &:hover .icon {
+          fill: #2727ad;
+        }
+
+        .button-icon {
+          width: 15px;
+          height: 15px;
+        }
+      }
+    }
+
+
   }
 `;
 
