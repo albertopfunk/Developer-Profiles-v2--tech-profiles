@@ -271,21 +271,40 @@ const ExperienceForm = React.forwardRef(
     }
 
     function setToPresentDate() {
+      let toMonthStatus = FORM_STATUS.success
+      let toYearStatus = FORM_STATUS.success
+
+      if (!dates.toMonth) {
+        toMonthStatus = FORM_STATUS.error
+      }
+      if (!dates.toYear) {
+        toYearStatus = FORM_STATUS.error
+      }
+
       if (presentRef.current.checked) {
         updateExperience(expIndex, {
           dateChange: true,
           toPresent: "Present",
         });
+        setDates({
+          ...dates,
+          dateChange: true,
+          toMonthStatus: FORM_STATUS.success,
+          toYearStatus: FORM_STATUS.success
+        });
+
       } else {
         updateExperience(expIndex, {
           dateChange: true,
           toPresent: "",
         });
+        setDates({
+          ...dates,
+          dateChange: true,
+          toMonthStatus,
+          toYearStatus
+        });
       }
-      setDates({
-        ...dates,
-        dateChange: true,
-      });
     }
 
     function setDescriptionInput(value) {
