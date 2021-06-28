@@ -671,15 +671,14 @@ const InfoSection = styled.section`
 
   .info-group {
     .image-container {
-      width: 95%;
-      max-width: 175px;
-
-      @media (min-width: 400px) {
-        max-width: 200px;
-      }
-
       img {
-        width: 100%;
+        width: 125px;
+        height: 125px;
+        
+        @media (min-width: 500px) {
+          width: 150px;
+          height: 150px;
+        }
       }
     }
   }

@@ -74,26 +74,32 @@ function UserImage({ previewImage, userImage, avatarImage, userId }) {
 
 const ImageSection = styled.section`
   width: 100%;
-  /* width: 200px;
-  height: auto; */
+  height: 100%;
   grid-column: 1 / 2;
   grid-row: 2 / 3;
   place-self: center;
 
   @media (min-width: 950px) {
-    /* width: 250px; */
     grid-column: 1 / 2;
     grid-row: 1 / 2;
   }
 
   .image-container {
-    width: min(200px, 100%);
+    width: 100%;
+    max-width: 200px;
+    height: 100%;
+    max-height: 200px;
     border-radius: 50%;
     margin: 0 auto;
 
+    @media (min-width: 500px) {
+      max-width: 250px;
+      max-height: 250px;
+    }
+
     img {
-      max-width: 100%;
-      height: auto;
+      width: 100%;
+      height: 100%;
     }
   }
 `;

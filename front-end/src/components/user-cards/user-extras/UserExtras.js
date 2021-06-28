@@ -34,12 +34,11 @@ function UserExtras({ userExtras, noExtras, userId }) {
                     rel="noreferrer"
                     className="image-link"
                   >
-                    <img src={project.project_img} alt="" width="100%" />
+                    <img className="image" src={project.project_img} alt="" />
                     {project.link}
                     <span className="visually-hidden-relative">(opens in new window)</span>
                   </a>
                 </dd>
-                <dd></dd>
                 <dd className="description">{project.project_description}</dd>
               </div>
             ))}
@@ -190,7 +189,7 @@ const ExtrasContainer = styled.div`
         flex-basis: 85%;
         display: flex;
         flex-direction: column;
-        justify-content: center;
+        justify-content: stretch;
         align-items: center;
         gap: 10px;
         border-radius: 10px;
@@ -198,7 +197,7 @@ const ExtrasContainer = styled.div`
           rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
         padding: 5px;
 
-        @media (min-width: 350px) {
+        @media (min-width: 400px) {
           flex-basis: 300px;
         }
 
@@ -214,6 +213,26 @@ const ExtrasContainer = styled.div`
             outline-color: transparent;
             box-shadow: inset 0 0 0 2.5px #2727ad;
           }
+          
+          .image {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+          }
+
+          @supports not (aspect-ratio: 1 / 1) {
+            .image::before {
+              float: left;
+              padding-top: 100%;
+              content: "";
+            }
+
+            .image::after {
+              display: block;
+              content: "";
+              clear: both;
+            }
+          }
+
         }
 
         .description {
