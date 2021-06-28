@@ -180,6 +180,7 @@ function AboutYou() {
 
     if (err) {
       console.error(`${res.mssg} => ${res.err}`);
+      if (res.err === "Zero results found") return []
       return { error: "Error getting location results" };
     }
 
