@@ -220,6 +220,7 @@ const Nav = styled.nav`
       justify-content: flex-end;
 
       &.mobile {
+        width: 40%;
         height: 100%;
         overflow: hidden;
 
