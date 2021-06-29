@@ -150,7 +150,7 @@ const MainContainerSkeleton = styled.main`
   text-align: center;
 
   .page-icon {
-    max-width: 900px;
+    max-width: 750px;
   }
 `;
 
