@@ -42,7 +42,7 @@ const HeaderContainer = styled.div`
 `;
 
 const Main = styled.main`
-  min-height: 100vh;
+  height: ${(props) => `calc(100vh - ${props.headerHeight}px);`};
   padding-top: ${(props) => `calc(30px + ${props.headerHeight}px);`};
   padding-right: 5px;
   padding-left: 5px;
@@ -51,7 +51,7 @@ const Main = styled.main`
   text-align: center;
 
   .page-icon {
-    max-width: 900px;
+    max-width: 750px;
   }
 `;
 
