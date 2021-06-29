@@ -20,6 +20,7 @@ import { ReactComponent as Projects } from "../../global/assets/dashboard-projec
 import { ReactComponent as Education } from "../../global/assets/dashboard-education.svg";
 import { ReactComponent as Experience } from "../../global/assets/dashboard-experience.svg";
 import { ReactComponent as CreditCard } from "../../global/assets/dashboard-credit-card.svg";
+import { ReactComponent as SkeletonSection } from "../../global/assets/page-construction.svg"
 
 import MainHeader from "../../components/header/MainHeader";
 import UserCard from "../../components/user-cards/user-card/UserCard";
@@ -308,9 +309,11 @@ function ProfileDashboard() {
 
       <Main aria-labelledby="main-heading" headerHeight={headerHeight}>
         {loadingUser ? (
-          <>
+          <div className="skeleton-section">
             <h1>Loading User</h1>
-          </>
+            <Spacer size="20" axis="vertical" />
+            <SkeletonSection className="page-icon" />
+          </div>
         ) : (
           <>
             <h1 id="main-heading">{mainHeading}</h1>
@@ -619,6 +622,14 @@ const Main = styled.main`
     padding-top: 85px;
     padding-left: 210px;
     padding-right: 10px;
+  }
+
+  .skeleton-section {
+    text-align: center;
+
+    .page-icon {
+      max-width: 750px;
+    }
   }
 `;
 

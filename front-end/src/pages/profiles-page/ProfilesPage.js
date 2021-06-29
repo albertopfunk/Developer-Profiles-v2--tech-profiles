@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Helmet } from "react-helmet";
+import { ReactComponent as ErrorSection } from "../../global/assets/page-section-error.svg"
+import { ReactComponent as SkeletonSection } from "../../global/assets/page-construction.svg"
 
 import { httpClient } from "../../global/helpers/http-requests";
 import { PROFILES_STATUS } from "../../global/helpers/variables";
 import useToggle from "../../global/helpers/hooks/useToggle";
+import Spacer from "../../global/helpers/spacer";
 
 import MainHeader from "../../components/header/MainHeader";
 import Filters from "../../components/forms/filters";
@@ -198,15 +201,19 @@ function ProfilesPage() {
 
         {pageStatus === PROFILES_STATUS.initialLoading ||
         pageStatus === PROFILES_STATUS.filtersLoading ? (
-          <div role="feed" aria-busy="true" aria-labelledby="profiles-heading">
+          <div role="feed" className="skeleton-section" aria-busy="true" aria-labelledby="profiles-heading">
             <h2 id="profiles-heading">Loading Profiles</h2>
+            <Spacer size="20" axis="vertical" />
+            <SkeletonSection className="page-icon" />
           </div>
         ) : null}
 
         {pageStatus === PROFILES_STATUS.initialError ||
         pageStatus === PROFILES_STATUS.filtersError ? (
-          <div role="feed" aria-labelledby="profiles-heading">
+          <div role="feed" className="skeleton-section" aria-labelledby="profiles-heading">
             <h2 id="profiles-heading">Page Error</h2>
+            <Spacer size="20" axis="vertical" />
+            <ErrorSection className="page-icon" />
           </div>
         ) : null}
 
@@ -260,6 +267,14 @@ const Main = styled.main`
   @media (min-width: 800px) {
     padding-left: 290px;
     padding-right: 15px;
+  }
+
+  .skeleton-section {
+    text-align: center;
+
+    .page-icon {
+      max-width: 750px;
+    }
   }
 `;
 
