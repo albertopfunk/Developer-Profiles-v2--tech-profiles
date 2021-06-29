@@ -3,10 +3,12 @@ import ReactDOM from "react-dom";
 import { Route, Switch, withRouter } from "react-router-dom";
 import styled from "styled-components";
 import { Helmet } from "react-helmet";
+import { ReactComponent as PageValidation } from "./global/assets/page-validation.svg"
 
 import { GlobalStyles } from "./global/styles/GlobalStyles";
 import FocusReset from "./global/helpers/focus-reset/FocusReset";
 import { AuthContext } from "./global/context/auth/AuthContext";
+import Spacer from "./global/helpers/spacer";
 import auth0Client from "./auth/Auth";
 import Callback from "./auth/Callback";
 
@@ -72,12 +74,12 @@ function App({ location }) {
         <HeaderSkeleton>
           <picture>
             <source
-              srcSet="https://res.cloudinary.com/dy5hgr3ht/image/upload/c_scale,h_40/v1594347155/tech-pros-v1-main/tech-profiles-logo.webp"
-              media="(max-width: 850px)"
+              srcSet="https://res.cloudinary.com/dy5hgr3ht/image/upload/c_scale,h_45/v1594347155/tech-pros-v1-main/tech-profiles-logo.webp"
+              media="(max-width: 750px)"
             />
             <source
-              srcSet="https://res.cloudinary.com/dy5hgr3ht/image/upload/c_scale,h_40/v1594347155/tech-pros-v1-main/tech-profiles-logo.png"
-              media="(max-width: 850px)"
+              srcSet="https://res.cloudinary.com/dy5hgr3ht/image/upload/c_scale,h_45/v1594347155/tech-pros-v1-main/tech-profiles-logo.png"
+              media="(max-width: 750px)"
             />
             <source srcSet="https://res.cloudinary.com/dy5hgr3ht/image/upload/c_scale,h_65/v1594347155/tech-pros-v1-main/tech-profiles-logo.webp" />
             <img
@@ -90,7 +92,9 @@ function App({ location }) {
           <title>Validating Session • Tech Profiles</title>
         </Helmet>
         <MainContainerSkeleton aria-labelledby="main-heading">
-          <h1 id="main-heading">Validating Session...</h1>
+          <h1 id="main-heading">Validating Session</h1>
+          <Spacer size="20" axis="vertical" />
+          <PageValidation className="page-icon"/>
         </MainContainerSkeleton>
       </>
     );
@@ -128,14 +132,26 @@ function App({ location }) {
 }
 
 const HeaderSkeleton = styled.header`
-  background-color: white;
   width: 100%;
-  padding: var(--nav-padding);
-  border-bottom: solid 1px rgba(229, 231, 235, 0.8);
+  height: 55px;
+  padding: 5px;
+  border-bottom: solid 1px rgba(229, 231, 235, 0.5);
+  background-color: white;
+
+  @media (min-width: 750px) {
+    height: 75px;
+  }
 `;
 
 const MainContainerSkeleton = styled.main`
-  width: 100%;
+  height: calc(100vh - 55px);
+  padding: 30px 5px 50px 5px;
+  background-color: hsl(240, 10%, 99%);
+  text-align: center;
+
+  .page-icon {
+    max-width: 900px;
+  }
 `;
 
 export default withRouter(App);
