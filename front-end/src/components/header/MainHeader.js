@@ -218,6 +218,7 @@ const Nav = styled.nav`
       width: 100%;
       display: flex;
       justify-content: flex-end;
+      padding-right: 5px;
 
       &.mobile {
         width: 40%;

@@ -14,7 +14,7 @@ import ProfilesPage from "./pages/profiles-page/ProfilesPage";
 import ProfileDashboard from "./pages/profile-dashboard/ProfileDashboard";
 import PageNotAuthorized from "./pages/error-pages/not-authorized/PageNotAuthorized";
 import PageNotFound from "./pages/error-pages/404/PageNotFound";
-import PrivatePolicy from "./pages/misc-pages/private-policy/PrivatePolicy";
+// import PrivatePolicy from "./pages/misc-pages/private-policy/PrivatePolicy";
 
 function App({ location }) {
   // callback validates when user signs in
@@ -108,9 +108,9 @@ function App({ location }) {
             <Route path="/profile-dashboard">
               {isValidated ? <ProfileDashboard /> : <PageNotAuthorized />}
             </Route>
-            <Route path="/private-policy">
+            {/* <Route path="/private-policy">
               <PrivatePolicy />
-            </Route>
+            </Route> */}
             <Route path="/callback">
               <Callback />
             </Route>
