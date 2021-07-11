@@ -58,6 +58,7 @@ export const GlobalStyles = createGlobalStyle`
 
   body {
     margin: 0;
+    background-color: hsl(240, 10%, 99%);
   }
   
   /**

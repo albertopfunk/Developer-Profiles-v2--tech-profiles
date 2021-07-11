@@ -14,28 +14,19 @@ function MainHeader(props) {
 
   const headerRef = useRef();
 
-
   useEffect(() => {
     if (!headerRef.current) {
-      return
+      return;
     }
 
-    const resizeObserver = new ResizeObserver(entries => {
-      for (let entry of entries) {
-        console.log("OIOIOI", entry.contentRect.height)
-        props.setHeaderHeight(entry.contentRect.height)
-      }
-    })
+    const resizeObserver = new ResizeObserver((entries) => {
+      props.setHeaderHeight(entries[0].contentRect.height);
+    });
 
-    resizeObserver.observe(headerRef.current)
+    resizeObserver.observe(headerRef.current);
 
-    return () => console.log("disconnect")
-
-  }, [])
-
-  // useEffect(() => {
-  //   props.setHeaderHeight(headerRef?.current?.offsetHeight ?? 60);
-  // }, [isMenuOpen]);
+    return () => resizeObserver.disconnect();
+  }, []);
 
   useEffect(() => {
     return () => clearTimeout(closeOnBlurWait);

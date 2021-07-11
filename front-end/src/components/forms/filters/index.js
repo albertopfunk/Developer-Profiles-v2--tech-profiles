@@ -17,7 +17,6 @@ function Filters({
 }) {
   const [areFiltersShowing, setAreFiltersShowing] = useState(false);
 
-
   const filtersBarRef = useRef();
 
   function setFilters() {
@@ -25,17 +24,7 @@ function Filters({
   }
 
   return (
-    <FilterNav
-      id="filters"
-      aria-label="filters"
-      tabIndex="-1"
-      headerHeight={headerHeight}
-    >
-
-
-
-
-
+    <FilterNav aria-label="filters" headerHeight={headerHeight}>
       <div ref={filtersBarRef} className="filters-bar">
         <div
           className="info"
@@ -56,9 +45,6 @@ function Filters({
           }}
         />
       </div>
-
-
-
 
       {/* not too happy about this workaround, found this to be the
       least hacky way to reset filters without having to make big

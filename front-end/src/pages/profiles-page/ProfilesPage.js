@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Helmet } from "react-helmet";
-import { ReactComponent as ErrorSection } from "../../global/assets/page-section-error.svg"
-import { ReactComponent as SkeletonSection } from "../../global/assets/page-construction.svg"
+import { ReactComponent as ErrorSection } from "../../global/assets/page-section-error.svg";
+import { ReactComponent as SkeletonSection } from "../../global/assets/page-construction.svg";
 
 import { httpClient } from "../../global/helpers/http-requests";
 import { PROFILES_STATUS } from "../../global/helpers/variables";
@@ -176,14 +176,9 @@ function ProfilesPage() {
     setResetToggle();
     setPageStatus(PROFILES_STATUS.idle);
   }
-
   return (
-    <ProfilesPageContainer>
-
-      {/* header height */}
-      <div style={{width: "100%", height: `75px`}}></div>
-
-      <HeaderContainer>
+    <ProfilesPageContainer headerHeight={headerHeight}>
+      <div className="header-container">
         <MainHeader setHeaderHeight={setHeaderHeight} />
         <Filters
           updateUsers={getFilteredUsers}
@@ -193,17 +188,10 @@ function ProfilesPage() {
           resetFilterToggle={resetToggle}
           headerHeight={headerHeight}
         />
-      </HeaderContainer>
+      </div>
 
-
-      {/* only used on tablet/desktop */}
-      <div style={{display: "flex", justifyContent: "flex-start", alignItems: "flex-start"}}>
-
-        {/* only used on tablet/desktop */}
-        {/* secondary nav width */}
-        <div style={{display: "inline-block", height: "100vh", width: `275px`}}></div>
-
-        <Main aria-labelledby="main-heading" headerHeight={headerHeight}>
+      <div className="main-container">
+        <main id="main-content" tabIndex="-1" aria-labelledby="main-heading">
           <Helmet>
             <title>Profiles • Tech Profiles</title>
           </Helmet>
@@ -213,7 +201,12 @@ function ProfilesPage() {
 
           {pageStatus === PROFILES_STATUS.initialLoading ||
           pageStatus === PROFILES_STATUS.filtersLoading ? (
-            <div role="feed" className="skeleton-section" aria-busy="true" aria-labelledby="profiles-heading">
+            <div
+              role="feed"
+              className="skeleton-section"
+              aria-busy="true"
+              aria-labelledby="profiles-heading"
+            >
               <h2 id="profiles-heading">Loading Profiles</h2>
               <Spacer size="20" axis="vertical" />
               <SkeletonSection className="page-icon" />
@@ -222,7 +215,11 @@ function ProfilesPage() {
 
           {pageStatus === PROFILES_STATUS.initialError ||
           pageStatus === PROFILES_STATUS.filtersError ? (
-            <div role="feed" className="skeleton-section" aria-labelledby="profiles-heading">
+            <div
+              role="feed"
+              className="skeleton-section"
+              aria-labelledby="profiles-heading"
+            >
               <h2 id="profiles-heading">Page Error</h2>
               <Spacer size="20" axis="vertical" />
               <ErrorSection className="page-icon" />
@@ -243,63 +240,55 @@ function ProfilesPage() {
               resetFilters={resetFilters}
             />
           ) : null}
-        </Main>
-
+        </main>
       </div>
-
-
-
-
-
     </ProfilesPageContainer>
   );
 }
 
-
 const ProfilesPageContainer = styled.div`
+  .main-container {
+    padding-top: ${(props) => `calc(1px + 4.4rem + ${props.headerHeight}px);`};
 
+    @media (min-width: 600px) {
+      padding-top: ${(props) => `calc(${props.headerHeight}px);`};
+      padding-left: 200px;
+    }
 
-`;
-
-const HeaderContainer = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  /* second mobile */
-  z-index: 20;
-  width: 100%;
-  border-bottom: solid 1px rgba(229, 231, 235, 0.8);
-
-  @media (min-width: 600px) {
-    border: none;
-  }
-`;
-
-const Main = styled.main`
-  min-height: 100vh;
-  flex-grow: 1;
-  /* padding-top: ${(props) => `calc(60px + 30px + ${props.headerHeight}px);`};
-  padding-right: 5px;
-  padding-left: 5px;
-  padding-bottom: 50px; */
-  background-color: hsl(240, 10%, 99%);
-
-  @media (min-width: 600px) {
-    /* padding-top: ${(props) => `calc(30px + ${props.headerHeight}px);`}; */
-    /* padding-left: 215px; */
-    /* padding-right: 15px; */
+    @media (min-width: 800px) {
+      padding-left: 275px;
+    }
   }
 
-  @media (min-width: 800px) {
-    /* padding-left: 290px; */
-    /* padding-right: 15px; */
+  .header-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    /* second mobile */
+    z-index: 20;
+    width: 100%;
+    border-bottom: solid 1px rgba(229, 231, 235, 0.8);
+
+    @media (min-width: 600px) {
+      border: none;
+    }
   }
 
-  .skeleton-section {
-    text-align: center;
+  main {
+    min-height: 100vh;
+    padding: 30px 5px 50px;
 
-    .page-icon {
-      max-width: 750px;
+    @media (min-width: 600px) {
+      padding-left: 15px;
+      padding-right: 15px;
+    }
+
+    .skeleton-section {
+      text-align: center;
+
+      .page-icon {
+        max-width: 750px;
+      }
     }
   }
 `;

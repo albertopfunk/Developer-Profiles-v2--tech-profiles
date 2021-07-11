@@ -43,19 +43,13 @@ function FocusReset({ location, children }) {
           </li>
 
           <li>
-            <a
-              href={`${location.pathname}#main-content`}
-              className="skip-link"
-            >
+            <a href={`${location.pathname}#main-content`} className="skip-link">
               Skip to Main Content
             </a>
           </li>
 
           <li>
-            <a
-              href={`${location.pathname}#profile-card`}
-              className="skip-link"
-            >
+            <a href={`${location.pathname}#profile-card`} className="skip-link">
               Skip to Profile Card
             </a>
           </li>
@@ -74,20 +68,14 @@ function FocusReset({ location, children }) {
       >
         <ul aria-label="skip links" className="skip-links">
           <li>
-            <a
-              href={`${location.pathname}#filters`}
-              className="skip-link"
-            >
+            <a href={`${location.pathname}#filters`} className="skip-link">
               Skip to Filters
             </a>
           </li>
 
           <li>
-            <a
-              href={`${location.pathname}#profile-cards`}
-              className="skip-link"
-            >
-              Skip to Profile Cards
+            <a href={`${location.pathname}#main-content`} className="skip-link">
+              Skip to Main Content
             </a>
           </li>
         </ul>
