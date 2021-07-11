@@ -97,7 +97,6 @@ function UserCards({
   return (
     <Feed
       id="profile-cards"
-      tabIndex="-1"
       role="feed"
       aria-busy={isBusy}
       aria-labelledby="profiles-heading"

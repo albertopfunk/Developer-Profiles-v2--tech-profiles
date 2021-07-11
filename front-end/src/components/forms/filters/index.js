@@ -24,7 +24,12 @@ function Filters({
   }
 
   return (
-    <FilterNav aria-label="filters" headerHeight={headerHeight}>
+    <FilterNav
+      id="filters"
+      tabIndex="-1"
+      aria-label="filters"
+      headerHeight={headerHeight}
+    >
       <div ref={filtersBarRef} className="filters-bar">
         <div
           className="info"
