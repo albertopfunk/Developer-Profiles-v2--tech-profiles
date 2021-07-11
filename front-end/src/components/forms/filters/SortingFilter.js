@@ -20,7 +20,6 @@ function SortingFilter(props) {
       <label htmlFor="sorting-select">Sort By:</label>
       <select
         id="sorting-select"
-        data-filter-content="true"
         onClick={(e) => sortUsers(e.target.value)}
         onBlur={(e) => sortUsers(e.target.value)}
       >

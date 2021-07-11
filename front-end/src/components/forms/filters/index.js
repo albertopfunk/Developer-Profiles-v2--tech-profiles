@@ -22,7 +22,12 @@ function Filters({
   }
 
   return (
-    <FilterNav headerHeight={headerHeight} aria-label="filters">
+    <FilterNav
+      id="filters"
+      aria-label="filters"
+      tabIndex="-1"
+      headerHeight={headerHeight}
+    >
       <div className="filters-bar">
         <div
           className="info"
@@ -40,7 +45,6 @@ function Filters({
           classNames="control-mobile top"
           attributes={{
             "aria-expanded": `${areFiltersShowing}`,
-            "data-filter-content": `${!areFiltersShowing}`,
           }}
         />
       </div>

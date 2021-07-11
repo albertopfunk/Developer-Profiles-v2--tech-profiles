@@ -5,7 +5,6 @@ import styled from "styled-components";
 function FocusReset({ location, children }) {
   const [previousLocation, setPreviousLocation] = useState(location.pathname);
   const [currentMainContentEl, setCurrentMainContentEl] = useState("");
-  const [currentFilterEl, setCurrentFilterEl] = useState("");
   const [currentUserCardEl, setCurrentUserCardEl] = useState("");
 
   let focusRef = React.createRef();
@@ -23,12 +22,6 @@ function FocusReset({ location, children }) {
     const mainContent = document.querySelector("[data-main-content='true']");
     const mainContentId = mainContent?.id ?? "";
     setCurrentMainContentEl(mainContentId);
-  }
-
-  function getFilterId() {
-    const filter = document.querySelector("[data-filter-content='true']");
-    const filterId = filter?.id ?? "";
-    setCurrentFilterEl(filterId);
   }
 
   function getUserCardId() {
@@ -98,9 +91,8 @@ function FocusReset({ location, children }) {
         <ul aria-label="skip links" className="skip-links">
           <li>
             <a
-              href={`${location.pathname}#${currentFilterEl}`}
+              href={`${location.pathname}#filters`}
               className="skip-link"
-              onFocus={getFilterId}
             >
               Skip to Filters
             </a>
