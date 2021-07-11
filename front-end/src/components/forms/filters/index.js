@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import styled from "styled-components";
 
 import AreaOfWorkFilter from "./AreaOfWorkFilter";
@@ -17,6 +17,9 @@ function Filters({
 }) {
   const [areFiltersShowing, setAreFiltersShowing] = useState(false);
 
+
+  const filtersBarRef = useRef();
+
   function setFilters() {
     setAreFiltersShowing(!areFiltersShowing);
   }
@@ -28,7 +31,12 @@ function Filters({
       tabIndex="-1"
       headerHeight={headerHeight}
     >
-      <div className="filters-bar">
+
+
+
+
+
+      <div ref={filtersBarRef} className="filters-bar">
         <div
           className="info"
           aria-live="assertive"
@@ -48,6 +56,9 @@ function Filters({
           }}
         />
       </div>
+
+
+
 
       {/* not too happy about this workaround, found this to be the
       least hacky way to reset filters without having to make big
@@ -116,6 +127,7 @@ function Filters({
 
 const FilterNav = styled.nav`
   background-color: white;
+  /* 100vh should come from window height hook */
   max-height: ${(props) => `calc(100vh - ${props.headerHeight}px);`};
   overflow-y: auto;
 

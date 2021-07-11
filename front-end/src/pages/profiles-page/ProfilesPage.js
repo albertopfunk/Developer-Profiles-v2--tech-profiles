@@ -178,7 +178,11 @@ function ProfilesPage() {
   }
 
   return (
-    <>
+    <ProfilesPageContainer>
+
+      {/* header height */}
+      <div style={{width: "100%", height: `75px`}}></div>
+
       <HeaderContainer>
         <MainHeader setHeaderHeight={setHeaderHeight} />
         <Filters
@@ -191,50 +195,71 @@ function ProfilesPage() {
         />
       </HeaderContainer>
 
-      <Main aria-labelledby="main-heading" headerHeight={headerHeight}>
-        <Helmet>
-          <title>Profiles • Tech Profiles</title>
-        </Helmet>
-        <h1 id="main-heading" className="sr-only">
-          Profiles
-        </h1>
 
-        {pageStatus === PROFILES_STATUS.initialLoading ||
-        pageStatus === PROFILES_STATUS.filtersLoading ? (
-          <div role="feed" className="skeleton-section" aria-busy="true" aria-labelledby="profiles-heading">
-            <h2 id="profiles-heading">Loading Profiles</h2>
-            <Spacer size="20" axis="vertical" />
-            <SkeletonSection className="page-icon" />
-          </div>
-        ) : null}
+      {/* only used on tablet/desktop */}
+      <div style={{display: "flex", justifyContent: "flex-start", alignItems: "flex-start"}}>
 
-        {pageStatus === PROFILES_STATUS.initialError ||
-        pageStatus === PROFILES_STATUS.filtersError ? (
-          <div role="feed" className="skeleton-section" aria-labelledby="profiles-heading">
-            <h2 id="profiles-heading">Page Error</h2>
-            <Spacer size="20" axis="vertical" />
-            <ErrorSection className="page-icon" />
-          </div>
-        ) : null}
+        {/* only used on tablet/desktop */}
+        {/* secondary nav width */}
+        <div style={{display: "inline-block", height: "100vh", width: `275px`}}></div>
 
-        {pageStatus === PROFILES_STATUS.idle ? (
-          <UserCards
-            users={users.users}
-            loadMoreUsers={loadMoreUsers}
-            usersToLoad={users.usersToLoad}
-            cardFocusIndex={cardFocusIndex}
-            isIdle={cardsStatus === PROFILES_STATUS.idle}
-            isBusy={cardsStatus === PROFILES_STATUS.paginationLoading}
-            isError={cardsStatus === PROFILES_STATUS.paginationError}
-            currentUsers={users.users.length}
-            totalUsers={users.len}
-            resetFilters={resetFilters}
-          />
-        ) : null}
-      </Main>
-    </>
+        <Main aria-labelledby="main-heading" headerHeight={headerHeight}>
+          <Helmet>
+            <title>Profiles • Tech Profiles</title>
+          </Helmet>
+          <h1 id="main-heading" className="sr-only">
+            Profiles
+          </h1>
+
+          {pageStatus === PROFILES_STATUS.initialLoading ||
+          pageStatus === PROFILES_STATUS.filtersLoading ? (
+            <div role="feed" className="skeleton-section" aria-busy="true" aria-labelledby="profiles-heading">
+              <h2 id="profiles-heading">Loading Profiles</h2>
+              <Spacer size="20" axis="vertical" />
+              <SkeletonSection className="page-icon" />
+            </div>
+          ) : null}
+
+          {pageStatus === PROFILES_STATUS.initialError ||
+          pageStatus === PROFILES_STATUS.filtersError ? (
+            <div role="feed" className="skeleton-section" aria-labelledby="profiles-heading">
+              <h2 id="profiles-heading">Page Error</h2>
+              <Spacer size="20" axis="vertical" />
+              <ErrorSection className="page-icon" />
+            </div>
+          ) : null}
+
+          {pageStatus === PROFILES_STATUS.idle ? (
+            <UserCards
+              users={users.users}
+              loadMoreUsers={loadMoreUsers}
+              usersToLoad={users.usersToLoad}
+              cardFocusIndex={cardFocusIndex}
+              isIdle={cardsStatus === PROFILES_STATUS.idle}
+              isBusy={cardsStatus === PROFILES_STATUS.paginationLoading}
+              isError={cardsStatus === PROFILES_STATUS.paginationError}
+              currentUsers={users.users.length}
+              totalUsers={users.len}
+              resetFilters={resetFilters}
+            />
+          ) : null}
+        </Main>
+
+      </div>
+
+
+
+
+
+    </ProfilesPageContainer>
   );
 }
+
+
+const ProfilesPageContainer = styled.div`
+
+
+`;
 
 const HeaderContainer = styled.div`
   position: fixed;
@@ -252,21 +277,22 @@ const HeaderContainer = styled.div`
 
 const Main = styled.main`
   min-height: 100vh;
-  padding-top: ${(props) => `calc(60px + 30px + ${props.headerHeight}px);`};
+  flex-grow: 1;
+  /* padding-top: ${(props) => `calc(60px + 30px + ${props.headerHeight}px);`};
   padding-right: 5px;
   padding-left: 5px;
-  padding-bottom: 50px;
+  padding-bottom: 50px; */
   background-color: hsl(240, 10%, 99%);
 
   @media (min-width: 600px) {
-    padding-top: ${(props) => `calc(30px + ${props.headerHeight}px);`};
-    padding-left: 215px;
-    padding-right: 15px;
+    /* padding-top: ${(props) => `calc(30px + ${props.headerHeight}px);`}; */
+    /* padding-left: 215px; */
+    /* padding-right: 15px; */
   }
 
   @media (min-width: 800px) {
-    padding-left: 290px;
-    padding-right: 15px;
+    /* padding-left: 290px; */
+    /* padding-right: 15px; */
   }
 
   .skeleton-section {

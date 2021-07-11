@@ -14,9 +14,28 @@ function MainHeader(props) {
 
   const headerRef = useRef();
 
+
   useEffect(() => {
-    props.setHeaderHeight(headerRef?.current?.offsetHeight ?? 60);
-  }, [isMenuOpen]);
+    if (!headerRef.current) {
+      return
+    }
+
+    const resizeObserver = new ResizeObserver(entries => {
+      for (let entry of entries) {
+        console.log("OIOIOI", entry.contentRect.height)
+        props.setHeaderHeight(entry.contentRect.height)
+      }
+    })
+
+    resizeObserver.observe(headerRef.current)
+
+    return () => console.log("disconnect")
+
+  }, [])
+
+  // useEffect(() => {
+  //   props.setHeaderHeight(headerRef?.current?.offsetHeight ?? 60);
+  // }, [isMenuOpen]);
 
   useEffect(() => {
     return () => clearTimeout(closeOnBlurWait);
