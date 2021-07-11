@@ -20,7 +20,7 @@ import { ReactComponent as Projects } from "../../global/assets/dashboard-projec
 import { ReactComponent as Education } from "../../global/assets/dashboard-education.svg";
 import { ReactComponent as Experience } from "../../global/assets/dashboard-experience.svg";
 import { ReactComponent as CreditCard } from "../../global/assets/dashboard-credit-card.svg";
-import { ReactComponent as SkeletonSection } from "../../global/assets/page-construction.svg"
+import { ReactComponent as SkeletonSection } from "../../global/assets/page-construction.svg";
 
 import MainHeader from "../../components/header/MainHeader";
 import UserCard from "../../components/user-cards/user-card/UserCard";
@@ -370,7 +370,11 @@ function ProfileDashboard() {
               </Elements>
 
               {/* ~30px gap + flex item */}
-              <section aria-labelledby="profile-card-heading">
+              <section
+                id="profile-card"
+                tabIndex="-1"
+                aria-labelledby="profile-card-heading"
+              >
                 <h2 id="profile-card-heading">Profile Preview</h2>
                 <Spacer axis="vertical" size="15" />
                 <UserCard

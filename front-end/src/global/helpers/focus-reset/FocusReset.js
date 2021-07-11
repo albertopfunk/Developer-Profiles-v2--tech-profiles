@@ -5,7 +5,6 @@ import styled from "styled-components";
 function FocusReset({ location, children }) {
   const [previousLocation, setPreviousLocation] = useState(location.pathname);
   const [currentMainContentEl, setCurrentMainContentEl] = useState("");
-  const [currentUserCardEl, setCurrentUserCardEl] = useState("");
 
   let focusRef = React.createRef();
   let currentLocation;
@@ -22,12 +21,6 @@ function FocusReset({ location, children }) {
     const mainContent = document.querySelector("[data-main-content='true']");
     const mainContentId = mainContent?.id ?? "";
     setCurrentMainContentEl(mainContentId);
-  }
-
-  function getUserCardId() {
-    const userCard = document.querySelector("[data-user-card='true']");
-    const userCardId = userCard?.id ?? "";
-    setCurrentUserCardEl(userCardId);
   }
 
   if (location.pathname === "/callback") {
@@ -68,9 +61,8 @@ function FocusReset({ location, children }) {
 
           <li>
             <a
-              href={`${location.pathname}#${currentUserCardEl}`}
+              href={`${location.pathname}#profile-card`}
               className="skip-link"
-              onFocus={getUserCardId}
             >
               Skip to Profile Card
             </a>
@@ -100,11 +92,10 @@ function FocusReset({ location, children }) {
 
           <li>
             <a
-              href={`${location.pathname}#${currentUserCardEl}`}
+              href={`${location.pathname}#profile-cards`}
               className="skip-link"
-              onFocus={getUserCardId}
             >
-              Skip to Main Content
+              Skip to Profile Cards
             </a>
           </li>
         </ul>
