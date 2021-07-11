@@ -47,10 +47,12 @@ function UserCards({
   }
 
   function userCardActions(action, index) {
+    // focus on feed container
     if (action === "start") {
       profileCardRefs[0].current.focus();
     }
 
+    // focus on bottom button
     if (action === "end") {
       profileCardRefs[currentUsers - 1].current.focus();
     }
@@ -74,7 +76,13 @@ function UserCards({
 
   if (totalUsers === 0) {
     return (
-      <Feed role="feed" aria-busy={isBusy} aria-labelledby="profiles-heading">
+      <Feed
+        id="profile-cards"
+        tabIndex="-1"
+        role="feed"
+        aria-busy={isBusy}
+        aria-labelledby="profiles-heading"
+      >
         <h2 id="profiles-heading" className="sr-only">
           Current Profiles
         </h2>
