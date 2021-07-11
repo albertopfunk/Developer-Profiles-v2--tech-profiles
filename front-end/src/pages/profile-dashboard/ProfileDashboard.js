@@ -177,7 +177,7 @@ function ProfileDashboard() {
   const mainHeading = getMainHeading();
 
   return (
-    <>
+    <ProfileDashboardContainer headerHeight={headerHeight}>
       <Helmet>
         <title>Profile Dashboard {mainHeading} • Tech Profiles</title>
       </Helmet>
@@ -311,122 +311,139 @@ function ProfileDashboard() {
         </PageNav>
       </PageHeader>
 
-      <Main
-        id="main-content"
-        tabIndex="-1"
-        aria-labelledby="main-heading"
-        headerHeight={headerHeight}
-      >
-        {loadingUser ? (
-          <div className="skeleton-section">
-            <h1>Loading User</h1>
-            <Spacer size="20" axis="vertical" />
-            <SkeletonSection className="page-icon" />
-          </div>
-        ) : (
-          <>
-            <h1 id="main-heading">{mainHeading}</h1>
-            <Spacer axis="vertical" size="30" />
-            <div className="flex-container">
-              <Elements stripe={stripePromise}>
-                <ProfileContext.Provider
-                  value={{
-                    user,
-                    editProfile,
-                    addUserExtras,
-                    userImage,
-                    setUserImage,
-                  }}
-                >
-                  <Switch>
-                    <Route exact path={`${path}`}>
-                      <ProfileHome />
-                    </Route>
-
-                    <Route path={`${path}/new`}>
-                      <NewUser />
-                    </Route>
-
-                    <Route path={`${path}/personal-info`}>
-                      <PersonalInfo />
-                    </Route>
-
-                    <Route path={`${path}/about-you`}>
-                      <AboutYou />
-                    </Route>
-
-                    <Route path={`${path}/your-whereabouts`}>
-                      <YourWhereabouts />
-                    </Route>
-
-                    <Route path={`${path}/projects`}>
-                      <DashboardProjects />
-                    </Route>
-
-                    <Route path={`${path}/education`}>
-                      <DashboardEducation />
-                    </Route>
-
-                    <Route path={`${path}/experience`}>
-                      <DashboardExperience />
-                    </Route>
-
-                    <Route path={`${path}/billing`}>
-                      <DashboardBilling />
-                    </Route>
-                  </Switch>
-                </ProfileContext.Provider>
-              </Elements>
-
-              {/* ~30px gap + flex item */}
-              <section
-                id="profile-card"
-                tabIndex="-1"
-                aria-labelledby="profile-card-heading"
-              >
-                <h2 id="profile-card-heading">Profile Preview</h2>
-                <Spacer axis="vertical" size="15" />
-                <UserCard
-                  previewImage={
-                    userImage.previewImage || userImage.previewAvatar
-                  }
-                  userExtras={{
-                    locations: user.locations,
-                    topSkills: user.topSkills,
-                    additionalSkills: user.additionalSkills,
-                    education: user.education,
-                    experience: user.experience,
-                    projects: user.projects,
-                  }}
-                  index={0}
-                  totalUsers={1}
-                  userId={user.id}
-                  areaOfWork={user.area_of_work}
-                  email={user.public_email}
-                  userImage={!userImage.removeUserImage && user.profile_image}
-                  avatarImage={
-                    !userImage.removeSavedAvatar && user.avatar_image
-                  }
-                  firstName={user.first_name}
-                  lastName={user.last_name}
-                  currentLocation={user.current_location_name}
-                  summary={user.summary}
-                  title={user.desired_title}
-                  topSkills={user.top_skills_prev}
-                  additionalSkills={user.additional_skills_prev}
-                  github={user.github}
-                  twitter={user.twitter}
-                  linkedin={user.linkedin}
-                  portfolio={user.portfolio}
-                />
-              </section>
+      <div className="main-container">
+        <Main
+          id="main-content"
+          tabIndex="-1"
+          aria-labelledby="main-heading"
+          headerHeight={headerHeight}
+        >
+          {loadingUser ? (
+            <div className="skeleton-section">
+              <h1>Loading User</h1>
+              <Spacer size="20" axis="vertical" />
+              <SkeletonSection className="page-icon" />
             </div>
-          </>
-        )}
-      </Main>
-    </>
+          ) : (
+            <>
+              <h1 id="main-heading">{mainHeading}</h1>
+              <Spacer axis="vertical" size="30" />
+              <div className="flex-container">
+                <Elements stripe={stripePromise}>
+                  <ProfileContext.Provider
+                    value={{
+                      user,
+                      editProfile,
+                      addUserExtras,
+                      userImage,
+                      setUserImage,
+                    }}
+                  >
+                    <Switch>
+                      <Route exact path={`${path}`}>
+                        <ProfileHome />
+                      </Route>
+
+                      <Route path={`${path}/new`}>
+                        <NewUser />
+                      </Route>
+
+                      <Route path={`${path}/personal-info`}>
+                        <PersonalInfo />
+                      </Route>
+
+                      <Route path={`${path}/about-you`}>
+                        <AboutYou />
+                      </Route>
+
+                      <Route path={`${path}/your-whereabouts`}>
+                        <YourWhereabouts />
+                      </Route>
+
+                      <Route path={`${path}/projects`}>
+                        <DashboardProjects />
+                      </Route>
+
+                      <Route path={`${path}/education`}>
+                        <DashboardEducation />
+                      </Route>
+
+                      <Route path={`${path}/experience`}>
+                        <DashboardExperience />
+                      </Route>
+
+                      <Route path={`${path}/billing`}>
+                        <DashboardBilling />
+                      </Route>
+                    </Switch>
+                  </ProfileContext.Provider>
+                </Elements>
+
+                {/* ~30px gap + flex item */}
+                <section
+                  id="profile-card"
+                  tabIndex="-1"
+                  aria-labelledby="profile-card-heading"
+                >
+                  <h2 id="profile-card-heading">Profile Preview</h2>
+                  <Spacer axis="vertical" size="15" />
+                  <UserCard
+                    previewImage={
+                      userImage.previewImage || userImage.previewAvatar
+                    }
+                    userExtras={{
+                      locations: user.locations,
+                      topSkills: user.topSkills,
+                      additionalSkills: user.additionalSkills,
+                      education: user.education,
+                      experience: user.experience,
+                      projects: user.projects,
+                    }}
+                    index={0}
+                    totalUsers={1}
+                    userId={user.id}
+                    areaOfWork={user.area_of_work}
+                    email={user.public_email}
+                    userImage={!userImage.removeUserImage && user.profile_image}
+                    avatarImage={
+                      !userImage.removeSavedAvatar && user.avatar_image
+                    }
+                    firstName={user.first_name}
+                    lastName={user.last_name}
+                    currentLocation={user.current_location_name}
+                    summary={user.summary}
+                    title={user.desired_title}
+                    topSkills={user.top_skills_prev}
+                    additionalSkills={user.additional_skills_prev}
+                    github={user.github}
+                    twitter={user.twitter}
+                    linkedin={user.linkedin}
+                    portfolio={user.portfolio}
+                  />
+                </section>
+              </div>
+            </>
+          )}
+        </Main>
+      </div>
+    </ProfileDashboardContainer>
   );
 }
+
+const ProfileDashboardContainer = styled.div`
+  & > .main-container {
+    padding-top: ${(props) => `calc(1px + 3.6rem + ${props.headerHeight}px);`};
+
+    @media (min-width: 500px) {
+      padding-top: ${(props) => `calc(${props.headerHeight}px);`};
+      padding-left: 50px;
+    }
+
+    @media (min-width: 750px) {
+      padding-left: 200px;
+    }
+  }
+`;
 
 const PageHeader = styled.div`
   position: fixed;
@@ -594,11 +611,17 @@ const PageNav = styled.nav`
 
 const Main = styled.main`
   min-height: 100vh;
-  padding-top: ${(props) => `calc(15px + 50px + ${props.headerHeight}px);`};
-  padding-right: 5px;
-  padding-left: 5px;
-  padding-bottom: 50px;
-  background-color: hsl(240, 10%, 99%);
+  padding: 25px 5px 50px;
+
+  @media (min-width: 500px) {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+  @media (min-width: 750px) {
+    padding-left: 25px;
+    padding-right: 25px;
+  }
 
   & > .flex-container {
     display: flex;
@@ -607,6 +630,11 @@ const Main = styled.main`
     gap: 30px;
 
     @media (min-width: 500px) {
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+
+    @media (min-width: 750px) {
       padding-left: 20px;
       padding-right: 20px;
     }
@@ -623,18 +651,6 @@ const Main = styled.main`
     & > section {
       flex-basis: 50%;
     }
-  }
-
-  @media (min-width: 500px) {
-    padding-top: 65px;
-    padding-left: 60px;
-    padding-right: 10px;
-  }
-
-  @media (min-width: 750px) {
-    padding-top: 85px;
-    padding-left: 210px;
-    padding-right: 10px;
   }
 
   .skeleton-section {
