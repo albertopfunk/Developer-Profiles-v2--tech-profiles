@@ -420,7 +420,6 @@ function DashboardProjects() {
             ref={editInfoBtnRef}
             id="edit-info-btn"
             className="button edit-button"
-            data-main-content="true"
             onClick={setFormInputs}
             onKeyDown={(e) => formFocusAction(e, FORM_STATUS.active)}
           >
@@ -568,7 +567,6 @@ function DashboardProjects() {
           ariaLabel="add"
           attributes={{
             id: "add-new-btn",
-            "data-main-content": "true",
             form: "projects-form",
           }}
         >

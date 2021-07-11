@@ -94,9 +94,6 @@ class UserForm extends Component {
                     name="subscription-type"
                     id="yearly"
                     aria-describedby="year-info year-price"
-                    data-main-content={
-                      this.props.isMainContent ? "true" : "false"
-                    }
                     onChange={this.toggleYearCheckbox}
                   />
                 </div>

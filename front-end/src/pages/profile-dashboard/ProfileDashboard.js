@@ -188,7 +188,12 @@ function ProfileDashboard() {
       />
       <PageHeader>
         <MainHeader setHeaderHeight={setHeaderHeight} />
-        <PageNav headerHeight={headerHeight} aria-label="page">
+        <PageNav
+          id="page-navigation"
+          tabIndex="-1"
+          headerHeight={headerHeight}
+          aria-label="page"
+        >
           <ul className="nav-group">
             <li className="nav-item">
               <NavLink
@@ -196,7 +201,6 @@ function ProfileDashboard() {
                 to={`${url}`}
                 className="link"
                 activeClassName="selected"
-                id="page-navigation"
               >
                 <span className="link-icon">
                   <Home className="icon" />
@@ -307,7 +311,12 @@ function ProfileDashboard() {
         </PageNav>
       </PageHeader>
 
-      <Main aria-labelledby="main-heading" headerHeight={headerHeight}>
+      <Main
+        id="main-content"
+        tabIndex="-1"
+        aria-labelledby="main-heading"
+        headerHeight={headerHeight}
+      >
         {loadingUser ? (
           <div className="skeleton-section">
             <h1>Loading User</h1>

@@ -120,7 +120,6 @@ class SubscriberForm extends Component {
             }${subError ? "Error canceling subscription, retry" : ""}`}
             attributes={{
               id: "cancel-subscribe-btn",
-              "data-main-content": this.props.isMainContent ? "true" : "false",
             }}
           />
         </form>

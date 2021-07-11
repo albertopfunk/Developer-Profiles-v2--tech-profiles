@@ -490,7 +490,6 @@ function AboutYou() {
             ref={editInfoBtnRef}
             id="edit-info-btn"
             className="button edit-button"
-            data-main-content="true"
             onClick={setFormInputs}
             onKeyDown={(e) => formFocusAction(e, FORM_STATUS.active)}
           >
@@ -604,7 +603,6 @@ function AboutYou() {
             <textarea
               ref={summaryInputRef}
               id="summary"
-              data-main-content="true"
               name="profile-summary"
               maxLength="280"
               cols="8"

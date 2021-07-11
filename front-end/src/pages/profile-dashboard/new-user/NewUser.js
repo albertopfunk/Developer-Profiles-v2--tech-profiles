@@ -472,7 +472,6 @@ function NewUser() {
             onKeyDown={(e) => formFocusAction(e, FORM_STATUS.active)}
             attributes={{
               id: "edit-info-btn",
-              "data-main-content": "true",
             }}
           />
 
@@ -563,9 +562,6 @@ function NewUser() {
                 selectedTab === "basic-info" ? "selected" : ""
               }`}
               id="basic-info"
-              data-main-content={
-                selectedTab === "basic-info" ? "true" : "false"
-              }
               role="tab"
               tabIndex={selectedTab === "basic-info" ? "0" : "-1"}
               // aria-controls="basic-info-panel"
@@ -584,9 +580,6 @@ function NewUser() {
                 selectedTab === "billing-info" ? "selected" : ""
               }`}
               id="billing-info"
-              data-main-content={
-                selectedTab === "billing-info" ? "true" : "false"
-              }
               role="tab"
               tabIndex={selectedTab === "billing-info" ? "0" : "-1"}
               // aria-controls="billing-info-panel"

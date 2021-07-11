@@ -477,7 +477,6 @@ function YourWhereabouts() {
             ref={editInfoBtnRef}
             id="edit-info-btn"
             className="button edit-button"
-            data-main-content="true"
             onClick={setFormInputs}
             onKeyDown={(e) => formFocusAction(e, FORM_STATUS.active)}
           >
@@ -604,7 +603,6 @@ function YourWhereabouts() {
               autoComplete="username"
               inputMode="url"
               id="github"
-              data-main-content="true"
               name="github"
               className={`input ${
                 github.inputStatus === FORM_STATUS.error ? "input-err" : ""
