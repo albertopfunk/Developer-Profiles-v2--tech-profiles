@@ -1,13 +1,55 @@
-# Developer-Profiles--New-V1
+# Tech Profiles
 
-Developer Profiles refactored and continued
+Second iteration of developer profiles capstone project.
 
-#Tools for V1
+Visit the site by going to [techprofiles.dev](https://techprofiles.dev).
 
-Front:
-React
-Styled-Components
+## Table of contents
+* [General info](#general-info)
+* [Technologies](#technologies)
+* [Setup](#setup)
 
-Back:
-Node
-SQL
+## General info
+Discovery app for people in tech, where they can create a portfolio for others to see.
+
+## Technologies
+Front-end is created with:
+* React(CRA)
+* Axios
+* Styled Components
+* React Router
+* React Helmet
+* ESLint/Prettier
+* Jest(default with CRA)
+* React Testing Library suite
+* Cypress
+* Netlify
+
+Back-end is created with:
+* Node with Express
+* Relational Database with PostgreSQL(prod)
+* SQLite(dev)
+* Knex
+* Nodemon
+* ESLint/Prettier
+* Axios
+* Node Cache
+* Express Fileupload
+* Jest
+* Supertest
+* Heroku
+
+APIs used:
+* Auth0
+* Stripe
+* Google Places
+* Cloudinary
+
+## Setup
+To run this project, install it locally using npm:
+
+```
+$ cd ../lorem
+$ npm install
+$ npm start
+```
