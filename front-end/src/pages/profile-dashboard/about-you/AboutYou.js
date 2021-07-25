@@ -196,31 +196,43 @@ function AboutYou() {
     return res.data;
   }
 
-  function addLocation(locations) {
+  function setLocations(locations) {
     const userLocationsObj = createObj(user.locations);
     const locationsToAdd = locations.filter(
       (location) => !(location.name in userLocationsObj)
     );
 
-    setLocation({
-      ...location,
-      inputValue: locations,
-      inputChange: true,
-      locationsToAdd,
-    });
-  }
-
-  function removeLocation(locations) {
     const locationsObj = createObj(locations);
     const locationsToRemove = user.locations.filter(
       (userLocation) => !(userLocation.name in locationsObj)
     );
 
+    let inputChange;
+    if (locationsToAdd.length === 0 && locationsToRemove.length === 0) {
+      inputChange = false;
+    } else {
+      inputChange = true;
+    }
+
+    return {
+      locationsToAdd,
+      locationsToRemove,
+      inputChange,
+    };
+  }
+
+  function updateLocation(locations) {
+    const { locationsToAdd, locationsToRemove, inputChange } = setLocations(
+      locations
+    );
+
     setLocation({
       ...location,
       inputValue: locations,
-      inputChange: true,
+
+      locationsToAdd,
       locationsToRemove,
+      inputChange,
     });
   }
 
@@ -272,8 +284,8 @@ function AboutYou() {
     return results;
   }
 
-  function addTopSkill(skills) {
-    const userSkillsObj = createObj(user.topSkills);
+  function setSkills(skills, userSkills) {
+    const userSkillsObj = createObj(userSkills);
     const skillsToAdd = [];
     const skillsForReview = [];
 
@@ -287,72 +299,53 @@ function AboutYou() {
       }
     });
 
-    const skillsForReviewCurrentId =
-      skillsForReview.length + additionalSkills.skillsForReview.length + 1;
-
-    setSkillsForReviewIdTracker(skillsForReviewCurrentId);
-    setTopSkills({
-      ...topSkills,
-      inputValue: skills,
-      inputChange: true,
-      skillsToAdd,
-      skillsForReview,
-    });
-  }
-
-  function removeTopSkill(skills) {
     const skillsObj = createObj(skills);
-    const skillsToRemove = user.topSkills.filter(
+    const skillsToRemove = userSkills.filter(
       (skill) => !(skill.name in skillsObj)
     );
 
-    setTopSkills({
-      ...topSkills,
-      inputValue: skills,
-      inputChange: true,
-      skillsToRemove,
-    });
-  }
+    let inputChange;
+    if (skillsToAdd.length === 0 && skillsToRemove.length === 0) {
+      inputChange = false;
+    } else {
+      inputChange = true;
+    }
 
-  function addAdditionalSkill(skills) {
-    const userSkillsObj = createObj(user.additionalSkills);
-    const skillsToAdd = [];
-    const skillsForReview = [];
-
-    skills.forEach((skill) => {
-      if (!(skill.name in userSkillsObj)) {
-        if (Number.isInteger(skill.id)) {
-          skillsToAdd.push(skill);
-        } else {
-          skillsForReview.push(skill);
-        }
-      }
-    });
-
-    const skillsForReviewCurrentId =
-      skillsForReview.length + topSkills.skillsForReview.length + 1;
-
-    setSkillsForReviewIdTracker(skillsForReviewCurrentId);
-    setAdditionalSkills({
-      ...additionalSkills,
-      inputValue: skills,
-      inputChange: true,
+    return {
       skillsToAdd,
       skillsForReview,
-    });
+      skillsToRemove,
+      inputChange,
+    };
   }
 
-  function removeAdditionalSkill(skills) {
-    const skillsObj = createObj(skills);
-    const skillsToRemove = user.additionalSkills.filter(
-      (skill) => !(skill.name in skillsObj)
-    );
+  function updateSkill(skills, type) {
+    // increasing id on each to avoid possible dups
+    setSkillsForReviewIdTracker(skillsForReviewIdTracker + 1);
 
-    setAdditionalSkills({
-      ...additionalSkills,
-      inputValue: skills,
-      inputChange: true,
+    let userSkills;
+    let skillsStateFn;
+    if (type === "top") {
+      userSkills = user.topSkills;
+      skillsStateFn = setTopSkills;
+    } else {
+      userSkills = user.additionalSkills;
+      skillsStateFn = setAdditionalSkills;
+    }
+
+    const {
+      skillsToAdd,
+      skillsForReview,
       skillsToRemove,
+      inputChange,
+    } = setSkills(skills, userSkills);
+
+    skillsStateFn({
+      inputValue: skills,
+      skillsToAdd,
+      skillsForReview,
+      skillsToRemove,
+      inputChange,
     });
   }
 
@@ -631,8 +624,8 @@ function AboutYou() {
           <Combobox
             chosenOptions={location.inputValue}
             onInputChange={getLocationsByValue}
-            onChosenOption={addLocation}
-            onRemoveChosenOption={removeLocation}
+            onChosenOption={updateLocation}
+            onRemoveChosenOption={updateLocation}
             inputName={"interested-locations"}
             displayName={"Interested Locations"}
           />
@@ -640,8 +633,8 @@ function AboutYou() {
           <Combobox
             chosenOptions={topSkills.inputValue}
             onInputChange={getSkillsByValue}
-            onChosenOption={addTopSkill}
-            onRemoveChosenOption={removeTopSkill}
+            onChosenOption={(skills) => updateSkill(skills, "top")}
+            onRemoveChosenOption={(skills) => updateSkill(skills, "top")}
             inputName={"top-skills"}
             displayName={"Top Skills"}
           />
@@ -649,8 +642,8 @@ function AboutYou() {
           <Combobox
             chosenOptions={additionalSkills.inputValue}
             onInputChange={getSkillsByValue}
-            onChosenOption={addAdditionalSkill}
-            onRemoveChosenOption={removeAdditionalSkill}
+            onChosenOption={(skills) => updateSkill(skills, "additional")}
+            onRemoveChosenOption={(skills) => updateSkill(skills, "additional")}
             inputName={"additional-skills"}
             displayName={"Additional Skills"}
           />

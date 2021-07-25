@@ -359,8 +359,6 @@ function YourWhereabouts() {
   }
 
   async function setLocationWithGio(name, id) {
-    setLocationChange(true);
-
     const [res, err] = await httpClient("POST", "/api/gio", {
       placeId: id,
     });
@@ -370,6 +368,14 @@ function YourWhereabouts() {
       return { error: "Error getting location information" };
     }
 
+    let locationChange;
+    if (user.current_location_name === name) {
+      locationChange = false;
+    } else {
+      locationChange = true;
+    }
+
+    setLocationChange(locationChange);
     setLocation([
       {
         name,
@@ -381,7 +387,14 @@ function YourWhereabouts() {
   }
 
   function removeLocation() {
-    setLocationChange(true);
+    let locationChange;
+    if (!user.current_location_name) {
+      locationChange = false;
+    } else {
+      locationChange = true;
+    }
+
+    setLocationChange(locationChange);
     setLocation([]);
   }
 
