@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { ReactComponent as EditIcon } from "../../../global/assets/dashboard-edit.svg";
 
@@ -49,9 +49,14 @@ function YourWhereabouts() {
   const [location, setLocation] = useState([]);
   const [locationChange, setLocationChange] = useState(false);
 
+  let isSubmittingRef = useRef(false);
   let errorSummaryRef = React.createRef();
   let editInfoBtnRef = React.createRef();
   let githubInputRef = React.createRef();
+  let linkedinInputRef = React.createRef();
+  let twitterInputRef = React.createRef();
+  let portfolioInputRef = React.createRef();
+  let emailInputRef = React.createRef();
 
   useEffect(() => {
     if (formStatus === FORM_STATUS.error && errorSummaryRef.current) {
@@ -141,7 +146,7 @@ function YourWhereabouts() {
   }
 
   function setGithubInput(value) {
-    if (user.github === null && value.trim() === "") {
+    if (!user.github && value.trim() === "") {
       setGithub({
         inputChange: false,
         inputValue: "",
@@ -164,6 +169,7 @@ function YourWhereabouts() {
 
   function validateGithubInput(value) {
     if (!github.inputChange) return;
+    if (isSubmittingRef.current) return;
     if (value.trim() === "") {
       setGithub({
         ...github,
@@ -184,7 +190,7 @@ function YourWhereabouts() {
   }
 
   function setTwitterInput(value) {
-    if (user.twitter === null && value.trim() === "") {
+    if (!user.twitter && value.trim() === "") {
       setTwitter({
         inputChange: false,
         inputValue: "",
@@ -207,6 +213,7 @@ function YourWhereabouts() {
 
   function validateTwitterInput(value) {
     if (!twitter.inputChange) return;
+    if (isSubmittingRef.current) return;
     if (value.trim() === "") {
       setTwitter({
         ...twitter,
@@ -226,7 +233,7 @@ function YourWhereabouts() {
   }
 
   function setLinkedinInput(value) {
-    if (user.linkedin === null && value.trim() === "") {
+    if (!user.linkedin && value.trim() === "") {
       setLinkedin({
         inputChange: false,
         inputValue: "",
@@ -249,6 +256,7 @@ function YourWhereabouts() {
 
   function validateLinkedinInput(value) {
     if (!linkedin.inputChange) return;
+    if (isSubmittingRef.current) return;
     if (value.trim() === "") {
       setLinkedin({
         ...linkedin,
@@ -269,7 +277,7 @@ function YourWhereabouts() {
   }
 
   function setPortfolioInput(value) {
-    if (user.portfolio === null && value.trim() === "") {
+    if (!user.portfolio && value.trim() === "") {
       setPortfolio({
         inputChange: false,
         inputValue: "",
@@ -292,6 +300,7 @@ function YourWhereabouts() {
 
   function validatePortfolioInput(value) {
     if (!portfolio.inputChange) return;
+    if (isSubmittingRef.current) return;
     if (value.trim() === "") {
       setPortfolio({
         ...portfolio,
@@ -306,7 +315,7 @@ function YourWhereabouts() {
   }
 
   function setEmailInput(value) {
-    if (user.public_email === null && value.trim() === "") {
+    if (!user.public_email && value.trim() === "") {
       setEmail({
         inputChange: false,
         inputValue: "",
@@ -329,6 +338,7 @@ function YourWhereabouts() {
 
   function validateEmailInput(value) {
     if (!email.inputChange) return;
+    if (isSubmittingRef.current) return;
     if (value.trim() === "") {
       setEmail({ ...email, inputValue: "", inputStatus: FORM_STATUS.success });
     } else if (validateInput("email", value)) {
@@ -402,20 +412,6 @@ function YourWhereabouts() {
     e.preventDefault();
 
     if (
-      github.inputStatus === FORM_STATUS.error ||
-      twitter.inputStatus === FORM_STATUS.error ||
-      linkedin.inputStatus === FORM_STATUS.error ||
-      portfolio.inputStatus === FORM_STATUS.error ||
-      email.inputStatus === FORM_STATUS.error
-    ) {
-      setFormStatus(FORM_STATUS.error);
-      if (errorSummaryRef.current) {
-        errorSummaryRef.current.focus();
-      }
-      return;
-    }
-
-    if (
       !github.inputChange &&
       !twitter.inputChange &&
       !linkedin.inputChange &&
@@ -427,26 +423,125 @@ function YourWhereabouts() {
     }
 
     setFormStatus(FORM_STATUS.loading);
+    isSubmittingRef.current = true;
+    let areThereErrors = false;
     const inputs = {};
 
     if (github.inputChange) {
-      inputs.github = github.inputValue;
+      if (github.inputValue.trim() === "") {
+        inputs.github = "";
+        githubInputRef.current.blur()
+        setGithub({
+          ...github,
+          inputValue: "",
+          inputStatus: FORM_STATUS.success,
+        });
+      } else if (validateInput("github", github.inputValue)) {
+        const { intl, username } = validateInput("github", github.inputValue);
+        const fullUrl = `https://${intl || ""}github.com/${username}`;
+        setGithub({
+          ...github,
+          inputStatus: FORM_STATUS.success,
+          inputValue: fullUrl,
+        });
+        inputs.github = fullUrl;
+        githubInputRef.current.blur()
+      } else {
+        areThereErrors = true;
+        setGithub({ ...github, inputStatus: FORM_STATUS.error });
+      }
     }
 
     if (twitter.inputChange) {
-      inputs.twitter = twitter.inputValue;
+      if (twitter.inputValue.trim() === "") {
+        setTwitter({
+          ...twitter,
+          inputValue: "",
+          inputStatus: FORM_STATUS.success,
+        });
+        inputs.twitter = "";
+        twitterInputRef.current.blur()
+      } else if (validateInput("twitter", twitter.inputValue)) {
+        const fullUrl = `https://twitter.com/${validateInput("twitter", twitter.inputValue)}`;
+        setTwitter({
+          ...twitter,
+          inputStatus: FORM_STATUS.success,
+          inputValue: fullUrl,
+        });
+        inputs.twitter = fullUrl;
+        twitterInputRef.current.blur()
+      } else {
+        areThereErrors = true;
+        setTwitter({ ...twitter, inputStatus: FORM_STATUS.error });
+      }
     }
 
     if (linkedin.inputChange) {
-      inputs.linkedin = linkedin.inputValue;
+      if (linkedin.inputValue.trim() === "") {
+        setLinkedin({
+          ...linkedin,
+          inputValue: "",
+          inputStatus: FORM_STATUS.success,
+        });
+        inputs.linkedin = "";
+        linkedinInputRef.current.blur()
+      } else if (validateInput("linkedin", linkedin.inputValue)) {
+        const { intl, username } = validateInput("linkedin", linkedin.inputValue);
+        const fullUrl = `https://${intl || ""}linkedin.com/in/${username}`;
+        setLinkedin({
+          ...linkedin,
+          inputStatus: FORM_STATUS.success,
+          inputValue: fullUrl,
+        });
+        inputs.linkedin = fullUrl;
+        linkedinInputRef.current.blur()
+      } else {
+        areThereErrors = true;
+        setLinkedin({ ...linkedin, inputStatus: FORM_STATUS.error });
+      }
     }
 
     if (portfolio.inputChange) {
-      inputs.portfolio = portfolio.inputValue;
+      if (portfolio.inputValue.trim() === "") {
+        setPortfolio({
+          ...portfolio,
+          inputValue: "",
+          inputStatus: FORM_STATUS.success,
+        });
+        inputs.portfolio = "";
+        portfolioInputRef.current.blur()
+      } else if (validateInput("url", portfolio.inputValue)) {
+        setPortfolio({ ...portfolio, inputStatus: FORM_STATUS.success });
+        inputs.portfolio = portfolio.inputValue;
+        portfolioInputRef.current.blur()
+      } else {
+        areThereErrors = true;
+        setPortfolio({ ...portfolio, inputStatus: FORM_STATUS.error });
+      }
     }
 
     if (email.inputChange) {
-      inputs.public_email = email.inputValue;
+      if (email.inputValue.trim() === "") {
+        setEmail({ ...email, inputValue: "", inputStatus: FORM_STATUS.success });
+        inputs.public_email = "";
+        emailInputRef.current.blur()
+      } else if (validateInput("email", email.inputValue)) {
+        setEmail({ ...email, inputStatus: FORM_STATUS.success });
+        inputs.public_email = email.inputValue;
+        emailInputRef.current.blur()
+      } else {
+        areThereErrors = true;
+        setEmail({ ...email, inputStatus: FORM_STATUS.error });
+      }
+    }
+
+    if (areThereErrors) {
+      isSubmittingRef.current = false;
+      setFormStatus(FORM_STATUS.error);
+      if (errorSummaryRef.current) {
+        errorSummaryRef.current.focus();
+      }
+      return;
     }
 
     if (locationChange) {
@@ -473,6 +568,7 @@ function YourWhereabouts() {
     formSuccessWait = setTimeout(() => {
       setFormStatus(FORM_STATUS.idle);
       setHasSubmitError(null);
+      isSubmittingRef.current = false;
     }, 750);
     setFormStatus(FORM_STATUS.success);
   }
@@ -644,6 +740,7 @@ function YourWhereabouts() {
             <label htmlFor="twitter">Twitter:</label>
             <Spacer axis="vertical" size="5" />
             <input
+              ref={twitterInputRef}
               type="text"
               autoComplete="username"
               inputMode="url"
@@ -676,6 +773,7 @@ function YourWhereabouts() {
             <label htmlFor="linkedin">Linkedin:</label>
             <Spacer axis="vertical" size="5" />
             <input
+              ref={linkedinInputRef}
               type="text"
               autoComplete="username"
               inputMode="url"
@@ -708,6 +806,7 @@ function YourWhereabouts() {
             <label htmlFor="portfolio">Portfolio:</label>
             <Spacer axis="vertical" size="5" />
             <input
+              ref={portfolioInputRef}
               type="url"
               autoComplete="url"
               inputMode="url"
@@ -738,6 +837,7 @@ function YourWhereabouts() {
             <label htmlFor="email">Public Email:</label>
             <Spacer axis="vertical" size="5" />
             <input
+              ref={emailInputRef}
               type="email"
               autoComplete="email"
               inputMode="email"

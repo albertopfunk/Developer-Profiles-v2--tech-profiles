@@ -238,14 +238,6 @@ function PersonalInfo() {
   async function submitEdit(e) {
     e.preventDefault();
 
-    // check for changes
-    // set loading to true
-    // validate all inputs
-    // show proper UI/submit err summary for input err if any
-    // run rest of submit logic
-    // test out how blur() is handled
-    
-
     if (
       !firstName.inputChange &&
       !lastName.inputChange &&
@@ -256,22 +248,10 @@ function PersonalInfo() {
       return;
     }
 
-    // if u want to show loading UI for validations as well
-    // maybe put logic to async fn and await validation to show
-    // loading UI from start
     setFormStatus(FORM_STATUS.loading);
     isSubmittingRef.current = true;
     let areThereErrors = false;
     const inputs = {};
-
-
-    // first name validation
-      // if !firstName.inputChange then skip
-      // if empty strings(trim) then input = "" && passes
-      // if validation true then input = firstName.input && passes
-      // if validation false then
-        // setFirstName status to error
-        // set areThereErrors to true
 
     if (firstName.inputChange) {
       if (firstName.inputValue.trim() === "") {
@@ -292,9 +272,6 @@ function PersonalInfo() {
       }      
     }
 
-
-
-    // last name validation
     if (lastName.inputChange) {
       if (lastName.inputValue.trim() === "") {
         inputs.last_name = "";
@@ -314,8 +291,6 @@ function PersonalInfo() {
       }
     }
 
-
-    // title validation
     if (title.inputChange) {
       if (title.inputValue.trim() === "") {
         inputs.desired_title = "";
@@ -331,11 +306,6 @@ function PersonalInfo() {
       }
     }
 
-    // if areThereErrors
-      // setFormStatus to error, focus if err summary present and return
-    // else
-      // continue to submit
-
     if (areThereErrors) {
       isSubmittingRef.current = false;
       setFormStatus(FORM_STATUS.error);
@@ -344,23 +314,6 @@ function PersonalInfo() {
       }
       return;
     }
-
-    // u can run blur() on inputs still in focus since isSubmittingRef.current = true
-    // figure out where this best fits
-
-
-    // if (
-    //   firstName.inputStatus === FORM_STATUS.error ||
-    //   lastName.inputStatus === FORM_STATUS.error ||
-    //   title.inputStatus === FORM_STATUS.error
-    // ) {
-    //   setFormStatus(FORM_STATUS.error);
-    //   if (errorSummaryRef.current) {
-    //     errorSummaryRef.current.focus();
-    //   }
-    //   return;
-    // }
-
 
     if (areaOfWork.inputChange) {
       inputs.area_of_work = areaOfWork.inputValue;

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { ReactComponent as EditIcon } from "../../../global/assets/dashboard-edit.svg";
 
@@ -49,6 +49,7 @@ function AboutYou() {
     skillsForReview: [],
   });
 
+  let isSubmittingRef = useRef(false);
   let errorSummaryRef = React.createRef();
   let editInfoBtnRef = React.createRef();
   let summaryInputRef = React.createRef();
@@ -131,7 +132,7 @@ function AboutYou() {
   }
 
   function setSummaryInput(value) {
-    if (user.summary === null && value.trim() === "") {
+    if (!user.summary && value.trim() === "") {
       setSummary({
         inputChange: false,
         inputValue: "",
@@ -154,6 +155,7 @@ function AboutYou() {
 
   function validateSummaryInput(value) {
     if (!summary.inputChange) return;
+    if (isSubmittingRef.current) return;
     if (value.trim() === "") {
       setSummary({
         ...summary,
@@ -411,14 +413,6 @@ function AboutYou() {
   async function submitEdit(e) {
     e.preventDefault();
 
-    if (summary.inputStatus === FORM_STATUS.error) {
-      setFormStatus(FORM_STATUS.error);
-      if (errorSummaryRef.current) {
-        errorSummaryRef.current.focus();
-      }
-      return;
-    }
-
     if (
       !summary.inputChange &&
       !location.inputChange &&
@@ -429,14 +423,44 @@ function AboutYou() {
     }
 
     setFormStatus(FORM_STATUS.loading);
+    isSubmittingRef.current = true;
+    let areThereErrors = false;
     let additionalArr = [];
 
     if (summary.inputChange) {
-      additionalArr.push({
-        method: "PUT",
-        url: `/users/${user.id}`,
-        data: { summary: summary.inputValue },
-      });
+      if (summary.inputValue.trim() === "") {
+        additionalArr.push({
+          method: "PUT",
+          url: `/users/${user.id}`,
+          data: { summary: "" },
+        });
+        summaryInputRef.current.blur();
+        setSummary({
+          ...summary,
+          inputValue: "",
+          inputStatus: FORM_STATUS.success,
+        });
+      } else if (validateInput("summary", summary.inputValue)) {
+        additionalArr.push({
+          method: "PUT",
+          url: `/users/${user.id}`,
+          data: { summary: summary.inputValue },
+        });
+        summaryInputRef.current.blur();
+        setSummary({ ...summary, inputStatus: FORM_STATUS.success });
+      } else {
+        areThereErrors = true;
+        setSummary({ ...summary, inputStatus: FORM_STATUS.error });
+      }
+    }
+
+    if (areThereErrors) {
+      isSubmittingRef.current = false;
+      setFormStatus(FORM_STATUS.error);
+      if (errorSummaryRef.current) {
+        errorSummaryRef.current.focus();
+      }
+      return;
     }
 
     if (location.inputChange) {
@@ -465,6 +489,7 @@ function AboutYou() {
     formSuccessWait = setTimeout(() => {
       setFormStatus(FORM_STATUS.idle);
       setHasSubmitError(null);
+      isSubmittingRef.current = false;
     }, 750);
 
     setFormStatus(FORM_STATUS.success);
