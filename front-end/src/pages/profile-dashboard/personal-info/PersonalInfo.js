@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { ReactComponent as EditIcon } from "../../../global/assets/dashboard-edit.svg";
 
@@ -42,9 +42,12 @@ function PersonalInfo() {
     inputStatus: FORM_STATUS.idle,
   });
 
+  let isSubmittingRef = useRef(false);
   let errorSummaryRef = React.createRef();
   let editInfoBtnRef = React.createRef();
   let firstNameInputRef = React.createRef();
+  let lastNameInputRef = React.createRef();
+  let titleInputRef = React.createRef();
 
   useEffect(() => {
     if (formStatus === FORM_STATUS.error && errorSummaryRef.current) {
@@ -115,7 +118,7 @@ function PersonalInfo() {
   }
 
   function setFirstNameInput(value) {
-    if (user.first_name === null && value.trim() === "") {
+    if (!user.first_name && value.trim() === "") {
       setFirstName({
         inputChange: false,
         inputValue: "",
@@ -138,6 +141,7 @@ function PersonalInfo() {
 
   function validateFirstNameInput(value) {
     if (!firstName.inputChange) return;
+    if (isSubmittingRef.current) return;
     if (value.trim() === "") {
       setFirstName({
         ...firstName,
@@ -152,7 +156,7 @@ function PersonalInfo() {
   }
 
   function setLastNameInput(value) {
-    if (user.last_name === null && value.trim() === "") {
+    if (!user.last_name && value.trim() === "") {
       setLastName({
         inputChange: false,
         inputValue: "",
@@ -175,6 +179,7 @@ function PersonalInfo() {
 
   function validateLastNameInput(value) {
     if (!lastName.inputChange) return;
+    if (isSubmittingRef.current) return;
     if (value.trim() === "") {
       setLastName({
         ...lastName,
@@ -197,7 +202,7 @@ function PersonalInfo() {
   }
 
   function setTitleInput(value) {
-    if (user.desired_title === null && value.trim() === "") {
+    if (!user.desired_title && value.trim() === "") {
       setTitle({
         inputChange: false,
         inputValue: "",
@@ -220,6 +225,7 @@ function PersonalInfo() {
 
   function validateTitleInput(value) {
     if (!title.inputChange) return;
+    if (isSubmittingRef.current) return;
     if (value.trim() === "") {
       setTitle({ ...title, inputValue: "", inputStatus: FORM_STATUS.success });
     } else if (validateInput("title", value)) {
@@ -232,17 +238,13 @@ function PersonalInfo() {
   async function submitEdit(e) {
     e.preventDefault();
 
-    if (
-      firstName.inputStatus === FORM_STATUS.error ||
-      lastName.inputStatus === FORM_STATUS.error ||
-      title.inputStatus === FORM_STATUS.error
-    ) {
-      setFormStatus(FORM_STATUS.error);
-      if (errorSummaryRef.current) {
-        errorSummaryRef.current.focus();
-      }
-      return;
-    }
+    // check for changes
+    // set loading to true
+    // validate all inputs
+    // show proper UI/submit err summary for input err if any
+    // run rest of submit logic
+    // test out how blur() is handled
+    
 
     if (
       !firstName.inputChange &&
@@ -254,23 +256,114 @@ function PersonalInfo() {
       return;
     }
 
+    // if u want to show loading UI for validations as well
+    // maybe put logic to async fn and await validation to show
+    // loading UI from start
     setFormStatus(FORM_STATUS.loading);
+    isSubmittingRef.current = true;
+    let areThereErrors = false;
     const inputs = {};
 
+
+    // first name validation
+      // if !firstName.inputChange then skip
+      // if empty strings(trim) then input = "" && passes
+      // if validation true then input = firstName.input && passes
+      // if validation false then
+        // setFirstName status to error
+        // set areThereErrors to true
+
     if (firstName.inputChange) {
-      inputs.first_name = firstName.inputValue;
+      if (firstName.inputValue.trim() === "") {
+        inputs.first_name = "";
+        firstNameInputRef.current.blur()
+        setFirstName({
+          ...firstName,
+          inputValue: "",
+          inputStatus: FORM_STATUS.success,
+        });
+      } else if (validateInput("name", firstName.inputValue)) {
+        inputs.first_name = firstName.inputValue;
+        firstNameInputRef.current.blur()
+        setFirstName({ ...firstName, inputStatus: FORM_STATUS.success });
+      } else {
+        areThereErrors = true;
+        setFirstName({ ...firstName, inputStatus: FORM_STATUS.error });
+      }      
     }
 
+
+
+    // last name validation
     if (lastName.inputChange) {
-      inputs.last_name = lastName.inputValue;
+      if (lastName.inputValue.trim() === "") {
+        inputs.last_name = "";
+        lastNameInputRef.current.blur();
+        setLastName({
+          ...lastName,
+          inputValue: "",
+          inputStatus: FORM_STATUS.success,
+        });
+      } else if (validateInput("name", lastName.inputValue)) {
+        inputs.last_name = lastName.inputValue;
+        lastNameInputRef.current.blur();
+        setLastName({ ...lastName, inputStatus: FORM_STATUS.success });
+      } else {
+        areThereErrors = true;
+        setLastName({ ...lastName, inputStatus: FORM_STATUS.error });
+      }
     }
+
+
+    // title validation
+    if (title.inputChange) {
+      if (title.inputValue.trim() === "") {
+        inputs.desired_title = "";
+        titleInputRef.current.blur();
+        setTitle({ ...title, inputValue: "", inputStatus: FORM_STATUS.success });
+      } else if (validateInput("title", title.inputValue)) {
+        inputs.desired_title = title.inputValue;
+        titleInputRef.current.blur();
+        setTitle({ ...title, inputStatus: FORM_STATUS.success });
+      } else {
+        areThereErrors = true;
+        setTitle({ ...title, inputStatus: FORM_STATUS.error });
+      }
+    }
+
+    // if areThereErrors
+      // setFormStatus to error, focus if err summary present and return
+    // else
+      // continue to submit
+
+    if (areThereErrors) {
+      isSubmittingRef.current = false;
+      setFormStatus(FORM_STATUS.error);
+      if (errorSummaryRef.current) {
+        errorSummaryRef.current.focus();
+      }
+      return;
+    }
+
+    // u can run blur() on inputs still in focus since isSubmittingRef.current = true
+    // figure out where this best fits
+
+
+    // if (
+    //   firstName.inputStatus === FORM_STATUS.error ||
+    //   lastName.inputStatus === FORM_STATUS.error ||
+    //   title.inputStatus === FORM_STATUS.error
+    // ) {
+    //   setFormStatus(FORM_STATUS.error);
+    //   if (errorSummaryRef.current) {
+    //     errorSummaryRef.current.focus();
+    //   }
+    //   return;
+    // }
+
 
     if (areaOfWork.inputChange) {
       inputs.area_of_work = areaOfWork.inputValue;
-    }
-
-    if (title.inputChange) {
-      inputs.desired_title = title.inputValue;
     }
 
     if (imageChange) {
@@ -314,6 +407,7 @@ function PersonalInfo() {
     formSuccessWait = setTimeout(() => {
       setFormStatus(FORM_STATUS.idle);
       setHasSubmitError(null);
+      isSubmittingRef.current = false;
     }, 750);
     setFormStatus(FORM_STATUS.success);
   }
@@ -480,6 +574,7 @@ function PersonalInfo() {
             <label htmlFor="last-name">Last Name:</label>
             <Spacer axis="vertical" size="5" />
             <input
+              ref={lastNameInputRef}
               type="text"
               autoComplete="family-name"
               id="last-name"
@@ -564,6 +659,7 @@ function PersonalInfo() {
             <label htmlFor="title">Title:</label>
             <Spacer axis="vertical" size="5" />
             <input
+              ref={titleInputRef}
               type="text"
               autoComplete="organization-title"
               id="title"
