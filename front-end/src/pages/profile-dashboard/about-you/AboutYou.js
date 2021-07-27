@@ -483,6 +483,7 @@ function AboutYou() {
     if (results?.error) {
       setFormStatus(FORM_STATUS.error);
       setHasSubmitError(true);
+      isSubmittingRef.current = false;
       return;
     }
 

@@ -430,7 +430,7 @@ function YourWhereabouts() {
     if (github.inputChange) {
       if (github.inputValue.trim() === "") {
         inputs.github = "";
-        githubInputRef.current.blur()
+        githubInputRef.current.blur();
         setGithub({
           ...github,
           inputValue: "",
@@ -445,7 +445,7 @@ function YourWhereabouts() {
           inputValue: fullUrl,
         });
         inputs.github = fullUrl;
-        githubInputRef.current.blur()
+        githubInputRef.current.blur();
       } else {
         areThereErrors = true;
         setGithub({ ...github, inputStatus: FORM_STATUS.error });
@@ -460,16 +460,19 @@ function YourWhereabouts() {
           inputStatus: FORM_STATUS.success,
         });
         inputs.twitter = "";
-        twitterInputRef.current.blur()
+        twitterInputRef.current.blur();
       } else if (validateInput("twitter", twitter.inputValue)) {
-        const fullUrl = `https://twitter.com/${validateInput("twitter", twitter.inputValue)}`;
+        const fullUrl = `https://twitter.com/${validateInput(
+          "twitter",
+          twitter.inputValue
+        )}`;
         setTwitter({
           ...twitter,
           inputStatus: FORM_STATUS.success,
           inputValue: fullUrl,
         });
         inputs.twitter = fullUrl;
-        twitterInputRef.current.blur()
+        twitterInputRef.current.blur();
       } else {
         areThereErrors = true;
         setTwitter({ ...twitter, inputStatus: FORM_STATUS.error });
@@ -484,9 +487,12 @@ function YourWhereabouts() {
           inputStatus: FORM_STATUS.success,
         });
         inputs.linkedin = "";
-        linkedinInputRef.current.blur()
+        linkedinInputRef.current.blur();
       } else if (validateInput("linkedin", linkedin.inputValue)) {
-        const { intl, username } = validateInput("linkedin", linkedin.inputValue);
+        const { intl, username } = validateInput(
+          "linkedin",
+          linkedin.inputValue
+        );
         const fullUrl = `https://${intl || ""}linkedin.com/in/${username}`;
         setLinkedin({
           ...linkedin,
@@ -494,7 +500,7 @@ function YourWhereabouts() {
           inputValue: fullUrl,
         });
         inputs.linkedin = fullUrl;
-        linkedinInputRef.current.blur()
+        linkedinInputRef.current.blur();
       } else {
         areThereErrors = true;
         setLinkedin({ ...linkedin, inputStatus: FORM_STATUS.error });
@@ -509,11 +515,11 @@ function YourWhereabouts() {
           inputStatus: FORM_STATUS.success,
         });
         inputs.portfolio = "";
-        portfolioInputRef.current.blur()
+        portfolioInputRef.current.blur();
       } else if (validateInput("url", portfolio.inputValue)) {
         setPortfolio({ ...portfolio, inputStatus: FORM_STATUS.success });
         inputs.portfolio = portfolio.inputValue;
-        portfolioInputRef.current.blur()
+        portfolioInputRef.current.blur();
       } else {
         areThereErrors = true;
         setPortfolio({ ...portfolio, inputStatus: FORM_STATUS.error });
@@ -522,13 +528,17 @@ function YourWhereabouts() {
 
     if (email.inputChange) {
       if (email.inputValue.trim() === "") {
-        setEmail({ ...email, inputValue: "", inputStatus: FORM_STATUS.success });
+        setEmail({
+          ...email,
+          inputValue: "",
+          inputStatus: FORM_STATUS.success,
+        });
         inputs.public_email = "";
-        emailInputRef.current.blur()
+        emailInputRef.current.blur();
       } else if (validateInput("email", email.inputValue)) {
         setEmail({ ...email, inputStatus: FORM_STATUS.success });
         inputs.public_email = email.inputValue;
-        emailInputRef.current.blur()
+        emailInputRef.current.blur();
       } else {
         areThereErrors = true;
         setEmail({ ...email, inputStatus: FORM_STATUS.error });
@@ -562,6 +572,7 @@ function YourWhereabouts() {
     if (results?.error) {
       setFormStatus(FORM_STATUS.error);
       setHasSubmitError(true);
+      isSubmittingRef.current = false;
       return;
     }
 

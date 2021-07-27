@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { ReactComponent as WelcomeIntro } from "../../../global/assets/dashboard-intro.svg";
 import { ReactComponent as CloseIcon } from "../../../global/assets/dashboard-close.svg";
@@ -50,12 +50,16 @@ function NewUser() {
   const [location, setLocation] = useState([]);
   const [locationChange, setLocationChange] = useState(false);
 
+  let isSubmittingRef = useRef(false);
   let errorSummaryRef = React.createRef();
   let editInfoBtnRef = React.createRef();
   let basicInfoTabRef = React.createRef();
   let basicInfoPanelRef = React.createRef();
   let billingInfoTabRef = React.createRef();
   let billingInfoPanelRef = React.createRef();
+  let firstNameInputRef = React.createRef();
+  let titleInputRef = React.createRef();
+  let summaryInputRef = React.createRef();
 
   useEffect(() => {
     return () => {
@@ -187,7 +191,7 @@ function NewUser() {
   }
 
   function setFirstNameInput(value) {
-    if (user.first_name === null && value.trim() === "") {
+    if (!user.first_name && value.trim() === "") {
       setFirstName({
         inputChange: false,
         inputValue: "",
@@ -210,6 +214,7 @@ function NewUser() {
 
   function validateFirstNameInput(value) {
     if (!firstName.inputChange) return;
+    if (isSubmittingRef.current) return;
     if (value.trim() === "") {
       setFirstName({
         ...firstName,
@@ -232,7 +237,7 @@ function NewUser() {
   }
 
   function setTitleInput(value) {
-    if (user.desired_title === null && value.trim() === "") {
+    if (!user.desired_title && value.trim() === "") {
       setTitle({
         inputChange: false,
         inputValue: "",
@@ -255,6 +260,7 @@ function NewUser() {
 
   function validateTitleInput(value) {
     if (!title.inputChange) return;
+    if (isSubmittingRef.current) return;
     if (value.trim() === "") {
       setTitle({ ...title, inputValue: "", inputStatus: FORM_STATUS.success });
     } else if (validateInput("title", value)) {
@@ -265,7 +271,7 @@ function NewUser() {
   }
 
   function setSummaryInput(value) {
-    if (user.summary === null && value.trim() === "") {
+    if (!user.summary && value.trim() === "") {
       setSummary({
         inputChange: false,
         inputValue: "",
@@ -288,6 +294,7 @@ function NewUser() {
 
   function validateSummaryInput(value) {
     if (!summary.inputChange) return;
+    if (isSubmittingRef.current) return;
     if (value.trim() === "") {
       setSummary({
         ...summary,
@@ -322,8 +329,6 @@ function NewUser() {
   }
 
   async function setLocationWithGio(name, id) {
-    setLocationChange(true);
-
     const [res, err] = await httpClient("POST", "/api/gio", {
       placeId: id,
     });
@@ -333,6 +338,14 @@ function NewUser() {
       return { error: "Error getting location information" };
     }
 
+    let locationChange;
+    if (user.current_location_name === name) {
+      locationChange = false;
+    } else {
+      locationChange = true;
+    }
+
+    setLocationChange(locationChange);
     setLocation([
       {
         name,
@@ -344,24 +357,19 @@ function NewUser() {
   }
 
   function removeLocation() {
-    setLocationChange(true);
+    let locationChange;
+    if (!user.current_location_name) {
+      locationChange = false;
+    } else {
+      locationChange = true;
+    }
+
+    setLocationChange(locationChange);
     setLocation([]);
   }
 
   async function submitEdit(e) {
     e.preventDefault();
-
-    if (
-      firstName.inputStatus === FORM_STATUS.error ||
-      title.inputStatus === FORM_STATUS.error ||
-      summary.inputStatus === FORM_STATUS.error
-    ) {
-      setFormStatus(FORM_STATUS.error);
-      if (errorSummaryRef.current) {
-        errorSummaryRef.current.focus();
-      }
-      return;
-    }
 
     if (
       !firstName.inputChange &&
@@ -375,22 +383,78 @@ function NewUser() {
     }
 
     setFormStatus(FORM_STATUS.loading);
+    isSubmittingRef.current = true;
+    let areThereErrors = false;
     const inputs = {};
 
     if (firstName.inputChange) {
-      inputs.first_name = firstName.inputValue;
+      if (firstName.inputValue.trim() === "") {
+        inputs.first_name = "";
+        firstNameInputRef.current.blur();
+        setFirstName({
+          ...firstName,
+          inputValue: "",
+          inputStatus: FORM_STATUS.success,
+        });
+      } else if (validateInput("name", firstName.inputValue)) {
+        inputs.first_name = firstName.inputValue;
+        firstNameInputRef.current.blur();
+        setFirstName({ ...firstName, inputStatus: FORM_STATUS.success });
+      } else {
+        areThereErrors = true;
+        setFirstName({ ...firstName, inputStatus: FORM_STATUS.error });
+      }
+    }
+
+    if (title.inputChange) {
+      if (title.inputValue.trim() === "") {
+        inputs.desired_title = "";
+        titleInputRef.current.blur();
+        setTitle({
+          ...title,
+          inputValue: "",
+          inputStatus: FORM_STATUS.success,
+        });
+      } else if (validateInput("title", title.inputValue)) {
+        inputs.desired_title = title.inputValue;
+        titleInputRef.current.blur();
+        setTitle({ ...title, inputStatus: FORM_STATUS.success });
+      } else {
+        areThereErrors = true;
+        setTitle({ ...title, inputStatus: FORM_STATUS.error });
+      }
+    }
+
+    if (summary.inputChange) {
+      if (summary.inputValue.trim() === "") {
+        inputs.summary = "";
+        summaryInputRef.current.blur();
+        setSummary({
+          ...summary,
+          inputValue: "",
+          inputStatus: FORM_STATUS.success,
+        });
+      } else if (validateInput("summary", summary.inputValue)) {
+        inputs.summary = summary.inputValue;
+        summaryInputRef.current.blur();
+        setSummary({ ...summary, inputStatus: FORM_STATUS.success });
+      } else {
+        areThereErrors = true;
+        setSummary({ ...summary, inputStatus: FORM_STATUS.error });
+      }
+    }
+
+    if (areThereErrors) {
+      isSubmittingRef.current = false;
+      setFormStatus(FORM_STATUS.error);
+      if (errorSummaryRef.current) {
+        errorSummaryRef.current.focus();
+      }
+      return;
     }
 
     if (areaOfWork.inputChange) {
       inputs.area_of_work = areaOfWork.inputValue;
-    }
-
-    if (title.inputChange) {
-      inputs.desired_title = title.inputValue;
-    }
-
-    if (summary.inputChange) {
-      inputs.summary = summary.inputValue;
     }
 
     if (locationChange) {
@@ -429,6 +493,7 @@ function NewUser() {
           console.error(`${res.mssg} => ${res.err}`);
           setFormStatus(FORM_STATUS.error);
           setHasSubmitError(true);
+          isSubmittingRef.current = false;
           return;
         }
 
@@ -441,6 +506,7 @@ function NewUser() {
     if (results?.error) {
       setFormStatus(FORM_STATUS.error);
       setHasSubmitError(true);
+      isSubmittingRef.current = false;
       return;
     }
 
@@ -607,6 +673,7 @@ function NewUser() {
               <label htmlFor="first-name">First Name:</label>
               <Spacer axis="vertical" size="5" />
               <input
+                ref={firstNameInputRef}
                 type="text"
                 autoComplete="given-name"
                 id="first-name"
@@ -689,6 +756,7 @@ function NewUser() {
               <label htmlFor="title">Title:</label>
               <Spacer axis="vertical" size="5" />
               <input
+                ref={titleInputRef}
                 type="text"
                 autoComplete="organization-title"
                 id="title"
@@ -718,6 +786,7 @@ function NewUser() {
               <label htmlFor="summary">Profile Summary:</label>
               <Spacer axis="vertical" size="5" />
               <textarea
+                ref={summaryInputRef}
                 id="summary"
                 name="profile-summary"
                 maxLength="280"

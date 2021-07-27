@@ -256,7 +256,7 @@ function PersonalInfo() {
     if (firstName.inputChange) {
       if (firstName.inputValue.trim() === "") {
         inputs.first_name = "";
-        firstNameInputRef.current.blur()
+        firstNameInputRef.current.blur();
         setFirstName({
           ...firstName,
           inputValue: "",
@@ -264,12 +264,12 @@ function PersonalInfo() {
         });
       } else if (validateInput("name", firstName.inputValue)) {
         inputs.first_name = firstName.inputValue;
-        firstNameInputRef.current.blur()
+        firstNameInputRef.current.blur();
         setFirstName({ ...firstName, inputStatus: FORM_STATUS.success });
       } else {
         areThereErrors = true;
         setFirstName({ ...firstName, inputStatus: FORM_STATUS.error });
-      }      
+      }
     }
 
     if (lastName.inputChange) {
@@ -295,7 +295,11 @@ function PersonalInfo() {
       if (title.inputValue.trim() === "") {
         inputs.desired_title = "";
         titleInputRef.current.blur();
-        setTitle({ ...title, inputValue: "", inputStatus: FORM_STATUS.success });
+        setTitle({
+          ...title,
+          inputValue: "",
+          inputStatus: FORM_STATUS.success,
+        });
       } else if (validateInput("title", title.inputValue)) {
         inputs.desired_title = title.inputValue;
         titleInputRef.current.blur();
@@ -342,6 +346,7 @@ function PersonalInfo() {
           console.error(`${res.mssg} => ${res.err}`);
           setFormStatus(FORM_STATUS.error);
           setHasSubmitError(true);
+          isSubmittingRef.current = false;
           return;
         }
 
@@ -354,6 +359,7 @@ function PersonalInfo() {
     if (results?.error) {
       setFormStatus(FORM_STATUS.error);
       setHasSubmitError(true);
+      isSubmittingRef.current = false;
       return;
     }
 
