@@ -9,6 +9,7 @@ import ControlButton from "../../../components/forms/buttons/ControlButton";
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
 import { FORM_STATUS } from "../../../global/helpers/variables";
 import { httpClient } from "../../../global/helpers/http-requests";
+import { validateInput } from "../../../global/helpers/validation";
 import Announcer from "../../../global/helpers/announcer";
 import Spacer from "../../../global/helpers/spacer";
 
@@ -25,6 +26,7 @@ function DashboardProjects() {
   const [removedProjUpdate, setRemovedProjUpdate] = useState(true);
   const [idTracker, setIdTracker] = useState(1);
 
+  let isSubmittingRef = useRef(false);
   const errorSummaryRef = React.createRef();
   const editInfoBtnRef = React.createRef();
   const addNewBtnRef = React.createRef();
@@ -339,19 +341,122 @@ function DashboardProjects() {
   async function submitEdit(e) {
     e.preventDefault();
 
-    const formErrors = checkFormErrors();
-    if (formErrors.length > 0 || hasSubmitError) {
+    // check for changes
+    // set loading
+    // validate all inputs
+    // if any errors then err summary
+    // use let element = document.activeElement to find
+    // input that is in focus
+    // unfocus from input
+    // continue with submit
+
+
+    // check for changes
+    const userProjChange = projects.filter(
+      (proj) => Number.isInteger(proj.id) &&
+        (proj.projectChange ||
+          proj.imageChange ||
+          proj.linkChange ||
+          proj.descriptionChange)
+    );
+    
+    if (userProjChange.length === 0 && !projectsChange) {
+      return;
+    }
+
+
+    // set loading
+    setFormStatus(FORM_STATUS.loading);
+    isSubmittingRef.current = true;
+    let areThereErrors = false;
+
+
+    // validate requests
+    // loop thru projects
+    // validate project input and check if it is empty
+    // if any are true then set error to true
+    projects.forEach((proj, projIndex) => {
+      if (proj.projectChange) {
+        if (proj.projectNameInput.trim() === "") {
+          areThereErrors = true;
+          updateProject(projIndex, {
+            projectNameInput: "",
+            projectStatus: FORM_STATUS.error,
+          });
+        } else if (validateInput("name", proj.projectNameInput)) {
+          updateProject(projIndex, {
+            projectStatus: FORM_STATUS.success,
+          });
+        } else {
+          areThereErrors = true;
+          updateProject(projIndex, {
+            projectStatus: FORM_STATUS.error,
+          });
+        }
+      }
+
+      if (proj.linkChange) {
+        if (proj.linkInput.trim() === "") {
+          areThereErrors = true;
+          updateProject(projIndex, {
+            linkInput: "",
+            linkStatus: FORM_STATUS.error,
+          });
+        } else if (validateInput("url", proj.linkInput)) {
+          updateProject(projIndex, {
+            linkStatus: FORM_STATUS.success,
+          });
+        } else {
+          areThereErrors = true;
+          updateProject(projIndex, {
+            linkStatus: FORM_STATUS.error,
+          });
+        }
+      }
+
+      if (proj.descriptionChange) {
+        if (proj.descriptionInput.trim() === "") {
+          areThereErrors = true;
+          updateProject(projIndex, {
+            descriptionInput: "",
+            descriptionStatus: FORM_STATUS.error,
+          });
+        } else if (validateInput("summary", proj.descriptionInput)) {
+          updateProject(projIndex, {
+            descriptionStatus: FORM_STATUS.success,
+          });
+        } else {
+          areThereErrors = true;
+          updateProject(projIndex, {
+            descriptionStatus: FORM_STATUS.error,
+          });
+        }
+      }
+    });
+
+    if (areThereErrors) {
+      isSubmittingRef.current = false;
       setFormStatus(FORM_STATUS.error);
       if (errorSummaryRef.current) {
         errorSummaryRef.current.focus();
       }
       return;
     }
+  
 
-    // check for changes first
-    setFormStatus(FORM_STATUS.loading);
+    // use let element = document.activeElement to find
+    // input that is in focus
+    // unfocus from input
+    let element = document.activeElement
+    // check if el is an input
+    if (element) {
+      element.blur();
+    }
 
+
+    // continue with submit
     let requests = [];
+
 
     if (projectsChange) {
       const newProjRequests = await addNewProjects();
@@ -359,6 +464,7 @@ function DashboardProjects() {
       if (newProjRequests?.error) {
         setFormStatus(FORM_STATUS.error);
         setHasSubmitError(true);
+        isSubmittingRef.current = false;
         return;
       }
 
@@ -366,21 +472,13 @@ function DashboardProjects() {
       requests = [...newProjRequests, ...removeProjRequests];
     }
 
-    const userProjChange = projects.filter(
-      (proj) =>
-        Number.isInteger(proj.id) &&
-        (proj.projectChange ||
-          proj.imageChange ||
-          proj.linkChange ||
-          proj.descriptionChange)
-    );
-
     if (userProjChange.length > 0) {
       const updatedProjRequests = await updateUserProjects();
 
       if (updatedProjRequests?.error) {
         setFormStatus(FORM_STATUS.error);
         setHasSubmitError(true);
+        isSubmittingRef.current = false;
         return;
       }
 
@@ -396,12 +494,14 @@ function DashboardProjects() {
     if (results?.error) {
       setFormStatus(FORM_STATUS.error);
       setHasSubmitError(true);
+      isSubmittingRef.current = false;
       return;
     }
 
     formSuccessWait = setTimeout(() => {
       setFormStatus(FORM_STATUS.idle);
       setHasSubmitError(null);
+      isSubmittingRef.current = false;
     }, 750);
 
     setFormStatus(FORM_STATUS.success);
@@ -586,12 +686,32 @@ function DashboardProjects() {
                     userId={user.id}
                     projectId={proj.id}
                     userProjectName={proj.project_title || ""}
+                    projectName={{
+                      projectNameInput: proj.projectNameInput,
+                      projectStatus: proj.projectStatus,
+                      projectChange: proj.projectChange
+                    }}
                     userProjectImage={proj.project_img || ""}
-                    shouldRemoveImage={proj.shouldRemoveUserImage}
+                    projectImage={{
+                      imageInput: proj.imageInput,
+                      imageChange: proj.imageChange,
+                      shouldRemoveUserImage: proj.shouldRemoveUserImage
+                    }}
                     userProjectLink={proj.link || ""}
+                    projectLink={{
+                      linkInput: proj.linkInput,
+                      linkStatus: proj.linkStatus,
+                      linkChange: proj.linkChange
+                    }}
                     userProjectDescription={proj.project_description || ""}
+                    projectDescription={{
+                      descriptionInput: proj.descriptionInput,
+                      descriptionStatus: proj.descriptionStatus,
+                      descriptionChange: proj.descriptionChange
+                    }}
                     updateProject={updateProject}
                     removeProject={removeProject}
+                    isSubmitting={isSubmittingRef}
                   />
                 </div>
               );
