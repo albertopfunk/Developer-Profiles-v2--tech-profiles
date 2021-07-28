@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import styled from "styled-components";
 import { Helmet } from "react-helmet";
-import { ReactComponent as PageValidation } from "../global/assets/page-validation.svg"
+import { ReactComponent as PageValidation } from "../global/assets/page-validation.svg";
 
 import auth0Client from "./Auth";
 import { httpClient } from "../global/helpers/http-requests";
@@ -60,7 +60,7 @@ class Callback extends Component {
   render() {
     return (
       <>
-      <HeaderSkeleton>
+        <HeaderSkeleton>
           <picture>
             <source
               srcSet="https://res.cloudinary.com/dy5hgr3ht/image/upload/c_scale,h_45/v1594347155/tech-pros-v1-main/tech-profiles-logo.webp"
@@ -83,9 +83,9 @@ class Callback extends Component {
         <MainContainerSkeleton aria-labelledby="main-heading">
           <h1 id="main-heading">Validating Session</h1>
           <Spacer size="20" axis="vertical" />
-          <PageValidation className="page-icon"/>
+          <PageValidation className="page-icon" />
         </MainContainerSkeleton>
-        </>
+      </>
     );
   }
 }

@@ -25,21 +25,20 @@ const ProjectForm = React.forwardRef(
       projectDescription,
       updateProject,
       removeProject,
-      isSubmitting
+      isSubmitting,
     },
     removeBtnRef
   ) => {
-
     function setProjectNameInput(value) {
       if (value === userProjectName) {
         updateProject(projIndex, {
           projectNameInput: value,
           projectChange: false,
-          projectStatus: FORM_STATUS.idle
+          projectStatus: FORM_STATUS.idle,
         });
         return;
       }
-      
+
       updateProject(projIndex, {
         ...projectName,
         projectNameInput: value,
@@ -78,7 +77,7 @@ const ProjectForm = React.forwardRef(
     }
 
     function removeImageInput() {
-      console.log("VOY")
+      console.log("VOY");
       updateProject(projIndex, {
         imageInput: "",
         imageChange: false,
@@ -175,12 +174,16 @@ const ProjectForm = React.forwardRef(
     return (
       <Fieldset>
         <div className="info-heading">
-          <legend>Project: {projectName.projectNameInput || "New Project"}</legend>
+          <legend>
+            Project: {projectName.projectNameInput || "New Project"}
+          </legend>
           <button
             ref={removeBtnRef}
             type="button"
             className="button remove-button"
-            aria-label={`Remove ${projectName.projectNameInput || "New"} Project`}
+            aria-label={`Remove ${
+              projectName.projectNameInput || "New"
+            } Project`}
             onClick={() => removeProject(projIndex)}
           >
             <span className="sr-only">Remove Project</span>
@@ -234,7 +237,9 @@ const ProjectForm = React.forwardRef(
           <ImagePreview
             uploadedImage={projectImage.imageInput}
             removeUploadedImage={removeImageInput}
-            savedUserImage={!projectImage.shouldRemoveUserImage && userProjectImage}
+            savedUserImage={
+              !projectImage.shouldRemoveUserImage && userProjectImage
+            }
             removeSavedUserImage={removeUserImage}
           />
         </div>
@@ -379,7 +384,6 @@ const InputContainer = styled.div`
     font-size: 0.7rem;
   }
 `;
-
 
 ProjectForm.displayName = "ProjectForm";
 

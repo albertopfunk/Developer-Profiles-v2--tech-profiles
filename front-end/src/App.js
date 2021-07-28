@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import { Route, Switch, withRouter } from "react-router-dom";
 import styled from "styled-components";
 import { Helmet } from "react-helmet";
-import { ReactComponent as PageValidation } from "./global/assets/page-validation.svg"
+import { ReactComponent as PageValidation } from "./global/assets/page-validation.svg";
 
 import { GlobalStyles } from "./global/styles/GlobalStyles";
 import FocusReset from "./global/helpers/focus-reset/FocusReset";
@@ -94,7 +94,7 @@ function App({ location }) {
         <MainContainerSkeleton aria-labelledby="main-heading">
           <h1 id="main-heading">Validating Session</h1>
           <Spacer size="20" axis="vertical" />
-          <PageValidation className="page-icon"/>
+          <PageValidation className="page-icon" />
         </MainContainerSkeleton>
       </>
     );

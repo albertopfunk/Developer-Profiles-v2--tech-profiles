@@ -5,7 +5,7 @@ import { Helmet } from "react-helmet";
 import MainHeader from "../../../components/header/MainHeader";
 
 import Spacer from "../../../global/helpers/spacer";
-import { ReactComponent as ErrorPage } from "../../../global/assets/page-error.svg"
+import { ReactComponent as ErrorPage } from "../../../global/assets/page-error.svg";
 
 function PageNotFound() {
   const [headerHeight, setHeaderHeight] = useState(0);
@@ -15,13 +15,17 @@ function PageNotFound() {
       <HeaderContainer>
         <MainHeader setHeaderHeight={setHeaderHeight} />
       </HeaderContainer>
-      <Main id="main-content" aria-labelledby="main-heading" headerHeight={headerHeight}>
+      <Main
+        id="main-content"
+        aria-labelledby="main-heading"
+        headerHeight={headerHeight}
+      >
         <Helmet>
           <title>Not Found • Tech Profiles</title>
         </Helmet>
         <h1 id="main-heading">Page Not Found!</h1>
         <Spacer size="20" axis="vertical" />
-        <ErrorPage className="page-icon"/>
+        <ErrorPage className="page-icon" />
       </Main>
     </>
   );

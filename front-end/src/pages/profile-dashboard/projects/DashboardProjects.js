@@ -350,26 +350,24 @@ function DashboardProjects() {
     // unfocus from input
     // continue with submit
 
-
     // check for changes
     const userProjChange = projects.filter(
-      (proj) => Number.isInteger(proj.id) &&
+      (proj) =>
+        Number.isInteger(proj.id) &&
         (proj.projectChange ||
           proj.imageChange ||
           proj.linkChange ||
           proj.descriptionChange)
     );
-    
+
     if (userProjChange.length === 0 && !projectsChange) {
       return;
     }
-
 
     // set loading
     setFormStatus(FORM_STATUS.loading);
     isSubmittingRef.current = true;
     let areThereErrors = false;
-
 
     // validate requests
     // loop thru projects
@@ -442,21 +440,18 @@ function DashboardProjects() {
       }
       return;
     }
-  
 
     // use let element = document.activeElement to find
     // input that is in focus
     // unfocus from input
-    let element = document.activeElement
+    let element = document.activeElement;
     // check if el is an input
     if (element) {
       element.blur();
     }
 
-
     // continue with submit
     let requests = [];
-
 
     if (projectsChange) {
       const newProjRequests = await addNewProjects();
@@ -689,25 +684,25 @@ function DashboardProjects() {
                     projectName={{
                       projectNameInput: proj.projectNameInput,
                       projectStatus: proj.projectStatus,
-                      projectChange: proj.projectChange
+                      projectChange: proj.projectChange,
                     }}
                     userProjectImage={proj.project_img || ""}
                     projectImage={{
                       imageInput: proj.imageInput,
                       imageChange: proj.imageChange,
-                      shouldRemoveUserImage: proj.shouldRemoveUserImage
+                      shouldRemoveUserImage: proj.shouldRemoveUserImage,
                     }}
                     userProjectLink={proj.link || ""}
                     projectLink={{
                       linkInput: proj.linkInput,
                       linkStatus: proj.linkStatus,
-                      linkChange: proj.linkChange
+                      linkChange: proj.linkChange,
                     }}
                     userProjectDescription={proj.project_description || ""}
                     projectDescription={{
                       descriptionInput: proj.descriptionInput,
                       descriptionStatus: proj.descriptionStatus,
-                      descriptionChange: proj.descriptionChange
+                      descriptionChange: proj.descriptionChange,
                     }}
                     updateProject={updateProject}
                     removeProject={removeProject}
