@@ -12,6 +12,7 @@ import Announcer from "../../../global/helpers/announcer";
 import Spacer from "../../../global/helpers/spacer";
 
 import ExperienceForm from "../../../components/forms/user-extras/ExperienceForm";
+import { validateInput } from "../../../global/helpers/validation";
 
 let formSuccessWait;
 function DashboardExperience() {
@@ -27,6 +28,7 @@ function DashboardExperience() {
   const [removedExpUpdate, setRemovedExpUpdate] = useState(true);
   const [idTracker, setIdTracker] = useState(1);
 
+  let isSubmittingRef = useRef(false);
   const errorSummaryRef = React.createRef();
   const editInfoBtnRef = React.createRef();
   const addNewBtnRef = React.createRef();
@@ -118,10 +120,15 @@ function DashboardExperience() {
     }
 
     return {
+      userFromMonth: fromMonth,
       fromMonth,
+      userFromYear: fromYear,
       fromYear,
+      userToMonth: toMonth,
       toMonth,
+      userToYear: toYear,
       toYear,
+      userToPresent: toPresent,
       toPresent,
     };
   }
@@ -146,7 +153,14 @@ function DashboardExperience() {
         descriptionStatus: FORM_STATUS.idle,
         descriptionChange: false,
 
-        dateChange: false,
+        fromMonthStatus: FORM_STATUS.idle,
+        fromMonthChange: false,
+        fromYearStatus: FORM_STATUS.idle,
+        fromYearChange: false,
+        toMonthStatus: FORM_STATUS.idle,
+        toMonthChange: false,
+        toYearStatus: FORM_STATUS.idle,
+        toYearChange: false,
         ...datesObj,
       };
     });
@@ -184,11 +198,18 @@ function DashboardExperience() {
         descriptionChange: false,
 
         fromMonth: "",
+        fromMonthStatus: FORM_STATUS.idle,
+        fromMonthChange: false,
         fromYear: "",
+        fromYearStatus: FORM_STATUS.idle,
+        fromYearChange: false,
         toMonth: "",
+        toMonthStatus: FORM_STATUS.idle,
+        toMonthChange: false,
         toYear: "",
+        toYearStatus: FORM_STATUS.idle,
+        toYearChange: false,
         toPresent: "",
-        dateChange: false,
       },
     ];
 
@@ -202,10 +223,16 @@ function DashboardExperience() {
     const newExperience = [...experience];
     newExperience.splice(expIndex, 1);
     removeBtnRefs.current = newExperience.map(() => React.createRef());
+
+    if (newExperience.length === user.experience.length) {
+      setExperienceChange(false);
+    } else {
+      setExperienceChange(true);
+    }
+
     setExperience(newExperience);
     setRemovedExpIndex(expIndex);
     setRemovedExpUpdate(!removedExpUpdate);
-    setExperienceChange(true);
   }
 
   function checkFormErrors() {
@@ -292,7 +319,10 @@ function DashboardExperience() {
           exp.companyChange ||
           exp.titleChange ||
           exp.descriptionChange ||
-          exp.dateChange
+          exp.fromMonthChange ||
+          exp.fromYearChange ||
+          exp.toMonthChange ||
+          exp.toYearChange
         ) {
           const data = {};
           if (exp.companyChange) {
@@ -307,7 +337,12 @@ function DashboardExperience() {
             data.job_description = exp.descriptionInput;
           }
 
-          if (exp.dateChange) {
+          if (
+            exp.fromMonthChange ||
+            exp.fromYearChange ||
+            exp.toMonthChange ||
+            exp.toYearChange
+          ) {
             const fromDates = `${exp.fromMonth} ${exp.fromYear}`;
             const toDates = exp.toPresent
               ? "Present"
@@ -330,10 +365,127 @@ function DashboardExperience() {
 
   async function submitEdit(e) {
     e.preventDefault();
-    let requests = [];
 
-    const formErrors = checkFormErrors();
-    if (formErrors.length > 0 || hasSubmitError) {
+    // check for changes
+    const userExpChange = experience.filter(
+      (exp) =>
+        Number.isInteger(exp.id) &&
+        (exp.companyChange ||
+          exp.titleChange ||
+          exp.descriptionChange ||
+          exp.fromMonthChange ||
+          exp.fromYearChange ||
+          exp.toMonthChange ||
+          exp.toYearChange)
+    );
+
+
+    if (userExpChange.length === 0 && !experienceChange) {
+      return;
+    }
+
+
+    // set loading
+    setFormStatus(FORM_STATUS.loading);
+    isSubmittingRef.current = true;
+
+
+    // validate experience
+    const currentExperience = [...experience];
+    let areThereErrors = false;
+
+
+    experience.forEach((exp, expIndex) => {
+      const newState = {};
+
+
+      if (exp.companyChange || exp.companyNameInput.trim() === "") {
+        if (exp.companyNameInput.trim() === "") {
+          areThereErrors = true;
+          newState.companyNameInput = "";
+          newState.companyStatus = FORM_STATUS.error;
+        } else if (validateInput("title", exp.companyNameInput)) {
+          newState.companyStatus = FORM_STATUS.success;
+        } else {
+          areThereErrors = true;
+          newState.companyStatus = FORM_STATUS.error;
+        }
+      }
+
+      if (exp.titleChange || exp.titleInput.trim() === "") {
+        if (exp.titleInput.trim() === "") {
+          areThereErrors = true;
+          newState.titleInput = "";
+          newState.titleStatus = FORM_STATUS.error;
+        } else if (validateInput("title", exp.titleInput)) {
+          newState.titleStatus = FORM_STATUS.success;
+        } else {
+          areThereErrors = true;
+          newState.titleStatus = FORM_STATUS.error;
+        }
+      }
+
+      if (exp.descriptionChange || exp.descriptionInput.trim() === "") {
+        if (exp.descriptionInput.trim() === "") {
+          areThereErrors = true;
+          newState.descriptionInput = "";
+          newState.descriptionStatus = FORM_STATUS.error;
+        } else if (validateInput("summary", exp.descriptionInput)) {
+          newState.descriptionStatus = FORM_STATUS.success;
+        } else {
+          areThereErrors = true;
+          newState.descriptionStatus = FORM_STATUS.error;
+        }
+      }
+
+      if (exp.fromMonthChange || !exp.fromMonth) {
+        if (!exp.fromMonth) {
+          areThereErrors = true;
+          newState.fromMonthStatus = FORM_STATUS.error;
+        } else {
+          newState.fromMonthStatus = FORM_STATUS.success;
+        }
+      }
+
+      if (exp.fromYearChange || !exp.fromYear) {
+        if (!exp.fromMonth) {
+          areThereErrors = true;
+          newState.fromYearStatus = FORM_STATUS.error;
+        } else {
+          newState.fromYearStatus = FORM_STATUS.success;
+        }
+      }
+
+      if (!exp.toPresent) {
+        if (exp.toMonthChange || !exp.toMonth) {
+          if (!exp.toMonth) {
+            areThereErrors = true;
+            newState.toMonthStatus = FORM_STATUS.error;
+          } else {
+            newState.toMonthStatus = FORM_STATUS.success;
+          }
+        }
+
+        if (exp.toYearChange || !exp.toYear) {
+          if (!exp.toYear) {
+            areThereErrors = true;
+            newState.toYearStatus = FORM_STATUS.error;
+          } else {
+            newState.toYearStatus = FORM_STATUS.success;
+          }
+        }
+      }
+
+      currentExperience.splice(expIndex, 1, {
+        ...currentExperience[expIndex],
+        ...newState,
+      });
+    });
+
+    setExperience(currentExperience);
+
+    if (areThereErrors) {
+      isSubmittingRef.current = false;
       setFormStatus(FORM_STATUS.error);
       if (errorSummaryRef.current) {
         errorSummaryRef.current.focus();
@@ -341,20 +493,20 @@ function DashboardExperience() {
       return;
     }
 
+    // unfocus from input
+    let element = document.activeElement;
+    if (element.dataset.input) {
+      element.blur();
+    }
+
+    // create requests
+    let requests = [];
+
     if (experienceChange) {
       const newExpRequests = addNewExperience();
       const removeExpRequests = removeUserExperience();
       requests = [...newExpRequests, ...removeExpRequests];
     }
-
-    const userExpChange = experience.filter(
-      (exp) =>
-        Number.isInteger(exp.id) &&
-        (exp.companyChange ||
-          exp.titleChange ||
-          exp.descriptionChange ||
-          exp.dateChange)
-    );
 
     if (userExpChange.length > 0) {
       const updatedExpRequests = updateUserExperience();
@@ -362,20 +514,26 @@ function DashboardExperience() {
     }
 
     if (requests.length === 0) {
+      setFormStatus(FORM_STATUS.error);
+      setHasSubmitError(true);
+      isSubmittingRef.current = false;
       return;
     }
 
+    // submit
     const results = await addUserExtras(requests);
 
     if (results?.error) {
       setFormStatus(FORM_STATUS.error);
       setHasSubmitError(true);
+      isSubmittingRef.current = false;
       return;
     }
 
     formSuccessWait = setTimeout(() => {
       setFormStatus(FORM_STATUS.idle);
       setHasSubmitError(null);
+      isSubmittingRef.current = false;
     }, 750);
 
     setFormStatus(FORM_STATUS.success);
@@ -514,13 +672,13 @@ function DashboardExperience() {
                       </li>
                     ) : null}
 
-                    {exp.toMonth === "" ? (
+                    {!exp.toPresent && exp.toMonth === "" ? (
                       <li>
                         <a href={`#to-month-${exp.id}`}>To Month Error</a>
                       </li>
                     ) : null}
 
-                    {exp.toYear === "" ? (
+                    {!exp.toPresent && exp.toYear === "" ? (
                       <li>
                         <a href={`#to-year-${exp.id}`}>To Year Error</a>
                       </li>
@@ -578,15 +736,46 @@ function DashboardExperience() {
                     userId={exp.id}
                     currentYear={currentYear}
                     userCompanyName={exp.company_name || ""}
+                    company={{
+                      companyNameInput: exp.companyNameInput,
+                      companyStatus: exp.companyStatus,
+                      companyChange: exp.companyChange
+                    }}
                     userJobTitle={exp.job_title || ""}
-                    userFromMonth={exp.fromMonth}
-                    userFromYear={exp.fromYear}
-                    userToMonth={exp.toMonth}
-                    userToYear={exp.toYear}
-                    userToPresent={exp.toPresent}
+                    title={{
+                      titleInput: exp.titleInput,
+                      titleStatus: exp.titleStatus,
+                      titleChange: exp.titleChange
+                    }}
+                    userFromMonth={exp.userFromMonth}
+                    userFromYear={exp.userFromYear}
+                    userToMonth={exp.userToMonth}
+                    userToYear={exp.userToYear}
+                    userToPresent={exp.userToPresent}
+                    dates={{
+                      fromMonth: exp.fromMonth,
+                      fromMonthStatus: exp.fromMonthStatus,
+                      fromMonthChange: exp.fromMonthChange,
+                      fromYear: exp.fromYear,
+                      fromYearStatus: exp.fromYearStatus,
+                      fromYearChange: exp.fromYearChange,
+                      toMonth: exp.toMonth,
+                      toMonthStatus: exp.toMonthStatus,
+                      toMonthChange: exp.toMonthChange,
+                      toYear: exp.toYear,
+                      toYearStatus: exp.toYearStatus,
+                      toYearChange: exp.toYearChange,
+                      toPresent: exp.toPresent,
+                    }}
                     userDescription={exp.job_description || ""}
+                    description={{
+                      descriptionInput: exp.descriptionInput,
+                      descriptionStatus: exp.descriptionStatus,
+                      descriptionChange: exp.descriptionChange,
+                    }}
                     updateExperience={updateExperience}
                     removeExperience={removeExperience}
+                    isSubmitting={isSubmittingRef}
                   />
                 </div>
               );

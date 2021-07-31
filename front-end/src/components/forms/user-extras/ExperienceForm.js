@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import { ReactComponent as RemoveIcon } from "../../../global/assets/dashboard-remove.svg";
 
@@ -13,345 +13,322 @@ const ExperienceForm = React.forwardRef(
       currentYear,
       userId,
       userCompanyName,
+      company,
       userJobTitle,
+      title,
       userFromYear,
       userFromMonth,
       userToYear,
       userToMonth,
       userToPresent,
+      dates,
       userDescription,
+      description,
       updateExperience,
       removeExperience,
+      isSubmitting,
     },
     removeBtnRef
   ) => {
-    const [company, setCompany] = useState({
-      companyNameInput: userCompanyName,
-      companyChange: false,
-      companyStatus: FORM_STATUS.idle,
-    });
-
-    const [title, setTitle] = useState({
-      titleInput: userJobTitle,
-      titleChange: false,
-      titleStatus: FORM_STATUS.idle,
-    });
-
-    const [dates, setDates] = useState({
-      fromYear: userFromYear,
-      fromYearStatus: FORM_STATUS.idle,
-      fromMonth: userFromMonth,
-      fromMonthStatus: FORM_STATUS.idle,
-      toYear: userToYear,
-      toYearStatus: FORM_STATUS.idle,
-      toMonth: userToMonth,
-      toMonthStatus: FORM_STATUS.idle,
-      toPresent: userToPresent,
-      dateChange: false,
-    });
-
-    const [description, setDescription] = useState({
-      descriptionInput: userDescription,
-      descriptionChange: false,
-      descriptionStatus: FORM_STATUS.idle,
-    });
-
     let presentRef = React.createRef();
 
     function setCompanyInput(value) {
-      setCompany({
-        ...company,
+      if (value === userCompanyName) {
+        updateExperience(expIndex, {
+          companyNameInput: value,
+          companyChange: false,
+          companyStatus: FORM_STATUS.idle,
+        });
+        return;
+      }
+
+      updateExperience(expIndex, {
         companyNameInput: value,
         companyChange: true,
       });
     }
 
     function validateCompany(value) {
-      let newState;
-
+      if (isSubmitting.current) return;
+      if (!company.companyChange && value) return;
       if (value.trim() === "") {
-        newState = {
-          ...company,
+        updateExperience(expIndex, {
           companyNameInput: "",
           companyStatus: FORM_STATUS.error,
-        };
-        setCompany(newState);
-        updateExperience(expIndex, newState);
-        return;
-      }
-
-      if (value === userCompanyName) {
-        newState = {
-          companyNameInput: value,
-          companyChange: false,
-          companyStatus: FORM_STATUS.idle,
-        };
-        setCompany(newState);
-        updateExperience(expIndex, newState);
-        return;
-      }
-
-      if (validateInput("name", value)) {
-        newState = {
-          ...company,
+        });
+      } else if (validateInput("title", value)) {
+        updateExperience(expIndex, {
           companyStatus: FORM_STATUS.success,
-        };
+        });
       } else {
-        newState = {
-          ...company,
+        updateExperience(expIndex, {
           companyStatus: FORM_STATUS.error,
-        };
+        });
       }
-      setCompany(newState);
-      updateExperience(expIndex, newState);
     }
 
     function setTitleInput(value) {
-      setTitle({
-        ...title,
+      if (value === userJobTitle) {
+        updateExperience(expIndex, {
+          titleInput: value,
+          titleChange: false,
+          titleStatus: FORM_STATUS.idle,
+        });
+        return;
+      }
+
+      updateExperience(expIndex, {
         titleInput: value,
         titleChange: true,
       });
     }
 
     function validateTitle(value) {
-      let newState;
-
+      if (isSubmitting.current) return;
+      if (!title.titleChange && value) return;
       if (value.trim() === "") {
-        newState = {
-          ...title,
+        updateExperience(expIndex, {
           titleInput: "",
           titleStatus: FORM_STATUS.error,
-        };
-        setTitle(newState);
-        updateExperience(expIndex, newState);
-        return;
-      }
-
-      if (value === userJobTitle) {
-        newState = {
-          titleInput: value,
-          titleChange: false,
-          titleStatus: FORM_STATUS.idle,
-        };
-        setTitle(newState);
-        updateExperience(expIndex, newState);
-        return;
-      }
-
-      if (validateInput("title", value)) {
-        newState = {
-          ...title,
+        });
+      } else if (validateInput("title", value)) {
+        updateExperience(expIndex, {
           titleStatus: FORM_STATUS.success,
-        };
+        });
       } else {
-        newState = {
-          ...title,
+        updateExperience(expIndex, {
           titleStatus: FORM_STATUS.error,
-        };
+        });
       }
-      setTitle(newState);
-      updateExperience(expIndex, newState);
     }
 
     function setFromMonthDate(value) {
-      setDates({
-        ...dates,
+      if (value === userFromMonth) {
+        updateExperience(expIndex, {
+          fromMonth: value,
+          fromMonthStatus: FORM_STATUS.idle,
+          fromMonthChange: false,
+        });
+        return;
+      }
+
+      updateExperience(expIndex, {
         fromMonth: value,
-        dateChange: true,
+        fromMonthChange: true,
       });
     }
 
     function validateFromMonthDate(value) {
-      if (!dates.dateChange && value) return;
+      if (isSubmitting.current) return;
+      if (!dates.fromMonthChange && value) return;
+
       if (value === "") {
-        setDates({
-          ...dates,
+        updateExperience(expIndex, {
           fromMonthStatus: FORM_STATUS.error,
-          fromMonth: value,
         });
       } else {
-        setDates({
-          ...dates,
+        updateExperience(expIndex, {
           fromMonthStatus: FORM_STATUS.success,
-          fromMonth: value,
         });
       }
-      updateExperience(expIndex, {
-        dateChange: true,
-        fromMonth: value,
-      });
     }
 
     function setFromYearDate(value) {
-      setDates({
-        ...dates,
+      if (value === userFromYear) {
+        updateExperience(expIndex, {
+          fromYear: value,
+          fromYearStatus: FORM_STATUS.idle,
+          fromYearChange: false,
+        });
+        return;
+      }
+
+      updateExperience(expIndex, {
         fromYear: value,
-        dateChange: true,
+        fromYearChange: true,
       });
     }
 
     function validateFromYearDate(value) {
-      if (!dates.dateChange && value) return;
+      if (isSubmitting.current) return;
+      if (!dates.fromYearChange && value) return;
+
       if (value === "") {
-        setDates({
-          ...dates,
+        updateExperience(expIndex, {
           fromYearStatus: FORM_STATUS.error,
-          fromYear: value,
         });
       } else {
-        setDates({
-          ...dates,
+        updateExperience(expIndex, {
           fromYearStatus: FORM_STATUS.success,
-          fromYear: value,
         });
       }
-      updateExperience(expIndex, {
-        dateChange: true,
-        fromYear: value,
-      });
     }
 
     function setToMonthDate(value) {
-      setDates({
-        ...dates,
+      if (value === userToMonth) {
+        updateExperience(expIndex, {
+          toMonth: value,
+          toMonthStatus: FORM_STATUS.idle,
+          toMonthChange: false,
+        });
+        return;
+      }
+
+      updateExperience(expIndex, {
         toMonth: value,
-        dateChange: true,
+        toMonthChange: true,
       });
     }
 
     function validateToMonthDate(value) {
-      if (!dates.dateChange && value) return;
+      if (isSubmitting.current) return;
+      if (!dates.toMonthChange && value) return;
+
       if (value === "") {
-        setDates({
-          ...dates,
+        updateExperience(expIndex, {
           toMonthStatus: FORM_STATUS.error,
-          toMonth: value,
         });
       } else {
-        setDates({
-          ...dates,
+        updateExperience(expIndex, {
           toMonthStatus: FORM_STATUS.success,
-          toMonth: value,
         });
       }
-      updateExperience(expIndex, {
-        dateChange: true,
-        toMonth: value,
-      });
     }
 
     function setToYearDate(value) {
-      setDates({
-        ...dates,
+      if (value === userToYear) {
+        updateExperience(expIndex, {
+          toYear: value,
+          toYearStatus: FORM_STATUS.idle,
+          toYearChange: false,
+        });
+        return;
+      }
+
+      updateExperience(expIndex, {
         toYear: value,
-        dateChange: true,
+        toYearChange: true,
       });
     }
 
     function validateToYearDate(value) {
-      if (!dates.dateChange && value) return;
+      if (isSubmitting.current) return;
+      if (!dates.toYearChange && value) return;
+
       if (value === "") {
-        setDates({
-          ...dates,
+        updateExperience(expIndex, {
           toYearStatus: FORM_STATUS.error,
-          toYear: value,
         });
       } else {
-        setDates({
-          ...dates,
+        updateExperience(expIndex, {
           toYearStatus: FORM_STATUS.success,
-          toYear: value,
         });
       }
-      updateExperience(expIndex, {
-        dateChange: true,
-        toYear: value,
-      });
     }
 
     function setToPresentDate() {
-      let toMonthStatus = FORM_STATUS.success;
-      let toYearStatus = FORM_STATUS.success;
-
-      if (!dates.toMonth) {
-        toMonthStatus = FORM_STATUS.error;
-      }
-      if (!dates.toYear) {
-        toYearStatus = FORM_STATUS.error;
-      }
-
       if (presentRef.current.checked) {
+        if (userToPresent === "Present") {
+          updateExperience(expIndex, {
+            toPresent: "Present",
+            toMonthStatus: FORM_STATUS.idle,
+            toMonthChange: false,
+            toYearStatus: FORM_STATUS.idle,
+            toYearChange: false,
+          });
+          return;
+        }
+
         updateExperience(expIndex, {
-          dateChange: true,
           toPresent: "Present",
-        });
-        setDates({
-          ...dates,
-          dateChange: true,
           toMonthStatus: FORM_STATUS.success,
+          toMonthChange: true,
           toYearStatus: FORM_STATUS.success,
+          toYearChange: true,
         });
       } else {
+        if (userToPresent === "") {
+          updateExperience(expIndex, {
+            toPresent: "",
+            toMonthStatus: FORM_STATUS.idle,
+            toMonthChange: false,
+            toYearStatus: FORM_STATUS.idle,
+            toYearChange: false,
+          });
+          return;
+        }
+
+        // validate to-dates
+        let toMonthStatus;
+        let toMonthChange;
+        let toYearStatus;
+        let toYearChange;
+
+        if (dates.toMonth && dates.toMonth === userToMonth) {
+          toMonthStatus = FORM_STATUS.idle;
+          toMonthChange = false;
+        } else if (!dates.toMonth) {
+          toMonthStatus = FORM_STATUS.error;
+          toMonthChange = true;
+        } else {
+          toMonthStatus = FORM_STATUS.success;
+          toMonthChange = true;
+        }
+
+        if (dates.toYear && dates.toYear === userToYear) {
+          toYearStatus = FORM_STATUS.idle;
+          toYearChange = false;
+        } else if (!dates.toYear) {
+          toYearStatus = FORM_STATUS.error;
+          toYearChange = true;
+        } else {
+          toYearStatus = FORM_STATUS.success;
+          toYearChange = true;
+        }
+
         updateExperience(expIndex, {
-          dateChange: true,
           toPresent: "",
-        });
-        setDates({
-          ...dates,
-          dateChange: true,
           toMonthStatus,
+          toMonthChange,
           toYearStatus,
+          toYearChange,
         });
       }
     }
 
     function setDescriptionInput(value) {
-      setDescription({
-        ...description,
+      if (value === userDescription) {
+        updateExperience(expIndex, {
+          descriptionInput: value,
+          descriptionChange: false,
+          descriptionStatus: FORM_STATUS.idle,
+        });
+        return;
+      }
+
+      updateExperience(expIndex, {
         descriptionInput: value,
         descriptionChange: true,
       });
     }
 
     function validateDescription(value) {
-      let newState;
-
+      if (isSubmitting.current) return;
+      if (!description.descriptionChange && value) return;
       if (value.trim() === "") {
-        newState = {
-          ...description,
+        updateExperience(expIndex, {
           descriptionInput: "",
           descriptionStatus: FORM_STATUS.error,
-        };
-        setDescription(newState);
-        updateExperience(expIndex, newState);
-        return;
-      }
-
-      if (value === userDescription) {
-        newState = {
-          descriptionInput: value,
-          descriptionChange: false,
-          descriptionStatus: FORM_STATUS.idle,
-        };
-        setDescription(newState);
-        updateExperience(expIndex, newState);
-        return;
-      }
-
-      if (validateInput("summary", value)) {
-        newState = {
-          ...description,
+        });
+      } else if (validateInput("summary", value)) {
+        updateExperience(expIndex, {
           descriptionStatus: FORM_STATUS.success,
-        };
+        });
       } else {
-        newState = {
-          ...description,
+        updateExperience(expIndex, {
           descriptionStatus: FORM_STATUS.error,
-        };
+        });
       }
-      setDescription(newState);
-      updateExperience(expIndex, newState);
     }
 
     return (
@@ -384,6 +361,7 @@ const ExperienceForm = React.forwardRef(
             type="text"
             autoComplete="organization"
             id={`company-${userId}`}
+            data-input
             name="company"
             className={`input ${
               company.companyStatus === FORM_STATUS.error ? "input-err" : ""
@@ -417,6 +395,7 @@ const ExperienceForm = React.forwardRef(
             type="text"
             autoComplete="organization-title"
             id={`title-${userId}`}
+            data-input
             name="title"
             className={`input ${
               title.titleStatus === FORM_STATUS.error ? "input-err" : ""
@@ -534,7 +513,7 @@ const ExperienceForm = React.forwardRef(
             <label htmlFor={`to-month-${userId}`}>To Month:</label>
             <Spacer axis="vertical" size="5" />
             <select
-              disabled={userToPresent === "Present"}
+              disabled={dates.toPresent === "Present"}
               name="to-month"
               id={`to-month-${userId}`}
               defaultValue={userToMonth}
@@ -578,7 +557,7 @@ const ExperienceForm = React.forwardRef(
             <label htmlFor={`to-year-${userId}`}>To Year:</label>
             <Spacer axis="vertical" size="5" />
             <select
-              disabled={userToPresent === "Present"}
+              disabled={dates.toPresent === "Present"}
               name="to-year"
               id={`to-year-${userId}`}
               defaultValue={userToYear}
@@ -617,7 +596,7 @@ const ExperienceForm = React.forwardRef(
               id={`to-present-${userId}`}
               name="to-present"
               onChange={setToPresentDate}
-              checked={userToPresent === "Present"}
+              checked={dates.toPresent === "Present"}
             />
             <label htmlFor={`present-${userId}`}>Present</label>
           </div>
@@ -629,6 +608,7 @@ const ExperienceForm = React.forwardRef(
           <input
             type="text"
             id={`description-${userId}`}
+            data-input
             name="description"
             className={`input ${
               description.descriptionStatus === FORM_STATUS.error
@@ -736,5 +716,7 @@ const InputContainer = styled.div`
     font-size: 0.7rem;
   }
 `;
+
+ExperienceForm.displayName = "ExperienceForm";
 
 export default ExperienceForm;

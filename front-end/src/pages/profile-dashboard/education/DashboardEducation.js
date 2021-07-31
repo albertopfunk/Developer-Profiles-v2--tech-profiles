@@ -8,6 +8,7 @@ import ControlButton from "../../../components/forms/buttons/ControlButton";
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
 import useCurrentYear from "../../../global/helpers/hooks/useCurrentYear";
 import { FORM_STATUS } from "../../../global/helpers/variables";
+import { validateInput } from "../../../global/helpers/validation";
 import Announcer from "../../../global/helpers/announcer";
 import Spacer from "../../../global/helpers/spacer";
 
@@ -27,6 +28,7 @@ function DashboardEducation() {
   const [removedEduUpdate, setRemovedEduUpdate] = useState(true);
   const [idTracker, setIdTracker] = useState(1);
 
+  let isSubmittingRef = useRef(false);
   const errorSummaryRef = React.createRef();
   const editInfoBtnRef = React.createRef();
   const addNewBtnRef = React.createRef();
@@ -98,31 +100,36 @@ function DashboardEducation() {
   }
 
   function splitDates(dates) {
-    const schoolDatesArr = dates.split(" - ");
-    const schoolFromDate = schoolDatesArr[0];
-    const schoolToDate = schoolDatesArr[1];
-    const schoolFromMonth = schoolFromDate.split(" ")[0];
-    const schoolFromYear = schoolFromDate.split(" ")[1];
+    const datesArr = dates.split(" - ");
+    const fromDate = datesArr[0];
+    const toDate = datesArr[1];
+    const fromMonth = fromDate.split(" ")[0];
+    const fromYear = fromDate.split(" ")[1];
 
-    let schoolToMonth;
-    let schoolToYear;
-    let schoolToPresent;
-    if (schoolToDate === "Present") {
-      schoolToPresent = "Present";
-      schoolToMonth = "";
-      schoolToYear = "";
+    let toMonth;
+    let toYear;
+    let toPresent;
+    if (toDate === "Present") {
+      toPresent = "Present";
+      toMonth = "";
+      toYear = "";
     } else {
-      schoolToPresent = "";
-      schoolToMonth = schoolToDate.split(" ")[0];
-      schoolToYear = schoolToDate.split(" ")[1];
+      toPresent = "";
+      toMonth = toDate.split(" ")[0];
+      toYear = toDate.split(" ")[1];
     }
 
     return {
-      schoolFromMonth,
-      schoolFromYear,
-      schoolToMonth,
-      schoolToYear,
-      schoolToPresent,
+      userFromMonth: fromMonth,
+      fromMonth,
+      userFromYear: fromYear,
+      fromYear,
+      userToMonth: toMonth,
+      toMonth,
+      userToYear: toYear,
+      toYear,
+      userToPresent: toPresent,
+      toPresent,
     };
   }
 
@@ -130,7 +137,7 @@ function DashboardEducation() {
     setFormStatus(FORM_STATUS.active);
 
     const updatedUserEducation = user.education.map((edu) => {
-      const schoolDatesObj = splitDates(edu.school_dates);
+      const datesObj = splitDates(edu.school_dates);
 
       return {
         ...edu,
@@ -146,8 +153,15 @@ function DashboardEducation() {
         descriptionStatus: FORM_STATUS.idle,
         descriptionChange: false,
 
-        schoolDateChange: false,
-        ...schoolDatesObj,
+        fromMonthStatus: FORM_STATUS.idle,
+        fromMonthChange: false,
+        fromYearStatus: FORM_STATUS.idle,
+        fromYearChange: false,
+        toMonthStatus: FORM_STATUS.idle,
+        toMonthChange: false,
+        toYearStatus: FORM_STATUS.idle,
+        toYearChange: false,
+        ...datesObj,
       };
     });
 
@@ -183,12 +197,19 @@ function DashboardEducation() {
         descriptionStatus: FORM_STATUS.idle,
         descriptionChange: false,
 
-        schoolFromMonth: "",
-        schoolFromYear: "",
-        schoolToMonth: "",
-        schoolToYear: "",
-        schoolToPresent: "",
-        schoolDateChange: false,
+        fromMonth: "",
+        fromMonthStatus: FORM_STATUS.idle,
+        fromMonthChange: false,
+        fromYear: "",
+        fromYearStatus: FORM_STATUS.idle,
+        fromYearChange: false,
+        toMonth: "",
+        toMonthStatus: FORM_STATUS.idle,
+        toMonthChange: false,
+        toYear: "",
+        toYearStatus: FORM_STATUS.idle,
+        toYearChange: false,
+        toPresent: "",
       },
     ];
 
@@ -202,10 +223,16 @@ function DashboardEducation() {
     const newEducation = [...education];
     newEducation.splice(eduIndex, 1);
     removeBtnRefs.current = newEducation.map(() => React.createRef());
+
+    if (newEducation.length === user.education.length) {
+      setEducationChange(false);
+    } else {
+      setEducationChange(true);
+    }
+
     setEducation(newEducation);
     setRemovedEduIndex(eduIndex);
     setRemovedEduUpdate(!removedEduUpdate);
-    setEducationChange(true);
   }
 
   function checkFormErrors() {
@@ -218,16 +245,13 @@ function DashboardEducation() {
         edu.fieldOfStudyStatus === FORM_STATUS.error ||
         edu.descriptionInput.trim() === "" ||
         edu.descriptionStatus === FORM_STATUS.error ||
-        edu.schoolFromMonth === "" ||
-        edu.schoolFromYear === ""
+        edu.fromMonth === "" ||
+        edu.fromYear === ""
       ) {
         isErrors = true;
       }
 
-      if (
-        edu.schoolToPresent === "" &&
-        (edu.schoolToMonth === "" || edu.schoolToYear === "")
-      ) {
+      if (edu.toPresent === "" && (edu.toMonth === "" || edu.toYear === "")) {
         isErrors = true;
       }
 
@@ -240,10 +264,10 @@ function DashboardEducation() {
 
     education.forEach((edu) => {
       if (!Number.isInteger(edu.id)) {
-        const fromDates = `${edu.schoolFromMonth} ${edu.schoolFromYear}`;
-        const toDates = edu.schoolToPresent
+        const fromDates = `${edu.fromMonth} ${edu.fromYear}`;
+        const toDates = edu.toPresent
           ? "Present"
-          : `${edu.schoolToMonth} ${edu.schoolToYear}`;
+          : `${edu.toMonth} ${edu.toYear}`;
         const school_dates = `${fromDates} - ${toDates}`;
 
         requests.push({
@@ -294,7 +318,10 @@ function DashboardEducation() {
           edu.schoolChange ||
           edu.fieldOfStudyChange ||
           edu.descriptionChange ||
-          edu.schoolDateChange
+          edu.fromMonthChange ||
+          edu.fromYearChange ||
+          edu.toMonthChange ||
+          edu.toYearChange
         ) {
           const data = {};
           if (edu.schoolChange) {
@@ -309,11 +336,16 @@ function DashboardEducation() {
             data.education_description = edu.descriptionInput;
           }
 
-          if (edu.schoolDateChange) {
-            const fromDates = `${edu.schoolFromMonth} ${edu.schoolFromYear}`;
-            const toDates = edu.schoolToPresent
+          if (
+            edu.fromMonthChange ||
+            edu.fromYearChange ||
+            edu.toMonthChange ||
+            edu.toYearChange
+          ) {
+            const fromDates = `${edu.fromMonth} ${edu.fromYear}`;
+            const toDates = edu.toPresent
               ? "Present"
-              : `${edu.schoolToMonth} ${edu.schoolToYear}`;
+              : `${edu.toMonth} ${edu.toYear}`;
             data.school_dates = `${fromDates} - ${toDates}`;
           }
 
@@ -331,10 +363,122 @@ function DashboardEducation() {
 
   async function submitEdit(e) {
     e.preventDefault();
-    let requests = [];
 
-    const formErrors = checkFormErrors();
-    if (formErrors.length > 0 || hasSubmitError) {
+    // check for changes
+    const userEduChange = education.filter(
+      (edu) =>
+        Number.isInteger(edu.id) &&
+        (edu.schoolChange ||
+          edu.fieldOfStudyChange ||
+          edu.descriptionChange ||
+          edu.fromMonthChange ||
+          edu.fromYearChange ||
+          edu.toMonthChange ||
+          edu.toYearChange)
+    );
+
+    if (userEduChange.length === 0 && !educationChange) {
+      return;
+    }
+
+    // set loading
+    setFormStatus(FORM_STATUS.loading);
+    isSubmittingRef.current = true;
+
+    // validate education
+    const currentEducation = [...education];
+    let areThereErrors = false;
+
+    education.forEach((edu, eduIndex) => {
+      const newState = {};
+
+      if (edu.schoolChange || edu.schoolNameInput.trim() === "") {
+        if (edu.schoolNameInput.trim() === "") {
+          areThereErrors = true;
+          newState.schoolNameInput = "";
+          newState.schoolStatus = FORM_STATUS.error;
+        } else if (validateInput("title", edu.schoolNameInput)) {
+          newState.schoolStatus = FORM_STATUS.success;
+        } else {
+          areThereErrors = true;
+          newState.schoolStatus = FORM_STATUS.error;
+        }
+      }
+
+      if (edu.fieldOfStudyChange || edu.fieldOfStudyInput.trim() === "") {
+        if (edu.fieldOfStudyInput.trim() === "") {
+          areThereErrors = true;
+          newState.fieldOfStudyInput = "";
+          newState.fieldOfStudyStatus = FORM_STATUS.error;
+        } else if (validateInput("title", edu.fieldOfStudyInput)) {
+          newState.fieldOfStudyStatus = FORM_STATUS.success;
+        } else {
+          areThereErrors = true;
+          newState.fieldOfStudyStatus = FORM_STATUS.error;
+        }
+      }
+
+      if (edu.descriptionChange || edu.descriptionInput.trim() === "") {
+        if (edu.descriptionInput.trim() === "") {
+          areThereErrors = true;
+          newState.descriptionInput = "";
+          newState.descriptionStatus = FORM_STATUS.error;
+        } else if (validateInput("summary", edu.descriptionInput)) {
+          newState.descriptionStatus = FORM_STATUS.success;
+        } else {
+          areThereErrors = true;
+          newState.descriptionStatus = FORM_STATUS.error;
+        }
+      }
+
+      if (edu.fromMonthChange || !edu.fromMonth) {
+        if (!edu.fromMonth) {
+          areThereErrors = true;
+          newState.fromMonthStatus = FORM_STATUS.error;
+        } else {
+          newState.fromMonthStatus = FORM_STATUS.success;
+        }
+      }
+
+      if (edu.fromYearChange || !edu.fromYear) {
+        if (!edu.fromMonth) {
+          areThereErrors = true;
+          newState.fromYearStatus = FORM_STATUS.error;
+        } else {
+          newState.fromYearStatus = FORM_STATUS.success;
+        }
+      }
+
+      if (!edu.toPresent) {
+        if (edu.toMonthChange || !edu.toMonth) {
+          if (!edu.toMonth) {
+            areThereErrors = true;
+            newState.toMonthStatus = FORM_STATUS.error;
+          } else {
+            newState.toMonthStatus = FORM_STATUS.success;
+          }
+        }
+
+        if (edu.toYearChange || !edu.toYear) {
+          if (!edu.toYear) {
+            areThereErrors = true;
+            newState.toYearStatus = FORM_STATUS.error;
+          } else {
+            newState.toYearStatus = FORM_STATUS.success;
+          }
+        }
+      }
+
+      currentEducation.splice(eduIndex, 1, {
+        ...currentEducation[eduIndex],
+        ...newState,
+      });
+    });
+
+    setEducation(currentEducation);
+
+    if (areThereErrors) {
+      isSubmittingRef.current = false;
       setFormStatus(FORM_STATUS.error);
       if (errorSummaryRef.current) {
         errorSummaryRef.current.focus();
@@ -342,20 +486,20 @@ function DashboardEducation() {
       return;
     }
 
+    // unfocus from input
+    let element = document.activeElement;
+    if (element.dataset.input) {
+      element.blur();
+    }
+
+    // create requests
+    let requests = [];
+
     if (educationChange) {
       const newEduRequests = addNewEducation();
       const removeEduRequests = removeUserEducation();
       requests = [...newEduRequests, ...removeEduRequests];
     }
-
-    const userEduChange = education.filter(
-      (edu) =>
-        Number.isInteger(edu.id) &&
-        (edu.schoolChange ||
-          edu.fieldOfStudyChange ||
-          edu.descriptionChange ||
-          edu.schoolDateChange)
-    );
 
     if (userEduChange.length > 0) {
       const updatedEduRequests = updateUserEducation();
@@ -363,20 +507,26 @@ function DashboardEducation() {
     }
 
     if (requests.length === 0) {
+      setFormStatus(FORM_STATUS.error);
+      setHasSubmitError(true);
+      isSubmittingRef.current = false;
       return;
     }
 
+    // submit
     const results = await addUserExtras(requests);
 
     if (results?.error) {
       setFormStatus(FORM_STATUS.error);
       setHasSubmitError(true);
+      isSubmittingRef.current = false;
       return;
     }
 
     formSuccessWait = setTimeout(() => {
       setFormStatus(FORM_STATUS.idle);
       setHasSubmitError(null);
+      isSubmittingRef.current = false;
     }, 750);
 
     setFormStatus(FORM_STATUS.success);
@@ -503,25 +653,25 @@ function DashboardEducation() {
                       </li>
                     ) : null}
 
-                    {edu.schoolFromMonth === "" ? (
+                    {edu.fromMonth === "" ? (
                       <li>
                         <a href={`#from-month-${edu.id}`}>From Month Error</a>
                       </li>
                     ) : null}
 
-                    {edu.schoolFromYear === "" ? (
+                    {edu.fromYear === "" ? (
                       <li>
                         <a href={`#from-year-${edu.id}`}>From Year Error</a>
                       </li>
                     ) : null}
 
-                    {edu.schoolToMonth === "" ? (
+                    {!edu.toPresent && edu.toMonth === "" ? (
                       <li>
                         <a href={`#to-month-${edu.id}`}>To Month Error</a>
                       </li>
                     ) : null}
 
-                    {edu.schoolToYear === "" ? (
+                    {!edu.toPresent && edu.toYear === "" ? (
                       <li>
                         <a href={`#to-year-${edu.id}`}>To Year Error</a>
                       </li>
@@ -579,15 +729,46 @@ function DashboardEducation() {
                     userId={edu.id}
                     currentYear={currentYear}
                     userSchool={edu.school || ""}
+                    school={{
+                      schoolNameInput: edu.schoolNameInput,
+                      schoolStatus: edu.schoolStatus,
+                      schoolChange: edu.schoolChange,
+                    }}
                     userFieldOfStudy={edu.field_of_study || ""}
-                    userFromMonth={edu.schoolFromMonth}
-                    userFromYear={edu.schoolFromYear}
-                    userToMonth={edu.schoolToMonth}
-                    userToYear={edu.schoolToYear}
-                    userToPresent={edu.schoolToPresent}
+                    fieldOfStudy={{
+                      fieldOfStudyInput: edu.fieldOfStudyInput,
+                      fieldOfStudyStatus: edu.fieldOfStudyStatus,
+                      fieldOfStudyChange: edu.fieldOfStudyChange,
+                    }}
+                    userFromMonth={edu.userFromMonth}
+                    userFromYear={edu.userFromYear}
+                    userToMonth={edu.userToMonth}
+                    userToYear={edu.userToYear}
+                    userToPresent={edu.userToPresent}
+                    dates={{
+                      fromMonth: edu.fromMonth,
+                      fromMonthStatus: edu.fromMonthStatus,
+                      fromMonthChange: edu.fromMonthChange,
+                      fromYear: edu.fromYear,
+                      fromYearStatus: edu.fromYearStatus,
+                      fromYearChange: edu.fromYearChange,
+                      toMonth: edu.toMonth,
+                      toMonthStatus: edu.toMonthStatus,
+                      toMonthChange: edu.toMonthChange,
+                      toYear: edu.toYear,
+                      toYearStatus: edu.toYearStatus,
+                      toYearChange: edu.toYearChange,
+                      toPresent: edu.toPresent,
+                    }}
                     userDescription={edu.education_description || ""}
+                    description={{
+                      descriptionInput: edu.descriptionInput,
+                      descriptionStatus: edu.descriptionStatus,
+                      descriptionChange: edu.descriptionChange,
+                    }}
                     updateEducation={updateEducation}
                     removeEducation={removeEducation}
+                    isSubmitting={isSubmittingRef}
                   />
                 </div>
               );
