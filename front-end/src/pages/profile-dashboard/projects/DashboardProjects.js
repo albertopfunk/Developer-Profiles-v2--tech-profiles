@@ -169,10 +169,16 @@ function DashboardProjects() {
     const newProjects = [...projects];
     newProjects.splice(projIndex, 1);
     removeBtnRefs.current = newProjects.map(() => React.createRef());
+
+    if (newProjects.length === user.projects.length) {
+      setProjectsChange(false);
+    } else {
+      setProjectsChange(true);
+    }
+
     setProjects(newProjects);
     setRemovedProjIndex(projIndex);
     setRemovedProjUpdate(!removedProjUpdate);
-    setProjectsChange(true);
   }
 
   function checkFormErrors() {
@@ -342,15 +348,6 @@ function DashboardProjects() {
     e.preventDefault();
 
     // check for changes
-    // set loading
-    // validate all inputs
-    // if any errors then err summary
-    // use let element = document.activeElement to find
-    // input that is in focus
-    // unfocus from input
-    // continue with submit
-
-    // check for changes
     const userProjChange = projects.filter(
       (proj) =>
         Number.isInteger(proj.id) &&
@@ -367,70 +364,60 @@ function DashboardProjects() {
     // set loading
     setFormStatus(FORM_STATUS.loading);
     isSubmittingRef.current = true;
+
+    // validate projects
+    const currentProjects = [...projects];
     let areThereErrors = false;
 
-    // validate requests
-    // loop thru projects
-    // validate project input and check if it is empty
-    // if any are true then set error to true
     projects.forEach((proj, projIndex) => {
-      if (proj.projectChange) {
+      const newState = {};
+
+      if (proj.projectChange || proj.projectNameInput.trim() === "") {
         if (proj.projectNameInput.trim() === "") {
           areThereErrors = true;
-          updateProject(projIndex, {
-            projectNameInput: "",
-            projectStatus: FORM_STATUS.error,
-          });
+          newState.projectNameInput = "";
+          newState.projectStatus = FORM_STATUS.error;
         } else if (validateInput("name", proj.projectNameInput)) {
-          updateProject(projIndex, {
-            projectStatus: FORM_STATUS.success,
-          });
+          newState.projectStatus = FORM_STATUS.success;
         } else {
           areThereErrors = true;
-          updateProject(projIndex, {
-            projectStatus: FORM_STATUS.error,
-          });
+          newState.projectStatus = FORM_STATUS.error;
         }
       }
 
-      if (proj.linkChange) {
+      if (proj.linkChange || proj.linkInput.trim() === "") {
         if (proj.linkInput.trim() === "") {
           areThereErrors = true;
-          updateProject(projIndex, {
-            linkInput: "",
-            linkStatus: FORM_STATUS.error,
-          });
+          newState.linkInput = "";
+          newState.linkStatus = FORM_STATUS.error;
         } else if (validateInput("url", proj.linkInput)) {
-          updateProject(projIndex, {
-            linkStatus: FORM_STATUS.success,
-          });
+          newState.linkStatus = FORM_STATUS.success;
         } else {
           areThereErrors = true;
-          updateProject(projIndex, {
-            linkStatus: FORM_STATUS.error,
-          });
+          newState.linkStatus = FORM_STATUS.error;
         }
       }
 
-      if (proj.descriptionChange) {
+      if (proj.descriptionChange || proj.descriptionInput.trim() === "") {
         if (proj.descriptionInput.trim() === "") {
           areThereErrors = true;
-          updateProject(projIndex, {
-            descriptionInput: "",
-            descriptionStatus: FORM_STATUS.error,
-          });
+          newState.descriptionInput = "";
+          newState.descriptionStatus = FORM_STATUS.error;
         } else if (validateInput("summary", proj.descriptionInput)) {
-          updateProject(projIndex, {
-            descriptionStatus: FORM_STATUS.success,
-          });
+          newState.descriptionStatus = FORM_STATUS.success;
         } else {
           areThereErrors = true;
-          updateProject(projIndex, {
-            descriptionStatus: FORM_STATUS.error,
-          });
+          newState.descriptionStatus = FORM_STATUS.error;
         }
       }
+
+      currentProjects.splice(projIndex, 1, {
+        ...currentProjects[projIndex],
+        ...newState,
+      });
     });
+
+    setProjects(currentProjects);
 
     if (areThereErrors) {
       isSubmittingRef.current = false;
@@ -441,16 +428,13 @@ function DashboardProjects() {
       return;
     }
 
-    // use let element = document.activeElement to find
-    // input that is in focus
     // unfocus from input
     let element = document.activeElement;
-    // check if el is an input
-    if (element) {
+    if (element.dataset.input) {
       element.blur();
     }
 
-    // continue with submit
+    // create requests
     let requests = [];
 
     if (projectsChange) {
@@ -481,9 +465,13 @@ function DashboardProjects() {
     }
 
     if (requests.length === 0) {
+      setFormStatus(FORM_STATUS.error);
+      setHasSubmitError(true);
+      isSubmittingRef.current = false;
       return;
     }
 
+    // submit
     const results = await addUserExtras(requests);
 
     if (results?.error) {

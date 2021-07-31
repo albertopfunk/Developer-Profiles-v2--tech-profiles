@@ -40,7 +40,6 @@ const ProjectForm = React.forwardRef(
       }
 
       updateProject(projIndex, {
-        ...projectName,
         projectNameInput: value,
         projectChange: true,
       });
@@ -48,21 +47,18 @@ const ProjectForm = React.forwardRef(
 
     function validateProjectName(value) {
       if (isSubmitting.current) return;
-      if (!projectName.projectChange) return;
+      if (!projectName.projectChange && value) return;
       if (value.trim() === "") {
         updateProject(projIndex, {
-          ...projectName,
           projectNameInput: "",
           projectStatus: FORM_STATUS.error,
         });
       } else if (validateInput("name", value)) {
         updateProject(projIndex, {
-          ...projectName,
           projectStatus: FORM_STATUS.success,
         });
       } else {
         updateProject(projIndex, {
-          ...projectName,
           projectStatus: FORM_STATUS.error,
         });
       }
@@ -70,14 +66,12 @@ const ProjectForm = React.forwardRef(
 
     function setImageInput(image) {
       updateProject(projIndex, {
-        ...projectImage,
         imageInput: image,
         imageChange: true,
       });
     }
 
     function removeImageInput() {
-      console.log("VOY");
       updateProject(projIndex, {
         imageInput: "",
         imageChange: false,
@@ -87,7 +81,6 @@ const ProjectForm = React.forwardRef(
 
     function removeUserImage() {
       updateProject(projIndex, {
-        ...projectImage,
         imageChange: true,
         shouldRemoveUserImage: true,
       });
@@ -104,7 +97,6 @@ const ProjectForm = React.forwardRef(
       }
 
       updateProject(projIndex, {
-        ...projectLink,
         linkInput: value,
         linkChange: true,
       });
@@ -112,21 +104,18 @@ const ProjectForm = React.forwardRef(
 
     function validateLink(value) {
       if (isSubmitting.current) return;
-      if (!projectLink.linkChange) return;
+      if (!projectLink.linkChange && value) return;
       if (value.trim() === "") {
         updateProject(projIndex, {
-          ...projectLink,
           linkInput: "",
           linkStatus: FORM_STATUS.error,
         });
       } else if (validateInput("url", value)) {
         updateProject(projIndex, {
-          ...projectLink,
           linkStatus: FORM_STATUS.success,
         });
       } else {
         updateProject(projIndex, {
-          ...projectLink,
           linkStatus: FORM_STATUS.error,
         });
       }
@@ -143,7 +132,6 @@ const ProjectForm = React.forwardRef(
       }
 
       updateProject(projIndex, {
-        ...projectDescription,
         descriptionInput: value,
         descriptionChange: true,
       });
@@ -151,21 +139,18 @@ const ProjectForm = React.forwardRef(
 
     function validateDescription(value) {
       if (isSubmitting.current) return;
-      if (!projectDescription.descriptionChange) return;
+      if (!projectDescription.descriptionChange && value) return;
       if (value.trim() === "") {
         updateProject(projIndex, {
-          ...projectDescription,
           descriptionInput: "",
           descriptionStatus: FORM_STATUS.error,
         });
       } else if (validateInput("summary", value)) {
         updateProject(projIndex, {
-          ...projectDescription,
           descriptionStatus: FORM_STATUS.success,
         });
       } else {
         updateProject(projIndex, {
-          ...projectDescription,
           descriptionStatus: FORM_STATUS.error,
         });
       }
@@ -200,6 +185,7 @@ const ProjectForm = React.forwardRef(
             type="text"
             autoComplete="organization"
             id={`project-${projectId}`}
+            data-input
             name="project"
             className={`input ${
               projectName.projectStatus === FORM_STATUS.error ? "input-err" : ""
@@ -252,6 +238,7 @@ const ProjectForm = React.forwardRef(
             type="text"
             autoComplete="url"
             id={`link-${projectId}`}
+            data-input
             name="link"
             className={`input ${
               projectLink.linkStatus === FORM_STATUS.error ? "input-err" : ""
@@ -284,6 +271,7 @@ const ProjectForm = React.forwardRef(
           <input
             type="text"
             id={`description-${projectId}`}
+            data-input
             name="description"
             className={`input ${
               projectDescription.descriptionStatus === FORM_STATUS.error
