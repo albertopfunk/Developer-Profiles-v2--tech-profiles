@@ -1,15 +1,20 @@
 import React, { Component } from "react";
 import styled from "styled-components";
+import { ReactComponent as ConstructionPageIcon } from "../../../global/assets/page-construction-3.svg"
+import { ReactComponent as ErrorPageIcon } from "../../../global/assets/page-error.svg"
+
 import { httpClient } from "../../../global/helpers/http-requests";
+import { USER_TYPE } from "../../../global/helpers/variables";
+import Spacer from "../../../global/helpers/spacer";
 
 import UserForm from "./UserForm";
 import SubscriberForm from "./SubscriberForm";
 import CustomerForm from "./CustomerForm";
-import { USER_TYPE } from "../../../global/helpers/variables";
 
 class CheckoutContainer extends Component {
   state = {
     userType: "",
+    userInfo: {}
   };
 
   componentDidMount() {
@@ -48,6 +53,26 @@ class CheckoutContainer extends Component {
       return;
     }
 
+    this.getSubInfo();
+  };
+
+  getSubInfo = async () => {
+    const [res, err] = await httpClient("POST", "/api/get-subscription", {
+      sub: this.props.stripeSubId,
+    });
+
+    if (err) {
+      console.error(`${res.mssg} => ${res.err}`);
+      this.setUserType(USER_TYPE.checkoutError);
+      return;
+    }
+
+    if (res.data.status !== "active") {
+      this.setUserType(USER_TYPE.inactiveSubscriber);
+      return;
+    }
+
+    this.setState({userInfo: res.data});
     this.setUserType(USER_TYPE.subscriber);
   };
 
@@ -57,7 +82,13 @@ class CheckoutContainer extends Component {
 
   render() {
     if (!this.state.userType) {
-      return <h1>Skeleton Loader...</h1>;
+      return (
+        <CheckoutFallback>
+          <h1>Setting up Billing Information</h1>
+          <Spacer size="20" axis="vertical" />
+          <ConstructionPageIcon className="page-icon" />
+        </CheckoutFallback>
+      );
     }
 
     if (this.state.userType === USER_TYPE.user) {
@@ -73,10 +104,14 @@ class CheckoutContainer extends Component {
     if (this.state.userType === USER_TYPE.subscriber) {
       return (
         <SubscriberForm
-          isMainContent={this.props.isMainContent}
-          editProfile={this.props.editProfile}
           stripeSubId={this.props.stripeSubId}
-          setUserType={this.setUserType}
+          status={this.state.userInfo.status}
+          nickName={this.state.userInfo.nickName}
+          type={this.state.userInfo.type}
+          created={this.state.userInfo.created}
+          startDate={this.state.userInfo.startDate}
+          dueDate={this.state.userInfo.dueDate}
+          editProfile={this.props.editProfile}
         />
       );
     }
@@ -95,22 +130,27 @@ class CheckoutContainer extends Component {
     if (this.state.userType === USER_TYPE.inactiveSubscriber) {
       return (
         <CheckoutFallback>
-          <h2 id="billing-info">INACTIVE</h2>
+          <h2 id="billing-info">Your Subscription is Invactive</h2>
+          <Spacer size="20" axis="vertical" />
+          <ErrorPageIcon className="page-icon" />
         </CheckoutFallback>
       );
     }
 
     return (
       <CheckoutFallback>
-        <h2 id="billing-info">UNKNOWN ERROR</h2>
+        <h2 id="billing-info">Billing Error</h2>
+        <Spacer size="20" axis="vertical" />
+        <ErrorPageIcon className="page-icon" />
       </CheckoutFallback>
     );
   }
 }
 
 const CheckoutFallback = styled.div`
+  text-align: center;
   width: 100%;
-  max-width: 500px;
-`;
+  max-width: 750px;
+  `;
 
 export default CheckoutContainer;

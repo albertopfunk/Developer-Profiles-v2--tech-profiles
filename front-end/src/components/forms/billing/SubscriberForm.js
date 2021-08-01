@@ -6,42 +6,12 @@ import ControlButton from "../buttons/ControlButton";
 import { httpClient } from "../../../global/helpers/http-requests";
 import {
   SUBSCRIPTION_STATUS,
-  USER_TYPE,
 } from "../../../global/helpers/variables";
 import Spacer from "../../../global/helpers/spacer";
 
 class SubscriberForm extends Component {
   state = {
-    subStatus: SUBSCRIPTION_STATUS.idle,
-    status: "",
-    nickName: "",
-    type: "",
-    created: "",
-    startDate: "",
-    dueDate: "",
-  };
-
-  componentDidMount() {
-    this.getSubInfo();
-  }
-
-  getSubInfo = async () => {
-    const [res, err] = await httpClient("POST", "/api/get-subscription", {
-      sub: this.props.stripeSubId,
-    });
-
-    if (err) {
-      console.error(`${res.mssg} => ${res.err}`);
-      this.props.setUserType(USER_TYPE.checkoutError);
-      return;
-    }
-
-    if (res.data.status !== "active") {
-      this.props.setUserType(USER_TYPE.inactiveSubscriber);
-      return;
-    }
-
-    this.setState(res.data);
+    subStatus: SUBSCRIPTION_STATUS.idle
   };
 
   cancelSub = async (e) => {
@@ -82,30 +52,30 @@ class SubscriberForm extends Component {
             <div className="flex-col">
               <div>
                 <dt>Name</dt>
-                <dd>{this.state.nickName}</dd>
+                <dd>{this.props.nickName}</dd>
               </div>
               <div>
                 <dt>Type</dt>
-                <dd>{this.state.type}</dd>
+                <dd>{this.props.type}</dd>
               </div>
               <div>
                 <dt>Date Created</dt>
-                <dd>{this.state.created}</dd>
+                <dd>{this.props.created}</dd>
               </div>
             </div>
 
             <div className="flex-col">
               <div>
                 <dt>Due Date</dt>
-                <dd>{this.state.dueDate}</dd>
+                <dd>{this.props.dueDate}</dd>
               </div>
               <div>
                 <dt>Start Date</dt>
-                <dd>{this.state.startDate}</dd>
+                <dd>{this.props.startDate}</dd>
               </div>
               <div>
                 <dt>Status</dt>
-                <dd>{this.state.status}</dd>
+                <dd>{this.props.status}</dd>
               </div>
             </div>
           </div>
