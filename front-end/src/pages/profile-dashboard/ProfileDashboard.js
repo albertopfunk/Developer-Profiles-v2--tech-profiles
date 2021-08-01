@@ -20,7 +20,7 @@ import { ReactComponent as Projects } from "../../global/assets/dashboard-projec
 import { ReactComponent as Education } from "../../global/assets/dashboard-education.svg";
 import { ReactComponent as Experience } from "../../global/assets/dashboard-experience.svg";
 import { ReactComponent as CreditCard } from "../../global/assets/dashboard-credit-card.svg";
-import { ReactComponent as SkeletonSection } from "../../global/assets/page-construction.svg";
+import { ReactComponent as ConstructionPageIcon } from "../../global/assets/page-construction-2.svg";
 
 import MainHeader from "../../components/header/MainHeader";
 import UserCard from "../../components/user-cards/user-card/UserCard";
@@ -33,26 +33,13 @@ import DashboardProjects from "./projects/DashboardProjects";
 import DashboardEducation from "./education/DashboardEducation";
 import DashboardExperience from "./experience/DashboardExperience";
 import DashboardBilling from "./billing/DashboardBilling";
+import DashboardNotFound from "../error-pages/404/DashboardNotFound";
 
 import { httpClient } from "../../global/helpers/http-requests";
 import { ProfileContext } from "../../global/context/user-profile/ProfileContext";
 import auth0Client from "../../auth/Auth";
 import Announcer from "../../global/helpers/announcer";
 import Spacer from "../../global/helpers/spacer";
-
-/*
-
-<focusreset>
-  <mainHeader/>
-  <pageNav/>
-  <MainContent>
-    <sections>
-      stuff
-    </sections>
-  </MainContent>
-</focusreset>
-
-*/
 
 function ProfileDashboard() {
   let { path, url } = useRouteMatch();
@@ -170,7 +157,7 @@ function ProfileDashboard() {
       case "billing":
         return "Billing";
       default:
-        return "";
+        return "Not Found";
     }
   }
 
@@ -322,7 +309,7 @@ function ProfileDashboard() {
             <div className="skeleton-section">
               <h1>Loading User</h1>
               <Spacer size="20" axis="vertical" />
-              <SkeletonSection className="page-icon" />
+              <ConstructionPageIcon className="page-icon" />
             </div>
           ) : (
             <>
@@ -374,6 +361,10 @@ function ProfileDashboard() {
 
                       <Route path={`${path}/billing`}>
                         <DashboardBilling />
+                      </Route>
+
+                      <Route>
+                        <DashboardNotFound />
                       </Route>
                     </Switch>
                   </ProfileContext.Provider>
