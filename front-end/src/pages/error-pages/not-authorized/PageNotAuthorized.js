@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { Helmet } from "react-helmet";
-
-import MainHeader from "../../../components/header/MainHeader";
+import { ReactComponent as NotAuthorizedPageIcon } from "../../../global/assets/page-not-authorized.svg";
 
 import Spacer from "../../../global/helpers/spacer";
-import { ReactComponent as ErrorPage } from "../../../global/assets/page-error.svg";
+
+import MainHeader from "../../../components/header/MainHeader";
 
 function PageNotAuthorized() {
   const [headerHeight, setHeaderHeight] = useState(0);
@@ -25,7 +25,7 @@ function PageNotAuthorized() {
         </Helmet>
         <h1 id="main-heading">Not Authorized, Please Log In!</h1>
         <Spacer size="20" axis="vertical" />
-        <ErrorPage className="page-icon" />
+        <NotAuthorizedPageIcon className="page-icon" />
       </Main>
     </>
   );

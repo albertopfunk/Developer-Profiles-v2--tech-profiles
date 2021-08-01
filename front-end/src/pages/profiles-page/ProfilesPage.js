@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Helmet } from "react-helmet";
-import { ReactComponent as ErrorSection } from "../../global/assets/page-section-error.svg";
-import { ReactComponent as SkeletonSection } from "../../global/assets/page-construction.svg";
+import { ReactComponent as ErrorPageIcon } from "../../global/assets/page-error.svg";
+import { ReactComponent as ConstructionPageIcon } from "../../global/assets/page-construction.svg";
 
 import { httpClient } from "../../global/helpers/http-requests";
 import { PROFILES_STATUS } from "../../global/helpers/variables";
@@ -209,7 +209,7 @@ function ProfilesPage() {
             >
               <h2 id="profiles-heading">Loading Profiles</h2>
               <Spacer size="20" axis="vertical" />
-              <SkeletonSection className="page-icon" />
+              <ConstructionPageIcon className="page-icon" />
             </div>
           ) : null}
 
@@ -222,7 +222,7 @@ function ProfilesPage() {
             >
               <h2 id="profiles-heading">Page Error</h2>
               <Spacer size="20" axis="vertical" />
-              <ErrorSection className="page-icon" />
+              <ErrorPageIcon className="page-icon" />
             </div>
           ) : null}
 

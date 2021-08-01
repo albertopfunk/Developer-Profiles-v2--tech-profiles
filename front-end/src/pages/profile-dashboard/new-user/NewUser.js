@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect, useRef } from "react";
 import { Link, useHistory } from "react-router-dom";
-import { ReactComponent as WelcomeIntro } from "../../../global/assets/dashboard-intro.svg";
+import { ReactComponent as WelcomePageIcon } from "../../../global/assets/page-welcome.svg";
 import { ReactComponent as CloseIcon } from "../../../global/assets/dashboard-close.svg";
 import styled from "styled-components";
 
@@ -526,7 +526,7 @@ function NewUser() {
         <h2 id="welcome-heading">Welcome, {user.first_name || "Newcomer"}!</h2>
         <Spacer axis="vertical" size="5" />
         <div className="image-container">
-          <WelcomeIntro />
+          <WelcomePageIcon />
         </div>
         <Spacer axis="vertical" size="15" />
         <div className="controls-container">
