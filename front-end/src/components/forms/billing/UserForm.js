@@ -84,7 +84,7 @@ class UserForm extends Component {
         <FormContainer aria-labelledby="form-section">
           <h3 id="form-section">Choose Subscription</h3>
           <Spacer axis="vertical" size="15" />
-          <form className="subscriptions-form">
+          <form id="submit-form" className="subscriptions-form">
             <div className="subscriptions-container">
               <div className="subscription">
                 <div className="input">

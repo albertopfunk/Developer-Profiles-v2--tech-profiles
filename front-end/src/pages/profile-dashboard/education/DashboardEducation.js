@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
+import { ReactComponent as CloseIcon } from "../../../global/assets/dashboard-close.svg";
 import { ReactComponent as EditIcon } from "../../../global/assets/dashboard-edit.svg";
 import { ReactComponent as AddIcon } from "../../../global/assets/dashboard-add.svg";
 
@@ -554,7 +555,7 @@ function DashboardEducation() {
             </span>
           </button>
         </div>
-        <Spacer axis="vertical" size="10" />
+        <Spacer axis="vertical" size="30" />
         <div className="grid-container">
           {user.education.length > 0 ? (
             user.education.map((edu) => (
@@ -609,97 +610,127 @@ function DashboardEducation() {
 
   return (
     <FormSection aria-labelledby="edit-information-heading">
-      <h2 id="edit-information-heading">Edit Info</h2>
-      <Spacer axis="vertical" size="15" />
+      <div className="edit-info-header">
+        <h2 id="edit-information-heading">Edit Info</h2>
+        <button
+          disabled={
+            formStatus === FORM_STATUS.loading ||
+            formStatus === FORM_STATUS.success
+          }
+          type="reset"
+          form="education-form"
+          className="button reset-button"
+          onClick={resetForm}
+          onKeyDown={(e) => formFocusAction(e, FORM_STATUS.idle)}
+        >
+          <span className="sr-only">cancel</span>
+          <span className="button-icon">
+            <CloseIcon className="icon" />
+          </span>
+        </button>
+      </div>
+
       {formStatus === FORM_STATUS.error ? (
-        <div ref={errorSummaryRef} tabIndex="-1">
-          <h3 id="error-heading">Errors in Submission</h3>
-          <>
-            <strong>
-              Please address the following errors and re-submit the form:
-            </strong>
-
-            {hasSubmitError ? (
-              <div>
-                <h4>Submit Error</h4>
-                <p>Error submitting form, please try again</p>
-              </div>
-            ) : null}
-
-            {formErrors.length > 0 ? (
-              formErrors.map((edu) => (
-                <div key={edu.id}>
-                  <h4>{`Current "${
-                    edu.schoolNameInput || "New Education"
-                  }" Errors`}</h4>
-                  <ul
-                    aria-label={`current ${
-                      edu.schoolNameInput || "new education"
-                    } errors`}
-                  >
-                    {edu.schoolNameInput.trim() === "" ||
-                    edu.schoolStatus === FORM_STATUS.error ? (
-                      <li>
-                        <a href={`#school-${edu.id}`}>School Error</a>
-                      </li>
-                    ) : null}
-
-                    {edu.fieldOfStudyInput.trim() === "" ||
-                    edu.fieldOfStudyStatus === FORM_STATUS.error ? (
-                      <li>
-                        <a href={`#field-of-study-${edu.id}`}>
-                          Field of Study Error
-                        </a>
-                      </li>
-                    ) : null}
-
-                    {edu.fromMonth === "" ? (
-                      <li>
-                        <a href={`#from-month-${edu.id}`}>From Month Error</a>
-                      </li>
-                    ) : null}
-
-                    {edu.fromYear === "" ? (
-                      <li>
-                        <a href={`#from-year-${edu.id}`}>From Year Error</a>
-                      </li>
-                    ) : null}
-
-                    {!edu.toPresent && edu.toMonth === "" ? (
-                      <li>
-                        <a href={`#to-month-${edu.id}`}>To Month Error</a>
-                      </li>
-                    ) : null}
-
-                    {!edu.toPresent && edu.toYear === "" ? (
-                      <li>
-                        <a href={`#to-year-${edu.id}`}>To Year Error</a>
-                      </li>
-                    ) : null}
-
-                    {edu.descriptionInput.trim() === "" ||
-                    edu.descriptionStatus === FORM_STATUS.error ? (
-                      <li>
-                        <a href={`#description-${edu.id}`}>Description Error</a>
-                      </li>
-                    ) : null}
-                  </ul>
+        <>
+          <Spacer axis="vertical" size="30" />
+          <div ref={errorSummaryRef} tabIndex="-1" className="error-summary">
+            <h3 id="error-heading">Errors in Submission</h3>
+            <Spacer axis="vertical" size="10" />
+            <>
+              <strong>
+                Please address the following errors and re-submit the form:
+              </strong>
+              <Spacer axis="vertical" size="10" />
+              {hasSubmitError ? (
+                <div>
+                  <h4>Submit Error</h4>
+                  <p>Error submitting form, please try again</p>
                 </div>
-              ))
-            ) : (
-              <>
-                <p>No Errors, ready to submit</p>
-                <Announcer
-                  announcement="No Errors, ready to submit"
-                  ariaId="no-errors-announcer"
-                  ariaLive="polite"
-                />
-              </>
-            )}
-          </>
-        </div>
+              ) : null}
+              <Spacer axis="vertical" size="10" />
+              {formErrors.length > 0 ? (
+                formErrors.map((edu, index) => (
+                  <div key={edu.id}>
+                    {index !== 0 ? <Spacer axis="vertical" size="15" /> : null}
+                    <div>
+                      <h4>{`Current "${
+                        edu.schoolNameInput || "New Education"
+                      }" Errors`}</h4>
+                      <Spacer axis="vertical" size="5" />
+                      <ul
+                        aria-label={`current ${
+                          edu.schoolNameInput || "new education"
+                        } errors`}
+                      >
+                        {edu.schoolNameInput.trim() === "" ||
+                        edu.schoolStatus === FORM_STATUS.error ? (
+                          <li>
+                            <a href={`#school-${edu.id}`}>School Error</a>
+                          </li>
+                        ) : null}
+                        <Spacer axis="vertical" size="5" />
+                        {edu.fieldOfStudyInput.trim() === "" ||
+                        edu.fieldOfStudyStatus === FORM_STATUS.error ? (
+                          <li>
+                            <a href={`#field-of-study-${edu.id}`}>
+                              Field of Study Error
+                            </a>
+                          </li>
+                        ) : null}
+                        <Spacer axis="vertical" size="5" />
+                        {edu.fromMonth === "" ? (
+                          <li>
+                            <a href={`#from-month-${edu.id}`}>
+                              From Month Error
+                            </a>
+                          </li>
+                        ) : null}
+                        <Spacer axis="vertical" size="5" />
+                        {edu.fromYear === "" ? (
+                          <li>
+                            <a href={`#from-year-${edu.id}`}>From Year Error</a>
+                          </li>
+                        ) : null}
+                        <Spacer axis="vertical" size="5" />
+                        {!edu.toPresent && edu.toMonth === "" ? (
+                          <li>
+                            <a href={`#to-month-${edu.id}`}>To Month Error</a>
+                          </li>
+                        ) : null}
+                        <Spacer axis="vertical" size="5" />
+                        {!edu.toPresent && edu.toYear === "" ? (
+                          <li>
+                            <a href={`#to-year-${edu.id}`}>To Year Error</a>
+                          </li>
+                        ) : null}
+                        <Spacer axis="vertical" size="5" />
+                        {edu.descriptionInput.trim() === "" ||
+                        edu.descriptionStatus === FORM_STATUS.error ? (
+                          <li>
+                            <a href={`#description-${edu.id}`}>
+                              Description Error
+                            </a>
+                          </li>
+                        ) : null}
+                      </ul>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <>
+                  <p>No Errors, ready to submit</p>
+                  <Announcer
+                    announcement="No Errors, ready to submit"
+                    ariaId="no-errors-announcer"
+                    ariaLive="polite"
+                  />
+                </>
+              )}
+            </>
+          </div>
+        </>
       ) : null}
-
+      <Spacer axis="vertical" size="30" />
       <div className="form-container">
         <ControlButton
           ref={addNewBtnRef}
@@ -788,17 +819,6 @@ function DashboardEducation() {
                 formStatus === FORM_STATUS.success ? "Success!" : ""
               }${formStatus === FORM_STATUS.error ? "Re-Submit" : ""}`}
             />
-
-            <ControlButton
-              type="reset"
-              disabled={
-                formStatus === FORM_STATUS.loading ||
-                formStatus === FORM_STATUS.success
-              }
-              onClick={resetForm}
-              onKeyDown={(e) => formFocusAction(e, FORM_STATUS.idle)}
-              buttonText="cancel"
-            />
           </div>
         </form>
       </div>
@@ -846,6 +866,40 @@ const InfoSection = styled.section`
 `;
 
 const FormSection = styled.section`
+  .edit-info-header {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 7px;
+
+    .reset-button {
+      width: 100%;
+      max-width: 35px;
+      border-radius: 10px;
+      height: 35px;
+      padding: 8px;
+
+      &:focus-visible {
+        outline-width: 3px;
+        outline-color: transparent;
+        box-shadow: inset 0 0 1px 2.5px #2727ad;
+      }
+
+      &:hover .icon {
+        fill: #2727ad;
+      }
+
+      .icon {
+        height: 100%;
+      }
+    }
+  }
+
+  .error-summary {
+    padding: 15px;
+    border: 3px dashed red;
+  }
+
   .form-container {
     .flex-container {
       display: flex;

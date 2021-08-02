@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
+import { ReactComponent as CloseIcon } from "../../../global/assets/dashboard-close.svg";
 import { ReactComponent as EditIcon } from "../../../global/assets/dashboard-edit.svg";
 
 import Combobox from "../../../components/forms/combobox";
@@ -518,7 +519,7 @@ function AboutYou() {
             </span>
           </button>
         </div>
-        <Spacer axis="vertical" size="10" />
+        <Spacer axis="vertical" size="30" />
         <dl className="info-group" aria-label="current information">
           <div className="flex-row">
             <div className="flex-col">
@@ -579,43 +580,65 @@ function AboutYou() {
       ) : null}
 
       <FormSection aria-labelledby="edit-information-heading">
-        <h2 id="edit-information-heading">Edit Info</h2>
-        <Spacer axis="vertical" size="15" />
+        <div className="edit-info-header">
+          <h2 id="edit-information-heading">Edit Info</h2>
+          <button
+            disabled={
+              formStatus === FORM_STATUS.loading ||
+              formStatus === FORM_STATUS.success
+            }
+            type="reset"
+            form="submit-form"
+            className="button reset-button"
+            onClick={resetForm}
+            onKeyDown={(e) => formFocusAction(e, FORM_STATUS.idle)}
+          >
+            <span className="sr-only">cancel</span>
+            <span className="button-icon">
+              <CloseIcon className="icon" />
+            </span>
+          </button>
+        </div>
+
         {formStatus === FORM_STATUS.error ? (
-          <div ref={errorSummaryRef} tabIndex="-1">
-            <h3 id="error-heading">Errors in Submission</h3>
-
-            {hasSubmitError || summary.inputStatus === FORM_STATUS.error ? (
-              <>
-                <strong>
-                  Please address the following errors and re-submit the form:
-                </strong>
-                <ul aria-label="current errors" id="error-group">
-                  {hasSubmitError ? (
-                    <li>Error submitting form, please try again</li>
-                  ) : null}
-
-                  {summary.inputStatus === FORM_STATUS.error ? (
-                    <li>
-                      <a href="#summary">Summary Error</a>
-                    </li>
-                  ) : null}
-                </ul>
-              </>
-            ) : (
-              <>
-                <p>No Errors, ready to submit</p>
-                <Announcer
-                  announcement="No Errors, ready to submit"
-                  ariaId="no-errors-announcer"
-                  ariaLive="polite"
-                />
-              </>
-            )}
-          </div>
+          <>
+            <Spacer axis="vertical" size="30" />
+            <div ref={errorSummaryRef} tabIndex="-1" className="error-summary">
+              <h3 id="error-heading">Errors in Submission</h3>
+              <Spacer axis="vertical" size="10" />
+              {hasSubmitError || summary.inputStatus === FORM_STATUS.error ? (
+                <>
+                  <strong>
+                    Please address the following errors and re-submit the form:
+                  </strong>
+                  <Spacer axis="vertical" size="10" />
+                  <ul aria-label="current errors" id="error-group">
+                    {hasSubmitError ? (
+                      <li>Error submitting form, please try again</li>
+                    ) : null}
+                    <Spacer axis="vertical" size="5" />
+                    {summary.inputStatus === FORM_STATUS.error ? (
+                      <li>
+                        <a href="#summary">Summary Error</a>
+                      </li>
+                    ) : null}
+                  </ul>
+                </>
+              ) : (
+                <>
+                  <p>No Errors, ready to submit</p>
+                  <Announcer
+                    announcement="No Errors, ready to submit"
+                    ariaId="no-errors-announcer"
+                    ariaLive="polite"
+                  />
+                </>
+              )}
+            </div>
+          </>
         ) : null}
-
-        <form onSubmit={(e) => submitEdit(e)}>
+        <Spacer axis="vertical" size="30" />
+        <form id="submit-form" onSubmit={(e) => submitEdit(e)}>
           <InputContainer>
             <label htmlFor="summary">Profile Summary:</label>
             <Spacer axis="vertical" size="5" />
@@ -687,17 +710,6 @@ function AboutYou() {
                 formStatus === FORM_STATUS.success ? "Success!" : ""
               }${formStatus === FORM_STATUS.error ? "Re-Submit" : ""}`}
             />
-
-            <ControlButton
-              type="reset"
-              disabled={
-                formStatus === FORM_STATUS.loading ||
-                formStatus === FORM_STATUS.success
-              }
-              onClick={resetForm}
-              onKeyDown={(e) => formFocusAction(e, FORM_STATUS.idle)}
-              buttonText="cancel"
-            />
           </div>
         </form>
       </FormSection>
@@ -737,6 +749,40 @@ const InfoSection = styled.section`
 `;
 
 const FormSection = styled.section`
+  .edit-info-header {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 7px;
+
+    .reset-button {
+      width: 100%;
+      max-width: 35px;
+      border-radius: 10px;
+      height: 35px;
+      padding: 8px;
+
+      &:focus-visible {
+        outline-width: 3px;
+        outline-color: transparent;
+        box-shadow: inset 0 0 1px 2.5px #2727ad;
+      }
+
+      &:hover .icon {
+        fill: #2727ad;
+      }
+
+      .icon {
+        height: 100%;
+      }
+    }
+  }
+
+  .error-summary {
+    padding: 15px;
+    border: 3px dashed red;
+  }
+
   .button-container {
     display: flex;
     flex-direction: column;

@@ -97,6 +97,7 @@ class CustomerForm extends Component {
           <h3 id="form-section">Choose Sub Type</h3>
           <Spacer axis="vertical" size="10" />
           <form
+            id="submit-form"
             className="subscriptions-form"
             onSubmit={(e) => this.onReSubscribe(e)}
           >

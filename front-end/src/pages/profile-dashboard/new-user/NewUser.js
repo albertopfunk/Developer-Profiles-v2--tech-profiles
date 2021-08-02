@@ -540,7 +540,6 @@ function NewUser() {
               id: "edit-info-btn",
             }}
           />
-
           <Link to="/profile-dashboard">
             <span className="link-text">Go Home</span>
           </Link>
@@ -559,7 +558,8 @@ function NewUser() {
             formStatus === FORM_STATUS.success
           }
           type="reset"
-          className="button edit-button"
+          form="submit-form"
+          className="button reset-button"
           onClick={resetForm}
           onKeyDown={(e) => formFocusAction(e, FORM_STATUS.idle)}
         >
@@ -569,55 +569,64 @@ function NewUser() {
           </span>
         </button>
       </div>
+
       <p id="edit-information-desc" className="sr-only">
         inputs are validated but not required to submit
       </p>
 
       {formStatus === FORM_STATUS.error ? (
-        <div ref={errorSummaryRef} tabIndex="-1">
-          <h3 id="error-heading">Errors in Submission</h3>
-          {hasSubmitError ||
-          firstName.inputStatus === FORM_STATUS.error ||
-          title.inputStatus === FORM_STATUS.error ||
-          summary.inputStatus === FORM_STATUS.error ? (
-            <>
-              <strong>
-                Please address the following errors and re-submit the form:
-              </strong>
-              <ul aria-label="current errors" id="error-group">
-                {hasSubmitError ? (
-                  <li>Error submitting form, please try again</li>
-                ) : null}
-                {firstName.inputStatus === FORM_STATUS.error ? (
-                  <li>
-                    <a href="#first-name">First Name Error</a>
-                  </li>
-                ) : null}
-                {title.inputStatus === FORM_STATUS.error ? (
-                  <li>
-                    <a href="#title">Title Error</a>
-                  </li>
-                ) : null}
-                {summary.inputStatus === FORM_STATUS.error ? (
-                  <li>
-                    <a href="#summary">Summary Error</a>
-                  </li>
-                ) : null}
-              </ul>
-            </>
-          ) : (
-            <>
-              <p>No Errors, ready to submit</p>
-              <Announcer
-                announcement="No Errors, ready to submit"
-                ariaId="no-errors-announcer"
-                ariaLive="polite"
-              />
-            </>
-          )}
-        </div>
+        <>
+          <Spacer axis="vertical" size="30" />
+          <div ref={errorSummaryRef} tabIndex="-1" className="error-summary">
+            <h3 id="error-heading">Errors in Submission</h3>
+            <Spacer axis="vertical" size="10" />
+            {hasSubmitError ||
+            firstName.inputStatus === FORM_STATUS.error ||
+            title.inputStatus === FORM_STATUS.error ||
+            summary.inputStatus === FORM_STATUS.error ? (
+              <>
+                <strong>
+                  Please address the following errors and re-submit the form:
+                </strong>
+                <Spacer axis="vertical" size="10" />
+                <ul aria-label="current errors" id="error-group">
+                  {hasSubmitError ? (
+                    <li>Error submitting form, please try again</li>
+                  ) : null}
+                  <Spacer axis="vertical" size="5" />
+                  {firstName.inputStatus === FORM_STATUS.error ? (
+                    <li>
+                      <a href="#first-name">First Name Error</a>
+                    </li>
+                  ) : null}
+                  <Spacer axis="vertical" size="5" />
+                  {title.inputStatus === FORM_STATUS.error ? (
+                    <li>
+                      <a href="#title">Title Error</a>
+                    </li>
+                  ) : null}
+                  <Spacer axis="vertical" size="5" />
+                  {summary.inputStatus === FORM_STATUS.error ? (
+                    <li>
+                      <a href="#summary">Summary Error</a>
+                    </li>
+                  ) : null}
+                </ul>
+              </>
+            ) : (
+              <>
+                <p>No Errors, ready to submit</p>
+                <Announcer
+                  announcement="No Errors, ready to submit"
+                  ariaId="no-errors-announcer"
+                  ariaLive="polite"
+                />
+              </>
+            )}
+          </div>
+        </>
       ) : null}
-      <Spacer axis="vertical" size="15" />
+      <Spacer axis="vertical" size="30" />
       <div className="tabs-container">
         <ul className="tablist" role="tablist" aria-label="quick start">
           <li role="presentation" className="tab">
@@ -668,7 +677,7 @@ function NewUser() {
             display: selectedTab === "basic-info" ? "block" : "none",
           }}
         >
-          <form onSubmit={(e) => submitEdit(e)}>
+          <form id="submit-form" onSubmit={(e) => submitEdit(e)}>
             <InputContainer>
               <label htmlFor="first-name">First Name:</label>
               <Spacer axis="vertical" size="5" />
@@ -864,6 +873,7 @@ function NewUser() {
 
 const WelcomeSection = styled.section`
   width: 100%;
+  max-width: 650px;
   text-align: center;
 
   .controls-container {
@@ -913,7 +923,7 @@ const FormSection = styled.section`
     align-items: center;
     gap: 7px;
 
-    .edit-button {
+    .reset-button {
       width: 100%;
       max-width: 35px;
       border-radius: 10px;
@@ -934,6 +944,11 @@ const FormSection = styled.section`
         height: 100%;
       }
     }
+  }
+
+  .error-summary {
+    padding: 15px;
+    border: 3px dashed red;
   }
 
   .tablist {

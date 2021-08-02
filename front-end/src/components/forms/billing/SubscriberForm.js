@@ -4,14 +4,12 @@ import styled from "styled-components";
 import ControlButton from "../buttons/ControlButton";
 
 import { httpClient } from "../../../global/helpers/http-requests";
-import {
-  SUBSCRIPTION_STATUS,
-} from "../../../global/helpers/variables";
+import { SUBSCRIPTION_STATUS } from "../../../global/helpers/variables";
 import Spacer from "../../../global/helpers/spacer";
 
 class SubscriberForm extends Component {
   state = {
-    subStatus: SUBSCRIPTION_STATUS.idle
+    subStatus: SUBSCRIPTION_STATUS.idle,
   };
 
   cancelSub = async (e) => {
@@ -81,7 +79,7 @@ class SubscriberForm extends Component {
           </div>
         </dl>
         <Spacer axis="vertical" size="20" />
-        <form onSubmit={(e) => this.cancelSub(e)}>
+        <form id="submit-form" onSubmit={(e) => this.cancelSub(e)}>
           <ControlButton
             type="submit"
             buttonText={`
