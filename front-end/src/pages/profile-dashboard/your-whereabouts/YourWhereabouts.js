@@ -72,6 +72,30 @@ function YourWhereabouts() {
   }, []);
 
   useEffect(() => {
+    if (formStatus !== FORM_STATUS.error) {
+      return;
+    }
+
+    if (
+      !github.inputChange &&
+      !twitter.inputChange &&
+      !linkedin.inputChange &&
+      !portfolio.inputChange &&
+      !email.inputChange &&
+      !locationChange
+    ) {
+      setFormStatus(FORM_STATUS.active);
+    }
+  }, [
+    github.inputChange,
+    twitter.inputChange,
+    linkedin.inputChange,
+    portfolio.inputChange,
+    email.inputChange,
+    locationChange,
+  ]);
+
+  useEffect(() => {
     if (formFocusStatus) {
       if (formFocusStatus === FORM_STATUS.idle) {
         editInfoBtnRef.current.focus();

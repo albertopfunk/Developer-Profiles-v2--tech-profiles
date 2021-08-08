@@ -68,6 +68,30 @@ function NewUser() {
   }, []);
 
   useEffect(() => {
+    if (formStatus !== FORM_STATUS.error) {
+      return;
+    }
+
+    if (
+      !firstName.inputChange &&
+      !imageChange &&
+      !areaOfWork.inputChange &&
+      !title.inputChange &&
+      !summary.inputChange &&
+      !locationChange
+    ) {
+      setFormStatus(FORM_STATUS.active);
+    }
+  }, [
+    firstName.inputChange,
+    imageChange,
+    areaOfWork.inputChange,
+    title.inputChange,
+    summary.inputChange,
+    locationChange,
+  ]);
+
+  useEffect(() => {
     if (formStatus === FORM_STATUS.error && errorSummaryRef.current) {
       errorSummaryRef.current.focus();
     }

@@ -68,6 +68,26 @@ function AboutYou() {
   }, []);
 
   useEffect(() => {
+    if (formStatus !== FORM_STATUS.error) {
+      return;
+    }
+
+    if (
+      !summary.inputChange &&
+      !location.inputChange &&
+      !topSkills.inputChange &&
+      !additionalSkills.inputChange
+    ) {
+      setFormStatus(FORM_STATUS.active);
+    }
+  }, [
+    summary.inputChange,
+    location.inputChange,
+    topSkills.inputChange,
+    additionalSkills.inputChange,
+  ]);
+
+  useEffect(() => {
     if (formFocusStatus) {
       if (formFocusStatus === FORM_STATUS.idle) {
         editInfoBtnRef.current.focus();

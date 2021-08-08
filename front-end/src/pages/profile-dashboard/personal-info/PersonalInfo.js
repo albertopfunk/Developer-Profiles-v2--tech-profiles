@@ -63,6 +63,28 @@ function PersonalInfo() {
   }, []);
 
   useEffect(() => {
+    if (formStatus !== FORM_STATUS.error) {
+      return;
+    }
+
+    if (
+      !firstName.inputChange &&
+      !lastName.inputChange &&
+      !imageChange &&
+      !areaOfWork.inputChange &&
+      !title.inputChange
+    ) {
+      setFormStatus(FORM_STATUS.active);
+    }
+  }, [
+    firstName.inputChange,
+    lastName.inputChange,
+    imageChange,
+    areaOfWork.inputChange,
+    title.inputChange,
+  ]);
+
+  useEffect(() => {
     if (formFocusStatus) {
       if (formFocusStatus === FORM_STATUS.idle) {
         editInfoBtnRef.current.focus();
