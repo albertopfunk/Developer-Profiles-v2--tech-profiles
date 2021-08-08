@@ -25,6 +25,7 @@ const ExperienceForm = React.forwardRef(
       userDescription,
       description,
       updateExperience,
+      removeExperienceFocusManagement,
       removeExperience,
       isSubmitting,
     },
@@ -34,11 +35,15 @@ const ExperienceForm = React.forwardRef(
 
     function setCompanyInput(value) {
       if (value === userCompanyName) {
-        updateExperience(expIndex, {
-          companyNameInput: value,
-          companyChange: false,
-          companyStatus: FORM_STATUS.idle,
-        });
+        updateExperience(
+          expIndex,
+          {
+            companyNameInput: value,
+            companyChange: false,
+            companyStatus: FORM_STATUS.idle,
+          },
+          true
+        );
         return;
       }
 
@@ -69,11 +74,15 @@ const ExperienceForm = React.forwardRef(
 
     function setTitleInput(value) {
       if (value === userJobTitle) {
-        updateExperience(expIndex, {
-          titleInput: value,
-          titleChange: false,
-          titleStatus: FORM_STATUS.idle,
-        });
+        updateExperience(
+          expIndex,
+          {
+            titleInput: value,
+            titleChange: false,
+            titleStatus: FORM_STATUS.idle,
+          },
+          true
+        );
         return;
       }
 
@@ -104,11 +113,15 @@ const ExperienceForm = React.forwardRef(
 
     function setFromMonthDate(value) {
       if (value === userFromMonth) {
-        updateExperience(expIndex, {
-          fromMonth: value,
-          fromMonthStatus: FORM_STATUS.idle,
-          fromMonthChange: false,
-        });
+        updateExperience(
+          expIndex,
+          {
+            fromMonth: value,
+            fromMonthStatus: FORM_STATUS.idle,
+            fromMonthChange: false,
+          },
+          true
+        );
         return;
       }
 
@@ -135,11 +148,15 @@ const ExperienceForm = React.forwardRef(
 
     function setFromYearDate(value) {
       if (value === userFromYear) {
-        updateExperience(expIndex, {
-          fromYear: value,
-          fromYearStatus: FORM_STATUS.idle,
-          fromYearChange: false,
-        });
+        updateExperience(
+          expIndex,
+          {
+            fromYear: value,
+            fromYearStatus: FORM_STATUS.idle,
+            fromYearChange: false,
+          },
+          true
+        );
         return;
       }
 
@@ -166,11 +183,15 @@ const ExperienceForm = React.forwardRef(
 
     function setToMonthDate(value) {
       if (value === userToMonth) {
-        updateExperience(expIndex, {
-          toMonth: value,
-          toMonthStatus: FORM_STATUS.idle,
-          toMonthChange: false,
-        });
+        updateExperience(
+          expIndex,
+          {
+            toMonth: value,
+            toMonthStatus: FORM_STATUS.idle,
+            toMonthChange: false,
+          },
+          true
+        );
         return;
       }
 
@@ -197,11 +218,15 @@ const ExperienceForm = React.forwardRef(
 
     function setToYearDate(value) {
       if (value === userToYear) {
-        updateExperience(expIndex, {
-          toYear: value,
-          toYearStatus: FORM_STATUS.idle,
-          toYearChange: false,
-        });
+        updateExperience(
+          expIndex,
+          {
+            toYear: value,
+            toYearStatus: FORM_STATUS.idle,
+            toYearChange: false,
+          },
+          true
+        );
         return;
       }
 
@@ -229,13 +254,17 @@ const ExperienceForm = React.forwardRef(
     function setToPresentDate() {
       if (presentRef.current.checked) {
         if (userToPresent === "Present") {
-          updateExperience(expIndex, {
-            toPresent: "Present",
-            toMonthStatus: FORM_STATUS.idle,
-            toMonthChange: false,
-            toYearStatus: FORM_STATUS.idle,
-            toYearChange: false,
-          });
+          updateExperience(
+            expIndex,
+            {
+              toPresent: "Present",
+              toMonthStatus: FORM_STATUS.idle,
+              toMonthChange: false,
+              toYearStatus: FORM_STATUS.idle,
+              toYearChange: false,
+            },
+            true
+          );
           return;
         }
 
@@ -248,13 +277,17 @@ const ExperienceForm = React.forwardRef(
         });
       } else {
         if (userToPresent === "") {
-          updateExperience(expIndex, {
-            toPresent: "",
-            toMonthStatus: FORM_STATUS.idle,
-            toMonthChange: false,
-            toYearStatus: FORM_STATUS.idle,
-            toYearChange: false,
-          });
+          updateExperience(
+            expIndex,
+            {
+              toPresent: "",
+              toMonthStatus: FORM_STATUS.idle,
+              toMonthChange: false,
+              toYearStatus: FORM_STATUS.idle,
+              toYearChange: false,
+            },
+            true
+          );
           return;
         }
 
@@ -298,11 +331,15 @@ const ExperienceForm = React.forwardRef(
 
     function setDescriptionInput(value) {
       if (value === userDescription) {
-        updateExperience(expIndex, {
-          descriptionInput: value,
-          descriptionChange: false,
-          descriptionStatus: FORM_STATUS.idle,
-        });
+        updateExperience(
+          expIndex,
+          {
+            descriptionInput: value,
+            descriptionChange: false,
+            descriptionStatus: FORM_STATUS.idle,
+          },
+          true
+        );
         return;
       }
 
@@ -344,6 +381,7 @@ const ExperienceForm = React.forwardRef(
             className="button remove-button"
             aria-label={`Remove ${company.companyNameInput || "New"} Company`}
             onClick={() => removeExperience(expIndex)}
+            onKeyDown={(e) => removeExperienceFocusManagement(e, expIndex)}
           >
             <span className="sr-only">Remove Project</span>
             <span className="button-icon">

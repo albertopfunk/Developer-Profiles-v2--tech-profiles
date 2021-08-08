@@ -4,30 +4,35 @@ import { ReactComponent as CloseIcon } from "../../../global/assets/dashboard-cl
 import { ReactComponent as EditIcon } from "../../../global/assets/dashboard-edit.svg";
 import { ReactComponent as AddIcon } from "../../../global/assets/dashboard-add.svg";
 
-import ControlButton from "../../../components/forms/buttons/ControlButton";
-
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
 import useCurrentYear from "../../../global/helpers/hooks/useCurrentYear";
 import { FORM_STATUS } from "../../../global/helpers/variables";
+import { validateInput } from "../../../global/helpers/validation";
+import useToggle from "../../../global/helpers/hooks/useToggle";
 import Announcer from "../../../global/helpers/announcer";
 import Spacer from "../../../global/helpers/spacer";
 
 import ExperienceForm from "../../../components/forms/user-extras/ExperienceForm";
-import { validateInput } from "../../../global/helpers/validation";
+import ControlButton from "../../../components/forms/buttons/ControlButton";
 
 let formSuccessWait;
 function DashboardExperience() {
   const { user, addUserExtras } = useContext(ProfileContext);
-  const currentYear = useCurrentYear();
 
   const [formStatus, setFormStatus] = useState(FORM_STATUS.idle);
   const [formFocusStatus, setFormFocusStatus] = useState("");
   const [hasSubmitError, setHasSubmitError] = useState(null);
+
   const [experience, setExperience] = useState([]);
   const [experienceChange, setExperienceChange] = useState(false);
-  const [removedExpIndex, setRemovedExpIndex] = useState(null);
-  const [removedExpUpdate, setRemovedExpUpdate] = useState(true);
-  const [idTracker, setIdTracker] = useState(1);
+  const [newExperienceId, setNewExperienceId] = useState(1);
+  const [removedExperienceIndex, setRemovedExperienceIndex] = useState(null);
+  const [
+    removeExperienceFocusToggle,
+    setRemoveExperienceFocusToggle,
+  ] = useToggle();
+
+  const currentYear = useCurrentYear();
 
   let isSubmittingRef = useRef(false);
   const errorSummaryRef = React.createRef();
@@ -35,40 +40,14 @@ function DashboardExperience() {
   const addNewBtnRef = React.createRef();
   const removeBtnRefs = useRef([]);
 
-  useEffect(() => {
-    if (formStatus === FORM_STATUS.error && errorSummaryRef.current) {
-      errorSummaryRef.current.focus();
-    }
-  }, [formStatus]);
-
+  // unmount cleanup
   useEffect(() => {
     return () => {
       clearTimeout(formSuccessWait);
     };
   }, []);
 
-  useEffect(() => {
-    if (removedExpIndex === null) {
-      return;
-    }
-
-    if (removeBtnRefs.current.length === 0) {
-      addNewBtnRef.current.focus();
-      return;
-    }
-
-    if (removeBtnRefs.current.length === 1) {
-      removeBtnRefs.current[0].current.focus();
-      return;
-    }
-
-    if (removeBtnRefs.current[removedExpIndex]) {
-      removeBtnRefs.current[removedExpIndex].current.focus();
-    } else {
-      removeBtnRefs.current[removedExpIndex - 1].current.focus();
-    }
-  }, [removedExpUpdate]);
-
+  // form focus management
   useEffect(() => {
     if (formFocusStatus) {
       if (formFocusStatus === FORM_STATUS.idle) {
@@ -82,7 +61,37 @@ function DashboardExperience() {
     }
   }, [formFocusStatus]);
 
-  function formFocusAction(e, status) {
+  // form error focus management
+  useEffect(() => {
+    if (formStatus === FORM_STATUS.error && errorSummaryRef.current) {
+      errorSummaryRef.current.focus();
+    }
+  }, [formStatus]);
+
+  // remove experience focus management
+  useEffect(() => {
+    if (removedExperienceIndex === null) {
+      return;
+    }
+
+    if (removeBtnRefs.current.length === 0) {
+      addNewBtnRef.current.focus();
+      return;
+    }
+
+    if (removeBtnRefs.current.length === 1) {
+      removeBtnRefs.current[0].current.focus();
+      return;
+    }
+
+    if (removeBtnRefs.current[removedExperienceIndex]) {
+      removeBtnRefs.current[removedExperienceIndex].current.focus();
+    } else {
+      removeBtnRefs.current[removedExperienceIndex - 1].current.focus();
+    }
+  }, [removeExperienceFocusToggle]);
+
+  function formFocusManagement(e, status) {
     // enter/space
     if (e.keyCode !== 13 && e.keyCode !== 32) {
       return;
@@ -136,6 +145,8 @@ function DashboardExperience() {
 
   function setFormInputs() {
     setFormStatus(FORM_STATUS.active);
+    setFormFocusStatus("");
+    setHasSubmitError(null);
 
     const updatedUserExperience = user.experience.map((exp) => {
       const datesObj = splitDates(exp.job_dates);
@@ -166,15 +177,37 @@ function DashboardExperience() {
       };
     });
 
-    removeBtnRefs.current = updatedUserExperience.map(() => React.createRef());
     setExperience(updatedUserExperience);
+    setExperienceChange(false);
+    setNewExperienceId(1);
+    setRemovedExperienceIndex(null);
+    removeBtnRefs.current = updatedUserExperience.map(() => React.createRef());
   }
 
-  function updateExperience(index, state) {
+  function updateExperience(index, state, checkChanges = false) {
     const newExpArr = [...experience];
     const newExpObj = { ...newExpArr[index], ...state };
     newExpArr.splice(index, 1, newExpObj);
     setExperience(newExpArr);
+
+    if (checkChanges) {
+      const userExpChange = newExpArr.filter(
+        (exp) =>
+          Number.isInteger(exp.id) &&
+          (exp.companyChange ||
+            exp.titleChange ||
+            exp.descriptionChange ||
+            exp.fromMonthChange ||
+            exp.fromYearChange ||
+            exp.toMonthChange ||
+            exp.toYearChange)
+      );
+
+      // set form back to active if no changes
+      if (userExpChange.length === 0 && !experienceChange) {
+        setFormStatus(FORM_STATUS.active);
+      }
+    }
   }
 
   function addExperience(e) {
@@ -184,7 +217,7 @@ function DashboardExperience() {
       ...experience,
 
       {
-        id: `new-${idTracker}`,
+        id: `new-${newExperienceId}`,
 
         companyNameInput: "",
         companyStatus: FORM_STATUS.idle,
@@ -216,24 +249,67 @@ function DashboardExperience() {
 
     removeBtnRefs.current = currentExperience.map(() => React.createRef());
     setExperience(currentExperience);
-    setIdTracker(idTracker + 1);
+    setNewExperienceId(newExperienceId + 1);
     setExperienceChange(true);
+  }
+
+  function removeExperienceFocusManagement(e, expIndex) {
+    // enter/space
+    if (e.keyCode !== 13 && e.keyCode !== 32) {
+      return;
+    }
+
+    removeExperience(expIndex);
+    setRemoveExperienceFocusToggle();
   }
 
   function removeExperience(expIndex) {
     const newExperience = [...experience];
     newExperience.splice(expIndex, 1);
     removeBtnRefs.current = newExperience.map(() => React.createRef());
+    setExperience(newExperience);
+    setRemovedExperienceIndex(expIndex);
+    setExperienceChanges(newExperience);
+  }
 
-    if (newExperience.length === user.experience.length) {
-      setExperienceChange(false);
-    } else {
+  function setExperienceChanges(experience) {
+    let savedExperience = [];
+    let newExperience = [];
+
+    experience.forEach((exp) => {
+      if (Number.isInteger(exp.id)) {
+        savedExperience.push(exp);
+      } else {
+        newExperience.push(exp);
+      }
+    });
+
+    if (
+      newExperience.length > 0 ||
+      savedExperience.length !== user.experience.length
+    ) {
       setExperienceChange(true);
+      return;
     }
 
-    setExperience(newExperience);
-    setRemovedExpIndex(expIndex);
-    setRemovedExpUpdate(!removedExpUpdate);
+    // checking input changes if no experience change
+    const savedExperienceChange = savedExperience.filter(
+      (exp) =>
+        exp.companyChange ||
+        exp.titleChange ||
+        exp.descriptionChange ||
+        exp.fromMonthChange ||
+        exp.fromYearChange ||
+        exp.toMonthChange ||
+        exp.toYearChange
+    );
+
+    // set form back to active if no changes
+    if (savedExperienceChange.length === 0) {
+      setFormStatus(FORM_STATUS.active);
+    }
+
+    setExperienceChange(false);
   }
 
   function checkFormErrors() {
@@ -549,7 +625,7 @@ function DashboardExperience() {
             id="edit-info-btn"
             className="button edit-button"
             onClick={setFormInputs}
-            onKeyDown={(e) => formFocusAction(e, FORM_STATUS.active)}
+            onKeyDown={(e) => formFocusManagement(e, FORM_STATUS.active)}
           >
             <span className="sr-only">Edit Information</span>
             <span className="button-icon">
@@ -621,10 +697,10 @@ function DashboardExperience() {
             formStatus === FORM_STATUS.success
           }
           type="reset"
-          form="education-form"
+          form="experience-form"
           className="button reset-button"
           onClick={resetForm}
-          onKeyDown={(e) => formFocusAction(e, FORM_STATUS.idle)}
+          onKeyDown={(e) => formFocusManagement(e, FORM_STATUS.idle)}
         >
           <span className="sr-only">cancel</span>
           <span className="button-icon">
@@ -801,6 +877,9 @@ function DashboardExperience() {
                       descriptionChange: exp.descriptionChange,
                     }}
                     updateExperience={updateExperience}
+                    removeExperienceFocusManagement={
+                      removeExperienceFocusManagement
+                    }
                     removeExperience={removeExperience}
                     isSubmitting={isSubmittingRef}
                   />

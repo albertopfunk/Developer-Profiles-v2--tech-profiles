@@ -4,15 +4,16 @@ import { ReactComponent as CloseIcon } from "../../../global/assets/dashboard-cl
 import { ReactComponent as EditIcon } from "../../../global/assets/dashboard-edit.svg";
 import { ReactComponent as AddIcon } from "../../../global/assets/dashboard-add.svg";
 
-import ProjectForm from "../../../components/forms/user-extras/ProjectForm";
-import ControlButton from "../../../components/forms/buttons/ControlButton";
-
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
 import { FORM_STATUS } from "../../../global/helpers/variables";
 import { httpClient } from "../../../global/helpers/http-requests";
 import { validateInput } from "../../../global/helpers/validation";
+import useToggle from "../../../global/helpers/hooks/useToggle";
 import Announcer from "../../../global/helpers/announcer";
 import Spacer from "../../../global/helpers/spacer";
+
+import ProjectForm from "../../../components/forms/user-extras/ProjectForm";
+import ControlButton from "../../../components/forms/buttons/ControlButton";
 
 let formSuccessWait;
 function DashboardProjects() {
@@ -21,11 +22,12 @@ function DashboardProjects() {
   const [formStatus, setFormStatus] = useState(FORM_STATUS.idle);
   const [formFocusStatus, setFormFocusStatus] = useState("");
   const [hasSubmitError, setHasSubmitError] = useState(null);
+
   const [projects, setProjects] = useState([]);
   const [projectsChange, setProjectsChange] = useState(false);
-  const [removedProjIndex, setRemovedProjIndex] = useState(null);
-  const [removedProjUpdate, setRemovedProjUpdate] = useState(true);
-  const [idTracker, setIdTracker] = useState(1);
+  const [newProjectId, setNewProjectId] = useState(1);
+  const [removedProjectIndex, setRemovedProjectIndex] = useState(null);
+  const [removeProjectFocusToggle, setRemoveProjectFocusToggle] = useToggle();
 
   let isSubmittingRef = useRef(false);
   const errorSummaryRef = React.createRef();
@@ -33,20 +35,39 @@ function DashboardProjects() {
   const addNewBtnRef = React.createRef();
   const removeBtnRefs = useRef([]);
 
-  useEffect(() => {
-    if (formStatus === FORM_STATUS.error && errorSummaryRef.current) {
-      errorSummaryRef.current.focus();
-    }
-  }, [formStatus]);
-
+  // unmount cleanup
   useEffect(() => {
     return () => {
       clearTimeout(formSuccessWait);
     };
   }, []);
 
+  // form focus management
   useEffect(() => {
-    if (removedProjIndex === null) {
+    if (formFocusStatus) {
+      if (formFocusStatus === FORM_STATUS.idle) {
+        editInfoBtnRef.current.focus();
+        return;
+      }
+
+      if (formFocusStatus === FORM_STATUS.active) {
+        // focus on cancel button
+        addNewBtnRef.current.focus();
+      }
+    }
+    // use toggle instead
+  }, [formFocusStatus]);
+
+  // form error focus management
+  useEffect(() => {
+    if (formStatus === FORM_STATUS.error && errorSummaryRef.current) {
+      errorSummaryRef.current.focus();
+    }
+  }, [formStatus]);
+
+  // remove project focus management
+  useEffect(() => {
+    if (removedProjectIndex === null) {
       return;
     }
 
@@ -60,27 +81,14 @@ function DashboardProjects() {
       return;
     }
 
-    if (removeBtnRefs.current[removedProjIndex]) {
-      removeBtnRefs.current[removedProjIndex].current.focus();
+    if (removeBtnRefs.current[removedProjectIndex]) {
+      removeBtnRefs.current[removedProjectIndex].current.focus();
     } else {
-      removeBtnRefs.current[removedProjIndex - 1].current.focus();
+      removeBtnRefs.current[removedProjectIndex - 1].current.focus();
     }
-  }, [removedProjUpdate]);
+  }, [removeProjectFocusToggle]);
 
-  useEffect(() => {
-    if (formFocusStatus) {
-      if (formFocusStatus === FORM_STATUS.idle) {
-        editInfoBtnRef.current.focus();
-        return;
-      }
-
-      if (formFocusStatus === FORM_STATUS.active) {
-        addNewBtnRef.current.focus();
-      }
-    }
-  }, [formFocusStatus]);
-
-  function formFocusAction(e, status) {
+  function formFocusManagement(e, status) {
     // enter/space
     if (e.keyCode !== 13 && e.keyCode !== 32) {
       return;
@@ -100,6 +108,8 @@ function DashboardProjects() {
 
   function setFormInputs() {
     setFormStatus(FORM_STATUS.active);
+    setFormFocusStatus("");
+    setHasSubmitError(null);
 
     const updatedUserProjects = user.projects.map((proj) => {
       return {
@@ -122,15 +132,34 @@ function DashboardProjects() {
       };
     });
 
-    removeBtnRefs.current = updatedUserProjects.map(() => React.createRef());
     setProjects(updatedUserProjects);
+    setProjectsChange(false);
+    setNewProjectId(1);
+    setRemovedProjectIndex(null);
+    removeBtnRefs.current = updatedUserProjects.map(() => React.createRef());
   }
 
-  function updateProject(index, state) {
+  function updateProject(index, state, checkChanges = false) {
     const newProjArr = [...projects];
     const newProjObj = { ...newProjArr[index], ...state };
     newProjArr.splice(index, 1, newProjObj);
     setProjects(newProjArr);
+
+    if (checkChanges) {
+      const userProjChange = newProjArr.filter(
+        (proj) =>
+          Number.isInteger(proj.id) &&
+          (proj.projectChange ||
+            proj.imageChange ||
+            proj.linkChange ||
+            proj.descriptionChange)
+      );
+
+      // set form back to active if no changes
+      if (userProjChange.length === 0 && !projectsChange) {
+        setFormStatus(FORM_STATUS.active);
+      }
+    }
   }
 
   function addProject(e) {
@@ -140,7 +169,7 @@ function DashboardProjects() {
       ...projects,
 
       {
-        id: `new-${idTracker}`,
+        id: `new-${newProjectId}`,
 
         projectNameInput: "",
         projectStatus: FORM_STATUS.idle,
@@ -162,24 +191,64 @@ function DashboardProjects() {
 
     removeBtnRefs.current = currentProjects.map(() => React.createRef());
     setProjects(currentProjects);
-    setIdTracker(idTracker + 1);
+    setNewProjectId(newProjectId + 1);
     setProjectsChange(true);
+  }
+
+  function removeProjectFocusManagement(e, projIndex) {
+    // enter/space
+    if (e.keyCode !== 13 && e.keyCode !== 32) {
+      return;
+    }
+
+    removeProject(projIndex);
+    setRemoveProjectFocusToggle();
   }
 
   function removeProject(projIndex) {
     const newProjects = [...projects];
     newProjects.splice(projIndex, 1);
     removeBtnRefs.current = newProjects.map(() => React.createRef());
+    setProjects(newProjects);
+    setRemovedProjectIndex(projIndex);
+    setProjectChanges(newProjects);
+  }
 
-    if (newProjects.length === user.projects.length) {
-      setProjectsChange(false);
-    } else {
+  function setProjectChanges(projects) {
+    let savedProjects = [];
+    let newProjects = [];
+
+    projects.forEach((proj) => {
+      if (Number.isInteger(proj.id)) {
+        savedProjects.push(proj);
+      } else {
+        newProjects.push(proj);
+      }
+    });
+
+    if (
+      newProjects.length > 0 ||
+      savedProjects.length !== user.projects.length
+    ) {
       setProjectsChange(true);
+      return;
     }
 
-    setProjects(newProjects);
-    setRemovedProjIndex(projIndex);
-    setRemovedProjUpdate(!removedProjUpdate);
+    // checking input changes if no project change
+    const savedProjectChange = savedProjects.filter(
+      (proj) =>
+        proj.projectChange ||
+        proj.imageChange ||
+        proj.linkChange ||
+        proj.descriptionChange
+    );
+
+    // set form back to active if no changes
+    if (savedProjectChange.length === 0) {
+      setFormStatus(FORM_STATUS.active);
+    }
+
+    setProjectsChange(false);
   }
 
   function checkFormErrors() {
@@ -505,7 +574,7 @@ function DashboardProjects() {
             id="edit-info-btn"
             className="button edit-button"
             onClick={setFormInputs}
-            onKeyDown={(e) => formFocusAction(e, FORM_STATUS.active)}
+            onKeyDown={(e) => formFocusManagement(e, FORM_STATUS.active)}
           >
             <span className="sr-only">Edit Information</span>
             <span className="button-icon">
@@ -586,7 +655,7 @@ function DashboardProjects() {
           form="projects-form"
           className="button reset-button"
           onClick={resetForm}
-          onKeyDown={(e) => formFocusAction(e, FORM_STATUS.idle)}
+          onKeyDown={(e) => formFocusManagement(e, FORM_STATUS.idle)}
         >
           <span className="sr-only">cancel</span>
           <span className="button-icon">
@@ -726,6 +795,7 @@ function DashboardProjects() {
                     }}
                     updateProject={updateProject}
                     removeProject={removeProject}
+                    removeProjectFocusManagement={removeProjectFocusManagement}
                     isSubmitting={isSubmittingRef}
                   />
                 </div>

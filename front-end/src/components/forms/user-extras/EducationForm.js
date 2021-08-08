@@ -25,6 +25,7 @@ const EducationForm = React.forwardRef(
       userDescription,
       description,
       updateEducation,
+      removeEducationFocusManagement,
       removeEducation,
       isSubmitting,
     },
@@ -34,11 +35,15 @@ const EducationForm = React.forwardRef(
 
     function setSchoolInput(value) {
       if (value === userSchool) {
-        updateEducation(eduIndex, {
-          schoolNameInput: value,
-          schoolChange: false,
-          schoolStatus: FORM_STATUS.idle,
-        });
+        updateEducation(
+          eduIndex,
+          {
+            schoolNameInput: value,
+            schoolChange: false,
+            schoolStatus: FORM_STATUS.idle,
+          },
+          true
+        );
         return;
       }
 
@@ -69,11 +74,15 @@ const EducationForm = React.forwardRef(
 
     function setFieldOfStudyInput(value) {
       if (value === userFieldOfStudy) {
-        updateEducation(eduIndex, {
-          fieldOfStudyInput: value,
-          fieldOfStudyChange: false,
-          fieldOfStudyStatus: FORM_STATUS.idle,
-        });
+        updateEducation(
+          eduIndex,
+          {
+            fieldOfStudyInput: value,
+            fieldOfStudyChange: false,
+            fieldOfStudyStatus: FORM_STATUS.idle,
+          },
+          true
+        );
         return;
       }
 
@@ -104,11 +113,15 @@ const EducationForm = React.forwardRef(
 
     function setFromMonthDate(value) {
       if (value === userFromMonth) {
-        updateEducation(eduIndex, {
-          fromMonth: value,
-          fromMonthStatus: FORM_STATUS.idle,
-          fromMonthChange: false,
-        });
+        updateEducation(
+          eduIndex,
+          {
+            fromMonth: value,
+            fromMonthStatus: FORM_STATUS.idle,
+            fromMonthChange: false,
+          },
+          true
+        );
         return;
       }
 
@@ -135,11 +148,15 @@ const EducationForm = React.forwardRef(
 
     function setFromYearDate(value) {
       if (value === userFromYear) {
-        updateEducation(eduIndex, {
-          fromYear: value,
-          fromYearStatus: FORM_STATUS.idle,
-          fromYearChange: false,
-        });
+        updateEducation(
+          eduIndex,
+          {
+            fromYear: value,
+            fromYearStatus: FORM_STATUS.idle,
+            fromYearChange: false,
+          },
+          true
+        );
         return;
       }
 
@@ -166,11 +183,15 @@ const EducationForm = React.forwardRef(
 
     function setToMonthDate(value) {
       if (value === userToMonth) {
-        updateEducation(eduIndex, {
-          toMonth: value,
-          toMonthStatus: FORM_STATUS.idle,
-          toMonthChange: false,
-        });
+        updateEducation(
+          eduIndex,
+          {
+            toMonth: value,
+            toMonthStatus: FORM_STATUS.idle,
+            toMonthChange: false,
+          },
+          true
+        );
         return;
       }
 
@@ -197,11 +218,15 @@ const EducationForm = React.forwardRef(
 
     function setToYearDate(value) {
       if (value === userToYear) {
-        updateEducation(eduIndex, {
-          toYear: value,
-          toYearStatus: FORM_STATUS.idle,
-          toYearChange: false,
-        });
+        updateEducation(
+          eduIndex,
+          {
+            toYear: value,
+            toYearStatus: FORM_STATUS.idle,
+            toYearChange: false,
+          },
+          true
+        );
         return;
       }
 
@@ -229,13 +254,17 @@ const EducationForm = React.forwardRef(
     function setToPresentDate() {
       if (presentRef.current.checked) {
         if (userToPresent === "Present") {
-          updateEducation(eduIndex, {
-            toPresent: "Present",
-            toMonthStatus: FORM_STATUS.idle,
-            toMonthChange: false,
-            toYearStatus: FORM_STATUS.idle,
-            toYearChange: false,
-          });
+          updateEducation(
+            eduIndex,
+            {
+              toPresent: "Present",
+              toMonthStatus: FORM_STATUS.idle,
+              toMonthChange: false,
+              toYearStatus: FORM_STATUS.idle,
+              toYearChange: false,
+            },
+            true
+          );
           return;
         }
 
@@ -248,13 +277,17 @@ const EducationForm = React.forwardRef(
         });
       } else {
         if (userToPresent === "") {
-          updateEducation(eduIndex, {
-            toPresent: "",
-            toMonthStatus: FORM_STATUS.idle,
-            toMonthChange: false,
-            toYearStatus: FORM_STATUS.idle,
-            toYearChange: false,
-          });
+          updateEducation(
+            eduIndex,
+            {
+              toPresent: "",
+              toMonthStatus: FORM_STATUS.idle,
+              toMonthChange: false,
+              toYearStatus: FORM_STATUS.idle,
+              toYearChange: false,
+            },
+            true
+          );
           return;
         }
 
@@ -298,11 +331,15 @@ const EducationForm = React.forwardRef(
 
     function setDescriptionInput(value) {
       if (value === userDescription) {
-        updateEducation(eduIndex, {
-          descriptionInput: value,
-          descriptionChange: false,
-          descriptionStatus: FORM_STATUS.idle,
-        });
+        updateEducation(
+          eduIndex,
+          {
+            descriptionInput: value,
+            descriptionChange: false,
+            descriptionStatus: FORM_STATUS.idle,
+          },
+          true
+        );
         return;
       }
 
@@ -344,6 +381,7 @@ const EducationForm = React.forwardRef(
             className="button remove-button"
             aria-label={`Remove ${school.schoolNameInput || "New"} Education`}
             onClick={() => removeEducation(eduIndex)}
+            onKeyDown={(e) => removeEducationFocusManagement(e, eduIndex)}
           >
             <span className="sr-only">Remove Project</span>
             <span className="button-icon">

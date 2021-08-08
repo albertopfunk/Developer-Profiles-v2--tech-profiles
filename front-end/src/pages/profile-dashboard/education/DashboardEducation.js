@@ -4,30 +4,35 @@ import { ReactComponent as CloseIcon } from "../../../global/assets/dashboard-cl
 import { ReactComponent as EditIcon } from "../../../global/assets/dashboard-edit.svg";
 import { ReactComponent as AddIcon } from "../../../global/assets/dashboard-add.svg";
 
-import ControlButton from "../../../components/forms/buttons/ControlButton";
-
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
 import useCurrentYear from "../../../global/helpers/hooks/useCurrentYear";
 import { FORM_STATUS } from "../../../global/helpers/variables";
 import { validateInput } from "../../../global/helpers/validation";
+import useToggle from "../../../global/helpers/hooks/useToggle";
 import Announcer from "../../../global/helpers/announcer";
 import Spacer from "../../../global/helpers/spacer";
 
 import EducationForm from "../../../components/forms/user-extras/EducationForm";
+import ControlButton from "../../../components/forms/buttons/ControlButton";
 
 let formSuccessWait;
 function DashboardEducation() {
   const { user, addUserExtras } = useContext(ProfileContext);
-  const currentYear = useCurrentYear();
 
   const [formStatus, setFormStatus] = useState(FORM_STATUS.idle);
   const [formFocusStatus, setFormFocusStatus] = useState("");
   const [hasSubmitError, setHasSubmitError] = useState(null);
+
   const [education, setEducation] = useState([]);
   const [educationChange, setEducationChange] = useState(false);
-  const [removedEduIndex, setRemovedEduIndex] = useState(null);
-  const [removedEduUpdate, setRemovedEduUpdate] = useState(true);
-  const [idTracker, setIdTracker] = useState(1);
+  const [newEducationId, setNewEducationId] = useState(1);
+  const [removedEducationIndex, setRemovedEducationIndex] = useState(null);
+  const [
+    removeEducationFocusToggle,
+    setRemoveEducationFocusToggle,
+  ] = useToggle();
+
+  const currentYear = useCurrentYear();
 
   let isSubmittingRef = useRef(false);
   const errorSummaryRef = React.createRef();
@@ -35,40 +40,14 @@ function DashboardEducation() {
   const addNewBtnRef = React.createRef();
   const removeBtnRefs = useRef([]);
 
-  useEffect(() => {
-    if (formStatus === FORM_STATUS.error && errorSummaryRef.current) {
-      errorSummaryRef.current.focus();
-    }
-  }, [formStatus]);
-
+  // unmount cleanup
   useEffect(() => {
     return () => {
       clearTimeout(formSuccessWait);
     };
   }, []);
 
-  useEffect(() => {
-    if (removedEduIndex === null) {
-      return;
-    }
-
-    if (removeBtnRefs.current.length === 0) {
-      addNewBtnRef.current.focus();
-      return;
-    }
-
-    if (removeBtnRefs.current.length === 1) {
-      removeBtnRefs.current[0].current.focus();
-      return;
-    }
-
-    if (removeBtnRefs.current[removedEduIndex]) {
-      removeBtnRefs.current[removedEduIndex].current.focus();
-    } else {
-      removeBtnRefs.current[removedEduIndex - 1].current.focus();
-    }
-  }, [removedEduUpdate]);
-
+  // form focus management
   useEffect(() => {
     if (formFocusStatus) {
       if (formFocusStatus === FORM_STATUS.idle) {
@@ -82,7 +61,37 @@ function DashboardEducation() {
     }
   }, [formFocusStatus]);
 
-  function formFocusAction(e, status) {
+  // form error focus management
+  useEffect(() => {
+    if (formStatus === FORM_STATUS.error && errorSummaryRef.current) {
+      errorSummaryRef.current.focus();
+    }
+  }, [formStatus]);
+
+  // remove education focus management
+  useEffect(() => {
+    if (removedEducationIndex === null) {
+      return;
+    }
+
+    if (removeBtnRefs.current.length === 0) {
+      addNewBtnRef.current.focus();
+      return;
+    }
+
+    if (removeBtnRefs.current.length === 1) {
+      removeBtnRefs.current[0].current.focus();
+      return;
+    }
+
+    if (removeBtnRefs.current[removedEducationIndex]) {
+      removeBtnRefs.current[removedEducationIndex].current.focus();
+    } else {
+      removeBtnRefs.current[removedEducationIndex - 1].current.focus();
+    }
+  }, [removeEducationFocusToggle]);
+
+  function formFocusManagement(e, status) {
     // enter/space
     if (e.keyCode !== 13 && e.keyCode !== 32) {
       return;
@@ -136,6 +145,8 @@ function DashboardEducation() {
 
   function setFormInputs() {
     setFormStatus(FORM_STATUS.active);
+    setFormFocusStatus("");
+    setHasSubmitError(null);
 
     const updatedUserEducation = user.education.map((edu) => {
       const datesObj = splitDates(edu.school_dates);
@@ -166,15 +177,37 @@ function DashboardEducation() {
       };
     });
 
-    removeBtnRefs.current = updatedUserEducation.map(() => React.createRef());
     setEducation(updatedUserEducation);
+    setEducationChange(false);
+    setNewEducationId(1);
+    setRemovedEducationIndex(null);
+    removeBtnRefs.current = updatedUserEducation.map(() => React.createRef());
   }
 
-  function updateEducation(index, state) {
+  function updateEducation(index, state, checkChanges = false) {
     const newEduArr = [...education];
     const newEduObj = { ...newEduArr[index], ...state };
     newEduArr.splice(index, 1, newEduObj);
     setEducation(newEduArr);
+
+    if (checkChanges) {
+      const userEduChange = newEduArr.filter(
+        (edu) =>
+          Number.isInteger(edu.id) &&
+          (edu.schoolChange ||
+            edu.fieldOfStudyChange ||
+            edu.descriptionChange ||
+            edu.fromMonthChange ||
+            edu.fromYearChange ||
+            edu.toMonthChange ||
+            edu.toYearChange)
+      );
+
+      // set form back to active if no changes
+      if (userEduChange.length === 0 && !educationChange) {
+        setFormStatus(FORM_STATUS.active);
+      }
+    }
   }
 
   function addEducation(e) {
@@ -184,7 +217,7 @@ function DashboardEducation() {
       ...education,
 
       {
-        id: `new-${idTracker}`,
+        id: `new-${newEducationId}`,
 
         schoolNameInput: "",
         schoolStatus: FORM_STATUS.idle,
@@ -216,24 +249,67 @@ function DashboardEducation() {
 
     removeBtnRefs.current = currentEducation.map(() => React.createRef());
     setEducation(currentEducation);
-    setIdTracker(idTracker + 1);
+    setNewEducationId(newEducationId + 1);
     setEducationChange(true);
+  }
+
+  function removeEducationFocusManagement(e, eduIndex) {
+    // enter/space
+    if (e.keyCode !== 13 && e.keyCode !== 32) {
+      return;
+    }
+
+    removeEducation(eduIndex);
+    setRemoveEducationFocusToggle();
   }
 
   function removeEducation(eduIndex) {
     const newEducation = [...education];
     newEducation.splice(eduIndex, 1);
     removeBtnRefs.current = newEducation.map(() => React.createRef());
+    setEducation(newEducation);
+    setRemovedEducationIndex(eduIndex);
+    setEducationChanges(newEducation);
+  }
 
-    if (newEducation.length === user.education.length) {
-      setEducationChange(false);
-    } else {
+  function setEducationChanges(education) {
+    let savedEducation = [];
+    let newEducation = [];
+
+    education.forEach((edu) => {
+      if (Number.isInteger(edu.id)) {
+        savedEducation.push(edu);
+      } else {
+        newEducation.push(edu);
+      }
+    });
+
+    if (
+      newEducation.length > 0 ||
+      savedEducation.length !== user.education.length
+    ) {
       setEducationChange(true);
+      return;
     }
 
-    setEducation(newEducation);
-    setRemovedEduIndex(eduIndex);
-    setRemovedEduUpdate(!removedEduUpdate);
+    // checking input changes if no education change
+    const savedEducationChange = savedEducation.filter(
+      (edu) =>
+        edu.schoolChange ||
+        edu.fieldOfStudyChange ||
+        edu.descriptionChange ||
+        edu.fromMonthChange ||
+        edu.fromYearChange ||
+        edu.toMonthChange ||
+        edu.toYearChange
+    );
+
+    // set form back to active if no changes
+    if (savedEducationChange.length === 0) {
+      setFormStatus(FORM_STATUS.active);
+    }
+
+    setEducationChange(false);
   }
 
   function checkFormErrors() {
@@ -547,7 +623,7 @@ function DashboardEducation() {
             id="edit-info-btn"
             className="button edit-button"
             onClick={setFormInputs}
-            onKeyDown={(e) => formFocusAction(e, FORM_STATUS.active)}
+            onKeyDown={(e) => formFocusManagement(e, FORM_STATUS.active)}
           >
             <span className="sr-only">Edit Information</span>
             <span className="button-icon">
@@ -621,7 +697,7 @@ function DashboardEducation() {
           form="education-form"
           className="button reset-button"
           onClick={resetForm}
-          onKeyDown={(e) => formFocusAction(e, FORM_STATUS.idle)}
+          onKeyDown={(e) => formFocusManagement(e, FORM_STATUS.idle)}
         >
           <span className="sr-only">cancel</span>
           <span className="button-icon">
@@ -798,6 +874,9 @@ function DashboardEducation() {
                       descriptionChange: edu.descriptionChange,
                     }}
                     updateEducation={updateEducation}
+                    removeEducationFocusManagement={
+                      removeEducationFocusManagement
+                    }
                     removeEducation={removeEducation}
                     isSubmitting={isSubmittingRef}
                   />

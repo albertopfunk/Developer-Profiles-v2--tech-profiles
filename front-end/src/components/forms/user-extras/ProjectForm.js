@@ -25,17 +25,22 @@ const ProjectForm = React.forwardRef(
       projectDescription,
       updateProject,
       removeProject,
+      removeProjectFocusManagement,
       isSubmitting,
     },
     removeBtnRef
   ) => {
     function setProjectNameInput(value) {
       if (value === userProjectName) {
-        updateProject(projIndex, {
-          projectNameInput: value,
-          projectChange: false,
-          projectStatus: FORM_STATUS.idle,
-        });
+        updateProject(
+          projIndex,
+          {
+            projectNameInput: value,
+            projectChange: false,
+            projectStatus: FORM_STATUS.idle,
+          },
+          true
+        );
         return;
       }
 
@@ -88,11 +93,15 @@ const ProjectForm = React.forwardRef(
 
     function setLinkInput(value) {
       if (value === userProjectLink) {
-        updateProject(projIndex, {
-          linkInput: value,
-          linkStatus: FORM_STATUS.idle,
-          linkChange: false,
-        });
+        updateProject(
+          projIndex,
+          {
+            linkInput: value,
+            linkStatus: FORM_STATUS.idle,
+            linkChange: false,
+          },
+          true
+        );
         return;
       }
 
@@ -123,11 +132,15 @@ const ProjectForm = React.forwardRef(
 
     function setDescriptionInput(value) {
       if (value === userProjectDescription) {
-        updateProject(projIndex, {
-          descriptionInput: value,
-          descriptionStatus: FORM_STATUS.idle,
-          descriptionChange: false,
-        });
+        updateProject(
+          projIndex,
+          {
+            descriptionInput: value,
+            descriptionStatus: FORM_STATUS.idle,
+            descriptionChange: false,
+          },
+          true
+        );
         return;
       }
 
@@ -170,6 +183,7 @@ const ProjectForm = React.forwardRef(
               projectName.projectNameInput || "New"
             } Project`}
             onClick={() => removeProject(projIndex)}
+            onKeyDown={(e) => removeProjectFocusManagement(e, projIndex)}
           >
             <span className="sr-only">Remove Project</span>
             <span className="button-icon">
