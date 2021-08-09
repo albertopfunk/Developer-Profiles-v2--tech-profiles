@@ -111,10 +111,15 @@ function NewUser() {
   }, [formFocusStatus]);
 
   function formFocusAction(e, status) {
-    // enter/space
+    // only run on enter or space
     if (e.keyCode !== 13 && e.keyCode !== 32) {
       return;
     }
+
+    // preventing onClick from running
+    // onClick from edit button will sometimes run after
+    // onKeydown runs for reset button
+    e.preventDefault();
 
     if (status === FORM_STATUS.active) {
       setFormInputs();
@@ -556,6 +561,7 @@ function NewUser() {
         <div className="controls-container">
           <ControlButton
             ref={editInfoBtnRef}
+            type="button"
             buttonText="quickstart"
             ariaLabel="form"
             onClick={setFormInputs}

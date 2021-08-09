@@ -53,6 +53,7 @@ function AboutYou() {
   let isSubmittingRef = useRef(false);
   let errorSummaryRef = React.createRef();
   let editInfoBtnRef = React.createRef();
+  let resetBtnRef = React.createRef();
   let summaryInputRef = React.createRef();
 
   useEffect(() => {
@@ -95,16 +96,19 @@ function AboutYou() {
       }
 
       if (formFocusStatus === FORM_STATUS.active) {
-        summaryInputRef.current.focus();
+        resetBtnRef.current.focus();
       }
     }
   }, [formFocusStatus]);
 
   function formFocusAction(e, status) {
-    // enter/space
+    // only run on enter or space
     if (e.keyCode !== 13 && e.keyCode !== 32) {
       return;
     }
+
+    // preventing onClick from running
+    e.preventDefault();
 
     if (status === FORM_STATUS.active) {
       setFormInputs();
@@ -603,6 +607,7 @@ function AboutYou() {
         <div className="edit-info-header">
           <h2 id="edit-information-heading">Edit Info</h2>
           <button
+            ref={resetBtnRef}
             disabled={
               formStatus === FORM_STATUS.loading ||
               formStatus === FORM_STATUS.success
