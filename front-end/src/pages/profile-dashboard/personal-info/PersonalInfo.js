@@ -10,6 +10,7 @@ import { ProfileContext } from "../../../global/context/user-profile/ProfileCont
 import { httpClient } from "../../../global/helpers/http-requests";
 import { validateInput } from "../../../global/helpers/validation";
 import { FORM_STATUS } from "../../../global/helpers/variables";
+import useToggle from "../../../global/helpers/hooks/useToggle";
 import Announcer from "../../../global/helpers/announcer";
 import Spacer from "../../../global/helpers/spacer";
 
@@ -30,9 +31,7 @@ function PersonalInfo() {
     inputChange: false,
     inputStatus: FORM_STATUS.idle,
   });
-
   const [imageChange, setImageChange] = useState(false);
-
   const [areaOfWork, setAreaOfWork] = useState({
     inputValue: "",
     inputChange: false,
@@ -43,26 +42,42 @@ function PersonalInfo() {
     inputStatus: FORM_STATUS.idle,
   });
 
+  const [checkChangesToggle, setCheckChangesToggle] = useToggle();
+
   let isSubmittingRef = useRef(false);
-  let errorSummaryRef = React.createRef();
-  let editInfoBtnRef = React.createRef();
-  let resetBtnRef = React.createRef();
-  let firstNameInputRef = React.createRef();
-  let lastNameInputRef = React.createRef();
-  let titleInputRef = React.createRef();
+  const errorSummaryRef = React.createRef();
+  const editInfoBtnRef = React.createRef();
+  const resetBtnRef = React.createRef();
 
-  useEffect(() => {
-    if (formStatus === FORM_STATUS.error && errorSummaryRef.current) {
-      errorSummaryRef.current.focus();
-    }
-  }, [formStatus]);
-
+  // unmount cleanup
   useEffect(() => {
     return () => {
       clearTimeout(formSuccessWait);
     };
   }, []);
 
+  // form focus management
+  useEffect(() => {
+    if (formFocusStatus) {
+      if (formFocusStatus === FORM_STATUS.idle) {
+        editInfoBtnRef.current.focus();
+        return;
+      }
+
+      if (formFocusStatus === FORM_STATUS.active) {
+        resetBtnRef.current.focus();
+      }
+    }
+  }, [formFocusStatus]);
+
+  // form error focus management
+  useEffect(() => {
+    if (formStatus === FORM_STATUS.error && errorSummaryRef.current) {
+      errorSummaryRef.current.focus();
+    }
+  }, [formStatus]);
+
+  // resets form status if no changes
   useEffect(() => {
     if (formStatus !== FORM_STATUS.error) {
       return;
@@ -77,28 +92,9 @@ function PersonalInfo() {
     ) {
       setFormStatus(FORM_STATUS.active);
     }
-  }, [
-    firstName.inputChange,
-    lastName.inputChange,
-    imageChange,
-    areaOfWork.inputChange,
-    title.inputChange,
-  ]);
+  }, [checkChangesToggle]);
 
-  useEffect(() => {
-    if (formFocusStatus) {
-      if (formFocusStatus === FORM_STATUS.idle) {
-        editInfoBtnRef.current.focus();
-        return;
-      }
-
-      if (formFocusStatus === FORM_STATUS.active) {
-        resetBtnRef.current.focus();
-      }
-    }
-  }, [formFocusStatus]);
-
-  function formFocusAction(e, status) {
+  function formFocusManagement(e, status) {
     // only run on enter or space
     if (e.keyCode !== 13 && e.keyCode !== 32) {
       return;
@@ -121,18 +117,20 @@ function PersonalInfo() {
 
   function setFormInputs() {
     setFormStatus(FORM_STATUS.active);
+    setFormFocusStatus("");
+    setHasSubmitError(null);
 
     setFirstName({
       inputValue: user.first_name || "",
       inputChange: false,
       inputStatus: FORM_STATUS.idle,
     });
+    setImageChange(false);
     setLastName({
       inputValue: user.last_name || "",
       inputChange: false,
       inputStatus: FORM_STATUS.idle,
     });
-
     setAreaOfWork({
       inputValue: "",
       inputChange: false,
@@ -151,6 +149,7 @@ function PersonalInfo() {
         inputValue: "",
         inputStatus: FORM_STATUS.idle,
       });
+      setCheckChangesToggle();
       return;
     }
 
@@ -160,6 +159,7 @@ function PersonalInfo() {
         inputValue: value,
         inputStatus: FORM_STATUS.idle,
       });
+      setCheckChangesToggle();
       return;
     }
 
@@ -182,6 +182,14 @@ function PersonalInfo() {
     }
   }
 
+  function setImage(change) {
+    if (!change) {
+      setCheckChangesToggle();
+    }
+
+    setImageChange(change);
+  }
+
   function setLastNameInput(value) {
     if (!user.last_name && value.trim() === "") {
       setLastName({
@@ -189,6 +197,7 @@ function PersonalInfo() {
         inputValue: "",
         inputStatus: FORM_STATUS.idle,
       });
+      setCheckChangesToggle();
       return;
     }
 
@@ -198,6 +207,7 @@ function PersonalInfo() {
         inputValue: value,
         inputStatus: FORM_STATUS.idle,
       });
+      setCheckChangesToggle();
       return;
     }
 
@@ -223,6 +233,7 @@ function PersonalInfo() {
   function setAreaOfWorkInput(value) {
     if (value === user.area_of_work) {
       setAreaOfWork({ ...areaOfWork, inputChange: false });
+      setCheckChangesToggle();
       return;
     }
     setAreaOfWork({ ...areaOfWork, inputChange: true, inputValue: value });
@@ -235,6 +246,7 @@ function PersonalInfo() {
         inputValue: "",
         inputStatus: FORM_STATUS.idle,
       });
+      setCheckChangesToggle();
       return;
     }
 
@@ -244,6 +256,7 @@ function PersonalInfo() {
         inputValue: value,
         inputStatus: FORM_STATUS.idle,
       });
+      setCheckChangesToggle();
       return;
     }
 
@@ -265,6 +278,7 @@ function PersonalInfo() {
   async function submitEdit(e) {
     e.preventDefault();
 
+    // check for changes
     if (
       !firstName.inputChange &&
       !lastName.inputChange &&
@@ -275,15 +289,17 @@ function PersonalInfo() {
       return;
     }
 
+    // set loading
     setFormStatus(FORM_STATUS.loading);
     isSubmittingRef.current = true;
+
+    // validate and set up requests
     let areThereErrors = false;
     const inputs = {};
 
     if (firstName.inputChange) {
       if (firstName.inputValue.trim() === "") {
         inputs.first_name = "";
-        firstNameInputRef.current.blur();
         setFirstName({
           ...firstName,
           inputValue: "",
@@ -291,7 +307,6 @@ function PersonalInfo() {
         });
       } else if (validateInput("name", firstName.inputValue)) {
         inputs.first_name = firstName.inputValue;
-        firstNameInputRef.current.blur();
         setFirstName({ ...firstName, inputStatus: FORM_STATUS.success });
       } else {
         areThereErrors = true;
@@ -302,7 +317,6 @@ function PersonalInfo() {
     if (lastName.inputChange) {
       if (lastName.inputValue.trim() === "") {
         inputs.last_name = "";
-        lastNameInputRef.current.blur();
         setLastName({
           ...lastName,
           inputValue: "",
@@ -310,7 +324,6 @@ function PersonalInfo() {
         });
       } else if (validateInput("name", lastName.inputValue)) {
         inputs.last_name = lastName.inputValue;
-        lastNameInputRef.current.blur();
         setLastName({ ...lastName, inputStatus: FORM_STATUS.success });
       } else {
         areThereErrors = true;
@@ -321,7 +334,6 @@ function PersonalInfo() {
     if (title.inputChange) {
       if (title.inputValue.trim() === "") {
         inputs.desired_title = "";
-        titleInputRef.current.blur();
         setTitle({
           ...title,
           inputValue: "",
@@ -329,7 +341,6 @@ function PersonalInfo() {
         });
       } else if (validateInput("title", title.inputValue)) {
         inputs.desired_title = title.inputValue;
-        titleInputRef.current.blur();
         setTitle({ ...title, inputStatus: FORM_STATUS.success });
       } else {
         areThereErrors = true;
@@ -346,6 +357,13 @@ function PersonalInfo() {
       return;
     }
 
+    // unfocus from input
+    let element = document.activeElement;
+    if (element.dataset.input) {
+      element.blur();
+    }
+
+    // continue setting up requests
     if (areaOfWork.inputChange) {
       inputs.area_of_work = areaOfWork.inputValue;
     }
@@ -381,6 +399,7 @@ function PersonalInfo() {
       }
     }
 
+    // submit
     const results = await editProfile(inputs);
 
     if (results?.error) {
@@ -392,7 +411,6 @@ function PersonalInfo() {
 
     formSuccessWait = setTimeout(() => {
       setFormStatus(FORM_STATUS.idle);
-      setHasSubmitError(null);
       isSubmittingRef.current = false;
     }, 750);
     setFormStatus(FORM_STATUS.success);
@@ -412,7 +430,7 @@ function PersonalInfo() {
             id="edit-info-btn"
             className="button edit-button"
             onClick={setFormInputs}
-            onKeyDown={(e) => formFocusAction(e, FORM_STATUS.active)}
+            onKeyDown={(e) => formFocusManagement(e, FORM_STATUS.active)}
           >
             <span className="sr-only">Edit Information</span>
             <span className="button-icon">
@@ -488,7 +506,7 @@ function PersonalInfo() {
             form="submit-form"
             className="button reset-button"
             onClick={resetForm}
-            onKeyDown={(e) => formFocusAction(e, FORM_STATUS.idle)}
+            onKeyDown={(e) => formFocusManagement(e, FORM_STATUS.idle)}
           >
             <span className="sr-only">cancel</span>
             <span className="button-icon">
@@ -555,11 +573,11 @@ function PersonalInfo() {
             <label htmlFor="first-name">First Name:</label>
             <Spacer axis="vertical" size="5" />
             <input
-              ref={firstNameInputRef}
               type="text"
               autoComplete="given-name"
               id="first-name"
               name="first-name"
+              data-input
               className={`input ${
                 firstName.inputStatus === FORM_STATUS.error ? "input-err" : ""
               }`}
@@ -585,11 +603,11 @@ function PersonalInfo() {
             <label htmlFor="last-name">Last Name:</label>
             <Spacer axis="vertical" size="5" />
             <input
-              ref={lastNameInputRef}
               type="text"
               autoComplete="family-name"
               id="last-name"
               name="last-name"
+              data-input
               className={`input ${
                 lastName.inputStatus === FORM_STATUS.error ? "input-err" : ""
               }`}
@@ -612,7 +630,7 @@ function PersonalInfo() {
           </InputContainer>
 
           <Spacer axis="vertical" size="30" />
-          <ImageBox setImageChange={setImageChange} />
+          <ImageBox setImageChange={setImage} />
           <Spacer axis="vertical" size="30" />
 
           <FieldSet>
@@ -670,11 +688,11 @@ function PersonalInfo() {
             <label htmlFor="title">Title:</label>
             <Spacer axis="vertical" size="5" />
             <input
-              ref={titleInputRef}
               type="text"
               autoComplete="organization-title"
               id="title"
               name="title"
+              data-input
               className={`input ${
                 title.inputStatus === FORM_STATUS.error ? "input-err" : ""
               }`}

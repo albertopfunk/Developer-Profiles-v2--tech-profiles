@@ -10,6 +10,7 @@ import { ProfileContext } from "../../../global/context/user-profile/ProfileCont
 import { httpClient } from "../../../global/helpers/http-requests";
 import { validateInput } from "../../../global/helpers/validation";
 import { FORM_STATUS } from "../../../global/helpers/variables";
+import useToggle from "../../../global/helpers/hooks/useToggle";
 import Announcer from "../../../global/helpers/announcer";
 import Spacer from "../../../global/helpers/spacer";
 
@@ -50,28 +51,42 @@ function YourWhereabouts() {
   const [location, setLocation] = useState([]);
   const [locationChange, setLocationChange] = useState(false);
 
+  const [checkChangesToggle, setCheckChangesToggle] = useToggle();
+
   let isSubmittingRef = useRef(false);
-  let errorSummaryRef = React.createRef();
-  let editInfoBtnRef = React.createRef();
-  let resetBtnRef = React.createRef();
-  let githubInputRef = React.createRef();
-  let linkedinInputRef = React.createRef();
-  let twitterInputRef = React.createRef();
-  let portfolioInputRef = React.createRef();
-  let emailInputRef = React.createRef();
+  const errorSummaryRef = React.createRef();
+  const editInfoBtnRef = React.createRef();
+  const resetBtnRef = React.createRef();
 
-  useEffect(() => {
-    if (formStatus === FORM_STATUS.error && errorSummaryRef.current) {
-      errorSummaryRef.current.focus();
-    }
-  }, [formStatus]);
-
+  // unmount cleanup
   useEffect(() => {
     return () => {
       clearTimeout(formSuccessWait);
     };
   }, []);
 
+  // form focus management
+  useEffect(() => {
+    if (formFocusStatus) {
+      if (formFocusStatus === FORM_STATUS.idle) {
+        editInfoBtnRef.current.focus();
+        return;
+      }
+
+      if (formFocusStatus === FORM_STATUS.active) {
+        resetBtnRef.current.focus();
+      }
+    }
+  }, [formFocusStatus]);
+
+  // form error focus management
+  useEffect(() => {
+    if (formStatus === FORM_STATUS.error && errorSummaryRef.current) {
+      errorSummaryRef.current.focus();
+    }
+  }, [formStatus]);
+
+  // resets form status if no changes
   useEffect(() => {
     if (formStatus !== FORM_STATUS.error) {
       return;
@@ -87,29 +102,9 @@ function YourWhereabouts() {
     ) {
       setFormStatus(FORM_STATUS.active);
     }
-  }, [
-    github.inputChange,
-    twitter.inputChange,
-    linkedin.inputChange,
-    portfolio.inputChange,
-    email.inputChange,
-    locationChange,
-  ]);
+  }, [checkChangesToggle]);
 
-  useEffect(() => {
-    if (formFocusStatus) {
-      if (formFocusStatus === FORM_STATUS.idle) {
-        editInfoBtnRef.current.focus();
-        return;
-      }
-
-      if (formFocusStatus === FORM_STATUS.active) {
-        resetBtnRef.current.focus();
-      }
-    }
-  }, [formFocusStatus]);
-
-  function formFocusAction(e, status) {
+  function formFocusManagement(e, status) {
     // only run on enter or space
     if (e.keyCode !== 13 && e.keyCode !== 32) {
       return;
@@ -132,6 +127,8 @@ function YourWhereabouts() {
 
   function setFormInputs() {
     setFormStatus(FORM_STATUS.active);
+    setFormFocusStatus("");
+    setHasSubmitError(null);
 
     setGithub({
       inputValue: user.github || "",
@@ -181,6 +178,7 @@ function YourWhereabouts() {
         inputValue: "",
         inputStatus: FORM_STATUS.idle,
       });
+      setCheckChangesToggle();
       return;
     }
 
@@ -190,6 +188,7 @@ function YourWhereabouts() {
         inputValue: value,
         inputStatus: FORM_STATUS.idle,
       });
+      setCheckChangesToggle();
       return;
     }
 
@@ -225,6 +224,7 @@ function YourWhereabouts() {
         inputValue: "",
         inputStatus: FORM_STATUS.idle,
       });
+      setCheckChangesToggle();
       return;
     }
 
@@ -234,6 +234,7 @@ function YourWhereabouts() {
         inputValue: value,
         inputStatus: FORM_STATUS.idle,
       });
+      setCheckChangesToggle();
       return;
     }
 
@@ -268,6 +269,7 @@ function YourWhereabouts() {
         inputValue: "",
         inputStatus: FORM_STATUS.idle,
       });
+      setCheckChangesToggle();
       return;
     }
 
@@ -277,6 +279,7 @@ function YourWhereabouts() {
         inputValue: value,
         inputStatus: FORM_STATUS.idle,
       });
+      setCheckChangesToggle();
       return;
     }
 
@@ -312,6 +315,7 @@ function YourWhereabouts() {
         inputValue: "",
         inputStatus: FORM_STATUS.idle,
       });
+      setCheckChangesToggle();
       return;
     }
 
@@ -321,6 +325,7 @@ function YourWhereabouts() {
         inputValue: value,
         inputStatus: FORM_STATUS.idle,
       });
+      setCheckChangesToggle();
       return;
     }
 
@@ -350,6 +355,7 @@ function YourWhereabouts() {
         inputValue: "",
         inputStatus: FORM_STATUS.idle,
       });
+      setCheckChangesToggle();
       return;
     }
 
@@ -359,6 +365,7 @@ function YourWhereabouts() {
         inputValue: value,
         inputStatus: FORM_STATUS.idle,
       });
+      setCheckChangesToggle();
       return;
     }
 
@@ -384,6 +391,7 @@ function YourWhereabouts() {
 
     if (err) {
       console.error(`${res.mssg} => ${res.err}`);
+      if (res.err === "Zero results found") return [];
       return { error: "Error getting location results" };
     }
 
@@ -410,6 +418,7 @@ function YourWhereabouts() {
     let locationChange;
     if (user.current_location_name === name) {
       locationChange = false;
+      setCheckChangesToggle();
     } else {
       locationChange = true;
     }
@@ -429,6 +438,7 @@ function YourWhereabouts() {
     let locationChange;
     if (!user.current_location_name) {
       locationChange = false;
+      setCheckChangesToggle();
     } else {
       locationChange = true;
     }
@@ -440,6 +450,7 @@ function YourWhereabouts() {
   async function submitEdit(e) {
     e.preventDefault();
 
+    // check for changes
     if (
       !github.inputChange &&
       !twitter.inputChange &&
@@ -451,15 +462,17 @@ function YourWhereabouts() {
       return;
     }
 
+    // set loading
     setFormStatus(FORM_STATUS.loading);
     isSubmittingRef.current = true;
+
+    // validate and set up requests
     let areThereErrors = false;
     const inputs = {};
 
     if (github.inputChange) {
       if (github.inputValue.trim() === "") {
         inputs.github = "";
-        githubInputRef.current.blur();
         setGithub({
           ...github,
           inputValue: "",
@@ -474,7 +487,6 @@ function YourWhereabouts() {
           inputValue: fullUrl,
         });
         inputs.github = fullUrl;
-        githubInputRef.current.blur();
       } else {
         areThereErrors = true;
         setGithub({ ...github, inputStatus: FORM_STATUS.error });
@@ -489,7 +501,6 @@ function YourWhereabouts() {
           inputStatus: FORM_STATUS.success,
         });
         inputs.twitter = "";
-        twitterInputRef.current.blur();
       } else if (validateInput("twitter", twitter.inputValue)) {
         const fullUrl = `https://twitter.com/${validateInput(
           "twitter",
@@ -501,7 +512,6 @@ function YourWhereabouts() {
           inputValue: fullUrl,
         });
         inputs.twitter = fullUrl;
-        twitterInputRef.current.blur();
       } else {
         areThereErrors = true;
         setTwitter({ ...twitter, inputStatus: FORM_STATUS.error });
@@ -516,7 +526,6 @@ function YourWhereabouts() {
           inputStatus: FORM_STATUS.success,
         });
         inputs.linkedin = "";
-        linkedinInputRef.current.blur();
       } else if (validateInput("linkedin", linkedin.inputValue)) {
         const { intl, username } = validateInput(
           "linkedin",
@@ -529,7 +538,6 @@ function YourWhereabouts() {
           inputValue: fullUrl,
         });
         inputs.linkedin = fullUrl;
-        linkedinInputRef.current.blur();
       } else {
         areThereErrors = true;
         setLinkedin({ ...linkedin, inputStatus: FORM_STATUS.error });
@@ -544,11 +552,9 @@ function YourWhereabouts() {
           inputStatus: FORM_STATUS.success,
         });
         inputs.portfolio = "";
-        portfolioInputRef.current.blur();
       } else if (validateInput("url", portfolio.inputValue)) {
         setPortfolio({ ...portfolio, inputStatus: FORM_STATUS.success });
         inputs.portfolio = portfolio.inputValue;
-        portfolioInputRef.current.blur();
       } else {
         areThereErrors = true;
         setPortfolio({ ...portfolio, inputStatus: FORM_STATUS.error });
@@ -563,11 +569,9 @@ function YourWhereabouts() {
           inputStatus: FORM_STATUS.success,
         });
         inputs.public_email = "";
-        emailInputRef.current.blur();
       } else if (validateInput("email", email.inputValue)) {
         setEmail({ ...email, inputStatus: FORM_STATUS.success });
         inputs.public_email = email.inputValue;
-        emailInputRef.current.blur();
       } else {
         areThereErrors = true;
         setEmail({ ...email, inputStatus: FORM_STATUS.error });
@@ -583,6 +587,13 @@ function YourWhereabouts() {
       return;
     }
 
+    // unfocus from input
+    let element = document.activeElement;
+    if (element.dataset.input) {
+      element.blur();
+    }
+
+    // continue setting up requests
     if (locationChange) {
       if (location.length > 0) {
         const { name, lat, lon } = location[0];
@@ -596,6 +607,7 @@ function YourWhereabouts() {
       }
     }
 
+    // submit
     const results = await editProfile(inputs);
 
     if (results?.error) {
@@ -607,7 +619,6 @@ function YourWhereabouts() {
 
     formSuccessWait = setTimeout(() => {
       setFormStatus(FORM_STATUS.idle);
-      setHasSubmitError(null);
       isSubmittingRef.current = false;
     }, 750);
     setFormStatus(FORM_STATUS.success);
@@ -627,7 +638,7 @@ function YourWhereabouts() {
             id="edit-info-btn"
             className="button edit-button"
             onClick={setFormInputs}
-            onKeyDown={(e) => formFocusAction(e, FORM_STATUS.active)}
+            onKeyDown={(e) => formFocusManagement(e, FORM_STATUS.active)}
           >
             <span className="sr-only">Edit Information</span>
             <span className="button-icon">
@@ -695,7 +706,7 @@ function YourWhereabouts() {
             form="submit-form"
             className="button reset-button"
             onClick={resetForm}
-            onKeyDown={(e) => formFocusAction(e, FORM_STATUS.idle)}
+            onKeyDown={(e) => formFocusManagement(e, FORM_STATUS.idle)}
           >
             <span className="sr-only">cancel</span>
             <span className="button-icon">
@@ -776,12 +787,12 @@ function YourWhereabouts() {
             <label htmlFor="github">Github:</label>
             <Spacer axis="vertical" size="5" />
             <input
-              ref={githubInputRef}
               type="text"
               autoComplete="username"
               inputMode="url"
               id="github"
               name="github"
+              data-input
               className={`input ${
                 github.inputStatus === FORM_STATUS.error ? "input-err" : ""
               }`}
@@ -809,12 +820,12 @@ function YourWhereabouts() {
             <label htmlFor="twitter">Twitter:</label>
             <Spacer axis="vertical" size="5" />
             <input
-              ref={twitterInputRef}
               type="text"
               autoComplete="username"
               inputMode="url"
               id="twitter"
               name="twitter"
+              data-input
               className={`input ${
                 twitter.inputStatus === FORM_STATUS.error ? "input-err" : ""
               }`}
@@ -842,12 +853,12 @@ function YourWhereabouts() {
             <label htmlFor="linkedin">Linkedin:</label>
             <Spacer axis="vertical" size="5" />
             <input
-              ref={linkedinInputRef}
               type="text"
               autoComplete="username"
               inputMode="url"
               id="linkedin"
               name="linkedin"
+              data-input
               className={`input ${
                 linkedin.inputStatus === FORM_STATUS.error ? "input-err" : ""
               }`}
@@ -875,12 +886,12 @@ function YourWhereabouts() {
             <label htmlFor="portfolio">Portfolio:</label>
             <Spacer axis="vertical" size="5" />
             <input
-              ref={portfolioInputRef}
               type="url"
               autoComplete="url"
               inputMode="url"
               id="portfolio"
               name="portfolio"
+              data-input
               className={`input ${
                 portfolio.inputStatus === FORM_STATUS.error ? "input-err" : ""
               }`}
@@ -906,12 +917,12 @@ function YourWhereabouts() {
             <label htmlFor="email">Public Email:</label>
             <Spacer axis="vertical" size="5" />
             <input
-              ref={emailInputRef}
               type="email"
               autoComplete="email"
               inputMode="email"
               id="email"
               name="email"
+              data-input
               className={`input ${
                 email.inputStatus === FORM_STATUS.error ? "input-err" : ""
               }`}

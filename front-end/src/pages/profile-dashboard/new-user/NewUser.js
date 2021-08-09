@@ -1,8 +1,8 @@
 import React, { useState, useContext, useEffect, useRef } from "react";
 import { Link, useHistory } from "react-router-dom";
+import styled from "styled-components";
 import { ReactComponent as WelcomePageIcon } from "../../../global/assets/page-welcome.svg";
 import { ReactComponent as CloseIcon } from "../../../global/assets/dashboard-close.svg";
-import styled from "styled-components";
 
 import ImageBox from "../../../components/forms/images/imageBox";
 import CheckoutContainer from "../../../components/forms/billing";
@@ -13,6 +13,7 @@ import { ProfileContext } from "../../../global/context/user-profile/ProfileCont
 import { httpClient } from "../../../global/helpers/http-requests";
 import { validateInput } from "../../../global/helpers/validation";
 import { FORM_STATUS } from "../../../global/helpers/variables";
+import useToggle from "../../../global/helpers/hooks/useToggle";
 import Announcer from "../../../global/helpers/announcer";
 import Spacer from "../../../global/helpers/spacer";
 
@@ -23,16 +24,13 @@ function NewUser() {
   const [formStatus, setFormStatus] = useState(FORM_STATUS.idle);
   const [formFocusStatus, setFormFocusStatus] = useState("");
   const [hasSubmitError, setHasSubmitError] = useState(null);
-  let history = useHistory();
 
   const [firstName, setFirstName] = useState({
     inputValue: "",
     inputChange: false,
     inputStatus: FORM_STATUS.idle,
   });
-
   const [imageChange, setImageChange] = useState(false);
-
   const [areaOfWork, setAreaOfWork] = useState({
     inputValue: "",
     inputChange: false,
@@ -50,23 +48,46 @@ function NewUser() {
   const [location, setLocation] = useState([]);
   const [locationChange, setLocationChange] = useState(false);
 
-  let isSubmittingRef = useRef(false);
-  let errorSummaryRef = React.createRef();
-  let editInfoBtnRef = React.createRef();
-  let basicInfoTabRef = React.createRef();
-  let basicInfoPanelRef = React.createRef();
-  let billingInfoTabRef = React.createRef();
-  let billingInfoPanelRef = React.createRef();
-  let firstNameInputRef = React.createRef();
-  let titleInputRef = React.createRef();
-  let summaryInputRef = React.createRef();
+  const [checkChangesToggle, setCheckChangesToggle] = useToggle();
+  const history = useHistory();
 
+  let isSubmittingRef = useRef(false);
+  const errorSummaryRef = React.createRef();
+  const editInfoBtnRef = React.createRef();
+  const basicInfoTabRef = React.createRef();
+  const basicInfoPanelRef = React.createRef();
+  const billingInfoTabRef = React.createRef();
+  const billingInfoPanelRef = React.createRef();
+
+  // unmount cleanup
   useEffect(() => {
     return () => {
       clearTimeout(formSuccessWait);
     };
   }, []);
 
+  // form focus management
+  useEffect(() => {
+    if (formFocusStatus) {
+      if (formFocusStatus === FORM_STATUS.idle) {
+        editInfoBtnRef.current.focus();
+        return;
+      }
+
+      if (formFocusStatus === FORM_STATUS.active) {
+        basicInfoTabRef.current.focus();
+      }
+    }
+  }, [formFocusStatus]);
+
+  // form error focus management
+  useEffect(() => {
+    if (formStatus === FORM_STATUS.error && errorSummaryRef.current) {
+      errorSummaryRef.current.focus();
+    }
+  }, [formStatus]);
+
+  // resets form status if no changes
   useEffect(() => {
     if (formStatus !== FORM_STATUS.error) {
       return;
@@ -82,35 +103,9 @@ function NewUser() {
     ) {
       setFormStatus(FORM_STATUS.active);
     }
-  }, [
-    firstName.inputChange,
-    imageChange,
-    areaOfWork.inputChange,
-    title.inputChange,
-    summary.inputChange,
-    locationChange,
-  ]);
+  }, [checkChangesToggle]);
 
-  useEffect(() => {
-    if (formStatus === FORM_STATUS.error && errorSummaryRef.current) {
-      errorSummaryRef.current.focus();
-    }
-  }, [formStatus]);
-
-  useEffect(() => {
-    if (formFocusStatus) {
-      if (formFocusStatus === FORM_STATUS.idle) {
-        editInfoBtnRef.current.focus();
-        return;
-      }
-
-      if (formFocusStatus === FORM_STATUS.active) {
-        basicInfoTabRef.current.focus();
-      }
-    }
-  }, [formFocusStatus]);
-
-  function formFocusAction(e, status) {
+  function formFocusManagement(e, status) {
     // only run on enter or space
     if (e.keyCode !== 13 && e.keyCode !== 32) {
       return;
@@ -134,13 +129,17 @@ function NewUser() {
   }
 
   function setFormInputs() {
+    setSelectedTab("basic-info")
     setFormStatus(FORM_STATUS.active);
+    setFormFocusStatus("");
+    setHasSubmitError(null);
 
     setFirstName({
       inputValue: user.first_name || "",
       inputChange: false,
       inputStatus: FORM_STATUS.idle,
     });
+    setImageChange(false);
     setAreaOfWork({
       inputValue: "",
       inputChange: false,
@@ -176,8 +175,8 @@ function NewUser() {
     setSelectedTab(tab);
   }
 
-  function tabActions(e) {
-    // left/right arrow keys
+  function tabFocusManagement(e) {
+    // left/right arrow keys - change tabs
     if (e.keyCode === 37 || e.keyCode === 39) {
       e.preventDefault();
       if (e.target.id === "basic-info") {
@@ -189,7 +188,7 @@ function NewUser() {
       }
     }
 
-    // down arrow
+    // down arrow - focus on info panel
     if (e.keyCode === 40) {
       e.preventDefault();
       if (e.target.id === "basic-info") {
@@ -199,19 +198,20 @@ function NewUser() {
       }
     }
 
-    // enter and space
-    if (e.keyCode === 13 || e.keyCode === 32) {
-      e.preventDefault();
-    }
+    // do not need these checks
+    // space should scroll like normal and enter does nothing
+    // if (e.keyCode === 13 || e.keyCode === 32) {
+    //   e.preventDefault();
+    // }
 
-    // home
+    // home - focus on first tab
     if (e.keyCode === 36) {
       e.preventDefault();
       changeTab("basic-info");
       basicInfoTabRef.current.focus();
     }
 
-    // end
+    // end - focus on last tab
     if (e.keyCode === 35) {
       e.preventDefault();
       changeTab("billing-info");
@@ -226,6 +226,7 @@ function NewUser() {
         inputValue: "",
         inputStatus: FORM_STATUS.idle,
       });
+      setCheckChangesToggle();
       return;
     }
 
@@ -235,6 +236,7 @@ function NewUser() {
         inputValue: value,
         inputStatus: FORM_STATUS.idle,
       });
+      setCheckChangesToggle();
       return;
     }
 
@@ -257,9 +259,18 @@ function NewUser() {
     }
   }
 
+  function setImage(change) {
+    if (!change) {
+      setCheckChangesToggle();
+    }
+
+    setImageChange(change);
+  }
+
   function setAreaOfWorkInput(value) {
     if (value === user.area_of_work) {
       setAreaOfWork({ ...areaOfWork, inputChange: false });
+      setCheckChangesToggle();
       return;
     }
     setAreaOfWork({ ...areaOfWork, inputChange: true, inputValue: value });
@@ -272,6 +283,7 @@ function NewUser() {
         inputValue: "",
         inputStatus: FORM_STATUS.idle,
       });
+      setCheckChangesToggle();
       return;
     }
 
@@ -281,6 +293,7 @@ function NewUser() {
         inputValue: value,
         inputStatus: FORM_STATUS.idle,
       });
+      setCheckChangesToggle();
       return;
     }
 
@@ -306,6 +319,7 @@ function NewUser() {
         inputValue: "",
         inputStatus: FORM_STATUS.idle,
       });
+      setCheckChangesToggle();
       return;
     }
 
@@ -315,6 +329,7 @@ function NewUser() {
         inputValue: value,
         inputStatus: FORM_STATUS.idle,
       });
+      setCheckChangesToggle();
       return;
     }
 
@@ -344,6 +359,7 @@ function NewUser() {
 
     if (err) {
       console.error(`${res.mssg} => ${res.err}`);
+      if (res.err === "Zero results found") return [];
       return { error: "Error getting location results" };
     }
 
@@ -370,6 +386,7 @@ function NewUser() {
     let locationChange;
     if (user.current_location_name === name) {
       locationChange = false;
+      setCheckChangesToggle();
     } else {
       locationChange = true;
     }
@@ -389,6 +406,7 @@ function NewUser() {
     let locationChange;
     if (!user.current_location_name) {
       locationChange = false;
+      setCheckChangesToggle();
     } else {
       locationChange = true;
     }
@@ -400,6 +418,7 @@ function NewUser() {
   async function submitEdit(e) {
     e.preventDefault();
 
+    // check for changes
     if (
       !firstName.inputChange &&
       !imageChange &&
@@ -411,15 +430,17 @@ function NewUser() {
       return;
     }
 
+    // set loading
     setFormStatus(FORM_STATUS.loading);
     isSubmittingRef.current = true;
+
+    // validate and set up requests
     let areThereErrors = false;
     const inputs = {};
 
     if (firstName.inputChange) {
       if (firstName.inputValue.trim() === "") {
         inputs.first_name = "";
-        firstNameInputRef.current.blur();
         setFirstName({
           ...firstName,
           inputValue: "",
@@ -427,7 +448,6 @@ function NewUser() {
         });
       } else if (validateInput("name", firstName.inputValue)) {
         inputs.first_name = firstName.inputValue;
-        firstNameInputRef.current.blur();
         setFirstName({ ...firstName, inputStatus: FORM_STATUS.success });
       } else {
         areThereErrors = true;
@@ -438,7 +458,6 @@ function NewUser() {
     if (title.inputChange) {
       if (title.inputValue.trim() === "") {
         inputs.desired_title = "";
-        titleInputRef.current.blur();
         setTitle({
           ...title,
           inputValue: "",
@@ -446,7 +465,6 @@ function NewUser() {
         });
       } else if (validateInput("title", title.inputValue)) {
         inputs.desired_title = title.inputValue;
-        titleInputRef.current.blur();
         setTitle({ ...title, inputStatus: FORM_STATUS.success });
       } else {
         areThereErrors = true;
@@ -457,7 +475,6 @@ function NewUser() {
     if (summary.inputChange) {
       if (summary.inputValue.trim() === "") {
         inputs.summary = "";
-        summaryInputRef.current.blur();
         setSummary({
           ...summary,
           inputValue: "",
@@ -465,7 +482,6 @@ function NewUser() {
         });
       } else if (validateInput("summary", summary.inputValue)) {
         inputs.summary = summary.inputValue;
-        summaryInputRef.current.blur();
         setSummary({ ...summary, inputStatus: FORM_STATUS.success });
       } else {
         areThereErrors = true;
@@ -482,6 +498,13 @@ function NewUser() {
       return;
     }
 
+    // unfocus from input
+    let element = document.activeElement;
+    if (element.dataset.input) {
+      element.blur();
+    }
+
+    // continue setting up requests
     if (areaOfWork.inputChange) {
       inputs.area_of_work = areaOfWork.inputValue;
     }
@@ -530,6 +553,7 @@ function NewUser() {
       }
     }
 
+    // submit
     const results = await editProfile(inputs);
 
     if (results?.error) {
@@ -553,7 +577,6 @@ function NewUser() {
     return (
       <WelcomeSection aria-labelledby="welcome-heading">
         <h2 id="welcome-heading">Welcome, {user.first_name || "Newcomer"}!</h2>
-        <Spacer axis="vertical" size="5" />
         <div className="image-container">
           <WelcomePageIcon />
         </div>
@@ -565,7 +588,7 @@ function NewUser() {
             buttonText="quickstart"
             ariaLabel="form"
             onClick={setFormInputs}
-            onKeyDown={(e) => formFocusAction(e, FORM_STATUS.active)}
+            onKeyDown={(e) => formFocusManagement(e, FORM_STATUS.active)}
             attributes={{
               id: "edit-info-btn",
             }}
@@ -591,7 +614,7 @@ function NewUser() {
           form="submit-form"
           className="button reset-button"
           onClick={resetForm}
-          onKeyDown={(e) => formFocusAction(e, FORM_STATUS.idle)}
+          onKeyDown={(e) => formFocusManagement(e, FORM_STATUS.idle)}
         >
           <span className="sr-only">close</span>
           <span className="button-icon">
@@ -672,7 +695,7 @@ function NewUser() {
               // aria-controls="basic-info-panel"
               aria-selected={selectedTab === "basic-info"}
               onClick={(e) => changeTab("basic-info", e)}
-              onKeyDown={(e) => tabActions(e)}
+              onKeyDown={(e) => tabFocusManagement(e)}
             >
               <span className="link-text">basic info</span>
             </a>
@@ -690,7 +713,7 @@ function NewUser() {
               // aria-controls="billing-info-panel"
               aria-selected={selectedTab === "billing-info"}
               onClick={(e) => changeTab("billing-info", e)}
-              onKeyDown={(e) => tabActions(e)}
+              onKeyDown={(e) => tabFocusManagement(e)}
             >
               <span className="link-text">billing info</span>
             </a>
@@ -712,11 +735,11 @@ function NewUser() {
               <label htmlFor="first-name">First Name:</label>
               <Spacer axis="vertical" size="5" />
               <input
-                ref={firstNameInputRef}
                 type="text"
                 autoComplete="given-name"
                 id="first-name"
                 name="first-name"
+                data-input
                 className={`input ${
                   firstName.inputStatus === FORM_STATUS.error ? "input-err" : ""
                 }`}
@@ -738,7 +761,7 @@ function NewUser() {
               ) : null}
             </InputContainer>
             <Spacer axis="vertical" size="30" />
-            <ImageBox setImageChange={setImageChange} />
+            <ImageBox setImageChange={setImage} />
             <Spacer axis="vertical" size="30" />
             <FieldSet>
               <legend>Area of Work</legend>
@@ -795,11 +818,11 @@ function NewUser() {
               <label htmlFor="title">Title:</label>
               <Spacer axis="vertical" size="5" />
               <input
-                ref={titleInputRef}
                 type="text"
                 autoComplete="organization-title"
                 id="title"
                 name="title"
+                data-input
                 className={`input ${
                   title.inputStatus === FORM_STATUS.error ? "input-err" : ""
                 }`}
@@ -825,9 +848,9 @@ function NewUser() {
               <label htmlFor="summary">Profile Summary:</label>
               <Spacer axis="vertical" size="5" />
               <textarea
-                ref={summaryInputRef}
                 id="summary"
                 name="profile-summary"
+                data-input
                 maxLength="280"
                 cols="8"
                 rows="5"

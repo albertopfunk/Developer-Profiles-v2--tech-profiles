@@ -365,6 +365,7 @@ class Combobox extends React.Component {
             autoComplete="off"
             id={`${inputName}-search-input`}
             name={`${inputName}-search-input`}
+            data-input
             aria-describedby={`${inputName}-combobox-instructions ${inputName}-error`}
             aria-autocomplete="list"
             aria-controls="results"

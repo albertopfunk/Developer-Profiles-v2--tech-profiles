@@ -10,6 +10,7 @@ import { ProfileContext } from "../../../global/context/user-profile/ProfileCont
 import { httpClient } from "../../../global/helpers/http-requests";
 import { validateInput } from "../../../global/helpers/validation";
 import { FORM_STATUS } from "../../../global/helpers/variables";
+import useToggle from "../../../global/helpers/hooks/useToggle";
 import Announcer from "../../../global/helpers/announcer";
 import Spacer from "../../../global/helpers/spacer";
 
@@ -19,21 +20,19 @@ function AboutYou() {
   const [formStatus, setFormStatus] = useState(FORM_STATUS.idle);
   const [formFocusStatus, setFormFocusStatus] = useState("");
   const [hasSubmitError, setHasSubmitError] = useState(null);
-  const [skillsForReviewIdTracker, setSkillsForReviewIdTracker] = useState(1);
-
+  
   const [summary, setSummary] = useState({
     inputValue: "",
     inputChange: false,
     inputStatus: FORM_STATUS.idle,
   });
-
   const [location, setLocation] = useState({
     inputValue: [],
     inputChange: false,
     locationsToAdd: [],
     locationsToRemove: [],
   });
-
+  const [skillsForReviewIdTracker, setSkillsForReviewIdTracker] = useState(1);
   const [topSkills, setTopSkills] = useState({
     inputValue: [],
     inputChange: false,
@@ -41,7 +40,6 @@ function AboutYou() {
     skillsToRemove: [],
     skillsForReview: [],
   });
-
   const [additionalSkills, setAdditionalSkills] = useState({
     inputValue: [],
     inputChange: false,
@@ -50,44 +48,21 @@ function AboutYou() {
     skillsForReview: [],
   });
 
+  const [checkChangesToggle, setCheckChangesToggle] = useToggle();
+
   let isSubmittingRef = useRef(false);
-  let errorSummaryRef = React.createRef();
-  let editInfoBtnRef = React.createRef();
-  let resetBtnRef = React.createRef();
-  let summaryInputRef = React.createRef();
+  const errorSummaryRef = React.createRef();
+  const editInfoBtnRef = React.createRef();
+  const resetBtnRef = React.createRef();
 
-  useEffect(() => {
-    if (formStatus === FORM_STATUS.error && errorSummaryRef.current) {
-      errorSummaryRef.current.focus();
-    }
-  }, [formStatus]);
-
+  // unmount cleanup
   useEffect(() => {
     return () => {
       clearTimeout(formSuccessWait);
     };
   }, []);
 
-  useEffect(() => {
-    if (formStatus !== FORM_STATUS.error) {
-      return;
-    }
-
-    if (
-      !summary.inputChange &&
-      !location.inputChange &&
-      !topSkills.inputChange &&
-      !additionalSkills.inputChange
-    ) {
-      setFormStatus(FORM_STATUS.active);
-    }
-  }, [
-    summary.inputChange,
-    location.inputChange,
-    topSkills.inputChange,
-    additionalSkills.inputChange,
-  ]);
-
+  // form focus management
   useEffect(() => {
     if (formFocusStatus) {
       if (formFocusStatus === FORM_STATUS.idle) {
@@ -101,7 +76,30 @@ function AboutYou() {
     }
   }, [formFocusStatus]);
 
-  function formFocusAction(e, status) {
+  // form error focus management
+  useEffect(() => {
+    if (formStatus === FORM_STATUS.error && errorSummaryRef.current) {
+      errorSummaryRef.current.focus();
+    }
+  }, [formStatus]);
+
+  // resets form status if no changes
+  useEffect(() => {
+    if (formStatus !== FORM_STATUS.error) {
+      return;
+    }
+
+    if (
+      !summary.inputChange &&
+      !location.inputChange &&
+      !topSkills.inputChange &&
+      !additionalSkills.inputChange
+    ) {
+      setFormStatus(FORM_STATUS.active);
+    }
+  }, [checkChangesToggle]);
+
+  function formFocusManagement(e, status) {
     // only run on enter or space
     if (e.keyCode !== 13 && e.keyCode !== 32) {
       return;
@@ -124,21 +122,21 @@ function AboutYou() {
 
   function setFormInputs() {
     setFormStatus(FORM_STATUS.active);
-    setSkillsForReviewIdTracker(1);
+    setFormFocusStatus("");
+    setHasSubmitError(null);
 
     setSummary({
       inputValue: user.summary || "",
       inputChange: false,
       inputStatus: FORM_STATUS.idle,
     });
-
     setLocation({
       inputValue: user.locations,
       inputChange: false,
       locationsToAdd: [],
       locationsToRemove: [],
     });
-
+    setSkillsForReviewIdTracker(1);
     setTopSkills({
       inputValue: user.topSkills,
       inputChange: false,
@@ -146,7 +144,6 @@ function AboutYou() {
       skillsToRemove: [],
       skillsForReview: [],
     });
-
     setAdditionalSkills({
       inputValue: user.additionalSkills,
       inputChange: false,
@@ -163,6 +160,7 @@ function AboutYou() {
         inputValue: "",
         inputStatus: FORM_STATUS.idle,
       });
+      setCheckChangesToggle();
       return;
     }
 
@@ -172,6 +170,7 @@ function AboutYou() {
         inputValue: value,
         inputStatus: FORM_STATUS.idle,
       });
+      setCheckChangesToggle();
       return;
     }
 
@@ -237,26 +236,13 @@ function AboutYou() {
     let inputChange;
     if (locationsToAdd.length === 0 && locationsToRemove.length === 0) {
       inputChange = false;
+      setCheckChangesToggle();
     } else {
       inputChange = true;
     }
 
-    return {
-      locationsToAdd,
-      locationsToRemove,
-      inputChange,
-    };
-  }
-
-  function updateLocation(locations) {
-    const { locationsToAdd, locationsToRemove, inputChange } = setLocations(
-      locations
-    );
-
     setLocation({
-      ...location,
       inputValue: locations,
-
       locationsToAdd,
       locationsToRemove,
       inputChange,
@@ -315,13 +301,17 @@ function AboutYou() {
     const userSkillsObj = createObj(userSkills);
     const skillsToAdd = [];
     const skillsForReview = [];
+    let skillsForReviewLen = skillsForReviewIdTracker;
 
     skills.forEach((skill) => {
       if (!(skill.name in userSkillsObj)) {
         if (Number.isInteger(skill.id)) {
           skillsToAdd.push(skill);
         } else {
+          // TODO:
+          // check if user has skill saved
           skillsForReview.push(skill);
+          skillsForReviewLen++
         }
       }
     });
@@ -332,24 +322,27 @@ function AboutYou() {
     );
 
     let inputChange;
-    if (skillsToAdd.length === 0 && skillsToRemove.length === 0) {
-      inputChange = false;
-    } else {
+    if (
+        skillsToAdd.length > 0 ||
+        skillsToRemove.length > 0 ||
+        skillsForReview.length > 0
+      ) {
       inputChange = true;
+    } else {
+      inputChange = false;
+      setCheckChangesToggle();
     }
 
     return {
       skillsToAdd,
       skillsForReview,
+      skillsForReviewLen,
       skillsToRemove,
       inputChange,
     };
   }
 
   function updateSkill(skills, type) {
-    // increasing id on each to avoid possible dups
-    setSkillsForReviewIdTracker(skillsForReviewIdTracker + 1);
-
     let userSkills;
     let skillsStateFn;
     if (type === "top") {
@@ -363,10 +356,12 @@ function AboutYou() {
     const {
       skillsToAdd,
       skillsForReview,
+      skillsForReviewLen,
       skillsToRemove,
       inputChange,
     } = setSkills(skills, userSkills);
 
+    setSkillsForReviewIdTracker(skillsForReviewIdTracker + skillsForReviewLen);
     skillsStateFn({
       inputValue: skills,
       skillsToAdd,
@@ -438,6 +433,7 @@ function AboutYou() {
   async function submitEdit(e) {
     e.preventDefault();
 
+    // check for changes
     if (
       !summary.inputChange &&
       !location.inputChange &&
@@ -447,8 +443,11 @@ function AboutYou() {
       return;
     }
 
+    // set loading
     setFormStatus(FORM_STATUS.loading);
     isSubmittingRef.current = true;
+
+    // validate and set up requests
     let areThereErrors = false;
     let additionalArr = [];
 
@@ -459,7 +458,6 @@ function AboutYou() {
           url: `/users/${user.id}`,
           data: { summary: "" },
         });
-        summaryInputRef.current.blur();
         setSummary({
           ...summary,
           inputValue: "",
@@ -471,7 +469,6 @@ function AboutYou() {
           url: `/users/${user.id}`,
           data: { summary: summary.inputValue },
         });
-        summaryInputRef.current.blur();
         setSummary({ ...summary, inputStatus: FORM_STATUS.success });
       } else {
         areThereErrors = true;
@@ -488,6 +485,13 @@ function AboutYou() {
       return;
     }
 
+    // unfocus from input
+    let element = document.activeElement;
+    if (element.dataset.input) {
+      element.blur();
+    }
+
+    // continue setting up requests
     if (location.inputChange) {
       const locationRequests = setUpLocationRequests();
       additionalArr = [...additionalArr, ...locationRequests];
@@ -503,6 +507,7 @@ function AboutYou() {
       additionalArr = [...additionalArr, ...skillRequests];
     }
 
+    // submit
     const results = await addUserExtras(additionalArr);
 
     if (results?.error) {
@@ -514,10 +519,8 @@ function AboutYou() {
 
     formSuccessWait = setTimeout(() => {
       setFormStatus(FORM_STATUS.idle);
-      setHasSubmitError(null);
       isSubmittingRef.current = false;
     }, 750);
-
     setFormStatus(FORM_STATUS.success);
   }
 
@@ -535,7 +538,7 @@ function AboutYou() {
             id="edit-info-btn"
             className="button edit-button"
             onClick={setFormInputs}
-            onKeyDown={(e) => formFocusAction(e, FORM_STATUS.active)}
+            onKeyDown={(e) => formFocusManagement(e, FORM_STATUS.active)}
           >
             <span className="sr-only">Edit Information</span>
             <span className="button-icon">
@@ -616,7 +619,7 @@ function AboutYou() {
             form="submit-form"
             className="button reset-button"
             onClick={resetForm}
-            onKeyDown={(e) => formFocusAction(e, FORM_STATUS.idle)}
+            onKeyDown={(e) => formFocusManagement(e, FORM_STATUS.idle)}
           >
             <span className="sr-only">cancel</span>
             <span className="button-icon">
@@ -668,9 +671,9 @@ function AboutYou() {
             <label htmlFor="summary">Profile Summary:</label>
             <Spacer axis="vertical" size="5" />
             <textarea
-              ref={summaryInputRef}
               id="summary"
               name="profile-summary"
+              data-input
               maxLength="280"
               cols="8"
               rows="5"
@@ -698,8 +701,8 @@ function AboutYou() {
           <Combobox
             chosenOptions={location.inputValue}
             onInputChange={getLocationsByValue}
-            onChosenOption={updateLocation}
-            onRemoveChosenOption={updateLocation}
+            onChosenOption={setLocations}
+            onRemoveChosenOption={setLocations}
             inputName={"interested-locations"}
             displayName={"Interested Locations"}
           />
