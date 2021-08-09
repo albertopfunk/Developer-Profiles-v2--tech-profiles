@@ -4,6 +4,9 @@ import { ReactComponent as CloseIcon } from "../../../global/assets/dashboard-cl
 import { ReactComponent as EditIcon } from "../../../global/assets/dashboard-edit.svg";
 import { ReactComponent as AddIcon } from "../../../global/assets/dashboard-add.svg";
 
+import ProjectForm from "../../../components/forms/user-extras/ProjectForm";
+import ControlButton from "../../../components/forms/buttons/ControlButton";
+
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
 import { FORM_STATUS } from "../../../global/helpers/variables";
 import { httpClient } from "../../../global/helpers/http-requests";
@@ -11,9 +14,6 @@ import { validateInput } from "../../../global/helpers/validation";
 import useToggle from "../../../global/helpers/hooks/useToggle";
 import Announcer from "../../../global/helpers/announcer";
 import Spacer from "../../../global/helpers/spacer";
-
-import ProjectForm from "../../../components/forms/user-extras/ProjectForm";
-import ControlButton from "../../../components/forms/buttons/ControlButton";
 
 let formSuccessWait;
 function DashboardProjects() {
@@ -32,6 +32,7 @@ function DashboardProjects() {
   let isSubmittingRef = useRef(false);
   const errorSummaryRef = React.createRef();
   const editInfoBtnRef = React.createRef();
+  const resetBtnRef = React.createRef();
   const addNewBtnRef = React.createRef();
   const removeBtnRefs = useRef([]);
 
@@ -49,13 +50,11 @@ function DashboardProjects() {
         editInfoBtnRef.current.focus();
         return;
       }
-
+      
       if (formFocusStatus === FORM_STATUS.active) {
-        // focus on cancel button
-        addNewBtnRef.current.focus();
+        resetBtnRef.current.focus();
       }
     }
-    // use toggle instead
   }, [formFocusStatus]);
 
   // form error focus management
@@ -89,10 +88,13 @@ function DashboardProjects() {
   }, [removeProjectFocusToggle]);
 
   function formFocusManagement(e, status) {
-    // enter/space
+    // only run on enter or space
     if (e.keyCode !== 13 && e.keyCode !== 32) {
       return;
     }
+
+    // preventing onClick from running
+    e.preventDefault();
 
     if (status === FORM_STATUS.active) {
       setFormInputs();
@@ -196,10 +198,13 @@ function DashboardProjects() {
   }
 
   function removeProjectFocusManagement(e, projIndex) {
-    // enter/space
+    // only run on enter or space
     if (e.keyCode !== 13 && e.keyCode !== 32) {
       return;
     }
+
+    // preventing onClick from running
+    e.preventDefault();
 
     removeProject(projIndex);
     setRemoveProjectFocusToggle();
@@ -553,10 +558,8 @@ function DashboardProjects() {
 
     formSuccessWait = setTimeout(() => {
       setFormStatus(FORM_STATUS.idle);
-      setHasSubmitError(null);
       isSubmittingRef.current = false;
     }, 750);
-
     setFormStatus(FORM_STATUS.success);
   }
 
@@ -647,6 +650,7 @@ function DashboardProjects() {
       <div className="edit-info-header">
         <h2 id="edit-information-heading">Edit Info</h2>
         <button
+          ref={resetBtnRef}
           disabled={
             formStatus === FORM_STATUS.loading ||
             formStatus === FORM_STATUS.success

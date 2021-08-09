@@ -81,7 +81,7 @@ const ProjectForm = React.forwardRef(
         imageInput: "",
         imageChange: false,
         shouldRemoveUserImage: false,
-      });
+      }, true);
     }
 
     function removeUserImage() {

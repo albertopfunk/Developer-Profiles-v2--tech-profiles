@@ -4,6 +4,9 @@ import { ReactComponent as CloseIcon } from "../../../global/assets/dashboard-cl
 import { ReactComponent as EditIcon } from "../../../global/assets/dashboard-edit.svg";
 import { ReactComponent as AddIcon } from "../../../global/assets/dashboard-add.svg";
 
+import EducationForm from "../../../components/forms/user-extras/EducationForm";
+import ControlButton from "../../../components/forms/buttons/ControlButton";
+
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
 import useCurrentYear from "../../../global/helpers/hooks/useCurrentYear";
 import { FORM_STATUS } from "../../../global/helpers/variables";
@@ -11,9 +14,6 @@ import { validateInput } from "../../../global/helpers/validation";
 import useToggle from "../../../global/helpers/hooks/useToggle";
 import Announcer from "../../../global/helpers/announcer";
 import Spacer from "../../../global/helpers/spacer";
-
-import EducationForm from "../../../components/forms/user-extras/EducationForm";
-import ControlButton from "../../../components/forms/buttons/ControlButton";
 
 let formSuccessWait;
 function DashboardEducation() {
@@ -37,6 +37,7 @@ function DashboardEducation() {
   let isSubmittingRef = useRef(false);
   const errorSummaryRef = React.createRef();
   const editInfoBtnRef = React.createRef();
+  const resetBtnRef = React.createRef();
   const addNewBtnRef = React.createRef();
   const removeBtnRefs = useRef([]);
 
@@ -56,7 +57,7 @@ function DashboardEducation() {
       }
 
       if (formFocusStatus === FORM_STATUS.active) {
-        addNewBtnRef.current.focus();
+        resetBtnRef.current.focus();
       }
     }
   }, [formFocusStatus]);
@@ -92,10 +93,13 @@ function DashboardEducation() {
   }, [removeEducationFocusToggle]);
 
   function formFocusManagement(e, status) {
-    // enter/space
+    // only run on enter or space
     if (e.keyCode !== 13 && e.keyCode !== 32) {
       return;
     }
+
+    // preventing onClick from running
+    e.preventDefault();
 
     if (status === FORM_STATUS.active) {
       setFormInputs();
@@ -254,10 +258,13 @@ function DashboardEducation() {
   }
 
   function removeEducationFocusManagement(e, eduIndex) {
-    // enter/space
+    // only run on enter or space
     if (e.keyCode !== 13 && e.keyCode !== 32) {
       return;
     }
+
+    // preventing onClick from running
+    e.preventDefault();
 
     removeEducation(eduIndex);
     setRemoveEducationFocusToggle();
@@ -602,10 +609,8 @@ function DashboardEducation() {
 
     formSuccessWait = setTimeout(() => {
       setFormStatus(FORM_STATUS.idle);
-      setHasSubmitError(null);
       isSubmittingRef.current = false;
     }, 750);
-
     setFormStatus(FORM_STATUS.success);
   }
 
@@ -689,6 +694,7 @@ function DashboardEducation() {
       <div className="edit-info-header">
         <h2 id="edit-information-heading">Edit Info</h2>
         <button
+          ref={resetBtnRef}
           disabled={
             formStatus === FORM_STATUS.loading ||
             formStatus === FORM_STATUS.success
