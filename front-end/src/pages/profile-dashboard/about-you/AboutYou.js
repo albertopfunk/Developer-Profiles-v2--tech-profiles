@@ -19,6 +19,7 @@ function AboutYou() {
   const { user, addUserExtras } = useContext(ProfileContext);
   const [formStatus, setFormStatus] = useState(FORM_STATUS.idle);
   const [formFocusStatus, setFormFocusStatus] = useState("");
+  const [formFocusToggle, setFormFocusToggle] = useToggle();
   const [hasSubmitError, setHasSubmitError] = useState(null);
   
   const [summary, setSummary] = useState({
@@ -74,7 +75,7 @@ function AboutYou() {
         resetBtnRef.current.focus();
       }
     }
-  }, [formFocusStatus]);
+  }, [formFocusToggle]);
 
   // form error focus management
   useEffect(() => {
@@ -110,19 +111,19 @@ function AboutYou() {
 
     if (status === FORM_STATUS.active) {
       setFormInputs();
-      setFormFocusStatus(FORM_STATUS.active);
+      setFormFocusToggle();
       return;
     }
 
     if (status === FORM_STATUS.idle) {
       resetForm();
-      setFormFocusStatus(FORM_STATUS.idle);
+      setFormFocusToggle();
     }
   }
 
   function setFormInputs() {
     setFormStatus(FORM_STATUS.active);
-    setFormFocusStatus("");
+    setFormFocusStatus(FORM_STATUS.active);
     setHasSubmitError(null);
 
     setSummary({
@@ -519,6 +520,7 @@ function AboutYou() {
 
     formSuccessWait = setTimeout(() => {
       setFormStatus(FORM_STATUS.idle);
+      setFormFocusStatus(FORM_STATUS.idle);
       isSubmittingRef.current = false;
     }, 750);
     setFormStatus(FORM_STATUS.success);
@@ -526,6 +528,7 @@ function AboutYou() {
 
   function resetForm() {
     setFormStatus(FORM_STATUS.idle);
+    setFormFocusStatus(FORM_STATUS.idle);
   }
 
   if (formStatus === FORM_STATUS.idle) {

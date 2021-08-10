@@ -21,6 +21,7 @@ function DashboardProjects() {
 
   const [formStatus, setFormStatus] = useState(FORM_STATUS.idle);
   const [formFocusStatus, setFormFocusStatus] = useState("");
+  const [formFocusToggle, setFormFocusToggle] = useToggle();
   const [hasSubmitError, setHasSubmitError] = useState(null);
 
   const [projects, setProjects] = useState([]);
@@ -55,7 +56,7 @@ function DashboardProjects() {
         resetBtnRef.current.focus();
       }
     }
-  }, [formFocusStatus]);
+  }, [formFocusToggle]);
 
   // form error focus management
   useEffect(() => {
@@ -98,19 +99,19 @@ function DashboardProjects() {
 
     if (status === FORM_STATUS.active) {
       setFormInputs();
-      setFormFocusStatus(FORM_STATUS.active);
+      setFormFocusToggle();
       return;
     }
 
     if (status === FORM_STATUS.idle) {
       resetForm();
-      setFormFocusStatus(FORM_STATUS.idle);
+      setFormFocusToggle();
     }
   }
 
   function setFormInputs() {
     setFormStatus(FORM_STATUS.active);
-    setFormFocusStatus("");
+    setFormFocusStatus(FORM_STATUS.active);
     setHasSubmitError(null);
 
     const updatedUserProjects = user.projects.map((proj) => {
@@ -558,6 +559,7 @@ function DashboardProjects() {
 
     formSuccessWait = setTimeout(() => {
       setFormStatus(FORM_STATUS.idle);
+      setFormFocusStatus(FORM_STATUS.idle);
       isSubmittingRef.current = false;
     }, 750);
     setFormStatus(FORM_STATUS.success);
@@ -565,6 +567,7 @@ function DashboardProjects() {
 
   function resetForm() {
     setFormStatus(FORM_STATUS.idle);
+    setFormFocusStatus(FORM_STATUS.idle);
   }
 
   if (formStatus === FORM_STATUS.idle) {

@@ -21,6 +21,7 @@ function DashboardExperience() {
 
   const [formStatus, setFormStatus] = useState(FORM_STATUS.idle);
   const [formFocusStatus, setFormFocusStatus] = useState("");
+  const [formFocusToggle, setFormFocusToggle] = useToggle();
   const [hasSubmitError, setHasSubmitError] = useState(null);
 
   const [experience, setExperience] = useState([]);
@@ -60,7 +61,7 @@ function DashboardExperience() {
         resetBtnRef.current.focus();
       }
     }
-  }, [formFocusStatus]);
+  }, [formFocusToggle]);
 
   // form error focus management
   useEffect(() => {
@@ -103,13 +104,13 @@ function DashboardExperience() {
 
     if (status === FORM_STATUS.active) {
       setFormInputs();
-      setFormFocusStatus(FORM_STATUS.active);
+      setFormFocusToggle();
       return;
     }
 
     if (status === FORM_STATUS.idle) {
       resetForm();
-      setFormFocusStatus(FORM_STATUS.idle);
+      setFormFocusToggle();
     }
   }
 
@@ -149,7 +150,7 @@ function DashboardExperience() {
 
   function setFormInputs() {
     setFormStatus(FORM_STATUS.active);
-    setFormFocusStatus("");
+    setFormFocusStatus(FORM_STATUS.active);
     setHasSubmitError(null);
 
     const updatedUserExperience = user.experience.map((exp) => {
@@ -611,6 +612,7 @@ function DashboardExperience() {
 
     formSuccessWait = setTimeout(() => {
       setFormStatus(FORM_STATUS.idle);
+      setFormFocusStatus(FORM_STATUS.idle);
       isSubmittingRef.current = false;
     }, 750);
     setFormStatus(FORM_STATUS.success);
@@ -618,6 +620,7 @@ function DashboardExperience() {
 
   function resetForm() {
     setFormStatus(FORM_STATUS.idle);
+    setFormFocusStatus(FORM_STATUS.idle);
   }
 
   if (formStatus === FORM_STATUS.idle) {

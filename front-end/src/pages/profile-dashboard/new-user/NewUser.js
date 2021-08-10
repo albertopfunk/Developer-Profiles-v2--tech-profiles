@@ -22,6 +22,7 @@ function NewUser() {
   const { user, editProfile, userImage } = useContext(ProfileContext);
   const [selectedTab, setSelectedTab] = useState("basic-info");
   const [formStatus, setFormStatus] = useState(FORM_STATUS.idle);
+  const [formFocusToggle, setFormFocusToggle] = useToggle();
   const [formFocusStatus, setFormFocusStatus] = useState("");
   const [hasSubmitError, setHasSubmitError] = useState(null);
 
@@ -78,7 +79,7 @@ function NewUser() {
         basicInfoTabRef.current.focus();
       }
     }
-  }, [formFocusStatus]);
+  }, [formFocusToggle]);
 
   // form error focus management
   useEffect(() => {
@@ -118,20 +119,20 @@ function NewUser() {
 
     if (status === FORM_STATUS.active) {
       setFormInputs();
-      setFormFocusStatus(FORM_STATUS.active);
+      setFormFocusToggle();
       return;
     }
 
     if (status === FORM_STATUS.idle) {
       resetForm();
-      setFormFocusStatus(FORM_STATUS.idle);
+      setFormFocusToggle();
     }
   }
 
   function setFormInputs() {
     setSelectedTab("basic-info")
     setFormStatus(FORM_STATUS.active);
-    setFormFocusStatus("");
+    setFormFocusStatus(FORM_STATUS.active);
     setHasSubmitError(null);
 
     setFirstName({
@@ -571,6 +572,7 @@ function NewUser() {
 
   function resetForm() {
     setFormStatus(FORM_STATUS.idle);
+    setFormFocusStatus(FORM_STATUS.idle);
   }
 
   if (formStatus === FORM_STATUS.idle) {
