@@ -26,6 +26,7 @@ class Combobox extends React.Component {
 
     chosenOptions: [],
     removedChosenOptionIndex: null,
+    removeChosenOptionToggle: true
   };
 
   chosenOptionBtnRefs = [];
@@ -38,9 +39,8 @@ class Combobox extends React.Component {
     }
   }
 
-  componentDidUpdate(prevProps) {
-    // keyboard list focus management when removing chosen options
-    if (this.props.chosenOptions.length < prevProps.chosenOptions.length) {
+  componentDidUpdate(_prevProps, prevState) {
+    if (this.state.removeChosenOptionToggle !== prevState.removeChosenOptionToggle) {
       if (this.chosenOptionBtnRefs.length === 0) {
         this.inputRef.current.focus();
         return;
@@ -315,6 +315,22 @@ class Combobox extends React.Component {
     });
   };
 
+  removeChosenOptionFocusManagement = (e, index) => {
+    // only run on enter or space
+    if (e.keyCode !== 13 && e.keyCode !== 32) {
+      return;
+    }
+
+    // preventing onClick from running
+    e.preventDefault();
+
+    this.setState(prevState => {
+      return { removeChosenOptionToggle: !prevState.removeChosenOptionToggle };
+    });
+
+    this.removeChosenOption(index);
+  }
+
   removeChosenOption = (optionIndex) => {
     const { input, chosenOptions } = this.state;
 
@@ -470,6 +486,7 @@ class Combobox extends React.Component {
                           this.setChosenOptionBtnRefs(ref, i);
                         }}
                         onClick={() => this.removeChosenOption(i)}
+                        onKeyDown={(e) => this.removeChosenOptionFocusManagement(e, i)}
                       >
                         <span className="sr-only">
                           remove {chosenOption.name}
