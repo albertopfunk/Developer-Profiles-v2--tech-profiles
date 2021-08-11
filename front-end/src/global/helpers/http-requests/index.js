@@ -5,7 +5,7 @@ function composer(options) {
   const headers = config?.headers ?? null;
   const setOptions = {
     baseURL: process.env.REACT_APP_SERVER,
-    timeout: 5000,
+    timeout: 60000,
     method,
     url,
     data,

@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { Helmet } from "react-helmet";
 import { ReactComponent as ErrorPageIcon } from "../../global/assets/page-error.svg";
 import { ReactComponent as ConstructionPageIcon } from "../../global/assets/page-construction.svg";
+import { ReactComponent as WaitingPageIcon } from "../../global/assets/page-waiting.svg";
 
 import { httpClient } from "../../global/helpers/http-requests";
 import { PROFILES_STATUS } from "../../global/helpers/variables";
@@ -59,6 +60,11 @@ function ProfilesPage() {
   }, []);
 
   async function initUsers() {
+    // temp heroku loading
+    setTimeout(() => {
+      setPageStatus(PROFILES_STATUS.initialWaiting);
+    }, 3000);
+
     const [res, err] = await httpClient("GET", "/users");
 
     if (err) {
@@ -210,6 +216,19 @@ function ProfilesPage() {
               <h2 id="profiles-heading">Loading Profiles</h2>
               <Spacer size="20" axis="vertical" />
               <ConstructionPageIcon className="page-icon" />
+            </div>
+          ) : null}
+
+          {pageStatus === PROFILES_STATUS.initialWaiting ? (
+            <div
+              role="feed"
+              className="skeleton-section"
+              aria-busy="true"
+              aria-labelledby="profiles-heading"
+            >
+              <h2 id="profiles-heading">Server is Waking Up</h2>
+              <Spacer size="20" axis="vertical" />
+              <WaitingPageIcon className="page-icon" />
             </div>
           ) : null}
 

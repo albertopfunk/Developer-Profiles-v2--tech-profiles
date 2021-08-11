@@ -20,6 +20,7 @@ export const COMBOBOX_STATUS = {
 export const PROFILES_STATUS = {
   idle: "idle",
   initialLoading: "initialLoading",
+  initialWaiting: "initialWaiting",
   initialError: "initialError",
   filtersLoading: "filtersLoading",
   filtersError: "filtersError",

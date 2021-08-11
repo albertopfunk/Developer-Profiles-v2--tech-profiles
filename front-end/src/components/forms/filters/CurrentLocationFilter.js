@@ -91,11 +91,11 @@ class CurrentLocationFilter extends React.Component {
   render() {
     return (
       <fieldset>
-        <legend>Filter by Current Location with Distance</legend>
+        <legend>Filter by Current Location</legend>
         <FlexContainer>
           <div className="miles">
             <label htmlFor="choose-miles">
-              {this.state.milesWithinInput} miles
+              {this.state.milesWithinInput} mile radius
             </label>
             <input
               type="range"
