@@ -28,6 +28,7 @@ import UserCards from "../../components/user-cards/UserCards";
 
 */
 
+let initialWaitTimeout;
 function ProfilesPage() {
   const [pageStatus, setPageStatus] = useState(PROFILES_STATUS.initialLoading);
   const [headerHeight, setHeaderHeight] = useState(0);
@@ -56,17 +57,21 @@ function ProfilesPage() {
   });
 
   useEffect(() => {
+    // temp heroku loading
+    initialWaitTimeout = setTimeout(() => {
+      setPageStatus(PROFILES_STATUS.initialWaiting);
+    }, 3000);
+  }, []);
+
+  useEffect(() => {
     initUsers();
   }, []);
 
   async function initUsers() {
-    // temp heroku loading
-    setTimeout(() => {
-      setPageStatus(PROFILES_STATUS.initialWaiting);
-    }, 3000);
-
     const [res, err] = await httpClient("GET", "/users");
 
+    clearTimeout(initialWaitTimeout);
+  
     if (err) {
       console.error(`${res.mssg} => ${res.err}`);
       setPageStatus(PROFILES_STATUS.initialError);
