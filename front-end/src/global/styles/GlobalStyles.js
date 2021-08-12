@@ -1,266 +1,109 @@
 import { createGlobalStyle } from "styled-components";
 
 export const GlobalStyles = createGlobalStyle`
-  /* Document
+  
+  /* Base
   * ========================================================================== */
 
-  /**
-  * 1. Add border box sizing in all browsers (opinionated).
-  * 2. Backgrounds do not repeat by default (opinionated).
-  */
+  :root {
+    --lighter-cyan-base: 171.4, 70%;
+    --lighter-cyan-1: hsl(var(--lighter-cyan-base), 99%);
+    --lighter-cyan-2: hsl(var(--lighter-cyan-base), 96%);
+    --lighter-cyan-3: hsl(var(--lighter-cyan-base), 85%);    
 
-  *,
-  ::before,
-  ::after {
-    box-sizing: border-box; /* 1 */
-    background-repeat: no-repeat; /* 2 */
+    --light-cyan-base: 169.8, 74.6%;
+    --light-cyan-1: hsl(var(--light-cyan-base), 97%);
+    --light-cyan-2: hsl(var(--light-cyan-base), 86%);
+    --light-cyan-3: hsl(var(--light-cyan-base), 75%);
+
+    --cyan-base: 177.1, 60.7%;
+    --cyan-1: hsl(var(--cyan-base), 64%);
+    --cyan-2: hsl(var(--cyan-base), 53%);
+    --cyan-3: hsl(var(--cyan-base), 42%);
+
+    --dark-cyan-base: 187.2, 93.5%;
+    --dark-cyan-1: hsl(var(--dark-cyan-base), 23%);
+    --dark-cyan-2: hsl(var(--dark-cyan-base), 12%);
+    --dark-cyan-3: hsl(var(--dark-cyan-base), 1%);
+
+    --green-base: 156.7, 58.4%;
+    --green-1: hsl(var(--green-base), 54%);
+    --green-2: hsl(var(--green-base), 43%);
+    --green-3: hsl(var(--green-base), 32%);
+
+    --dark-green-base: 118.5, 38%;
+    --dark-green-1: hsl(var(--dark-green-base), 52%);
+    --dark-green-2: hsl(var(--dark-green-base), 41%);
+    --dark-green-3: hsl(var(--dark-green-base), 30%);
+
+    --border-radius-sm: 2.5px;
+    --border-radius-md: 6.25px;
+    --border-radius-lg: 10px;
   }
-
-  /**
-  * 1. Add text decoration inheritance in all browsers (opinionated).
-  * 2. Add vertical alignment inheritance in all browsers (opinionated).
-  */
-
-  ::before,
-  ::after {
-    text-decoration: inherit; /* 1 */
-    vertical-align: inherit; /* 2 */
-  }
-
-  /**
-  * 1. Use the default cursor in all browsers (opinionated).
-  * 2. Change the line height in all browsers (opinionated).
-  * 3. Use a 4-space tab width in all browsers (opinionated).
-  * 4. Remove the grey highlight on links in iOS (opinionated).
-  * 5. Prevent adjustments of font size after orientation changes in
-  *    IE on Windows Phone and in iOS.
-  * 6. Breaks words to prevent overflow in all browsers (opinionated).
-  */
 
   html {
-    cursor: default; /* 1 */
-    line-height: 1.5; /* 2 */
-    -moz-tab-size: 4; /* 3 */
-    tab-size: 4; /* 3 */
-    -webkit-tap-highlight-color: transparent /* 4 */;
-    -ms-text-size-adjust: 100%; /* 5 */
-    -webkit-text-size-adjust: 100%; /* 5 */
-    word-break: break-word; /* 6 */
-    font-family: Arial, Helvetica, sans-serif;
-  }
+    cursor: default;
+    box-sizing: border-box;
+    background: var(--lighter-cyan-1);
 
-  /* Sections
-  * ========================================================================== */
+    /*only break work when necessary and add hyphen*/
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    hyphens: auto;
 
-  /**
-  * Remove the margin in all browsers (opinionated).
-  */
+    /*Prevent adjustments of font size Windows Phone/iOS*/
+    -ms-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
 
-  body {
-    margin: 0;
-    background-color: hsl(240, 10%, 99%);
-  }
-  
-  /**
-  * Remove all margin/padding on headers
-  */
+    /*Remove grey highlight on links in iOS*/
+    -webkit-tap-highlight-color: transparent;
 
-  h1, h2, h3, h4, h5, h6 {
-    margin: 0;
-    padding: 0;
-    font-family: Georgia, 'Times New Roman', Times, serif;
-  }
-
-  /**
-  * Remove all margin/padding on text
-  */
-  p {
-    margin: 0;
-    padding: 0;
-  }
-
-  /* Grouping content
-  * ========================================================================== */
-
-  /**
-  * Remove all margin/padding on lists
-  * as well as default list styles
-  */
-
-  ul, ol, li, dl, dd, dt {
-    margin: 0;
-    padding: 0;
-  }
-
-  ul, ol {
-    list-style: none;
-  }
-
-  /**
-  * 1. Correct the inheritance of border color in Firefox.
-  * 2. Add the correct box sizing in Firefox.
-  * 3. Show the overflow in Edge 18- and IE.
-  */
-
-  hr {
-    color: inherit; /* 1 */
-    height: 0; /* 2 */
-    overflow: visible; /* 3 */
-  }
-
-  /**
-  * 1. Correct the inheritance and scaling of font size in all browsers.
-  * 2. Correct the odd em font sizing in all browsers.
-  * 3. Prevent overflow of the container in all browsers (opinionated).
-  */
-
-  pre {
-    font-family: monospace, monospace; /* 1 */
-    font-size: 1em; /* 2 */
-    overflow: auto; /* 3 */
-    -ms-overflow-style: scrollbar; /* 3 */
-  }
-
-  /* Text-level semantics
-  * ========================================================================== */
-
-  /**
-  * Add the correct text decoration in Edge 18-, IE, and Safari.
-  */
-
-  abbr[title] {
-    text-decoration: underline;
-    text-decoration: underline dotted;
-  }
-
-  /**
-  * bolder font weight for titles/important text
-  */
-
-  b,
-  strong,
-  dt,
-  legend {
-    font-size: .95rem;
-    font-weight: bolder;
-
-    @media (min-width: 750px) {
-      font-size: 1rem;
+    @media (prefers-reduced-motion: no-preference) {
+      scroll-behavior: smooth;
     }
   }
 
-  /**
-  * 1. Correct the inheritance and scaling of font size in all browsers.
-  * 2. Correct the odd em font sizing in all browsers.
-  */
+  *,
+  *::before,
+  *::after {
+    box-sizing: inherit;
+    position: relative;
 
-  code,
-  kbd,
-  samp {
-    font-family: monospace, monospace; /* 1 */
-    font-size: 1em; /* 2 */
+    @media (prefers-reduced-motion: no-preference) {
+      transition: all 0.1s ease;
+    }
   }
 
-  /**
-  * Add the correct font size in all browsers.
-  */
-
-  small {
-    font-size: 80%;
-  }
-
-  /* Embedded content
-  * ========================================================================== */
-
-  /*
-  * Change the alignment on media elements in all browsers (opinionated).
-  */
-
-  audio,
-  canvas,
-  iframe,
-  img,
-  svg,
-  video {
-    vertical-align: middle;
-  }
-
-  /**
-  * Add the correct display in iOS 4-7.
-  */
-
-  audio:not([controls]) {
-    display: none;
-    height: 0;
-  }
-
-  /**
-  * Remove the border on iframes in all browsers (opinionated).
-  */
-
-  iframe {
-    border-style: none;
-  }
-
-  /**
-  * Change the fill color to match the text color in all browsers (opinionated).
-  */
-
-  /* svg:not([fill]) {
-    fill: currentColor;
-  } */
-
-
-  /* Tabular data
-  * ========================================================================== */
-
-  /**
-  * 1. Collapse border spacing in all browsers (opinionated).
-  * 2. Correct table border color inheritance in all Chrome, Edge, and Safari.
-  * 3. Remove text indentation from table contents in Chrome, Edge, and Safari.
-  */
-
-  table {
-    border-collapse: collapse; /* 1 */
-    border-color: inherit; /* 2 */
-    text-indent: 0; /* 3 */
-  }
-
-  /* Forms
-  * ========================================================================== */
-
-  /**
-  * block labels to stay above inputs
-  */
-  
-  label {
-    display: block;
-  }
- 
-  /**
-  * Remove the margin and padding on controls.
-  */
-
-  button,
-  input,
-  select {
+  html,
+  body {
     margin: 0;
     padding: 0;
   }
 
-  /**
-  * 1rem default for inputs to avoid zoom on ios
-  */
+  /* Forms/controls
+  * ========================================================================== */
 
+  /*block labels to stay above inputs*/
+  label {
+    display: block;
+  }
+
+  /*Remove the margin and padding on controls*/
+  button,
+  input,
+  fieldset,
+  select,
+  textarea {
+    margin: 0;
+    padding: 0;
+  }
+
+  /*1rem default for inputs to avoid zoom on ios*/
   input, select, textarea {
     font-size: 1rem;
   }
 
-
-  /**
-  * Correct the inability to style buttons in iOS and Safari.
-  */
-
+  /*Correct the inability to style buttons in iOS and Safari*/
   button,
   [type="button"],
   [type="reset"],
@@ -268,22 +111,68 @@ export const GlobalStyles = createGlobalStyle`
     -webkit-appearance: button;
   }
 
-
-  /**
-  * button defaults
-  */
-
-  button {
+  /*Resetting fieldset*/
+  fieldset {
     border: none;
-    background-color: transparent;
-    cursor: pointer;
-    user-select: none;
   }
 
+  /*Remove the inheritance of text transform in Firefox*/
+  select {
+    text-transform: none;
+  }
+
+  /*Textareas only resize vertically by default*/
+  textarea {
+    resize: vertical;
+  }
+
+  /*Single taps are dispatched immediately on clickable elements*/
+  a,
+  button,
+  input,
+  label,
+  textarea,
+  [tabindex] {
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+  }
 
   /**
-  * input defaults
+  * 1. Correct the odd appearance in Chrome, Edge, and Safari.
+  * 2. Correct the outline style in Safari.
   */
+  [type="search"] {
+    -webkit-appearance: textfield; /* 1 */
+    outline-offset: -2px; /* 2 */
+  }
+
+  /* Correct the cursor style of increment and decrement buttons in Safari*/
+  ::-webkit-inner-spin-button,
+  ::-webkit-outer-spin-button {
+    height: auto;
+  }
+
+  /**
+  * 1. Correct the inability to style upload buttons in iOS and Safari.
+  * 2. Change font properties to inherit in Safari.
+  * 3. pointer for button appearance
+  */
+  ::-webkit-file-upload-button {
+    -webkit-appearance: button; /* 1 */
+    font: inherit; /* 2 */
+    cursor: pointer; /* 3 */
+  }
+
+  /*Button defaults*/
+  button {
+    border: none;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    background-color: transparent;
+  }
+
+  /*Input defaults*/
   input[type=text],
   input[type=url],
   input[type=email],
@@ -293,95 +182,43 @@ export const GlobalStyles = createGlobalStyle`
     max-width: 450px;
     min-height: 35px;
     padding: 5px;
-    border: solid 1px #dbdbdb;
-    border-radius: 2.5px;
+    border: solid 1px var(--light-cyan-3);
+    border-radius: var(--border-radius-sm);
     box-shadow: inset 0 0.0625em 0.125em rgb(10 10 10 / 5%);
   }
 
+  /* a11y/UI
+  * ========================================================================== */
 
-  /**
-  * 1. resetting fieldset
-  */
-
-  fieldset {
-    border: none;
-    margin: 0;
-    padding: 0;
+  /*Remove the additional :invalid styles in Firefox*/
+  :-moz-ui-invalid {
+    box-shadow: none;
   }
 
-  /**
-  * Remove the inheritance of text transform in Firefox.
-  */
-
-  select {
-    text-transform: none;
+  /*visual cursor hints*/
+  [aria-busy="true"] {
+    cursor: progress;
   }
 
-  /**
-  * 1. Remove the margin in Firefox and Safari.
-  * 2. Remove the default vertical scrollbar in IE.
-  * 3. Change the resize direction in all browsers (opinionated).
-  */
-
-  textarea {
-    margin: 0; /* 1 */
-    overflow: auto; /* 2 */
-    resize: vertical; /* 3 */
-    resize: block; /* 3 */
+  [aria-disabled="true"],
+  [disabled] {
+    cursor: not-allowed;
+    pointer-events: none;
   }
 
-  /**
-  * 1. Correct the odd appearance in Chrome, Edge, and Safari.
-  * 2. Correct the outline style in Safari.
-  */
-
-  [type="search"] {
-    -webkit-appearance: textfield; /* 1 */
-    outline-offset: -2px; /* 2 */
-  }
-
-  /**
-  * Correct the cursor style of increment and decrement buttons in Safari.
-  */
-
-  ::-webkit-inner-spin-button,
-  ::-webkit-outer-spin-button {
-    height: auto;
-  }
-
-  /**
-  * Correct the text style of placeholders in Chrome, Edge, and Safari.
-  */
-
-  ::-webkit-input-placeholder {
-    color: inherit;
-    opacity: 0.54;
-  }
-
-  /**
-  * Remove the inner padding in Chrome, Edge, and Safari on macOS.
-  */
-
+  /*Remove the inner padding in Chrome, Edge, and Safari on macOS*/
   ::-webkit-search-decoration {
     -webkit-appearance: none;
   }
 
-  /**
-  * 1. Correct the inability to style upload buttons in iOS and Safari.
-  * 2. Change font properties to inherit in Safari.
-  * 3. pointer for button appearance
-  */
-
-  ::-webkit-file-upload-button {
-    -webkit-appearance: button; /* 1 */
-    font: inherit; /* 2 */
-    cursor: pointer; /* 3 */
+  /* For images to not be able to exceed their container */
+  img {
+    max-width: 100%;
   }
 
   /**
   * Remove the inner border and padding of focus outlines in Firefox.
   */
-
   ::-moz-focus-inner {
     border-style: none;
     padding: 0;
@@ -390,169 +227,113 @@ export const GlobalStyles = createGlobalStyle`
   /**
   * Restore the focus outline styles unset by the previous rule in Firefox.
   */
-
   :-moz-focusring {
     outline: 1px dotted ButtonText;
   }
 
-  /**
-  * Remove the additional :invalid styles in Firefox.
-  */
-
-  :-moz-ui-invalid {
-    box-shadow: none;
-  }
-
-  /* Interactive
+  /* Grouping content
   * ========================================================================== */
 
-  /*
-  * Add the correct styles in Edge 18-, IE, and Safari.
-  */
-
-  dialog {
-    background-color: white;
-    border: solid;
-    color: black;
-    display: block;
-    height: -moz-fit-content;
-    height: -webkit-fit-content;
-    height: fit-content;
-    left: 0;
-    margin: auto;
-    padding: 1em;
-    position: absolute;
-    right: 0;
-    width: -moz-fit-content;
-    width: -webkit-fit-content;
-    width: fit-content;
+  /*Remove all margin/padding on lists*/
+  ul, ol, li, dl, dd, dt {
+    margin: 0;
+    padding: 0;
   }
 
-  dialog:not([open]) {
-    display: none;
+  /*default list styles*/
+  ul, ol {
+    list-style: none;
   }
 
-  /*
-  * Add the correct display in all browsers.
-  */
-
-  summary {
-    display: list-item;
-  }
-
-  /* User interaction
+  /* Text-level styles
   * ========================================================================== */
 
+  /*default header styles*/
+  h1, h2, h3, h4, h5, h6 {
+    margin: 0;
+    padding: 0;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+  }
 
+  /*default text styles*/
+  p,
+  a,
+  button,
+  li,
+  dd,
+  dt,
+  label,
+  b,
+  strong,
+  legend {
+    margin: 0;
+    padding: 0;
+    font-family: "Roboto", sans-serif;
+  }
 
+  /*remove default link decoration*/
+  a {
+    text-decoration: none;
+  }
 
-  /* Accessibility
+  /*bold font weight for titles/important text*/
+  b,
+  strong,
+  dt,
+  legend {
+    font-weight: bold;
+  }
+
+  /* Text-level sizing
   * ========================================================================== */
 
-  /**
-  * Change the cursor on busy elements in all browsers (opinionated).
-  */
-
-  [aria-busy="true"] {
-    cursor: progress;
+  p,
+  a,
+  button,
+  li,
+  dd,
+  dt,
+  label,
+  b,
+  strong,
+  legend {
+    font-size: 1rem;
   }
-
-
-  /*
-  * Change the cursor on disabled, not-editable, or otherwise
-  * inoperable elements in all browsers (opinionated).
-  */
-
-  [aria-disabled="true"],
-  [disabled] {
-    cursor: not-allowed;
-  }
-
-  /*
-  * Change the display on visually hidden accessible elements
-  * in all browsers (opinionated).
-  */
-
-  [aria-hidden="false"][hidden] {
-    display: initial;
-  }
-
-
-  /*
-  ------------------------------------------------------------------------
-                General Styles
-  ------------------------------------------------------------------------
-  */
-
-  :root {
-    --primary_color:#001940;
-    --secondary-color:#EE6C4D;
-
-    --nav-padding: 10px 15px;
-  }
-
-
-  //
 
   h4 {
-    font-size: 1rem;
+    font-size: 1.125rem;
 
-    @media (min-width: 750px) {
-      font-size: 1.1rem;
+    @media (min-width: 1000px) {
+      font-size: 1.2rem;
     }
   }
 
   h3 {
-    font-size: 1.1rem;
+    font-size: 1.266rem;
 
-    @media (min-width: 750px) {
-      font-size: 1.3rem;
+    @media (min-width: 1000px) {
+      font-size: 1.44rem;
     }
   }
 
   h2 {
-    font-size: 1.25rem;
+    font-size: 1.424rem;
 
-    @media (min-width: 750px) {
-      font-size: 1.5rem;
+    @media (min-width: 1000px) {
+      font-size: 1.728rem;
     }
   }
 
   h1 {
-    font-size: 1.3rem;
-    /* text-transform: uppercase; */
+    font-size: 1.602rem;
 
-    @media (min-width: 750px) {
-      font-size: 1.6rem;
+    @media (min-width: 1000px) {
+      font-size: 2.074rem;
     }
   }
 
-  p, li, dd, label {
-    font-size: .9rem;
-
-    @media (min-width: 750px) {
-      font-size: .9rem;
-    }
-  }
-
-  button {
-    font-size: .9rem;
-    /* text-transform: uppercase; */
-
-
-    @media (min-width: 750px) {
-      font-size: .8rem;
-    }
-  }
-
-  a {
-    font-size: .8rem;
-    text-decoration: none;
-
-    @media (min-width: 750px) {
-      font-size: 1rem;
-    }
-  }
+  /* General styles
+  * ========================================================================== */
 
   .sr-only {
     position: absolute;
