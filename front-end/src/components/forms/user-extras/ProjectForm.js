@@ -77,11 +77,15 @@ const ProjectForm = React.forwardRef(
     }
 
     function removeImageInput() {
-      updateProject(projIndex, {
-        imageInput: "",
-        imageChange: false,
-        shouldRemoveUserImage: false,
-      }, true);
+      updateProject(
+        projIndex,
+        {
+          imageInput: "",
+          imageChange: false,
+          shouldRemoveUserImage: false,
+        },
+        true
+      );
     }
 
     function removeUserImage() {

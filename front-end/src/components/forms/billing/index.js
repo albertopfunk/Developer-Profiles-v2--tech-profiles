@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import { ReactComponent as ConstructionPageIcon } from "../../../global/assets/page-construction-3.svg"
-import { ReactComponent as ErrorPageIcon } from "../../../global/assets/page-error.svg"
+import { ReactComponent as ConstructionPageIcon } from "../../../global/assets/page-construction-3.svg";
+import { ReactComponent as ErrorPageIcon } from "../../../global/assets/page-error.svg";
 
 import { httpClient } from "../../../global/helpers/http-requests";
 import { USER_TYPE } from "../../../global/helpers/variables";
@@ -14,7 +14,7 @@ import CustomerForm from "./CustomerForm";
 class CheckoutContainer extends Component {
   state = {
     userType: "",
-    userInfo: {}
+    userInfo: {},
   };
 
   componentDidMount() {
@@ -72,7 +72,7 @@ class CheckoutContainer extends Component {
       return;
     }
 
-    this.setState({userInfo: res.data});
+    this.setState({ userInfo: res.data });
     this.setUserType(USER_TYPE.subscriber);
   };
 
@@ -151,6 +151,6 @@ const CheckoutFallback = styled.div`
   text-align: center;
   width: 100%;
   max-width: 750px;
-  `;
+`;
 
 export default CheckoutContainer;

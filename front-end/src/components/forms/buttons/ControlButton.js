@@ -44,17 +44,17 @@ const ControlButton = React.forwardRef(
 const Button = styled.button`
   color: white;
   text-transform: capitalize;
-  letter-spacing: .8px;
+  letter-spacing: 0.8px;
   padding: 7px 10px;
   border-radius: var(--border-radius-md);
-  box-shadow: rgba(0, 0, 0, .2) 0 3px 1px -2px,rgba(0, 0, 0, .14) 0 2px 2px 0,rgba(0, 0, 0, .12) 0 1px 5px 0;
-  transition: box-shadow 280ms cubic-bezier(.4, 0, .2, 1);
-  will-change: transform,opacity;
+  box-shadow: rgba(0, 0, 0, 0.2) 0 3px 1px -2px, rgba(0, 0, 0, 0.14) 0 2px 2px 0,
+    rgba(0, 0, 0, 0.12) 0 1px 5px 0;
 
   &:disabled {
-    color: rgba(0, 0, 0, .37);
-    background-color: rgba(0, 0, 0, .12);
-    box-shadow: rgba(0, 0, 0, .2) 0 0 0 0, rgba(0, 0, 0, .14) 0 0 0 0, rgba(0, 0, 0, .12) 0 0 0 0;
+    color: rgba(0, 0, 0, 0.37);
+    background-color: rgba(0, 0, 0, 0.12);
+    box-shadow: rgba(0, 0, 0, 0.2) 0 0 0 0, rgba(0, 0, 0, 0.14) 0 0 0 0,
+      rgba(0, 0, 0, 0.12) 0 0 0 0;
   }
 
   &:not(:disabled) {
@@ -62,7 +62,8 @@ const Button = styled.button`
   }
 
   &:hover {
-    box-shadow: rgba(0, 0, 0, .2) 0 2px 4px -1px, rgba(0, 0, 0, .14) 0 4px 5px 0, rgba(0, 0, 0, .12) 0 1px 10px 0;
+    box-shadow: rgba(0, 0, 0, 0.2) 0 2px 4px -1px,
+      rgba(0, 0, 0, 0.14) 0 4px 5px 0, rgba(0, 0, 0, 0.12) 0 1px 10px 0;
     filter: brightness(105%);
   }
 
@@ -74,7 +75,8 @@ const Button = styled.button`
   }
 
   &:active {
-    box-shadow: rgba(0, 0, 0, .2) 0 5px 5px -3px, rgba(0, 0, 0, .14) 0 8px 10px 1px, rgba(0, 0, 0, .12) 0 3px 14px 2px;
+    box-shadow: rgba(0, 0, 0, 0.2) 0 5px 5px -3px,
+      rgba(0, 0, 0, 0.14) 0 8px 10px 1px, rgba(0, 0, 0, 0.12) 0 3px 14px 2px;
     filter: brightness(110%);
   }
 
