@@ -6,6 +6,7 @@ import { ReactComponent as AddIcon } from "../../../global/assets/dashboard-add.
 
 import EducationForm from "../../../components/forms/user-extras/EducationForm";
 import ControlButton from "../../../components/forms/buttons/ControlButton";
+import IconButton from "../../../components/forms/buttons/IconButton";
 
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
 import useCurrentYear from "../../../global/helpers/hooks/useCurrentYear";
@@ -626,18 +627,17 @@ function DashboardEducation() {
       <InfoSection aria-labelledby="current-information-heading">
         <div className="info-heading">
           <h2 id="current-information-heading">Current Info</h2>
-          <button
+          <IconButton
             ref={editInfoBtnRef}
-            id="edit-info-btn"
-            className="button edit-button"
+            type="button"
+            ariaLabel="edit information"
+            icon={<EditIcon className="icon" />}
+            attributes={{
+              id: "edit-info-btn",
+            }}
             onClick={setFormInputs}
             onKeyDown={(e) => formFocusManagement(e, FORM_STATUS.active)}
-          >
-            <span className="sr-only">Edit Information</span>
-            <span className="button-icon">
-              <EditIcon className="icon" />
-            </span>
-          </button>
+          />
         </div>
         <Spacer axis="vertical" size="30" />
         <div className="grid-container">
@@ -696,23 +696,21 @@ function DashboardEducation() {
     <FormSection aria-labelledby="edit-information-heading">
       <div className="edit-info-header">
         <h2 id="edit-information-heading">Edit Info</h2>
-        <button
+        <IconButton
           ref={resetBtnRef}
+          type="reset"
           disabled={
             formStatus === FORM_STATUS.loading ||
             formStatus === FORM_STATUS.success
           }
-          type="reset"
-          form="education-form"
-          className="button reset-button"
+          ariaLabel="cancel"
+          icon={<CloseIcon className="icon" />}
+          attributes={{
+            form: "education-form",
+          }}
           onClick={resetForm}
           onKeyDown={(e) => formFocusManagement(e, FORM_STATUS.idle)}
-        >
-          <span className="sr-only">cancel</span>
-          <span className="button-icon">
-            <CloseIcon className="icon" />
-          </span>
-        </button>
+        />
       </div>
 
       {formStatus === FORM_STATUS.error ? (
@@ -920,28 +918,6 @@ const InfoSection = styled.section`
     justify-content: flex-start;
     align-items: center;
     gap: 7px;
-
-    .edit-button {
-      width: 100%;
-      max-width: 40px;
-      border-radius: 10px;
-      height: 40px;
-      padding: 8px;
-
-      &:focus-visible {
-        outline-width: 3px;
-        outline-color: transparent;
-        box-shadow: inset 0 0 1px 2.5px #2727ad;
-      }
-
-      &:hover .icon {
-        fill: #2727ad;
-      }
-
-      .icon {
-        height: 100%;
-      }
-    }
   }
 
   .grid-container {
@@ -959,28 +935,6 @@ const FormSection = styled.section`
     justify-content: flex-start;
     align-items: center;
     gap: 7px;
-
-    .reset-button {
-      width: 100%;
-      max-width: 35px;
-      border-radius: 10px;
-      height: 35px;
-      padding: 8px;
-
-      &:focus-visible {
-        outline-width: 3px;
-        outline-color: transparent;
-        box-shadow: inset 0 0 1px 2.5px #2727ad;
-      }
-
-      &:hover .icon {
-        fill: #2727ad;
-      }
-
-      .icon {
-        height: 100%;
-      }
-    }
   }
 
   .error-summary {
@@ -1000,6 +954,7 @@ const FormSection = styled.section`
       max-width: 350px;
       .icon {
         height: 1rem;
+        fill: var(--lighter-cyan-2);
       }
     }
   }
@@ -1014,10 +969,6 @@ const FormSection = styled.section`
     button {
       width: 100%;
       max-width: 350px;
-
-      .button-text {
-        padding: 7px 0;
-      }
     }
   }
 `;

@@ -283,14 +283,9 @@ const UserInfo = styled.div`
 
     button {
       width: 90%;
-      font-size: 0.8em;
 
       @media (min-width: 950px) {
         width: 90%;
-      }
-
-      .button-text {
-        padding: 5px 0;
       }
     }
   }

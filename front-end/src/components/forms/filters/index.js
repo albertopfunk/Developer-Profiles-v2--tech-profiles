@@ -166,10 +166,6 @@ const FilterNav = styled.nav`
   }
 
   .control-mobile {
-    .button-text {
-      padding: 5px 0;
-    }
-
     @media (min-width: 600px) {
       display: none;
     }
@@ -276,10 +272,6 @@ const FiltersContainer = styled.div`
     button {
       width: 100%;
       max-width: 350px;
-
-      .button-text {
-        padding: 7px 0;
-      }
     }
   }
 `;

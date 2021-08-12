@@ -5,6 +5,7 @@ import { ReactComponent as EditIcon } from "../../../global/assets/dashboard-edi
 
 import Combobox from "../../../components/forms/combobox";
 import ControlButton from "../../../components/forms/buttons/ControlButton";
+import IconButton from "../../../components/forms/buttons/IconButton";
 
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
 import { httpClient } from "../../../global/helpers/http-requests";
@@ -21,7 +22,7 @@ function AboutYou() {
   const [formFocusStatus, setFormFocusStatus] = useState("");
   const [formFocusToggle, setFormFocusToggle] = useToggle();
   const [hasSubmitError, setHasSubmitError] = useState(null);
-  
+
   const [summary, setSummary] = useState({
     inputValue: "",
     inputChange: false,
@@ -312,7 +313,7 @@ function AboutYou() {
           // TODO:
           // check if user has skill saved
           skillsForReview.push(skill);
-          skillsForReviewLen++
+          skillsForReviewLen++;
         }
       }
     });
@@ -324,10 +325,10 @@ function AboutYou() {
 
     let inputChange;
     if (
-        skillsToAdd.length > 0 ||
-        skillsToRemove.length > 0 ||
-        skillsForReview.length > 0
-      ) {
+      skillsToAdd.length > 0 ||
+      skillsToRemove.length > 0 ||
+      skillsForReview.length > 0
+    ) {
       inputChange = true;
     } else {
       inputChange = false;
@@ -536,18 +537,17 @@ function AboutYou() {
       <InfoSection aria-labelledby="current-information-heading">
         <div className="info-heading">
           <h2 id="current-information-heading">Current Info</h2>
-          <button
+          <IconButton
             ref={editInfoBtnRef}
-            id="edit-info-btn"
-            className="button edit-button"
+            type="button"
+            ariaLabel="edit information"
+            icon={<EditIcon className="icon" />}
+            attributes={{
+              id: "edit-info-btn",
+            }}
             onClick={setFormInputs}
             onKeyDown={(e) => formFocusManagement(e, FORM_STATUS.active)}
-          >
-            <span className="sr-only">Edit Information</span>
-            <span className="button-icon">
-              <EditIcon className="icon" />
-            </span>
-          </button>
+          />
         </div>
         <Spacer axis="vertical" size="30" />
         <dl className="info-group" aria-label="current information">
@@ -612,23 +612,21 @@ function AboutYou() {
       <FormSection aria-labelledby="edit-information-heading">
         <div className="edit-info-header">
           <h2 id="edit-information-heading">Edit Info</h2>
-          <button
+          <IconButton
             ref={resetBtnRef}
+            type="reset"
             disabled={
               formStatus === FORM_STATUS.loading ||
               formStatus === FORM_STATUS.success
             }
-            type="reset"
-            form="submit-form"
-            className="button reset-button"
+            ariaLabel="cancel"
+            icon={<CloseIcon className="icon" />}
+            attributes={{
+              form: "submit-form",
+            }}
             onClick={resetForm}
             onKeyDown={(e) => formFocusManagement(e, FORM_STATUS.idle)}
-          >
-            <span className="sr-only">cancel</span>
-            <span className="button-icon">
-              <CloseIcon className="icon" />
-            </span>
-          </button>
+          />
         </div>
 
         {formStatus === FORM_STATUS.error ? (
@@ -754,28 +752,6 @@ const InfoSection = styled.section`
     justify-content: flex-start;
     align-items: center;
     gap: 7px;
-
-    .edit-button {
-      width: 100%;
-      max-width: 40px;
-      border-radius: 10px;
-      height: 40px;
-      padding: 8px;
-
-      &:focus-visible {
-        outline-width: 3px;
-        outline-color: transparent;
-        box-shadow: inset 0 0 1px 2.5px #2727ad;
-      }
-
-      &:hover .icon {
-        fill: #2727ad;
-      }
-
-      .icon {
-        height: 100%;
-      }
-    }
   }
 `;
 
@@ -785,28 +761,6 @@ const FormSection = styled.section`
     justify-content: flex-start;
     align-items: center;
     gap: 7px;
-
-    .reset-button {
-      width: 100%;
-      max-width: 35px;
-      border-radius: 10px;
-      height: 35px;
-      padding: 8px;
-
-      &:focus-visible {
-        outline-width: 3px;
-        outline-color: transparent;
-        box-shadow: inset 0 0 1px 2.5px #2727ad;
-      }
-
-      &:hover .icon {
-        fill: #2727ad;
-      }
-
-      .icon {
-        height: 100%;
-      }
-    }
   }
 
   .error-summary {
@@ -824,10 +778,6 @@ const FormSection = styled.section`
     button {
       width: 100%;
       max-width: 350px;
-
-      .button-text {
-        padding: 7px 0;
-      }
     }
   }
 `;

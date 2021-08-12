@@ -16,6 +16,7 @@ import { FORM_STATUS } from "../../../global/helpers/variables";
 import useToggle from "../../../global/helpers/hooks/useToggle";
 import Announcer from "../../../global/helpers/announcer";
 import Spacer from "../../../global/helpers/spacer";
+import IconButton from "../../../components/forms/buttons/IconButton";
 
 let formSuccessWait;
 function NewUser() {
@@ -130,7 +131,7 @@ function NewUser() {
   }
 
   function setFormInputs() {
-    setSelectedTab("basic-info")
+    setSelectedTab("basic-info");
     setFormStatus(FORM_STATUS.active);
     setFormFocusStatus(FORM_STATUS.active);
     setHasSubmitError(null);
@@ -607,22 +608,20 @@ function NewUser() {
     <FormSection aria-labelledby="edit-information-heading edit-information-desc">
       <div className="edit-info-header">
         <h2 id="edit-information-heading">Edit Info</h2>
-        <button
+        <IconButton
+          type="reset"
           disabled={
             formStatus === FORM_STATUS.loading ||
             formStatus === FORM_STATUS.success
           }
-          type="reset"
-          form="submit-form"
-          className="button reset-button"
+          ariaLabel="cancel"
+          icon={<CloseIcon className="icon" />}
+          attributes={{
+            form: "submit-form",
+          }}
           onClick={resetForm}
           onKeyDown={(e) => formFocusManagement(e, FORM_STATUS.idle)}
-        >
-          <span className="sr-only">close</span>
-          <span className="button-icon">
-            <CloseIcon className="icon" />
-          </span>
-        </button>
+        />
       </div>
 
       <p id="edit-information-desc" className="sr-only">
@@ -977,28 +976,6 @@ const FormSection = styled.section`
     justify-content: flex-start;
     align-items: center;
     gap: 7px;
-
-    .reset-button {
-      width: 100%;
-      max-width: 35px;
-      border-radius: 10px;
-      height: 35px;
-      padding: 8px;
-
-      &:focus-visible {
-        outline-width: 3px;
-        outline-color: transparent;
-        box-shadow: inset 0 0 1px 2.5px #2727ad;
-      }
-
-      &:hover .icon {
-        fill: #2727ad;
-      }
-
-      .icon {
-        height: 100%;
-      }
-    }
   }
 
   .error-summary {
