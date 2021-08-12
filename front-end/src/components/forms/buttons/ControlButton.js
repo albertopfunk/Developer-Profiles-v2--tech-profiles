@@ -42,43 +42,40 @@ const ControlButton = React.forwardRef(
 );
 
 const Button = styled.button`
-  background: hsl(340deg 100% 32%);
-  border-radius: 10px;
-  transition: filter 50ms ease-in;
-  -webkit-tap-highlight-color: transparent;
-  outline-offset: 1px;
+  color: white;
+  text-transform: capitalize;
+  letter-spacing: .8px;
+  padding: 7px 10px;
+  border-radius: var(--border-radius-md);
+  box-shadow: rgba(0, 0, 0, .2) 0 3px 1px -2px,rgba(0, 0, 0, .14) 0 2px 2px 0,rgba(0, 0, 0, .12) 0 1px 5px 0;
+  transition: box-shadow 280ms cubic-bezier(.4, 0, .2, 1);
+  will-change: transform,opacity;
 
-  &:focus {
-    outline: 2.5px solid transparent;
+  &:disabled {
+    color: rgba(0, 0, 0, .37);
+    background-color: rgba(0, 0, 0, .12);
+    box-shadow: rgba(0, 0, 0, .2) 0 0 0 0, rgba(0, 0, 0, .14) 0 0 0 0, rgba(0, 0, 0, .12) 0 0 0 0;
   }
 
-  &:focus .button-text {
-    filter: brightness(110%);
-    transition: filter 50ms ease-in;
-    box-shadow: inset 0 0 4px 2.5px #2727ad;
-    transform: translateY(-5px);
-    transition: transform 75ms ease-out;
-  }
-
-  &:focus:not(:focus-visible) .button-text {
-    filter: none;
-    box-shadow: 0;
-    transition: none;
+  &:not(:disabled) {
+    background-color: var(--dark-green-2);
   }
 
   &:hover {
-    transition: filter 50ms ease-in;
+    box-shadow: rgba(0, 0, 0, .2) 0 2px 4px -1px, rgba(0, 0, 0, .14) 0 4px 5px 0, rgba(0, 0, 0, .12) 0 1px 10px 0;
+    filter: brightness(105%);
+  }
+
+  &:focus {
+    outline: 2.5px solid transparent;
+    box-shadow: none;
+    box-shadow: 0 0 0 2.5px var(--dark-cyan-3);
+    filter: brightness(105%);
+  }
+
+  &:active {
+    box-shadow: rgba(0, 0, 0, .2) 0 5px 5px -3px, rgba(0, 0, 0, .14) 0 8px 10px 1px, rgba(0, 0, 0, .12) 0 3px 14px 2px;
     filter: brightness(110%);
-  }
-
-  &:hover .button-text {
-    transform: translateY(-5px);
-    transition: transform 75ms ease-out;
-  }
-
-  &:active .button-text {
-    transform: translateY(-2px);
-    transition: transform ease-out;
   }
 
   .button-text {
@@ -86,17 +83,6 @@ const Button = styled.button`
     justify-content: center;
     align-items: center;
     gap: 7px;
-    padding: 12px 5px;
-    border-radius: 10px;
-    background: hsl(345deg 100% 47%);
-    color: white;
-    transform: translateY(-4px);
-    will-change: transform;
-    transition: transform 75ms ease-out;
-
-    @media (min-width: 750px) {
-      padding: 15px 0;
-    }
   }
 `;
 
