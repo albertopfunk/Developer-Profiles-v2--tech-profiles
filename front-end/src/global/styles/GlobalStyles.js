@@ -234,6 +234,11 @@ export const GlobalStyles = createGlobalStyle`
     outline: 1px dotted ButtonText;
   }
 
+  // default icon color
+  svg:not([fill]) {
+    fill: var(--dark-cyan-2);
+  }
+
   /* Grouping content
   * ========================================================================== */
 

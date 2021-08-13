@@ -864,7 +864,7 @@ const ChecklistSection = styled.section`
       width: 75%;
       height: 10px;
       padding: 3px;
-      background-color: #555;
+      background-color: var(--dark-cyan-2);
       border-radius: 25px;
       box-shadow: inset 0 -1px 1px rgba(255, 255, 255, 0.3);
 
@@ -875,9 +875,9 @@ const ChecklistSection = styled.section`
         border-bottom-right-radius: 8px;
         border-top-left-radius: 20px;
         border-bottom-left-radius: 20px;
-        background-color: rgb(43, 194, 83);
-        box-shadow: inset 0 2px 9px rgba(255, 255, 255, 0.3),
-          inset 0 -2px 6px rgba(0, 0, 0, 0.4);
+        background-color: var(--dark-green-1);
+        box-shadow: inset 0 1px 6px rgba(255, 255, 255, 0.2),
+          inset 0 -1px 3px rgba(0, 0, 0, 0.3);
       }
     }
 
