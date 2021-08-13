@@ -1,12 +1,14 @@
 import React from "react";
 import styled from "styled-components";
+import { ReactComponent as RemoveIcon } from "../../../global/assets/dashboard-remove.svg";
+
+import IconButton from "../buttons/IconButton";
+
 import {
   CANCEL_STATUS,
   COMBOBOX_STATUS,
 } from "../../../global/helpers/variables";
 import Spacer from "../../../global/helpers/spacer";
-
-import { ReactComponent as RemoveIcon } from "../../../global/assets/dashboard-remove.svg";
 
 class Combobox extends React.Component {
   state = {
@@ -481,22 +483,19 @@ class Combobox extends React.Component {
                   return (
                     <li key={chosenOption.id} className="chosen-option">
                       <span>{chosenOption.name}</span>
-                      <button
-                        type="button"
-                        className="button remove-button"
+                      <IconButton
                         ref={(ref) => {
                           this.setChosenOptionBtnRefs(ref, i);
                         }}
+                        type="button"
+                        size="sm"
+                        ariaLabel={`remove ${chosenOption.name}`}
+                        icon={<RemoveIcon className="icon" />}
                         onClick={() => this.removeChosenOption(i)}
                         onKeyDown={(e) =>
                           this.removeChosenOptionFocusManagement(e, i)
                         }
-                      >
-                        <span className="sr-only">
-                          remove {chosenOption.name}
-                        </span>
-                        <RemoveIcon className="button-icon" />
-                      </button>
+                      />
                     </li>
                   );
                 })}
@@ -543,42 +542,17 @@ const ChosenOptionsContainer = styled.div`
   .chosen-options-group {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 15px;
 
     .chosen-option {
-      border-radius: 10px;
-      box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
-        rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
-      padding: 5px;
-
       display: flex;
       justify-content: flex-start;
       align-items: center;
-      gap: 3px;
-
-      .remove-button {
-        width: 25px;
-        height: 25px;
-        border-radius: 10px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-        &:focus-visible {
-          outline-width: 3px;
-          outline-color: transparent;
-          box-shadow: inset 0 0 1px 2.5px #2727ad;
-        }
-
-        &:hover .icon {
-          fill: #2727ad;
-        }
-
-        .button-icon {
-          width: 15px;
-          height: 15px;
-        }
-      }
+      gap: 4px;
+      padding: 5px;
+      border-radius: 10px;
+      box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+        rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
     }
   }
 `;

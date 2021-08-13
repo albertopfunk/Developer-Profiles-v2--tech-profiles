@@ -5,6 +5,7 @@ import styled from "styled-components";
 
 import ControlButton from "../forms/buttons/ControlButton";
 import { AuthContext } from "../../global/context/auth/AuthContext";
+import IconButton from "../forms/buttons/IconButton";
 
 let closeOnBlurWait;
 function MainHeader(props) {
@@ -90,27 +91,31 @@ function MainHeader(props) {
   let menuButton;
   if (isMenuOpen) {
     menuButton = (
-      <button
+      <IconButton
         type="button"
-        className="button menu-button"
-        aria-label="close menu"
-        aria-expanded="true"
+        size="lg"
+        classNames="menu-button"
+        ariaLabel="close menu"
+        icon={<BurgerMenu className="icon rotate" />}
+        attributes={{
+          "aria-expanded": "true",
+        }}
         onClick={closeMenu}
-      >
-        <BurgerMenu className="icon rotate" aria-hidden="true" />
-      </button>
+      />
     );
   } else {
     menuButton = (
-      <button
+      <IconButton
         type="button"
-        className="button menu-button"
-        aria-label="open menu"
-        aria-expanded="false"
+        size="lg"
+        classNames="menu-button"
+        ariaLabel="open menu"
+        icon={<BurgerMenu className="icon" />}
+        attributes={{
+          "aria-expanded": "false",
+        }}
         onClick={openMenu}
-      >
-        <BurgerMenu className="icon" aria-hidden="true" />
-      </button>
+      />
     );
   }
 
@@ -239,27 +244,12 @@ const Nav = styled.nav`
           display: none;
         }
       }
-
+    
       .menu-button {
         width: 100%;
         max-width: 60px;
-        border-radius: 10px;
         height: 55px;
         padding: 8px;
-
-        &:focus-visible {
-          outline-width: 3px;
-          outline-color: transparent;
-          box-shadow: inset 0 0 1px 2.5px #2727ad;
-        }
-
-        &:focus-visible .icon {
-          fill: #2727ad;
-        }
-
-        &:hover .icon {
-          fill: #2727ad;
-        }
 
         .icon {
           transition: all 0.3s linear;

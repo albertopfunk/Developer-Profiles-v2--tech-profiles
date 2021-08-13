@@ -2,6 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import { ReactComponent as RemoveIcon } from "../../../global/assets/dashboard-remove.svg";
 
+import IconButton from "../buttons/IconButton";
+
 function ImagePreview({
   uploadedImage,
   removeUploadedImage,
@@ -15,17 +17,17 @@ function ImagePreview({
   if (uploadedImage) {
     return (
       <ImageContainer>
-        <button
+        <IconButton
           type="button"
-          className="button close-button"
-          aria-label="remove current preview pic"
+          size="sm"
+          classNames="close-button"
+          icon={<RemoveIcon className="icon" />}
           onClick={removeUploadedImage}
         >
-          <span className="visually-hidden-relative">remove image</span>
-          <span className="button-icon">
-            <RemoveIcon className="icon" />
+          <span className="visually-hidden-relative">
+            remove current preview pic
           </span>
-        </button>
+        </IconButton>
         <img
           src={uploadedImage}
           alt="current preview pic"
@@ -39,17 +41,17 @@ function ImagePreview({
   if (selectedAvatar) {
     return (
       <ImageContainer>
-        <button
+        <IconButton
           type="button"
-          className="button close-button"
-          aria-label="remove current avatar"
+          size="sm"
+          classNames="close-button"
+          icon={<RemoveIcon className="icon" />}
           onClick={removeSelectedAvatar}
         >
-          <span className="visually-hidden-relative">remove image</span>
-          <span className="button-icon">
-            <RemoveIcon className="icon" />
+          <span className="visually-hidden-relative">
+            remove current avatar
           </span>
-        </button>
+        </IconButton>
         <img
           src={selectedAvatar}
           alt="current avatar"
@@ -63,17 +65,17 @@ function ImagePreview({
   if (savedUserImage) {
     return (
       <ImageContainer>
-        <button
+        <IconButton
           type="button"
-          className="button close-button"
-          aria-label="remove saved pic on submit"
+          size="sm"
+          classNames="close-button"
+          icon={<RemoveIcon className="icon" />}
           onClick={removeSavedUserImage}
         >
-          <span className="visually-hidden-relative">remove image</span>
-          <span className="button-icon">
-            <RemoveIcon className="icon" />
+          <span className="visually-hidden-relative">
+            remove saved image on submit
           </span>
-        </button>
+        </IconButton>
         <img
           src={savedUserImage}
           alt="saved pic"
@@ -87,17 +89,17 @@ function ImagePreview({
   if (savedAvatar) {
     return (
       <ImageContainer>
-        <button
+        <IconButton
           type="button"
-          className="button close-button"
-          aria-label="remove saved avatar on submit"
+          size="sm"
+          classNames="close-button"
+          icon={<RemoveIcon className="icon" />}
           onClick={removeSavedAvatar}
         >
-          <span className="visually-hidden-relative">remove image</span>
-          <span className="button-icon">
-            <RemoveIcon className="icon" />
+          <span className="visually-hidden-relative">
+            remove saved avatar on submit
           </span>
-        </button>
+        </IconButton>
         <img
           src={savedAvatar}
           alt="saved avatar"
@@ -123,31 +125,6 @@ const ImageContainer = styled.div`
 
   .close-button {
     align-self: flex-end;
-    width: 30px;
-    height: 30px;
-    border-radius: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    &:focus-visible {
-      outline-width: 3px;
-      outline-color: transparent;
-      box-shadow: inset 0 0 1px 2.5px #2727ad;
-    }
-
-    &:hover .icon {
-      fill: #2727ad;
-    }
-
-    .button-icon {
-      display: inline-block;
-
-      .icon {
-        height: 20px;
-        width: 20px;
-      }
-    }
   }
 `;
 

@@ -4,6 +4,7 @@ import { ReactComponent as RemoveIcon } from "../../../global/assets/dashboard-r
 
 import ImageUploadForm from "../images/ImageUpload";
 import ImagePreview from "../images/ImagePreview";
+import IconButton from "../buttons/IconButton";
 
 import { validateInput } from "../../../global/helpers/validation";
 import { FORM_STATUS } from "../../../global/helpers/variables";
@@ -179,21 +180,17 @@ const ProjectForm = React.forwardRef(
           <legend>
             Project: {projectName.projectNameInput || "New Project"}
           </legend>
-          <button
+          <IconButton
             ref={removeBtnRef}
             type="button"
-            className="button remove-button"
-            aria-label={`Remove ${
+            size="sm"
+            ariaLabel={`Remove ${
               projectName.projectNameInput || "New"
             } Project`}
+            icon={<RemoveIcon className="icon" />}
             onClick={() => removeProject(projIndex)}
             onKeyDown={(e) => removeProjectFocusManagement(e, projIndex)}
-          >
-            <span className="sr-only">Remove Project</span>
-            <span className="button-icon">
-              <RemoveIcon className="icon" />
-            </span>
-          </button>
+          />
         </div>
         <Spacer axis="vertical" size="5" />
         <InputContainer>
@@ -332,34 +329,7 @@ const Fieldset = styled.fieldset`
     display: flex;
     justify-content: flex-start;
     align-items: center;
-
-    .remove-button {
-      width: 30px;
-      height: 30px;
-      border-radius: 10px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-
-      &:focus-visible {
-        outline-width: 3px;
-        outline-color: transparent;
-        box-shadow: inset 0 0 1px 2.5px #2727ad;
-      }
-
-      &:hover .icon {
-        fill: #2727ad;
-      }
-
-      .button-icon {
-        display: inline-block;
-
-        .icon {
-          height: 20px;
-          width: 20px;
-        }
-      }
-    }
+    gap: 4px;
   }
 
   .image-upload-container {

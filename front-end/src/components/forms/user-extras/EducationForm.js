@@ -2,6 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import { ReactComponent as RemoveIcon } from "../../../global/assets/dashboard-remove.svg";
 
+import IconButton from "../buttons/IconButton";
+
 import { validateInput } from "../../../global/helpers/validation";
 import { FORM_STATUS } from "../../../global/helpers/variables";
 import Spacer from "../../../global/helpers/spacer";
@@ -374,20 +376,15 @@ const EducationForm = React.forwardRef(
           <legend>
             Education: {school.schoolNameInput || "New Education"}
           </legend>
-
-          <button
+          <IconButton
             ref={removeBtnRef}
             type="button"
-            className="button remove-button"
-            aria-label={`Remove ${school.schoolNameInput || "New"} Education`}
+            size="sm"
+            ariaLabel={`Remove ${school.schoolNameInput || "New"} Education`}
+            icon={<RemoveIcon className="icon" />}
             onClick={() => removeEducation(eduIndex)}
             onKeyDown={(e) => removeEducationFocusManagement(e, eduIndex)}
-          >
-            <span className="sr-only">Remove Project</span>
-            <span className="button-icon">
-              <RemoveIcon className="icon" />
-            </span>
-          </button>
+          />
         </div>
         <Spacer axis="vertical" size="5" />
         <InputContainer>
@@ -686,34 +683,7 @@ const Fieldset = styled.fieldset`
     display: flex;
     justify-content: flex-start;
     align-items: center;
-
-    .remove-button {
-      width: 30px;
-      height: 30px;
-      border-radius: 10px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-
-      &:focus-visible {
-        outline-width: 3px;
-        outline-color: transparent;
-        box-shadow: inset 0 0 1px 2.5px #2727ad;
-      }
-
-      &:hover .icon {
-        fill: #2727ad;
-      }
-
-      .button-icon {
-        display: inline-block;
-
-        .icon {
-          height: 20px;
-          width: 20px;
-        }
-      }
-    }
+    gap: 4px;
   }
 `;
 
