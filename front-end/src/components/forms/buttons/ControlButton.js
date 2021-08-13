@@ -4,11 +4,12 @@ import styled from "styled-components";
 const ControlButton = React.forwardRef(
   (
     {
-      children,
       type,
       classNames = "",
       disabled,
+      startIcon,
       buttonText,
+      endIcon,
       ariaLabel = "",
       onClick,
       onKeyDown,
@@ -32,8 +33,9 @@ const ControlButton = React.forwardRef(
         onKeyDown={onKeyDown}
       >
         <span className="button-text">
-          <span className="text">{buttonText}</span>
-          {children}
+          {startIcon}
+          {buttonText}
+          {endIcon}
         </span>
         {ariaLabel ? <span className="sr-only">{ariaLabel}</span> : null}
       </Button>

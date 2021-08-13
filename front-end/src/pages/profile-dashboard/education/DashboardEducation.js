@@ -630,6 +630,7 @@ function DashboardEducation() {
           <IconButton
             ref={editInfoBtnRef}
             type="button"
+            size="lg"
             ariaLabel="edit information"
             icon={<EditIcon className="icon" />}
             attributes={{
@@ -699,6 +700,7 @@ function DashboardEducation() {
         <IconButton
           ref={resetBtnRef}
           type="reset"
+          size="lg"
           disabled={
             formStatus === FORM_STATUS.loading ||
             formStatus === FORM_STATUS.success
@@ -822,15 +824,12 @@ function DashboardEducation() {
           classNames="add-button"
           buttonText="new education"
           ariaLabel="add"
+          endIcon={<AddIcon className="icon" />}
           attributes={{
             id: "add-new-btn",
             form: "education-form",
           }}
-        >
-          <span className="icon-container">
-            <AddIcon className="icon" />
-          </span>
-        </ControlButton>
+        / >
         <Spacer axis="vertical" size="20" />
         <form id="education-form" onSubmit={(e) => submitEdit(e)}>
           <div className="flex-container">

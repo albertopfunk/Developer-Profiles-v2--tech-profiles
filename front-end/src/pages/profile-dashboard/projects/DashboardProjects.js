@@ -579,6 +579,7 @@ function DashboardProjects() {
           <IconButton
             ref={editInfoBtnRef}
             type="button"
+            size="lg"
             ariaLabel="edit information"
             icon={<EditIcon className="icon" />}
             attributes={{
@@ -655,6 +656,7 @@ function DashboardProjects() {
         <IconButton
           ref={resetBtnRef}
           type="reset"
+          size="lg"
           disabled={
             formStatus === FORM_STATUS.loading ||
             formStatus === FORM_STATUS.success
@@ -754,15 +756,12 @@ function DashboardProjects() {
           classNames="add-button"
           buttonText="new project"
           ariaLabel="add"
+          endIcon={<AddIcon className="icon" />}
           attributes={{
             id: "add-new-btn",
             form: "projects-form",
           }}
-        >
-          <span className="icon-container">
-            <AddIcon className="icon" />
-          </span>
-        </ControlButton>
+        / >
         <Spacer axis="vertical" size="20" />
         <form id="projects-form" onSubmit={(e) => submitEdit(e)}>
           <div className="flex-container">
@@ -884,6 +883,7 @@ const FormSection = styled.section`
       max-width: 350px;
       .icon {
         height: 1rem;
+        fill: var(--lighter-cyan-2);
       }
     }
   }
