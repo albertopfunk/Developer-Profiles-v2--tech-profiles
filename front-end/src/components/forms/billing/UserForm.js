@@ -189,8 +189,8 @@ const FormContainer = styled.div`
     width: 100%;
     padding: 10px 15px;
     background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px 0 hsla(0, 0%, 0%, 0.2);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--box-shadow-primary);
 
     display: grid;
     grid-template-columns: 0.2fr 1fr 1fr;

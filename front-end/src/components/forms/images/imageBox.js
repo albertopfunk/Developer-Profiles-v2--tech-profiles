@@ -373,8 +373,8 @@ const ImageBoxContainer = styled.div`
   display: flex;
   gap: 30px;
   padding: 15px;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px 0 hsla(0, 0%, 0%, 0.2);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--box-shadow-primary);
 
   .image-upload-container {
     display: flex;

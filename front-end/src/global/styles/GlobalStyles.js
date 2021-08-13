@@ -39,6 +39,9 @@ export const GlobalStyles = createGlobalStyle`
     --border-radius-sm: 2.5px;
     --border-radius-md: 6.25px;
     --border-radius-lg: 10px;
+
+    --box-shadow-primary: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+        rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
   }
 
   html {

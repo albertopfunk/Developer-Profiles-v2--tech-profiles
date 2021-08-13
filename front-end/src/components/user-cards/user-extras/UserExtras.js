@@ -170,12 +170,11 @@ const ExtrasContainer = styled.div`
     ul.list {
       display: flex;
       flex-wrap: wrap;
-      gap: 10px;
+      gap: 15px;
 
       .item {
-        border-radius: 10px;
-        box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
-          rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+        border-radius: var(--border-radius-lg);
+        box-shadow: var(--box-shadow-primary);
         padding: 5px;
       }
     }
@@ -194,9 +193,8 @@ const ExtrasContainer = styled.div`
         justify-content: stretch;
         align-items: center;
         gap: 10px;
-        border-radius: 10px;
-        box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
-          rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+        border-radius: var(--border-radius-lg);
+        box-shadow: var(--box-shadow-primary);
         padding: 5px;
 
         @media (min-width: 400px) {

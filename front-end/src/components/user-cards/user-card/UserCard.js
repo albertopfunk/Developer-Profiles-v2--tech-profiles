@@ -247,8 +247,8 @@ const UserCardContainer = styled.article`
   max-width: 700px;
   padding: 15px;
   background-color: white;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px 0 hsla(0, 0%, 0%, 0.2);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--box-shadow-primary);
 
   &:focus-visible {
     outline-width: 3px;
