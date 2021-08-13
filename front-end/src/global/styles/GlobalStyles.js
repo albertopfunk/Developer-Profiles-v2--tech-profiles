@@ -271,6 +271,11 @@ export const GlobalStyles = createGlobalStyle`
     font-family: "Roboto", sans-serif;
   }
 
+  /*line height for text*/
+  p, dd, li {
+    line-height: 1.5;
+  }
+
   /*remove default link decoration*/
   a {
     text-decoration: none;
