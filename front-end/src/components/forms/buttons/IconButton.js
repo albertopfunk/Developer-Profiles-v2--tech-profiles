@@ -4,6 +4,7 @@ import styled from "styled-components";
 const IconButton = React.forwardRef(
   (
     {
+      children,
       icon,
       type,
       classNames = "",
@@ -12,6 +13,7 @@ const IconButton = React.forwardRef(
       onClick,
       onKeyDown,
       attributes,
+      size = "sm",
     },
     buttonRef
   ) => {
@@ -23,7 +25,7 @@ const IconButton = React.forwardRef(
       <Button
         ref={buttonRef}
         type={type}
-        className={`button-icon ${classNames}`}
+        className={`button-icon ${size} ${classNames}`}
         disabled={disabled === true || disabled === "true" ? true : false}
         {...attributes}
         onClick={onClick}
@@ -31,18 +33,27 @@ const IconButton = React.forwardRef(
         onKeyDown={onKeyDown}
       >
         {ariaLabel ? <span className="sr-only">{ariaLabel}</span> : null}
-        <span className="icon-container">{icon}</span>
+        {icon}
+        {children}
       </Button>
     );
   }
 );
 
 const Button = styled.button`
-  width: 100%;
-  max-width: 35px;
-  height: 35px;
   border-radius: var(--border-radius-md);
-  padding: 7px;
+
+  &.sm {
+    width: 27px;
+    height: 27px;
+    padding: 5px;
+  }
+
+  &.lg {
+    width: 35px;
+    height: 35px;
+    padding: 7px;
+  }
 
   &:hover .icon {
     fill: var(--dark-green-3);
@@ -50,19 +61,12 @@ const Button = styled.button`
 
   &:focus {
     outline: 2.5px solid transparent;
-    box-shadow: none;
     box-shadow: 0 0 0 2.5px var(--dark-cyan-1);
     filter: brightness(105%);
   }
 
   &:active .icon {
     filter: brightness(110%);
-  }
-
-  .icon-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
   }
 
   .icon {

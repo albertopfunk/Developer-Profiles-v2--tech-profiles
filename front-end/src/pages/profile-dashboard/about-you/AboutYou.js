@@ -540,6 +540,7 @@ function AboutYou() {
           <IconButton
             ref={editInfoBtnRef}
             type="button"
+            size="lg"
             ariaLabel="edit information"
             icon={<EditIcon className="icon" />}
             attributes={{
@@ -615,6 +616,7 @@ function AboutYou() {
           <IconButton
             ref={resetBtnRef}
             type="reset"
+            size="lg"
             disabled={
               formStatus === FORM_STATUS.loading ||
               formStatus === FORM_STATUS.success
