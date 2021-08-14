@@ -244,7 +244,7 @@ const Nav = styled.nav`
           display: none;
         }
       }
-    
+
       .menu-button {
         width: 100%;
         max-width: 60px;
@@ -352,29 +352,56 @@ const Nav = styled.nav`
 
     .menu-group {
       .menu-item {
-        .link {
-          border-right: solid 1px rgba(229, 231, 235, 0.8);
+        border-right: solid 1px rgba(229, 231, 235, 0.8);
 
-          &:focus-visible {
-            outline-width: 3px;
-            outline-color: transparent;
-            box-shadow: inset 0 0 0 2.5px #2727ad;
-          }
+        &:last-child {
+          border-right: none;
+        }
+
+        .link {
+          color: var(--dark-cyan-2);
+          // selected and focus placeholder
+          border: solid 2px transparent;
 
           &.selected {
-            border-bottom: solid 2px;
+            color: var(--dark-green-3);
+            border-bottom-color: var(--dark-green-3);
           }
 
-          &:hover .link-text {
-            border-bottom: solid 1px;
-          }
-          &:focus .link-text {
-            outline: 0.25rem solid transparent;
-            border-bottom: solid 1px;
+          // next 3 selectors are due to focus-visible
+          // not being fully supported yet
+          &:focus {
+            // contrast mode fallback
+            outline: 2.5px solid transparent;
+            border-color: var(--dark-green-3);
           }
 
-          &.selected .link-text {
-            border-bottom: solid 1px transparent;
+          // removing focus styles when using mouse
+          &:focus:not(:focus-visible) {
+            outline: none;
+            border-color: transparent;
+          }
+
+          // undoing removal of bottom border from above selector when using mouse
+          &.selected:focus {
+            border-bottom-color: var(--dark-green-3);
+          }
+
+          &:active {
+            color: var(--dark-green-3);
+          }
+
+          .link-text {
+            // hover and focus placeholder
+            border: solid 1px transparent;
+          }
+
+          &:hover:not(.selected) .link-text {
+            border-bottom-color: currentColor;
+          }
+
+          &:focus:not(.selected) .link-text {
+            border-bottom-color: currentColor;
           }
         }
       }

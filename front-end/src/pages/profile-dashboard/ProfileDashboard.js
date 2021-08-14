@@ -486,71 +486,88 @@ const PageNav = styled.nav`
       justify-content: center;
       align-items: stretch;
     }
+
+    .nav-item {
+      border-right: solid 1px rgba(229, 231, 235, 0.8);
+
+      @media (min-width: 500px) {
+        border-right: none;
+        border-bottom: solid 1px rgba(229, 231, 235, 0.8);
+      }
+
+      &:last-child {
+        border-right: none;
+      }
+    }
   }
 
   .link {
+    // allow for padding
     display: inline-block;
+    padding: 10px 15px;
+    // no wrap of white space in ul and display all li in one line
     white-space: nowrap;
-    padding: 13px 15px 10px; // 13px for bottom borders
-    border-right: solid 1px rgba(229, 231, 235, 0.8);
-    border-bottom: solid 2px transparent;
+    // default color
+    color: var(--dark-cyan-2);
+    // selected and focus placeholder
+    border: solid 2px transparent;
 
-    &:focus-visible {
-      outline-width: 3px;
-      outline-color: transparent;
-      box-shadow: inset 0 0 0 2.5px #2727ad;
-    }
-
+    // icon only
     @media (min-width: 500px) {
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 20px 10px;
-      border-right: none;
-      border-bottom: solid 1px rgba(229, 231, 235, 0.8);
     }
 
+    // icon + text
     @media (min-width: 750px) {
-      padding-top: 21px;
-      gap: 10px;
+      padding-top: 20px;
       justify-content: flex-start;
-    }
-
-    &:hover .link-text {
-      border-bottom: solid 1px;
-    }
-    &:focus .link-text {
-      outline: 0.25rem solid transparent;
-      border-bottom: solid 1px;
-    }
-
-    &.selected .link-text {
-      border-bottom: solid 1px transparent;
-    }
-
-    &:hover .link-icon {
-      @media (min-width: 750px) {
-        border-bottom: solid 1px transparent;
-      }
-    }
-
-    &:hover .icon {
-      @media (min-width: 500px) {
-        fill: #2727ad;
-      }
+      gap: 10px;
     }
 
     &.selected {
-      border-bottom: solid 2px;
+      color: var(--dark-green-3);
+      border-bottom-color: var(--dark-green-3);
 
       @media (min-width: 500px) {
-        border-bottom: solid 1px rgba(229, 231, 235, 0.8);
-        border-right: solid;
+        border-bottom-color: transparent;
+        border-right-color: var(--dark-green-3);
       }
     }
 
+    // next 3 selectors are due to focus-visible
+    // not being fully supported yet
+    &:focus {
+      // contrast mode fallback
+      outline: 2.5px solid transparent;
+      border-color: var(--dark-green-3);
+    }
+
+    // removing focus styles when using mouse
+    &:focus:not(:focus-visible) {
+      outline: none;
+      border-color: transparent;
+    }
+
+    // undoing removal of bottom border from above selector when using mouse
+    &.selected:focus {
+      border-bottom-color: var(--dark-green-3);
+
+      @media (min-width: 500px) {
+        border-bottom-color: transparent;
+        border-right-color: var(--dark-green-3);
+      }
+    }
+
+    &:active {
+      color: var(--dark-green-3);
+    }
+
     .link-text {
-      border-bottom: solid 1px transparent;
+      // hover and focus placeholder
+      border: solid 1px transparent;
 
       @media (min-width: 500px) {
         display: none;
@@ -559,6 +576,14 @@ const PageNav = styled.nav`
       @media (min-width: 750px) {
         display: inline-block;
       }
+    }
+
+    &:hover:not(.selected) .link-text {
+      border-bottom-color: currentColor;
+    }
+
+    &:focus:not(.selected) .link-text {
+      border-bottom-color: currentColor;
     }
 
     .link-text-sr-only {
@@ -586,7 +611,6 @@ const PageNav = styled.nav`
       @media (min-width: 500px) {
         display: flex;
         justify-content: center;
-        border-bottom: solid 1px transparent;
       }
 
       .icon {
@@ -595,6 +619,12 @@ const PageNav = styled.nav`
         @media (min-width: 750px) {
           height: 1.1rem;
         }
+      }
+    }
+
+    &:hover .icon {
+      @media (min-width: 500px) {
+        fill: var(--dark-green-3);
       }
     }
   }
