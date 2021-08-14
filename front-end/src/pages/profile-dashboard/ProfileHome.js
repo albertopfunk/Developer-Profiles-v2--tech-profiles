@@ -923,6 +923,10 @@ const ChecklistSection = styled.section`
     justify-content: space-between;
     align-items: center;
 
+    &:hover .icon {
+      fill: var(--dark-green-3);
+    }
+
     .title-container {
       flex-basis: 90%;
       display: flex;

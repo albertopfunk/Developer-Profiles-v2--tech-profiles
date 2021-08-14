@@ -35,7 +35,9 @@ function UserExtras({ userExtras, noExtras, userId }) {
                     className="image-link"
                   >
                     <img className="image" src={project.project_img} alt="" />
-                    {project.link}
+                    <span className="link-text">
+                      {project.link}
+                    </span>
                     <span className="visually-hidden-relative">
                       (opens in new window)
                     </span>
@@ -202,6 +204,7 @@ const ExtrasContainer = styled.div`
         }
 
         .image-link {
+          color: var(--dark-cyan-2);
           overflow: hidden;
           display: flex;
           flex-direction: column;
@@ -212,6 +215,13 @@ const ExtrasContainer = styled.div`
             outline-width: 3px;
             outline-color: transparent;
             box-shadow: inset 0 0 0 2.5px #2727ad;
+          }
+
+          .link-text {
+            border-bottom: 1px solid transparent;
+          }
+          &:hover .link-text {
+            border-bottom-color: black;
           }
 
           .image {

@@ -96,6 +96,10 @@ const IconsSection = styled.section`
       box-shadow: inset 0 0 0 2.5px #2727ad;
     }
 
+    &:hover svg {
+      fill: var(--dark-green-3);
+    }
+
     @media (min-width: 500px) {
       width: 50px;
     }
