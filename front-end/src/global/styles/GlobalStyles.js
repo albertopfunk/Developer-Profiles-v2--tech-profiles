@@ -81,6 +81,12 @@ export const GlobalStyles = createGlobalStyle`
     padding: 0;
   }
 
+  [tabindex="-1"] {
+    outline-width: 3px;
+    outline-offset: -1;
+    outline-color: var(--cyan-3);
+  }
+
   /* Forms/controls
   * ========================================================================== */
 

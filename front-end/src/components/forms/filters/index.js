@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
 import AreaOfWorkFilter from "./AreaOfWorkFilter";
@@ -14,10 +14,26 @@ function Filters({
   resetFilters,
   resetFilterToggle,
   headerHeight,
+  setFilterHeight
 }) {
   const [areFiltersShowing, setAreFiltersShowing] = useState(false);
 
   const filtersBarRef = useRef();
+
+  useEffect(() => {
+    if (!filtersBarRef.current) {
+      return;
+    }
+
+    const resizeObserver = new ResizeObserver((entries) => {
+      console.log(entries[0])
+      setFilterHeight(entries[0].contentRect.height);
+    });
+
+    resizeObserver.observe(filtersBarRef.current);
+
+    return () => resizeObserver.disconnect();
+  }, []);
 
   function setFilters() {
     setAreFiltersShowing(!areFiltersShowing);
@@ -30,25 +46,27 @@ function Filters({
       aria-label="filters"
       headerHeight={headerHeight}
     >
-      <div ref={filtersBarRef} className="filters-bar">
-        <div
-          className="info"
-          aria-live="assertive"
-          aria-relevant="additions text"
-        >
-          {/* if full str isn't dynamic, sr will not announce full str */}
-          <p>{`Showing ${currentUsers} of ${totalUsers} Profiles`}</p>
+      <div ref={filtersBarRef} className="filters-bar-container">
+        <div className="filters-bar">
+          <div
+            className="info"
+            aria-live="assertive"
+            aria-relevant="additions text"
+          >
+            {/* if full str isn't dynamic, sr will not announce full str */}
+            <p>{`Showing ${currentUsers} of ${totalUsers} Profiles`}</p>
+          </div>
+          <ControlButton
+            type="button"
+            buttonText="filters"
+            ariaLabel={`${areFiltersShowing ? "close" : "open"} filters`}
+            onClick={setFilters}
+            classNames="control-mobile top"
+            attributes={{
+              "aria-expanded": `${areFiltersShowing}`,
+            }}
+          />
         </div>
-        <ControlButton
-          type="button"
-          buttonText="filters"
-          ariaLabel={`${areFiltersShowing ? "close" : "open"} filters`}
-          onClick={setFilters}
-          classNames="control-mobile top"
-          attributes={{
-            "aria-expanded": `${areFiltersShowing}`,
-          }}
-        />
       </div>
 
       {/* not too happy about this workaround, found this to be the

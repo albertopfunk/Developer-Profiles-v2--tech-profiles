@@ -31,6 +31,7 @@ let initialWaitTimeout;
 function ProfilesPage() {
   const [pageStatus, setPageStatus] = useState(PROFILES_STATUS.initialLoading);
   const [headerHeight, setHeaderHeight] = useState(0);
+  const [filterHeight, setFilterHeight] = useState(0);
   const [cardsStatus, setCardsStatus] = useState(PROFILES_STATUS.idle);
   const [cardFocusIndex, setCardFocusIndex] = useState(0);
   const [users, setUsers] = useState({
@@ -187,7 +188,7 @@ function ProfilesPage() {
     setPageStatus(PROFILES_STATUS.idle);
   }
   return (
-    <ProfilesPageContainer headerHeight={headerHeight}>
+    <ProfilesPageContainer headerHeight={headerHeight} filterHeight={filterHeight}>
       <div className="header-container">
         <MainHeader setHeaderHeight={setHeaderHeight} />
         <Filters
@@ -197,6 +198,7 @@ function ProfilesPage() {
           resetFilters={resetFilters}
           resetFilterToggle={resetToggle}
           headerHeight={headerHeight}
+          setFilterHeight={setFilterHeight}
         />
       </div>
 
@@ -268,17 +270,20 @@ function ProfilesPage() {
 }
 
 const ProfilesPageContainer = styled.div`
-
   .main-container {
-    padding-top: ${(props) => `calc(1px + 4.4rem + ${props.headerHeight}px);`};
+    padding-top: ${(props) => `calc(5px + ${props.filterHeight}px + ${props.headerHeight}px);`};
+    padding-left: 5px;
+    padding-right: 5px;
 
     @media (min-width: 600px) {
-      padding-top: ${(props) => `calc(${props.headerHeight}px);`};
-      padding-left: 200px;
+      padding-top: ${(props) => `calc(5px + ${props.headerHeight}px);`};
+      padding-left: calc(200px + 5px);
+      padding-right: 5px;
     }
 
     @media (min-width: 800px) {
-      padding-left: 275px;
+      padding-left: calc(275px + 5px);
+      padding-right: 5px;
     }
   }
 
@@ -298,6 +303,11 @@ const ProfilesPageContainer = styled.div`
 
   main {
     padding: 30px 5px 50px;
+    scroll-margin-top: ${(props) => `calc(5px + ${props.filterHeight}px + ${props.headerHeight}px);`};
+
+    @media (min-width: 600px) {
+      scroll-margin-top: ${(props) => `calc(5px + ${props.headerHeight}px);`};
+    }
 
     @media (min-width: 600px) {
       padding-left: 15px;

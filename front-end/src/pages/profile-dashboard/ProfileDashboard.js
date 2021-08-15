@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import ReactDOM from "react-dom";
 import { Helmet } from "react-helmet";
 import {
@@ -45,6 +45,7 @@ function ProfileDashboard() {
   let { path, url } = useRouteMatch();
   let location = useLocation();
   const [headerHeight, setHeaderHeight] = useState(0);
+  const [navHeight, setNavHeight] = useState(0);
   const [user, setUser] = useState(null);
   const [loadingUser, setLoadingUser] = useState(true);
   const [userImage, setUserImage] = useState({
@@ -56,6 +57,22 @@ function ProfileDashboard() {
   const [stripePromise] = useState(() =>
     loadStripe(process.env.REACT_APP_STRIPE)
   );
+
+  const navRef = useRef();
+
+  useEffect(() => {
+    if (!navRef.current) {
+      return;
+    }
+
+    const resizeObserver = new ResizeObserver((entries) => {
+      setNavHeight(entries[0].contentRect.height);
+    });
+
+    resizeObserver.observe(navRef.current);
+
+    return () => resizeObserver.disconnect();
+  }, []);
 
   useEffect(() => {
     if (!user) {
@@ -164,7 +181,7 @@ function ProfileDashboard() {
   const mainHeading = getMainHeading();
 
   return (
-    <ProfileDashboardContainer headerHeight={headerHeight}>
+    <ProfileDashboardContainer headerHeight={headerHeight} navHeight={navHeight}>
       <Helmet>
         <title>Profile Dashboard {mainHeading} • Tech Profiles</title>
       </Helmet>
@@ -176,6 +193,7 @@ function ProfileDashboard() {
       <PageHeader>
         <MainHeader setHeaderHeight={setHeaderHeight} />
         <PageNav
+          ref={navRef}
           id="page-navigation"
           tabIndex="-1"
           headerHeight={headerHeight}
@@ -304,6 +322,7 @@ function ProfileDashboard() {
           tabIndex="-1"
           aria-labelledby="main-heading"
           headerHeight={headerHeight}
+          navHeight={navHeight}
         >
           {loadingUser ? (
             <div className="skeleton-section">
@@ -371,7 +390,6 @@ function ProfileDashboard() {
                   </ProfileContext.Provider>
                 </Elements>
 
-                {/* ~30px gap + flex item */}
                 <section
                   id="profile-card"
                   tabIndex="-1"
@@ -424,15 +442,19 @@ function ProfileDashboard() {
 
 const ProfileDashboardContainer = styled.div`
   & > .main-container {
-    padding-top: ${(props) => `calc(1px + 3.6rem + ${props.headerHeight}px);`};
+    padding-top: ${(props) => `calc(5px + ${props.navHeight}px + ${props.headerHeight}px);`};
+    padding-left: 5px;
+    padding-right: 5px;
 
     @media (min-width: 500px) {
-      padding-top: ${(props) => `calc(${props.headerHeight}px);`};
-      padding-left: 50px;
+      padding-top: ${(props) => `calc(5px + ${props.headerHeight}px);`};
+      padding-left: calc(50px + 5px);
+      padding-right: 5px;
     }
 
     @media (min-width: 750px) {
-      padding-left: 200px;
+      padding-left: calc(200px + 5px);
+      padding-right: 5px;
     }
   }
 `;
@@ -633,8 +655,10 @@ const PageNav = styled.nav`
 
 const Main = styled.main`
   padding: 25px 5px 50px;
+  scroll-margin-top: ${(props) => `calc(5px + ${props.navHeight}px + ${props.headerHeight}px);`};
 
   @media (min-width: 500px) {
+    scroll-margin-top: ${(props) => `calc(5px + ${props.headerHeight}px);`};
     padding-left: 15px;
     padding-right: 15px;
   }
@@ -671,6 +695,7 @@ const Main = styled.main`
 
     & > section {
       flex-basis: 50%;
+      padding: 5px;
     }
   }
 
