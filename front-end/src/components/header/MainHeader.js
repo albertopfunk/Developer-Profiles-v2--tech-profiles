@@ -223,7 +223,7 @@ const Nav = styled.nav`
           outline: none;
           border-color: transparent;
         }
-  
+
         picture {
           display: inline-block;
           width: 100%;

@@ -829,7 +829,7 @@ function DashboardEducation() {
             id: "add-new-btn",
             form: "education-form",
           }}
-        / >
+        />
         <Spacer axis="vertical" size="20" />
         <form id="education-form" onSubmit={(e) => submitEdit(e)}>
           <div className="flex-container">

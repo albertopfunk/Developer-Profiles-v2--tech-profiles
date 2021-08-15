@@ -761,7 +761,7 @@ function DashboardProjects() {
             id: "add-new-btn",
             form: "projects-form",
           }}
-        / >
+        />
         <Spacer axis="vertical" size="20" />
         <form id="projects-form" onSubmit={(e) => submitEdit(e)}>
           <div className="flex-container">

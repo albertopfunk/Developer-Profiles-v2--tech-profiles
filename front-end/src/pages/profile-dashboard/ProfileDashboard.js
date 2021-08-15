@@ -181,7 +181,10 @@ function ProfileDashboard() {
   const mainHeading = getMainHeading();
 
   return (
-    <ProfileDashboardContainer headerHeight={headerHeight} navHeight={navHeight}>
+    <ProfileDashboardContainer
+      headerHeight={headerHeight}
+      navHeight={navHeight}
+    >
       <Helmet>
         <title>Profile Dashboard {mainHeading} • Tech Profiles</title>
       </Helmet>
@@ -442,7 +445,8 @@ function ProfileDashboard() {
 
 const ProfileDashboardContainer = styled.div`
   & > .main-container {
-    padding-top: ${(props) => `calc(5px + ${props.navHeight}px + ${props.headerHeight}px);`};
+    padding-top: ${(props) =>
+      `calc(5px + ${props.navHeight}px + ${props.headerHeight}px);`};
     padding-left: 5px;
     padding-right: 5px;
 
@@ -655,7 +659,8 @@ const PageNav = styled.nav`
 
 const Main = styled.main`
   padding: 25px 5px 50px;
-  scroll-margin-top: ${(props) => `calc(5px + ${props.navHeight}px + ${props.headerHeight}px);`};
+  scroll-margin-top: ${(props) =>
+    `calc(5px + ${props.navHeight}px + ${props.headerHeight}px);`};
 
   @media (min-width: 500px) {
     scroll-margin-top: ${(props) => `calc(5px + ${props.headerHeight}px);`};

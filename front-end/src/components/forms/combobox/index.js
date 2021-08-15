@@ -551,7 +551,6 @@ const ChosenOptionsContainer = styled.div`
       padding: 5px;
       border-radius: var(--border-radius-lg);
       box-shadow: var(--box-shadow-primary);
-
     }
   }
 `;

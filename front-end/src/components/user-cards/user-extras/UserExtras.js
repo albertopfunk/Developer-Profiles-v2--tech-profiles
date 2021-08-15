@@ -40,12 +40,15 @@ function UserExtras({ userExtras, noExtras, userId }) {
                     rel="noreferrer"
                     className="image-link"
                   >
-                    {project.project_img && !imageErr ?
-                      <img className="image" src={project.project_img} alt="" onError={handleBrokenLink} />
-                    : null}
-                    <span className="link-text">
-                      {project.link}
-                    </span>
+                    {project.project_img && !imageErr ? (
+                      <img
+                        className="image"
+                        src={project.project_img}
+                        alt=""
+                        onError={handleBrokenLink}
+                      />
+                    ) : null}
+                    <span className="link-text">{project.link}</span>
                     <span className="visually-hidden-relative">
                       (opens in new window)
                     </span>
@@ -241,7 +244,7 @@ const ExtrasContainer = styled.div`
           &:focus .link-text {
             border-bottom-color: currentColor;
           }
-          
+
           .image {
             width: 100%;
             aspect-ratio: 1 / 1;

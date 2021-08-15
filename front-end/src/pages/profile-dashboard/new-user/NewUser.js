@@ -1010,7 +1010,7 @@ const FormSection = styled.section`
       padding: 10px 15px 10px;
       border: solid 1px rgba(229, 231, 235, 0.8);
       border-bottom: solid 2px transparent;
-      
+
       &.selected {
         color: var(--dark-green-3);
         border-bottom-color: var(--dark-green-3);

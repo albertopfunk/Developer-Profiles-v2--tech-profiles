@@ -319,13 +319,13 @@ function ProfileHome() {
                   </div>
                 </div>
                 <div className="icon-container">
-                <div className="focus-container">
-                  {isExpanded.aboutYou ? (
-                    <Collapse className="icon" />
-                  ) : (
-                    <Expand className="icon" />
-                  )}
-                </div>
+                  <div className="focus-container">
+                    {isExpanded.aboutYou ? (
+                      <Collapse className="icon" />
+                    ) : (
+                      <Expand className="icon" />
+                    )}
+                  </div>
                 </div>
               </button>
             </h3>
@@ -455,13 +455,13 @@ function ProfileHome() {
                   </div>
                 </div>
                 <div className="icon-container">
-                <div className="focus-container">
-                  {isExpanded.yourWhereabouts ? (
-                    <Collapse className="icon" />
-                  ) : (
-                    <Expand className="icon" />
-                  )}
-                </div>
+                  <div className="focus-container">
+                    {isExpanded.yourWhereabouts ? (
+                      <Collapse className="icon" />
+                    ) : (
+                      <Expand className="icon" />
+                    )}
+                  </div>
                 </div>
               </button>
             </h3>
@@ -617,13 +617,13 @@ function ProfileHome() {
                   </div>
                 </div>
                 <div className="icon-container">
-                <div className="focus-container">
-                  {isExpanded.projects ? (
-                    <Collapse className="icon" />
-                  ) : (
-                    <Expand className="icon" />
-                  )}
-                </div>
+                  <div className="focus-container">
+                    {isExpanded.projects ? (
+                      <Collapse className="icon" />
+                    ) : (
+                      <Expand className="icon" />
+                    )}
+                  </div>
                 </div>
               </button>
             </h3>
@@ -684,13 +684,13 @@ function ProfileHome() {
                   </div>
                 </div>
                 <div className="icon-container">
-                <div className="focus-container">
-                  {isExpanded.education ? (
-                    <Collapse className="icon" />
-                  ) : (
-                    <Expand className="icon" />
-                  )}
-                </div>
+                  <div className="focus-container">
+                    {isExpanded.education ? (
+                      <Collapse className="icon" />
+                    ) : (
+                      <Expand className="icon" />
+                    )}
+                  </div>
                 </div>
               </button>
             </h3>
@@ -751,13 +751,13 @@ function ProfileHome() {
                   </div>
                 </div>
                 <div className="icon-container">
-                <div className="focus-container">
-                  {isExpanded.experience ? (
-                    <Collapse className="icon" />
-                  ) : (
-                    <Expand className="icon" />
-                  )}
-                </div>
+                  <div className="focus-container">
+                    {isExpanded.experience ? (
+                      <Collapse className="icon" />
+                    ) : (
+                      <Expand className="icon" />
+                    )}
+                  </div>
                 </div>
               </button>
             </h3>
@@ -820,13 +820,13 @@ function ProfileHome() {
                   </div>
                 </div>
                 <div className="icon-container">
-                <div className="focus-container">
-                  {isExpanded.billing ? (
-                    <Collapse className="icon" />
-                  ) : (
-                    <Expand className="icon" />
-                  )}
-                </div>
+                  <div className="focus-container">
+                    {isExpanded.billing ? (
+                      <Collapse className="icon" />
+                    ) : (
+                      <Expand className="icon" />
+                    )}
+                  </div>
                 </div>
               </button>
             </h3>

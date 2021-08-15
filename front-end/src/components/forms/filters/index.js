@@ -14,7 +14,7 @@ function Filters({
   resetFilters,
   resetFilterToggle,
   headerHeight,
-  setFilterHeight
+  setFilterHeight,
 }) {
   const [areFiltersShowing, setAreFiltersShowing] = useState(false);
 
@@ -26,7 +26,7 @@ function Filters({
     }
 
     const resizeObserver = new ResizeObserver((entries) => {
-      console.log(entries[0])
+      console.log(entries[0]);
       setFilterHeight(entries[0].contentRect.height);
     });
 

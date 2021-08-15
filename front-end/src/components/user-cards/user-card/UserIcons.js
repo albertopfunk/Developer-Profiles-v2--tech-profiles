@@ -92,7 +92,7 @@ const IconsSection = styled.section`
     justify-content: center;
     align-items: center;
     padding: 4px;
-    
+
     &:focus {
       outline: 2.5px solid transparent;
       box-shadow: 0 0 0 2.5px var(--dark-cyan-3);

@@ -832,7 +832,7 @@ function DashboardExperience() {
             id: "add-new-btn",
             form: "experience-form",
           }}
-        / >
+        />
         <Spacer axis="vertical" size="20" />
         <form id="experience-form" onSubmit={(e) => submitEdit(e)}>
           <div className="flex-container">

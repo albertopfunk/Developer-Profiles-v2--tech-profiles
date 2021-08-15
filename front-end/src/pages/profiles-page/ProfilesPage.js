@@ -188,7 +188,10 @@ function ProfilesPage() {
     setPageStatus(PROFILES_STATUS.idle);
   }
   return (
-    <ProfilesPageContainer headerHeight={headerHeight} filterHeight={filterHeight}>
+    <ProfilesPageContainer
+      headerHeight={headerHeight}
+      filterHeight={filterHeight}
+    >
       <div className="header-container">
         <MainHeader setHeaderHeight={setHeaderHeight} />
         <Filters
@@ -271,7 +274,8 @@ function ProfilesPage() {
 
 const ProfilesPageContainer = styled.div`
   .main-container {
-    padding-top: ${(props) => `calc(5px + ${props.filterHeight}px + ${props.headerHeight}px);`};
+    padding-top: ${(props) =>
+      `calc(5px + ${props.filterHeight}px + ${props.headerHeight}px);`};
     padding-left: 5px;
     padding-right: 5px;
 
@@ -303,7 +307,8 @@ const ProfilesPageContainer = styled.div`
 
   main {
     padding: 30px 5px 50px;
-    scroll-margin-top: ${(props) => `calc(5px + ${props.filterHeight}px + ${props.headerHeight}px);`};
+    scroll-margin-top: ${(props) =>
+      `calc(5px + ${props.filterHeight}px + ${props.headerHeight}px);`};
 
     @media (min-width: 600px) {
       scroll-margin-top: ${(props) => `calc(5px + ${props.headerHeight}px);`};
