@@ -581,7 +581,7 @@ function NewUser() {
       <WelcomeSection aria-labelledby="welcome-heading">
         <h2 id="welcome-heading">Welcome, {user.first_name || "Newcomer"}!</h2>
         <div className="image-container">
-          <WelcomePageIcon />
+          <WelcomePageIcon className="page-icon" />
         </div>
         <Spacer axis="vertical" size="15" />
         <div className="controls-container">
@@ -724,6 +724,7 @@ function NewUser() {
         <section
           ref={basicInfoPanelRef}
           id="basic-info-panel"
+          className="tab-panel"
           role="tabpanel"
           tabIndex="-1"
           aria-labelledby="basic-info"
@@ -904,6 +905,7 @@ function NewUser() {
         <section
           ref={billingInfoPanelRef}
           id="billing-info-panel"
+          className="tab-panel"
           role="tabpanel"
           tabIndex="-1"
           aria-labelledby="billing-info"
@@ -944,25 +946,37 @@ const WelcomeSection = styled.section`
       flex-basis: 40%;
       display: inline-block;
       white-space: nowrap;
-      padding: 13px 15px 10px; // 13px for bottom borders
-      border: solid 1px rgba(229, 231, 235, 0.8);
+      padding: 10px 15px 10px;
+      border: solid 2px rgba(229, 231, 235, 0.8);
+      color: var(--dark-cyan-2);
 
-      &:focus-visible {
-        outline-width: 3px;
-        outline-color: transparent;
-        box-shadow: inset 0 0 0 2.5px #2727ad;
+      &:focus {
+        // contrast mode fallback
+        outline: 2.5px solid transparent;
+        border-color: var(--dark-green-3);
       }
 
-      &:hover .link-text {
-        border-bottom: solid 1px;
+      // removing focus styles when using mouse
+      &:focus:not(:focus-visible) {
+        outline: none;
+        border-color: transparent;
       }
-      &:focus .link-text {
-        outline: 0.25rem solid transparent;
-        border-bottom: solid 1px;
+
+      &:active {
+        color: var(--dark-green-3);
       }
 
       .link-text {
-        border-bottom: solid 1px transparent;
+        // hover and focus placeholder
+        border: solid 1px transparent;
+      }
+
+      &:hover:not(.selected) .link-text {
+        border-bottom-color: currentColor;
+      }
+
+      &:focus:not(.selected) .link-text {
+        border-bottom-color: currentColor;
       }
     }
   }
@@ -991,37 +1005,57 @@ const FormSection = styled.section`
 
     .tab-link {
       display: inline-block;
+      color: var(--dark-cyan-2);
       white-space: nowrap;
-      padding: 13px 15px 10px; // 13px for bottom borders
+      padding: 10px 15px 10px;
       border: solid 1px rgba(229, 231, 235, 0.8);
       border-bottom: solid 2px transparent;
-
-      &:focus-visible {
-        outline-width: 3px;
-        outline-color: transparent;
-        box-shadow: inset 0 0 0 2.5px #2727ad;
-      }
-
-      &:hover .link-text {
-        border-bottom: solid 1px;
-      }
-      &:focus .link-text {
-        outline: 0.25rem solid transparent;
-        border-bottom: solid 1px;
-      }
-
-      &.selected .link-text {
-        border-bottom: solid 1px transparent;
-      }
-
+      
       &.selected {
-        border-bottom: solid 2px;
+        color: var(--dark-green-3);
+        border-bottom-color: var(--dark-green-3);
+      }
+
+      // next 3 selectors are due to focus-visible
+      // not being fully supported yet
+      &:focus {
+        // contrast mode fallback
+        outline: 2.5px solid transparent;
+        border-color: var(--dark-green-3);
+      }
+
+      // removing focus styles when using mouse
+      &:focus:not(:focus-visible) {
+        outline: none;
+        border-color: transparent;
+      }
+
+      // undoing removal of bottom border from above selector when using mouse
+      &.selected:focus {
+        border-bottom-color: var(--dark-green-3);
+      }
+
+      &:active {
+        color: var(--dark-green-3);
       }
 
       .link-text {
-        border-bottom: solid 1px transparent;
+        // hover and focus placeholder
+        border: solid 1px transparent;
+      }
+
+      &:hover:not(.selected) .link-text {
+        border-bottom-color: currentColor;
+      }
+
+      &:focus:not(.selected) .link-text {
+        border-bottom-color: currentColor;
       }
     }
+  }
+
+  .tab-panel {
+    padding: 5px;
   }
 
   .submit-button {

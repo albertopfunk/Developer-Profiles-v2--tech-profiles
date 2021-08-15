@@ -211,19 +211,29 @@ const ExtrasContainer = styled.div`
           align-items: center;
           padding: 5px;
 
-          &:focus-visible {
-            outline-width: 3px;
-            outline-color: transparent;
-            box-shadow: inset 0 0 0 2.5px #2727ad;
+          &:focus {
+            outline: 2.5px solid transparent;
+            box-shadow: 0 0 0 2.5px var(--dark-cyan-3);
+          }
+
+          // removing focus styles when using mouse
+          &:focus:not(:focus-visible) {
+            outline: none;
+            box-shadow: none;
           }
 
           .link-text {
-            border-bottom: 1px solid transparent;
-          }
-          &:hover .link-text {
-            border-bottom-color: black;
+            border: 1px solid transparent;
           }
 
+          &:hover .link-text {
+            border-bottom-color: currentColor;
+          }
+
+          &:focus .link-text {
+            border-bottom-color: currentColor;
+          }
+          
           .image {
             width: 100%;
             aspect-ratio: 1 / 1;

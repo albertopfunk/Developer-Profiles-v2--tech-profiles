@@ -89,8 +89,8 @@ const InputContainer = styled.div`
     width: 100%;
     max-width: 225px;
     position: relative;
-    border: solid 1px #dbdbdb;
-    border-radius: 2.5px;
+    border: solid 1px var(--light-cyan-3);
+    border-radius: var(--border-radius-sm);
     box-shadow: inset 0 0.0625em 0.125em rgb(10 10 10 / 5%);
     background-color: white;
 
@@ -98,15 +98,17 @@ const InputContainer = styled.div`
       outline: solid 2px;
       outline-offset: -1px;
     }
+
     &:focus-within .icon {
-      fill: #2727ad;
+      fill: var(--dark-green-3);
     }
+
     &:hover .icon {
-      fill: #2727ad;
+      fill: var(--dark-green-3);
     }
 
     .upload-icon {
-      display: inline-block;
+      display: flex;
       position: absolute;
       top: 50%;
       left: 50%;

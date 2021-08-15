@@ -88,12 +88,20 @@ const IconsSection = styled.section`
   .icon {
     width: 45px;
     height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     padding: 4px;
+    
+    &:focus {
+      outline: 2.5px solid transparent;
+      box-shadow: 0 0 0 2.5px var(--dark-cyan-3);
+    }
 
-    &:focus-visible {
-      outline-width: 3px;
-      outline-color: transparent;
-      box-shadow: inset 0 0 0 2.5px #2727ad;
+    // removing focus styles when using mouse
+    &:focus:not(:focus-visible) {
+      outline: none;
+      box-shadow: none;
     }
 
     &:hover svg {

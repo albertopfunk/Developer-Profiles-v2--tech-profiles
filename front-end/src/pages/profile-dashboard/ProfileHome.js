@@ -174,11 +174,13 @@ function ProfileHome() {
                   </div>
                 </div>
                 <div className="icon-container">
-                  {isExpanded.personalInfo ? (
-                    <Collapse className="icon" />
-                  ) : (
-                    <Expand className="icon" />
-                  )}
+                  <div className="focus-container">
+                    {isExpanded.personalInfo ? (
+                      <Collapse className="icon" />
+                    ) : (
+                      <Expand className="icon" />
+                    )}
+                  </div>
                 </div>
               </button>
             </h3>
@@ -317,11 +319,13 @@ function ProfileHome() {
                   </div>
                 </div>
                 <div className="icon-container">
+                <div className="focus-container">
                   {isExpanded.aboutYou ? (
                     <Collapse className="icon" />
                   ) : (
                     <Expand className="icon" />
                   )}
+                </div>
                 </div>
               </button>
             </h3>
@@ -451,11 +455,13 @@ function ProfileHome() {
                   </div>
                 </div>
                 <div className="icon-container">
+                <div className="focus-container">
                   {isExpanded.yourWhereabouts ? (
                     <Collapse className="icon" />
                   ) : (
                     <Expand className="icon" />
                   )}
+                </div>
                 </div>
               </button>
             </h3>
@@ -611,11 +617,13 @@ function ProfileHome() {
                   </div>
                 </div>
                 <div className="icon-container">
+                <div className="focus-container">
                   {isExpanded.projects ? (
                     <Collapse className="icon" />
                   ) : (
                     <Expand className="icon" />
                   )}
+                </div>
                 </div>
               </button>
             </h3>
@@ -676,11 +684,13 @@ function ProfileHome() {
                   </div>
                 </div>
                 <div className="icon-container">
+                <div className="focus-container">
                   {isExpanded.education ? (
                     <Collapse className="icon" />
                   ) : (
                     <Expand className="icon" />
                   )}
+                </div>
                 </div>
               </button>
             </h3>
@@ -741,11 +751,13 @@ function ProfileHome() {
                   </div>
                 </div>
                 <div className="icon-container">
+                <div className="focus-container">
                   {isExpanded.experience ? (
                     <Collapse className="icon" />
                   ) : (
                     <Expand className="icon" />
                   )}
+                </div>
                 </div>
               </button>
             </h3>
@@ -808,11 +820,13 @@ function ProfileHome() {
                   </div>
                 </div>
                 <div className="icon-container">
+                <div className="focus-container">
                   {isExpanded.billing ? (
                     <Collapse className="icon" />
                   ) : (
                     <Expand className="icon" />
                   )}
+                </div>
                 </div>
               </button>
             </h3>
@@ -920,11 +934,22 @@ const ChecklistSection = styled.section`
     width: 100%;
     height: auto;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
+    outline: none;
 
     &:hover .icon {
       fill: var(--dark-green-3);
+    }
+
+    &:focus .focus-container {
+      outline: solid 2.5px transparent;
+      box-shadow: 0 0 0 2.5px var(--dark-cyan-3);
+    }
+
+    &:focus:not(:focus-visible) .focus-container {
+      outline: none;
+      box-shadow: none;
     }
 
     .title-container {
@@ -938,6 +963,17 @@ const ChecklistSection = styled.section`
     .icon-container {
       flex-basis: 10%;
       height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .focus-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 5px;
+        border-radius: var(--border-radius-md);
+      }
 
       .icon {
         height: 100%;

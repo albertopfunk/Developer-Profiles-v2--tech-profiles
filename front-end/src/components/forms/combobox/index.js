@@ -532,7 +532,6 @@ const ResultsContainer = styled.div`
       &.selected {
         outline-style: solid;
         outline-width: 2px;
-        outline-color: #2727ad;
       }
     }
   }

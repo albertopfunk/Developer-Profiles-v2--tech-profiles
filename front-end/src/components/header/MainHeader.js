@@ -205,17 +205,25 @@ const Nav = styled.nav`
         display: inline-block;
         height: 55px;
         padding: 5px;
+        // selected and focus placeholder
+        border: solid 2px transparent;
 
         @media (min-width: 750px) {
           height: 75px;
         }
 
-        &:focus-visible {
-          outline-width: 3px;
-          outline-color: transparent;
-          box-shadow: inset 0 0 0 2.5px #2727ad;
+        &:focus {
+          // contrast mode fallback
+          outline: 2.5px solid transparent;
+          border-color: var(--dark-green-3);
         }
 
+        // removing focus styles when using mouse
+        &:focus:not(:focus-visible) {
+          outline: none;
+          border-color: transparent;
+        }
+  
         picture {
           display: inline-block;
           width: 100%;

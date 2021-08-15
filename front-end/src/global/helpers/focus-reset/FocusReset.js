@@ -116,16 +116,17 @@ function FocusReset({ location, children }) {
 const FocusContainer = styled.div`
   .skip-link {
     position: absolute;
-    top: 2%;
+    top: 5px;
     left: -999px;
     /* fourth */
     z-index: 40;
-    border: solid 0.5px;
     background-color: white;
-    padding: 5px;
+    padding: 10px 15px 10px;
+    border: solid 2px var(--dark-green-3);
+    color: var(--dark-cyan-2);
 
     &:focus {
-      left: 2%;
+      left: 5px;
     }
   }
 `;

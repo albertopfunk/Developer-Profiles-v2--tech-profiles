@@ -250,10 +250,15 @@ const UserCardContainer = styled.article`
   border-radius: var(--border-radius-lg);
   box-shadow: var(--box-shadow-primary);
 
-  &:focus-visible {
-    outline-width: 3px;
-    outline-color: transparent;
-    box-shadow: inset 0 0 2px 2.5px #2727ad, 0 4px 6px 0 #2727ad;
+  &:focus {
+    outline: 2.5px solid transparent;
+    box-shadow: 0 0 0 2.5px var(--dark-cyan-3);
+  }
+
+  // removing focus styles when using mouse
+  &:focus:not(:focus-visible) {
+    outline: none;
+    box-shadow: var(--box-shadow-primary);
   }
 `;
 

@@ -71,6 +71,8 @@ export const GlobalStyles = createGlobalStyle`
   *::after {
     box-sizing: inherit;
     position: relative;
+    outline-width: 2.5px;
+    outline-color: var(--dark-cyan-3);
 
     @media (prefers-reduced-motion: no-preference) {
       transition: all 0.1s ease;
@@ -239,7 +241,7 @@ export const GlobalStyles = createGlobalStyle`
   }
 
   // default icon color
-  svg:not([fill]) {
+  svg:not(.page-icon):not([fill]) {
     fill: var(--dark-cyan-2);
   }
 
@@ -377,10 +379,6 @@ export const GlobalStyles = createGlobalStyle`
 
   .hidden {
     display: none;
-  }
-
-  .icon {
-    fill: black;
   }
 
   .info-group {
