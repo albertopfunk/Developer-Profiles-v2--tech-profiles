@@ -144,7 +144,7 @@ const HeaderSkeleton = styled.header`
 `;
 
 const MainContainerSkeleton = styled.main`
-  height: calc(100vh - 55px);
+  height: 100%;
   padding: 30px 5px 50px 5px;
   background-color: hsl(240, 10%, 99%);
   text-align: center;

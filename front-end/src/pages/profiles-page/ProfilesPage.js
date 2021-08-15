@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Helmet } from "react-helmet";
 import { ReactComponent as ErrorPageIcon } from "../../global/assets/page-error.svg";
-import { ReactComponent as ConstructionPageIcon } from "../../global/assets/page-construction.svg";
-import { ReactComponent as WaitingPageIcon } from "../../global/assets/page-waiting.svg";
+import { ReactComponent as PageLoadingIcon } from "../../global/assets/page-loading.svg";
 
 import { httpClient } from "../../global/helpers/http-requests";
 import { PROFILES_STATUS } from "../../global/helpers/variables";
@@ -71,7 +70,7 @@ function ProfilesPage() {
     const [res, err] = await httpClient("GET", "/users");
 
     clearTimeout(initialWaitTimeout);
-  
+
     if (err) {
       console.error(`${res.mssg} => ${res.err}`);
       setPageStatus(PROFILES_STATUS.initialError);
@@ -211,6 +210,7 @@ function ProfilesPage() {
           </h1>
 
           {pageStatus === PROFILES_STATUS.initialLoading ||
+          pageStatus === PROFILES_STATUS.initialWaiting ||
           pageStatus === PROFILES_STATUS.filtersLoading ? (
             <div
               role="feed"
@@ -218,22 +218,17 @@ function ProfilesPage() {
               aria-busy="true"
               aria-labelledby="profiles-heading"
             >
-              <h2 id="profiles-heading">Loading Profiles</h2>
-              <Spacer size="20" axis="vertical" />
-              <ConstructionPageIcon className="page-icon" />
-            </div>
-          ) : null}
-
-          {pageStatus === PROFILES_STATUS.initialWaiting ? (
-            <div
-              role="feed"
-              className="skeleton-section"
-              aria-busy="true"
-              aria-labelledby="profiles-heading"
-            >
-              <h2 id="profiles-heading">Server is Waking Up</h2>
-              <Spacer size="20" axis="vertical" />
-              <WaitingPageIcon className="page-icon" />
+              <h2 id="profiles-heading" className="sr-only">
+                Loading Profiles
+              </h2>
+              <div aria-live="polite" aria-relevant="additions">
+                {pageStatus === PROFILES_STATUS.initialWaiting ? (
+                  <p>server is waking up</p>
+                ) : null}
+              </div>
+              <div className="icon-container">
+                <PageLoadingIcon className="icon-sm" />
+              </div>
             </div>
           ) : null}
 
@@ -246,7 +241,9 @@ function ProfilesPage() {
             >
               <h2 id="profiles-heading">Page Error</h2>
               <Spacer size="20" axis="vertical" />
-              <ErrorPageIcon className="page-icon" />
+              <div className="icon-container">
+                <ErrorPageIcon className="icon-lg" />
+              </div>
             </div>
           ) : null}
 
@@ -271,7 +268,10 @@ function ProfilesPage() {
 }
 
 const ProfilesPageContainer = styled.div`
+  height: 100%;
+
   .main-container {
+    height: 100%;
     padding-top: ${(props) => `calc(1px + 4.4rem + ${props.headerHeight}px);`};
 
     @media (min-width: 600px) {
@@ -299,7 +299,7 @@ const ProfilesPageContainer = styled.div`
   }
 
   main {
-    min-height: 100vh;
+    height: 100%;
     padding: 30px 5px 50px;
 
     @media (min-width: 600px) {
@@ -308,10 +308,26 @@ const ProfilesPageContainer = styled.div`
     }
 
     .skeleton-section {
+      height: 100%;
       text-align: center;
 
-      .page-icon {
+      .icon-container {
+        height: 100%;
+        width: 100%;
         max-width: 750px;
+        margin: auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .icon-sm {
+          width: 100%;
+          max-width: 75px;
+        }
+
+        .icon-lg {
+          width: 100%;
+        }
       }
     }
   }

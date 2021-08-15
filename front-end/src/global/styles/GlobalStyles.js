@@ -83,6 +83,10 @@ export const GlobalStyles = createGlobalStyle`
     padding: 0;
   }
 
+  html, body, #root, #focus-reset {
+    height: 100%;
+  }
+
   /* Forms/controls
   * ========================================================================== */
 

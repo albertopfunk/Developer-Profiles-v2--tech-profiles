@@ -20,7 +20,7 @@ import { ReactComponent as Projects } from "../../global/assets/dashboard-projec
 import { ReactComponent as Education } from "../../global/assets/dashboard-education.svg";
 import { ReactComponent as Experience } from "../../global/assets/dashboard-experience.svg";
 import { ReactComponent as CreditCard } from "../../global/assets/dashboard-credit-card.svg";
-import { ReactComponent as ConstructionPageIcon } from "../../global/assets/page-construction-2.svg";
+import { ReactComponent as PageLoadingIcon } from "../../global/assets/page-loading.svg";
 
 import MainHeader from "../../components/header/MainHeader";
 import UserCard from "../../components/user-cards/user-card/UserCard";
@@ -307,9 +307,10 @@ function ProfileDashboard() {
         >
           {loadingUser ? (
             <div className="skeleton-section">
-              <h1>Loading User</h1>
-              <Spacer size="20" axis="vertical" />
-              <ConstructionPageIcon className="page-icon" />
+              <h1 className="sr-only">Loading User</h1>
+              <div className="icon-container">
+                <PageLoadingIcon className="icon" />
+              </div>
             </div>
           ) : (
             <>
@@ -422,7 +423,10 @@ function ProfileDashboard() {
 }
 
 const ProfileDashboardContainer = styled.div`
+  height: 100%;
+
   & > .main-container {
+    height: 100%;
     padding-top: ${(props) => `calc(1px + 3.6rem + ${props.headerHeight}px);`};
 
     @media (min-width: 500px) {
@@ -631,7 +635,7 @@ const PageNav = styled.nav`
 `;
 
 const Main = styled.main`
-  min-height: 100vh;
+  height: 100%;
   padding: 25px 5px 50px;
 
   @media (min-width: 500px) {
@@ -675,10 +679,22 @@ const Main = styled.main`
   }
 
   .skeleton-section {
+    height: 100%;
     text-align: center;
 
-    .page-icon {
+    .icon-container {
+      height: 100%;
+      width: 100%;
       max-width: 750px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .icon {
+        width: 100%;
+        max-width: 75px;
+      }
     }
   }
 `;

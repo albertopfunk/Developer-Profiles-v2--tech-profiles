@@ -18,7 +18,7 @@ function FocusReset({ location, children }) {
 
   if (location.pathname === "/callback") {
     return (
-      <FocusContainer tabIndex="-1" ref={focusRef}>
+      <FocusContainer ref={focusRef} id="focus-reset" tabIndex="-1">
         {children}
       </FocusContainer>
     );
@@ -29,6 +29,7 @@ function FocusReset({ location, children }) {
     return (
       <FocusContainer
         ref={focusRef}
+        id="focus-reset"
         tabIndex="-1"
         aria-label={`Navigated to ${currentLocation}, press tab for skip links`}
       >
@@ -63,6 +64,7 @@ function FocusReset({ location, children }) {
     return (
       <FocusContainer
         ref={focusRef}
+        id="focus-reset"
         tabIndex="-1"
         aria-label={"Navigated to profiles page, press tab for skip links"}
       >
@@ -95,6 +97,7 @@ function FocusReset({ location, children }) {
   return (
     <FocusContainer
       ref={focusRef}
+      id="focus-reset"
       tabIndex="-1"
       aria-label={`Navigated to ${currentLocation}, press tab for skip links`}
     >
