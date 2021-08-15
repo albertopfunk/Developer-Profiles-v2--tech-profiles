@@ -268,10 +268,8 @@ function ProfilesPage() {
 }
 
 const ProfilesPageContainer = styled.div`
-  height: 100%;
 
   .main-container {
-    height: 100%;
     padding-top: ${(props) => `calc(1px + 4.4rem + ${props.headerHeight}px);`};
 
     @media (min-width: 600px) {
@@ -299,7 +297,6 @@ const ProfilesPageContainer = styled.div`
   }
 
   main {
-    height: 100%;
     padding: 30px 5px 50px;
 
     @media (min-width: 600px) {
@@ -308,11 +305,10 @@ const ProfilesPageContainer = styled.div`
     }
 
     .skeleton-section {
-      height: 100%;
       text-align: center;
 
       .icon-container {
-        height: 100%;
+        height: 50vh;
         width: 100%;
         max-width: 750px;
         margin: auto;

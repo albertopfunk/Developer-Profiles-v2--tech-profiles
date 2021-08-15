@@ -423,10 +423,7 @@ function ProfileDashboard() {
 }
 
 const ProfileDashboardContainer = styled.div`
-  height: 100%;
-
   & > .main-container {
-    height: 100%;
     padding-top: ${(props) => `calc(1px + 3.6rem + ${props.headerHeight}px);`};
 
     @media (min-width: 500px) {
@@ -635,7 +632,6 @@ const PageNav = styled.nav`
 `;
 
 const Main = styled.main`
-  height: 100%;
   padding: 25px 5px 50px;
 
   @media (min-width: 500px) {
@@ -679,11 +675,10 @@ const Main = styled.main`
   }
 
   .skeleton-section {
-    height: 100%;
     text-align: center;
 
     .icon-container {
-      height: 100%;
+      height: 50vh;
       width: 100%;
       max-width: 750px;
       margin: 0 auto;
