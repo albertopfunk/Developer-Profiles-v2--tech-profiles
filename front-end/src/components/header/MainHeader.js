@@ -271,7 +271,11 @@ const Nav = styled.nav`
 
       .signin-button {
         width: 100%;
-        max-width: 150px;
+        max-width: 155px;
+
+        @media (min-width: 400px) {
+          max-width: 175px;
+        }
 
         @media (min-width: 750px) {
           max-width: 200px;
