@@ -73,10 +73,6 @@ export const GlobalStyles = createGlobalStyle`
     position: relative;
     outline-width: 2.5px;
     outline-color: var(--dark-cyan-3);
-
-    @media (prefers-reduced-motion: no-preference) {
-      transition: all 0.1s ease;
-    }
   }
 
   html,

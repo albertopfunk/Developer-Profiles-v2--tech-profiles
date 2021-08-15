@@ -87,9 +87,11 @@ function UserCards({
           Current Profiles
         </h2>
         <p>No Users Here!</p>
-        <button type="reset" onClick={resetFilters}>
-          reset filters
-        </button>
+        <ControlButton
+          type="reset"
+          onClick={resetFilters}
+          buttonText="reset filters"
+        />
       </Feed>
     );
   }
@@ -184,6 +186,8 @@ function UserCards({
 }
 
 const Feed = styled.div`
+  padding-bottom: 30px;
+
   .feed-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(550px, 100%), 1fr));

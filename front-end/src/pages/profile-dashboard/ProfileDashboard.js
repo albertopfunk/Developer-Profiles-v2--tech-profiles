@@ -556,7 +556,7 @@ const PageNav = styled.nav`
     }
 
     // undoing removal of bottom border from above selector when using mouse
-    &.selected:focus {
+    &.selected:focus:not(:focus-visible) {
       border-bottom-color: var(--dark-green-3);
 
       @media (min-width: 500px) {
