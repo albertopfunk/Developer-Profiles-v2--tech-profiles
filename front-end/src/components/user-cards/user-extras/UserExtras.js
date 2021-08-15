@@ -1,7 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
 function UserExtras({ userExtras, noExtras, userId }) {
+  const [imageErr, setImageErr] = useState(false);
+
+  function handleBrokenLink() {
+    setImageErr(true);
+  }
+
   if (noExtras) {
     return <p>Nothing to Show...</p>;
   }
@@ -34,7 +40,9 @@ function UserExtras({ userExtras, noExtras, userId }) {
                     rel="noreferrer"
                     className="image-link"
                   >
-                    <img className="image" src={project.project_img} alt="" />
+                    {project.project_img && !imageErr ?
+                      <img className="image" src={project.project_img} alt="" onError={handleBrokenLink} />
+                    : null}
                     <span className="link-text">
                       {project.link}
                     </span>
