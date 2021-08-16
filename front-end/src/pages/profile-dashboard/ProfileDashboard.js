@@ -467,14 +467,9 @@ const PageHeader = styled.div`
   position: fixed;
   top: 0;
   left: 0;
-  /* second mobile */
-  z-index: 20;
+  z-index: var(--header-layer);
   width: 100%;
   border-bottom: solid 1px rgba(229, 231, 235, 0.8);
-
-  @media (min-width: 500px) {
-    border: none;
-  }
 `;
 
 const PageNav = styled.nav`
@@ -486,16 +481,11 @@ const PageNav = styled.nav`
     position: fixed;
     top: 0;
     left: 0;
-    z-index: -1;
+    z-index: var(--side-nav-layer);
     padding-top: 56px;
     width: 50px;
     min-height: 100vh;
     box-shadow: 0 1px 3px 0 rgb(0 0 0 / 10%), 0 1px 2px 0 rgb(0 0 0 / 6%);
-  }
-
-  @media (min-width: 600px) {
-    /* third desktop */
-    z-index: 20;
   }
 
   @media (min-width: 750px) {

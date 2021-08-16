@@ -522,9 +522,7 @@ const ResultsContainer = styled.div`
     border-top: none;
     background-color: white;
     padding: 5px;
-
-    /* first */
-    z-index: 10;
+    z-index: var(--first-layer);
 
     .result {
       padding: 2px;

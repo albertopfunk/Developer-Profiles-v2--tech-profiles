@@ -141,24 +141,15 @@ const FilterNav = styled.nav`
   max-height: ${(props) => `calc(100vh - ${props.headerHeight}px);`};
   overflow-y: auto;
 
-  @media (min-width: 600px) {
+  @media (min-width: 750px) {
     position: fixed;
     top: 0;
     left: 0;
-    /* third desktop */
-    z-index: 20;
-    padding-top: 75px;
-    width: 200px;
+    z-index: var(--side-nav-layer);
+    padding-top: 95px;
+    width: 275px;
     min-height: 100vh;
     box-shadow: 0 1px 3px 0 rgb(0 0 0 / 10%), 0 1px 2px 0 rgb(0 0 0 / 6%);
-  }
-
-  @media (min-width: 750px) {
-    padding-top: 95px;
-  }
-
-  @media (min-width: 800px) {
-    width: 275px;
   }
 
   .filters-bar {
@@ -169,7 +160,7 @@ const FilterNav = styled.nav`
     gap: 10px;
     padding: 5px;
 
-    @media (min-width: 600px) {
+    @media (min-width: 750px) {
       display: block;
     }
 
@@ -185,7 +176,7 @@ const FilterNav = styled.nav`
   }
 
   .control-mobile {
-    @media (min-width: 600px) {
+    @media (min-width: 750px) {
       display: none;
     }
   }
@@ -198,7 +189,7 @@ const FiltersContainer = styled.div`
   padding-top: 15px;
   padding-bottom: 30px;
 
-  @media (min-width: 600px) {
+  @media (min-width: 750px) {
     display: block;
     border: none;
     padding-top: 20px;
@@ -216,7 +207,7 @@ const FiltersContainer = styled.div`
       grid-template-rows: auto auto auto;
     }
     
-    @media (min-width: 600px) {
+    @media (min-width: 750px) {
       grid-template-columns: 1fr;
       grid-template-rows: repeat(5, auto);
       grid-gap: 40px;
@@ -237,7 +228,7 @@ const FiltersContainer = styled.div`
       grid-row: 1 / 2;
     }
 
-    @media (min-width: 600px) {
+    @media (min-width: 750px) {
       grid-column: 1 / 2;
       grid-row: 2 / 3;
     }
@@ -252,7 +243,7 @@ const FiltersContainer = styled.div`
       grid-row: 2 / 3;
     }
 
-    @media (min-width: 600px) {
+    @media (min-width: 750px) {
       grid-column: 1 / 2;
       grid-row: 3 / 4;
     }
@@ -267,7 +258,7 @@ const FiltersContainer = styled.div`
       grid-row: 2 / 3;
     }
 
-    @media (min-width: 600px) {
+    @media (min-width: 750px) {
       grid-column: 1 / 2;
       grid-row: 4 / 5;
     }
@@ -287,7 +278,7 @@ const FiltersContainer = styled.div`
       grid-row: 3 / 4;
     }
 
-    @media (min-width: 600px) {
+    @media (min-width: 750px) {
       grid-column: 1 / 2;
       grid-row: 5 / 6;
     }

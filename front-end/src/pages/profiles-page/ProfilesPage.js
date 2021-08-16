@@ -279,13 +279,8 @@ const ProfilesPageContainer = styled.div`
     padding-left: 5px;
     padding-right: 5px;
 
-    @media (min-width: 600px) {
+    @media (min-width: 750px) {
       padding-top: ${(props) => `calc(5px + ${props.headerHeight}px);`};
-      padding-left: calc(200px + 5px);
-      padding-right: 5px;
-    }
-
-    @media (min-width: 800px) {
       padding-left: calc(275px + 5px);
       padding-right: 5px;
     }
@@ -295,14 +290,9 @@ const ProfilesPageContainer = styled.div`
     position: fixed;
     top: 0;
     left: 0;
-    /* second mobile */
-    z-index: 20;
+    z-index: var(--header-layer);
     width: 100%;
     border-bottom: solid 1px rgba(229, 231, 235, 0.8);
-
-    @media (min-width: 600px) {
-      border: none;
-    }
   }
 
   main {
@@ -310,11 +300,8 @@ const ProfilesPageContainer = styled.div`
     scroll-margin-top: ${(props) =>
       `calc(5px + ${props.filterHeight}px + ${props.headerHeight}px);`};
 
-    @media (min-width: 600px) {
+    @media (min-width: 750px) {
       scroll-margin-top: ${(props) => `calc(5px + ${props.headerHeight}px);`};
-    }
-
-    @media (min-width: 600px) {
       padding-left: 15px;
       padding-right: 15px;
     }

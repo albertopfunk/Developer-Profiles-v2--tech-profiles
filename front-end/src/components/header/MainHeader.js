@@ -169,16 +169,7 @@ function MainHeader(props) {
 const Header = styled.header`
   border-bottom: solid 1px rgba(229, 231, 235, 0.5);
   background-color: white;
-
-  @media (min-width: 600px) {
-    position: fixed;
-    top: 0;
-    left: 0;
-    /* second desktop */
-    z-index: 30;
-    width: 100%;
-    border-bottom: solid 1px rgba(229, 231, 235, 0.8);
-  }
+  z-index: var(--header-layer);
 `;
 
 const Nav = styled.nav`

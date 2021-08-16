@@ -35,14 +35,9 @@ const HeaderContainer = styled.div`
   position: fixed;
   top: 0;
   left: 0;
-  /* second mobile */
-  z-index: 20;
+  z-index: var(--header-layer);
   width: 100%;
   border-bottom: solid 1px rgba(229, 231, 235, 0.8);
-
-  @media (min-width: 600px) {
-    border: none;
-  }
 `;
 
 const Main = styled.main`
