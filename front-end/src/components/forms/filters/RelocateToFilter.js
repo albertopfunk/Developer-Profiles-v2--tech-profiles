@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 
 import Combobox from "../combobox";
+
 import { httpClient } from "../../../global/helpers/http-requests";
+import Spacer from "../../../global/helpers/spacer";
+import styled from "styled-components";
 
 function RelocateToFilter(props) {
   const [interestedLocations, setInterestedLocations] = useState([]);
@@ -53,8 +56,9 @@ function RelocateToFilter(props) {
   }
 
   return (
-    <fieldset>
+    <Fieldset>
       <legend>Filter by Interested Locations</legend>
+      <Spacer axis="vertical" size="15" />
       <Combobox
         chosenOptions={interestedLocations}
         onInputChange={onInputChange}
@@ -63,8 +67,16 @@ function RelocateToFilter(props) {
         inputName={"interested-locations"}
         displayName={"Interested Locations"}
       />
-    </fieldset>
+    </Fieldset>
   );
 }
+
+const Fieldset = styled.fieldset`
+  legend {
+    width: 100%;
+    padding: 2.5px 5px;
+    border-bottom: solid var(--light-cyan-3);
+  }
+`;
 
 export default RelocateToFilter;

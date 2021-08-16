@@ -195,6 +195,10 @@ export const GlobalStyles = createGlobalStyle`
     box-shadow: inset 0 0.0625em 0.125em rgb(10 10 10 / 5%);
   }
 
+  select {
+    background-color: var(--light-cyan-1);
+  }
+
   /* a11y/UI
   * ========================================================================== */
 

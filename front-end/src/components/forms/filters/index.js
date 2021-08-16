@@ -84,6 +84,7 @@ function Filters({
                 <SortingFilter updateUsers={updateUsers} />
               ) : null}
             </div>
+
             <div className="area-of-work">
               {resetFilterToggle ? (
                 <AreaOfWorkFilter updateUsers={updateUsers} />
@@ -194,27 +195,31 @@ const FiltersContainer = styled.div`
   display: ${(props) => (props.showForm ? "block" : "none")};
   border-top: solid 1px rgba(229, 231, 235, 0.5);
   padding: 5px;
+  padding-top: 15px;
+  padding-bottom: 30px;
 
   @media (min-width: 600px) {
     display: block;
     border: none;
     padding-top: 20px;
+    padding-bottom: 5px;
   }
 
   .grid-container {
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: repeat(5, auto);
-    grid-gap: 40px;
-
-    @media (min-width: 400px) {
+    grid-gap: 60px;
+    
+    @media (min-width: 500px) {
       grid-template-columns: 1fr 1fr;
       grid-template-rows: auto auto auto;
     }
-
+    
     @media (min-width: 600px) {
       grid-template-columns: 1fr;
       grid-template-rows: repeat(5, auto);
+      grid-gap: 40px;
     }
   }
 
@@ -227,7 +232,7 @@ const FiltersContainer = styled.div`
     grid-column: 1 / 2;
     grid-row: 2 / 3;
 
-    @media (min-width: 400px) {
+    @media (min-width: 500px) {
       grid-column: 2 / 3;
       grid-row: 1 / 2;
     }
@@ -242,7 +247,7 @@ const FiltersContainer = styled.div`
     grid-column: 1 / 2;
     grid-row: 3 / 4;
 
-    @media (min-width: 400px) {
+    @media (min-width: 500px) {
       grid-column: 1 / 2;
       grid-row: 2 / 3;
     }
@@ -257,7 +262,7 @@ const FiltersContainer = styled.div`
     grid-column: 1 / 2;
     grid-row: 4 / 5;
 
-    @media (min-width: 400px) {
+    @media (min-width: 500px) {
       grid-column: 2 / 3;
       grid-row: 2 / 3;
     }
@@ -277,7 +282,7 @@ const FiltersContainer = styled.div`
     align-items: center;
     gap: 10px;
 
-    @media (min-width: 400px) {
+    @media (min-width: 500px) {
       grid-column: 1 / -1;
       grid-row: 3 / 4;
     }

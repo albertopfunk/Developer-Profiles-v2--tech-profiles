@@ -1,6 +1,8 @@
 import React, { useState } from "react";
+import styled from "styled-components";
 
-// Tests
+import Spacer from "../../../global/helpers/spacer";
+
 function SortingFilter(props) {
   const [currentValue, setCurrentValue] = useState("acending(oldest-newest)");
 
@@ -15,9 +17,11 @@ function SortingFilter(props) {
   }
 
   return (
-    <fieldset>
+    <Fieldset>
       <legend>Sort Profiles</legend>
+      <Spacer axis="vertical" size="15" />
       <label htmlFor="sorting-select">Sort By:</label>
+      <Spacer axis="vertical" size="5" />
       <select
         id="sorting-select"
         onClick={(e) => sortUsers(e.target.value)}
@@ -28,8 +32,16 @@ function SortingFilter(props) {
           descending(newest-oldest)
         </option>
       </select>
-    </fieldset>
+    </Fieldset>
   );
 }
+
+const Fieldset = styled.fieldset`
+  legend {
+    width: 100%;
+    padding: 2.5px 5px;
+    border-bottom: solid var(--light-cyan-3);
+  }
+`;
 
 export default SortingFilter;

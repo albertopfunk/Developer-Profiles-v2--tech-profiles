@@ -1,6 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 
+import Spacer from "../../../global/helpers/spacer";
+
 // Additional Area of Work
 // AR/VR
 // Blockchain
@@ -25,6 +27,7 @@ function AreaOfWorkFilter(props) {
   return (
     <AreaOfWorkFieldset>
       <legend>Filter by Area of Work</legend>
+      <Spacer axis="vertical" size="15" />
       <div className="flex-container">
         <div className="flex-item">
           <input
@@ -75,6 +78,12 @@ function AreaOfWorkFilter(props) {
 }
 
 const AreaOfWorkFieldset = styled.fieldset`
+  legend {
+    width: 100%;
+    padding: 2.5px 5px;
+    border-bottom: solid var(--light-cyan-3);
+  }
+
   .flex-container {
     display: flex;
     flex-wrap: wrap;

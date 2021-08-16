@@ -1,6 +1,8 @@
 import React from "react";
 import styled from "styled-components";
+
 import { httpClient } from "../../../global/helpers/http-requests";
+import Spacer from "../../../global/helpers/spacer";
 
 import Combobox from "../combobox";
 
@@ -90,13 +92,15 @@ class CurrentLocationFilter extends React.Component {
 
   render() {
     return (
-      <fieldset>
+      <Fieldset>
         <legend>Filter by Current Location</legend>
+        <Spacer axis="vertical" size="15" />
         <FlexContainer>
           <div className="miles">
             <label htmlFor="choose-miles">
               {this.state.milesWithinInput} mile radius
             </label>
+            <Spacer axis="vertical" size="5" />
             <input
               type="range"
               min="5"
@@ -120,15 +124,23 @@ class CurrentLocationFilter extends React.Component {
             single
           />
         </FlexContainer>
-      </fieldset>
+      </Fieldset>
     );
   }
 }
 
+const Fieldset = styled.fieldset`
+  legend {
+    width: 100%;
+    padding: 2.5px 5px;
+    border-bottom: solid var(--light-cyan-3);
+  }
+`;
+
 const FlexContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 15px;
 `;
 
 export default CurrentLocationFilter;
