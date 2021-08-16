@@ -1,11 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
+import { ReactComponent as ResetIcon } from "../../../global/assets/button-reset.svg";
 
 import AreaOfWorkFilter from "./AreaOfWorkFilter";
 import CurrentLocationFilter from "./CurrentLocationFilter";
 import RelocateToFilter from "./RelocateToFilter";
 import SortingFilter from "./SortingFilter";
 import ControlButton from "../buttons/ControlButton";
+import IconButton from "../buttons/IconButton";
+
+import Spacer from "../../../global/helpers/spacer";
 
 function Filters({
   updateUsers,
@@ -43,8 +47,7 @@ function Filters({
     <FilterNav
       id="filters"
       tabIndex="-1"
-      aria-label="filters"
-      headerHeight={headerHeight}
+      aria-label="filters"      
     >
       <div ref={filtersBarRef} className="filters-bar-container">
         <div className="filters-bar">
@@ -56,12 +59,12 @@ function Filters({
             {/* if full str isn't dynamic, sr will not announce full str */}
             <p>{`Showing ${currentUsers} of ${totalUsers} Profiles`}</p>
           </div>
+
           <ControlButton
             type="button"
-            buttonText="filters"
-            ariaLabel={`${areFiltersShowing ? "close" : "open"} filters`}
+            classNames="mobile-control"
+            buttonText={`${areFiltersShowing ? "close" : "open"} filters`}
             onClick={setFilters}
-            classNames="control-mobile top"
             attributes={{
               "aria-expanded": `${areFiltersShowing}`,
             }}
@@ -73,8 +76,19 @@ function Filters({
       least hacky way to reset filters without having to make big
       changes, this will reset all state of children.
       using fragments to bypass reacts optimization */}
-      <FiltersContainer showForm={areFiltersShowing}>
+      <FiltersContainer showForm={areFiltersShowing} headerHeight={headerHeight}>
         <form>
+          <div className="mobile-reset-container">
+            <IconButton
+              type="reset"
+              size="xl"
+              classNames="mobile-reset"
+              ariaLabel="reset filters"
+              icon={<ResetIcon className="icon" />}
+              onClick={resetFilters}
+            />
+          </div>
+          <Spacer axis="vertical" size="10" />
           <div className="grid-container">
             <div className="sorting">
               {resetFilterToggle ? (
@@ -111,23 +125,13 @@ function Filters({
                 <RelocateToFilter updateUsers={updateUsers} />
               ) : null}
             </div>
-
-            <div className="controls-container">
-              <ControlButton
-                type="button"
-                buttonText="close"
-                ariaLabel="close filters"
-                onClick={setFilters}
-                classNames="control-mobile"
-                attributes={{ "aria-expanded": "true" }}
-              />
-              <ControlButton
-                type="reset"
-                buttonText="reset"
-                ariaLabel="reset filters"
-                onClick={resetFilters}
-              />
-            </div>
+            <ControlButton
+              type="reset"
+              classNames="desktop-reset"
+              buttonText="reset"
+              ariaLabel="filters"
+              onClick={resetFilters}
+            />
           </div>
         </form>
       </FiltersContainer>
@@ -137,9 +141,6 @@ function Filters({
 
 const FilterNav = styled.nav`
   background-color: white;
-  /* 100vh should come from window height hook */
-  max-height: ${(props) => `calc(100vh - ${props.headerHeight}px);`};
-  overflow-y: auto;
 
   @media (min-width: 750px) {
     position: fixed;
@@ -150,6 +151,11 @@ const FilterNav = styled.nav`
     width: 275px;
     min-height: 100vh;
     box-shadow: 0 1px 3px 0 rgb(0 0 0 / 10%), 0 1px 2px 0 rgb(0 0 0 / 6%);
+  }
+
+  button {
+    width: 100%;
+    max-width: 350px;
   }
 
   .filters-bar {
@@ -169,25 +175,28 @@ const FilterNav = styled.nav`
       text-align: center;
     }
 
-    .control-mobile.top {
+    .mobile-control {
       flex-basis: 100%;
-      max-width: 350px;
-    }
-  }
 
-  .control-mobile {
-    @media (min-width: 750px) {
-      display: none;
+      @media (min-width: 750px) {
+        display: none;
+      }
     }
   }
 `;
 
 const FiltersContainer = styled.div`
   display: ${(props) => (props.showForm ? "block" : "none")};
+  /* 100vh should come from window height hook */
+  max-height: ${(props) => `calc(100vh - ${props.headerHeight}px);`};
+  overflow-y: auto;
   border-top: solid 1px rgba(229, 231, 235, 0.5);
-  padding: 5px;
-  padding-top: 15px;
-  padding-bottom: 30px;
+  border-bottom: double 2px rgba(229, 231, 235, 0.7);
+  padding: 20px 5px 300px;
+  
+  @media (min-width: 500px) {
+    padding-bottom: 150px;
+  }
 
   @media (min-width: 750px) {
     display: block;
@@ -196,21 +205,31 @@ const FiltersContainer = styled.div`
     padding-bottom: 5px;
   }
 
+  .mobile-reset-container {
+    width: 95%;
+    display: flex;
+    justify-content: flex-end;
+
+    @media (min-width: 750px) {
+      display: none;
+    }
+  }
+
   .grid-container {
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: repeat(5, auto);
+    grid-template-rows: repeat(4, auto);
     grid-gap: 60px;
     
     @media (min-width: 500px) {
       grid-template-columns: 1fr 1fr;
-      grid-template-rows: auto auto auto;
+      grid-template-rows: auto auto;
     }
     
     @media (min-width: 750px) {
       grid-template-columns: 1fr;
       grid-template-rows: repeat(5, auto);
-      grid-gap: 40px;
+      grid-gap: 50px;
     }
   }
 
@@ -264,28 +283,13 @@ const FiltersContainer = styled.div`
     }
   }
 
-  .controls-container {
-    grid-column: 1 / 2;
-    grid-row: 5 / 6;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-
-    @media (min-width: 500px) {
-      grid-column: 1 / -1;
-      grid-row: 3 / 4;
-    }
+  .desktop-reset {
+    display: none;
 
     @media (min-width: 750px) {
+      display: block;
       grid-column: 1 / 2;
       grid-row: 5 / 6;
-    }
-
-    button {
-      width: 100%;
-      max-width: 350px;
     }
   }
 `;

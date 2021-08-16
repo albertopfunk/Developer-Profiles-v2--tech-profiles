@@ -55,6 +55,12 @@ const Button = styled.button`
     padding: 7px;
   }
 
+  &.xl {
+    width: 55px;
+    height: 55px;
+    padding: 10px;
+  }
+
   &:hover .icon {
     fill: var(--dark-green-3);
   }
@@ -71,6 +77,7 @@ const Button = styled.button`
 
   .icon {
     fill: var(--dark-cyan-2);
+    height: 100%;
   }
 `;
 

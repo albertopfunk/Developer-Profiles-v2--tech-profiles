@@ -93,7 +93,7 @@ function MainHeader(props) {
     menuButton = (
       <IconButton
         type="button"
-        size="lg"
+        size="xl"
         classNames="menu-button"
         ariaLabel="close menu"
         icon={<BurgerMenu className="icon rotate" />}
@@ -107,7 +107,7 @@ function MainHeader(props) {
     menuButton = (
       <IconButton
         type="button"
-        size="lg"
+        size="xl"
         classNames="menu-button"
         ariaLabel="open menu"
         icon={<BurgerMenu className="icon" />}
@@ -247,12 +247,9 @@ const Nav = styled.nav`
       .menu-button {
         width: 100%;
         max-width: 60px;
-        height: 55px;
-        padding: 8px;
 
         .icon {
           transition: all 0.3s linear;
-          height: 100%;
         }
 
         .icon.rotate {
