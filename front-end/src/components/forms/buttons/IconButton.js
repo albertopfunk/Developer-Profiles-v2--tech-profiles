@@ -61,7 +61,7 @@ const Button = styled.button`
 
   &:focus {
     outline: 2.5px solid transparent;
-    box-shadow: 0 0 0 2.5px var(--dark-cyan-3);
+    box-shadow: var(--box-shadow-focus);
     filter: brightness(105%);
   }
 

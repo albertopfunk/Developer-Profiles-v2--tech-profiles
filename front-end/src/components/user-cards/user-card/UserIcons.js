@@ -95,7 +95,7 @@ const IconsSection = styled.section`
 
     &:focus {
       outline: 2.5px solid transparent;
-      box-shadow: 0 0 0 2.5px var(--dark-cyan-3);
+      box-shadow: var(--box-shadow-focus);
     }
 
     // removing focus styles when using mouse

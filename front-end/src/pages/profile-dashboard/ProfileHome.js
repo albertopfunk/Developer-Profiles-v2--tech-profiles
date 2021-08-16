@@ -944,7 +944,7 @@ const ChecklistSection = styled.section`
 
     &:focus .focus-container {
       outline: solid 2.5px transparent;
-      box-shadow: 0 0 0 2.5px var(--dark-cyan-3);
+      box-shadow: var(--box-shadow-focus);
     }
 
     &:focus:not(:focus-visible) .focus-container {
