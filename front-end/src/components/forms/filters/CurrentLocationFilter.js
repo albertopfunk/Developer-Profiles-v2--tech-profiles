@@ -1,22 +1,19 @@
 import React from "react";
 import styled from "styled-components";
 
+import Combobox from "../combobox";
+
 import { httpClient } from "../../../global/helpers/http-requests";
 import Spacer from "../../../global/helpers/spacer";
 
-import Combobox from "../combobox";
-
 class CurrentLocationFilter extends React.Component {
   state = {
-    milesWithinInput: 5,
+    inputTimeout: null,
     location: [],
+    rangeInput: 30,
   };
 
-  onInputChange = (e) => {
-    this.setState({ milesWithinInput: e.target.value });
-  };
-
-  onLocationInputChange = async (value) => {
+  getLocationsByValue = async (value) => {
     const [res, err] = await httpClient("POST", "/api/autocomplete", {
       value,
     });
@@ -37,32 +34,40 @@ class CurrentLocationFilter extends React.Component {
     return res.data;
   };
 
-  chooseDistanceOnKeyUp = (e) => {
-    if (
-      e.keyCode !== 37 &&
-      e.keyCode !== 38 &&
-      e.keyCode !== 39 &&
-      e.keyCode !== 40
-    ) {
-      return;
+  debounceRangeChange = (e) => {
+    const { value } = e.target;
+    let currTimeOut;
+
+    this.setState({
+      rangeInput: value,
+    });
+
+    if (this.state.inputTimeout) {
+      clearTimeout(this.state.inputTimeout);
     }
-    this.onDistanceChange();
+
+    currTimeOut = setTimeout(() => {
+      this.setState({ inputTimeout: null });
+      this.updateLocationGio();
+    }, 500);
+
+    this.setState({ inputTimeout: currTimeOut });
   };
 
-  onDistanceChange = () => {
+  updateLocationGio = () => {
     if (this.state.location.length === 0) {
       return;
     }
 
-    this.onChosenLocation(
+    this.setLocationWithGio(
       this.state.location[0].name,
       this.state.location[0].id,
       true
     );
   };
 
-  onChosenLocation = async (name, id, distChange) => {
-    if (!distChange) {
+  setLocationWithGio = async (name, id, rangeChange) => {
+    if (!rangeChange) {
       this.setState({ location: [{ name, id }] });
     }
 
@@ -77,7 +82,7 @@ class CurrentLocationFilter extends React.Component {
 
     this.props.updateUsers({
       isUsingCurrLocationFilter: true,
-      selectedWithinMiles: +this.state.milesWithinInput,
+      selectedWithinMiles: +this.state.rangeInput,
       chosenLocationLat: res.data.lat,
       chosenLocationLon: res.data.lng,
     });
@@ -96,28 +101,27 @@ class CurrentLocationFilter extends React.Component {
         <legend>Filter by Current Location</legend>
         <Spacer axis="vertical" size="15" />
         <FlexContainer>
-          <div className="miles">
-            <label htmlFor="choose-miles">
-              {this.state.milesWithinInput} mile radius
+          <div className="range-input-container">
+            <label htmlFor="location-radius">
+              {this.state.rangeInput} mile radius
             </label>
             <Spacer axis="vertical" size="5" />
             <input
               type="range"
-              min="5"
+              min="10"
               max="2000"
               step="5"
-              id="choose-miles"
-              name="milesWithinInput"
-              value={this.state.milesWithinInput}
-              onChange={this.onInputChange}
-              onMouseUp={this.onDistanceChange}
-              onKeyUp={this.chooseDistanceOnKeyUp}
+              id="location-radius"
+              name="rangeInput"
+              className="range-input"
+              value={this.state.rangeInput}
+              onChange={(e) => this.debounceRangeChange(e)}
             />
           </div>
           <Combobox
             chosenOptions={this.state.location}
-            onInputChange={this.onLocationInputChange}
-            onChosenOption={this.onChosenLocation}
+            onInputChange={this.getLocationsByValue}
+            onChosenOption={this.setLocationWithGio}
             onRemoveChosenOption={this.resetLocationFilter}
             inputName={"current-location"}
             displayName={"Current Location"}
@@ -141,6 +145,16 @@ const FlexContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 15px;
+
+  .range-input-container {
+    width: 95%;
+    max-width: 300px;
+    margin: 0 auto;
+
+    .range-input {
+      width: 100%;
+    }
+  }
 `;
 
 export default CurrentLocationFilter;
