@@ -89,7 +89,7 @@ const InputContainer = styled.div`
     width: 100%;
     max-width: 225px;
     position: relative;
-    border: solid 1px var(--light-cyan-3);
+    border: var(--border-sm);
     border-radius: var(--border-radius-sm);
     box-shadow: inset 0 0.0625em 0.125em rgb(10 10 10 / 5%);
     background-color: white;

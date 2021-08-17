@@ -167,7 +167,7 @@ function MainHeader(props) {
 }
 
 const Header = styled.header`
-  border-bottom: solid 1px rgba(229, 231, 235, 0.5);
+  border-bottom: var(--border-sm);
   background-color: white;
   z-index: var(--header-layer);
 `;
@@ -299,7 +299,7 @@ const Nav = styled.nav`
     }
 
     &.mobile {
-      border-top: solid 1px rgba(229, 231, 235, 0.5);
+      border-top: var(--border-sm);
       overflow-x: auto;
 
       @media (min-width: 500px) {
@@ -352,7 +352,7 @@ const Nav = styled.nav`
 
     .menu-group {
       .menu-item {
-        border-right: solid 1px rgba(229, 231, 235, 0.8);
+        border-right: var(--border-sm);
 
         &:last-child {
           border-right: none;

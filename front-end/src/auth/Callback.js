@@ -94,7 +94,7 @@ const HeaderSkeleton = styled.header`
   width: 100%;
   height: 55px;
   padding: 5px;
-  border-bottom: solid 1px rgba(229, 231, 235, 0.5);
+  border-bottom: var(--border-sm);
   background-color: white;
 
   @media (min-width: 750px) {

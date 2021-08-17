@@ -40,7 +40,7 @@ const Fieldset = styled.fieldset`
   legend {
     width: 100%;
     padding: 2.5px 5px;
-    border-bottom: solid var(--light-cyan-3);
+    border-bottom: var(--border-lg);
   }
 `;
 

@@ -469,7 +469,11 @@ const PageHeader = styled.div`
   left: 0;
   z-index: var(--header-layer);
   width: 100%;
-  border-bottom: solid 1px rgba(229, 231, 235, 0.8);
+  border-bottom: var(--border-sm);
+  
+  @media (min-width: 500px) {
+    border-bottom: none;
+  }
 `;
 
 const PageNav = styled.nav`
@@ -505,11 +509,11 @@ const PageNav = styled.nav`
     }
 
     .nav-item {
-      border-right: solid 1px rgba(229, 231, 235, 0.8);
+      border-right: var(--border-sm);
 
       @media (min-width: 500px) {
         border-right: none;
-        border-bottom: solid 1px rgba(229, 231, 235, 0.8);
+        border-bottom: var(--border-sm);
       }
 
       &:last-child {

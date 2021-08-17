@@ -518,7 +518,7 @@ const ResultsContainer = styled.div`
   .results-group {
     position: absolute;
     width: 100%;
-    border: solid 2px rgba(229, 231, 235, 0.8);
+    border: var(--border-md);
     border-top: none;
     background-color: white;
     padding: 5px;

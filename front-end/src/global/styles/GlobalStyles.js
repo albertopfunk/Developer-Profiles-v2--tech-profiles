@@ -36,6 +36,10 @@ export const GlobalStyles = createGlobalStyle`
     --dark-green-2: hsl(var(--dark-green-base), 41%);
     --dark-green-3: hsl(var(--dark-green-base), 30%);
 
+    --border-sm: 1px solid var(--light-cyan-2);
+    --border-md: 2px solid var(--light-cyan-2);
+    --border-lg: 3px solid var(--light-cyan-2);
+
     --border-radius-sm: 2.5px;
     --border-radius-md: 6.25px;
     --border-radius-lg: 10px;
@@ -195,7 +199,7 @@ export const GlobalStyles = createGlobalStyle`
     max-width: 450px;
     min-height: 35px;
     padding: 5px;
-    border: solid 1px var(--light-cyan-3);
+    border: var(--border-sm);
     border-radius: var(--border-radius-sm);
     box-shadow: inset 0 0.0625em 0.125em rgb(10 10 10 / 5%);
   }

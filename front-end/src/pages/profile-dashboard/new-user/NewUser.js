@@ -947,7 +947,7 @@ const WelcomeSection = styled.section`
       display: inline-block;
       white-space: nowrap;
       padding: 10px 15px 10px;
-      border: solid 2px rgba(229, 231, 235, 0.8);
+      border: var(--border-md);
       color: var(--dark-cyan-2);
 
       &:focus {
@@ -1008,7 +1008,7 @@ const FormSection = styled.section`
       color: var(--dark-cyan-2);
       white-space: nowrap;
       padding: 10px 15px 10px;
-      border: solid 1px rgba(229, 231, 235, 0.8);
+      border: var(--border-sm);
       border-bottom: solid 2px transparent;
 
       &.selected {

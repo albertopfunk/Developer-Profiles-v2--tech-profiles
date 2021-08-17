@@ -190,8 +190,8 @@ const FiltersContainer = styled.div`
   /* 100vh should come from window height hook */
   max-height: ${(props) => `calc(100vh - ${props.headerHeight}px);`};
   overflow-y: auto;
-  border-top: solid 1px rgba(229, 231, 235, 0.5);
-  border-bottom: double 2px rgba(229, 231, 235, 0.7);
+  border-top: var(--border-sm);
+  border-bottom: var(--border-lg);
   padding: 20px 5px 300px;
   
   @media (min-width: 500px) {

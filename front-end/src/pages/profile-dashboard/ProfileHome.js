@@ -909,9 +909,9 @@ const ChecklistSection = styled.section`
 
   .main-container {
     section {
-      border-top: solid 1px rgba(229, 231, 235, 0.8);
+      border-top: var(--border-sm);
       &:last-child {
-        border-bottom: solid 1px rgba(229, 231, 235, 0.8);
+        border-bottom: var(--border-sm);
       }
     }
   }
@@ -984,7 +984,7 @@ const ChecklistSection = styled.section`
   }
 
   .section-info {
-    border-top: solid 1px rgba(229, 231, 235, 0.8);
+    border-top: var(--border-sm);
     padding: 15px 5px;
 
     .flex-row {

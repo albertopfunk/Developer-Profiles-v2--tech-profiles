@@ -391,7 +391,7 @@ const ImageBoxContainer = styled.div`
       .avatar {
         width: 100px;
         height: 130px;
-        border: solid 1px rgba(229, 231, 235, 0.8);
+        border: var(--border-sm);
 
         label {
           height: 80%;

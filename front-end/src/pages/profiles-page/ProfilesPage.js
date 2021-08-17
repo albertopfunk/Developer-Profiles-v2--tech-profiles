@@ -292,7 +292,11 @@ const ProfilesPageContainer = styled.div`
     left: 0;
     z-index: var(--header-layer);
     width: 100%;
-    border-bottom: solid 1px rgba(229, 231, 235, 0.8);
+    border-bottom: var(--border-sm);
+
+    @media (min-width: 750px) {
+      border-bottom: none;
+    }
   }
 
   main {
