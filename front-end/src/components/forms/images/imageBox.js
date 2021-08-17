@@ -412,6 +412,7 @@ const ImageBoxContainer = styled.div`
         img {
           height: 95%;
           width: 100%;
+          border-radius: 50%;
         }
       }
     }
