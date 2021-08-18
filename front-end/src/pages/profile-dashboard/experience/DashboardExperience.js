@@ -10,7 +10,7 @@ import IconButton from "../../../components/forms/buttons/IconButton";
 
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
 import useCurrentYear from "../../../global/helpers/hooks/useCurrentYear";
-import { FORM_STATUS } from "../../../global/helpers/variables";
+import { ERROR_MESSAGE, FORM_STATUS } from "../../../global/helpers/variables";
 import { validateInput } from "../../../global/helpers/validation";
 import useToggle from "../../../global/helpers/hooks/useToggle";
 import Announcer from "../../../global/helpers/announcer";
@@ -744,7 +744,7 @@ function DashboardExperience() {
                       <h4>{`Current "${
                         exp.companyNameInput || "New Experience"
                       }" Errors`}</h4>
-                      <Spacer axis="vertical" size="5" />
+                      <Spacer axis="vertical" size="10" />
                       <ul
                         aria-label={`current ${
                           exp.companyNameInput || "new experience"
@@ -754,50 +754,57 @@ function DashboardExperience() {
                         exp.companyStatus === FORM_STATUS.error ? (
                           <li>
                             <a href={`#company-${exp.id}`}>
-                              Company Name Error
+                              Company Name Error:{' '}
                             </a>
+                            {ERROR_MESSAGE.nameLong} {' '} {ERROR_MESSAGE.required}
                           </li>
                         ) : null}
-                        <Spacer axis="vertical" size="5" />
+                        <Spacer axis="vertical" size="10" />
                         {exp.titleInput.trim() === "" ||
                         exp.titleStatus === FORM_STATUS.error ? (
                           <li>
-                            <a href={`#title-${exp.id}`}>Title Error</a>
+                            <a href={`#title-${exp.id}`}>Title Error:{' '}</a>
+                            {ERROR_MESSAGE.titleLong} {' '} {ERROR_MESSAGE.required}
                           </li>
                         ) : null}
-                        <Spacer axis="vertical" size="5" />
+                        <Spacer axis="vertical" size="10" />
                         {exp.fromMonth === "" ? (
                           <li>
                             <a href={`#from-month-${exp.id}`}>
-                              From Month Error
+                              From Month Error:{' '}
                             </a>
+                            {ERROR_MESSAGE.required}
                           </li>
                         ) : null}
-                        <Spacer axis="vertical" size="5" />
+                        <Spacer axis="vertical" size="10" />
                         {exp.fromYear === "" ? (
                           <li>
-                            <a href={`#from-year-${exp.id}`}>From Year Error</a>
+                            <a href={`#from-year-${exp.id}`}>From Year Error:{' '}</a>
+                            {ERROR_MESSAGE.required}
                           </li>
                         ) : null}
-                        <Spacer axis="vertical" size="5" />
+                        <Spacer axis="vertical" size="10" />
                         {!exp.toPresent && exp.toMonth === "" ? (
                           <li>
-                            <a href={`#to-month-${exp.id}`}>To Month Error</a>
+                            <a href={`#to-month-${exp.id}`}>To Month Error:{' '}</a>
+                            {ERROR_MESSAGE.required}
                           </li>
                         ) : null}
-                        <Spacer axis="vertical" size="5" />
+                        <Spacer axis="vertical" size="10" />
                         {!exp.toPresent && exp.toYear === "" ? (
                           <li>
-                            <a href={`#to-year-${exp.id}`}>To Year Error</a>
+                            <a href={`#to-year-${exp.id}`}>To Year Error:{' '}</a>
+                            {ERROR_MESSAGE.required}
                           </li>
                         ) : null}
-                        <Spacer axis="vertical" size="5" />
+                        <Spacer axis="vertical" size="10" />
                         {exp.descriptionInput.trim() === "" ||
                         exp.descriptionStatus === FORM_STATUS.error ? (
                           <li>
                             <a href={`#description-${exp.id}`}>
-                              Description Error
+                              Description Error:{' '}
                             </a>
+                            {ERROR_MESSAGE.summaryLong} {' '} {ERROR_MESSAGE.required}
                           </li>
                         ) : null}
                       </ul>

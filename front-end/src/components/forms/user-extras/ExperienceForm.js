@@ -5,7 +5,7 @@ import { ReactComponent as RemoveIcon } from "../../../global/assets/dashboard-r
 import IconButton from "../buttons/IconButton";
 
 import { validateInput } from "../../../global/helpers/validation";
-import { FORM_STATUS } from "../../../global/helpers/variables";
+import { ERROR_MESSAGE, FORM_STATUS } from "../../../global/helpers/variables";
 import Spacer from "../../../global/helpers/spacer";
 
 const ExperienceForm = React.forwardRef(
@@ -410,15 +410,17 @@ const ExperienceForm = React.forwardRef(
             onChange={(e) => setCompanyInput(e.target.value)}
             onBlur={(e) => validateCompany(e.target.value)}
           />
+          <Spacer axis="vertical" size="5" />
           {company.companyStatus === FORM_STATUS.error ? (
-            <span id={`company-${userId}-error`} className="err-mssg">
-              Input is required. Company can only be alphabelical characters, no
-              numbers
-            </span>
+            <div id={`company-${userId}-error`} className="err-mssg">
+              <span>{ERROR_MESSAGE.nameShort}</span>
+              <Spacer axis="vertical" size="3" />
+              <span>{ERROR_MESSAGE.required}</span>
+            </div>
           ) : null}
           {company.companyStatus === FORM_STATUS.success ? (
             <span id={`company-${userId}-success`} className="success-mssg">
-              Company is Validated
+              Company name is validated
             </span>
           ) : null}
         </InputContainer>
@@ -444,15 +446,17 @@ const ExperienceForm = React.forwardRef(
             onChange={(e) => setTitleInput(e.target.value)}
             onBlur={(e) => validateTitle(e.target.value)}
           />
+          <Spacer axis="vertical" size="5" />
           {title.titleStatus === FORM_STATUS.error ? (
-            <span id={`title-${userId}-error`} className="err-mssg">
-              Input is required. Title can only be alphabelical characters, no
-              numbers
-            </span>
+            <div id={`title-${userId}-error`} className="err-mssg">
+              <span>{ERROR_MESSAGE.titleShort}</span>
+              <Spacer axis="vertical" size="3" />
+              <span>{ERROR_MESSAGE.required}</span>
+            </div>
           ) : null}
           {title.titleStatus === FORM_STATUS.success ? (
             <span id={`title-${userId}-success`} className="success-mssg">
-              Title is Validated
+              Title is validated
             </span>
           ) : null}
         </InputContainer>
@@ -491,9 +495,10 @@ const ExperienceForm = React.forwardRef(
               <option value="November">11 | November</option>
               <option value="December">12 | December</option>
             </select>
+            <Spacer axis="vertical" size="5" />
             {dates.fromMonthStatus === FORM_STATUS.error ? (
               <span id={`from-month-${userId}-error`} className="err-mssg">
-                month is required
+                {ERROR_MESSAGE.required}
               </span>
             ) : null}
             {dates.fromMonthStatus === FORM_STATUS.success ? (
@@ -501,7 +506,7 @@ const ExperienceForm = React.forwardRef(
                 id={`from-month-${userId}-success`}
                 className="success-mssg"
               >
-                month is Validated
+                Month is validated
               </span>
             ) : null}
           </InputContainer>
@@ -530,14 +535,15 @@ const ExperienceForm = React.forwardRef(
                 </option>
               ))}
             </select>
+            <Spacer axis="vertical" size="5" />
             {dates.fromYearStatus === FORM_STATUS.error ? (
               <span id={`from-year-${userId}-error`} className="err-mssg">
-                year is required
+                {ERROR_MESSAGE.required}
               </span>
             ) : null}
             {dates.fromYearStatus === FORM_STATUS.success ? (
               <span id={`from-year-${userId}-success`} className="success-mssg">
-                year is Validated
+                Year is validated
               </span>
             ) : null}
           </InputContainer>
@@ -577,14 +583,15 @@ const ExperienceForm = React.forwardRef(
               <option value="November">11 | November</option>
               <option value="December">12 | December</option>
             </select>
+            <Spacer axis="vertical" size="5" />
             {dates.toMonthStatus === FORM_STATUS.error ? (
               <span id={`to-month-${userId}-error`} className="err-mssg">
-                month is required
+                {ERROR_MESSAGE.required}
               </span>
             ) : null}
             {dates.toMonthStatus === FORM_STATUS.success ? (
               <span id={`to-month-${userId}-success`} className="success-mssg">
-                month is Validated
+                Month is validated
               </span>
             ) : null}
           </InputContainer>
@@ -613,14 +620,15 @@ const ExperienceForm = React.forwardRef(
                 </option>
               ))}
             </select>
+            <Spacer axis="vertical" size="5" />
             {dates.toYearStatus === FORM_STATUS.error ? (
               <span id={`to-year-${userId}-error`} className="err-mssg">
-                year is required
+                {ERROR_MESSAGE.required}
               </span>
             ) : null}
             {dates.toYearStatus === FORM_STATUS.success ? (
               <span id={`to-year-${userId}-success`} className="success-mssg">
-                year is Validated
+                Year is validated
               </span>
             ) : null}
           </InputContainer>
@@ -659,15 +667,17 @@ const ExperienceForm = React.forwardRef(
             onChange={(e) => setDescriptionInput(e.target.value)}
             onBlur={(e) => validateDescription(e.target.value)}
           />
+          <Spacer axis="vertical" size="5" />
           {description.descriptionStatus === FORM_STATUS.error ? (
-            <span id={`description-${userId}-error`} className="err-mssg">
-              Input is required. description can only be alphabelical
-              characters, no numbers
-            </span>
+            <div id={`description-${userId}-error`} className="err-mssg">
+              <span>{ERROR_MESSAGE.summaryShort}</span>
+              <Spacer axis="vertical" size="3" />
+              <span>{ERROR_MESSAGE.required}</span>
+            </div>
           ) : null}
           {description.descriptionStatus === FORM_STATUS.success ? (
             <span id={`description-${userId}-success`} className="success-mssg">
-              description is Validated
+              Description is validated
             </span>
           ) : null}
         </InputContainer>

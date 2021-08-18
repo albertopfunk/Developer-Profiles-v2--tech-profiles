@@ -537,24 +537,24 @@ function PersonalInfo() {
                     {hasSubmitError ? (
                       <li>Error submitting form, please try again</li>
                     ) : null}
-                    <Spacer axis="vertical" size="5" />
+                    <Spacer axis="vertical" size="10" />
                     {firstName.inputStatus === FORM_STATUS.error ? (
                       <li>
-                        <a href="#first-name">First Name Error: </a>
+                        <a href="#first-name">First Name Error:{' '}</a>
                         {ERROR_MESSAGE.nameLong}
                       </li>
                     ) : null}
-                    <Spacer axis="vertical" size="5" />
+                    <Spacer axis="vertical" size="10" />
                     {lastName.inputStatus === FORM_STATUS.error ? (
                       <li>
-                        <a href="#last-name">Last Name Error: </a>
+                        <a href="#last-name">Last Name Error:{' '}</a>
                         {ERROR_MESSAGE.nameLong}
                       </li>
                     ) : null}
-                    <Spacer axis="vertical" size="5" />
+                    <Spacer axis="vertical" size="10" />
                     {title.inputStatus === FORM_STATUS.error ? (
                       <li>
-                        <a href="#title">Title Error: </a>
+                        <a href="#title">Title Error:{' '}</a>
                         {ERROR_MESSAGE.titleLong}
                       </li>
                     ) : null}
@@ -601,7 +601,7 @@ function PersonalInfo() {
             ) : null}
             {firstName.inputStatus === FORM_STATUS.success ? (
               <span id="first-name-success" className="success-mssg">
-                First Name is Validated
+                First name is validated
               </span>
             ) : null}
           </InputContainer>
@@ -632,7 +632,7 @@ function PersonalInfo() {
             ) : null}
             {lastName.inputStatus === FORM_STATUS.success ? (
               <span id="last-name-success" className="success-mssg">
-                Last Name is Validated
+                Last name is validated
               </span>
             ) : null}
           </InputContainer>
@@ -718,7 +718,7 @@ function PersonalInfo() {
             ) : null}
             {title.inputStatus === FORM_STATUS.success ? (
               <span id="title-success" className="success-mssg">
-                Title is Validated
+                Title is validated
               </span>
             ) : null}
           </InputContainer>

@@ -9,7 +9,7 @@ import ControlButton from "../../../components/forms/buttons/ControlButton";
 import IconButton from "../../../components/forms/buttons/IconButton";
 
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
-import { FORM_STATUS } from "../../../global/helpers/variables";
+import { ERROR_MESSAGE, FORM_STATUS } from "../../../global/helpers/variables";
 import { httpClient } from "../../../global/helpers/http-requests";
 import { validateInput } from "../../../global/helpers/validation";
 import useToggle from "../../../global/helpers/hooks/useToggle";
@@ -699,7 +699,7 @@ function DashboardProjects() {
                       <h4>{`Current "${
                         proj.projectNameInput || "New Project"
                       }" Errors`}</h4>
-                      <Spacer axis="vertical" size="5" />
+                      <Spacer axis="vertical" size="10" />
                       <ul
                         aria-label={`current ${
                           proj.projectNameInput || "new project"
@@ -709,24 +709,27 @@ function DashboardProjects() {
                         proj.projectStatus === FORM_STATUS.error ? (
                           <li>
                             <a href={`#project-${proj.id}`}>
-                              project Name Error
+                              Project Name Error:{' '}
                             </a>
+                            {ERROR_MESSAGE.nameLong} {' '} {ERROR_MESSAGE.required}
                           </li>
                         ) : null}
-                        <Spacer axis="vertical" size="5" />
+                        <Spacer axis="vertical" size="10" />
                         {proj.linkInput.trim() === "" ||
                         proj.linkStatus === FORM_STATUS.error ? (
                           <li>
-                            <a href={`#link-${proj.id}`}>Link Error</a>
+                            <a href={`#link-${proj.id}`}>Link Error:{' '}</a>
+                            {ERROR_MESSAGE.urlLong} {' '} {ERROR_MESSAGE.required}
                           </li>
                         ) : null}
-                        <Spacer axis="vertical" size="5" />
+                        <Spacer axis="vertical" size="10" />
                         {proj.descriptionInput.trim() === "" ||
                         proj.descriptionStatus === FORM_STATUS.error ? (
                           <li>
                             <a href={`#description-${proj.id}`}>
-                              Description Error
+                              Description Error:{' '}
                             </a>
+                            {ERROR_MESSAGE.summaryLong} {' '} {ERROR_MESSAGE.required}
                           </li>
                         ) : null}
                       </ul>

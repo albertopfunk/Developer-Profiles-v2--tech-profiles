@@ -739,38 +739,38 @@ function YourWhereabouts() {
                     {hasSubmitError ? (
                       <li>Error submitting form, please try again</li>
                     ) : null}
-                    <Spacer axis="vertical" size="5" />
+                    <Spacer axis="vertical" size="10" />
                     {github.inputStatus === FORM_STATUS.error ? (
                       <li>
-                        <a href="#github">Github Error: </a>
+                        <a href="#github">Github Error:{' '}</a>
                         {ERROR_MESSAGE.githubLong}
                       </li>
                     ) : null}
-                    <Spacer axis="vertical" size="5" />
+                    <Spacer axis="vertical" size="10" />
                     {twitter.inputStatus === FORM_STATUS.error ? (
                       <li>
-                        <a href="#twitter"> Twitter Error: </a>
+                        <a href="#twitter"> Twitter Error:{' '}</a>
                         {ERROR_MESSAGE.twitterLong}
                       </li>
                     ) : null}
-                    <Spacer axis="vertical" size="5" />
+                    <Spacer axis="vertical" size="10" />
                     {linkedin.inputStatus === FORM_STATUS.error ? (
                       <li>
-                        <a href="#linkedin">Linkedin Error: </a>
+                        <a href="#linkedin">Linkedin Error:{' '}</a>
                         {ERROR_MESSAGE.linkedinLong}
                       </li>
                     ) : null}
-                    <Spacer axis="vertical" size="5" />
+                    <Spacer axis="vertical" size="10" />
                     {portfolio.inputStatus === FORM_STATUS.error ? (
                       <li>
-                        <a href="#portfolio">Portfolio Error: </a>
+                        <a href="#portfolio">Portfolio Error:{' '}</a>
                         {ERROR_MESSAGE.urlLong}
                       </li>
                     ) : null}
-                    <Spacer axis="vertical" size="5" />
+                    <Spacer axis="vertical" size="10" />
                     {email.inputStatus === FORM_STATUS.error ? (
                       <li>
-                        <a href="#email">Email Error: </a>
+                        <a href="#email">Email Error:{' '}</a>
                         {ERROR_MESSAGE.emailLong}
                       </li>
                     ) : null}
@@ -818,7 +818,7 @@ function YourWhereabouts() {
             ) : null}
             {github.inputStatus === FORM_STATUS.success ? (
               <span id="github-success" className="success-mssg">
-                Github is Validated and Updated with Full URL
+                Github is validated and updated with full URL
               </span>
             ) : null}
           </InputContainer>
@@ -850,7 +850,7 @@ function YourWhereabouts() {
             ) : null}
             {twitter.inputStatus === FORM_STATUS.success ? (
               <span id="twitter-success" className="success-mssg">
-                Twitter is Validated and Updated with Full URL
+                Twitter is validated and updated with full URL
               </span>
             ) : null}
           </InputContainer>
@@ -882,7 +882,7 @@ function YourWhereabouts() {
             ) : null}
             {linkedin.inputStatus === FORM_STATUS.success ? (
               <span id="linkedin-success" className="success-mssg">
-                Linkedin is Validated and Updated with Full URL
+                Linkedin is validated and updated with full URL
               </span>
             ) : null}
           </InputContainer>
@@ -914,7 +914,7 @@ function YourWhereabouts() {
             ) : null}
             {portfolio.inputStatus === FORM_STATUS.success ? (
               <span id="portfolio-success" className="success-mssg">
-                Portfolio is Validated
+                Portfolio is validated
               </span>
             ) : null}
           </InputContainer>
@@ -946,7 +946,7 @@ function YourWhereabouts() {
             ) : null}
             {email.inputStatus === FORM_STATUS.success ? (
               <span id="email-success" className="success-mssg">
-                Email is Validated
+                Email is validated
               </span>
             ) : null}
           </InputContainer>

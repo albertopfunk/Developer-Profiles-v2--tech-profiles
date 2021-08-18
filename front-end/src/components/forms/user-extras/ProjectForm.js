@@ -7,7 +7,7 @@ import ImagePreview from "../images/ImagePreview";
 import IconButton from "../buttons/IconButton";
 
 import { validateInput } from "../../../global/helpers/validation";
-import { FORM_STATUS } from "../../../global/helpers/variables";
+import { ERROR_MESSAGE, FORM_STATUS } from "../../../global/helpers/variables";
 import Spacer from "../../../global/helpers/spacer";
 
 const ProjectForm = React.forwardRef(
@@ -214,15 +214,17 @@ const ProjectForm = React.forwardRef(
             onChange={(e) => setProjectNameInput(e.target.value)}
             onBlur={(e) => validateProjectName(e.target.value)}
           />
+          <Spacer axis="vertical" size="5" />
           {projectName.projectStatus === FORM_STATUS.error ? (
-            <span id={`project-${projectId}-error`} className="err-mssg">
-              Input is required. Project can only be alphabelical characters, no
-              numbers
-            </span>
+            <div id={`project-${projectId}-error`} className="err-mssg">
+              <span>{ERROR_MESSAGE.nameShort}</span>
+              <Spacer axis="vertical" size="3" />
+              <span>{ERROR_MESSAGE.required}</span>
+            </div>
           ) : null}
           {projectName.projectStatus === FORM_STATUS.success ? (
             <span id={`project-${projectId}-success`} className="success-mssg">
-              Project is Validated
+              Project name is validated
             </span>
           ) : null}
         </InputContainer>
@@ -267,15 +269,17 @@ const ProjectForm = React.forwardRef(
             onChange={(e) => setLinkInput(e.target.value)}
             onBlur={(e) => validateLink(e.target.value)}
           />
+          <Spacer axis="vertical" size="5" />
           {projectLink.linkStatus === FORM_STATUS.error ? (
-            <span id={`link-${projectId}-error`} className="err-mssg">
-              Input is required. Link can only be alphabelical characters, no
-              numbers
-            </span>
+            <div id={`link-${projectId}-error`} className="err-mssg">
+              <span>{ERROR_MESSAGE.urlShort}</span>
+              <Spacer axis="vertical" size="3" />
+              <span>{ERROR_MESSAGE.required}</span>
+            </div>
           ) : null}
           {projectLink.linkStatus === FORM_STATUS.success ? (
             <span id={`link-${projectId}-success`} className="success-mssg">
-              Link is Validated
+              Link is validated
             </span>
           ) : null}
         </InputContainer>
@@ -302,18 +306,20 @@ const ProjectForm = React.forwardRef(
             onChange={(e) => setDescriptionInput(e.target.value)}
             onBlur={(e) => validateDescription(e.target.value)}
           />
+          <Spacer axis="vertical" size="5" />
           {projectDescription.descriptionStatus === FORM_STATUS.error ? (
-            <span id={`description-${projectId}-error`} className="err-mssg">
-              Input is required. description can only be alphabelical
-              characters, no numbers
-            </span>
+            <div id={`description-${projectId}-error`} className="err-mssg">
+              <span>{ERROR_MESSAGE.summaryShort}</span>
+              <Spacer axis="vertical" size="3" />
+              <span>{ERROR_MESSAGE.required}</span>
+            </div>
           ) : null}
           {projectDescription.descriptionStatus === FORM_STATUS.success ? (
             <span
               id={`description-${projectId}-success`}
               className="success-mssg"
             >
-              description is Validated
+              Description is validated
             </span>
           ) : null}
         </InputContainer>

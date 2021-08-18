@@ -647,10 +647,10 @@ function AboutYou() {
                     {hasSubmitError ? (
                       <li>Error submitting form, please try again</li>
                     ) : null}
-                    <Spacer axis="vertical" size="5" />
+                    <Spacer axis="vertical" size="10" />
                     {summary.inputStatus === FORM_STATUS.error ? (
                       <li>
-                        <a href="#summary">Summary Error: </a>
+                        <a href="#summary">Summary Error{' '}</a>
                         {ERROR_MESSAGE.summaryLong}
                       </li>
                     ) : null}
@@ -698,7 +698,7 @@ function AboutYou() {
             ) : null}
             {summary.inputStatus === FORM_STATUS.success ? (
               <span id="summary-success" className="success-mssg">
-                Summary is Validated
+                Summary is validated
               </span>
             ) : null}
           </InputContainer>

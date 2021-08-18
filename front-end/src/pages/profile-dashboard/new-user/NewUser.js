@@ -647,24 +647,24 @@ function NewUser() {
                   {hasSubmitError ? (
                     <li>Error submitting form, please try again</li>
                   ) : null}
-                  <Spacer axis="vertical" size="5" />
+                  <Spacer axis="vertical" size="10" />
                   {firstName.inputStatus === FORM_STATUS.error ? (
                     <li>
-                      <a href="#first-name">First Name Error: </a>
+                      <a href="#first-name">First Name Error:{' '}</a>
                       {ERROR_MESSAGE.nameLong}
                     </li>
                   ) : null}
-                  <Spacer axis="vertical" size="5" />
+                  <Spacer axis="vertical" size="10" />
                   {title.inputStatus === FORM_STATUS.error ? (
                     <li>
-                      <a href="#title">Title Error: </a>
+                      <a href="#title">Title Error:{' '}</a>
                       {ERROR_MESSAGE.titleLong}
                     </li>
                   ) : null}
-                  <Spacer axis="vertical" size="5" />
+                  <Spacer axis="vertical" size="10" />
                   {summary.inputStatus === FORM_STATUS.error ? (
                     <li>
-                      <a href="#summary">Summary Error: </a>
+                      <a href="#summary">Summary Error:{' '}</a>
                       {ERROR_MESSAGE.summaryLong}
                     </li>
                   ) : null}
@@ -762,7 +762,7 @@ function NewUser() {
               ) : null}
               {firstName.inputStatus === FORM_STATUS.success ? (
                 <span id="first-name-success" className="success-mssg">
-                  First Name is Validated
+                  First name is validated
                 </span>
               ) : null}
             </InputContainer>
@@ -846,7 +846,7 @@ function NewUser() {
               ) : null}
               {title.inputStatus === FORM_STATUS.success ? (
                 <span id="title-success" className="success-mssg">
-                  Title is Validated
+                  Title is validated
                 </span>
               ) : null}
             </InputContainer>
@@ -878,7 +878,7 @@ function NewUser() {
               ) : null}
               {summary.inputStatus === FORM_STATUS.success ? (
                 <span id="summary-success" className="success-mssg">
-                  Summary is Validated
+                  Summary is validated
                 </span>
               ) : null}
             </InputContainer>

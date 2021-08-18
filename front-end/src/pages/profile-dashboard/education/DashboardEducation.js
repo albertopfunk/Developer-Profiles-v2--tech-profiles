@@ -10,7 +10,7 @@ import IconButton from "../../../components/forms/buttons/IconButton";
 
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
 import useCurrentYear from "../../../global/helpers/hooks/useCurrentYear";
-import { FORM_STATUS } from "../../../global/helpers/variables";
+import { ERROR_MESSAGE, FORM_STATUS } from "../../../global/helpers/variables";
 import { validateInput } from "../../../global/helpers/validation";
 import useToggle from "../../../global/helpers/hooks/useToggle";
 import Announcer from "../../../global/helpers/announcer";
@@ -741,7 +741,7 @@ function DashboardEducation() {
                       <h4>{`Current "${
                         edu.schoolNameInput || "New Education"
                       }" Errors`}</h4>
-                      <Spacer axis="vertical" size="5" />
+                      <Spacer axis="vertical" size="10" />
                       <ul
                         aria-label={`current ${
                           edu.schoolNameInput || "new education"
@@ -750,51 +750,58 @@ function DashboardEducation() {
                         {edu.schoolNameInput.trim() === "" ||
                         edu.schoolStatus === FORM_STATUS.error ? (
                           <li>
-                            <a href={`#school-${edu.id}`}>School Error</a>
+                            <a href={`#school-${edu.id}`}>School Name Error:{' '}</a>
+                            {ERROR_MESSAGE.nameLong} {' '} {ERROR_MESSAGE.required}
                           </li>
                         ) : null}
-                        <Spacer axis="vertical" size="5" />
+                        <Spacer axis="vertical" size="10" />
                         {edu.fieldOfStudyInput.trim() === "" ||
                         edu.fieldOfStudyStatus === FORM_STATUS.error ? (
                           <li>
                             <a href={`#field-of-study-${edu.id}`}>
-                              Field of Study Error
+                              Field of Study Error:{' '}
                             </a>
+                            {ERROR_MESSAGE.titleLong} {' '} {ERROR_MESSAGE.required}
                           </li>
                         ) : null}
-                        <Spacer axis="vertical" size="5" />
+                        <Spacer axis="vertical" size="10" />
                         {edu.fromMonth === "" ? (
                           <li>
                             <a href={`#from-month-${edu.id}`}>
-                              From Month Error
+                              From Month Error:{' '}
                             </a>
+                            {ERROR_MESSAGE.required}
                           </li>
                         ) : null}
-                        <Spacer axis="vertical" size="5" />
+                        <Spacer axis="vertical" size="10" />
                         {edu.fromYear === "" ? (
                           <li>
-                            <a href={`#from-year-${edu.id}`}>From Year Error</a>
+                            <a href={`#from-year-${edu.id}`}>From Year Error:{' '}</a>
+                            {ERROR_MESSAGE.required}
                           </li>
                         ) : null}
-                        <Spacer axis="vertical" size="5" />
+                        <Spacer axis="vertical" size="10" />
                         {!edu.toPresent && edu.toMonth === "" ? (
                           <li>
-                            <a href={`#to-month-${edu.id}`}>To Month Error</a>
+                            <a href={`#to-month-${edu.id}`}>To Month Error:{' '}</a>
+                            {ERROR_MESSAGE.required}
                           </li>
                         ) : null}
-                        <Spacer axis="vertical" size="5" />
+                        <Spacer axis="vertical" size="10" />
                         {!edu.toPresent && edu.toYear === "" ? (
                           <li>
-                            <a href={`#to-year-${edu.id}`}>To Year Error</a>
+                            <a href={`#to-year-${edu.id}`}>To Year Error:{' '}</a>
+                            {ERROR_MESSAGE.required}
                           </li>
                         ) : null}
-                        <Spacer axis="vertical" size="5" />
+                        <Spacer axis="vertical" size="10" />
                         {edu.descriptionInput.trim() === "" ||
                         edu.descriptionStatus === FORM_STATUS.error ? (
                           <li>
                             <a href={`#description-${edu.id}`}>
-                              Description Error
+                              Description Error:{' '}
                             </a>
+                            {ERROR_MESSAGE.summaryLong} {' '} {ERROR_MESSAGE.required}
                           </li>
                         ) : null}
                       </ul>
