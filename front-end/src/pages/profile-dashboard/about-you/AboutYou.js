@@ -10,7 +10,7 @@ import IconButton from "../../../components/forms/buttons/IconButton";
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
 import { httpClient } from "../../../global/helpers/http-requests";
 import { validateInput } from "../../../global/helpers/validation";
-import { FORM_STATUS } from "../../../global/helpers/variables";
+import { ERROR_MESSAGE, FORM_STATUS } from "../../../global/helpers/variables";
 import useToggle from "../../../global/helpers/hooks/useToggle";
 import Announcer from "../../../global/helpers/announcer";
 import Spacer from "../../../global/helpers/spacer";
@@ -650,7 +650,8 @@ function AboutYou() {
                     <Spacer axis="vertical" size="5" />
                     {summary.inputStatus === FORM_STATUS.error ? (
                       <li>
-                        <a href="#summary">Summary Error</a>
+                        <a href="#summary">Summary Error: </a>
+                        {ERROR_MESSAGE.summaryLong}
                       </li>
                     ) : null}
                   </ul>
@@ -689,9 +690,10 @@ function AboutYou() {
               onChange={(e) => setSummaryInput(e.target.value)}
               onBlur={(e) => validateSummaryInput(e.target.value)}
             />
+            <Spacer axis="vertical" size="5" />
             {summary.inputStatus === FORM_STATUS.error ? (
               <span id="summary-error" className="err-mssg">
-                Summary can only be alphabelical characters, numbers
+                {ERROR_MESSAGE.summaryShort}
               </span>
             ) : null}
             {summary.inputStatus === FORM_STATUS.success ? (

@@ -10,7 +10,7 @@ import IconButton from "../../../components/forms/buttons/IconButton";
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
 import { httpClient } from "../../../global/helpers/http-requests";
 import { validateInput } from "../../../global/helpers/validation";
-import { FORM_STATUS } from "../../../global/helpers/variables";
+import { ERROR_MESSAGE, FORM_STATUS } from "../../../global/helpers/variables";
 import useToggle from "../../../global/helpers/hooks/useToggle";
 import Announcer from "../../../global/helpers/announcer";
 import Spacer from "../../../global/helpers/spacer";
@@ -742,31 +742,36 @@ function YourWhereabouts() {
                     <Spacer axis="vertical" size="5" />
                     {github.inputStatus === FORM_STATUS.error ? (
                       <li>
-                        <a href="#github">Github Error</a>
+                        <a href="#github">Github Error: </a>
+                        {ERROR_MESSAGE.githubLong}
                       </li>
                     ) : null}
                     <Spacer axis="vertical" size="5" />
                     {twitter.inputStatus === FORM_STATUS.error ? (
                       <li>
-                        <a href="#twitter"> Twitter Error</a>
+                        <a href="#twitter"> Twitter Error: </a>
+                        {ERROR_MESSAGE.twitterLong}
                       </li>
                     ) : null}
                     <Spacer axis="vertical" size="5" />
                     {linkedin.inputStatus === FORM_STATUS.error ? (
                       <li>
-                        <a href="#linkedin">Linkedin Error</a>
+                        <a href="#linkedin">Linkedin Error: </a>
+                        {ERROR_MESSAGE.linkedinLong}
                       </li>
                     ) : null}
                     <Spacer axis="vertical" size="5" />
                     {portfolio.inputStatus === FORM_STATUS.error ? (
                       <li>
-                        <a href="#portfolio">Portfolio Error</a>
+                        <a href="#portfolio">Portfolio Error: </a>
+                        {ERROR_MESSAGE.urlLong}
                       </li>
                     ) : null}
                     <Spacer axis="vertical" size="5" />
                     {email.inputStatus === FORM_STATUS.error ? (
                       <li>
-                        <a href="#email">Email Error</a>
+                        <a href="#email">Email Error: </a>
+                        {ERROR_MESSAGE.emailLong}
                       </li>
                     ) : null}
                   </ul>
@@ -805,11 +810,10 @@ function YourWhereabouts() {
               onChange={(e) => setGithubInput(e.target.value)}
               onBlur={(e) => validateGithubInput(e.target.value)}
             />
+            <Spacer axis="vertical" size="5" />
             {github.inputStatus === FORM_STATUS.error ? (
               <span id="github-error" className="err-mssg">
-                Github Username can only be alphabelical characters, no numbers
-                If full URL was used, it should be valid; for example, url, url,
-                url
+                {ERROR_MESSAGE.githubShort}
               </span>
             ) : null}
             {github.inputStatus === FORM_STATUS.success ? (
@@ -838,11 +842,10 @@ function YourWhereabouts() {
               onChange={(e) => setTwitterInput(e.target.value)}
               onBlur={(e) => validateTwitterInput(e.target.value)}
             />
+            <Spacer axis="vertical" size="5" />
             {twitter.inputStatus === FORM_STATUS.error ? (
               <span id="twitter-error" className="err-mssg">
-                Twitter Username can only be alphabelical characters, no numbers
-                If full URL was used, it should be valid; for example, url, url,
-                url
+                {ERROR_MESSAGE.twitterShort}
               </span>
             ) : null}
             {twitter.inputStatus === FORM_STATUS.success ? (
@@ -871,11 +874,10 @@ function YourWhereabouts() {
               onChange={(e) => setLinkedinInput(e.target.value)}
               onBlur={(e) => validateLinkedinInput(e.target.value)}
             />
+            <Spacer axis="vertical" size="5" />
             {linkedin.inputStatus === FORM_STATUS.error ? (
               <span id="linkedin-error" className="err-mssg">
-                Linkedin Username can only be alphabelical characters, no
-                numbers If full URL was used, it should be valid; for example,
-                url, url, url
+                {ERROR_MESSAGE.linkedinShort}
               </span>
             ) : null}
             {linkedin.inputStatus === FORM_STATUS.success ? (
@@ -904,9 +906,10 @@ function YourWhereabouts() {
               onChange={(e) => setPortfolioInput(e.target.value)}
               onBlur={(e) => validatePortfolioInput(e.target.value)}
             />
+            <Spacer axis="vertical" size="5" />
             {portfolio.inputStatus === FORM_STATUS.error ? (
               <span id="portfolio-error" className="err-mssg">
-                URL should be valid; for example, url, url, url
+                {ERROR_MESSAGE.urlShort}
               </span>
             ) : null}
             {portfolio.inputStatus === FORM_STATUS.success ? (
@@ -935,9 +938,10 @@ function YourWhereabouts() {
               onChange={(e) => setEmailInput(e.target.value)}
               onBlur={(e) => validateEmailInput(e.target.value)}
             />
+            <Spacer axis="vertical" size="5" />
             {email.inputStatus === FORM_STATUS.error ? (
               <span id="email-error" className="err-mssg">
-                email should be valid; for example, email, email, email
+                {ERROR_MESSAGE.emailShort}
               </span>
             ) : null}
             {email.inputStatus === FORM_STATUS.success ? (

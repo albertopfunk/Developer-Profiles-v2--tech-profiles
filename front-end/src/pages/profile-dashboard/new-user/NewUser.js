@@ -12,7 +12,7 @@ import ControlButton from "../../../components/forms/buttons/ControlButton";
 import { ProfileContext } from "../../../global/context/user-profile/ProfileContext";
 import { httpClient } from "../../../global/helpers/http-requests";
 import { validateInput } from "../../../global/helpers/validation";
-import { FORM_STATUS } from "../../../global/helpers/variables";
+import { ERROR_MESSAGE, FORM_STATUS } from "../../../global/helpers/variables";
 import useToggle from "../../../global/helpers/hooks/useToggle";
 import Announcer from "../../../global/helpers/announcer";
 import Spacer from "../../../global/helpers/spacer";
@@ -650,19 +650,22 @@ function NewUser() {
                   <Spacer axis="vertical" size="5" />
                   {firstName.inputStatus === FORM_STATUS.error ? (
                     <li>
-                      <a href="#first-name">First Name Error</a>
+                      <a href="#first-name">First Name Error: </a>
+                      {ERROR_MESSAGE.nameLong}
                     </li>
                   ) : null}
                   <Spacer axis="vertical" size="5" />
                   {title.inputStatus === FORM_STATUS.error ? (
                     <li>
-                      <a href="#title">Title Error</a>
+                      <a href="#title">Title Error: </a>
+                      {ERROR_MESSAGE.titleLong}
                     </li>
                   ) : null}
                   <Spacer axis="vertical" size="5" />
                   {summary.inputStatus === FORM_STATUS.error ? (
                     <li>
-                      <a href="#summary">Summary Error</a>
+                      <a href="#summary">Summary Error: </a>
+                      {ERROR_MESSAGE.summaryLong}
                     </li>
                   ) : null}
                 </ul>
@@ -751,9 +754,10 @@ function NewUser() {
                 onChange={(e) => setFirstNameInput(e.target.value)}
                 onBlur={(e) => validateFirstNameInput(e.target.value)}
               />
+              <Spacer axis="vertical" size="5" />
               {firstName.inputStatus === FORM_STATUS.error ? (
                 <span id="first-name-error" className="err-mssg">
-                  First Name can only be alphabelical characters, no numbers
+                  {ERROR_MESSAGE.nameShort}
                 </span>
               ) : null}
               {firstName.inputStatus === FORM_STATUS.success ? (
@@ -834,9 +838,10 @@ function NewUser() {
                 onChange={(e) => setTitleInput(e.target.value)}
                 onBlur={(e) => validateTitleInput(e.target.value)}
               />
+              <Spacer axis="vertical" size="5" />
               {title.inputStatus === FORM_STATUS.error ? (
                 <span id="title-error" className="err-mssg">
-                  Title can only be alphabelical characters, no numbers
+                  {ERROR_MESSAGE.titleShort}
                 </span>
               ) : null}
               {title.inputStatus === FORM_STATUS.success ? (
@@ -865,9 +870,10 @@ function NewUser() {
                 onChange={(e) => setSummaryInput(e.target.value)}
                 onBlur={(e) => validateSummaryInput(e.target.value)}
               />
+              <Spacer axis="vertical" size="5" />
               {summary.inputStatus === FORM_STATUS.error ? (
                 <span id="summary-error" className="err-mssg">
-                  Summary can only be alphabelical characters, numbers
+                  {ERROR_MESSAGE.summaryShort}
                 </span>
               ) : null}
               {summary.inputStatus === FORM_STATUS.success ? (
