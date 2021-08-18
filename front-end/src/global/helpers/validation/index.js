@@ -248,7 +248,7 @@ function urlCheck(value) {
     Structure: protocol:// www. domain-name . TLD / path
 
     protocol
-    optional http(s)://
+    required http(s)://
 
     subdomain
     optional www.
@@ -285,6 +285,6 @@ function urlCheck(value) {
     ^(?:https?:\/\/)?(?:www\.)?(?:[A-Za-zÀ-ú0-9][A-Za-zÀ-ú0-9-]{1,63}[A-Za-zÀ-ú0-9]\.){1,8}(?:[A-Za-zÀ-ú]{2,63})(?:(?:\/(?:[A-Za-zÀ-ú0-9-._#?=+&%\/])*)|\/?)$
   */
 
-  const regex = /^(?:https?:\/\/)?(?:www\.)?(?:[A-Za-zÀ-ú0-9][A-Za-zÀ-ú0-9-]{1,63}[A-Za-zÀ-ú0-9]\.){1,8}(?:[A-Za-zÀ-ú]{2,63})(?:(?:\/(?:[A-Za-zÀ-ú0-9-._#?=+&%/])*)|\/?)$/;
+  const regex = /^(?:https?:\/\/)(?:www\.)?(?:[A-Za-zÀ-ú0-9][A-Za-zÀ-ú0-9-]{1,63}[A-Za-zÀ-ú0-9]\.){1,8}(?:[A-Za-zÀ-ú]{2,63})(?:(?:\/(?:[A-Za-zÀ-ú0-9-._#?=+&%/])*)|\/?)$/;
   return regex.test(value);
 }
