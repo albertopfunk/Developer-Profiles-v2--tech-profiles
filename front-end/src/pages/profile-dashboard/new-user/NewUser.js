@@ -1073,19 +1073,6 @@ const FormSection = styled.section`
 const InputContainer = styled.div`
   display: flex;
   flex-direction: column;
-  /* max-width: 450px; */
-
-  .input-err {
-    border: solid red;
-  }
-  .err-mssg {
-    color: red;
-    font-size: 0.7rem;
-  }
-  .success-mssg {
-    color: green;
-    font-size: 0.7rem;
-  }
 `;
 
 const FieldSet = styled.fieldset`

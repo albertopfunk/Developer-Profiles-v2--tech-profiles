@@ -393,6 +393,25 @@ export const GlobalStyles = createGlobalStyle`
     display: none;
   }
 
+  .input-err {
+    border: 2px solid red;
+  }
+
+  .info-mssg {
+    color: var(--dark-cyan-2);
+    font-size: 0.9rem;
+  }
+
+  .err-mssg {
+    color: red;
+    font-size: 0.9rem;
+  }
+
+  .success-mssg {
+    color: var(--dark-green-2);
+    font-size: 0.9rem;
+  }
+
   .info-group {
     width: 95%;
     max-width: 600px;

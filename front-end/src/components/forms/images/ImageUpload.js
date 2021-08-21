@@ -63,7 +63,7 @@ function ImageUploadForm({ userId, imageId, setImageInput }) {
         </div>
         <Spacer axis="vertical" size="2" />
         {imageStatus === FORM_STATUS.loading ? (
-          <span id="image-loading" className="loading-mssg">
+          <span id="image-loading" className="info-mssg">
             Loading...
           </span>
         ) : null}
@@ -140,19 +140,6 @@ const InputContainer = styled.div`
 
   span {
     display: block;
-  }
-
-  .loading-mssg {
-    color: green;
-    font-size: 0.7rem;
-  }
-  .err-mssg {
-    color: red;
-    font-size: 0.7rem;
-  }
-  .success-mssg {
-    color: green;
-    font-size: 0.7rem;
   }
 `;
 

@@ -396,14 +396,18 @@ class Combobox extends React.Component {
             onChange={(e) => this.debounceInput(e)}
             onKeyDown={(e) => this.inputFocusActions(e)}
           />
-
+          <Spacer axis="vertical" size="5" />
           <span id={`${inputName}-combobox-instructions`} className="sr-only">
             {`chosen ${displayName} will be listed below`}
           </span>
 
           {this.state.comboboxStatus === COMBOBOX_STATUS.error ? (
-            <span id={`${inputName}-error`}>
-              {`error with combobox. ${this.state.errorMessage}. please try again`}
+            <span id={`${inputName}-error`} className="err-mssg">
+              {`${
+                this.state.errorMessage
+                  ? this.state.errorMessage
+                  : "Error with combobox"
+              }. Please try again`}
             </span>
           ) : null}
         </InputContainer>
