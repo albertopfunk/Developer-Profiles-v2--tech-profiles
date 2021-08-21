@@ -5,6 +5,7 @@
     "no-console": 1
   },
   "env": {
-    "node": true
+    "node": true,
+    "jest": true
   }
 }
