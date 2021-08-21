@@ -1,8 +1,10 @@
 import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
-import ControlButton from "../forms/buttons/ControlButton";
 
 import UserCard from "./user-card/UserCard";
+import ControlButton from "../forms/buttons/ControlButton";
+
+import Spacer from "../../global/helpers/spacer";
 
 function UserCards({
   users,
@@ -86,12 +88,16 @@ function UserCards({
         <h2 id="profiles-heading" className="sr-only">
           Current Profiles
         </h2>
-        <p>No Users Here!</p>
-        <ControlButton
-          type="reset"
-          onClick={resetFilters}
-          buttonText="reset filters"
-        />
+        <Spacer axis="vertical" size="50" />
+        <div className="feed-control">
+          <p className="info-mssg">No Users Here!</p>
+          <Spacer axis="vertical" size="5" />
+          <ControlButton
+            type="reset"
+            onClick={resetFilters}
+            buttonText="reset filters"
+          />
+        </div>
       </Feed>
     );
   }
@@ -137,21 +143,22 @@ function UserCards({
         })}
       </div>
 
-      <div className="feed-controls">
+      <Spacer axis="vertical" size="50" />
+
+      <div className="feed-control">
         {isIdle && usersToLoad ? (
-          <div className="control">
-            <ControlButton
-              type="button"
-              onClick={loadMoreUsers}
-              onKeyDown={(e) => loadMoreFocus(e)}
-              buttonText="load more profiles"
-            />
-          </div>
+          <ControlButton
+            type="button"
+            onClick={loadMoreUsers}
+            onKeyDown={(e) => loadMoreFocus(e)}
+            buttonText="load more profiles"
+          />
         ) : null}
 
         {isIdle && !usersToLoad ? (
-          <div className="control">
-            <p>No more profiles to load</p>
+          <>
+            <p className="info-mssg">No more profiles to load</p>
+            <Spacer axis="vertical" size="5" />
             <ControlButton
               type="button"
               onClick={backToTop}
@@ -159,17 +166,15 @@ function UserCards({
               buttonText="back to top"
               ariaLabel="no more profiles to load, back to top"
             />
-          </div>
+          </>
         ) : null}
 
         {isBusy ? (
-          <div className="control">
-            <ControlButton type="button" disabled="true" buttonText="loading" />
-          </div>
+          <ControlButton type="button" disabled="true" buttonText="loading" />
         ) : null}
 
         {isError ? (
-          <div className="control">
+          <>
             <p>Error loading profiles</p>
             <ControlButton
               type="button"
@@ -178,7 +183,7 @@ function UserCards({
               buttonText="retry"
               ariaLabel="error loading profiles, retry"
             />
-          </div>
+          </>
         ) : null}
       </div>
     </Feed>
@@ -188,6 +193,11 @@ function UserCards({
 const Feed = styled.div`
   padding-bottom: 30px;
 
+  button {
+    width: 100%;
+    max-width: 450px;
+  }
+
   .feed-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(550px, 100%), 1fr));
@@ -196,18 +206,10 @@ const Feed = styled.div`
     grid-gap: 50px;
   }
 
-  .feed-controls {
-    margin-top: 30px;
-
-    .control {
-      width: 90%;
-      margin: 0 auto;
-      text-align: center;
-
-      button {
-        width: 90%;
-      }
-    }
+  .feed-control {
+    width: 90%;
+    margin: 0 auto;
+    text-align: center;
   }
 `;
 
