@@ -189,7 +189,6 @@ function ImageBox({ setImageChange }) {
       const urlStart =
         "https://res.cloudinary.com/dy5hgr3ht/image/upload/v1618796810/tech-pros-v1-avatars/";
 
-      console.log(avatarRadioRefs.current);
       for (const avatarRadio in avatarRadioRefs.current) {
         const { value } = avatarRadioRefs.current[avatarRadio].current;
         if (user.avatar_image === `${urlStart}${value}.svg`) {

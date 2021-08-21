@@ -362,8 +362,6 @@ class Combobox extends React.Component {
     const { inputName, displayName } = this.props;
     const { input, inputResults, selectedOptionId, chosenOptions } = this.state;
 
-    console.log("Status", this.state.comboboxStatus);
-
     return (
       <div>
         <label id={`${inputName}-label`} htmlFor={`${inputName}-search-input`}>

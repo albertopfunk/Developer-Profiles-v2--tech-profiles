@@ -30,7 +30,6 @@ function Filters({
     }
 
     const resizeObserver = new ResizeObserver((entries) => {
-      console.log(entries[0]);
       setFilterHeight(entries[0].contentRect.height);
     });
 
