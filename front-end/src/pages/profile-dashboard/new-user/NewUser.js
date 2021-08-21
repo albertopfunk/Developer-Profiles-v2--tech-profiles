@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect, useRef } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { ReactComponent as WelcomePageIcon } from "../../../global/assets/page-welcome.svg";
 import { ReactComponent as CloseIcon } from "../../../global/assets/dashboard-close.svg";
@@ -51,7 +51,6 @@ function NewUser() {
   const [locationChange, setLocationChange] = useState(false);
 
   const [checkChangesToggle, setCheckChangesToggle] = useToggle();
-  const history = useHistory();
 
   let isSubmittingRef = useRef(false);
   const errorSummaryRef = React.createRef();
@@ -119,7 +118,7 @@ function NewUser() {
     e.preventDefault();
 
     if (status === FORM_STATUS.active) {
-      setFormInputs();
+      setFormInputs("basic-info");
       setFormFocusToggle();
       return;
     }
@@ -130,8 +129,8 @@ function NewUser() {
     }
   }
 
-  function setFormInputs() {
-    setSelectedTab("basic-info");
+  function setFormInputs(tab) {
+    setSelectedTab(tab);
     setFormStatus(FORM_STATUS.active);
     setFormFocusStatus(FORM_STATUS.active);
     setHasSubmitError(null);
@@ -566,7 +565,8 @@ function NewUser() {
     }
 
     formSuccessWait = setTimeout(() => {
-      history.push("/profile-dashboard");
+      setFormInputs("billing-info");
+      isSubmittingRef.current = false;
     }, 750);
     setFormStatus(FORM_STATUS.success);
   }
@@ -590,7 +590,7 @@ function NewUser() {
             type="button"
             buttonText="quickstart"
             ariaLabel="form"
-            onClick={setFormInputs}
+            onClick={() => setFormInputs("basic-info")}
             onKeyDown={(e) => formFocusManagement(e, FORM_STATUS.active)}
             attributes={{
               id: "edit-info-btn",
@@ -1022,7 +1022,7 @@ const FormSection = styled.section`
         border-bottom-color: var(--dark-green-3);
       }
 
-      // next 3 selectors are due to focus-visible
+      // next 2 selectors are due to focus-visible
       // not being fully supported yet
       &:focus {
         // contrast mode fallback
@@ -1030,15 +1030,11 @@ const FormSection = styled.section`
         border-color: var(--dark-green-3);
       }
 
-      // removing focus styles when using mouse
       &:focus:not(:focus-visible) {
         outline: none;
-        border-color: transparent;
-      }
-
-      // undoing removal of bottom border from above selector when using mouse
-      &.selected:focus {
-        border-bottom-color: var(--dark-green-3);
+        // default + selected border styles
+        border: var(--border-sm);
+        border-bottom: solid 2px var(--dark-green-3);
       }
 
       &:active {
