@@ -173,7 +173,12 @@ function NewUser() {
 
   function changeTab(tab, e = null) {
     e && e.preventDefault();
-    setSelectedTab(tab);
+
+    if (tab === "basic-info") {
+      setFormInputs("basic-info");
+    } else {
+      setSelectedTab("billing-info");
+    }
   }
 
   function tabFocusManagement(e) {
@@ -565,7 +570,7 @@ function NewUser() {
     }
 
     formSuccessWait = setTimeout(() => {
-      setFormInputs("billing-info");
+      changeTab("billing-info");
       isSubmittingRef.current = false;
     }, 750);
     setFormStatus(FORM_STATUS.success);
