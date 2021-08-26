@@ -7,7 +7,6 @@ Visit the site by going to [techprofiles.dev](https://techprofiles.dev).
 ## Table of contents
 * [General info](#general-info)
 * [Technologies](#technologies)
-* [Setup](#setup)
 
 ## General info
 Discovery app for people in tech, where they can create a portfolio for others to see.
@@ -44,12 +43,3 @@ APIs used:
 * Stripe
 * Google Places
 * Cloudinary
-
-## Setup
-To run this project, install it locally using npm:
-
-```
-$ cd ../lorem
-$ npm install
-$ npm start
-```
