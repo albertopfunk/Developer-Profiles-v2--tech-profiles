@@ -1,33 +1,21 @@
+const { seedUserLocations } = require("../seedData");
+
 exports.seed = function (knex) {
-  // Deletes ALL existing entries
   return knex("user_locations")
     .del()
-    .then(function () {
-      let userLocationsArr = [];
+    .then(async function () {
+      for (let i = 0; i < 40; i++) {
+        let multiplier = 50 * i;
+        let start = 1 + multiplier;
+        let end = 50 + multiplier;
 
-      // giving all users 1-5 interested locations
-      for (let i = 1; i <= 50; i++) {
-        let randomAmount = Math.floor(Math.random() * (6 - 1) + 1);
-        let randomUserLocations = [];
-        let randomNumbers = [];
+        let newSeedUserLocations = [...seedUserLocations];
 
-        for (let j = 0; j < randomAmount; j++) {
-          let num = Math.floor(Math.random() * (120 - 1) + 1);
-          let isDup = randomNumbers.includes(num);
+        let splitSeedUserLocations = newSeedUserLocations.filter((location) => {
+          return location.user_id >= start && location.user_id <= end;
+        });
 
-          while (isDup) {
-            num = Math.floor(Math.random() * (120 - 1) + 1);
-            isDup = randomNumbers.includes(num);
-          }
-
-          randomNumbers.push(num);
-          randomUserLocations.push({ user_id: i, location_id: num });
-        }
-
-        userLocationsArr = [...userLocationsArr, ...randomUserLocations];
+        await knex("user_locations").insert(splitSeedUserLocations);
       }
-
-      // Inserts seed entries
-      return knex("user_locations").insert(userLocationsArr);
     });
 };

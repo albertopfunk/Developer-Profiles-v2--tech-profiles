@@ -1,11 +1,25 @@
 const { seedUserAdditionalSkills } = require("../seedData");
 
 exports.seed = function (knex) {
-  // Deletes ALL existing entries
   return knex("user_additional_skills")
     .del()
-    .then(function () {
-      // Inserts seed entries
-      return knex("user_additional_skills").insert(seedUserAdditionalSkills);
+    .then(async function () {
+      for (let i = 0; i < 40; i++) {
+        let multiplier = 50 * i;
+        let start = 1 + multiplier;
+        let end = 50 + multiplier;
+
+        let newSeedUserAdditionalSkills = [...seedUserAdditionalSkills];
+
+        let splitSeedUserAdditionalSkills = newSeedUserAdditionalSkills.filter(
+          (location) => {
+            return location.user_id >= start && location.user_id <= end;
+          }
+        );
+
+        await knex("user_additional_skills").insert(
+          splitSeedUserAdditionalSkills
+        );
+      }
     });
 };
