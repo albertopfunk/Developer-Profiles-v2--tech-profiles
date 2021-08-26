@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { ReactComponent as ResetIcon } from "../../../global/assets/button-reset.svg";
+import { ReactComponent as LoadingIcon } from "../../../global/assets/page-loading.svg";
 
 import AreaOfWorkFilter from "./AreaOfWorkFilter";
 import CurrentLocationFilter from "./CurrentLocationFilter";
@@ -13,6 +14,7 @@ import Spacer from "../../../global/helpers/spacer";
 
 function Filters({
   updateUsers,
+  filtersLoading,
   currentUsers,
   totalUsers,
   resetFilters,
@@ -46,7 +48,8 @@ function Filters({
     <FilterNav
       id="filters"
       tabIndex="-1"
-      aria-label="filters"      
+      aria-label="filters"
+      headerHeight={headerHeight}
     >
       <div ref={filtersBarRef} className="filters-bar-container">
         <div className="filters-bar">
@@ -63,6 +66,7 @@ function Filters({
             type="button"
             classNames="mobile-control"
             buttonText={`${areFiltersShowing ? "close" : "open"} filters`}
+            endIcon={filtersLoading ? <LoadingIcon className="icon" /> : null}
             onClick={setFilters}
             attributes={{
               "aria-expanded": `${areFiltersShowing}`,
@@ -75,7 +79,10 @@ function Filters({
       least hacky way to reset filters without having to make big
       changes, this will reset all state of children.
       using fragments to bypass reacts optimization */}
-      <FiltersContainer showForm={areFiltersShowing} headerHeight={headerHeight}>
+      <FiltersContainer
+        showForm={areFiltersShowing}
+        headerHeight={headerHeight}
+      >
         <form>
           <div className="mobile-reset-container">
             <IconButton
@@ -142,6 +149,8 @@ const FilterNav = styled.nav`
   background-color: white;
 
   @media (min-width: 750px) {
+    max-height: ${(props) => `calc(100vh - ${props.headerHeight}px);`};
+    overflow-y: auto;
     position: fixed;
     top: 0;
     left: 0;
@@ -180,6 +189,11 @@ const FilterNav = styled.nav`
       @media (min-width: 750px) {
         display: none;
       }
+
+      .icon {
+        height: 1rem;
+        fill: var(--lighter-cyan-2);
+      }
     }
   }
 `;
@@ -191,17 +205,18 @@ const FiltersContainer = styled.div`
   overflow-y: auto;
   border-top: var(--border-sm);
   border-bottom: var(--border-lg);
-  padding: 20px 5px 300px;
-  
+  padding: 20px 5px 250px;
+
   @media (min-width: 500px) {
     padding-bottom: 150px;
   }
 
   @media (min-width: 750px) {
+    max-height: unset;
+    overflow-y: unset;
     display: block;
     border: none;
-    padding-top: 20px;
-    padding-bottom: 5px;
+    padding-bottom: 50px;
   }
 
   .mobile-reset-container {
@@ -219,12 +234,12 @@ const FiltersContainer = styled.div`
     grid-template-columns: 1fr;
     grid-template-rows: repeat(4, auto);
     grid-gap: 60px;
-    
+
     @media (min-width: 500px) {
       grid-template-columns: 1fr 1fr;
       grid-template-rows: auto auto;
     }
-    
+
     @media (min-width: 750px) {
       grid-template-columns: 1fr;
       grid-template-rows: repeat(5, auto);

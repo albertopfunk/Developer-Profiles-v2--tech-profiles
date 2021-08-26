@@ -91,7 +91,7 @@ function ProfilesPage() {
   async function getFilteredUsers(filtersUpdate) {
     let loadingTimeout = setTimeout(() => {
       setPageStatus(PROFILES_STATUS.filtersLoading);
-    }, 250);
+    }, 150);
 
     const updatedFilters = {
       ...filters,
@@ -125,7 +125,7 @@ function ProfilesPage() {
   async function loadMoreUsers() {
     let loadingTimeout = setTimeout(() => {
       setCardsStatus(PROFILES_STATUS.paginationLoading);
-    }, 250);
+    }, 150);
 
     const [res, err] = await httpClient(
       "GET",
@@ -152,8 +152,8 @@ function ProfilesPage() {
 
   async function resetFilters() {
     let loadingTimeout = setTimeout(() => {
-      setPageStatus(PROFILES_STATUS.initialLoading);
-    }, 250);
+      setPageStatus(PROFILES_STATUS.filtersLoading);
+    }, 150);
 
     const [res, err] = await httpClient("GET", "/users");
     clearTimeout(loadingTimeout);
@@ -196,6 +196,7 @@ function ProfilesPage() {
         <MainHeader setHeaderHeight={setHeaderHeight} />
         <Filters
           updateUsers={getFilteredUsers}
+          filtersLoading={pageStatus === PROFILES_STATUS.filtersLoading}
           currentUsers={users.users.length}
           totalUsers={users.len}
           resetFilters={resetFilters}
