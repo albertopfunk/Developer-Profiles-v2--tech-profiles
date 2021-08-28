@@ -55,6 +55,7 @@ export const GlobalStyles = createGlobalStyle`
   }
 
   html {
+    height: -webkit-fill-available;
     cursor: default;
     box-sizing: border-box;
     background: var(--lighter-cyan-1);
@@ -89,6 +90,15 @@ export const GlobalStyles = createGlobalStyle`
   body {
     margin: 0;
     padding: 0;
+  }
+
+  body {
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+  }
+
+  #root, #focus-reset {
+    min-height: 100vh;
   }
 
   [tabindex="-1"] {
