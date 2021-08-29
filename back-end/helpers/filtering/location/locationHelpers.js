@@ -86,22 +86,32 @@ function distanceWithinFilter(lat1, lon1, lat2, lon2, filter) {
 }
 
 async function relocateToFilter(users, chosenRelocateToObj) {
+  function convertLocationsToObj(arr) {
+    return arr.reduce((accumilator, current) => {
+      accumilator[current.id] = current.location;
+      return accumilator;
+    }, {});
+  }
+
+  function convertUsersToObj(arr) {
+    return arr.reduce((accumilator, current) => {
+      accumilator[current.id] = current;
+      return accumilator;
+    }, {});
+  }
+
   let filteredUsers = [];
-  let filteredUserArr = [];
+  let userLocations = await db("user_locations");
+  let locations = await db("locations");
+  let locationsObj = convertLocationsToObj(locations);
+  let usersObj = convertUsersToObj(users);
 
-  for (let i = 0; i < users.length; i++) {
-    filteredUserArr = await db("user_locations").where("user_id", users[i].id);
-
-    for (let j = 0; j < filteredUserArr.length; j++) {
-      let [location] = await db("locations").where(
-        "id",
-        filteredUserArr[j].location_id
-      );
-
-      if (location.location in chosenRelocateToObj) {
-        filteredUsers.push(users[i]);
-        break;
-      }
+  for (let i = 0; i < userLocations.length; i++) {
+    if (
+      userLocations[i].user_id in usersObj &&
+      locationsObj[userLocations[i].location_id] in chosenRelocateToObj
+    ) {
+      filteredUsers.push(usersObj[userLocations[i].user_id]);
     }
   }
 
