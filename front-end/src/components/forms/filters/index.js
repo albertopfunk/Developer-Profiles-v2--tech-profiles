@@ -205,7 +205,7 @@ const FiltersContainer = styled.div`
   overflow-y: auto;
   border-top: var(--border-sm);
   border-bottom: var(--border-lg);
-  padding: 20px 5px 250px;
+  padding: 20px 5px 300px;
 
   @media (min-width: 500px) {
     padding-bottom: 150px;
