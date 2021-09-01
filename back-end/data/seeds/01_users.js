@@ -27,10 +27,19 @@ exports.seed = function (knex) {
         return filterOptions[rand];
       }
 
-      function randomTitleValue() {
-        const titles = seedTitles;
+      function randomTitleValue(areaOfWork) {
+        const titles = seedTitles[areaOfWork];
         let rand = [(Math.random() * titles.length) | 0];
         return titles[rand];
+      }
+
+      function randomTitleAndAreaOfWork() {
+        const areaOfWork = randomAreaOfWorkValue();
+        const title = randomTitleValue(areaOfWork)
+        return {
+          areaOfWork,
+          title,
+        }
       }
 
       function randomSkillsSync(id) {
@@ -76,14 +85,16 @@ exports.seed = function (knex) {
         for (let j = start; j <= end; j++) {
           const userLocation = randomLocationValue();
           const userSkills = randomSkillsSync(j);
+          const { title, areaOfWork } = randomTitleAndAreaOfWork();
+
           userArr.push({
             email: `test_email_${j}@gmail.com`,
             first_name: faker.name.firstName(),
             last_name: faker.name.lastName(),
             profile_image: randomUserImage() ? faker.image.avatar() : null,
             avatar_image: randomAvatarImage(),
-            desired_title: randomTitleValue(),
-            area_of_work: randomAreaOfWorkValue(),
+            desired_title: title,
+            area_of_work: areaOfWork,
             current_location_name: userLocation.name,
             current_location_lat: userLocation.lat,
             current_location_lon: userLocation.lon,
