@@ -4,7 +4,7 @@ exports.seed = function (knex) {
   return knex("projects")
     .del()
     .then(async function () {
-      for (let i = 0; i < 40; i++) {
+      for (let i = 0; i < 200; i++) {
         let projectArr = [];
         let multiplier = 50 * i;
         let start = 1 + multiplier;
