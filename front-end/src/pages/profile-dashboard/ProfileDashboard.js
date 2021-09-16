@@ -470,7 +470,7 @@ const PageHeader = styled.div`
   z-index: var(--header-layer);
   width: 100%;
   border-bottom: var(--border-sm);
-  
+
   @media (min-width: 500px) {
     border-bottom: none;
   }
@@ -713,6 +713,13 @@ const Main = styled.main`
       .icon {
         width: 100%;
         max-width: 75px;
+        animation: spinner 2s linear infinite;
+
+        @keyframes spinner {
+          to {
+            transform: rotate(360deg);
+          }
+        }
       }
     }
   }

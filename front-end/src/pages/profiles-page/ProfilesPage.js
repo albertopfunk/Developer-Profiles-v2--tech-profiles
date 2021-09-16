@@ -227,13 +227,14 @@ function ProfilesPage() {
               <h2 id="profiles-heading" className="sr-only">
                 Loading Profiles
               </h2>
-              <div aria-live="polite" aria-relevant="additions">
-                {pageStatus === PROFILES_STATUS.initialWaiting ? (
-                  <p>server is waking up</p>
-                ) : null}
-              </div>
               <div className="icon-container">
-                <PageLoadingIcon className="icon-sm" />
+                <div aria-live="polite" aria-relevant="additions">
+                  <PageLoadingIcon className="icon-sm" />
+                  <Spacer size="20" axis="vertical" />
+                  {pageStatus === PROFILES_STATUS.initialWaiting ? (
+                    <p>server is waking up</p>
+                  ) : null}
+                </div>
               </div>
             </div>
           ) : null}
@@ -326,6 +327,13 @@ const ProfilesPageContainer = styled.div`
         .icon-sm {
           width: 100%;
           max-width: 75px;
+          animation: spinner 2s linear infinite;
+
+          @keyframes spinner {
+            to {
+              transform: rotate(360deg);
+            }
+          }
         }
 
         .icon-lg {
