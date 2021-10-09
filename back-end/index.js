@@ -8,6 +8,7 @@ if (PORT == null || PORT == "") {
 }
 
 server.listen(PORT, () => {
+  // eslint-disable-next-line
   console.log(
     `== backend server is running on ${PORT} ==\n== using the ${process.env.DB} database ==`
   );

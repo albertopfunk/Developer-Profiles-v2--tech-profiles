@@ -17,6 +17,15 @@ describe("POST /new", () => {
     await db("users").truncate();
   });
 
+  /*
+
+    making sure you only call res.json once
+    expect(res.json).toHaveBeenCalledTimes(1);
+
+    
+
+  */
+
   it("responds with 201 OK and JSON", async () => {
     await request(server)
       .post("/users/new")

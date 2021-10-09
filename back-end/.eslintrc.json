@@ -2,7 +2,8 @@
   "extends": ["eslint:recommended", "plugin:node/recommended", "prettier"],
   "plugins": [],
   "rules": {
-    "no-console": 1
+    "no-console": 1,
+    "node/no-unpublished-require": 0
   },
   "env": {
     "node": true,
