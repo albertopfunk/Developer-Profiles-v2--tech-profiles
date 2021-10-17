@@ -1,5 +1,5 @@
 import React, { useEffect, useContext } from "react";
-import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { Helmet } from "react-helmet";
 import { ReactComponent as NetworkingPageIcon } from "../../global/assets/page-networking.svg";
@@ -14,10 +14,14 @@ import { httpClient } from "../../global/helpers/http-requests";
 function LandingPage() {
   const { isValidated, signIn } = useContext(AuthContext);
 
-  useEffect(async () => {
+  useEffect(() => {
     // wake up heroku
-    await httpClient("GET", "/hello");
+    wakeUp();
   }, []);
+  
+  async function wakeUp() {
+    await httpClient("GET", "/hello");
+  }
 
   return (
     <div>
@@ -39,14 +43,14 @@ function LandingPage() {
         </div>
         <Spacer size="10" axis="vertical" />
         <ControlsContainer>
-          <NavLink to="/profiles">
+          <Link to="/profiles">
             <span>View Profiles</span>
-          </NavLink>
+          </Link>
 
           {isValidated ? (
-            <NavLink to="/profile-dashboard">
+            <Link to="/profile-dashboard">
               <span>Edit Your Profile</span>
-            </NavLink>
+            </Link>
           ) : (
             <ControlButton
               type="button"
