@@ -2,11 +2,10 @@ import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import styled from "styled-components";
 import { Helmet } from "react-helmet";
-import { ReactComponent as PageValidation } from "../global/assets/page-validation.svg";
+import { ReactComponent as PageValidation } from "../global/assets/tech-profiles-logo.svg";
 
 import auth0Client from "./Auth";
 import { httpClient } from "../global/helpers/http-requests";
-import Spacer from "../global/helpers/spacer";
 
 class Callback extends Component {
   async componentDidMount() {
@@ -81,9 +80,10 @@ class Callback extends Component {
           <title>Validating Session • Tech Profiles</title>
         </Helmet>
         <MainContainerSkeleton aria-labelledby="main-heading">
-          <h1 id="main-heading">Validating Session</h1>
-          <Spacer size="20" axis="vertical" />
-          <PageValidation className="page-icon" />
+          <h1 id="main-heading" className="sr-only">Validating Session</h1>
+          <div className="page-icon">
+            <PageValidation className="icon" />
+          </div>
         </MainContainerSkeleton>
       </>
     );
@@ -103,13 +103,45 @@ const HeaderSkeleton = styled.header`
 `;
 
 const MainContainerSkeleton = styled.main`
-  height: calc(100vh - 55px);
+  height: 100%;
   padding: 30px 5px 50px 5px;
   background-color: hsl(240, 10%, 99%);
   text-align: center;
 
   .page-icon {
-    max-width: 750px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    .icon {
+      width: 100%;
+      max-width: 75px;
+      height: auto;
+      animation: spinner 3s linear infinite;
+
+      @keyframes spinner {
+        from {
+          transform: rotate(0deg);
+        }
+
+        25% {
+          transform: rotate(-15deg) scale(1.1);
+        }
+        
+        50% {
+          transform: rotate(0deg);
+        }
+        
+        75% {
+          transform: rotate(15deg) scale(1.1);
+        }
+        
+        100% {
+          transform: rotate(0deg);
+        }
+      }
+    }
   }
 `;
 
