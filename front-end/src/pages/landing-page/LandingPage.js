@@ -2,6 +2,7 @@ import React, { useEffect, useContext } from "react";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 import { Helmet } from "react-helmet";
+import { ReactComponent as NetworkingPageIcon } from "../../global/assets/page-networking.svg";
 
 import MainHeader from "../../components/header/MainHeader";
 import ControlButton from "../../components/forms/buttons/ControlButton";
@@ -32,7 +33,11 @@ function LandingPage() {
           Whether you want to hire someone or network, tech profiles helps you
           connect with like-minded people in your area.
         </p>
-        <Spacer size="20" axis="vertical" />
+        <Spacer size="10" axis="vertical" />
+        <div className="image-container">
+          <NetworkingPageIcon className="page-icon" />
+        </div>
+        <Spacer size="10" axis="vertical" />
         <ControlsContainer>
           <NavLink to="/profiles">
             <span>View Profiles</span>
@@ -46,7 +51,7 @@ function LandingPage() {
             <ControlButton
               type="button"
               onClick={signIn}
-              buttonText={"Create a Profiles"}
+              buttonText={"Create a Profile"}
             />
           )}
         </ControlsContainer>
@@ -57,6 +62,19 @@ function LandingPage() {
 
 const Main = styled.main`
   text-align: center;
+  max-width: 700px;
+  margin: 0 auto;
+
+  .image-container {
+    width: 100%;
+    max-width: 650px;
+    margin: 0 auto;
+
+    .page-icon {
+      width: 100%;
+      height: auto;
+    }
+  }
 `;
 
 const ControlsContainer = styled.div`
