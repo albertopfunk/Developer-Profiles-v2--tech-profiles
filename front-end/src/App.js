@@ -3,20 +3,19 @@ import ReactDOM from "react-dom";
 import { Route, Switch, withRouter } from "react-router-dom";
 import styled from "styled-components";
 import { Helmet } from "react-helmet";
-import { ReactComponent as PageValidation } from "./global/assets/page-validation.svg";
+import { ReactComponent as PageValidation } from "./global/assets/tech-profiles-logo.svg";
 
 import { GlobalStyles } from "./global/styles/GlobalStyles";
 import FocusReset from "./global/helpers/focus-reset/FocusReset";
 import { AuthContext } from "./global/context/auth/AuthContext";
-import Spacer from "./global/helpers/spacer";
 import auth0Client from "./auth/Auth";
 import Callback from "./auth/Callback";
 
+import LandingPage from "./pages/landing-page/LandingPage";
 import ProfilesPage from "./pages/profiles-page/ProfilesPage";
 import ProfileDashboard from "./pages/profile-dashboard/ProfileDashboard";
 import PageNotAuthorized from "./pages/error-pages/not-authorized/PageNotAuthorized";
 import PageNotFound from "./pages/error-pages/404/PageNotFound";
-// import PrivatePolicy from "./pages/misc-pages/private-policy/PrivatePolicy";
 
 function App({ location }) {
   // callback validates when user signs in
@@ -92,9 +91,10 @@ function App({ location }) {
           <title>Validating Session • Tech Profiles</title>
         </Helmet>
         <MainContainerSkeleton aria-labelledby="main-heading">
-          <h1 id="main-heading">Validating Session</h1>
-          <Spacer size="20" axis="vertical" />
-          <PageValidation className="page-icon" />
+          <h1 id="main-heading" className="sr-only">Validating Session</h1>
+          <div className="page-icon">
+            <PageValidation className="icon" />
+          </div>
         </MainContainerSkeleton>
       </>
     );
@@ -107,14 +107,14 @@ function App({ location }) {
         <FocusReset>
           <Switch>
             <Route exact path="/">
+              <LandingPage />
+            </Route>
+            <Route path="/profiles">
               <ProfilesPage />
             </Route>
             <Route path="/profile-dashboard">
               {isValidated ? <ProfileDashboard /> : <PageNotAuthorized />}
             </Route>
-            {/* <Route path="/private-policy">
-              <PrivatePolicy />
-            </Route> */}
             <Route path="/callback">
               <Callback />
             </Route>
@@ -150,7 +150,39 @@ const MainContainerSkeleton = styled.main`
   text-align: center;
 
   .page-icon {
-    max-width: 750px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    .icon {
+      width: 100%;
+      max-width: 75px;
+      height: auto;
+      animation: spinner 3s linear infinite;
+
+      @keyframes spinner {
+        from {
+          transform: rotate(0deg);
+        }
+
+        25% {
+          transform: rotate(-15deg) scale(1.1);
+        }
+        
+        50% {
+          transform: rotate(0deg);
+        }
+        
+        75% {
+          transform: rotate(15deg) scale(1.1);
+        }
+        
+        100% {
+          transform: rotate(0deg);
+        }
+      }
+    }
   }
 `;
 

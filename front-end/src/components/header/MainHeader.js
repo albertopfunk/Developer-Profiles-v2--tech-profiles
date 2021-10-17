@@ -16,7 +16,7 @@ function MainHeader(props) {
   const headerRef = useRef();
 
   useEffect(() => {
-    if (!headerRef.current) {
+    if (!headerRef.current || !props.setHeaderHeight) {
       return;
     }
 
@@ -64,7 +64,7 @@ function MainHeader(props) {
   const siteNav = (
     <ul aria-label="site navigation menu" className="menu-group">
       <li className="menu-item">
-        <NavLink exact to="/" className="link" activeClassName="selected">
+        <NavLink to="/profiles" className="link" activeClassName="selected">
           <span className="link-text">Profiles</span>
         </NavLink>
       </li>
