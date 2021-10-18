@@ -1,11 +1,13 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { ReactComponent as BurgerMenu } from "../../global/assets/header-nav.svg";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
+import { ReactComponent as BurgerMenu } from "../../global/assets/header-nav.svg";
 
+import SiteLogo from "./SiteLogo";
 import ControlButton from "../forms/buttons/ControlButton";
-import { AuthContext } from "../../global/context/auth/AuthContext";
 import IconButton from "../forms/buttons/IconButton";
+
+import { AuthContext } from "../../global/context/auth/AuthContext";
 
 let closeOnBlurWait;
 function MainHeader(props) {
@@ -42,24 +44,6 @@ function MainHeader(props) {
     setIsMenuOpen(false);
     setAnnounceMenuToggle(true);
   }
-
-  const siteLogo = (
-    <picture>
-      <source
-        srcSet="https://res.cloudinary.com/dy5hgr3ht/image/upload/c_scale,h_45/v1594347155/tech-pros-v1-main/tech-profiles-logo.webp"
-        media="(max-width: 750px)"
-      />
-      <source
-        srcSet="https://res.cloudinary.com/dy5hgr3ht/image/upload/c_scale,h_45/v1594347155/tech-pros-v1-main/tech-profiles-logo.png"
-        media="(max-width: 750px)"
-      />
-      <source srcSet="https://res.cloudinary.com/dy5hgr3ht/image/upload/c_scale,h_65/v1594347155/tech-pros-v1-main/tech-profiles-logo.webp" />
-      <img
-        src="https://res.cloudinary.com/dy5hgr3ht/image/upload/c_scale,h_65/v1594347155/tech-pros-v1-main/tech-profiles-logo.png"
-        alt="site logo link to profiles page"
-      />
-    </picture>
-  );
 
   const siteNav = (
     <ul aria-label="site navigation menu" className="menu-group">
@@ -130,11 +114,7 @@ function MainHeader(props) {
         {isValidated ? (
           <>
             <div className="fixed-container">
-              <div className="logo-container">
-                <NavLink exact to="/" className="site-logo">
-                  {siteLogo}
-                </NavLink>
-              </div>
+              <SiteLogo />
               <div className="button-container mobile">{menuButton}</div>
               <div className="menu-container desktop">{siteNav}</div>
             </div>
@@ -146,16 +126,12 @@ function MainHeader(props) {
           </>
         ) : (
           <div className="fixed-container">
-            <div className="logo-container">
-              <NavLink exact to="/" className="site-logo">
-                {siteLogo}
-              </NavLink>
-            </div>
+            <SiteLogo />
             <div className="button-container">
               <ControlButton
                 type="button"
                 onClick={signIn}
-                buttonText={"sign in / sign up"}
+                buttonText={"login/register"}
                 classNames="signin-button"
               />
             </div>
@@ -173,6 +149,8 @@ const Header = styled.header`
 `;
 
 const Nav = styled.nav`
+  overflow: auto;
+  
   .fixed-container {
     height: 55px;
     display: flex;
@@ -182,50 +160,6 @@ const Nav = styled.nav`
 
     @media (min-width: 750px) {
       height: 75px;
-    }
-
-    .logo-container {
-      min-width: 115px;
-      width: 100%;
-
-      @media (min-width: 500px) {
-        flex-basis: 40%;
-      }
-
-      .site-logo {
-        display: inline-block;
-        height: 55px;
-        padding: 5px;
-        // selected and focus placeholder
-        border: solid 2px transparent;
-
-        @media (min-width: 750px) {
-          height: 75px;
-        }
-
-        &:focus {
-          // contrast mode fallback
-          outline: 2.5px solid transparent;
-          border-color: var(--dark-green-3);
-        }
-
-        // removing focus styles when using mouse
-        &:focus:not(:focus-visible) {
-          outline: none;
-          border-color: transparent;
-        }
-
-        picture {
-          display: inline-block;
-          width: 100%;
-          height: 100%;
-        }
-
-        img {
-          width: 100%;
-          height: 100%;
-        }
-      }
     }
 
     .button-container {
@@ -247,6 +181,7 @@ const Nav = styled.nav`
       .menu-button {
         width: 100%;
         max-width: 60px;
+        
 
         .icon {
           transition: all 0.3s linear;
@@ -259,7 +194,8 @@ const Nav = styled.nav`
 
       .signin-button {
         width: 100%;
-        max-width: 155px;
+        max-width: 165px;
+        min-width: 145px;
 
         @media (min-width: 400px) {
           max-width: 175px;

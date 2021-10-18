@@ -327,7 +327,7 @@ const ProfilesPageContainer = styled.div`
         .icon-sm {
           width: 100%;
           max-width: 75px;
-          animation: spinner 2s linear infinite;
+          animation: spinner 3s linear infinite;
 
           @keyframes spinner {
             to {

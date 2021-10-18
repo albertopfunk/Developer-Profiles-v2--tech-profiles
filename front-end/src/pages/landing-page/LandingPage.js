@@ -24,64 +24,71 @@ function LandingPage() {
   }
 
   return (
-    <div>
+    <>
       <Helmet>
         <title>Tech Profiles</title>
       </Helmet>
       <MainHeader />
-      <Spacer size="20" axis="vertical" />
+      <Spacer size="30" axis="vertical" />
       <Main>
-        <h1>Discover People in Tech</h1>
-        <Spacer size="5" axis="vertical" />
-        <p>
-          Whether you want to hire someone or network, tech profiles helps you
-          connect with like-minded people in your area.
-        </p>
+        <HeadingContainer>
+          <h1>Discover People in Tech</h1>
+          <Spacer size="5" axis="vertical" />
+          <p>
+            Whether you want to hire someone or network, tech profiles helps you
+            connect with like-minded people in your area.
+          </p>
+        </HeadingContainer>
         <Spacer size="10" axis="vertical" />
-        <div className="image-container">
+        <ContentContainer>
           <NetworkingPageIcon className="page-icon" />
-        </div>
-        <Spacer size="10" axis="vertical" />
-        <ControlsContainer>
-          <Link to="/profiles">
-            <span>View Profiles</span>
-          </Link>
-
-          {isValidated ? (
-            <Link to="/profile-dashboard">
-              <span>Edit Your Profile</span>
+          <Spacer size="20" axis="vertical" />
+          <Controls>
+            <Link to="/profiles">
+              <span>View Profiles</span>
             </Link>
-          ) : (
-            <ControlButton
+
+            {isValidated ? (
+              <Link to="/profile-dashboard">
+                <span>Edit Your Profile</span>
+              </Link>
+            ) : (
+              <ControlButton
               type="button"
               onClick={signIn}
               buttonText={"Create a Profile"}
-            />
-          )}
-        </ControlsContainer>
+              />
+              )}
+          </Controls>
+        </ContentContainer>
       </Main>
-    </div>
+    </>
   );
 }
 
 const Main = styled.main`
+  padding: 0 10px;
   text-align: center;
-  max-width: 700px;
+`;
+
+const HeadingContainer = styled.div`
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+`;
+
+const ContentContainer = styled.div`
+  width: 100%;
+  max-width: 750px;
   margin: 0 auto;
 
-  .image-container {
+  .page-icon {
     width: 100%;
-    max-width: 650px;
-    margin: 0 auto;
-
-    .page-icon {
-      width: 100%;
-      height: auto;
-    }
+    height: auto;
   }
 `;
 
-const ControlsContainer = styled.div`
+const Controls = styled.div`
   width: 100%;
   display: flex;
   justify-content: center;
