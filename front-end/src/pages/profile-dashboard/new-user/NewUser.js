@@ -655,21 +655,21 @@ function NewUser() {
                   <Spacer axis="vertical" size="10" />
                   {firstName.inputStatus === FORM_STATUS.error ? (
                     <li>
-                      <a href="#first-name">First Name Error:{' '}</a>
+                      <a href="#first-name">First Name Error: </a>
                       {ERROR_MESSAGE.nameLong}
                     </li>
                   ) : null}
                   <Spacer axis="vertical" size="10" />
                   {title.inputStatus === FORM_STATUS.error ? (
                     <li>
-                      <a href="#title">Title Error:{' '}</a>
+                      <a href="#title">Title Error: </a>
                       {ERROR_MESSAGE.titleLong}
                     </li>
                   ) : null}
                   <Spacer axis="vertical" size="10" />
                   {summary.inputStatus === FORM_STATUS.error ? (
                     <li>
-                      <a href="#summary">Summary Error:{' '}</a>
+                      <a href="#summary">Summary Error: </a>
                       {ERROR_MESSAGE.summaryLong}
                     </li>
                   ) : null}

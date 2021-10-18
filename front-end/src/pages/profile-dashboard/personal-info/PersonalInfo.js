@@ -540,21 +540,21 @@ function PersonalInfo() {
                     <Spacer axis="vertical" size="10" />
                     {firstName.inputStatus === FORM_STATUS.error ? (
                       <li>
-                        <a href="#first-name">First Name Error:{' '}</a>
+                        <a href="#first-name">First Name Error: </a>
                         {ERROR_MESSAGE.nameLong}
                       </li>
                     ) : null}
                     <Spacer axis="vertical" size="10" />
                     {lastName.inputStatus === FORM_STATUS.error ? (
                       <li>
-                        <a href="#last-name">Last Name Error:{' '}</a>
+                        <a href="#last-name">Last Name Error: </a>
                         {ERROR_MESSAGE.nameLong}
                       </li>
                     ) : null}
                     <Spacer axis="vertical" size="10" />
                     {title.inputStatus === FORM_STATUS.error ? (
                       <li>
-                        <a href="#title">Title Error:{' '}</a>
+                        <a href="#title">Title Error: </a>
                         {ERROR_MESSAGE.titleLong}
                       </li>
                     ) : null}

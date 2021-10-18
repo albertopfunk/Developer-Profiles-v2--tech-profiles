@@ -709,17 +709,17 @@ function DashboardProjects() {
                         proj.projectStatus === FORM_STATUS.error ? (
                           <li>
                             <a href={`#project-${proj.id}`}>
-                              Project Name Error:{' '}
+                              Project Name Error:{" "}
                             </a>
-                            {ERROR_MESSAGE.nameLong} {' '} {ERROR_MESSAGE.required}
+                            {ERROR_MESSAGE.nameLong} {ERROR_MESSAGE.required}
                           </li>
                         ) : null}
                         <Spacer axis="vertical" size="10" />
                         {proj.linkInput.trim() === "" ||
                         proj.linkStatus === FORM_STATUS.error ? (
                           <li>
-                            <a href={`#link-${proj.id}`}>Link Error:{' '}</a>
-                            {ERROR_MESSAGE.urlLong} {' '} {ERROR_MESSAGE.required}
+                            <a href={`#link-${proj.id}`}>Link Error: </a>
+                            {ERROR_MESSAGE.urlLong} {ERROR_MESSAGE.required}
                           </li>
                         ) : null}
                         <Spacer axis="vertical" size="10" />
@@ -727,9 +727,9 @@ function DashboardProjects() {
                         proj.descriptionStatus === FORM_STATUS.error ? (
                           <li>
                             <a href={`#description-${proj.id}`}>
-                              Description Error:{' '}
+                              Description Error:{" "}
                             </a>
-                            {ERROR_MESSAGE.summaryLong} {' '} {ERROR_MESSAGE.required}
+                            {ERROR_MESSAGE.summaryLong} {ERROR_MESSAGE.required}
                           </li>
                         ) : null}
                       </ul>

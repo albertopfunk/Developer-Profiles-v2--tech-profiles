@@ -754,24 +754,24 @@ function DashboardExperience() {
                         exp.companyStatus === FORM_STATUS.error ? (
                           <li>
                             <a href={`#company-${exp.id}`}>
-                              Company Name Error:{' '}
+                              Company Name Error:{" "}
                             </a>
-                            {ERROR_MESSAGE.nameLong} {' '} {ERROR_MESSAGE.required}
+                            {ERROR_MESSAGE.nameLong} {ERROR_MESSAGE.required}
                           </li>
                         ) : null}
                         <Spacer axis="vertical" size="10" />
                         {exp.titleInput.trim() === "" ||
                         exp.titleStatus === FORM_STATUS.error ? (
                           <li>
-                            <a href={`#title-${exp.id}`}>Title Error:{' '}</a>
-                            {ERROR_MESSAGE.titleLong} {' '} {ERROR_MESSAGE.required}
+                            <a href={`#title-${exp.id}`}>Title Error: </a>
+                            {ERROR_MESSAGE.titleLong} {ERROR_MESSAGE.required}
                           </li>
                         ) : null}
                         <Spacer axis="vertical" size="10" />
                         {exp.fromMonth === "" ? (
                           <li>
                             <a href={`#from-month-${exp.id}`}>
-                              From Month Error:{' '}
+                              From Month Error:{" "}
                             </a>
                             {ERROR_MESSAGE.required}
                           </li>
@@ -779,21 +779,23 @@ function DashboardExperience() {
                         <Spacer axis="vertical" size="10" />
                         {exp.fromYear === "" ? (
                           <li>
-                            <a href={`#from-year-${exp.id}`}>From Year Error:{' '}</a>
+                            <a href={`#from-year-${exp.id}`}>
+                              From Year Error:{" "}
+                            </a>
                             {ERROR_MESSAGE.required}
                           </li>
                         ) : null}
                         <Spacer axis="vertical" size="10" />
                         {!exp.toPresent && exp.toMonth === "" ? (
                           <li>
-                            <a href={`#to-month-${exp.id}`}>To Month Error:{' '}</a>
+                            <a href={`#to-month-${exp.id}`}>To Month Error: </a>
                             {ERROR_MESSAGE.required}
                           </li>
                         ) : null}
                         <Spacer axis="vertical" size="10" />
                         {!exp.toPresent && exp.toYear === "" ? (
                           <li>
-                            <a href={`#to-year-${exp.id}`}>To Year Error:{' '}</a>
+                            <a href={`#to-year-${exp.id}`}>To Year Error: </a>
                             {ERROR_MESSAGE.required}
                           </li>
                         ) : null}
@@ -802,9 +804,9 @@ function DashboardExperience() {
                         exp.descriptionStatus === FORM_STATUS.error ? (
                           <li>
                             <a href={`#description-${exp.id}`}>
-                              Description Error:{' '}
+                              Description Error:{" "}
                             </a>
-                            {ERROR_MESSAGE.summaryLong} {' '} {ERROR_MESSAGE.required}
+                            {ERROR_MESSAGE.summaryLong} {ERROR_MESSAGE.required}
                           </li>
                         ) : null}
                       </ul>

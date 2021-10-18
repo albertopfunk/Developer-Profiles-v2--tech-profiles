@@ -150,7 +150,7 @@ const Header = styled.header`
 
 const Nav = styled.nav`
   overflow: auto;
-  
+
   .fixed-container {
     height: 55px;
     display: flex;
@@ -181,7 +181,6 @@ const Nav = styled.nav`
       .menu-button {
         width: 100%;
         max-width: 60px;
-        
 
         .icon {
           transition: all 0.3s linear;

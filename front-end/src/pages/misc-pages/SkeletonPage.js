@@ -1,25 +1,27 @@
 import React from "react";
 import styled from "styled-components";
 import { Helmet } from "react-helmet";
-import { ReactComponent as PageValidation } from "../../global/assets/tech-profiles-logo.svg"
+import { ReactComponent as PageValidation } from "../../global/assets/tech-profiles-logo.svg";
 import SiteLogo from "../../components/header/SiteLogo";
 
 function SkeletonPage() {
   return (
     <>
-        <HeaderSkeleton>
-            <SiteLogo />
-        </HeaderSkeleton>
-        <Helmet>
-          <title>Validating Session • Tech Profiles</title>
-        </Helmet>
-        <MainContainerSkeleton aria-labelledby="main-heading">
-          <h1 id="main-heading" className="sr-only">Validating Session</h1>
-          <div className="page-icon">
-            <PageValidation className="icon" />
-          </div>
-        </MainContainerSkeleton>
-      </>
+      <HeaderSkeleton>
+        <SiteLogo />
+      </HeaderSkeleton>
+      <Helmet>
+        <title>Validating Session • Tech Profiles</title>
+      </Helmet>
+      <MainContainerSkeleton aria-labelledby="main-heading">
+        <h1 id="main-heading" className="sr-only">
+          Validating Session
+        </h1>
+        <div className="page-icon">
+          <PageValidation className="icon" />
+        </div>
+      </MainContainerSkeleton>
+    </>
   );
 }
 
@@ -55,15 +57,15 @@ const MainContainerSkeleton = styled.main`
         25% {
           transform: rotate(-15deg) scale(1.1);
         }
-        
+
         50% {
           transform: rotate(0deg);
         }
-        
+
         75% {
           transform: rotate(15deg) scale(1.1);
         }
-        
+
         100% {
           transform: rotate(0deg);
         }
@@ -71,6 +73,5 @@ const MainContainerSkeleton = styled.main`
     }
   }
 `;
-
 
 export default SkeletonPage;

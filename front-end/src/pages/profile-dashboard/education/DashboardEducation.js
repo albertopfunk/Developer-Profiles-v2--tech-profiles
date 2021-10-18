@@ -750,8 +750,10 @@ function DashboardEducation() {
                         {edu.schoolNameInput.trim() === "" ||
                         edu.schoolStatus === FORM_STATUS.error ? (
                           <li>
-                            <a href={`#school-${edu.id}`}>School Name Error:{' '}</a>
-                            {ERROR_MESSAGE.nameLong} {' '} {ERROR_MESSAGE.required}
+                            <a href={`#school-${edu.id}`}>
+                              School Name Error:{" "}
+                            </a>
+                            {ERROR_MESSAGE.nameLong} {ERROR_MESSAGE.required}
                           </li>
                         ) : null}
                         <Spacer axis="vertical" size="10" />
@@ -759,16 +761,16 @@ function DashboardEducation() {
                         edu.fieldOfStudyStatus === FORM_STATUS.error ? (
                           <li>
                             <a href={`#field-of-study-${edu.id}`}>
-                              Field of Study Error:{' '}
+                              Field of Study Error:{" "}
                             </a>
-                            {ERROR_MESSAGE.titleLong} {' '} {ERROR_MESSAGE.required}
+                            {ERROR_MESSAGE.titleLong} {ERROR_MESSAGE.required}
                           </li>
                         ) : null}
                         <Spacer axis="vertical" size="10" />
                         {edu.fromMonth === "" ? (
                           <li>
                             <a href={`#from-month-${edu.id}`}>
-                              From Month Error:{' '}
+                              From Month Error:{" "}
                             </a>
                             {ERROR_MESSAGE.required}
                           </li>
@@ -776,21 +778,23 @@ function DashboardEducation() {
                         <Spacer axis="vertical" size="10" />
                         {edu.fromYear === "" ? (
                           <li>
-                            <a href={`#from-year-${edu.id}`}>From Year Error:{' '}</a>
+                            <a href={`#from-year-${edu.id}`}>
+                              From Year Error:{" "}
+                            </a>
                             {ERROR_MESSAGE.required}
                           </li>
                         ) : null}
                         <Spacer axis="vertical" size="10" />
                         {!edu.toPresent && edu.toMonth === "" ? (
                           <li>
-                            <a href={`#to-month-${edu.id}`}>To Month Error:{' '}</a>
+                            <a href={`#to-month-${edu.id}`}>To Month Error: </a>
                             {ERROR_MESSAGE.required}
                           </li>
                         ) : null}
                         <Spacer axis="vertical" size="10" />
                         {!edu.toPresent && edu.toYear === "" ? (
                           <li>
-                            <a href={`#to-year-${edu.id}`}>To Year Error:{' '}</a>
+                            <a href={`#to-year-${edu.id}`}>To Year Error: </a>
                             {ERROR_MESSAGE.required}
                           </li>
                         ) : null}
@@ -799,9 +803,9 @@ function DashboardEducation() {
                         edu.descriptionStatus === FORM_STATUS.error ? (
                           <li>
                             <a href={`#description-${edu.id}`}>
-                              Description Error:{' '}
+                              Description Error:{" "}
                             </a>
-                            {ERROR_MESSAGE.summaryLong} {' '} {ERROR_MESSAGE.required}
+                            {ERROR_MESSAGE.summaryLong} {ERROR_MESSAGE.required}
                           </li>
                         ) : null}
                       </ul>

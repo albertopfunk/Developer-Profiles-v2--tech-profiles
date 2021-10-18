@@ -742,35 +742,35 @@ function YourWhereabouts() {
                     <Spacer axis="vertical" size="10" />
                     {github.inputStatus === FORM_STATUS.error ? (
                       <li>
-                        <a href="#github">Github Error:{' '}</a>
+                        <a href="#github">Github Error: </a>
                         {ERROR_MESSAGE.githubLong}
                       </li>
                     ) : null}
                     <Spacer axis="vertical" size="10" />
                     {twitter.inputStatus === FORM_STATUS.error ? (
                       <li>
-                        <a href="#twitter"> Twitter Error:{' '}</a>
+                        <a href="#twitter"> Twitter Error: </a>
                         {ERROR_MESSAGE.twitterLong}
                       </li>
                     ) : null}
                     <Spacer axis="vertical" size="10" />
                     {linkedin.inputStatus === FORM_STATUS.error ? (
                       <li>
-                        <a href="#linkedin">Linkedin Error:{' '}</a>
+                        <a href="#linkedin">Linkedin Error: </a>
                         {ERROR_MESSAGE.linkedinLong}
                       </li>
                     ) : null}
                     <Spacer axis="vertical" size="10" />
                     {portfolio.inputStatus === FORM_STATUS.error ? (
                       <li>
-                        <a href="#portfolio">Portfolio Error:{' '}</a>
+                        <a href="#portfolio">Portfolio Error: </a>
                         {ERROR_MESSAGE.urlLong}
                       </li>
                     ) : null}
                     <Spacer axis="vertical" size="10" />
                     {email.inputStatus === FORM_STATUS.error ? (
                       <li>
-                        <a href="#email">Email Error:{' '}</a>
+                        <a href="#email">Email Error: </a>
                         {ERROR_MESSAGE.emailLong}
                       </li>
                     ) : null}

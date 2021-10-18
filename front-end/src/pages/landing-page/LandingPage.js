@@ -18,7 +18,7 @@ function LandingPage() {
     // wake up heroku
     wakeUp();
   }, []);
-  
+
   async function wakeUp() {
     await httpClient("GET", "/hello");
   }
@@ -54,11 +54,11 @@ function LandingPage() {
               </Link>
             ) : (
               <ControlButton
-              type="button"
-              onClick={signIn}
-              buttonText={"Create a Profile"}
+                type="button"
+                onClick={signIn}
+                buttonText={"Create a Profile"}
               />
-              )}
+            )}
           </Controls>
         </ContentContainer>
       </Main>

@@ -650,7 +650,7 @@ function AboutYou() {
                     <Spacer axis="vertical" size="10" />
                     {summary.inputStatus === FORM_STATUS.error ? (
                       <li>
-                        <a href="#summary">Summary Error{' '}</a>
+                        <a href="#summary">Summary Error </a>
                         {ERROR_MESSAGE.summaryLong}
                       </li>
                     ) : null}

@@ -56,9 +56,7 @@ class Callback extends Component {
   }
 
   render() {
-    return (
-      <SkeletonPage />
-    );
+    return <SkeletonPage />;
   }
 }
 
