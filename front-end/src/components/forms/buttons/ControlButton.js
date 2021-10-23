@@ -60,7 +60,7 @@ const Button = styled.button`
   }
 
   &:not(:disabled) {
-    background-color: var(--dark-green-2);
+    background-color: var(--dark-cyan-1);
   }
 
   &:hover {
