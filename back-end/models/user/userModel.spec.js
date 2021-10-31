@@ -69,7 +69,7 @@ describe("getAll", () => {
     const user1 = userMaker({email: "test@email.com"})
     const user2 = userMaker({
       email: "test2@email.com",
-      stripe_subscription_name: "subscribed"
+      stripe_subscription_name: null
     });
 
     await db("users").insert(user1);
@@ -77,8 +77,8 @@ describe("getAll", () => {
 
     const allUsers = await userModel.getAll();
     expect(allUsers).toHaveLength(1);
-    expect(allUsers[0].email).toBe("test2@email.com")
-    expect(allUsers[0].id).toBe(2)
+    expect(allUsers[0].email).toBe("test@email.com")
+    expect(allUsers[0].id).toBe(1)
   });
 });
 
@@ -105,10 +105,10 @@ describe("getAllFiltered", () => {
   };
 
   it("should return all subscribed users if no filter is being used", async () => {
-    const user = userMaker({stripe_subscription_name: "subscribed"})
+    const user = userMaker()
     
-    await userModel.insert(user);
-    await userModel.insert(user);
+    await db("users").insert(user);
+    await db("users").insert(user);
 
     const filterOptionsCopy = { ...filterOptions };
     const testUsers = await userModel.getAllFiltered(filterOptionsCopy);
@@ -116,25 +116,51 @@ describe("getAllFiltered", () => {
   });
 
   it("should return Development users", async () => {
+    const user1 = userMaker()
+    const user2 = userMaker({area_of_work: "Development"});
+    const user3 = userMaker({area_of_work: "Android"});
+
+    await db("users").insert([user1, user2, user3]);
+
     const filterOptionsCopy = { ...filterOptions };
     filterOptionsCopy.isWebDevChecked = true;
-    const testUsers = await userModel.getAllFiltered(filterOptionsCopy);
-    expect(testUsers).toHaveLength(18);
+
+    const filteredUsers = await userModel.getAllFiltered(filterOptionsCopy);
+    expect(filteredUsers).toHaveLength(1);
+    expect(filteredUsers[0].area_of_work).toBe("Development")
   });
 
   it("should return Design users", async () => {
+    const user1 = userMaker()
+    const user2 = userMaker({area_of_work: "Design"});
+    const user3 = userMaker({area_of_work: "iOS"});
+
+    await db("users").insert([user1, user2, user3]);
+
     const filterOptionsCopy = { ...filterOptions };
     filterOptionsCopy.isUIUXChecked = true;
-    const testUsers = await userModel.getAllFiltered(filterOptionsCopy);
-    expect(testUsers).toHaveLength(9);
+
+    const filteredUsers = await userModel.getAllFiltered(filterOptionsCopy);
+    expect(filteredUsers).toHaveLength(1);
+    expect(filteredUsers[0].area_of_work).toBe("Design")
   });
 
   it("should return IOS and Android users", async () => {
+    const user1 = userMaker()
+    const user2 = userMaker({area_of_work: "Design"});
+    const user3 = userMaker({area_of_work: "iOS"});
+    const user4 = userMaker({area_of_work: "Android"});
+
+    await db("users").insert([user1, user2, user3, user4]);
+
     const filterOptionsCopy = { ...filterOptions };
     filterOptionsCopy.isIOSChecked = true;
     filterOptionsCopy.isAndroidChecked = true;
-    const testUsers = await userModel.getAllFiltered(filterOptionsCopy);
-    expect(testUsers).toHaveLength(23);
+
+    const filteredUsers = await userModel.getAllFiltered(filterOptionsCopy);
+    expect(filteredUsers).toHaveLength(2);
+    expect(filteredUsers[0].area_of_work).toBe("iOS")
+    expect(filteredUsers[1].area_of_work).toBe("Android")
   });
 
   it("should return users within default 500 miles of default Boston", async () => {

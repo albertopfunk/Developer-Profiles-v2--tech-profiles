@@ -22,7 +22,7 @@ const user = {
   top_skills_prev: null,
   additional_skills_prev: null,
   stripe_customer_id: null,
-  stripe_subscription_name: null,
+  stripe_subscription_name: "subscribed",
 };
 
 function userMaker(props) {
