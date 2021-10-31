@@ -2,12 +2,6 @@ const userModel = require("./userModel");
 const testUsers = require("../../helpers/testUsers");
 const db = require("../../data/dbConfig");
 
-describe("environment", () => {
-  it("environment should be testing", () => {
-    expect(process.env.DB_ENV).toBe("testing");
-  });
-});
-
 describe("insert", () => {
   beforeAll(async () => {
     await db("users").truncate();
@@ -50,23 +44,24 @@ describe("insert", () => {
       id: 2,
       email: "test@email2.com",
       first_name: "Mr. Test2",
-      additional_skills: null,
+      last_name: null,
+      public_email: null,
+      profile_image: null,
+      avatar_image: null,
       area_of_work: null,
+      desired_title: null,
+      summary: null,
       current_location_lat: null,
       current_location_lon: null,
       current_location_name: null,
-      desired_title: null,
+      twitter: null,
       github: null,
-      image: null,
-      interested_location_names: null,
-      last_name: null,
       linkedin: null,
       portfolio: null,
-      public_email: null,
+      top_skills_prev: null,
+      additional_skills_prev: null,
       stripe_customer_id: null,
       stripe_subscription_name: null,
-      summary: null,
-      top_skills: null,
     };
     expect(user2).toEqual(expectedFullUser2);
   });
@@ -101,19 +96,20 @@ describe("getAll", () => {
     expect(allUsers).toHaveLength(0);
   });
 
-  it("should return all users", async () => {
-    const user = {
+  it("should return all subscribed users", async () => {
+    const unSubscribedUser = {
       first_name: "Mr. Test",
       email: "test@email.com",
     };
-    const user2 = {
+    const subscribedUser = {
       first_name: "Mr. Test2",
       email: "test2@email.com",
+      stripe_subscription_name: "subscribed"
     };
-    await db("users").insert(user);
-    await db("users").insert(user2);
+    await db("users").insert(unSubscribedUser);
+    await db("users").insert(subscribedUser);
     const allUsers = await userModel.getAll();
-    expect(allUsers).toHaveLength(2);
+    expect(allUsers).toHaveLength(1);
   });
 });
 

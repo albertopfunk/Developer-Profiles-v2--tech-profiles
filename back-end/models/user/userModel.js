@@ -14,9 +14,16 @@ module.exports = {
   remove,
 };
 
+
+/**
+ * inserts user object to users db table
+ * @param newUser object containing any or none user properties
+ * @returns full provided user object
+ */
 async function insert(newUser) {
   const dbEnv = process.env.DB_ENV || process.env.DB;
 
+  // PG requires returning method
   if (dbEnv === "production") {
     const [id] = await db("users").returning("id").insert(newUser);
     return getSingle(id);
@@ -26,6 +33,10 @@ async function insert(newUser) {
   }
 }
 
+/**
+ * returns all subscribed users from users db table
+ * @returns subscribed users
+ */
 function getAll() {
   return db("users").whereNotNull("stripe_subscription_name");
 }
