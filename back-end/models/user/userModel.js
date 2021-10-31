@@ -41,6 +41,11 @@ function getAll() {
   return db("users").whereNotNull("stripe_subscription_name");
 }
 
+/**
+ * Inclusive/expansive filtering
+ * @param filters object containing any or none filter properties
+ * @returns subscribed filtered users
+ */
 async function getAllFiltered(filters) {
   let users = [];
   let tempUsers;

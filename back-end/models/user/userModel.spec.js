@@ -1,6 +1,6 @@
 const userModel = require("./userModel");
-const testUsers = require("../../helpers/testUsers");
 const db = require("../../data/dbConfig");
+const { userMaker } = require("../../helpers/mocks");
 
 describe("insert", () => {
   beforeAll(async () => {
@@ -11,72 +11,41 @@ describe("insert", () => {
   });
 
   it("should insert users", async () => {
-    await userModel.insert({
-      first_name: "Mr. Test",
-      email: "test@email.com",
-    });
-    await userModel.insert({
-      first_name: "Mr. Test2",
-      email: "test@email2.com",
-    });
+    const user1 = userMaker({email: "test@email.com"})
+    const user2 = userMaker({email: "test2@email.com"})
+
+    const userRes1 = await userModel.insert(user1);
+    const userRes2 = await userModel.insert(user2);
+
     const users = await db("users");
     expect(users).toHaveLength(2);
+
+    expect(userRes1.id).toBe(1);
+    expect(userRes1.email).toBe("test@email.com");
+
+    expect(userRes2.id).toBe(2);
+    expect(userRes2.email).toBe("test2@email.com");
   });
 
-  it("should insert and return provided user", async () => {
-    const user = await userModel.insert({
-      first_name: "Mr. Test",
-      email: "test@email.com",
-    });
-    expect(user.id).toBe(1);
-    expect(user.email).toBe("test@email.com");
-    expect(user.first_name).toBe("Mr. Test");
+  it("should return provided user", async () => {
+    const user = userMaker({email: "test@email.com"})
+    const userCopy = userMaker({id: 1, email: "test@email.com"})
 
-    const user2 = await userModel.insert({
-      first_name: "Mr. Test2",
-      email: "test@email2.com",
-    });
-    expect(user2.id).toBe(2);
-    expect(user2.email).toBe("test@email2.com");
-    expect(user2.first_name).toBe("Mr. Test2");
-
-    const expectedFullUser2 = {
-      id: 2,
-      email: "test@email2.com",
-      first_name: "Mr. Test2",
-      last_name: null,
-      public_email: null,
-      profile_image: null,
-      avatar_image: null,
-      area_of_work: null,
-      desired_title: null,
-      summary: null,
-      current_location_lat: null,
-      current_location_lon: null,
-      current_location_name: null,
-      twitter: null,
-      github: null,
-      linkedin: null,
-      portfolio: null,
-      top_skills_prev: null,
-      additional_skills_prev: null,
-      stripe_customer_id: null,
-      stripe_subscription_name: null,
-    };
-    expect(user2).toEqual(expectedFullUser2);
+    const userRes = await userModel.insert(user);
+    expect(userRes).toEqual(userCopy);
   });
 
   it("should accept any column of the user table", async () => {
-    const user = {
-      github: "theTestUser",
-    };
-    const newUser = await userModel.insert(user);
-    expect(newUser.id).toBe(1);
-    expect(newUser.github).toBe(user.github);
+    const user = userMaker({github: "theTestUser"})
+
+    const userRes = await userModel.insert(user);
+    expect(userRes.id).toBe(1);
+    expect(userRes.github).toBe(user.github);
   });
 
   it("should accept a user with no columns", async () => {
     const user = {};
+
     const newUser = await userModel.insert(user);
     expect(newUser.id).toBe(1);
     expect(newUser.email).toBeNull;
@@ -97,19 +66,19 @@ describe("getAll", () => {
   });
 
   it("should return all subscribed users", async () => {
-    const unSubscribedUser = {
-      first_name: "Mr. Test",
-      email: "test@email.com",
-    };
-    const subscribedUser = {
-      first_name: "Mr. Test2",
+    const user1 = userMaker({email: "test@email.com"})
+    const user2 = userMaker({
       email: "test2@email.com",
       stripe_subscription_name: "subscribed"
-    };
-    await db("users").insert(unSubscribedUser);
-    await db("users").insert(subscribedUser);
+    });
+
+    await db("users").insert(user1);
+    await db("users").insert(user2);
+
     const allUsers = await userModel.getAll();
     expect(allUsers).toHaveLength(1);
+    expect(allUsers[0].email).toBe("test2@email.com")
+    expect(allUsers[0].id).toBe(2)
   });
 });
 
@@ -117,7 +86,7 @@ describe("getAllFiltered", () => {
   beforeAll(async () => {
     await db("users").truncate();
   });
-  afterAll(async () => {
+  afterEach(async () => {
     await db("users").truncate();
   });
 
@@ -128,66 +97,39 @@ describe("getAllFiltered", () => {
     isAndroidChecked: false,
     isUsingCurrLocationFilter: false,
     isUsingRelocateToFilter: false,
-    // boston
-    selectedWithinMiles: 500,
-    chosenLocationLat: 42.361145,
-    chosenLocationLon: -71.057083,
-    chosenRelocateTo: "Boston, MA, USA",
+    selectedWithinMiles: 0,
+    chosenLocationLat: 0,
+    chosenLocationLon: 0,
+    chosenRelocateToObj: {},
     sortChoice: "acending(oldest-newest)",
   };
 
-  let users = [...testUsers.usersData];
-  users = users.map((user) => {
-    user.current_location_lat = +user.current_location_lat;
-    user.current_location_lon = +user.current_location_lon;
-    return user;
-  });
+  it("should return all subscribed users if no filter is being used", async () => {
+    const user = userMaker({stripe_subscription_name: "subscribed"})
+    
+    await userModel.insert(user);
+    await userModel.insert(user);
 
-  // testUsers:
-  // ids 1-50
-  // 18 Dev
-  // 9 Design
-  // 11 IOS
-  // 12 Android
-  // users within 500 miles of Boston = 4(boston)
-  // users within 50 miles of Los Angeles = 7(LA,Calabasas)
-  // users interested in relocating to Boston = 10
-  // users interested in relocating to Boulder = 7
-  // --------------
-
-  it("should set up DB", async () => {
-    let splitUsers;
-    splitUsers = users.slice(0, 20);
-    await db("users").insert(splitUsers);
-    splitUsers = users.slice(20, 40);
-    await db("users").insert(splitUsers);
-    splitUsers = users.slice(40, 50);
-    await db("users").insert(splitUsers);
-    const testUsers = await db("users");
-    expect(testUsers).toHaveLength(50);
-  });
-
-  it("should return all users if all filters are NOT being used", async () => {
     const filterOptionsCopy = { ...filterOptions };
     const testUsers = await userModel.getAllFiltered(filterOptionsCopy);
-    expect(testUsers).toHaveLength(50);
+    expect(testUsers).toHaveLength(2);
   });
 
-  it("should return Web Dev users if checkbox is checked", async () => {
+  it("should return Development users", async () => {
     const filterOptionsCopy = { ...filterOptions };
     filterOptionsCopy.isWebDevChecked = true;
     const testUsers = await userModel.getAllFiltered(filterOptionsCopy);
     expect(testUsers).toHaveLength(18);
   });
 
-  it("should return UIUX users if checkbox is checked", async () => {
+  it("should return Design users", async () => {
     const filterOptionsCopy = { ...filterOptions };
     filterOptionsCopy.isUIUXChecked = true;
     const testUsers = await userModel.getAllFiltered(filterOptionsCopy);
     expect(testUsers).toHaveLength(9);
   });
 
-  it("should return IOS/Android users if checkboxes are checked", async () => {
+  it("should return IOS and Android users", async () => {
     const filterOptionsCopy = { ...filterOptions };
     filterOptionsCopy.isIOSChecked = true;
     filterOptionsCopy.isAndroidChecked = true;
