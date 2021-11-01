@@ -1,6 +1,6 @@
 module.exports = {
-  userMaker
-}
+  userMaker,
+};
 
 const user = {
   email: null,
@@ -27,6 +27,7 @@ const user = {
 
 function userMaker(props) {
   return {
-    ...user, ...props
-  }
+    ...user,
+    ...props,
+  };
 }

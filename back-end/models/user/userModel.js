@@ -14,7 +14,6 @@ module.exports = {
   remove,
 };
 
-
 /**
  * inserts user object to users db table
  * @param newUser object containing any or none user properties

@@ -35,11 +35,11 @@ exports.seed = function (knex) {
 
       function randomTitleAndAreaOfWork() {
         const areaOfWork = randomAreaOfWorkValue();
-        const title = randomTitleValue(areaOfWork)
+        const title = randomTitleValue(areaOfWork);
         return {
           areaOfWork,
           title,
-        }
+        };
       }
 
       function randomSkillsSync(id) {
