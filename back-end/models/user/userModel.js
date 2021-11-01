@@ -42,7 +42,9 @@ function getAll() {
 }
 
 /**
- * Exclusive/reductive filtering
+ * Grouped into area_of_work and locations.
+ * Groups are exclusive/reductive.
+ * Individual filtering within groups are inclusive/additive.
  * @param filters object containing any or none filter properties
  * @returns subscribed filtered users
  */
@@ -95,7 +97,7 @@ async function getAllFiltered(filters) {
       tempUsers = await db("users").where("area_of_work", "Android");
       users = [...users, ...tempUsers];
     }
-
+    // exclusive/reductive group
     if (users.length === 0) {
       return users;
     }
@@ -112,6 +114,7 @@ async function getAllFiltered(filters) {
       chosenRelocateToObj,
     };
     users = await locationHelpers.locationFilters(locationOptions, users);
+    // exclusive/reductive group
     if (users.length === 0) {
       return users;
     }
