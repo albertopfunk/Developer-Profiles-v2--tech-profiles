@@ -42,7 +42,7 @@ function getAll() {
 }
 
 /**
- * Inclusive/expansive filtering
+ * Exclusive/reductive filtering
  * @param filters object containing any or none filter properties
  * @returns subscribed filtered users
  */

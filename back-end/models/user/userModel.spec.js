@@ -1,6 +1,6 @@
 const userModel = require("./userModel");
 const db = require("../../data/dbConfig");
-const { userMaker } = require("../../helpers/mocks");
+const { userMaker } = require("../../tests/utils/generate");
 
 describe("insert", () => {
   beforeAll(async () => {
@@ -85,9 +85,13 @@ describe("getAll", () => {
 describe("getAllFiltered", () => {
   beforeAll(async () => {
     await db("users").truncate();
+    await db("locations").truncate();
+    await db("user_locations").truncate();
   });
   afterEach(async () => {
     await db("users").truncate();
+    await db("locations").truncate();
+    await db("user_locations").truncate();
   });
 
   const filterOptions = {
@@ -163,36 +167,150 @@ describe("getAllFiltered", () => {
     expect(filteredUsers[1].area_of_work).toBe("Android")
   });
 
-  it("should return users within default 500 miles of default Boston", async () => {
+  // Exclusive/reductive - user must have desired area_of_work
+  it("should return empty array if no user has desired area_of_work", async () => {
+    const user = userMaker()
+    const user2 = userMaker({area_of_work: "Design"});
+    const user3 = userMaker({area_of_work: "iOS"});
+    
+    await db("users").insert([user, user2, user3]);
+
+    const filterOptionsCopy = { ...filterOptions };
+    filterOptionsCopy.isWebDevChecked = true;
+
+    const testUsers = await userModel.getAllFiltered(filterOptionsCopy);
+    expect(testUsers).toHaveLength(0);
+  });
+
+  it("should return users within default 100 miles of Los Angeles", async () => {
+    // Los Angeles
+    const user1 = userMaker({
+      current_location_lat: 34.052235,
+      current_location_lon: -118.243683,
+    });
+    // riverside ~70 miles from LA
+    const user2 = userMaker({
+      current_location_lat: 33.9806005,
+      current_location_lon: -117.3754942,
+    });
+    // Las Vegas ~250 miles from LA
+    const user3 = userMaker({
+      current_location_lat: 36.1699412,
+      current_location_lon: -115.1398296,
+    });
+
+    await db("users").insert([user1, user2, user3]);
+    
     const filterOptionsCopy = { ...filterOptions };
     filterOptionsCopy.isUsingCurrLocationFilter = true;
+    filterOptionsCopy.selectedWithinMiles = 100
+    // Los Angeles
+    filterOptionsCopy.chosenLocationLat = 34.052235
+    filterOptionsCopy.chosenLocationLon = -118.243683
+    
     const testUsers = await userModel.getAllFiltered(filterOptionsCopy);
-    expect(testUsers).toHaveLength(4);
+    expect(testUsers).toHaveLength(2);
   });
 
-  it("should return users within 50 miles of Los Angeles", async () => {
+  it("should return users interested in Los Angeles", async () => {
+    const user = userMaker();
+    const locations = [
+      {location: "Los Angeles, CA, USA"},
+      {location: "Boston, MA, USA"},
+      {location: "Boulder, CO, USA"}
+    ]
+    const userLocations = [
+      { user_id: 1, location_id: 1 },
+      { user_id: 2, location_id: 2 },
+      { user_id: 3, location_id: 3 },
+      { user_id: 3, location_id: 1 },
+    ]
+
+    await db("users").insert([user, user, user])
+    await db("locations").insert(locations)
+    await db("user_locations").insert(userLocations)
+
     const filterOptionsCopy = { ...filterOptions };
-    filterOptionsCopy.selectedWithinMiles = 50;
-    filterOptionsCopy.chosenLocationLat = 34.052235;
-    filterOptionsCopy.chosenLocationLon = -118.243683;
+    filterOptionsCopy.isUsingRelocateToFilter = true;
+    filterOptionsCopy.chosenRelocateToObj = {
+      "Los Angeles, CA, USA": "Los Angeles, CA, USA"
+    };
+  
+    const testUsers = await userModel.getAllFiltered(filterOptionsCopy);
+    expect(testUsers).toHaveLength(2);
+    expect(testUsers[0].id).toBe(1);
+    expect(testUsers[1].id).toBe(3);
+  });
+
+  it("should return users interested in Boston or Boulder", async () => {
+    const user = userMaker();
+    const locations = [
+      {location: "Los Angeles, CA, USA"},
+      {location: "Boston, MA, USA"},
+      {location: "Boulder, CO, USA"}
+    ]
+    const userLocations = [
+      { user_id: 1, location_id: 1 },
+      { user_id: 2, location_id: 2 },
+      { user_id: 3, location_id: 1 },
+      { user_id: 3, location_id: 3 },
+    ]
+
+    await db("users").insert([user, user, user])
+    await db("locations").insert(locations)
+    await db("user_locations").insert(userLocations)
+
+    const filterOptionsCopy = { ...filterOptions };
+    filterOptionsCopy.isUsingRelocateToFilter = true;
+    filterOptionsCopy.chosenRelocateToObj = {
+      "Boston, MA, USA": "Boston, MA, USA",
+      "Boulder, CO, USA": "Boulder, CO, USA"
+    };
+  
+    const testUsers = await userModel.getAllFiltered(filterOptionsCopy);
+    expect(testUsers).toHaveLength(2);
+    expect(testUsers[0].id).toBe(2);
+    expect(testUsers[1].id).toBe(3);
+  });
+
+  // Exclusive/reductive - user must have desired current location 
+  // or interested location
+  it("should return empty array if no user lives or wants to relocate to LA", async () => {
+    const user = userMaker();
+    // Las Vegas ~250 miles from LA
+    const user2 = userMaker({
+      current_location_lat: 36.1699412,
+      current_location_lon: -115.1398296,
+    });
+    const locations = [
+      {location: "Los Angeles, CA, USA"},
+      {location: "Boston, MA, USA"},
+      {location: "Boulder, CO, USA"}
+    ]
+    const userLocations = [
+      { user_id: 1, location_id: 2 },
+      { user_id: 2, location_id: 2 },
+      { user_id: 3, location_id: 3 },
+    ]
+
+    await db("users").insert([user, user, user2])
+    await db("locations").insert(locations)
+    await db("user_locations").insert(userLocations)
+
+    const filterOptionsCopy = { ...filterOptions };
+    // lives within 100miles of Los Angeles
     filterOptionsCopy.isUsingCurrLocationFilter = true;
-    const testUsers = await userModel.getAllFiltered(filterOptionsCopy);
-    expect(testUsers).toHaveLength(7);
-  });
-
-  it("should return users interested in default Boston", async () => {
-    const filterOptionsCopy = { ...filterOptions };
+    filterOptionsCopy.selectedWithinMiles = 100
+    filterOptionsCopy.chosenLocationLat = 34.052235
+    filterOptionsCopy.chosenLocationLon = -118.243683
+    // Interested in Los Angeles
     filterOptionsCopy.isUsingRelocateToFilter = true;
+    filterOptionsCopy.chosenRelocateToObj = {
+      "Los Angeles, CA, USA": "Los Angeles, CA, USA",
+    };
+  
     const testUsers = await userModel.getAllFiltered(filterOptionsCopy);
-    expect(testUsers).toHaveLength(10);
-  });
-
-  it("should return users interested in Boulder", async () => {
-    const filterOptionsCopy = { ...filterOptions };
-    filterOptionsCopy.chosenRelocateTo = "Boulder, CO, USA";
-    filterOptionsCopy.isUsingRelocateToFilter = true;
-    const testUsers = await userModel.getAllFiltered(filterOptionsCopy);
-    expect(testUsers).toHaveLength(7);
+    expect(testUsers).toHaveLength(0);
   });
 
   it("should return default acending sorted users", async () => {
@@ -251,6 +369,21 @@ describe("getAllFiltered", () => {
     const testUsers = await userModel.getAllFiltered(filterOptionsCopy);
     expect(testUsers[0].id).toBe(17);
   });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 });
 
 describe("getSingle", () => {
