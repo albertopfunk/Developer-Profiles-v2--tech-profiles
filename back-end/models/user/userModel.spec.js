@@ -134,6 +134,7 @@ describe("getAllFiltered", () => {
     expect(filteredUsers[0].area_of_work).toBe("Development")
   });
 
+  // inclusive/additive - returns users if they match at least 1 area_of_work
   it("should return Design users", async () => {
     const user1 = userMaker()
     const user2 = userMaker({area_of_work: "Design"});
@@ -143,6 +144,7 @@ describe("getAllFiltered", () => {
 
     const filterOptionsCopy = { ...filterOptions };
     filterOptionsCopy.isUIUXChecked = true;
+    filterOptionsCopy.isAndroidChecked = true;
 
     const filteredUsers = await userModel.getAllFiltered(filterOptionsCopy);
     expect(filteredUsers).toHaveLength(1);
@@ -273,14 +275,22 @@ describe("getAllFiltered", () => {
     expect(testUsers[1].id).toBe(3);
   });
 
-  // Exclusive/reductive - user must have desired current location 
-  // or interested location
-  it("should return empty array if no user lives or wants to relocate to LA", async () => {
-    const user = userMaker();
+  // inclusive/additive - returns users if they match at least 1 location
+  it("should return users that want to relocate to Los Angeles", async () => {
+    // San Francisco ~350 miles from LA
+    const user1 = userMaker({
+      current_location_lat: 37.773972,
+      current_location_lon: -122.431297,
+    });
     // Las Vegas ~250 miles from LA
     const user2 = userMaker({
       current_location_lat: 36.1699412,
       current_location_lon: -115.1398296,
+    });
+    // Tempe, AZ ~380 miles from LA
+    const user3 = userMaker({
+      current_location_lat: 33.427204,
+      current_location_lon: -111.939896,
     });
     const locations = [
       {location: "Los Angeles, CA, USA"},
@@ -288,12 +298,13 @@ describe("getAllFiltered", () => {
       {location: "Boulder, CO, USA"}
     ]
     const userLocations = [
-      { user_id: 1, location_id: 2 },
+      { user_id: 1, location_id: 1 },
+      { user_id: 1, location_id: 3 },
       { user_id: 2, location_id: 2 },
-      { user_id: 3, location_id: 3 },
+      { user_id: 3, location_id: 1 },
     ]
 
-    await db("users").insert([user, user, user2])
+    await db("users").insert([user1, user2, user3])
     await db("locations").insert(locations)
     await db("user_locations").insert(userLocations)
 
@@ -310,7 +321,9 @@ describe("getAllFiltered", () => {
     };
   
     const testUsers = await userModel.getAllFiltered(filterOptionsCopy);
-    expect(testUsers).toHaveLength(0);
+    expect(testUsers).toHaveLength(2);
+    expect(testUsers[0].id).toBe(1);
+    expect(testUsers[1].id).toBe(3);
   });
   
   // Exclusive/reductive - user must have desired area_of_work AND location
