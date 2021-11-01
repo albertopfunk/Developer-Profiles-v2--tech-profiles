@@ -312,78 +312,102 @@ describe("getAllFiltered", () => {
     const testUsers = await userModel.getAllFiltered(filterOptionsCopy);
     expect(testUsers).toHaveLength(0);
   });
+  
+  // Exclusive/reductive - user must have desired area_of_work AND location
+  it("should return empty array if user matches location but not area_of_work", async () => {
+    // Los Angeles
+    const user1 = userMaker({
+      current_location_lat: 34.052235,
+      current_location_lon: -118.243683,
+      area_of_work: "Design"
+    });
+    // riverside ~70 miles from LA
+    const user2 = userMaker({
+      current_location_lat: 33.9806005,
+      current_location_lon: -117.3754942,
+      area_of_work: "Android"
+    });
+    // Las Vegas ~250 miles from LA
+    const user3 = userMaker({
+      current_location_lat: 36.1699412,
+      current_location_lon: -115.1398296,
+      area_of_work: "Development"
+    });
+    
+    await db("users").insert([user1, user2, user3]);
+
+    const filterOptionsCopy = { ...filterOptions };
+    // Development area of work
+    filterOptionsCopy.isWebDevChecked = true;
+    // lives within 100miles of Los Angeles
+    filterOptionsCopy.isUsingCurrLocationFilter = true;
+    filterOptionsCopy.selectedWithinMiles = 100
+    filterOptionsCopy.chosenLocationLat = 34.052235
+    filterOptionsCopy.chosenLocationLon = -118.243683
+
+    const testUsers = await userModel.getAllFiltered(filterOptionsCopy);
+    expect(testUsers).toHaveLength(0);
+  });
+  
+  // Exclusive/reductive - user must have desired area_of_work AND location
+  it("should return users that match location and area_of_work", async () => {
+    // Los Angeles
+    const user1 = userMaker({
+      current_location_lat: 34.052235,
+      current_location_lon: -118.243683,
+      area_of_work: "Development"
+    });
+    // riverside ~70 miles from LA
+    const user2 = userMaker({
+      current_location_lat: 33.9806005,
+      current_location_lon: -117.3754942,
+      area_of_work: "Android"
+    });
+    // Las Vegas ~250 miles from LA
+    const user3 = userMaker({
+      current_location_lat: 36.1699412,
+      current_location_lon: -115.1398296,
+      area_of_work: "Development"
+    });
+    
+    await db("users").insert([user1, user2, user3]);
+
+    const filterOptionsCopy = { ...filterOptions };
+    // Development area of work
+    filterOptionsCopy.isWebDevChecked = true;
+    // lives within 300miles of Los Angeles
+    filterOptionsCopy.isUsingCurrLocationFilter = true;
+    filterOptionsCopy.selectedWithinMiles = 300
+    filterOptionsCopy.chosenLocationLat = 34.052235
+    filterOptionsCopy.chosenLocationLon = -118.243683
+
+    const testUsers = await userModel.getAllFiltered(filterOptionsCopy);
+    expect(testUsers).toHaveLength(2);
+    expect(testUsers[0].id).toBe(1);
+    expect(testUsers[1].id).toBe(3);
+  });
 
   it("should return default acending sorted users", async () => {
+    const user = userMaker()
+    
+    await db("users").insert([user, user, user]);
+
     const filterOptionsCopy = { ...filterOptions };
     const testUsers = await userModel.getAllFiltered(filterOptionsCopy);
     expect(testUsers[0].id).toBe(1);
   });
 
   it("should return descending sorted users", async () => {
+    const user = userMaker()
+    
+    await db("users").insert([user, user, user]);
+
     const filterOptionsCopy = { ...filterOptions };
     filterOptionsCopy.sortChoice = "descending(newest-oldest)";
+
     const testUsers = await userModel.getAllFiltered(filterOptionsCopy);
-    expect(testUsers[0].id).toBe(50);
+    expect(testUsers[0].id).toBe(3);
   });
-
-  it("should return 0 users since 0 Design users live close to Boston", async () => {
-    const filterOptionsCopy = { ...filterOptions };
-    filterOptionsCopy.isUIUXChecked = true;
-    filterOptionsCopy.isUsingCurrLocationFilter = true;
-    const testUsers = await userModel.getAllFiltered(filterOptionsCopy);
-    expect(testUsers).toHaveLength(0);
-  });
-
-  it("should return 2 users since 2 Web Dev users live close to Boston", async () => {
-    const filterOptionsCopy = { ...filterOptions };
-    filterOptionsCopy.isWebDevChecked = true;
-    filterOptionsCopy.isUsingCurrLocationFilter = true;
-    const testUsers = await userModel.getAllFiltered(filterOptionsCopy);
-    expect(testUsers).toHaveLength(2);
-  });
-
-  it("should return 2 users since 2 IOS/Android users live close to Boston", async () => {
-    const filterOptionsCopy = { ...filterOptions };
-    filterOptionsCopy.isIOSChecked = true;
-    filterOptionsCopy.isAndroidChecked = true;
-    filterOptionsCopy.isUsingCurrLocationFilter = true;
-    const testUsers = await userModel.getAllFiltered(filterOptionsCopy);
-    expect(testUsers).toHaveLength(2);
-  });
-
-  it("should return 2 users since 2 IOS/Android users live close to Boston sorted default acending(oldest-newest)", async () => {
-    const filterOptionsCopy = { ...filterOptions };
-    filterOptionsCopy.isIOSChecked = true;
-    filterOptionsCopy.isAndroidChecked = true;
-    filterOptionsCopy.isUsingCurrLocationFilter = true;
-    const testUsers = await userModel.getAllFiltered(filterOptionsCopy);
-    expect(testUsers[0].id).toBe(6);
-  });
-
-  it("should return 2 users since 2 IOS/Android users live close to Boston sorted descending(newest-oldest)", async () => {
-    const filterOptionsCopy = { ...filterOptions };
-    filterOptionsCopy.isIOSChecked = true;
-    filterOptionsCopy.isAndroidChecked = true;
-    filterOptionsCopy.isUsingCurrLocationFilter = true;
-    filterOptionsCopy.sortChoice = "descending(newest-oldest)";
-    const testUsers = await userModel.getAllFiltered(filterOptionsCopy);
-    expect(testUsers[0].id).toBe(17);
-  });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 });
 
 describe("getSingle", () => {
