@@ -5,7 +5,7 @@ exports.seed = function (knex) {
   return knex("education")
     .del()
     .then(async function () {
-      for (let i = 0; i < 200; i++) {
+      for (let i = 0; i < 50; i++) {
         let educationArr = [];
         let multiplier = 50 * i;
         let start = 1 + multiplier;

@@ -76,7 +76,7 @@ exports.seed = function (knex) {
         return currentLocations[rand];
       }
 
-      for (let i = 0; i < 200; i++) {
+      for (let i = 0; i < 50; i++) {
         const userArr = [];
         let multiplier = 50 * i;
         let start = 1 + multiplier;
