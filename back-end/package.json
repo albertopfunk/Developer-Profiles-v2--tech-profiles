@@ -26,7 +26,7 @@
     "express-fileupload": "^1.2.1",
     "faker": "^5.5.3",
     "helmet": "^4.6.0",
-    "knex": "^0.95.10",
+    "knex": "^2.4.0",
     "node-cache": "^5.1.2",
     "pg": "^8.7.1",
     "sqlite3": "^5.0.2",
